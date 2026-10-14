@@ -1,0 +1,37 @@
+---
+title: "Komponen DC: Fungsi dan Kapan Digunakan"
+summary: "Dari resistor LED sampai MOSFET, sekering DC, converter, dan BMS."
+---
+<LearningHook>LED, router, dan motor DC sama-sama memakai DC. Mengapa rangkaian tambahannya berbeda?</LearningHook>
+
+## 1. Mulai dari kebutuhan bebannya
+LED perlu arus yang dibatasi. Router perlu tegangan, polaritas, dan konektor yang tepat. Motor perlu driver yang mampu menangani arus awal dan perubahan energi saat dimatikan. Kata DC belum menjelaskan seluruh kebutuhan tersebut.
+
+<DeviceGuide type="resistor" />
+
+<ComponentTable type="komponen-dc-penggunaan" />
+
+## 2. Apa itu dioda flyback?
+Koil relay atau beban induktif menyimpan energi pada medan magnet. Saat arus diputus, tegangan bisa naik untuk mempertahankan arus. Pada rangkaian DC tertentu, dioda flyback menyediakan jalur pelepasan energi yang dirancang sesuai kebutuhan. Ia biasanya tidak menghantar saat operasi normal.
+
+Dioda flyback biasa tidak dipasang begitu saja pada koil AC. Pilihan peredam dan pengaruhnya terhadap waktu pelepasan koil mengikuti rancangan. Ini penjelasan fungsi, bukan gambar pengawatan untuk segala modul relay.
+
+## Studi kasus: LED indikator dari 5V
+Jika LED turun sekitar 2V dan sasaran arus 10mA, resistor ideal sekitar 300Ω. Nilai standar 330Ω memberi perkiraan 9,1mA. Tegangan maju LED berubah dengan jenis dan kondisi; jangan menganggap semua LED selalu 2V.
+
+<Formula label="Pembatas arus LED" expression="R = (Vs − Vf) / I">
+1. Vs = 5V, Vf ≈ 2V, I = 10mA = 0,01A.
+2. R = (5 − 2) / 0,01 = 300Ω.
+3. Untuk 330Ω: I ≈ 3 / 330 = 0,0091A.
+4. Verifikasi spesifikasi LED dan daya resistor sebelum latihan menggunakan sumber DC kecil terproteksi.
+</Formula>
+
+## 3. Kapan tidak boleh mengganti AC dengan DC?
+Saklar, relay, pemutus, dan sekering harus mempunyai rating untuk jenis sumber yang digunakan. Angka 10A pada satu tegangan AC tidak otomatis berlaku pada semua tegangan DC. Sumber baterai juga dapat menyalurkan arus hubung singkat besar.
+
+<LearningCheck question="Apakah BMS otomatis berfungsi sebagai charger baterai?" answer="Tidak. BMS dan charger mempunyai tugas berbeda; keduanya harus sesuai kimia serta konfigurasi baterai." />
+
+## Bacaan lanjutan
+[Omron: rating dan kondisi pensaklaran relay](https://www.ia.omron.com/product/cautions/36/safety_precautions.html).
+
+[Texas Instruments: fungsi pengelolaan, proteksi, dan pengisian baterai](https://www.ti.com/product-category/battery-management-ics/overview.html).

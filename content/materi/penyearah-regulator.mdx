@@ -1,0 +1,36 @@
+---
+title: "Penyearah, Regulator, Buck, Boost, dan Inverter"
+summary: "Kapan perlu mengubah AC ke DC, menurunkan tegangan, atau menaikkannya."
+---
+<LearningHook>Sumber 12V ingin dipakai untuk alat 5V. Apakah cukup menambahkan resistor?</LearningHook>
+
+## 1. Empat kebutuhan yang berbeda
+**Penyearah** mengubah bentuk AC menjadi arus/tegangan satu polaritas. **Regulator** menjaga keluaran dalam batas saat kondisi input dan beban berubah. **Converter DC-DC** mengubah level DC. **Inverter** mengubah DC menjadi AC melalui rangkaian pensaklaran dan pengendalian.
+
+Penyearah saja bukan adaptor lengkap. Keluaran penyearah bisa berdenyut dan belum stabil. Penyaringan, regulasi, isolasi bila diperlukan, serta proteksi mempunyai fungsi tambahan.
+
+<ConversionGuide />
+
+## 2. Komponen mana digunakan kapan?
+<ComponentTable type="penyearah-regulator" />
+
+## Studi kasus: Mengapa regulator linear bisa panas?
+Misalkan input 12V, keluaran 5V, beban 0,5A. Selisih 7V pada arus itu menghasilkan sekitar 3,5W panas pada model sederhana. Regulator kecil dapat melampaui batas termalnya. Buck yang tepat bisa lebih efisien untuk selisih tersebut, tetapi tetap mempunyai rugi dan memerlukan rancangan yang benar.
+
+<Formula label="Perkiraan rugi regulator linear" expression="Ploss ≈ (Vin − Vout) × I">
+1. Vin = 12V, Vout = 5V, I = 0,5A.
+2. Ploss ≈ (12 − 5) × 0,5 = 3,5W.
+3. Daya beban = 5 × 0,5 = 2,5W.
+4. Mengabaikan arus internal, input sekitar 6W. Periksa suhu, disipasi, dan batas regulator; contoh bukan petunjuk memasang komponen tanpa perhitungan termal.
+</Formula>
+
+## 3. Converter tidak menciptakan energi
+Jika sebuah boost menghasilkan 12V × 0,5A = 6W dari sumber 5V, arus masukan ideal minimal sekitar 1,2A. Dengan rugi konversi, kebutuhan masukan lebih besar. Label arus keluaran dan kemampuan sumber harus dinilai bersama.
+
+## 4. Kenapa resistor bukan pengganti regulator umum?
+Jatuh tegangan resistor berubah saat arus beban berubah. Beban router atau mikrokontroler bukan arus konstan sempurna, sehingga resistor seri tidak memberi keluaran 5V stabil untuk semua kondisi. Gunakan converter atau regulator yang memang sesuai.
+
+<LearningCheck question="Untuk menurunkan DC 12V menjadi DC 5V, converter apa yang umum digunakan?" answer="Buck yang sesuai spesifikasi. Boost digunakan untuk menaikkan, sedangkan penyearah mengubah AC menjadi satu polaritas." />
+
+## Bacaan lanjutan
+[Texas Instruments: pengenalan topologi regulator dan converter](https://www.ti.com/video/5219549475001).

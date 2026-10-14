@@ -31,6 +31,11 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
     if(route.startsWith('/materi/')){
      const slug=route.split('/').pop();
      assert.ok((await page.title()).includes('Akademi Listrik'));
+     const table=page.locator('.component-reference');
+     if(await table.count()){
+      assert.equal(await table.getByRole('columnheader').count(),4,slug+' component reference headers');
+      assert.ok(await table.locator('tbody tr').count()>=4,slug+' component reference rows');
+     }
      const quiz=page.locator('section[aria-labelledby="quiz-'+slug+'"]');
      assert.equal(await quiz.locator('fieldset').count(),bank[slug].length);
      assert.equal(await quiz.getByRole('button',{name:'Periksa jawaban'}).isEnabled(),false);
@@ -86,7 +91,7 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
    const missing=await page.goto(base+'/materi/tidak-ada',{waitUntil:'networkidle'});
    assert.equal(missing.status(),404);
    assert.deepEqual(errors,[],`browser errors ${viewport.width}`);
-   console.log(`PASS ${viewport.width}px: 28 pages, 24 quizzes, progress persistence, mobile navigation, 5 simulators, 404, zero runtime errors`);
+   console.log(`PASS ${viewport.width}px: ${slugs.length+4} pages, ${slugs.length} quizzes, progress persistence, mobile navigation, 5 simulators, 404, zero runtime errors`);
    await context.close();
   }
   const blocked=await browser.newContext();
@@ -95,6 +100,7 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'/materi/apa-itu-listrik',{waitUntil:'networkidle'});
   await page.getByRole('button',{name:'Tandai materi selesai',exact:true}).click();
+  await page.getByText('Browser tidak mengizinkan penyimpanan.',{exact:false}).waitFor();
   assert.ok((await page.locator('body').innerText()).includes('Browser tidak mengizinkan penyimpanan'));
   assert.deepEqual(errors,[]);
   console.log('PASS blocked localStorage: no crash and clear feedback');

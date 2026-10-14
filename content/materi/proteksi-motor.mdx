@@ -1,0 +1,36 @@
+---
+title: "Proteksi Motor: Kontaktor, Overload, dan Pengaman"
+summary: "Membedakan perangkat yang menyalakan motor dengan yang melindunginya."
+---
+<LearningHook>Motor sudah memakai kontaktor. Mengapa masih memerlukan proteksi lainnya?</LearningHook>
+
+## 1. Empat pertanyaan sebelum menyalakan motor
+Apa tegangan dan jenis suplai motor? Berapa arus nominalnya? Apa sifat beban mekaniknya? Perangkat apa yang merespons setiap gangguan? Pertanyaan ini membantu memahami rancangan sebelum membahas pengawatan.
+
+<DeviceGuide type="motor" />
+
+## 2. Bedakan tiga fungsi utama
+<ComponentTable type="proteksi-motor" />
+
+## 3. Arus awal bukan selalu gangguan
+Saat mulai berputar, motor tertentu menarik arus lebih tinggi daripada kondisi normal. Proteksi perlu memungkinkan starting yang wajar sekaligus merespons gangguan. Kurva, trip class, cara start, kemampuan kabel, dan data pabrikan ikut menentukan pilihan. Tidak ada satu kelipatan arus yang berlaku untuk semua motor.
+
+Jika poros tertahan, motor tidak melakukan kerja normal dan bisa panas. Pada sistem tiga phase, kehilangan phase atau ketidakseimbangan dapat memperburuk kondisi. Perangkat pemantauan dan proteksi dipilih sesuai risiko sistem, bukan sekadar jumlah lampu indikator.
+
+## Studi kasus: Pompa mendengung tetapi tidak berputar
+Kemungkinannya mencakup masalah mekanik, suplai, komponen starting pada motor tertentu, atau motor itu sendiri. Gejala tersebut tidak cukup untuk menyatakan satu penyebab. Hentikan penggunaan, amankan sumber sesuai prosedur, dan minta pemeriksaan kompeten. Jangan berulang kali menekan START.
+
+## 4. Membaca pelat motor
+Cari daya, tegangan, arus, frekuensi, putaran, jenis koneksi, serta batas operasi. Angka kW motor sering mengacu pada daya mekanik nominal keluaran, sehingga arus masukan tidak cukup dihitung dengan membagi angka itu oleh tegangan saja.
+
+<Formula label="Daya masukan dan efisiensi" expression="Pin = Pout / η">
+1. Contoh ilustratif: keluaran mekanik 1.000W, efisiensi 80% = 0,8.
+2. Pin = 1.000 / 0,8.
+3. Hasil: 1.250W daya aktif masukan.
+4. Untuk menghitung arus AC, masih perlu tegangan, jumlah phase, dan faktor daya. Pemilihan proteksi memakai data motor serta rancangan lengkap.
+</Formula>
+
+<LearningCheck question="Apakah overload relay biasa menggantikan pengaman hubung singkat?" answer="Tidak. Fungsi overload dan proteksi hubung singkat harus dikoordinasikan; kemampuan perangkat mengikuti spesifikasinya." />
+
+## Bacaan lanjutan
+[ABB: overload relay motor](https://electrification.us.abb.com/products/contactors-starters/thermal-overload-relay).

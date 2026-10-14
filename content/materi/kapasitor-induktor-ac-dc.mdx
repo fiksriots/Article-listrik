@@ -1,0 +1,46 @@
+---
+title: "Kapasitor dan Induktor pada AC dan DC"
+summary: "Mengapa komponen yang sama bereaksi berbeda saat sinyal berubah."
+---
+<LearningHook>Kapasitor sering ada di adaptor dan motor. Apakah semua kapasitor bisa dipakai untuk keduanya?</LearningHook>
+
+## 1. Dua cara menyimpan energi
+Kapasitor menyimpan energi pada medan listrik. Induktor menyimpan energi pada medan magnet. Keduanya bereaksi terhadap perubahan: arus kapasitor terkait perubahan tegangan, sedangkan tegangan induktor terkait perubahan arus. Mereka bukan resistor dengan bentuk yang berbeda.
+
+<DeviceGuide type="kapasitor" />
+
+## 2. Pada DC tetap dan keadaan transien
+Dalam model ideal, setelah pengisian selesai pada DC tetap, arus kapasitor menjadi nol. Saat sumber baru dihubungkan, arus pengisian dapat besar, dibatasi rangkaian nyata. Kapasitor nyata memiliki kebocoran dan resistansi internal.
+
+Pada induktor ideal, tegangan menjadi nol jika arus sudah tetap, tetapi kumparan nyata memiliki hambatan dan batas termal. Saat arus berubah, induktor menimbulkan tegangan yang menentang perubahan tersebut. Menyebutnya selalu kabel biasa atau selalu penghalang listrik sama-sama keliru.
+
+## 3. Pada AC sinusoidal
+**Reaktansi** menyatakan ukuran hambatan terhadap AC dalam model ideal, berbeda dari resistansi yang membuang energi sebagai panas. Reaktansi kapasitor turun saat frekuensi naik. Reaktansi induktor naik saat frekuensi naik. Rangkaian gabungan dapat memiliki resonansi, sehingga hasil total tidak selalu cukup dijumlahkan biasa.
+
+<Formula label="Reaktansi kapasitor ideal" expression="XC = 1 / (2πfC)">
+1. f = 50Hz, C = 10µF = 0,00001F.
+2. XC = 1 / (2 × 3,1416 × 50 × 0,00001).
+3. Hasil: sekitar 318Ω.
+4. Pada 100Hz dengan C sama, XC sekitar 159Ω. Ini contoh model sinusoidal, bukan petunjuk memasang kapasitor ke PLN.
+</Formula>
+
+<Formula label="Reaktansi induktor ideal" expression="XL = 2πfL">
+1. f = 50Hz, L = 0,1H.
+2. XL = 2 × 3,1416 × 50 × 0,1.
+3. Hasil: sekitar 31,4Ω.
+4. Pada 100Hz nilainya sekitar 62,8Ω. Kumparan nyata juga mempunyai resistansi dan rugi.
+</Formula>
+
+## Studi kasus: Kapasitor motor vs kapasitor adaptor
+Kapasitor motor dirancang untuk kondisi operasi AC dan duty tertentu. Kapasitor elektrolit polar pada sisi DC adaptor mempunyai fungsi serta batas berbeda. Kesamaan angka 10µF tidak menjamin kedua komponen bisa dipertukarkan. Untuk aplikasi yang melintasi jaringan atau ke earth diperlukan kelas keselamatan yang sesuai; kapasitor umum bukan pengganti.
+
+## 4. Kapan digunakan?
+Kapasitor decoupling membantu menyediakan respons arus lokal dan penyaringan pada suplai elektronik. Kapasitor lain dapat digunakan pada motor yang memerlukannya. Induktor digunakan pada converter switching dan filter tertentu. Nilai, frekuensi, arus, tegangan, parasitik, dan suhu menentukan apakah komponen sesuai.
+
+<Note>Kapasitor dapat menyimpan energi setelah sumber dilepas. Jangan mencoba membuang muatan dengan menghubungkan kaki menggunakan benda logam; penanganan energi tersimpan memerlukan prosedur serta alat yang sesuai.</Note>
+
+<LearningCheck question="Ketika frekuensi naik, bagaimana XC kapasitor ideal berubah?" answer="Menurun karena XC = 1/(2πfC), sedangkan XL induktor ideal meningkat." />
+
+## Bacaan lanjutan
+
+[TDK: kapasitor motor start dan run](https://product.tdk.com/en/products/capacitor/film/motor-run/index.html).

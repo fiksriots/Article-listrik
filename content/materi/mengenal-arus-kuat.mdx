@@ -1,0 +1,42 @@
+---
+title: "Mengenal Listrik Arus Kuat"
+summary: "Dari panel rumah sampai mesin industri: jalur tenaga, kontrol, dan jenis beban."
+---
+<LearningHook>Kipas, pompa air, dan charger sama-sama memakai listrik. Mengapa kebutuhan kabel dan pengamannya bisa berbeda?</LearningHook>
+
+## 1. Arus kuat itu apa?
+Istilah **arus kuat** lazim dipakai untuk bidang tenaga listrik: pembangkitan, penyaluran, distribusi, instalasi, dan mesin listrik. Istilah **arus lemah** sering dipakai untuk sinyal, komunikasi, atau kontrol. Pembagian ini menggambarkan bidang penggunaan, **bukan batas angka ampere yang pasti**.
+
+AC bukan sinonim arus kuat, dan DC bukan sinonim arus lemah. Baterai kecil dapat menjadi sumber latihan, tetapi sistem baterai industri juga dapat menyalurkan daya besar. Sebaliknya, sinyal AC pada rangkaian audio bisa berdaya kecil.
+
+<Note>Tegangan, kemampuan arus sumber, energi tersimpan, dan lingkungan menentukan risiko. Jangan menilai keamanan hanya dari label AC, DC, arus kuat, atau arus lemah.</Note>
+
+## 2. Ikuti perjalanan energinya
+<CircuitDiagram type="installation" caption="Model alur tenaga menuju cabang beban. Pengawatan, jalur N/PE, dan proteksi nyata tidak ditunjukkan lengkap." />
+Bayangkan pusat perbelanjaan. Pasokan masuk ke distribusi, lalu dibagi ke penerangan, pendingin, lift, dan pompa. Setiap cabang mempunyai kebutuhan sendiri. Sistem kontrol memberi perintah, sedangkan jalur tenaga mengantarkan energi ke beban.
+
+- **Sumber:** menyediakan energi, misalnya jaringan, generator, atau baterai.
+- **Distribusi:** membagi suplai menjadi cabang yang terencana.
+- **Proteksi:** mendeteksi kondisi tertentu dan membatasi akibat gangguan.
+- **Kontrol:** menentukan kapan dan bagaimana beban bekerja.
+- **Beban:** mengubah energi menjadi cahaya, panas, gerak, atau proses elektronik.
+
+## 3. Kenali sifat bebannya
+**Resistif** seperti model elemen pemanas mengubah energi menjadi panas. **Induktif** seperti motor dan trafo melibatkan medan magnet; arus awal dan faktor daya perlu diperhatikan. **Elektronik** seperti adaptor switching menarik arus dengan bentuk yang bisa tidak sinusoidal. Peralatan nyata dapat menggabungkan beberapa sifat ini.
+
+Jadi, dua alat dengan daya yang sama belum tentu memiliki arus awal, faktor daya, atau karakter proteksi yang sama. Pelat spesifikasi dan data pabrikan lebih berguna daripada menebak dari ukuran bodinya.
+
+## Studi kasus: Pompa bukan sekadar lampu yang lebih besar
+Lampu dan pompa dapat berada pada jaringan satu phase yang sama, tetapi pompa mempunyai motor, beban mekanik, dan arus awal. Jika motor macet, ia bisa menarik arus dan menjadi panas tanpa menghasilkan kerja yang berguna. Mengganti MCB menjadi lebih besar tanpa evaluasi tidak menyelesaikan penyebab dan bisa membahayakan kabel.
+
+<Formula label="Model beban resistif satu phase" expression="I = P / V">
+1. Diketahui: pemanas ideal 460W, tegangan 230V RMS, faktor daya 1.
+2. Substitusi: I = 460 / 230.
+3. Hasil: 2A.
+4. Ini contoh teori, bukan rekomendasi ukuran kabel atau pemutus. Beban motor dan elektronik memerlukan data tambahan.
+</Formula>
+
+## 4. Kapan mulai belajar instalasi?
+Mulailah dengan membaca simbol, fungsi alat, dan diagram konseptual. Setelah dasar dipahami, pelajari perancangan dan prosedur melalui pelatihan yang sesuai. Materi ini tidak mengarahkan pemula membuka panel, mengukur penghantar PLN, atau mencoba gangguan secara nyata.
+
+<LearningCheck question="Apakah sistem DC selalu termasuk arus lemah?" answer="Tidak. Sistem DC dapat berdaya besar; pembagian arus kuat dan arus lemah lebih berkaitan dengan bidang penggunaan." />

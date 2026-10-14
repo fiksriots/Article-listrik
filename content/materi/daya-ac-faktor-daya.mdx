@@ -1,0 +1,42 @@
+---
+title: "Daya AC dan Faktor Daya: W, VA, dan var"
+summary: "Mengapa angka watt saja belum cukup untuk menghitung arus AC."
+---
+<LearningHook>UPS tertulis 1.000VA, tetapi batas watt-nya bisa berbeda. Apa arti kedua angka itu?</LearningHook>
+
+## 1. Tiga ukuran yang berbeda
+**Daya aktif P (W)** adalah rata-rata daya yang menjadi kerja, panas, atau proses lain. **Daya semu S (VA)** adalah hasil kali tegangan RMS dan arus RMS pada satu phase. **Daya reaktif Q (var)** menggambarkan pertukaran energi pada model AC sinusoidal dengan komponen reaktif.
+
+**Faktor daya PF = P/S**. Pada gelombang sinusoidal, ia terkait cos φ, yaitu sudut antara tegangan dan arus. Pada beban nonlinier, faktor daya total juga dipengaruhi distorsi arus; jangan selalu menyamakannya dengan cos φ saja.
+
+## 2. Mengapa arus bertambah ketika PF rendah?
+Untuk daya aktif dan tegangan yang sama, PF lebih rendah membutuhkan arus RMS lebih besar. Kabel serta peralatan distribusi tetap membawa arus tersebut. Faktor daya bukan ukuran efisiensi: efisiensi membandingkan daya keluaran dengan masukan, sedangkan PF membandingkan daya aktif dengan daya semu.
+
+<Formula label="AC satu phase" expression="S = V × I; P = V × I × PF">
+1. Diketahui: V = 230V RMS, I = 5A RMS, PF = 0,8.
+2. Daya semu: S = 230 × 5 = 1.150VA.
+3. Daya aktif: P = 1.150 × 0,8 = 920W.
+4. Jika PF = 1 pada arus dan tegangan yang sama, P menjadi 1.150W. Ini bukan pernyataan bahwa rugi alat selalu 20%.
+</Formula>
+
+## 3. Bagaimana untuk tiga phase?
+Pada sistem tiga phase **seimbang**, daya aktif total dapat dihitung dari tegangan antarphase, arus line, dan faktor daya. Beban tidak seimbang atau gelombang yang kompleks memerlukan evaluasi tiap phase dan metode ukur yang sesuai.
+
+<Formula label="Total tiga phase seimbang" expression="P = √3 × VLL × IL × PF">
+1. Diketahui: VLL = 400V RMS, IL = 5A RMS, PF = 0,8.
+2. P = 1,732 × 400 × 5 × 0,8.
+3. Hasil: sekitar 2.771W atau 2,77kW.
+4. Ini daya aktif masukan, bukan otomatis daya mekanik poros motor.
+</Formula>
+
+## Studi kasus: Memilih UPS untuk perangkat IT
+Periksa kedua batasnya: watt dan VA. Beban bisa berada di bawah batas VA namun melampaui batas W. Runtime juga dipengaruhi energi baterai, kondisi baterai, dan rugi konversi. Label 1.000VA tidak otomatis berarti 1.000W atau mampu menyala selama satu jam.
+
+## 4. Apakah memasang kapasitor selalu membantu?
+Tidak. Bank kapasitor untuk kompensasi membutuhkan analisis beban, harmonisa, pengendalian, dan proteksi. Memasang kapasitor sembarangan dapat menimbulkan masalah. Untuk pemula, pahami besaran dan gunakan contoh angka dahulu.
+
+<LearningCheck question="Apakah PF 0,8 sama dengan efisiensi 80%?" answer="Tidak. Faktor daya membandingkan W dengan VA; efisiensi membandingkan daya keluaran dengan masukan." />
+
+## Bacaan lanjutan
+
+[Fluke: panduan pengukuran daya, VA, dan faktor daya](https://assets.fluke.com/manuals/1735____umeng0100.pdf).

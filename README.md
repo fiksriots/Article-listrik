@@ -1,6 +1,6 @@
 # Akademi Listrik & Elektronika
 
-Website edukasi gratis berbahasa Indonesia untuk pemula. Next.js App Router, TypeScript, Tailwind CSS, dan 24 artikel MDX dalam enam tahap.
+Website edukasi gratis berbahasa Indonesia untuk pemula. Next.js App Router, TypeScript, Tailwind CSS, dan 32 artikel MDX dalam delapan tahap.
 
 ## Menjalankan
 
@@ -25,12 +25,12 @@ npm start
 npm run test:smoke
 ```
 
-Smoke test mengunjungi 28 halaman pada lebar 390px dan 1440px, menjawab dan mengulang kuis 24 modul, menguji progress setelah reload, sidebar mobile, lima simulator, kondisi localStorage ditolak, serta halaman 404. Untuk deployment, jalankan `BASE_URL=https://listrik.fikss.site npm run test:smoke`. Jika memakai instalasi Chromium lain, isi `CHROMIUM_PATH` dengan executable yang sesuai.
+Smoke test mengunjungi 36 halaman pada lebar 390px dan 1440px, menjawab dan mengulang kuis 32 modul, menguji progress setelah reload, sidebar mobile, lima simulator, kondisi localStorage ditolak, serta halaman 404. Untuk deployment, jalankan `BASE_URL=https://listrik.fikss.site npm run test:smoke`. Jika memakai instalasi Chromium lain, isi `CHROMIUM_PATH` dengan executable yang sesuai.
 
 ## Fitur
 
-- 24 materi dengan studi kasus, analogi, latihan, dan pembahasan
-- 48 soal khusus topik, masing-masing dua soal per modul
+- 32 materi dengan studi kasus, analogi, latihan, dan pembahasan
+- 64 soal khusus topik, masing-masing dua soal per modul
 - Kotak rumus dengan asumsi dan contoh perhitungan
 - Ilustrasi SVG: multimeter, PLC, saklar, relay/kontaktor, MCB/RCCB/SPD, resistor, kapasitor, motor
 - Diagram seri, paralel, pengukuran, LED, AC/DC, tiga phase, distribusi, grounding, dan instalasi konseptual

@@ -1,0 +1,31 @@
+---
+title: "Komponen AC: Fungsi dan Kapan Digunakan"
+summary: "Mengenal pemutus, kontaktor, proteksi bocor, trafo, dan komponen motor AC."
+---
+<LearningHook>Di panel ada MCB, RCCB, kontaktor, dan terminal. Mengapa tidak cukup memakai satu saklar saja?</LearningHook>
+
+## 1. Setiap alat punya pekerjaan berbeda
+Saklar memberi perintah ON/OFF. Pemutus proteksi merespons gangguan sesuai karakteristiknya. Kontaktor membantu pensaklaran yang dikendalikan koil. Terminal menyediakan titik sambung terencana. Bentuk mirip tidak berarti fungsinya sama.
+
+<DeviceGuide type="proteksi" />
+
+<ComponentTable type="komponen-ac-penggunaan" />
+
+## 2. Mengapa rating AC perlu dibaca?
+Kontak yang membuka beban dapat menimbulkan busur. Pada AC, arus melewati nol secara berkala; pada DC tetap, kondisi ini tidak terjadi secara alami. Perbedaan itu memengaruhi desain pemutusan. **Gunakan hanya kombinasi AC/DC, tegangan, dan beban yang dinyatakan pabrikan**. Ada alat berating ganda, tetapi tidak semua alat demikian.
+
+Rating koil kontaktor pun berbeda dari rating kontak. Koil 24V DC pada sebuah kontaktor tidak berarti kontaknya hanya boleh mengendalikan beban 24V; data kedua bagian harus dibaca terpisah.
+
+<DeviceGuide type="relay" />
+
+## Studi kasus: Kendali pompa otomatis
+Sensor atau kontroler memberi perintah. Kontaktor yang sesuai melakukan pensaklaran daya. Proteksi hubung singkat dan overload menjalankan tugas lain. Jika sensor rusak, desain juga perlu menentukan perilaku sistem; sekadar menambahkan relay tidak membuat seluruh sistem aman.
+
+## 3. Kapan tidak boleh mengganti komponen begitu saja?
+Jangan mengganti kapasitor motor dengan kapasitor elektrolit umum hanya karena angka µF sama. Jangan menaikkan rating MCB untuk mengatasi trip berulang. Jangan menyimpulkan RCCB cocok untuk semua inverter tanpa memeriksa jenis arus sisa yang dapat timbul.
+
+<LearningCheck question="Apakah kontaktor sekaligus melindungi motor dari overload?" answer="Tidak secara otomatis. Kontaktor melakukan pensaklaran; proteksi overload memerlukan perangkat serta koordinasi yang sesuai." />
+
+## Bacaan lanjutan
+- [Schneider Electric: perbedaan pemutusan AC dan DC](https://www.se.com/us/en/faqs/FA326780/)
+- [ABB: perangkat proteksi dan kendali motor](https://new.abb.com/low-voltage/products/motor-protection)

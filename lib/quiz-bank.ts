@@ -527,5 +527,181 @@ export const quizBank: Record<string, Question[]> = {
       "a": 0,
       "why": "Gejala perlu dianalisis bersama kondisi dan cakupan gangguan."
     }
+  ],
+  "mengenal-arus-kuat": [
+    {
+      "q": "Istilah arus kuat terutama menunjuk...",
+      "o": [
+        "Bidang tenaga listrik",
+        "Semua arus di atas angka pasti",
+        "Semua AC tanpa pengecualian"
+      ],
+      "a": 0,
+      "why": "Istilahnya menggambarkan bidang penggunaan, bukan batas ampere yang universal."
+    },
+    {
+      "q": "Dua beban dengan watt sama pasti mempunyai arus awal sama?",
+      "o": [
+        "Ya",
+        "Tidak",
+        "Hanya jika kabelnya sama"
+      ],
+      "a": 1,
+      "why": "Jenis beban dan karakter starting dapat berbeda."
+    }
+  ],
+  "komponen-ac-penggunaan": [
+    {
+      "q": "Perangkat yang membatasi surja transien adalah...",
+      "o": [
+        "SPD",
+        "Kontaktor biasa",
+        "Terminal N"
+      ],
+      "a": 0,
+      "why": "SPD digunakan dalam rancangan proteksi surja."
+    },
+    {
+      "q": "Rating koil dan kontak kontaktor...",
+      "o": [
+        "Selalu sama",
+        "Perlu dibaca terpisah",
+        "Hanya bergantung warna"
+      ],
+      "a": 1,
+      "why": "Koil menggerakkan mekanisme, kontak menangani beban."
+    }
+  ],
+  "proteksi-motor": [
+    {
+      "q": "Overload relay biasa menggantikan proteksi korsleting?",
+      "o": [
+        "Tidak",
+        "Ya selalu",
+        "Jika motor besar"
+      ],
+      "a": 0,
+      "why": "Proteksi overload dan korsleting memerlukan koordinasi."
+    },
+    {
+      "q": "Arus saat motor mulai berputar...",
+      "o": [
+        "Selalu sama dengan nominal",
+        "Bisa lebih tinggi daripada normal",
+        "Pasti nol"
+      ],
+      "a": 1,
+      "why": "Karakter starting mengikuti motor dan metode start."
+    }
+  ],
+  "daya-ac-faktor-daya": [
+    {
+      "q": "230V × 5A menghasilkan daya semu...",
+      "o": [
+        "1.150VA",
+        "920VA selalu",
+        "46VA"
+      ],
+      "a": 0,
+      "why": "S = Vrms × Irms pada satu phase."
+    },
+    {
+      "q": "PF 0,8 pada daya semu 1.150VA memberikan daya aktif...",
+      "o": [
+        "1.150W",
+        "920W",
+        "230W"
+      ],
+      "a": 1,
+      "why": "P = S × PF = 1.150 × 0,8 = 920W."
+    }
+  ],
+  "komponen-dc-penggunaan": [
+    {
+      "q": "Dioda flyback pada aplikasi koil DC tertentu membantu...",
+      "o": [
+        "Menangani energi induktif saat dimatikan",
+        "Menaikkan arus tanpa batas",
+        "Mengganti semua pengaman"
+      ],
+      "a": 0,
+      "why": "Energi koil memerlukan jalur pelepasan yang sesuai rancangan."
+    },
+    {
+      "q": "BMS adalah...",
+      "o": [
+        "Charger universal",
+        "Pengelola/proteksi paket baterai sesuai spesifikasi",
+        "Pengganti semua sekering"
+      ],
+      "a": 1,
+      "why": "BMS dan charger mempunyai tugas berbeda."
+    }
+  ],
+  "penyearah-regulator": [
+    {
+      "q": "Converter untuk menurunkan 12V DC menjadi 5V DC adalah...",
+      "o": [
+        "Buck",
+        "Boost",
+        "Penyearah saja"
+      ],
+      "a": 0,
+      "why": "Buck menurunkan level tegangan DC sesuai batasnya."
+    },
+    {
+      "q": "Rugi linear dari 12V ke 5V pada 0,5A sekitar...",
+      "o": [
+        "2,5W",
+        "3,5W",
+        "0W"
+      ],
+      "a": 1,
+      "why": "(12 − 5) × 0,5 = 3,5W, mengabaikan arus internal."
+    }
+  ],
+  "kapasitor-induktor-ac-dc": [
+    {
+      "q": "Frekuensi naik membuat reaktansi kapasitor ideal...",
+      "o": [
+        "Turun",
+        "Naik",
+        "Selalu nol"
+      ],
+      "a": 0,
+      "why": "XC berbanding terbalik dengan f."
+    },
+    {
+      "q": "Kapasitor motor dan elektrolit biasa dengan µF sama...",
+      "o": [
+        "Pasti bisa saling mengganti",
+        "Belum tentu kompatibel",
+        "Hanya berbeda warna"
+      ],
+      "a": 1,
+      "why": "Jenis, rating AC/DC, polaritas, dan duty harus cocok."
+    }
+  ],
+  "memilih-komponen-ac-dc": [
+    {
+      "q": "Label 10A AC otomatis berlaku pada semua tegangan DC?",
+      "o": [
+        "Tidak",
+        "Ya",
+        "Jika mereknya sama"
+      ],
+      "a": 0,
+      "why": "Rating jenis sumber dan kondisi beban harus diperiksa."
+    },
+    {
+      "q": "Untuk adaptor pengganti, yang diperiksa adalah...",
+      "o": [
+        "Warna bodi",
+        "Tegangan, polaritas, konektor, dan kapasitas",
+        "Konektor saja"
+      ],
+      "a": 1,
+      "why": "Kecocokan fisik saja tidak menjamin cocok secara listrik."
+    }
   ]
 };

@@ -1,0 +1,38 @@
+---
+title: "Memilih Komponen AC/DC dari Label dan Datasheet"
+summary: "Urutan memilih saklar, relay, adaptor, dan pengaman tanpa menebak dari bentuk."
+---
+<LearningHook>Sebuah relay tertulis 10A. Apakah artinya boleh dipakai untuk semua beban 10A?</LearningHook>
+
+## 1. Baca spesifikasi dengan urutan ini
+1. **Jenis sumber:** AC atau DC, rentang tegangan, dan frekuensi jika relevan.
+2. **Jenis beban:** resistif, induktif, elektronik, atau gabungan.
+3. **Arus kerja dan kondisi awal:** nominal, starting/inrush, dan duty.
+4. **Fungsi komponen:** pensaklaran, isolasi, proteksi, pengukuran, atau konversi.
+5. **Rating spesifik:** tegangan, kemampuan pemutusan, kategori penggunaan, dan kondisi uji.
+6. **Lingkungan:** suhu, pendinginan, enclosure, getaran, serta metode pemasangan.
+7. **Dokumen:** nomor model yang tepat, datasheet, manual, dan koordinasi dengan komponen lain.
+
+## 2. Rating koil tidak sama dengan rating kontak
+Relay bisa memakai koil DC tetapi kontaknya memiliki rating AC dan DC yang berbeda. Tegangan koil menjelaskan suplai penggeraknya. Rating kontak menjelaskan kondisi beban yang boleh disakelarkan. Periksa keduanya; jangan menyalin satu angka ke bagian lain.
+
+**Contoh label ilustratif:** koil 12V DC; kontak dinyatakan untuk beban resistif 5A pada 30V DC dan 8A pada 250V AC. Angka itu tidak memberi izin menyakelarkan beban induktif 8A pada 250V DC. Contoh ini bukan spesifikasi produk tertentu.
+
+<DeviceGuide type="relay" />
+
+## 3. Angka arus saja belum cukup
+Pemutus harus memiliki kemampuan memutus arus gangguan yang mungkin muncul. Saklar harus cocok untuk jenis beban dan sumber. Kapasitor memerlukan rating jenis serta tegangan yang sesuai. Resistor memerlukan batas daya. MOSFET memerlukan data kendali serta termal. Semua penilaian ini lebih rinci daripada bertanya apakah benda muat di panel.
+
+<ComponentTable type="memilih-komponen-ac-dc" />
+
+## Studi kasus: Ingin mengendalikan pompa dari sensor
+Jangan langsung membeli relay berdasarkan tulisan ampere terbesar. Mulai dari data pompa, cara start, frekuensi switching, suplai kontrol, lingkungan, serta kebutuhan proteksi. Setelah itu perancang memilih perangkat dan koordinasinya. Diagram logika dari sensor ke motor belum cukup sebagai gambar pengawatan siap dipasang.
+
+## 4. Latihan memilih tanpa membeli
+Buat dua daftar: kebutuhan beban dan spesifikasi komponen calon. Tandai mana yang cocok, belum jelas, atau tidak cocok. Jika datasheet tidak menyatakan sebuah penggunaan, jangan menganggapnya otomatis diperbolehkan. Belajar menolak kandidat yang salah sama pentingnya dengan menemukan yang cocok.
+
+<LearningCheck question="Relay 10A AC otomatis boleh dipakai untuk 10A DC pada tegangan sama?" answer="Tidak. Rating AC/DC dan jenis beban harus diperiksa secara terpisah pada datasheet." />
+
+## Bacaan lanjutan
+- [Omron: kondisi dan rating penggunaan relay](https://www.ia.omron.com/product/cautions/36/safety_precautions.html)
+- [Schneider Electric: desain pemutusan AC/DC](https://www.se.com/us/en/faqs/FA326780/)
