@@ -1,0 +1,56 @@
+---
+title: Rangkaian Seri dan Paralel
+summary: Belajar bagaimana komponen tersambung dan bagaimana arus serta tegangan terbagi.
+---
+## 1. Mengapa cara menyambung komponen penting?
+Dua lampu yang sama dapat berperilaku berbeda tergantung cara sambungannya. Ada dua pola dasar: **seri** dan **paralel**.
+
+## 2. Rangkaian seri
+Dalam rangkaian seri, komponen disusun pada satu jalur. Arus yang sama melewati masing-masing komponen.
+
+Pada resistor ideal, hambatan total adalah jumlah setiap hambatan.
+
+<Formula label="Hambatan seri" expression="Rtotal = R1 + R2">
+**Contoh:** resistor 4Ω diseri dengan resistor 6Ω.
+
+**Hasil:** Rtotal = 4 + 6 = **10Ω**.
+
+Jika sumber DC sebesar 20V, arusnya I = 20 / 10 = **2A**.
+</Formula>
+
+Tegangan sumber terbagi di antara resistor. Pada contoh tersebut, tegangan resistor 4Ω sebesar 8V dan resistor 6Ω sebesar 12V.
+
+## 3. Rangkaian paralel
+Komponen paralel memiliki dua titik sambungan yang sama. Karena itu, tegangan pada tiap cabang sama.
+
+Arus total adalah penjumlahan arus cabang.
+
+<Formula label="Hambatan dua resistor paralel" expression="1 / Rtotal = 1 / R1 + 1 / R2">
+**Contoh:** resistor 6Ω diparalel dengan 3Ω.
+
+**Hitung:** 1/Rtotal = 1/6 + 1/3 = 1/2.
+
+**Hasil:** Rtotal = **2Ω**.
+</Formula>
+
+Jika kedua resistor diberi tegangan 6V DC, arus cabang masing-masing adalah 1A dan 2A. Arus total 3A.
+
+## 4. Mengapa instalasi rumah menggunakan cabang paralel?
+Peralatan rumah umumnya dihubungkan ke cabang paralel agar tiap beban mendapatkan tegangan suplai yang sesuai dan dapat dikendalikan relatif mandiri.
+
+Itu bukan berarti instalasi rumah bebas risiko. Pengaman, penampang kabel, grounding, dan tata cara instalasi tetap sangat penting.
+
+## 5. Perbandingan cepat
+- **Seri:** satu lintasan arus, arus sama, tegangan dapat terbagi.
+- **Paralel:** beberapa cabang, tegangan sama, arus dapat terbagi.
+- Dalam seri, satu jalur terputus dapat menghentikan seluruh arus pada lintasan tersebut.
+- Dalam paralel, membuka satu cabang tidak harus memutus cabang lainnya.
+
+<Note>Pernyataan ini menjelaskan model rangkaian ideal. Pada perangkat nyata, karakteristik lampu, kabel, dan sumber dapat memengaruhi hasil.</Note>
+
+## 6. Latihan
+1. Berapa hambatan total resistor 2Ω, 3Ω, dan 5Ω dalam seri?
+2. Dua resistor 4Ω dipasang paralel. Berapa hambatan totalnya?
+3. Pada dua cabang paralel, apakah tegangan setiap cabang berbeda atau sama?
+
+> Jangan merangkai beban rumah secara langsung sebagai percobaan. Gunakan simulator atau kit DC tegangan rendah dengan pembatas arus.
