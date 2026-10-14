@@ -1,0 +1,33 @@
+---
+title: Simulasi Gangguan Listrik dan Sistem Proteksi
+summary: Menganalisis MCB trip, netral putus, dan tegangan turun.
+---
+## 1. Apa yang akan kita pelajari?
+Gangguan listrik dapat berupa arus berlebih, korsleting, kebocoran ke tanah, undervoltage, overvoltage, atau hilangnya netral. Setiap jenis gangguan membutuhkan metode deteksi dan proteksi yang tepat.
+
+<Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
+
+## 2. Memahami cara kerjanya
+**MCB** dirancang untuk arus lebih dan korsleting. **RCCB/RCBO** menyediakan fungsi deteksi arus bocor sesuai jenis perangkat. **SPD** menangani surja transien. Relay pemantau tegangan dapat mengendalikan pemutus jika tegangan di luar batas, bila dirancang benar.
+
+## 3. Hal yang wajib diperhatikan
+Ketika netral pada suplai tiga phase terputus, tegangan beberapa beban satu phase yang tidak seimbang dapat naik atau turun secara berbahaya. MCB tidak otomatis trip karena tegangan tinggi tidak identik dengan arus lebih.
+
+## 4. Contoh penerapan dan perhitungan
+Contoh: resistor 230Ω pada 230V menarik arus 1A dan mengonsumsi 230W. Bila mendapat 300V pada hambatan sama, arus sekitar 1,30A dan daya sekitar 391W. Peralatan yang tidak dirancang untuk tegangan itu bisa rusak.
+
+## 5. Menghubungkan teori dengan sistem listrik
+Semua perangkat memerlukan **sumber energi**, jalur yang sesuai, **beban**, dan cara mengendalikan serta melindungi rangkaian. Prinsip ini juga membantu membedakan gangguan suplai dengan kesalahan pada komponen. Dalam pekerjaan nyata, selalu cocokkan rancangan dengan datasheet, standar keselamatan, dan kondisi pemasangan.
+
+## 6. Latihan pemahaman
+**Pertanyaan:** Mengapa MCB 10A tidak otomatis memutus rangkaian jika tegangan naik tetapi arus masih di bawah karakteristik trip?
+
+Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang diketahui, rumus, penggantian nilai, satuan, dan kesimpulan. Bandingkan kembali jawabanmu dengan penjelasan materi.
+
+## 7. Ringkasan
+- Pahami pengertian dan tujuan komponen atau sistem terlebih dahulu.
+- Kenali hubungan antara sumber, jalur, beban, pengendalian, serta proteksi.
+- Periksa rating dan batas penggunaan sebelum memilih perangkat.
+- Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
+
+> **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
