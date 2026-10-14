@@ -1,0 +1,33 @@
+---
+title: VFD, PLC, dan Kontrol Industri
+summary: Memahami pengendali motor serta logika otomasi.
+---
+## 1. Apa yang akan kita pelajari?
+**VFD** (variable frequency drive) mengendalikan kecepatan motor AC tertentu dengan mengubah frekuensi dan tegangan keluaran sesuai metode kendalinya. **PLC** (programmable logic controller) menjalankan logika proses berdasarkan input dan mengendalikan output.
+
+<Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
+
+## 2. Memahami cara kerjanya
+Sensor batas, tombol, serta sinyal proses dapat menjadi input PLC. Output PLC dapat mengendalikan relay, indikator, atau perintah ke drive. Rangkaian keselamatan mesin tidak boleh hanya bergantung pada program biasa; diperlukan perangkat keselamatan yang sesuai.
+
+## 3. Hal yang wajib diperhatikan
+Kecepatan sinkron motor berhubungan dengan frekuensi dan jumlah kutub. Rotor motor induksi berjalan sedikit di bawah kecepatan sinkron dalam mode motor, tergantung slip.
+
+## 4. Contoh penerapan dan perhitungan
+Contoh motor 4 kutub pada 50Hz memiliki kecepatan sinkron 120×50/4 = 1500 rpm. Pada 40Hz menjadi 1200 rpm. Kecepatan rotor aktual biasanya sedikit lebih rendah.
+
+## 5. Menghubungkan teori dengan sistem listrik
+Semua perangkat memerlukan **sumber energi**, jalur yang sesuai, **beban**, dan cara mengendalikan serta melindungi rangkaian. Prinsip ini juga membantu membedakan gangguan suplai dengan kesalahan pada komponen. Dalam pekerjaan nyata, selalu cocokkan rancangan dengan datasheet, standar keselamatan, dan kondisi pemasangan.
+
+## 6. Latihan pemahaman
+**Pertanyaan:** Mengapa mengubah frekuensi keluaran VFD dapat mengubah kecepatan motor?
+
+Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang diketahui, rumus, penggantian nilai, satuan, dan kesimpulan. Bandingkan kembali jawabanmu dengan penjelasan materi.
+
+## 7. Ringkasan
+- Pahami pengertian dan tujuan komponen atau sistem terlebih dahulu.
+- Kenali hubungan antara sumber, jalur, beban, pengendalian, serta proteksi.
+- Periksa rating dan batas penggunaan sebelum memilih perangkat.
+- Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
+
+> **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
