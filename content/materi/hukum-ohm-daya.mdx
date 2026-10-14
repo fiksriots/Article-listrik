@@ -1,0 +1,62 @@
+---
+title: Hukum Ohm dan Perhitungan Daya
+summary: Menggunakan Volt, Ampere, dan Ohm untuk menghitung rangkaian DC sederhana.
+---
+## 1. Dari konsep menuju hitungan
+Kita sudah tahu bahwa tegangan merupakan beda potensial dan arus merupakan aliran muatan. Sekarang kita mempelajari hubungan keduanya pada resistor ohmik.
+
+<Illustration type="water" caption="Analogi tekanan, aliran, dan hambatan air untuk mengingat Hukum Ohm." />
+
+## 2. Mengenal Hukum Ohm
+Jika hambatan tetap, makin besar tegangan maka makin besar arus. Jika tegangan tetap, makin besar hambatan maka makin kecil arus.
+
+<Formula label="Tiga bentuk Hukum Ohm" expression="V = I × R">
+**Mencari arus:** I = V / R.
+
+**Mencari hambatan:** R = V / I.
+
+**Contoh:** resistor 8Ω diberi 24V DC. Arusnya 24 / 8 = **3A**.
+</Formula>
+
+## 3. Menghitung daya
+Daya listrik pada rangkaian DC ideal adalah hasil kali tegangan dan arus.
+
+<Formula label="Rumus daya" expression="P = V × I">
+**Diketahui:** adaptor mengeluarkan 12V dengan arus aktual 2A.
+
+**Hitung:** P = 12 × 2.
+
+**Hasil:** **24W** pada sisi DC. Rating arus maksimum adaptor bukan selalu arus aktual yang digunakan beban.
+</Formula>
+
+## 4. Hubungan daya dan hambatan
+Dengan Hukum Ohm, pada resistor dapat diperoleh dua bentuk lain.
+
+<Formula label="Daya pada resistor" expression="P = I² × R = V² / R">
+**Contoh:** sebuah resistor 10Ω dialiri arus 0,2A.
+
+**Hitung:** P = (0,2)² × 10 = **0,4W**.
+
+Resistor harus memiliki rating daya yang cukup dan margin sesuai desain.
+</Formula>
+
+## 5. Mengapa kabel bisa panas?
+Setiap penghantar memiliki hambatan. Ketika arus melewatinya, sebagian energi listrik berubah menjadi panas. Karena itu ukuran kabel, suhu, dan pengaman arus harus dipilih sesuai desain instalasi.
+
+## 6. Menghitung energi
+<Formula label="Energi listrik" expression="kWh = W × jam / 1000">
+**Contoh:** perangkat 50W dipakai 8 jam sehari selama 30 hari.
+
+**Hitung:** 50 × 8 × 30 / 1000.
+
+**Hasil:** **12 kWh**.
+</Formula>
+
+## 7. Latihan
+1. Resistor 5Ω diberi tegangan 20V DC. Berapa arusnya?
+2. Perangkat DC 12V memakai arus 1,5A. Berapa dayanya?
+3. Lampu 20W menyala selama 5 jam. Berapa energi dalam kWh?
+
+Cobalah simulator Hukum Ohm di bawah artikel untuk mengecek jawaban pertama.
+
+> Rumus di sini terutama diterapkan pada rangkaian DC dan resistor ideal. Daya nyata sistem AC dapat memerlukan perhitungan faktor daya.
