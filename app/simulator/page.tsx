@@ -1,0 +1,1 @@
+import Simulator from '@/components/simulator';export default function Page(){return <main className="max-w-3xl mx-auto px-5 py-12"><h1 className="text-4xl font-extrabold mb-7">Laboratorium Virtual</h1><Simulator/></main>}
