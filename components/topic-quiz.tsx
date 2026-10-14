@@ -1,8 +1,22 @@
-'use client';import {useState} from 'react';
-const bank:Record<string,{q:string;o:string[];a:number;why:string}[]>={
-'rangkaian-seri-paralel':[{q:'Dalam rangkaian seri, besaran apa yang sama pada setiap resistor?',o:['Arus','Tegangan','Hambatan'],a:0,why:'Pada seri hanya terdapat satu jalur, jadi arusnya sama.'},{q:'Resistor 4Ω dan 6Ω diseri. Berapa hambatan total?',o:['2,4Ω','10Ω','24Ω'],a:1,why:'Seri: 4 + 6 = 10Ω.'},{q:'Dua resistor 6Ω diparalel. Berapa hambatan total?',o:['12Ω','6Ω','3Ω'],a:2,why:'Dua resistor identik yang diparalel menghasilkan setengah hambatan salah satunya.'}],
-'multimeter':[{q:'Port COM biasanya digunakan untuk probe warna apa?',o:['Hitam','Merah','Kuning'],a:0,why:'COM biasanya menjadi tempat probe hitam.'},{q:'Untuk mengukur tegangan baterai, multimeter dihubungkan...',o:['Seri','Paralel antara kedua terminal','Hanya ke satu terminal'],a:1,why:'Tegangan merupakan beda potensial antara dua titik.'},{q:'Bolehkah mengukur hambatan ketika rangkaian masih bertegangan?',o:['Boleh selalu','Tidak','Hanya saat AC'],a:1,why:'Matikan sumber dan pastikan rangkaian aman sebelum mengukur hambatan.'}],
-'vfd-plc':[{q:'Apa urutan sederhana cara kerja PLC?',o:['Input → Proses → Output','Output → Input → Proses','Proses → Output → Input'],a:0,why:'PLC membaca masukan, menjalankan logika, dan mengendalikan keluaran.'},{q:'Sensor biasanya terhubung ke bagian?',o:['Output','Input','Power saja'],a:1,why:'Sensor memberikan sinyal ke input PLC.'}],
-'netral-grounding-proteksi':[{q:'MCB biasa terutama mendeteksi...',o:['Arus lebih','Semua kenaikan tegangan','Frekuensi radio'],a:0,why:'MCB melindungi dari kelebihan arus dan hubung singkat.'},{q:'Perangkat untuk menangani surja transien adalah...',o:['RCCB','SPD','Saklar biasa'],a:1,why:'SPD membantu membatasi surge transien.'}]};
-const common=[{q:'Apa tujuan memahami fungsi komponen sebelum praktik?',o:['Agar memilih dan menggunakan dengan aman','Agar tidak perlu membaca spesifikasi','Agar semua alat dapat dihubungkan ke PLN'],a:0,why:'Pemahaman fungsi dan rating membantu mencegah kesalahan.'},{q:'Apa yang harus dilakukan sebelum pengukuran atau perakitan?',o:['Memastikan sumber dan batas komponen','Langsung menyentuh konduktor','Menaikkan tegangan sebanyak mungkin'],a:0,why:'Pastikan sumber, rangkaian, dan pengaman sesuai.'}];
-export default function TopicQuiz({slug}:{slug:string}){const qs=bank[slug]||common;const [ans,setAns]=useState<Record<number,number>>({});const [show,setShow]=useState(false);const score=qs.filter((x,i)=>ans[i]===x.a).length;return <section className="panel space-y-5"><h2 className="text-2xl font-extrabold">🧠 Cek Pemahaman</h2><p className="text-slate-600">Coba jawab dulu, kemudian lihat pembahasannya.</p>{qs.map((x,i)=><fieldset key={i} className="space-y-2"><legend className="font-semibold">{i+1}. {x.q}</legend>{x.o.map((o,j)=><label key={j} className="block border rounded-lg p-3"><input type="radio" name={'q'+i} checked={ans[i]===j} disabled={show} onChange={()=>setAns(a=>({...a,[i]:j}))} className="mr-2"/>{o}</label>)}{show&&<p className="text-sm text-teal-800 bg-teal-50 rounded-lg p-3">{ans[i]===x.a?'✓ Benar. ':'Jawaban: '+x.o[x.a]+'. '}{x.why}</p>}</fieldset>)}{show?<><p className="font-bold">Skor: {score}/{qs.length}</p><button className="btn" onClick={()=>{setAns({});setShow(false)}}>Coba lagi</button></>:<button className="btn disabled:opacity-50" disabled={Object.keys(ans).length!==qs.length} onClick={()=>setShow(true)}>Periksa jawaban</button>}</section>}
+'use client';
+import {useState} from 'react';
+import {quizBank} from '@/lib/quiz-bank';
+export default function TopicQuiz({slug}: {slug: string}) {
+  const qs = quizBank[slug];
+  const [ans, setAns] = useState<Record<number, number>>({});
+  const [show, setShow] = useState(false);
+  if (!qs) return null;
+  const score = qs.filter((x, i) => ans[i] === x.a).length;
+  return <section className="panel space-y-5" aria-labelledby={'quiz-'+slug}>
+    <h2 id={'quiz-'+slug} className="text-2xl font-extrabold">🧠 Cek Pemahaman</h2>
+    <p className="text-slate-600">{qs.length} soal tentang materi ini. Coba jawab dulu, lalu baca alasannya.</p>
+    {qs.map((x, i) => <fieldset key={i} className="space-y-2">
+      <legend className="font-semibold">{i+1}. {x.q}</legend>
+      {x.o.map((o, j) => <label key={j} className={'block border rounded-lg p-3 '+(show && j === x.a ? 'border-teal-600 bg-teal-50' : '')}>
+        <input type="radio" name={slug+'-q'+i} checked={ans[i] === j} disabled={show} onChange={() => setAns(a => ({...a, [i]: j}))} className="mr-2"/>{o}
+      </label>)}
+      {show && <p className="text-sm text-teal-900 bg-teal-50 rounded-lg p-3">{ans[i] === x.a ? '✓ Benar. ' : 'Jawaban: '+x.o[x.a]+'. '}{x.why}</p>}
+    </fieldset>)}
+    {show ? <><p className="font-bold" role="status">Skor: {score}/{qs.length}</p><button className="btn" onClick={() => {setAns({}); setShow(false);}}>Coba lagi</button></> : <button className="btn disabled:opacity-50" disabled={Object.keys(ans).length !== qs.length} onClick={() => setShow(true)}>Periksa jawaban</button>}
+  </section>;
+}

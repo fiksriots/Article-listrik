@@ -31,3 +31,23 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Dari daftar beban ke rancangan
+
+Mulai dengan daftar perangkat, daya masukan, tegangan, faktor daya bila relevan, dan pola pemakaian. Pisahkan cabang sesuai fungsi. Setelah itu tenaga kompeten mengevaluasi kemampuan kabel, jatuh tegangan, proteksi, dan kondisi pemasangan. Menjumlah watt hanyalah langkah awal.
+
+<Note>Diagram satu garis menyederhanakan beberapa penghantar menjadi satu jalur simbol. Ia menunjukkan hubungan distribusi, tetapi bukan gambar lengkap terminal pengawatan. Kabel panjang atau berkumpul rapat memerlukan evaluasi berbeda dari kabel pendek terbuka.</Note>
+
+<Formula label="Arus AC satu phase" expression="I = P / (V × faktor daya)">
+
+1. Contoh resistif: P = 100W, V = 230V, faktor daya = 1.
+2. I = 100 / (230 × 1).
+3. Hasil: 0,43A.
+4. Tidak cukup untuk menentukan kabel atau MCB; periksa kondisi instalasi dan arus awal.
+
+</Formula>
+
+<LearningCheck question="Pemilihan kabel perlu mempertimbangkan..." answer="Panjang, suhu, pemasangan, dan pengaman. Kemampuan hantar arus dan jatuh tegangan bergantung kondisi pemasangan." />
+
+<CircuitDiagram type="installation" caption="Alur instalasi konseptual. Pengaman tiap cabang, netral, PE, dan terminal nyata memerlukan rancangan lengkap." />

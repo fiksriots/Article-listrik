@@ -7,6 +7,9 @@ summary: Mengenal komponen dasar dan cara membaca fungsinya.
 
 <Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
 
+<DeviceGuide type="resistor" />
+<DeviceGuide type="kapasitor" />
+
 ## 2. Memahami cara kerjanya
 <CircuitDiagram type="electronics" caption="Rangkaian LED DC konseptual: resistor diperlukan untuk membatasi arus." />
 **Dioda** menghantarkan arus terutama pada satu arah dalam rentang kerjanya. **LED** adalah dioda yang memancarkan cahaya ketika diberi bias maju dan arus yang sesuai. LED tetap memerlukan pembatas arus, biasanya resistor atau driver khusus.
@@ -32,3 +35,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Mengenali bentuk sebelum membaca nilai
+
+Resistor axial sering berbentuk tabung kecil dengan gelang warna. Kapasitor elektrolit sering berupa silinder dengan penanda polaritas. LED berkaki dua biasanya memiliki tanda katoda pada bentuk fisiknya, tetapi identifikasi akhir tetap mengikuti datasheet. Bentuk lain seperti komponen SMD sangat kecil dan memiliki penandaan berbeda.
+
+<Note>Resistor seperti pembatas aliran, kapasitor seperti penyimpan energi sementara, dan induktor menentang perubahan arus. Ketiganya bukan komponen yang dapat saling menggantikan. Kapasitor tidak otomatis aman disentuh setelah sumber dimatikan.</Note>
+
+<Formula label="Panas pada resistor LED" expression="P = I² × R">
+
+1. Diketahui: arus perkiraan 0,0091A dan resistor 330Ω.
+2. Substitusi: P = 0,0091² × 330.
+3. Hasil: sekitar 0,027W.
+4. Rating resistor harus di atas disipasi dengan margin serta kondisi suhu yang sesuai.
+
+</Formula>
+
+<LearningCheck question="Kapasitor menyimpan energi dalam..." answer="Medan listrik. Energi tersimpan pada medan listrik di antara penghantarnya." />

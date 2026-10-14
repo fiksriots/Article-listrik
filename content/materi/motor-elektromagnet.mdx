@@ -7,6 +7,8 @@ Arus dalam penghantar menghasilkan medan magnet. Interaksi medan magnet dapat me
 
 <Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
 
+<DeviceGuide type="motor" />
+
 ## 2. Memahami cara kerjanya
 Motor DC sederhana memanfaatkan gaya elektromagnetik dan mekanisme komutasi agar putaran berlanjut. Motor induksi AC menggunakan medan magnet berputar pada stator untuk menginduksikan arus rotor.
 
@@ -31,3 +33,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Apa yang berputar di dalam motor?
+
+Stator adalah bagian diam, rotor bagian yang berputar, dan poros menyalurkan gerak ke beban. Pada motor induksi, medan berputar di stator menginduksi arus rotor. Celah udara memisahkan keduanya. Ilustrasi bentuk motor membantu mengenali bodi, sirip pendingin, dan kotak terminal.
+
+<Note>Motor bukan resistor biasa: arus awal, beban mekanik, pendinginan, dan proteksinya memengaruhi operasi. Suara mendengung tanpa putaran bukan alasan untuk membiarkannya ON. Putuskan energi dan minta pemeriksaan yang sesuai.</Note>
+
+<Formula label="Efisiensi motor" expression="η = Pout / Pin × 100%">
+
+1. Diketahui: daya masukan 500W, keluaran mekanik 400W.
+2. Substitusi: 400 / 500 × 100%.
+3. Hasil: 80%.
+4. Rugi total: 500 − 400 = 100W.
+
+</Formula>
+
+<LearningCheck question="Motor mengubah energi listrik menjadi..." answer="Energi mekanik. Poros memberikan keluaran mekanik; sebagian energi menjadi rugi panas." />

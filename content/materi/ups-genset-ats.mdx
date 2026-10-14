@@ -32,3 +32,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Listrik padam: siapa bekerja lebih dulu?
+
+UPS dapat mempertahankan daya beban tertentu selama batas waktunya. Genset memerlukan waktu untuk mulai dan stabil. ATS memindahkan suplai sesuai desain. Ketiganya punya tugas berbeda; adanya UPS tidak berarti semua alat di rumah bisa ditopang.
+
+<Note>Sumber alternatif tidak boleh menyuplai balik jaringan PLN secara sembarangan. Interlock dan sistem perpindahan dirancang tenaga kompeten. Perkiraan runtime UPS memakai energi yang benar-benar tersedia, beban, dan rugi konversi, bukan angka VA saja.</Note>
+
+<Formula label="Perkiraan runtime" expression="t ≈ Energi tersedia × efisiensi / daya beban">
+
+1. Asumsi ilustratif: energi tersedia 100Wh, efisiensi 0,8, beban 40W.
+2. t = 100 × 0,8 / 40.
+3. Hasil: 2 jam perkiraan.
+4. Energi tersedia sudah harus memperhitungkan batas pengosongan; kondisi baterai dan karakter beban mengubah hasil.
+
+</Formula>
+
+<LearningCheck question="ATS berfungsi terutama untuk..." answer="Memindahkan sumber suplai. ATS mengatur perpindahan antar sumber sesuai rancangan." />

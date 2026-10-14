@@ -37,3 +37,25 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: PLC dan VFD bekerja sebagai tim
+
+Bayangkan konveyor. Sensor membaca keberadaan barang, PLC memproses logika, dan VFD menerima perintah kecepatan motor. PLC bukan sumber daya langsung untuk motor. Pola baca-proses-keluaran adalah model pemula; waktu pembaruan I/O dan urutan scan spesifik mengikuti manual CPU.
+
+<Note>Frekuensi lebih rendah mengubah kecepatan sinkron motor, tetapi torsi, pendinginan, dan batas motor tetap harus diperiksa. Emergency stop dan keselamatan mesin tidak cukup diwujudkan dengan satu tombol di program PLC biasa.</Note>
+
+<Formula label="Kecepatan sinkron motor" expression="ns = 120 × f / p">
+
+1. Diketahui: f = 50Hz, p = 4 kutub.
+2. Substitusi: 120 × 50 / 4.
+3. Hasil: 1500rpm.
+4. Pada 40Hz: 1200rpm. Rotor motor induksi dalam mode motor berjalan lebih lambat karena slip.
+
+</Formula>
+
+<LearningCheck question="Motor 4 kutub pada 50Hz memiliki kecepatan sinkron..." answer="1500 rpm. ns = 120f/p = 120 × 50 / 4 = 1500 rpm." />
+
+## Bacaan lanjutan
+
+[Manual Siemens S7-1200: siklus scan dan pembaruan I/O](https://docs.tia.siemens.cloud/r/simatic_s7_1200_manual_collection_enus_20/plc-concepts/execution-of-the-user-program/processing-the-scan-cycle-in-run-mode). Urutan teknis mengikuti CPU; alur input–proses–output pada pelajaran adalah penyederhanaan konsep.

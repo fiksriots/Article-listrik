@@ -32,3 +32,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Mengapa transmisi memakai tegangan tinggi?
+
+Untuk daya sama pada model ideal, tegangan lebih tinggi memungkinkan arus lebih kecil. Rugi panas penghantar I²R menjadi lebih kecil. Transformator menyesuaikan tegangan AC di berbagai tahap sebelum energi mencapai pelanggan. Ini bukan berarti jaringan tegangan tinggi aman; justru jarak dan isolasinya harus dirancang khusus.
+
+<Note>Trafo biasa memerlukan perubahan fluks magnet. Jangan memasang DC tetap langsung ke kumparan trafo AC. Rasio lilitan memberi perkiraan rasio tegangan tanpa memperhitungkan seluruh rugi dan regulasi.</Note>
+
+<Formula label="Perbandingan trafo ideal" expression="V2 / V1 = N2 / N1">
+
+1. Contoh: V1 = 230V, N1 = 1000 lilitan, N2 = 100 lilitan.
+2. V2 = 230 × 100 / 1000.
+3. Hasil ideal: 23V AC.
+4. Tegangan nyata bergantung beban dan rugi; jangan merakit trafo PLN sebagai latihan pemula.
+
+</Formula>
+
+<LearningCheck question="Untuk daya sama, tegangan transmisi naik membuat arus ideal..." answer="Turun. P = VI pada model sederhana: arus berkurang ketika tegangan naik." />

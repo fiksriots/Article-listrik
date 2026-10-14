@@ -32,3 +32,12 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Lampu otomatis ketika ruangan gelap
+
+Sensor cahaya memberi masukan. Kontroler membandingkan nilai dengan ambang. Driver lalu mengendalikan aktuator yang sesuai. Tambahkan dua ambang berbeda untuk ON dan OFF (histeresis) agar lampu tidak berkedip ketika cahaya berada dekat batas.
+
+<Note>IoT menambahkan komunikasi jaringan; fungsi dasar kontrol tetap input, proses, output. Rancang kondisi ketika jaringan terputus. Contoh belajar cukup memakai LED DC kecil, bukan lampu PLN.</Note>
+
+<LearningCheck question="Histeresis membantu mencegah..." answer="Berkedip di dekat ambang. Ambang ON dan OFF yang berbeda mencegah perubahan cepat di sekitar satu batas." />

@@ -31,3 +31,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Latihan aman dimulai sebelum tombol ON
+
+Gunakan rangkaian LED berdaya kecil dari sumber DC rendah yang terproteksi. Saat sumber dilepas, periksa polaritas LED, resistor pembatas, dan sambungan. Letakkan rangkaian di permukaan yang sesuai, hindari benda logam lepas, lalu hentikan percobaan jika timbul panas, bau, atau perubahan bentuk.
+
+<Note>Tegangan rendah bukan jaminan tanpa bahaya: baterai besar dapat memasok arus korsleting tinggi. Pemula tidak perlu memakai aki kendaraan atau merakit baterai litium untuk memahami LED.</Note>
+
+<Formula label="Resistor pembatas LED" expression="R = (Vs − Vf) / I">
+
+1. Diketahui: Vs = 5V, Vf ≈ 2V, target I = 10mA.
+2. Ubah satuan: 10mA = 0,01A.
+3. Hitung: (5 − 2) / 0,01 = 300Ω.
+4. Pilih contoh nilai standar 330Ω: I ≈ 3/330 = 9,1mA. Periksa rating LED dan daya resistor.
+
+</Formula>
+
+<LearningCheck question="Mengapa LED latihan membutuhkan resistor?" answer="Agar membatasi arus. LED memerlukan pembatas arus untuk mencegah arus berlebih." />

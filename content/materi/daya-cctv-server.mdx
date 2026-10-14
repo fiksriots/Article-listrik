@@ -31,3 +31,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Empat kamera dan satu perekam
+
+Daftar daya setiap perangkat dahulu. Empat kamera 6W dan perekam 18W menghasilkan total 42W, sebelum rugi dan perangkat tambahan. Untuk CCTV, periksa pula daya saat inframerah ON. Untuk PoE, pastikan standar perangkat, daya per port, dan anggaran total switch cocok.
+
+<Note>Server memakai beban yang berubah terhadap aktivitas. Label PSU menyatakan kemampuan maksimum, bukan konsumsi tetap. Gunakan daya masukan terukur atau spesifikasi beban yang relevan untuk perkiraan energi. PoE pasif tidak otomatis kompatibel dengan perangkat PoE standar.</Note>
+
+<Formula label="Energi CCTV sehari" expression="E = P × t / 1000">
+
+1. Total contoh: 4 × 6W + 18W = 42W.
+2. Waktu: 24 jam.
+3. E = 42 × 24 / 1000 = 1,008kWh.
+4. Belum termasuk rugi adaptor, switch, dan variasi daya kamera.
+
+</Formula>
+
+<LearningCheck question="Empat kamera 6W dan perekam 18W totalnya..." answer="42W. 4 × 6 + 18 = 42W sebelum rugi dan cadangan." />

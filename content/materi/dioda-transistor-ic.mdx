@@ -31,3 +31,21 @@ Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang
 - Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
 
 > **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
+
+
+## Studi kasus: Mengendalikan beban dengan sinyal kecil
+
+Mikrokontroler biasanya tidak mampu memasok arus motor langsung. Transistor atau driver yang sesuai menjadi perantara: sinyal kecil mengendalikan jalur daya yang lebih besar. Beban induktif juga memerlukan penanganan tegangan saat dimatikan, misalnya dioda flyback pada aplikasi DC yang sesuai.
+
+<Note>MOSFET bukan sekadar saklar ideal. Hambatan saat ON menghasilkan panas. Nilai tegangan ambang VGS(th) tidak berarti komponen sudah menghantar penuh; periksa RDS(on) pada tegangan gerbang yang digunakan.</Note>
+
+<Formula label="Rugi konduksi MOSFET" expression="P ≈ I² × RDS(on)">
+
+1. Contoh: I = 2A, RDS(on) = 0,05Ω pada kondisi datasheet.
+2. Substitusi: 2² × 0,05.
+3. Hasil: 0,2W rugi konduksi.
+4. Belum termasuk rugi switching dan kenaikan hambatan saat panas; ini bukan rancangan driver lengkap.
+
+</Formula>
+
+<LearningCheck question="Dua transistor dengan bentuk sama pasti memiliki kaki sama?" answer="Tidak. Urutan kaki dan rating harus diperiksa pada datasheet." />
