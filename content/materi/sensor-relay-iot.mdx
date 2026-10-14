@@ -1,0 +1,33 @@
+---
+title: Sensor, Relay, Mikrokontroler, dan IoT
+summary: Membangun logika input, proses, dan output.
+---
+## 1. Apa yang akan kita pelajari?
+**Sensor** mengubah besaran fisik seperti suhu, cahaya, atau jarak menjadi sinyal. **Mikrokontroler** membaca sinyal dan menjalankan program. **Aktuator** seperti LED, buzzer, atau motor mengubah keputusan menjadi tindakan.
+
+<Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
+
+## 2. Memahami cara kerjanya
+Relay adalah saklar yang digerakkan secara elektromagnetik; sisi kumparan dan kontaknya perlu dipahami secara terpisah. Modul relay tidak otomatis aman untuk mengendalikan listrik PLN karena dibutuhkan isolasi, jarak bebas, rumah pelindung, dan komponen bersertifikat.
+
+## 3. Hal yang wajib diperhatikan
+Pada IoT, perangkat dapat mengirim pengukuran melalui WiFi atau protokol lain. Tetapi otomasi lokal sebaiknya memiliki perilaku aman ketika jaringan putus dan tidak mengandalkan koneksi internet untuk fungsi keselamatan.
+
+## 4. Contoh penerapan dan perhitungan
+Contoh: sensor cahaya membaca nilai rendah, mikrokontroler mengaktifkan LED melalui resistor. Aturan sederhana: jika nilai sensor di bawah ambang, output ON; jika di atas, output OFF. Tambahkan hysteresis agar output tidak berkedip di sekitar ambang.
+
+## 5. Menghubungkan teori dengan sistem listrik
+Semua perangkat memerlukan **sumber energi**, jalur yang sesuai, **beban**, dan cara mengendalikan serta melindungi rangkaian. Prinsip ini juga membantu membedakan gangguan suplai dengan kesalahan pada komponen. Dalam pekerjaan nyata, selalu cocokkan rancangan dengan datasheet, standar keselamatan, dan kondisi pemasangan.
+
+## 6. Latihan pemahaman
+**Pertanyaan:** Bagian mana yang membaca lingkungan, mana yang memproses, dan mana yang memberi keluaran?
+
+Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang diketahui, rumus, penggantian nilai, satuan, dan kesimpulan. Bandingkan kembali jawabanmu dengan penjelasan materi.
+
+## 7. Ringkasan
+- Pahami pengertian dan tujuan komponen atau sistem terlebih dahulu.
+- Kenali hubungan antara sumber, jalur, beban, pengendalian, serta proteksi.
+- Periksa rating dan batas penggunaan sebelum memilih perangkat.
+- Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
+
+> **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
