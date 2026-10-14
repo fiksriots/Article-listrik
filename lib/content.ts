@@ -1,0 +1,1 @@
+import fs from 'node:fs';import path from 'node:path';import matter from 'gray-matter';export function getLesson(slug:string){if(!/^[a-z0-9-]+$/.test(slug))return null;const p=path.join(process.cwd(),'content','materi',slug+'.mdx');if(!fs.existsSync(p))return null;return matter(fs.readFileSync(p,'utf8'));}
