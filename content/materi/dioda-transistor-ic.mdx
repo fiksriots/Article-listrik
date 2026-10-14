@@ -1,0 +1,33 @@
+---
+title: Dioda, Transistor, MOSFET, dan IC
+summary: Dasar komponen aktif sebagai saklar dan pengolah sinyal.
+---
+## 1. Apa yang akan kita pelajari?
+Dioda dipakai untuk mengarahkan arus pada berbagai rangkaian. Transistor bipolar (BJT) dapat dipakai sebagai penguat atau saklar yang dikendalikan arus basis. MOSFET dapat dikendalikan tegangan gerbang untuk mengatur arus pada jalur drain-source.
+
+<Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
+
+## 2. Memahami cara kerjanya
+**IC atau integrated circuit** berisi banyak komponen pada satu chip. Contohnya mikrokontroler, penguat operasional, dan pengatur tegangan. Setiap IC mempunyai nomor pin, suplai, batas arus, dan ketentuan pemasangan yang harus dibaca di datasheet.
+
+## 3. Hal yang wajib diperhatikan
+Komponen aktif tidak boleh disambungkan berdasarkan bentuk fisiknya saja. Dua transistor dengan kemasan sama bisa memiliki urutan kaki dan karakteristik berbeda. Gunakan rangkaian DC rendah yang terproteksi saat belajar.
+
+## 4. Contoh penerapan dan perhitungan
+Contoh saklar MOSFET: sebuah mikrokontroler memberikan sinyal logika melalui driver yang sesuai ke gerbang MOSFET; beban DC disuplai dari sumber terpisah dengan ground dan proteksi yang dirancang benar. Pemilihan MOSFET membutuhkan data RDS(on), VGS, dan kemampuan termal.
+
+## 5. Menghubungkan teori dengan sistem listrik
+Semua perangkat memerlukan **sumber energi**, jalur yang sesuai, **beban**, dan cara mengendalikan serta melindungi rangkaian. Prinsip ini juga membantu membedakan gangguan suplai dengan kesalahan pada komponen. Dalam pekerjaan nyata, selalu cocokkan rancangan dengan datasheet, standar keselamatan, dan kondisi pemasangan.
+
+## 6. Latihan pemahaman
+**Pertanyaan:** Mengapa penting membaca datasheet sebelum memasang transistor atau IC?
+
+Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang diketahui, rumus, penggantian nilai, satuan, dan kesimpulan. Bandingkan kembali jawabanmu dengan penjelasan materi.
+
+## 7. Ringkasan
+- Pahami pengertian dan tujuan komponen atau sistem terlebih dahulu.
+- Kenali hubungan antara sumber, jalur, beban, pengendalian, serta proteksi.
+- Periksa rating dan batas penggunaan sebelum memilih perangkat.
+- Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
+
+> **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
