@@ -28,6 +28,17 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
     assert.equal(await page.locator('#konten').count(),1,route+' main target');
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),route+' page overflow');
     assert.ok(!(await page.locator('body').innerText()).includes('\\u'),route+' escaped Unicode');
+    for(const img of await page.locator('.device-photograph img').all()){
+     assert.ok((await img.getAttribute('src')).startsWith('/devices/'),route+' local photo');
+     await img.scrollIntoViewIfNeeded();
+     await img.evaluate(el=>el.decode());
+     assert.ok(await img.evaluate(el=>el.naturalWidth>0 && el.complete),route+' photo loaded');
+    }
+    if(route==='/galeri'){
+     assert.equal(await page.locator('.device-photograph img').count(),8);
+     await page.getByText('Kredit foto dan lisensi',{exact:true}).click();
+     assert.ok((await page.locator('.photo-credits').innerText()).includes('CC BY-SA'));
+    }
     if(route.startsWith('/materi/')){
      const slug=route.split('/').pop();
      assert.ok((await page.title()).includes('Akademi Listrik'));

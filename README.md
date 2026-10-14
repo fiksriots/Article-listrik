@@ -32,7 +32,8 @@ Smoke test mengunjungi 36 halaman pada lebar 390px dan 1440px, menjawab dan meng
 - 32 materi dengan studi kasus, analogi, latihan, dan pembahasan
 - 64 soal khusus topik, masing-masing dua soal per modul
 - Kotak rumus dengan asumsi dan contoh perhitungan
-- Ilustrasi SVG: multimeter, PLC, saklar, relay/kontaktor, MCB/RCCB/SPD, resistor, kapasitor, motor
+- 10 foto perangkat asli dengan atribusi dan lisensi di `public/devices/ATTRIBUTION.md`
+- Ilustrasi SVG (dapat dibuka di artikel): multimeter, PLC, saklar, relay/kontaktor, MCB/RCCB/SPD, resistor, kapasitor, motor
 - Diagram seri, paralel, pengukuran, LED, AC/DC, tiga phase, distribusi, grounding, dan instalasi konseptual
 - Simulator Hukum Ohm, seri/paralel, AC satu/tiga phase, multimeter, dan logika PLC
 - Progress lokal, tautan lanjut belajar, sidebar, serta navigasi materi sebelumnya/berikutnya
