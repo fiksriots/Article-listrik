@@ -1,0 +1,33 @@
+---
+title: Distribusi Daya CCTV, Router, dan Server
+summary: Menghitung kebutuhan daya perangkat jaringan dan kamera.
+---
+## 1. Apa yang akan kita pelajari?
+Perangkat IT memerlukan suplai yang stabil. Router dan switch sering memakai adaptor DC, kamera IP bisa memakai PoE, sedangkan rack server menggunakan PSU AC dan distribusi melalui PDU. Masing-masing memiliki rating serta proteksi.
+
+<Note>Mulailah dari memahami fungsi setiap komponen dan alasan sebuah sistem dirancang demikian. Jangan terburu-buru mencoba rangkaian daya yang belum dipahami.</Note>
+
+## 2. Memahami cara kerjanya
+Pada PoE, switch/injector menyalurkan data dan daya melalui kabel Ethernet sesuai standar yang kompatibel. Anggaran daya (power budget) switch harus cukup bagi kamera dan perangkat PoE lainnya, termasuk cadangan untuk kondisi puncak.
+
+## 3. Hal yang wajib diperhatikan
+Perkirakan kapasitas UPS dari konsumsi aktual total, bukan hanya penjumlahan kemampuan maksimum adaptor. Pertimbangkan beban puncak, efisiensi, rugi konversi, dan waktu backup. Kabel dan konektor juga menyebabkan jatuh tegangan.
+
+## 4. Contoh penerapan dan perhitungan
+Contoh 4 kamera masing-masing menggunakan 8W berarti 32W total pada kamera. Switch PoE perlu menyediakan setidaknya jumlah anggaran PoE yang cukup, serta memperhitungkan konsumsi switch sendiri untuk UPS.
+
+## 5. Menghubungkan teori dengan sistem listrik
+Semua perangkat memerlukan **sumber energi**, jalur yang sesuai, **beban**, dan cara mengendalikan serta melindungi rangkaian. Prinsip ini juga membantu membedakan gangguan suplai dengan kesalahan pada komponen. Dalam pekerjaan nyata, selalu cocokkan rancangan dengan datasheet, standar keselamatan, dan kondisi pemasangan.
+
+## 6. Latihan pemahaman
+**Pertanyaan:** Mengapa perhitungan UPS untuk CCTV harus memasukkan konsumsi switch selain kamera?
+
+Coba jawab menggunakan bahasa sendiri. Jika menyangkut angka, tuliskan data yang diketahui, rumus, penggantian nilai, satuan, dan kesimpulan. Bandingkan kembali jawabanmu dengan penjelasan materi.
+
+## 7. Ringkasan
+- Pahami pengertian dan tujuan komponen atau sistem terlebih dahulu.
+- Kenali hubungan antara sumber, jalur, beban, pengendalian, serta proteksi.
+- Periksa rating dan batas penggunaan sebelum memilih perangkat.
+- Kerjakan perhitungan dengan satuan yang benar dan dokumentasikan asumsi.
+
+> **Keselamatan:** Pelajaran ini untuk edukasi. Jangan membuka power supply bertegangan, bekerja pada panel PLN, atau menguji jaringan 230/400V tanpa pelatihan, kewenangan, dan prosedur keselamatan yang sesuai.
