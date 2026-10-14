@@ -1,0 +1,61 @@
+---
+title: AC, DC, Frekuensi, dan Sumber Listrik
+summary: Memahami baterai, listrik PLN, 50Hz, gelombang sinus, dan perjalanan listrik ke rumah.
+---
+## 1. Ada dua bentuk arus utama
+**DC (Direct Current)** adalah arus yang mengalir satu arah, seperti pada rangkaian yang menggunakan baterai.
+
+**AC (Alternating Current)** adalah arus yang berubah arah secara berkala, seperti yang digunakan dalam jaringan listrik PLN.
+
+DC tidak harus selalu datar; AC juga tidak harus selalu berupa sinus. Namun gelombang sinus merupakan model penting bagi sistem tenaga listrik.
+
+## 2. Mengapa AC disebut bolak-balik?
+Pada gelombang AC sinusoidal, tegangan berubah dari positif ke nol, ke negatif, lalu kembali mengulangi pola yang sama.
+
+**Frekuensi** menunjukkan banyaknya siklus lengkap tiap detik. Listrik PLN Indonesia berfrekuensi nominal 50Hz.
+
+<Formula label="Periode sebuah gelombang" expression="T = 1 / f">
+**Diketahui:** frekuensi f = 50Hz.
+
+**Hitung:** T = 1 / 50 = 0,02 detik.
+
+**Hasil:** satu siklus berlangsung **20 milidetik (ms)**.
+</Formula>
+
+<Note>50Hz tidak berarti listrik PLN diputus dan dinyalakan 50 kali setiap detik. Yang berubah adalah besar dan polaritas tegangan secara berkala.</Note>
+
+## 3. Mengapa angka 230V bukan tegangan puncak?
+Tegangan listrik rumah dinyatakan dengan nilai **RMS** atau nilai efektif. Untuk gelombang sinus ideal, tegangan puncaknya sekitar 1,414 kali nilai RMS.
+
+<Formula label="Tegangan puncak sinus" expression="Vpeak = Vrms × √2">
+**Contoh:** Vrms = 230V.
+
+**Hitung:** 230 × 1,414 ≈ **325V**.
+
+Angka itu adalah puncak tegangan sesaat, bukan perubahan tegangan nominal menjadi 325V RMS.
+</Formula>
+
+## 4. Dari mana energi listrik dihasilkan?
+Pembangkit listrik dapat memanfaatkan energi air, uap, angin, atau sumber lainnya untuk menggerakkan generator. Panel surya langsung mengubah energi cahaya menjadi energi listrik DC.
+
+Listrik dari generator kemudian ditransmisikan dan didistribusikan melalui sistem kelistrikan.
+
+## 5. Perjalanan listrik PLN ke rumah
+Pembangkit → transformator penaik tegangan → jaringan transmisi → gardu induk → jaringan distribusi → transformator distribusi → meter pelanggan → panel rumah.
+
+Tegangan transmisi dinaikkan supaya arus dan rugi panas kabel berkurang pada daya yang sama.
+
+<Formula label="Rugi daya pada penghantar resistif" expression="Ploss = I² × R">
+**Contoh:** Kabel memiliki hambatan total 2Ω dan membawa arus 5A.
+
+**Hitung:** 5² × 2 = **50W** hilang sebagai panas.
+
+Jika arusnya turun menjadi 1A dengan hambatan sama, rugi panas turun menjadi **2W**.
+</Formula>
+
+## 6. Ringkasan
+DC mengalir satu arah, AC berubah arah secara berkala, dan frekuensi 50Hz memiliki periode 20ms. Tegangan listrik rumah nominal sekitar 230V RMS untuk satu phase terhadap netral.
+
+**Latihan:** Berapa periode gelombang pada frekuensi 25Hz?
+
+> Jangan mencoba mengukur sinyal PLN atau membongkar panel jika belum terlatih. Pelajari bentuk gelombang melalui simulasi.
