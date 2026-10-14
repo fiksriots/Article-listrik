@@ -1,28 +1,85 @@
 ---
 title: Volt, Ampere, Ohm, Watt dan kWh
-summary: Besaran listrik dasar dijelaskan dengan analogi air dan hitungan sederhana.
+summary: Pahami lima satuan listrik dengan analogi air, contoh nyata, rumus, dan simulasi.
 ---
-## Mengenal lima istilah penting
+## 1. Memahami listrik lewat analogi air
 
-- **Volt (V)**: perbedaan potensial antara dua titik, mirip perbedaan tekanan air.
-- **Ampere (A)**: banyaknya muatan listrik yang lewat setiap detik.
-- **Ohm (Ω)**: besarnya hambatan terhadap aliran arus.
-- **Watt (W)**: laju perpindahan atau penggunaan energi.
-- **kWh**: satuan jumlah energi listrik.
+Bayangkan sebuah tangki air yang terhubung ke pipa dan kincir. Perbedaan tekanan mendorong air, volume air yang mengalir per detik menggambarkan arus, dan pipa yang sempit memberikan hambatan.
 
-## Hukum Ohm
-Pada resistor ohmik, **V = I × R**. Artinya arus adalah tegangan dibagi hambatan.
+<Illustration type="water" caption="Analogi air membantu memahami hubungan tegangan, arus, hambatan, dan beban; bukan gambaran fisik yang persis sama." />
 
-Contoh: resistor 6 Ω diberi tegangan DC 12 V. Arusnya **12 / 6 = 2 A**.
+## 2. Apa itu Volt (V)?
 
-## Menghitung daya
-Untuk DC, **P = V × I**. Sebuah perangkat DC menggunakan 12 V dan arus aktual 2 A berarti dayanya 24 W.
+**Tegangan** adalah beda potensial listrik antara dua titik. Contohnya baterai AA sekitar 1,5V, adaptor router 12V, dan tegangan rumah nominal sekitar 230V AC.
 
-Untuk peralatan AC, perlu memperhatikan faktor daya apabila tidak murni resistif.
+Tegangan dapat ada meskipun tidak ada arus, misalnya pada baterai yang belum dihubungkan ke beban.
 
-## Menghitung energi
-Lampu 10 W menyala 10 jam: 10 × 10 = 100 Wh = **0,1 kWh**.
+## 3. Apa itu Ampere (A)?
 
-Gunakan simulator di bawah materi untuk mengubah tegangan dan hambatan.
+**Arus** mengukur laju aliran muatan per detik. Satu Ampere sama dengan satu coulomb per detik.
 
-> Keselamatan: simulator adalah model matematis dan bukan panduan langsung menghubungkan komponen ke listrik PLN.
+<Formula label="Hubungan arus dan muatan" expression="I = Q / t">
+**Diketahui:** 10 coulomb muatan lewat dalam 5 detik.
+
+**Hitung:** I = 10 / 5 = **2 A**.
+</Formula>
+
+## 4. Apa itu Ohm (Ω)?
+
+**Hambatan** menggambarkan sifat komponen yang membatasi arus. Pada tegangan tetap, resistor dengan hambatan lebih tinggi menghasilkan arus lebih kecil.
+
+## 5. Hukum Ohm
+
+Hukum Ohm berlaku pada komponen ohmik seperti resistor ideal.
+
+<Formula label="Rumus Hukum Ohm" expression="V = I × R">
+**Contoh:** Resistor 6Ω diberi tegangan 12V DC.
+
+**Mencari arus:** I = V / R.
+
+**Substitusi:** I = 12 / 6.
+
+**Jawaban:** **2 Ampere**.
+</Formula>
+
+Coba ubah tegangan dan hambatan di simulator setelah artikel ini. Amati perubahan arus.
+
+## 6. Apa itu Watt (W)?
+
+**Daya** adalah laju pemakaian atau perpindahan energi. Dalam rangkaian DC sederhana, daya dapat dihitung menggunakan tegangan dan arus.
+
+<Formula label="Rumus daya DC" expression="P = V × I">
+**Contoh:** Sebuah router menggunakan 12V DC dan arus aktual 2A.
+
+**Hitung:** P = 12 × 2.
+
+**Hasil:** **24 Watt** pada sisi DC. Daya yang ditarik adaptor dari PLN dapat lebih besar akibat rugi konversi.
+</Formula>
+
+Pada sistem AC, perhitungan daya nyata juga dapat melibatkan faktor daya.
+
+## 7. Apa itu kWh?
+
+**Watt** menyatakan daya, sedangkan **kWh** menyatakan energi yang dipakai selama waktu tertentu.
+
+<Formula label="Energi listrik" expression="kWh = (W × jam) / 1000">
+**Contoh:** Lampu 10W menyala 10 jam.
+
+**Hitung:** (10 × 10) / 1000.
+
+**Hasil:** **0,1 kWh**.
+</Formula>
+
+Contoh lain: router 24W bekerja selama 24 jam sehari selama 30 hari. Energinya (24 × 24 × 30) / 1000 = **17,28 kWh**.
+
+## 8. Ringkasan
+
+- Volt (V): perbedaan potensial.
+- Ampere (A): laju aliran muatan.
+- Ohm (Ω): hambatan.
+- Watt (W): daya.
+- kWh: energi.
+
+<Note>Jangan menyamakan Watt dan kWh. Perangkat berdaya 100W tidak selalu menghabiskan 100 kWh; energi bergantung pada berapa lama perangkat bekerja.</Note>
+
+> Praktik kelistrikan awal harus memakai rangkaian DC tegangan rendah dengan pembatas arus. Jangan menghubungkan resistor percobaan langsung ke stopkontak PLN.
