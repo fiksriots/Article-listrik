@@ -1001,322 +1001,7 @@
     "title": "MTCNA 10 · PPP, PPPoE, dan tunnel",
     "summary": "Pelajari akun, profile, pool, dan sesi tanpa menganggap semua tunnel terenkripsi.",
     "analogy": "PPP profile seperti paket aturan layanan; secret seperti identitas pengguna; sesi aktif menunjukkan siapa yang benar-benar tersambung.",
-    "explain": "PPP menyediakan pengelolaan sesi serta autentikasi untuk beberapa layanan. Pada RouterOS, profile menyimpan parameter bersama, secret menyimpan akun lokal, dan active menampilkan sesi. IP pool menyediakan rentang alamat; local-address dan remote-address menjelaskan kedua ujung koneksi point-to-point.\n\nPPPoE membawa PPP melalui Ethernet. Client memerlukan server yang dapat dijangkau pada layer 2 serta kredensial dan service-name bila diperlukan. PPPoE bukan enkripsi isi trafik. Pada lab, server dan client harus ditempatkan di segmen terpisah dari pengguna produksi agar tidak menawarkan layanan tak diinginkan.\n\nOutline lama juga memuat PPTP dan SSTP. PPTP dikenali untuk memahami konteks lama, bukan pilihan pengamanan baru. SSTP memakai TLS dan memerlukan validasi sertifikat serta pengaturan waktu yang benar untuk keamanan yang sesuai. Tunnel aktif belum menjamin subnet jauh terjangkau: rute, firewall, MTU, dan DNS tetap perlu diuji. WireGuard dapat dipelajari terpisah sebagai tambahan, bukan menggantikan pemahaman pokok PPP.",
-    "example": "Router lab menjadi PPPoE client ke server lab. Saat akun salah sesi tidak aktif; saat sesi aktif tetapi internet gagal, periksa alamat, default route, NAT bila diperlukan, dan layanan hulu.",
-    "practice": [
-      "Siapkan dua router/CHR pada segmen Ethernet lab terisolasi.",
-      "Pada server lab, rancang IP pool, PPP profile, dan akun secret khusus latihan.",
-      "Aktifkan PPPoE server pada antarmuka lab yang benar.",
-      "Pada client, buat PPPoE client dengan interface serta kredensial lab.",
-      "Periksa status active, alamat kedua ujung, route, lalu uji layanan; untuk SSTP verifikasi sertifikat sebelum akses sensitif."
-    ],
-    "warning": "Jangan memakai PPPoE atau PPTP seolah otomatis mengenkripsi seluruh komunikasi dengan aman.",
-    "check": "Apa bedanya PPP profile dan secret?",
-    "answer": "Profile berisi parameter bersama; secret berisi identitas serta parameter akun lokal.",
-    "nodes": [
-      "PPPoE client",
-      "Sesi PPP / profile",
-      "Server + pool"
-    ],
-    "stage": 10,
-    "minutes": 10,
-    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/pppoe/",
-    "mtcna": 8
-  },
-  {
-    "slug": "mtcna-tools-monitoring",
-    "title": "MTCNA 11 · Torch, Netwatch, log, dan monitoring",
-    "summary": "Gunakan alat RouterOS untuk mengumpulkan bukti gangguan.",
-    "analogy": "Alat monitoring seperti beberapa alat ukur: masing-masing menjawab pertanyaan berbeda, bukan semuanya memberi satu vonis sehat/rusak.",
-    "explain": "Interface traffic monitor menunjukkan laju pada antarmuka. Torch membantu melihat aliran trafik yang terlihat pada titik pengamatan, tetapi fitur akselerasi serta hardware offload dapat memengaruhi visibilitas. Ping dan traceroute menguji keterjangkauan; Profiler membantu mencari penggunaan CPU. Tentukan pertanyaan sebelum memilih alat.\n\nNetwatch dapat menguji target dan memicu tindakan sesuai kemampuan versi, tetapi target gagal bukan otomatis seluruh internet mati. System logs menyimpan kejadian yang perlu dikaitkan dengan waktu. Atur waktu/NTP yang benar. Graphs dan SNMP menyediakan pengamatan jangka panjang; The Dude adalah alat monitoring terpisah dengan dukungan yang perlu diperiksa sesuai platform.\n\nUntuk eskalasi, siapkan gejala, waktu, diagram, versi, log relevan, serta langkah reproduksi. supout.rif dan autosupout.rif dapat membantu dukungan resmi namun berpotensi memuat informasi sensitif. E-mail notifikasi harus memakai layanan dan kredensial yang dikelola dengan benar. Gunakan komentar rule serta nama interface yang jelas agar pemeriksaan berikutnya lebih mudah.",
-    "example": "CPU penuh saat throughput turun. Bandingkan Profiler, trafik interface, dan perubahan terakhir. Jangan langsung menuduh sinyal radio jika jalur yang dipakai ternyata kabel.",
-    "practice": [
-      "Catat waktu perangkat, gejala, dan kondisi sebelum uji.",
-      "Pakai Tools → Ping/Traceroute ke gateway dan tujuan layanan.",
-      "Jalankan Torch di interface yang relevan, lalu bandingkan dengan traffic monitor.",
-      "Lihat System → Resources/Profiler serta Log sesuai versi.",
-      "Buat catatan eskalasi tanpa membagikan password, private key, atau file dukungan secara publik."
-    ],
-    "warning": "Hasil satu alat harus dibaca bersama posisi pengamatan, waktu, dan pengaruh akselerasi trafik.",
-    "check": "Mengapa log perlu waktu perangkat yang benar?",
-    "answer": "Agar kejadian dapat dicocokkan dengan laporan pengguna dan log perangkat lain.",
-    "nodes": [
-      "Trafik / perangkat",
-      "Tools + log",
-      "Bukti gangguan"
-    ],
-    "stage": 10,
-    "minutes": 10,
-    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323150/Torch",
-    "mtcna": 9
-  },
-  {
-    "slug": "mtcna-lab-akhir",
-    "title": "MTCNA 12 · Lab terpadu dan cek kesiapan",
-    "summary": "Buktikan pemahaman melalui konfigurasi, pengujian, dan penjelasan hasil.",
-    "analogy": "Belajar jaringan seperti belajar mengemudi: hafal tombol belum cukup; kamu perlu menunjukkan keputusan dan hasilnya.",
-    "explain": "Siapkan satu router/CHR, satu koneksi hulu lab, dua klien, dan bila tersedia dua radio untuk praktik wireless. Gunakan LAN 192.168.50.0/24 dengan gateway .1, pool .100–.150, serta subnet hulu yang tidak bertabrakan. Simpan backup/export dan diagram sebelum mulai.\n\nBangun LAN bridge, DHCP, koneksi hulu, rute keluar, source NAT bila diperlukan, serta filter sesuai kebijakan. Tambahkan queue untuk satu klien dan buktikan pengaruhnya. Untuk routing dua LAN, gunakan dua router dan rute balik seperti modul routing. PPPoE serta wireless memerlukan topologi dan perangkat pendukung tersendiri; jangan menganggap semua latihan cukup pada satu CHR.\n\nUji kasus salah gateway, DNS tidak sesuai, kabel/antarmuka terputus, dan queue yang dilewati FastTrack secara terkendali. Untuk tiap kasus, tulis gejala, hipotesis, bukti, perubahan, dan hasil. Jelaskan mengapa input berbeda dari forward dan NAT berbeda dari izin firewall. Kesiapan ditentukan oleh kemampuan mengulang serta menjelaskan praktik, bukan sekadar jumlah halaman selesai.",
-    "example": "Klien bisa ping gateway tetapi pencarian nama gagal. Tunjukkan hasil konfigurasi IP, uji layanan luar, dan nslookup untuk memisahkan gangguan DNS dari jalur IP.",
-    "practice": [
-      "Selesaikan prasyarat IP/subnet/gateway dan buat topologi lab.",
-      "Bangun LAN dan WAN sesuai metode hulu, verifikasi DHCP serta rute.",
-      "Uji kebijakan filter dan koneksi internet; catat koneksi yang ditolak.",
-      "Pasang queue dan buktikan batasnya dengan trafik yang tidak di-FastTrack.",
-      "Suntikkan satu gangguan lab tiap kali, diagnosis, pulihkan, dan simpan laporan serta export."
-    ],
-    "warning": "Ini latihan mandiri dan cek kesiapan, bukan soal bocoran atau pengganti pelatihan/ujian sertifikasi resmi.",
-    "check": "Apa bukti praktik sudah dipahami?",
-    "answer": "Kamu dapat mengulang konfigurasi, menguji hasil yang boleh dan ditolak, menjelaskan keputusan, serta memulihkan gangguan.",
-    "nodes": [
-      "Rancang",
-      "Konfigurasi + uji",
-      "Jelaskan + pulihkan"
-    ],
-    "stage": 10,
-    "minutes": 10,
-    "source": "https://mikrotik.com/training/about",
-    "mtcna": 9
-  },
-  {
-    "slug": "vlsm-perencanaan-ip",
-    "title": "VLSM: membagi IP sesuai jumlah perangkat",
-    "summary": "Bedakan pembagian subnet sama besar dan pembagian sesuai kebutuhan.",
-    "analogy": "Membagi satu bangunan menjadi ruangan tidak harus membuat semua ruangan sama luas. VLSM menyesuaikan ukuran tiap bagian.",
-    "explain": "FLSM memakai ukuran prefix yang sama untuk semua subnet. VLSM memakai panjang prefix berbeda agar kebutuhan host yang berbeda tidak menghabiskan alamat secara sia-sia. Mulai dari daftar kebutuhan perangkat, termasuk gateway, perangkat tetap, dan cadangan pertumbuhan.\n\nUntuk subnet IPv4 biasa, pilih bit host yang menghasilkan 2 pangkat bit host dikurangi 2 alamat host yang cukup. Kebutuhan 60 alamat cocok dengan /26 yang menyediakan 62 host. Kebutuhan 25 cocok /27 dengan 30 host, dan 10 cocok /28 dengan 14 host. Ini perencanaan LAN biasa; /31 dan /32 mempunyai penggunaan khusus.\n\nAlokasikan blok terbesar dahulu pada batas yang benar, lalu blok berikutnya tanpa tumpang tindih. Gateway mengambil salah satu alamat host, bukan alamat tambahan di luar kapasitas. Sisakan ruang untuk perubahan dan dokumentasikan subnet, rentang DHCP, alamat tetap, serta broadcast.",
-    "example": "Dari 192.168.50.0/24: staf mendapat .0/26 (host .1–.62), tamu .64/27 (host .65–.94), dan perangkat .96/28 (host .97–.110). Sisa alamat belum dialokasikan.",
-    "practice": [
-      "Daftar kebutuhan 60, 25, dan 10 alamat host termasuk gateway.",
-      "Pilih /26, /27, dan /28 lalu tulis ukuran bloknya.",
-      "Tempatkan blok terbesar di .0, berikutnya .64 dan .96.",
-      "Periksa rentang network, host, dan broadcast tidak bertumpuk.",
-      "Buat tabel alokasi dan cadangan."
-    ],
-    "warning": "Jangan menulis subnet mulai di angka sembarang; alamat network harus berada pada batas blok prefix-nya.",
-    "check": "Apakah 60 perangkat ditambah satu gateway cukup pada /26?",
-    "answer": "Cukup: 61 alamat host diperlukan dan /26 menyediakan 62. Tambahkan kebutuhan cadangan sebelum memutuskan rancangan akhir.",
-    "nodes": [
-      "60 host → /26",
-      "25 host → /27",
-      "10 host → /28"
-    ],
-    "source": "https://www.rfc-editor.org/rfc/rfc4632",
-    "stage": 11,
-    "minutes": 8
-  },
-  {
-    "slug": "ipv6-alamat-prefix",
-    "title": "IPv6: membaca alamat, prefix, dan jenisnya",
-    "summary": "Kenali heksadesimal, penyingkatan, link-local, serta global unicast.",
-    "analogy": "IPv6 seperti sistem alamat baru dengan ruang sangat besar. Cara membaca dan menemukan tetangganya tidak persis sama dengan IPv4.",
-    "explain": "Alamat IPv6 berukuran 128 bit dan ditulis dalam delapan kelompok heksadesimal. Setiap kelompok memuat empat digit 0–9 atau a–f. Nol di depan kelompok dapat dihilangkan. Satu rangkaian kelompok nol dapat diringkas memakai ::, tetapi hanya satu kali dalam satu alamat agar jumlah kelompok dapat direkonstruksi.\n\nContoh 2001:db8:0000:0000:0000:0000:0000:0010 disingkat menjadi 2001:db8::10. Prefix seperti /64 menyatakan jumlah bit network, bukan jumlah digit tulisan. 2001:db8::/32 dipakai untuk dokumentasi dan contoh, bukan alamat publik yang boleh dipasang sembarang.\n\nLink-local berada dalam fe80::/10 dan digunakan pada link setempat; alamat interface sering memerlukan penunjuk zona ketika diakses. Unique local memakai ruang fc00::/7 dengan penggunaan lokal yang direncanakan. Global unicast berasal dari alokasi yang sesuai. IPv6 tidak memakai broadcast IPv4; fungsi tertentu menggunakan multicast dan Neighbor Discovery.",
-    "example": "Satu PC dapat memiliki link-local dan alamat global pada interface yang sama. Adanya alamat fe80:: saja belum membuktikan akses internet IPv6 tersedia.",
-    "practice": [
-      "Lihat alamat IPv6 pada perangkat sendiri tanpa mengubahnya.",
-      "Bedakan link-local dan alamat lainnya.",
-      "Kembangkan 2001:db8::10 menjadi delapan kelompok.",
-      "Tulis bagian prefix dari contoh /64.",
-      "Catat bahwa contoh dokumentasi tidak dipakai sebagai alokasi internet nyata."
-    ],
-    "warning": "Tanda :: hanya boleh muncul sekali dalam satu alamat. Banyak alamat pada satu interface bukan otomatis konflik.",
-    "check": "Bolehkah menyingkat menjadi 2001::db8::10?",
-    "answer": "Tidak. Dua tanda :: membuat jumlah kelompok nol yang dihilangkan menjadi ambigu.",
-    "nodes": [
-      "128 bit",
-      "Prefix /64",
-      "Interface IPv6"
-    ],
-    "source": "https://www.rfc-editor.org/rfc/rfc4291",
-    "stage": 11,
-    "minutes": 8
-  },
-  {
-    "slug": "ipv6-ra-slaac-dhcpv6",
-    "title": "IPv6: RA, SLAAC, DHCPv6, dan prefix delegation",
-    "summary": "Pahami bagaimana klien mengenal router dan memperoleh konfigurasi IPv6.",
-    "analogy": "Router Advertisement seperti pengumuman gerbang lingkungan. SLAAC membantu perangkat menyusun alamatnya dari informasi lingkungan tersebut.",
-    "explain": "Neighbor Discovery pada IPv6 memakai ICMPv6 untuk fungsi seperti menemukan tetangga dan router. Router Advertisement atau RA mengumumkan informasi yang dapat mencakup prefix, masa berlaku, dan parameter lain. SLAAC memungkinkan klien membuat alamat dari prefix yang sesuai; LAN umum menggunakan /64 untuk mekanisme ini.\n\nDHCPv6 dapat memberikan alamat atau parameter tertentu menurut konfigurasi serta dukungan klien. Default router biasanya dipelajari melalui RA, bukan dengan menganggap DHCPv6 identik dengan DHCPv4. DNS dapat diumumkan melalui mekanisme yang didukung klien dan router. Satu sistem operasi tidak selalu mendukung semua metode yang sama.\n\nPrefix delegation memungkinkan router menerima satu prefix dari hulu lalu membagikan subnet ke LAN. Misalnya alokasi /56 dapat direncanakan menjadi beberapa /64. Periksa dukungan dan ketentuan ISP, route, RA, firewall IPv6, serta DNS. Memblokir seluruh ICMPv6 dapat merusak fungsi penting; keamanan IPv6 perlu kebijakan sendiri, bukan bergantung pada NAT IPv4.",
-    "example": "Klien mempunyai alamat IPv6 tetapi tidak ada default route. Periksa RA dan keterjangkauan router, bukan sekadar mengaktifkan DHCPv6 berulang kali.",
-    "practice": [
-      "Di lab dual-stack, catat alamat dan default route IPv6 klien.",
-      "Periksa RA/ND router serta prefix LAN.",
-      "Bandingkan metode pemberian DNS yang didukung klien.",
-      "Jika ISP memberi prefix delegation, dokumentasikan subnet /64 tiap LAN.",
-      "Uji koneksi dan kebijakan firewall IPv6 secara terpisah dari IPv4."
-    ],
-    "warning": "Jangan memblokir seluruh ICMPv6 atau menganggap firewall IPv4 otomatis melindungi IPv6.",
-    "check": "Dari mana default router biasanya dipelajari klien IPv6?",
-    "answer": "Dari Router Advertisement melalui Neighbor Discovery, bukan sekadar dari DHCPv6.",
-    "nodes": [
-      "Router Advertisement",
-      "SLAAC / DHCPv6",
-      "Alamat + route klien"
-    ],
-    "source": "https://manual.mikrotik.com/docs/getting-started/networking-fundamentals/ipv6-neighbor-discovery/",
-    "stage": 11,
-    "minutes": 8
-  },
-  {
-    "slug": "dns-record-ttl",
-    "title": "DNS record, TTL, dan perubahan domain",
-    "summary": "Bedakan A, AAAA, CNAME, MX, TXT, dan cache saat domain diubah.",
-    "analogy": "DNS seperti buku alamat berlapis dengan salinan sementara. Memperbarui satu buku tidak langsung menghapus semua salinan yang masih berlaku.",
-    "explain": "Record A menghubungkan nama ke IPv4; AAAA ke IPv6; CNAME membuat nama alias ke nama lain. MX menunjuk layanan penerima email dengan prioritas, sedangkan TXT menyimpan teks untuk kebutuhan seperti verifikasi dan kebijakan email. Nilai record harus mengikuti kebutuhan layanan yang benar.\n\nTTL menyatakan berapa lama jawaban boleh disimpan di cache. Perubahan record tidak langsung menghapus jawaban lama pada semua resolver. Menurunkan TTL perlu dilakukan sebelum migrasi dengan mempertimbangkan TTL lama. Cache negatif juga dapat membuat nama yang baru dibuat belum segera terlihat.\n\nPisahkan nameserver otoritatif, resolver, dan hosting. Mengubah A tidak memindahkan file website; mengganti nameserver berarti pengelolaan jawaban berpindah dan semua record penting harus dibawa. HTTPS juga memerlukan sertifikat serta konfigurasi hosting untuk nama tersebut. Jangan menghapus MX atau TXT email ketika hanya memindahkan subdomain website.",
-    "example": "Website berpindah alamat, tetapi beberapa perangkat masih menuju server lama. Bandingkan jawaban resolver dan record otoritatif sebelum menyimpulkan server baru gagal.",
-    "practice": [
-      "Buat tabel record domain latihan beserta tujuannya.",
-      "Gunakan nslookup -type=A example.com dan periksa juga AAAA bila diperlukan.",
-      "Catat resolver yang menjawab dan TTL bila alat menampilkannya.",
-      "Untuk migrasi, rencanakan record, hosting, sertifikat, serta rollback.",
-      "Uji website dan email sebagai layanan terpisah."
-    ],
-    "warning": "CNAME menunjuk nama host, bukan URL lengkap dengan https:// atau path halaman.",
-    "check": "Apakah mengganti A record otomatis memindahkan file website?",
-    "answer": "Tidak. DNS mengubah jawaban alamat; konten dan konfigurasi hosting harus disiapkan tersendiri.",
-    "nodes": [
-      "Record otoritatif",
-      "Cache resolver / TTL",
-      "Jawaban ke klien"
-    ],
-    "source": "https://developers.cloudflare.com/dns/manage-dns-records/reference/dns-record-types/",
-    "stage": 11,
-    "minutes": 8
-  },
-  {
-    "slug": "mtu-mss-pmtud",
-    "title": "MTU, MSS, dan kasus situs hanya terbuka sebagian",
-    "summary": "Mengapa ping kecil berhasil tetapi upload atau halaman tertentu macet?",
-    "analogy": "MTU seperti batas ukuran barang yang boleh melewati satu gerbang. Ukuran yang muat di gerbang awal belum tentu muat sepanjang perjalanan.",
-    "explain": "MTU membatasi ukuran paket yang dapat dibawa pada lapisan yang dimaksud. Bedakan IP MTU, L2MTU, dan ukuran frame yang dilaporkan perangkat. Tunnel serta enkapsulasi menambah overhead sehingga kapasitas payload dapat lebih kecil. Jangan memakai satu angka universal untuk semua media.\n\nMSS berkaitan dengan ukuran data TCP dalam satu segmen dan dinegosiasikan saat pembentukan koneksi. MTU 1500 dengan header IPv4 dan TCP dasar masing-masing 20 byte memberi ilustrasi MSS 1460; opsi header atau mekanisme lain dapat mengubah kebutuhan. MSS bukan batas ukuran semua paket UDP.\n\nPath MTU Discovery membantu menemukan batas jalur. ICMP yang diperlukan harus dapat bekerja sesuai protokol. Jika pesan penting diblokir, paket besar dapat bermasalah sementara paket kecil berhasil. MSS clamping dapat membantu kasus TCP tertentu, tetapi bukan pengganti diagnosis semua masalah MTU atau UDP.",
-    "example": "VPN tersambung dan ping kecil berhasil, tetapi transfer besar macet. Periksa overhead tunnel, MTU jalur, pesan ICMP terkait, dan uji ukuran paket secara terkendali.",
-    "practice": [
-      "Catat MTU interface fisik dan tunnel pada lab.",
-      "Bandingkan akses layanan kecil dan transfer besar.",
-      "Gunakan alat uji ukuran paket sesuai dokumentasi OS, dengan batas dan flag yang dipahami.",
-      "Periksa firewall untuk ICMP yang diperlukan.",
-      "Ubah satu parameter di lab dan uji kembali layanan yang semula gagal."
-    ],
-    "warning": "Jangan menetapkan MSS 1460 atau MTU 1500 ke semua interface tanpa melihat enkapsulasi dan jalurnya.",
-    "check": "Apakah MSS clamping memperbaiki semua paket UDP?",
-    "answer": "Tidak. MSS adalah parameter TCP; UDP membutuhkan penanganan MTU yang sesuai pada aplikasinya dan jalur.",
-    "nodes": [
-      "Ukuran paket",
-      "Batas MTU jalur",
-      "PMTUD / MSS TCP"
-    ],
-    "source": "https://manual.mikrotik.com/docs/hardware/mtu-in-routeros/",
-    "stage": 12,
-    "minutes": 8
-  },
-  {
-    "slug": "loop-rstp",
-    "title": "Loop, broadcast storm, dan RSTP",
-    "summary": "Pahami mengapa satu kabel yang salah dapat mengganggu banyak pengguna.",
-    "analogy": "Jalur berputar seperti surat yang terus disalin dan dikirim ulang. RSTP membantu memilih jalur layer 2 agar tidak membentuk lingkaran aktif.",
-    "explain": "Switch meneruskan frame broadcast pada domain yang sesuai. Pada loop Ethernet yang tidak dikendalikan, frame dapat terus beredar, membuat banyak salinan dan membebani link serta perangkat. MAC table dapat terlihat berpindah-pindah antarport. Ini berbeda dari sekadar internet ISP lambat.\n\nSTP/RSTP membentuk topologi logis bebas loop dengan menempatkan jalur tertentu pada status yang sesuai. RSTP bertukar BPDU dan memilih peran port berdasarkan proses protokol. Jalur cadangan tidak selalu membawa trafik pengguna saat kondisi normal; ia dapat dipakai ketika topologi berubah.\n\nPastikan rancangan, perangkat, dan konfigurasi mendukung. Port yang menghadap perangkat pengguna dapat memerlukan perlindungan BPDU sesuai kebijakan, tetapi jangan mengaktifkan setting tanpa memahami akibatnya. Untuk jaringan VLAN yang kompleks, pemilihan protokol serta interoperabilitas perlu kajian lebih lanjut.",
-    "example": "Dua switch tersambung dua kabel tanpa LAG atau kendali loop yang benar. Menambah kabel kedua tidak otomatis menggandakan kapasitas; jaringan dapat terganggu.",
-    "practice": [
-      "Gambar jalur antarswitch dan cari kemungkinan lingkaran.",
-      "Di lab terisolasi, baca status RSTP dan peran port tanpa membuat loop produksi.",
-      "Catat root bridge dan jalur aktif.",
-      "Uji perpindahan jalur secara terkendali jika lab mendukung.",
-      "Simpan diagram serta alasan pemilihan jalur."
-    ],
-    "warning": "Jangan membuat loop pada jaringan aktif untuk melihat broadcast storm secara langsung.",
-    "check": "Mengapa link cadangan kadang tidak meneruskan trafik biasa?",
-    "answer": "Protokol spanning tree dapat menahan jalur tertentu agar topologi aktif tidak membentuk loop.",
-    "nodes": [
-      "Jalur ganda",
-      "RSTP memilih peran",
-      "Topologi bebas loop"
-    ],
-    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
-    "stage": 12,
-    "minutes": 8
-  },
-  {
-    "slug": "lacp-bonding",
-    "title": "LACP dan bonding: beberapa kabel menjadi satu grup",
-    "summary": "Bedakan agregasi link, redundansi, dan penggabungan dua ISP.",
-    "analogy": "Beberapa kasir dapat melayani banyak antrean, tetapi satu pelanggan tidak otomatis dilayani semua kasir sekaligus.",
-    "explain": "Link aggregation mengelompokkan beberapa sambungan sesuai mode yang didukung. LACP memakai negosiasi IEEE 802.1AX/802.3ad untuk anggota grup. Active-backup memilih jalur aktif dan cadangan; mode itu berbeda dari agregasi yang membagi trafik. Dukungan hardware offload tergantung model dan konfigurasi.\n\nDistribusi trafik biasanya memakai hash dari atribut tertentu. Satu aliran sering tetap berada pada satu link agar urutan paket terjaga. Dua port 1 Gbps dapat memberi kapasitas agregat untuk beberapa aliran, tetapi satu transfer tidak otomatis menjadi 2 Gbps. Kemampuan endpoint dan pola hash ikut menentukan hasil.\n\nKonfigurasi kedua ujung harus sesuai: anggota, mode, VLAN, MTU, dan kecepatan. Jangan menyambung dua kabel paralel lalu menyebutnya LACP. Agregasi antarswitch juga berbeda dari load balancing dua ISP yang mempunyai routing serta alamat publik berbeda.",
-    "example": "Server memiliki dua link gigabit ke switch dalam LAG yang benar. Banyak klien dapat memakai kapasitas grup, tetapi satu sesi transfer mungkin tetap dibatasi satu anggota.",
-    "practice": [
-      "Pastikan kedua perangkat mendukung mode yang dipilih.",
-      "Rancang anggota LAG dan jalur manajemen sebelum perubahan.",
-      "Di lab, periksa status anggota dan negosiasi pada kedua ujung.",
-      "Uji beberapa aliran, bukan hanya satu unduhan.",
-      "Putus satu anggota secara terkendali dan catat pemulihan."
-    ],
-    "warning": "Jangan membentuk satu LAG ke dua switch terpisah kecuali arsitektur keduanya memang mendukung rancangan tersebut.",
-    "check": "Apakah dua link 1 Gbps menjamin satu unduhan 2 Gbps?",
-    "answer": "Tidak. Satu aliran biasanya dipetakan ke satu anggota oleh hash; kapasitas agregat terutama berguna untuk beberapa aliran.",
-    "nodes": [
-      "Link anggota",
-      "Grup LACP",
-      "Distribusi aliran"
-    ],
-    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323193/Bonding",
-    "stage": 12,
-    "minutes": 8
-  },
-  {
-    "slug": "qos-bufferbloat",
-    "title": "Bufferbloat dan antrean: cepat tetapi terasa lambat",
-    "summary": "Hubungkan upload penuh, latency melonjak, dan pengelolaan antrean.",
-    "analogy": "Gudang tunggu terlalu besar dapat menumpuk barang lama. Jalannya lebar, tetapi setiap kiriman menghabiskan banyak waktu di antrean.",
-    "explain": "Bufferbloat terjadi ketika antrean berlebihan membuat delay tinggi saat jaringan terbebani. Koneksi dapat mencapai throughput bagus sementara rapat, gim, atau interaksi jarak jauh terasa tersendat. Ukur latency saat idle dan saat upload/download berjalan untuk melihat perubahan.\n\nPengelolaan antrean yang baik dapat mengurangi penumpukan dan membagi aliran secara lebih adil. Shaping sering perlu ditempatkan sehingga antrean yang dikendalikan menjadi titik pembatas, bukan antrean hulu yang tidak dikelola. Pilihan algoritma, laju, dan kemampuan CPU harus sesuai perangkat serta variasi kapasitas link.\n\nPada RouterOS, fitur seperti queue dan akselerasi harus dibaca bersama alur paket. FastTrack dapat melewati pemrosesan queue tertentu. Jangan menjanjikan QoS menambah bandwidth ISP; ia mengelola pemakaian kapasitas yang ada. Untuk radio dengan kapasitas berubah, hasil perlu diuji pada beberapa kondisi.",
-    "example": "Backup memenuhi upload kantor. Latency ke tujuan luar melonjak, tetapi kembali rendah saat backup dihentikan. Ini petunjuk antrean yang perlu diukur, bukan bukti semua server rapat rusak.",
-    "practice": [
-      "Ukur RTT idle dengan tujuan yang sama.",
-      "Aktifkan transfer terkontrol pada lab dan catat RTT serta loss.",
-      "Bandingkan kabel dan Wi-Fi untuk memisahkan radio dari uplink.",
-      "Uji kebijakan queue yang sesuai dan periksa pengaruh FastTrack.",
-      "Nilai throughput, latency saat beban, dan CPU bersama-sama."
-    ],
-    "warning": "Jangan menilai kualitas jaringan hanya dari angka download pada speed test.",
-    "check": "Apa petunjuk bufferbloat yang perlu diuji lebih lanjut?",
-    "answer": "Latency meningkat tajam saat link dibebani, lalu turun kembali saat beban berhenti; cocokkan dengan antrean dan kondisi jalur.",
-    "nodes": [
-      "Link dibebani",
-      "Antrean membesar",
-      "Latency meningkat"
-    ],
-    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/queues/",
-    "stage": 12,
-    "minutes": 8
-  },
-  {
-    "slug": "wireshark-dasar",
-    "title": "Wireshark: membaca paket untuk pemula",
-    "summary": "Bedakan capture filter, display filter, dan bukti gangguan.",
-    "analogy": "Packet capture seperti rekaman pada satu titik jalan. Kendaraan yang tidak melewati titik itu tidak akan terlihat di rekaman.",
-    "explain": "Wireshark menampilkan paket yang tertangkap pada interface serta posisi pengamatan tertentu. Pada switch, komputer biasa tidak otomatis melihat semua trafik port lain. Gunakan perangkat sendiri atau lab yang diizinkan; port mirroring dan TAP memerlukan rancangan serta otorisasi yang sesuai.\n\nCapture filter membatasi paket yang direkam, sedangkan display filter menyaring tampilan dari rekaman yang sudah ada. Sintaks keduanya berbeda. Contoh display filter sederhana adalah arp, dns, icmp, dan ip.addr == 192.168.10.10. Simpan file capture hanya jika memang diperlukan karena isinya dapat memuat informasi sensitif.\n\nMulai dari urutan kejadian: ARP untuk next hop, pertanyaan DNS, koneksi transport, lalu aplikasi. Label retransmission merupakan petunjuk analisis, bukan putusan otomatis sumber gangguan; kehilangan pada proses capture juga dapat memengaruhi pembacaan. HTTPS mengenkripsi isi aplikasi sehingga Wireshark tidak langsung menampilkan semua isi halaman.",
-    "example": "Klien gagal membuka nama domain. Capture di klien menunjukkan pertanyaan DNS tetapi tidak ada jawaban yang terlihat. Periksa resolver, jalur, firewall, serta posisi capture sebelum menyimpulkan server pasti mati.",
-    "practice": [
-      "Gunakan lab sendiri dan pilih interface yang benar.",
-      "Mulai rekaman singkat lalu lakukan satu aktivitas uji.",
-      "Gunakan display filter arp, dns, atau icmp.",
-      "Catat waktu, alamat sumber/tujuan, dan urutan permintaan/balasan.",
-      "Hentikan capture dan simpan secara terbatas bila dibutuhkan."
-    ],
-    "warning": "Jangan merekam jaringan orang lain tanpa izin atau membagikan file capture yang belum ditinjau.",
-    "check": "Apakah display filter menghapus paket dari file capture?",
-    "answer": "Tidak. Ia menyaring tampilan; paket lain masih dapat berada dalam rekaman.",
-    "nodes": [
-      "Capture pada interface",
-      "Filter tampilan",
-      "Urutan paket"
-    ],
-    "source": "https://www.wireshark.org/docs/wsug_html/",
-    "stage": 13,
-    "minutes": 8
-  },
-  {
-    "slug": "radio-ptp-los-fresnel",
-    "title": "Radio PTP: LOS, Fresnel, alignment, dan link budget",
-    "summary": "Kenali faktor sambungan radio antargedung sebelum memilih channel.",
-    "analogy": "Dua antena bukan hanya perlu saling terlihat; ruang di sekitar jalur gelombang juga memengaruhi sambungan.",
-    "explain": "Point-to-point menghubungkan dua titik radio. Optical line of sight berarti jalur pandang tampak terbuka, tetapi zona Fresnel di sekitar jalur juga perlu diperhitungkan. Pepohonan, bangunan, dan perubahan lingkungan dapat mengganggu walaupun kedua antena tampak saling melihat. Gunakan perencanaan lintasan dan survei lapangan.\n\nLink budget menilai daya pancar, gain antena, rugi kabel/konektor, kehilangan lintasan, serta daya terima yang dibutuhkan untuk performa tertentu. Angka prediksi bukan jaminan throughput. Interferensi, lebar channel, modulasi, alignment, cuaca, dan kemampuan perangkat ikut berpengaruh.\n\nBandingkan kedua arah: sinyal, kualitas, noise, kapasitas aktual, error, dan penggunaan airtime. Peningkatan daya bukan solusi tunggal dan harus sesuai regulasi serta spesifikasi. Instalasi antena, tiang, proteksi petir, dan kerja di ketinggian harus mengikuti prosedur serta tenaga yang kompeten.",
+    "explain": "PPP menyediakan pengelolaan sesi serta autentikasi untuk beberapa layanan. Pada RouterOS, profile menyimpan parameter bersama, secret menyimpan akun lokal, dan active menampilkan sesi. IP pool menyediakan rentang alamat; local-address dan remote-address menjelaskan kedua ujung koneksi point-to-point.\n\nPPPoE membawa PPP melalui Ethernet. Client memerlukan server yang dapat dijangkau pada layer 2 serta kredensial dan service-name bila diperlukan. PPPoE bukan enkripsi isi trafik. Pada lab, server dan client harus ditempatkan di segmen terpisah dari pengguna produksi agar tidak menawarkan layanan tak diinginkan.\n\nOutline lama juga memuat PPTP dan SSTP. PPTP dikenali untuk memahami konteks lama, bukan pilihan pengamanan baru. SSTP memakai TLS dan memerlukan validasi sertifikat serta pengaturan waktu yang benar untuk keamanan yang sesuai. Tunnel aktif belum menjamin subnet jauh terjangkau: rute, firewall, MTU, dan DNS tetap perlu diuji. WireGuard dapat dipelajari terpisah sebagai t…7288 tokens truncated…an, serta daya terima yang dibutuhkan untuk performa tertentu. Angka prediksi bukan jaminan throughput. Interferensi, lebar channel, modulasi, alignment, cuaca, dan kemampuan perangkat ikut berpengaruh.\n\nBandingkan kedua arah: sinyal, kualitas, noise, kapasitas aktual, error, dan penggunaan airtime. Peningkatan daya bukan solusi tunggal dan harus sesuai regulasi serta spesifikasi. Instalasi antena, tiang, proteksi petir, dan kerja di ketinggian harus mengikuti prosedur serta tenaga yang kompeten.",
     "example": "Link PTP sering turun saat pohon basah tertiup angin. Periksa lintasan dan perubahan halangan, bukan hanya berpindah channel setiap kali putus.",
     "practice": [
       "Gambar dua titik, jarak, elevasi, dan penghalang yang diketahui.",
@@ -1492,5 +1177,644 @@
     "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
     "stage": 14,
     "minutes": 8
+  },
+  {
+    "slug": "mtcre-keputusan-routing",
+    "title": "MTCRE 01 · Bagaimana router memilih jalur?",
+    "summary": "Mulai dari RIB, FIB, prefix paling spesifik, dan distance.",
+    "analogy": "RIB seperti daftar pilihan jalan; FIB seperti petunjuk yang benar-benar dipakai petugas untuk meneruskan kendaraan.",
+    "explain": "Router menyimpan informasi tujuan dari connected route, static route, dan protokol dinamis. RIB menyimpan informasi routing; FIB dipakai untuk forwarding sesuai hasil pemilihan serta kemampuan sistem. Status route perlu dibaca, bukan sekadar menghitung berapa banyak baris yang ada.\n\nDalam tabel yang dipilih, pencarian tujuan mengutamakan prefix paling spesifik yang cocok. Contoh tujuan 192.168.20.10 cocok dengan 0.0.0.0/0 dan 192.168.20.0/24; /24 lebih spesifik. Distance membantu memilih kandidat untuk tujuan/prefix yang setara menurut aturan sistem. Distance kecil pada default route tidak mengalahkan route /24 hanya karena angkanya lebih kecil.\n\nNext hop harus dapat digunakan melalui jalur yang sesuai. Connected route berasal dari jaringan antarmuka yang aktif; static route perlu gateway yang bisa diresolusikan. Pelajari juga pemilihan tabel jika memakai policy routing. Gunakan legenda flags pada versi RouterOS yang berjalan, bukan menghafal semua huruf dari satu slide lama.",
+    "example": "Route /24 distance 10 tetap lebih spesifik daripada default route distance 1 untuk alamat di dalam /24 tersebut. Bandingkan prefix dahulu, lalu kandidat route yang relevan.",
+    "practice": [
+      "Siapkan lab dan catat versi RouterOS.",
+      "Baca connected serta static route tanpa mengubahnya.",
+      "Pilih satu IP tujuan dan cari semua prefix yang cocok.",
+      "Tentukan prefix paling spesifik, lalu lihat route aktif dan gateway-nya.",
+      "Cocokkan prediksi dengan ping/traceroute serta jalur balasan."
+    ],
+    "warning": "Distance bukan pengganti aturan longest-prefix match. Jangan menyimpulkan route default selalu menang karena distance-nya kecil.",
+    "check": "Tujuan cocok dengan /24 distance 10 dan /0 distance 1. Mana lebih spesifik?",
+    "answer": "/24. Distance digunakan dalam pemilihan kandidat yang relevan, bukan untuk mengabaikan kecocokan prefix yang lebih panjang.",
+    "nodes": [
+      "RIB: pilihan route",
+      "Pemilihan tujuan",
+      "FIB: forwarding"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
+    "sourcePages": "10–18",
+    "mtcre": 1,
+    "stage": 15,
+    "minutes": 12,
+    "diagram": "lookup",
+    "commands": [
+      "/routing/route/print detail",
+      "/ip/route/print detail",
+      "/routing/table/print"
+    ]
+  },
+  {
+    "slug": "mtcre-static-multihop",
+    "title": "MTCRE 02 · Static route pada tiga router",
+    "summary": "Latih destination, next hop langsung, dan rute balik per langkah.",
+    "analogy": "Setiap persimpangan cukup menunjuk persimpangan berikutnya; tidak harus menunjuk alamat di ujung kota.",
+    "explain": "Gunakan rantai R1–R2–R3. R1 dan R3 memiliki LAN, sedangkan R2 menghubungkan dua transit. PC ujung memakai gateway LAN router setempat. Router tengah tidak otomatis mengetahui kedua LAN ujung hanya karena IP transit dapat saling ping.\n\nTransit R1–R2 adalah 10.12.0.0/30: R1 .1 dan R2 .2. Transit R2–R3 adalah 10.23.0.0/30: R2 .1 dan R3 .2. LAN kiri 192.168.10.0/24, LAN kanan 192.168.30.0/24. Dari R1, tujuan LAN kanan diarahkan ke 10.12.0.2; dari R2 ke 10.23.0.2. Buat pula route arah balik.\n\nBedakan host route /32, network route, dan default route. Ringkasan prefix hanya boleh dibuat bila blok serta kebijakan yang diwakili benar. Jangan mengatasi route balik yang hilang dengan NAT tanpa memahami akibatnya; pada lab ini tujuan utamanya menunjukkan alamat asli dan routing dua arah.",
+    "example": "R1 bisa ping R2, tetapi PC kiri belum bisa ke PC kanan. Periksa route R2 menuju LAN, gateway PC, firewall, dan route balik dari R3 sampai R1.",
+    "practice": [
+      "Tetapkan IP LAN dan kedua transit sesuai tabel lab.",
+      "Uji setiap tetangga transit yang terhubung langsung.",
+      "Tambahkan route LAN kanan di R1 via 10.12.0.2 dan di R2 via 10.23.0.2.",
+      "Tambahkan route LAN kiri di R3 via 10.23.0.1 dan di R2 via 10.12.0.1.",
+      "Uji kedua PC, lalu hilangkan satu route lab untuk mengamati titik gagal."
+    ],
+    "warning": "Next hop R1 tidak harus IP LAN R3. Ia biasanya tetangga yang bisa dijangkau di transit lokal.",
+    "check": "Apa next hop R1 untuk LAN kanan pada contoh ini?",
+    "answer": "10.12.0.2, yaitu R2 pada transit yang langsung terhubung ke R1.",
+    "nodes": [
+      "LAN A — R1",
+      "R2: dua transit",
+      "R3 — LAN C"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
+    "sourcePages": "16–19",
+    "mtcre": 2,
+    "stage": 15,
+    "minutes": 12,
+    "diagram": "chain",
+    "table": {
+      "headers": [
+        "Perangkat",
+        "Interface/peran",
+        "Alamat"
+      ],
+      "rows": [
+        [
+          "R1",
+          "LAN A",
+          "192.168.10.1/24"
+        ],
+        [
+          "R1",
+          "Transit ke R2",
+          "10.12.0.1/30"
+        ],
+        [
+          "R2",
+          "Transit ke R1",
+          "10.12.0.2/30"
+        ],
+        [
+          "R2",
+          "Transit ke R3",
+          "10.23.0.1/30"
+        ],
+        [
+          "R3",
+          "Transit ke R2",
+          "10.23.0.2/30"
+        ],
+        [
+          "R3",
+          "LAN C",
+          "192.168.30.1/24"
+        ],
+        [
+          "PC A",
+          "Gateway R1",
+          "192.168.10.10/24"
+        ],
+        [
+          "PC C",
+          "Gateway R3",
+          "192.168.30.10/24"
+        ]
+      ]
+    }
+  },
+  {
+    "slug": "mtcre-recursive-failover",
+    "title": "MTCRE 03 · Recursive route dan deteksi jalur cadangan",
+    "summary": "Bedakan gateway menjawab, target jauh menjawab, dan internet benar-benar sehat.",
+    "analogy": "Pintu tol terbuka tidak membuktikan perjalanan sampai kota tujuan lancar. Pemeriksaan perlu mengarah ke titik yang mewakili kebutuhanmu.",
+    "explain": "Failover memilih jalur lain ketika kondisi pemeriksaan menyatakan jalur utama tidak layak dipakai. Status port atau balasan gateway ISP hanya menguji bagian tertentu. Recursive routing memungkinkan gateway suatu route diresolusikan melalui route lain menuju target pemeriksaan yang lebih jauh.\n\nRancang host route target pemeriksaan agar benar-benar melewati ISP yang sedang diuji. Jangan biarkan probe ISP A keluar melalui ISP B lalu menyimpulkan A masih sehat. Scope dan target-scope menentukan keterkaitan resolusi next hop; periksa perilaku versi RouterOS, immediate gateway, dan status route, bukan menyalin angka tanpa memahami rantainya.\n\nPilih target yang stabil serta sesuai kebutuhan dan pahami keterbatasan satu target. Rute aktif kembali tidak menjamin sesi lama tetap bertahan, terutama jika NAT atau IP sumber berubah. Uji kabel lepas, gangguan upstream, serta pulihnya jalur utama sebagai skenario terpisah.",
+    "example": "Gateway ISP A masih menjawab, tetapi layanan di luar ISP terputus. Probe ke target jauh melalui jalur A dapat memberikan informasi berbeda dari sekadar check pada gateway langsung.",
+    "practice": [
+      "Gunakan dua sambungan hulu lab yang masing-masing sudah berfungsi.",
+      "Gambar route target pemeriksaan dan resolusi gateway tiap ISP.",
+      "Periksa scope, target-scope, immediate gateway, dan arah probe sesuai dokumentasi.",
+      "Uji putus fisik lalu gangguan upstream secara terpisah.",
+      "Catat waktu perpindahan, hasil layanan, dan perilaku saat jalur utama pulih."
+    ],
+    "warning": "Jangan menganggap satu balasan ping membuktikan seluruh internet sehat atau semua sesi akan pindah tanpa putus.",
+    "check": "Mengapa target pemeriksaan A tidak boleh bebas keluar melalui ISP B?",
+    "answer": "Karena hasil probe dapat tampak sehat walaupun jalur A yang hendak diuji sedang bermasalah.",
+    "nodes": [
+      "Route layanan",
+      "Target pemeriksaan",
+      "Gateway fisik"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/26476608/Failover+WAN+Backup",
+    "sourcePages": "21–25; pendalaman dari dokumentasi RouterOS",
+    "mtcre": 3,
+    "stage": 15,
+    "minutes": 12,
+    "diagram": "dual"
+  },
+  {
+    "slug": "mtcre-ecmp",
+    "title": "MTCRE 04 · ECMP: lebih dari satu jalur setara",
+    "summary": "Pahami pembagian aliran dan mengapa satu unduhan tidak selalu berlipat.",
+    "analogy": "Beberapa jalur setara seperti beberapa loket: banyak pelanggan dapat dibagi, tetapi satu pelanggan tidak harus berpindah loket setiap saat.",
+    "explain": "ECMP berarti Equal-Cost Multipath: beberapa jalur setara dapat tersedia untuk tujuan yang sama. Penerapan forwarding dan pemilihan jalur bergantung sistem, versi, serta hash yang digunakan. Jangan menganggap semua ECMP membagi setiap paket secara round-robin atau selalu menghasilkan perbandingan trafik 50:50.\n\nSatu aliran dapat tetap berada pada satu jalur agar urutan paket terjaga. Dua uplink bukan otomatis menggandakan laju satu unduhan. Ukur beberapa aliran dan tujuan. Untuk jalur internet, NAT, connection tracking, alamat sumber, serta jalur balasan juga menentukan apakah komunikasi berjalan konsisten.\n\nBedakan ECMP dengan failover murni: ECMP dapat memakai beberapa jalur setara, sedangkan jalur dengan prioritas berbeda dipakai sesuai seleksi route. Ketika satu jalur hilang, pemetaan aliran dapat berubah dan sesi bisa terganggu. Uji perilakunya pada versi RouterOS lab yang benar.",
+    "example": "Dua PC membuka layanan berbeda dan penggunaan dua link terlihat tidak seimbang. Hal itu belum membuktikan ECMP gagal; jumlah aliran, ukuran transfer, hash, serta kapasitas link perlu dilihat.",
+    "practice": [
+      "Siapkan dua jalur lab yang dapat mencapai tujuan yang sama.",
+      "Pastikan route setara tampil serta next hop dapat digunakan.",
+      "Jalankan beberapa koneksi dan catat interface yang dilewati.",
+      "Putus satu jalur lab dan periksa route serta sesi baru/lama.",
+      "Bandingkan hasil dengan ekspektasi agregat, bukan janji satu aliran dua kali cepat."
+    ],
+    "warning": "Penjelasan round-robin dalam contoh tertentu bukan aturan universal untuk semua versi dan jenis ECMP.",
+    "check": "Apakah dua jalur 100 Mbps menjamin satu unduhan 200 Mbps?",
+    "answer": "Tidak. Satu aliran dapat dipetakan ke satu jalur; kapasitas agregat harus dinilai dengan pola trafik yang sesuai.",
+    "nodes": [
+      "Satu tujuan",
+      "Dua next hop setara",
+      "Aliran dipetakan"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
+    "sourcePages": "20–25",
+    "mtcre": 4,
+    "stage": 15,
+    "minutes": 12,
+    "diagram": "dual"
+  },
+  {
+    "slug": "mtcre-policy-routing",
+    "title": "MTCRE 05 · Policy routing dan tabel terpisah",
+    "summary": "Pilih jalur berdasarkan kebijakan, bukan hanya tujuan di tabel main.",
+    "analogy": "Dua kelompok pengguna dapat mendapat petunjuk jalan berbeda walaupun menuju kota yang sama.",
+    "explain": "Secara sederhana, policy routing mengarahkan trafik yang memenuhi kriteria tertentu ke tabel atau jalur tertentu. Pada RouterOS v7, kenali /routing/table dan /routing/rule; jangan menganggap lokasi menu pada contoh v6 selalu sama. Tabel baru harus dirancang beserta route serta resolusi gateway yang bisa digunakan.\n\nContoh kebijakan: LAN staf memakai jalur A dan LAN tamu jalur B. Tetap tentukan pengecualian untuk tujuan lokal agar trafik antar-LAN atau ke router tidak terseret ke default route internet. Trafik yang dibuat router sendiri juga tidak selalu mengikuti aturan yang sama dengan trafik forward klien.\n\nPahami action lookup dan lookup-only-in-table. Pilihan dengan fallback berbeda dari pilihan yang dibatasi ke satu tabel. Buat keputusan perilaku ketika jalur utama tidak tersedia. Jika memakai mangle sekaligus routing rule, pahami prioritas pemrosesan pada versi yang digunakan sebelum mencampurnya.",
+    "example": "LAN tamu diarahkan ke tabel to-B, tetapi printer kantor harus tetap memakai jalur lokal. Tulis pengecualian serta urutannya sebelum memasang rule umum.",
+    "practice": [
+      "Tulis matriks sumber, tujuan, dan jalur yang diinginkan.",
+      "Di lab v7, buat tabel yang diperlukan dan pastikan route/gateway dapat diresolusikan.",
+      "Tetapkan pengecualian tujuan lokal sebelum kebijakan umum.",
+      "Pasang routing rule yang sesuai dan pahami pilihan fallback-nya.",
+      "Uji dari kedua LAN dan dari router sendiri, lalu uji saat salah satu jalur tidak tersedia."
+    ],
+    "warning": "Tabel baru tidak otomatis memiliki semua route yang diperlukan. Jangan menguji hanya ping yang dibuat router lalu menganggap klien ikut benar.",
+    "check": "Mengapa perlu pengecualian tujuan lokal pada policy internet?",
+    "answer": "Agar akses ke subnet internal atau layanan router tidak diarahkan keluar melalui jalur internet yang salah.",
+    "nodes": [
+      "Sumber / kebijakan",
+      "Pemilihan tabel",
+      "Route di tabel terpilih"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/59965508/Policy+Routing",
+    "sourcePages": "26–31",
+    "mtcre": 5,
+    "stage": 16,
+    "minutes": 12,
+    "diagram": "policy",
+    "commands": [
+      "/routing/table/print",
+      "/routing/rule/print detail",
+      "/ip/route/print detail"
+    ]
+  },
+  {
+    "slug": "mtcre-mangle-routing",
+    "title": "MTCRE 06 · Mangle dan routing mark",
+    "summary": "Tandai koneksi dahulu agar kebijakan jalur konsisten.",
+    "analogy": "Label bagasi membantu petugas menjaga barang tetap pada jalur yang sesuai.",
+    "explain": "Connection mark melekat pada koneksi yang dilacak, sedangkan routing mark dipakai untuk pemilihan tabel paket. Keduanya berbeda fungsi. Pada RouterOS v7, tabel yang dirujuk harus tersedia dan memiliki route yang dapat digunakan.\n\nTrafik dari klien masuk melalui prerouting; trafik buatan router melewati output. Buat pengecualian tujuan lokal sebelum aturan umum. Jangan mengarahkan paket ke router sendiri ke tabel internet secara tidak sengaja.\n\nFastTrack perlu diperhatikan karena kebijakan non-main tidak boleh diasumsikan diproses seperti trafik biasa. Uji connection tracking, penghitung rule, dan jalur balasan; pisahkan pengujian trafik forward dengan trafik lokal router.",
+    "example": "LAN tamu memakai ISP B, tetapi akses DNS pada router tetap lokal.",
+    "practice": [
+      "Gambar aliran klien dan router sendiri.",
+      "Catat tabel dan route yang diperlukan.",
+      "Buat pengecualian tujuan lokal di lab.",
+      "Periksa counter mangle dan koneksi.",
+      "Uji jalur balasan dan interaksi FastTrack."
+    ],
+    "warning": "Routing mark bukan connection mark; aturan salah dapat memutus akses pengelolaan.",
+    "check": "Mengapa ping dari router belum membuktikan policy klien benar?",
+    "answer": "Karena trafik lokal dan forward melewati tahap pemrosesan yang berbeda.",
+    "nodes": [
+      "Klien: prerouting",
+      "Koneksi dan paket",
+      "Router: output"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/59965508/Policy+Routing",
+    "sourcePages": "32–35",
+    "mtcre": 6,
+    "stage": 16,
+    "minutes": 12,
+    "diagram": "policy"
+  },
+  {
+    "slug": "mtcre-ttl-traceroute",
+    "title": "MTCRE 07 · TTL dan membaca traceroute",
+    "summary": "Kenali batas hop dan pesan dari router sepanjang perjalanan.",
+    "analogy": "TTL seperti kupon jumlah persimpangan, bukan jam hitung mundur.",
+    "explain": "TTL pada IPv4 membatasi jumlah hop. Router menguranginya ketika meneruskan paket. Ketika habis, router membuang paket dan dapat mengirim ICMP Time Exceeded. Ini membantu mencegah paket berputar tanpa batas akibat routing loop.\n\nTraceroute mengirim probe dengan TTL bertahap untuk mengamati perangkat yang merespons. Jenis probe dapat berbeda antaralat. Angka waktu adalah waktu respons probe, bukan otomatis waktu pemrosesan satu router.\n\nTanda bintang berarti respons probe tidak diterima, bukan bukti pasti link itu mati. Firewall, pembatasan ICMP, jalur balasan, dan penyeimbangan jalur bisa mengubah hasil. Cocokkan traceroute dengan ping tujuan dan route sebelum menyimpulkan.",
+    "example": "Hop kedua tidak menjawab tetapi tujuan akhir menjawab: layanan tetap dapat dijangkau.",
+    "practice": [
+      "Gunakan rantai tiga router lab.",
+      "Prediksi titik TTL 1 dan 2 habis.",
+      "Jalankan traceroute ke tujuan.",
+      "Bandingkan dengan ping tujuan.",
+      "Catat kemungkinan penyebab hop tanpa respons."
+    ],
+    "warning": "TTL adalah batas hop, bukan sisa waktu dalam detik.",
+    "check": "Apakah bintang di satu hop selalu berarti trafik tidak dapat lewat?",
+    "answer": "Tidak; perangkat mungkin meneruskan trafik tetapi tidak membalas probe.",
+    "nodes": [
+      "TTL 3 → 2",
+      "TTL 2 → 1",
+      "TTL habis: ICMP"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
+    "sourcePages": "36–38",
+    "mtcre": 7,
+    "stage": 16,
+    "minutes": 12,
+    "diagram": "ttl"
+  },
+  {
+    "slug": "mtcre-lab-multiwan",
+    "title": "MTCRE 08 · Lab kebijakan dua jalur",
+    "summary": "Gabungkan route, kebijakan sumber, dan pengujian gangguan.",
+    "analogy": "Rencana perjalanan perlu aturan jalan utama, jalan cadangan, dan cara membuktikan keduanya.",
+    "explain": "Buat dua LAN dan dua jalur hulu di lab terisolasi. Tentukan kebutuhan lebih dahulu: staf lewat A, tamu lewat B, serta apakah masing-masing boleh memakai cadangan. Kebijakan ini berbeda dari sekadar memasang dua default route.\n\nSusun tabel pengujian: sumber, tujuan, jalur normal, kondisi gangguan, dan hasil yang diharapkan. Pastikan tujuan internal dikecualikan. Untuk akses internet, periksa NAT per jalur serta konsistensi koneksi tanpa menganggap NAT sebagai pengganti routing.\n\nUji kabel putus dan gangguan di luar gateway secara terpisah. Catat hasil sesi lama, sesi baru, dan pemulihan. Jika hasil meleset, periksa resolusi gateway, route aktif, penghitung rule, serta arah balasan secara berurutan.",
+    "example": "Staf perlu cadangan B, tetapi tamu dibatasi hanya B. Kedua kelompok membutuhkan perilaku fallback berbeda.",
+    "practice": [
+      "Tulis matriks kebijakan dua LAN.",
+      "Pastikan kedua jalur bekerja sendiri.",
+      "Pasang tabel dan pengecualian lokal.",
+      "Uji normal, putus link, dan gangguan upstream.",
+      "Simpan hasil serta rencana pemulihan."
+    ],
+    "warning": "Jangan memasang percobaan multi-WAN langsung pada koneksi produksi yang sedang dipakai.",
+    "check": "Mengapa gangguan upstream perlu diuji terpisah?",
+    "answer": "Karena gateway lokal dapat tetap menjawab ketika tujuan di luar ISP gagal.",
+    "nodes": [
+      "LAN staf / tamu",
+      "Kebijakan tabel",
+      "Uji dua jalur"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/59965508/Policy+Routing",
+    "sourcePages": "19–35",
+    "mtcre": 8,
+    "stage": 16,
+    "minutes": 12,
+    "diagram": "dual"
+  },
+  {
+    "slug": "mtcre-ospf-identitas",
+    "title": "MTCRE 09 · OSPF, router ID, dan loopback",
+    "summary": "Mulai protokol routing dinamis dengan identitas yang jelas.",
+    "analogy": "Router saling berbagi peta; router ID seperti nomor identitas pembuat peta.",
+    "explain": "OSPF adalah protokol link-state untuk routing di dalam satu domain administrasi. Bedakan IGP seperti OSPF dengan EGP seperti BGP. Pada pelajaran ini kita memakai OSPFv2 untuk IPv4, bukan menyamakan konfigurasi IPv4 dan IPv6.\n\nTetapkan router ID unik secara eksplisit agar identitas mudah diprediksi. Loopback beralamat /32 dapat menjadi alamat manajemen yang stabil secara logis, tetapi keterjangkauannya tetap bergantung route yang tersedia. Identitas router ID tidak berarti alamat itu otomatis dapat diping.\n\nPada RouterOS v7 kenali instance, area, dan interface-template. Contoh menu Networks pada v6 perlu diterjemahkan, bukan disalin persis. OSPF memakai IP protocol 89; angka tersebut bukan port TCP atau UDP.",
+    "example": "R1 memakai router ID 10.1.1.1 dan R2 10.2.2.2, dicatat dalam inventaris lab.",
+    "practice": [
+      "Catat versi RouterOS.",
+      "Buat daftar router ID unik.",
+      "Rencanakan loopback /32 bila diperlukan.",
+      "Kenali instance, area, dan template v7.",
+      "Verifikasi identitas sebelum menambah tetangga."
+    ],
+    "warning": "Router ID ganda dapat mengacaukan adjacency dan pertukaran informasi.",
+    "check": "Apakah router ID otomatis membuat alamatnya dapat diping?",
+    "answer": "Tidak; alamat antarmuka dan route menuju alamat itu tetap harus tersedia.",
+    "nodes": [
+      "Identitas unik",
+      "Instance OSPF",
+      "Peta jaringan"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "39–50, 55",
+    "mtcre": 9,
+    "stage": 17,
+    "minutes": 12,
+    "diagram": "chain"
+  },
+  {
+    "slug": "mtcre-ospf-single-area",
+    "title": "MTCRE 10 · Lab OSPF satu area",
+    "summary": "Hubungkan tiga router dan pelajari route yang terbentuk.",
+    "analogy": "Satu kelompok memakai peta wilayah yang sama agar semua persimpangan dikenali.",
+    "explain": "Gunakan R1–R2–R3 dengan transit 10.12.0.0/30 dan 10.23.0.0/30. LAN R1 adalah 192.168.10.0/24 dan LAN R3 192.168.30.0/24. Beri IP transit .1 dan .2 pada tiap ujung, lalu buktikan ping tetangga sebelum mengaktifkan OSPF.\n\nBuat instance OSPFv2, router ID unik, dan area backbone 0.0.0.0 pada tiap router. Pada v7, interface-template mencocokkan antarmuka yang ikut OSPF. Transit membentuk tetangga; LAN pengguna dapat dipasang passive agar prefix diumumkan tanpa mencari neighbor di sana.\n\nPeriksa neighbor dan route dinamis. Jangan membiarkan static route lama menyamarkan hasil lab: baca sumber route aktif dan distance. Uji komunikasi kedua LAN, termasuk firewall dan gateway PC. Topologi ini diadaptasi dari PDF dengan pengalamatan transit disederhanakan.",
+    "example": "R2 mempelajari kedua LAN melalui OSPF; PC kiri dan kanan tetap memakai gateway lokal masing-masing.",
+    "practice": [
+      "Pasang IP dan ping semua transit.",
+      "Tetapkan router ID unik dan instance v2.",
+      "Buat area 0 serta template transit.",
+      "Umumkan LAN sebagai passive.",
+      "Periksa adjacency, route, dan ping dua arah."
+    ],
+    "warning": "OSPF tidak menggantikan pengalamatan IP, gateway PC, atau izin firewall.",
+    "check": "Mengapa LAN pengguna dapat dibuat passive?",
+    "answer": "Agar prefix tetap diumumkan tanpa mencoba membentuk neighbor pada LAN tersebut.",
+    "nodes": [
+      "LAN A — R1",
+      "R2 · Area 0",
+      "R3 — LAN C"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "51–54",
+    "mtcre": 10,
+    "stage": 17,
+    "minutes": 12,
+    "diagram": "chain"
+  },
+  {
+    "slug": "mtcre-ospf-neighbor",
+    "title": "MTCRE 11 · Neighbor, adjacency, dan LSDB",
+    "summary": "Baca proses sinkronisasi tanpa menghafal status secara buta.",
+    "analogy": "Dua orang perlu saling mengenali lalu menyamakan isi peta sebelum menghitung jalan.",
+    "explain": "Hello membantu menemukan dan menjaga hubungan neighbor. Proses dapat melewati Down, Init, 2-Way, ExStart, Exchange, Loading, hingga Full sesuai jenis jaringan dan peran. Attempt berkaitan dengan keadaan tertentu seperti neighbor yang dikonfigurasi pada NBMA.\n\nLima jenis paket OSPF adalah Hello, Database Description, Link State Request, Link State Update, dan Link State Acknowledgment. LSA adalah informasi yang dibawa dalam pertukaran, bukan nama paket keenam. LSDB yang selaras memberi bahan untuk perhitungan SPF.\n\nStatus 2-Way antar-DROther pada jaringan broadcast bisa normal. Sebaliknya, ExStart atau Exchange yang menetap dapat memerlukan pemeriksaan MTU, router ID, dan konektivitas. Periksa pula area, timer, autentikasi, network type, dan firewall protocol 89.",
+    "example": "Dua router transit point-to-point diharapkan mencapai Full; dua DROther pada segmen broadcast tidak selalu membentuk adjacency penuh satu sama lain.",
+    "practice": [
+      "Catat neighbor dan state.",
+      "Cocokkan area serta timer.",
+      "Periksa identitas dan network type.",
+      "Bandingkan MTU ketika sinkronisasi tersendat.",
+      "Pulihkan satu kesalahan lab dan amati perubahan state."
+    ],
+    "warning": "Jangan menganggap semua neighbor wajib Full pada semua pasangan.",
+    "check": "Kapan 2-Way dapat normal?",
+    "answer": "Di antara DROther pada jaringan broadcast yang memakai DR dan BDR.",
+    "nodes": [
+      "Hello: kenalan",
+      "Database: sinkron",
+      "SPF: hitung jalur"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "56–59, 64–65",
+    "mtcre": 11,
+    "stage": 17,
+    "minutes": 12,
+    "diagram": "sync"
+  },
+  {
+    "slug": "mtcre-ospf-dr-networktype",
+    "title": "MTCRE 12 · DR/BDR dan jenis jaringan",
+    "summary": "Pahami pemilihan peran pada segmen bersama.",
+    "analogy": "Rapat besar memilih koordinator untuk merapikan pertukaran catatan.",
+    "explain": "Pada jaringan broadcast, DR dan BDR membantu mengatur adjacency dan pertukaran informasi. Keduanya bukan otomatis gateway semua trafik pengguna. Pemilihan mempertimbangkan priority lalu router ID di antara peserta yang memenuhi syarat; priority 0 tidak ikut menjadi DR/BDR.\n\nPemilihan bersifat non-preemptive: router baru berpriority lebih tinggi tidak otomatis menggusur DR yang sudah aktif. Karena itu urutan waktu dan kondisi pemilihan perlu dilihat bersama konfigurasi, bukan menyebut router pertama selalu menang.\n\nNetwork type menentukan cara pembentukan neighbor. Broadcast dan NBMA menggunakan DR/BDR; point-to-point tidak. Point-to-multipoint memiliki perilaku berbeda lagi. Pilih sesuai media dan desain, serta cocokkan kedua sisi; jangan mengganti tipe hanya untuk menutupi masalah dasar.",
+    "example": "Tiga router pada satu switch dapat membentuk peran DR, BDR, dan DROther. Transit dua router dapat dirancang point-to-point.",
+    "practice": [
+      "Buat segmen bersama tiga router.",
+      "Catat priority, router ID, dan peran.",
+      "Amati router baru tanpa restart adjacency.",
+      "Uji priority 0 di lab.",
+      "Bandingkan dengan transit point-to-point."
+    ],
+    "warning": "DR berperan dalam kontrol OSPF, bukan berarti semua paket pengguna harus melewatinya.",
+    "check": "Apakah router baru priority tertinggi pasti langsung menjadi DR?",
+    "answer": "Tidak, pemilihan non-preemptive tidak otomatis mengganti DR aktif.",
+    "nodes": [
+      "DR: koordinator",
+      "BDR: cadangan",
+      "DROther: peserta"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "60–63, 87–91",
+    "mtcre": 12,
+    "stage": 17,
+    "minutes": 12,
+    "diagram": "dr"
+  },
+  {
+    "slug": "mtcre-ospf-cost",
+    "title": "MTCRE 13 · Cost, SPF, dan jalur cadangan",
+    "summary": "Hitung total biaya jalur sebelum menebak pilihan router.",
+    "analogy": "Jalan dengan lebih sedikit persimpangan belum tentu memiliki ongkos total lebih murah.",
+    "explain": "OSPF memakai cost untuk menghitung jalur terpendek. Cost bukan sekadar jumlah hop. Tetapkan angka lab secara eksplisit: R1–R2–R4 masing-masing 10 menghasilkan 20; R1–R3–R4 masing-masing 20 menghasilkan 40 untuk bagian transit tersebut.\n\nJika tujuan berada pada LAN di R4, tambahkan cost keluar menuju LAN itu pada kedua total. Karena tambahan sama, perbandingan tetap. Cost bersifat arah antarmuka; jalur pergi dan pulang bisa berbeda jika pengaturannya berbeda. Jangan menganggap default cost semua interface selalu 10.\n\nJalur setara dapat menghasilkan ECMP sesuai dukungan sistem. Saat link terbaik hilang, perubahan topologi memicu perhitungan ulang. Ukur waktu gangguan; protokol dinamis tidak menjanjikan tanpa kehilangan paket. Bedakan perubahan route dengan keberhasilan aplikasi.",
+    "example": "Jalur dua hop cost 20 mengalahkan jalur dua hop cost 40, walaupun jumlah hop sama.",
+    "practice": [
+      "Gambar topologi berlian empat router.",
+      "Tetapkan cost tiap arah.",
+      "Hitung total menuju satu LAN.",
+      "Bandingkan route aktif dengan prediksi.",
+      "Putus jalur terbaik dan ukur pemulihan."
+    ],
+    "warning": "Hitung seluruh jalur menuju prefix tujuan, termasuk interface tujuan yang relevan.",
+    "check": "Mana lebih murah: 10+10 atau 20+20?",
+    "answer": "20 lebih murah daripada 40; tambahkan cost LAN tujuan yang sama bila membandingkan prefix LAN.",
+    "nodes": [
+      "R1: pilih jalur",
+      "Atas 10 + 10",
+      "Bawah 20 + 20"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "66–75",
+    "mtcre": 13,
+    "stage": 18,
+    "minutes": 12,
+    "diagram": "diamond"
+  },
+  {
+    "slug": "mtcre-ospf-multiarea",
+    "title": "MTCRE 14 · Area backbone dan ABR",
+    "summary": "Pisahkan wilayah routing sambil menjaga hubungan antararea.",
+    "analogy": "Peta kota dibagi kecamatan, dengan penghubung yang memahami dua wilayah.",
+    "explain": "Area membatasi lingkup informasi link-state. Area 0 adalah backbone untuk pertukaran antararea dalam desain OSPF biasa. ABR menghubungkan area dan memegang informasi per area yang terhubung, bukan sekadar router dengan banyak kabel.\n\nMulai lab R1 di area 1, R2 sebagai ABR area 1 dan 0, lalu R3 di area 0. Tetapkan area per transit secara konsisten. Periksa route intra-area dan inter-area, lalu bandingkan informasi yang terlihat dengan lab satu area.\n\nDesain umumnya menjaga backbone kontinu dan area lain terhubung secara tepat ke backbone. Ada mekanisme khusus seperti virtual link, tetapi itu bukan alasan mengabaikan desain backbone. Summarization di batas area perlu blok alamat yang benar dan pengujian keterjangkauan.",
+    "example": "R2 memiliki satu transit area 1 dan satu transit area 0 sehingga berperan sebagai ABR dalam lab ini.",
+    "practice": [
+      "Mulai dari lab satu area yang berfungsi.",
+      "Gambar batas area dan ABR.",
+      "Pindahkan transit sesuai rencana lab.",
+      "Verifikasi neighbor dan jenis route.",
+      "Uji LAN antararea serta gangguan backbone."
+    ],
+    "warning": "Kedua ujung satu transit harus sepakat area yang digunakan.",
+    "check": "Apa peran R2 pada contoh?",
+    "answer": "ABR karena menghubungkan area 1 dengan area backbone 0.",
+    "nodes": [
+      "Area 1: R1",
+      "R2: ABR",
+      "Area 0: R3"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "76–86",
+    "mtcre": 14,
+    "stage": 18,
+    "minutes": 12,
+    "diagram": "area"
+  },
+  {
+    "slug": "mtcre-ospf-stub-nssa",
+    "title": "MTCRE 15 · Stub, NSSA, dan peran router",
+    "summary": "Kenali kebutuhan route eksternal sebelum memilih jenis area.",
+    "analogy": "Sebagian wilayah cukup memakai petunjuk pintu keluar, sebagian perlu memperkenalkan jalan dari luar.",
+    "explain": "Internal router berada dalam satu area, ABR menghubungkan area, dan ASBR memasukkan route eksternal ke OSPF. Satu router dapat memiliki lebih dari satu peran sesuai topologi. ASBR tidak terbatas pada router yang menjalankan BGP; static atau protokol lain juga bisa menjadi sumber redistribusi.\n\nStub membatasi informasi eksternal tertentu dan menggunakan default route dari ABR sesuai desain. Semua router dalam area harus cocok pengaturan area yang relevan. Jangan memilih stub untuk area yang membutuhkan redistribusi eksternal lokal tanpa memahami batasannya.\n\nNSSA memungkinkan pengenalan eksternal di area tersebut melalui LSA Type 7; ABR yang menjalankan fungsi translator dapat menerjemahkannya menjadi Type 5 untuk bagian lain. Pelajari kebutuhan, default route, dan perilaku implementasi sebelum mengaktifkan opsi tambahan.",
+    "example": "Kantor cabang dengan satu pintu keluar mungkin cukup stub; cabang yang memasukkan route eksternal lokal dapat membutuhkan NSSA.",
+    "practice": [
+      "Tandai IR, ABR, dan ASBR pada gambar.",
+      "Catat kebutuhan route eksternal.",
+      "Bandingkan area normal dengan stub.",
+      "Uji NSSA pada lab terpisah.",
+      "Periksa default route dan informasi eksternal."
+    ],
+    "warning": "Stub dan NSSA bukan sekadar tombol untuk mempercepat jaringan tanpa konsekuensi.",
+    "check": "Apa pembeda dasar NSSA?",
+    "answer": "Dapat membawa route eksternal lokal sebagai Type 7 dengan penerjemahan yang sesuai di ABR.",
+    "nodes": [
+      "Cabang: area khusus",
+      "ABR: batas area",
+      "Eksternal: ASBR"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "78–81",
+    "mtcre": 15,
+    "stage": 18,
+    "minutes": 12,
+    "diagram": "area"
+  },
+  {
+    "slug": "mtcre-ospf-redistribute",
+    "title": "MTCRE 16 · Redistribusi dan metric E1/E2",
+    "summary": "Masukkan route dari luar secara terkontrol.",
+    "analogy": "Pengumuman jalan luar perlu disaring agar peta tidak penuh informasi yang salah.",
+    "explain": "Redistribusi memasukkan route dari sumber lain ke OSPF. Tentukan prefix yang benar-benar perlu diketahui. Jangan otomatis mengumumkan semua connected atau static route karena bisa membocorkan jaringan manajemen, transit, atau default route yang tidak direncanakan.\n\nUntuk external metric E1, biaya internal menuju jalur eksternal ikut ditambahkan dengan external cost. Pada E2, external metric menjadi pembanding utama; biaya internal tetap dapat berperan sebagai tie-break sesuai proses pemilihan. Karena itu E2 bukan berarti biaya internal selalu diabaikan.\n\nGunakan filter yang sesuai RouterOS v7 dan uji prefix yang diterima serta ditolak. Originate default route memiliki tujuan dan kondisi tersendiri; bedakan dengan redistribusi seluruh static route. Hindari dua arah redistribusi tanpa rancangan anti-loop.",
+    "example": "Cabang hanya perlu mengumumkan 172.16.50.0/24 dari sumber eksternal, bukan semua subnet router.",
+    "practice": [
+      "Inventaris prefix eksternal.",
+      "Pilih satu prefix lab yang dibutuhkan.",
+      "Tentukan filter serta metric.",
+      "Periksa route pada router penerima.",
+      "Uji penghapusan route sumber dan pastikan penarikan iklan."
+    ],
+    "warning": "Filter routing v6 dan v7 berbeda; jangan menempel aturan lama tanpa penyesuaian.",
+    "check": "Apakah E2 membuat biaya internal tidak pernah berpengaruh?",
+    "answer": "Tidak; biaya internal dapat digunakan ketika pembanding eksternal setara.",
+    "nodes": [
+      "Route luar",
+      "ASBR + filter",
+      "OSPF: E1 / E2"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "92–96",
+    "mtcre": 16,
+    "stage": 18,
+    "minutes": 12,
+    "diagram": "policy"
+  },
+  {
+    "slug": "mtcre-tunnel-underlay",
+    "title": "MTCRE 17 · Underlay dan overlay",
+    "summary": "Pisahkan jalan fisik dengan jalur logis di atasnya.",
+    "analogy": "Terowongan menghubungkan dua pintu, tetapi jalan menuju pintu itu harus sudah ada.",
+    "explain": "Underlay adalah jaringan yang membawa paket luar menuju endpoint tunnel. Overlay adalah hubungan logis di atas underlay. Alamat endpoint luar berbeda fungsi dari alamat IP pada interface tunnel. Buktikan underlay lebih dahulu sebelum menyalahkan routing di dalam tunnel.\n\nContoh endpoint lab R1 192.0.2.1 dan R2 192.0.2.2 memakai prefix dokumentasi pada jaringan uji. Interface tunnel dapat memakai 10.255.0.1/30 dan 10.255.0.2/30. Dalam internet nyata, alamat endpoint dan keterjangkauannya harus disesuaikan, termasuk NAT serta firewall.\n\nRoute menuju endpoint luar tidak boleh tanpa sengaja bergantung pada tunnel yang sedang dibangunnya. Ini menimbulkan ketergantungan melingkar. Alamat /32 dengan peer adalah pola khusus point-to-point, bukan alasan memasang /32 secara sembarang pada LAN Ethernet.",
+    "example": "Tunnel tampak terkonfigurasi, tetapi endpoint luar tidak dapat dijangkau: perbaiki underlay terlebih dahulu.",
+    "practice": [
+      "Gambar dua lapisan alamat.",
+      "Ping endpoint luar lewat underlay.",
+      "Tetapkan alamat tunnel lab.",
+      "Periksa route menuju endpoint agar tetap di underlay.",
+      "Uji IP tunnel lalu LAN di belakangnya."
+    ],
+    "warning": "Tunnel tidak otomatis menyediakan enkripsi atau menyelesaikan masalah NAT.",
+    "check": "Mengapa route endpoint tidak boleh mengarah ke tunnel itu sendiri?",
+    "answer": "Karena tunnel membutuhkan jalur luar yang sudah tersedia untuk membawa paket pembentuknya.",
+    "nodes": [
+      "Endpoint luar",
+      "Jaringan pembawa",
+      "IP tunnel / overlay"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/gre/",
+    "sourcePages": "97–99",
+    "mtcre": 17,
+    "stage": 19,
+    "minutes": 12,
+    "diagram": "tunnel"
+  },
+  {
+    "slug": "mtcre-jenis-tunnel",
+    "title": "MTCRE 18 · GRE, IPIP, EoIP, dan batasannya",
+    "summary": "Pilih tunnel Layer 3 atau Layer 2 sesuai kebutuhan.",
+    "analogy": "Mengirim surat IP berbeda dengan memperpanjang satu ruangan Ethernet ke lokasi lain.",
+    "explain": "IPIP dan GRE dapat membawa trafik Layer 3 sesuai kemampuan protokol. EoIP membawa Ethernet dan dapat dipakai memperpanjang segmen Layer 2. Membawa VLAN melalui transport Layer 2 berbeda dari merutekan subnet antar lokasi; pilih berdasarkan kebutuhan yang benar.\n\nGRE, IPIP, dan EoIP sendiri bukan jaminan kerahasiaan. Bila jaringan pembawa tidak tepercaya, rancang perlindungan seperti IPsec yang sesuai. Cocokkan dukungan kedua endpoint; nama tunnel tidak berarti semua router atau semua NAT dapat menjalankannya tanpa penyesuaian.\n\nEncapsulation menambah overhead sehingga MTU efektif berkurang. Uji ukuran paket dan path MTU; jangan memilih angka MTU secara acak. Memperpanjang Layer 2 juga memperluas domain broadcast dan risiko loop, sehingga perlu desain bridge serta pencegahan loop.",
+    "example": "Dua kantor hanya perlu akses subnet berbeda: routing melalui tunnel Layer 3 sering lebih sederhana daripada memperpanjang satu LAN.",
+    "practice": [
+      "Tulis kebutuhan L2 atau L3.",
+      "Pilih protokol yang didukung endpoint.",
+      "Tentukan perlindungan transport.",
+      "Periksa firewall, NAT, dan MTU.",
+      "Uji layanan serta risiko loop bila memakai bridge."
+    ],
+    "warning": "Tunnel dan enkripsi adalah dua konsep berbeda.",
+    "check": "Apakah EoIP sendiri berarti data terenkripsi?",
+    "answer": "Tidak; perlindungan kriptografi perlu dirancang terpisah sesuai transport dan kebutuhan.",
+    "nodes": [
+      "L3: IPIP / GRE",
+      "L2: EoIP",
+      "Enkripsi: terpisah"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/eoip/",
+    "sourcePages": "97–99; pendalaman dokumentasi",
+    "mtcre": 18,
+    "stage": 19,
+    "minutes": 12,
+    "diagram": "tunnel"
+  },
+  {
+    "slug": "mtcre-ospf-tunnel",
+    "title": "MTCRE 19 · OSPF melewati tunnel",
+    "summary": "Bangun adjacency setelah jalur pembawa benar.",
+    "analogy": "Dua kantor dapat bertukar peta melalui jalur logis jika jalur pengiriman pesannya bekerja.",
+    "explain": "Mulai dengan tunnel Layer 3 yang berfungsi, misalnya GRE pada lab. Gunakan alamat tunnel /30 dan buktikan ping antar-IP tunnel. Pada jaringan tidak tepercaya, gunakan perlindungan transport yang sesuai; adjacency routing bukan fitur enkripsi.\n\nAktifkan OSPF pada interface tunnel dengan area yang sama, router ID berbeda, serta network type sesuai. Point-to-point cocok untuk hubungan dua endpoint yang dirancang demikian dan tidak memerlukan DR/BDR. Pastikan protocol 89 dan transport tunnel diizinkan pada lapisan yang tepat.\n\nKemampuan multicast berbeda antarjenis tunnel; jangan menganggap konfigurasi OSPF dapat dipindah mentah ke semua VPN, termasuk WireGuard yang tidak membawa multicast secara native. Setelah Full, periksa iklan LAN, route endpoint underlay, MTU, serta jalur balasan.",
+    "example": "IP tunnel saling ping tetapi neighbor tidak muncul: periksa area, template, tipe jaringan, multicast, dan firewall.",
+    "practice": [
+      "Buktikan underlay dan ping IP tunnel.",
+      "Tetapkan area serta router ID.",
+      "Pasang template OSPF pada tunnel.",
+      "Verifikasi adjacency dan route LAN.",
+      "Putus underlay dan amati penarikan route."
+    ],
+    "warning": "Jangan mengumumkan jalur yang membuat endpoint tunnel bergantung pada overlay sendiri.",
+    "check": "Apa urutan pemeriksaan yang masuk akal?",
+    "answer": "Underlay, tunnel, neighbor OSPF, route LAN, lalu layanan dan jalur balasan.",
+    "nodes": [
+      "Underlay sehat",
+      "Tunnel point-to-point",
+      "OSPF + LAN"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "97–99; penerapan lanjutan",
+    "mtcre": 19,
+    "stage": 19,
+    "minutes": 12,
+    "diagram": "tunnel"
+  },
+  {
+    "slug": "mtcre-lab-akhir",
+    "title": "MTCRE 20 · Proyek akhir dan troubleshooting",
+    "summary": "Buktikan pemahaman lewat hasil pengujian, bukan hafalan menu.",
+    "analogy": "Ujian pemahaman seperti latihan evakuasi: rencana harus bekerja saat satu bagian gagal.",
+    "explain": "Bangun lab empat router dengan dua jalur antar lokasi. Mulai dari IP serta static route, lalu gunakan OSPF untuk jalur internal. Tambahkan area kedua setelah satu area berfungsi. Pisahkan tahap agar sumber gangguan mudah ditemukan.\n\nTambahkan tunnel pada tahap terpisah dan pastikan underlay tetap independen. Jika memakai dua uplink, tulis kebijakan sumber dan fallback secara eksplisit. Uji satu perubahan setiap kali: route balik hilang, area tidak cocok, cost berubah, link putus, atau MTU bermasalah.\n\nBuat laporan berisi topologi, tabel alamat, versi RouterOS, route yang diharapkan, hasil aktual, serta langkah pemulihan. Materi ini adalah persiapan belajar berdasarkan PDF dan dokumentasi, bukan pelatihan resmi, bocoran ujian, atau jaminan sertifikasi. Periksa ketentuan sertifikasi pada penyelenggara resmi.",
+    "example": "Kasus: neighbor Full tetapi PC gagal ping. Telusuri gateway PC, route tujuan dan balik, firewall, lalu layanan; Full hanya membuktikan adjacency.",
+    "practice": [
+      "Gambar topologi dan tabel IP.",
+      "Buktikan routing dasar dua arah.",
+      "Aktifkan OSPF dan hitung cost.",
+      "Tambahkan tunnel atau kebijakan sebagai tahap terpisah.",
+      "Dokumentasikan lima gangguan dan cara pemulihannya."
+    ],
+    "warning": "Ubah satu variabel sekali agar hasil diagnosis dapat dijelaskan.",
+    "check": "Apakah neighbor Full menjamin aplikasi pengguna bekerja?",
+    "answer": "Tidak; pengalamatan host, route, firewall, MTU, dan layanan tetap perlu diuji.",
+    "nodes": [
+      "Rancang",
+      "Uji gangguan",
+      "Jelaskan hasil"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "sourcePages": "1–99",
+    "mtcre": 20,
+    "stage": 19,
+    "minutes": 12,
+    "diagram": "diamond"
   }
 ]

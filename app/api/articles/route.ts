@@ -73,7 +73,7 @@ export function GET() {
   const networkItems = networkLessons.map((lesson, index) => ({
     id: `network-${lesson.slug}`, slug: lesson.slug, title: lesson.title,
     summary: lesson.summary, url: `${origin}/jaringan/${lesson.slug}`,
-    category: 'Belajar Jaringan', tags: ['Jaringan', 'Network', 'Pemula'],
+    category: 'Belajar Jaringan', tags: lesson.mtcre ? ['Jaringan', 'MTCRE', 'Routing'] : ['Jaringan', 'Network', 'Pemula'],
     minutes: lesson.minutes, order: lessons.length + index + 1,
     image: { url: `${origin}/network/${lesson.slug}.svg`, alt: lesson.title,
       author: 'Learn Jaringan', source: `${origin}/jaringan/${lesson.slug}`,

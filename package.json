@@ -11,7 +11,8 @@
     "test:smoke": "node scripts/smoke.cjs",
     "check:network": "node scripts/check-network.mjs",
     "check:subnet": "node scripts/check-subnet.cjs",
-    "check:routing": "node scripts/check-routing.cjs"
+    "check:routing": "node scripts/check-routing.cjs",
+    "check:mtcre": "node scripts/check-mtcre.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
