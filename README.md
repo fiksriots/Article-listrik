@@ -80,3 +80,9 @@ Jalankan `npm run check:network` untuk memeriksa struktur materi, keutuhan rute 
 ## Pintu masuk akademi
 
 `/` adalah dashboard umum dengan pilihan Learn Listrik dan Learn Jaringan. Beranda listrik berada di `/listrik`; semua rute materi listrik (`/materi/*`), modul, simulator, dan galeri tetap tersedia. Navbar mengikuti bagian yang dibuka dan menyediakan tautan kembali ke dashboard untuk mengganti akademi. Pada layar kecil, tombol Menu mengontrol navigasi yang dapat dibuka/tutup.
+
+## Simulator jaringan
+
+`/jaringan/simulator` adalah lab subnetting IPv4 lokal: input alamat dan prefix /0–/32, tampilan bit network/host, network/mask/broadcast/rentang host, perbandingan dua IP dengan prefix yang sama, pembagian FLSM (maksimal delapan baris untuk menjaga rendering tetap ringan), dan tiga latihan dengan pembahasan. /31 dimodelkan sebagai point-to-point RFC 3021; /32 sebagai satu alamat. Lab tidak mengirim paket atau membuktikan keterjangkauan perangkat.
+
+Perhitungan murni ada di `lib/subnet.ts`. Jalankan `npm run check:subnet` untuk kasus batas, input tidak valid, /31–/32, pembagian blok, dan perbandingan subnet. Tautan lab tersedia pada navbar jaringan, beranda, jalur MTCNA, serta materi IP/subnet/gateway/routing terkait.

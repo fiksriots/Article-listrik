@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "check:content": "node scripts/check-content.mjs",
     "test:smoke": "node scripts/smoke.cjs",
-    "check:network": "node scripts/check-network.mjs"
+    "check:network": "node scripts/check-network.mjs",
+    "check:subnet": "node scripts/check-subnet.cjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
