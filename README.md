@@ -76,3 +76,7 @@ Katalog `/api/articles` menggabungkan materi listrik dan jaringan dengan ID, kat
 Kurikulum jaringan kini berisi 44 materi: 32 fondasi dan 12 materi persiapan MTCNA pada 11 tahap. Materi dasar ditata sebelum konsep IP, routing, dan troubleshooting; identitas slug tetap sehingga progres sebelumnya masih dikenali di origin yang sama. Jalur `/jaringan/mtcna` memetakan 12 materi ke sembilan kelompok outline MikroTik, menyertakan prasyarat, kebutuhan lab, serta checklist kesiapan lokal (`fiks-mtcna-readiness-v1`). Materi merupakan persiapan mandiri, bukan kelas atau sertifikasi resmi. Outline yang ditautkan MikroTik bertanggal 22 Januari 2016; rujukan fitur RouterOS dicantumkan per materi.
 
 Jalankan `npm run check:network` untuk memeriksa struktur materi, keutuhan rute lama, cakupan kelompok MTCNA, dan keberadaan ilustrasi.
+
+## Pintu masuk akademi
+
+`/` adalah dashboard umum dengan pilihan Learn Listrik dan Learn Jaringan. Beranda listrik berada di `/listrik`; semua rute materi listrik (`/materi/*`), modul, simulator, dan galeri tetap tersedia. Navbar mengikuti bagian yang dibuka dan menyediakan tautan kembali ke dashboard untuk mengganti akademi. Pada layar kecil, tombol Menu mengontrol navigasi yang dapat dibuka/tutup.
