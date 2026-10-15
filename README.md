@@ -86,3 +86,9 @@ Jalankan `npm run check:network` untuk memeriksa struktur materi, keutuhan rute 
 `/jaringan/simulator` adalah lab subnetting IPv4 lokal: input alamat dan prefix /0–/32, tampilan bit network/host, network/mask/broadcast/rentang host, perbandingan dua IP dengan prefix yang sama, pembagian FLSM (maksimal delapan baris untuk menjaga rendering tetap ringan), dan tiga latihan dengan pembahasan. /31 dimodelkan sebagai point-to-point RFC 3021; /32 sebagai satu alamat. Lab tidak mengirim paket atau membuktikan keterjangkauan perangkat.
 
 Perhitungan murni ada di `lib/subnet.ts`. Jalankan `npm run check:subnet` untuk kasus batas, input tidak valid, /31–/32, pembagian blok, dan perbandingan subnet. Tautan lab tersedia pada navbar jaringan, beranda, jalur MTCNA, serta materi IP/subnet/gateway/routing terkait.
+
+### Lab next hop dua router
+
+`/jaringan/simulator/next-hop` menyediakan topologi tetap empat PC pada dua LAN /24, dua switch, serta dua router dengan transit 10.10.10.0/30. Pengguna memilih pasangan komputer, gateway tiap PC, status static route dan next hop R1/R2. Model mengikuti permintaan lalu balasan secara independen; IP tujuan paket tidak diganti oleh next hop. Playback langkah dan log menampilkan lokasi kegagalan. Semua link diasumsikan aktif, connected route tersedia, ICMP diizinkan, dan NAT tidak digunakan. Ini model pembelajaran, bukan emulator RouterOS.
+
+`npm run check:routing` memverifikasi 12 pasangan PC, rute balik hilang, gateway salah, next hop sendiri/tak terjangkau, serta komunikasi satu LAN yang tidak membutuhkan router.
