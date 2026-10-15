@@ -67,13 +67,13 @@ Semua gambar dan simulasi merupakan model pendidikan. Pengawatan nyata, pemiliha
 
 ## Learn Jaringan
 
-Akademi jaringan tersedia di `/jaringan`, dengan 44 bacaan pada 11 tahap dan ilustrasi SVG lokal. Konten terstruktur: `lib/network-lessons.json`; daftar tahap dan tipe: `lib/network-course.ts`; aset: `public/network/`. Setiap materi mempunyai analogi, pembahasan, contoh, latihan, koreksi miskonsepsi, dan cek pemahaman.
+Akademi jaringan tersedia di `/jaringan`, dengan 60 bacaan pada 15 tahap dan ilustrasi SVG lokal. Konten terstruktur: `lib/network-lessons.json`; daftar tahap dan tipe: `lib/network-course.ts`; aset: `public/network/`. Setiap materi mempunyai analogi, pembahasan, contoh, latihan, koreksi miskonsepsi, dan cek pemahaman.
 
 Katalog `/api/articles` menggabungkan materi listrik dan jaringan dengan ID, kategori, URL, serta thumbnail masing-masing. Portofolio mengonsumsi katalog ini; materi baru yang ditambahkan akan ikut pada deployment berikutnya. Cache HTTP katalog 5 menit; browser portofolio mengambil ulang saat halaman artikel dimuat. Progres jaringan menggunakan localStorage `fiks-network-progress-v1`, terpisah dari progres listrik; tidak tersinkron antarperangkat.
 
 ### Hardware jaringan dan persiapan MTCNA
 
-Kurikulum jaringan kini berisi 44 materi: 32 fondasi dan 12 materi persiapan MTCNA pada 11 tahap. Materi dasar ditata sebelum konsep IP, routing, dan troubleshooting; identitas slug tetap sehingga progres sebelumnya masih dikenali di origin yang sama. Jalur `/jaringan/mtcna` memetakan 12 materi ke sembilan kelompok outline MikroTik, menyertakan prasyarat, kebutuhan lab, serta checklist kesiapan lokal (`fiks-mtcna-readiness-v1`). Materi merupakan persiapan mandiri, bukan kelas atau sertifikasi resmi. Outline yang ditautkan MikroTik bertanggal 22 Januari 2016; rujukan fitur RouterOS dicantumkan per materi.
+Kurikulum jaringan kini berisi 60 materi: 32 fondasi, 12 materi persiapan MTCNA, dan 16 materi lanjutan pada 15 tahap. Materi dasar ditata sebelum konsep IP, routing, dan troubleshooting; identitas slug tetap sehingga progres sebelumnya masih dikenali di origin yang sama. Jalur `/jaringan/mtcna` memetakan 12 materi ke sembilan kelompok outline MikroTik, menyertakan prasyarat, kebutuhan lab, serta checklist kesiapan lokal (`fiks-mtcna-readiness-v1`). Materi merupakan persiapan mandiri, bukan kelas atau sertifikasi resmi. Outline yang ditautkan MikroTik bertanggal 22 Januari 2016; rujukan fitur RouterOS dicantumkan per materi.
 
 Jalankan `npm run check:network` untuk memeriksa struktur materi, keutuhan rute lama, cakupan kelompok MTCNA, dan keberadaan ilustrasi.
 
@@ -92,3 +92,8 @@ Perhitungan murni ada di `lib/subnet.ts`. Jalankan `npm run check:subnet` untuk 
 `/jaringan/simulator/next-hop` menyediakan topologi tetap empat PC pada dua LAN /24, dua switch, serta dua router dengan transit 10.10.10.0/30. Pengguna memilih pasangan komputer, gateway tiap PC, status static route dan next hop R1/R2. Model mengikuti permintaan lalu balasan secara independen; IP tujuan paket tidak diganti oleh next hop. Playback langkah dan log menampilkan lokasi kegagalan. Semua link diasumsikan aktif, connected route tersedia, ICMP diizinkan, dan NAT tidak digunakan. Ini model pembelajaran, bukan emulator RouterOS.
 
 `npm run check:routing` memverifikasi 12 pasangan PC, rute balik hilang, gateway salah, next hop sendiri/tak terjangkau, serta komunikasi satu LAN yang tidak membutuhkan router.
+
+
+### Materi lanjutan jaringan
+
+Empat tahap setelah jalur MTCNA menambah VLSM, alamat IPv6, RA/SLAAC/DHCPv6, DNS record/TTL, MTU/MSS, RSTP, LACP, bufferbloat, Wireshark, radio PTP, monitoring SNMP, IPAM, DHCP relay, WireGuard, pengantar OSPF, serta keamanan LAN. Topik ini merupakan pendalaman tersendiri dan tidak ditandai sebagai modul inti MTCNA. Seluruh slug lama tetap tersedia dan progres lama tetap merujuk slug yang sama. Katalog portofolio memperbarui materi dari feed pada deployment ini.

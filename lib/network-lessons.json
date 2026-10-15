@@ -1076,5 +1076,421 @@
     "minutes": 10,
     "source": "https://mikrotik.com/training/about",
     "mtcna": 9
+  },
+  {
+    "slug": "vlsm-perencanaan-ip",
+    "title": "VLSM: membagi IP sesuai jumlah perangkat",
+    "summary": "Bedakan pembagian subnet sama besar dan pembagian sesuai kebutuhan.",
+    "analogy": "Membagi satu bangunan menjadi ruangan tidak harus membuat semua ruangan sama luas. VLSM menyesuaikan ukuran tiap bagian.",
+    "explain": "FLSM memakai ukuran prefix yang sama untuk semua subnet. VLSM memakai panjang prefix berbeda agar kebutuhan host yang berbeda tidak menghabiskan alamat secara sia-sia. Mulai dari daftar kebutuhan perangkat, termasuk gateway, perangkat tetap, dan cadangan pertumbuhan.\n\nUntuk subnet IPv4 biasa, pilih bit host yang menghasilkan 2 pangkat bit host dikurangi 2 alamat host yang cukup. Kebutuhan 60 alamat cocok dengan /26 yang menyediakan 62 host. Kebutuhan 25 cocok /27 dengan 30 host, dan 10 cocok /28 dengan 14 host. Ini perencanaan LAN biasa; /31 dan /32 mempunyai penggunaan khusus.\n\nAlokasikan blok terbesar dahulu pada batas yang benar, lalu blok berikutnya tanpa tumpang tindih. Gateway mengambil salah satu alamat host, bukan alamat tambahan di luar kapasitas. Sisakan ruang untuk perubahan dan dokumentasikan subnet, rentang DHCP, alamat tetap, serta broadcast.",
+    "example": "Dari 192.168.50.0/24: staf mendapat .0/26 (host .1–.62), tamu .64/27 (host .65–.94), dan perangkat .96/28 (host .97–.110). Sisa alamat belum dialokasikan.",
+    "practice": [
+      "Daftar kebutuhan 60, 25, dan 10 alamat host termasuk gateway.",
+      "Pilih /26, /27, dan /28 lalu tulis ukuran bloknya.",
+      "Tempatkan blok terbesar di .0, berikutnya .64 dan .96.",
+      "Periksa rentang network, host, dan broadcast tidak bertumpuk.",
+      "Buat tabel alokasi dan cadangan."
+    ],
+    "warning": "Jangan menulis subnet mulai di angka sembarang; alamat network harus berada pada batas blok prefix-nya.",
+    "check": "Apakah 60 perangkat ditambah satu gateway cukup pada /26?",
+    "answer": "Cukup: 61 alamat host diperlukan dan /26 menyediakan 62. Tambahkan kebutuhan cadangan sebelum memutuskan rancangan akhir.",
+    "nodes": [
+      "60 host → /26",
+      "25 host → /27",
+      "10 host → /28"
+    ],
+    "source": "https://www.rfc-editor.org/rfc/rfc4632",
+    "stage": 11,
+    "minutes": 8
+  },
+  {
+    "slug": "ipv6-alamat-prefix",
+    "title": "IPv6: membaca alamat, prefix, dan jenisnya",
+    "summary": "Kenali heksadesimal, penyingkatan, link-local, serta global unicast.",
+    "analogy": "IPv6 seperti sistem alamat baru dengan ruang sangat besar. Cara membaca dan menemukan tetangganya tidak persis sama dengan IPv4.",
+    "explain": "Alamat IPv6 berukuran 128 bit dan ditulis dalam delapan kelompok heksadesimal. Setiap kelompok memuat empat digit 0–9 atau a–f. Nol di depan kelompok dapat dihilangkan. Satu rangkaian kelompok nol dapat diringkas memakai ::, tetapi hanya satu kali dalam satu alamat agar jumlah kelompok dapat direkonstruksi.\n\nContoh 2001:db8:0000:0000:0000:0000:0000:0010 disingkat menjadi 2001:db8::10. Prefix seperti /64 menyatakan jumlah bit network, bukan jumlah digit tulisan. 2001:db8::/32 dipakai untuk dokumentasi dan contoh, bukan alamat publik yang boleh dipasang sembarang.\n\nLink-local berada dalam fe80::/10 dan digunakan pada link setempat; alamat interface sering memerlukan penunjuk zona ketika diakses. Unique local memakai ruang fc00::/7 dengan penggunaan lokal yang direncanakan. Global unicast berasal dari alokasi yang sesuai. IPv6 tidak memakai broadcast IPv4; fungsi tertentu menggunakan multicast dan Neighbor Discovery.",
+    "example": "Satu PC dapat memiliki link-local dan alamat global pada interface yang sama. Adanya alamat fe80:: saja belum membuktikan akses internet IPv6 tersedia.",
+    "practice": [
+      "Lihat alamat IPv6 pada perangkat sendiri tanpa mengubahnya.",
+      "Bedakan link-local dan alamat lainnya.",
+      "Kembangkan 2001:db8::10 menjadi delapan kelompok.",
+      "Tulis bagian prefix dari contoh /64.",
+      "Catat bahwa contoh dokumentasi tidak dipakai sebagai alokasi internet nyata."
+    ],
+    "warning": "Tanda :: hanya boleh muncul sekali dalam satu alamat. Banyak alamat pada satu interface bukan otomatis konflik.",
+    "check": "Bolehkah menyingkat menjadi 2001::db8::10?",
+    "answer": "Tidak. Dua tanda :: membuat jumlah kelompok nol yang dihilangkan menjadi ambigu.",
+    "nodes": [
+      "128 bit",
+      "Prefix /64",
+      "Interface IPv6"
+    ],
+    "source": "https://www.rfc-editor.org/rfc/rfc4291",
+    "stage": 11,
+    "minutes": 8
+  },
+  {
+    "slug": "ipv6-ra-slaac-dhcpv6",
+    "title": "IPv6: RA, SLAAC, DHCPv6, dan prefix delegation",
+    "summary": "Pahami bagaimana klien mengenal router dan memperoleh konfigurasi IPv6.",
+    "analogy": "Router Advertisement seperti pengumuman gerbang lingkungan. SLAAC membantu perangkat menyusun alamatnya dari informasi lingkungan tersebut.",
+    "explain": "Neighbor Discovery pada IPv6 memakai ICMPv6 untuk fungsi seperti menemukan tetangga dan router. Router Advertisement atau RA mengumumkan informasi yang dapat mencakup prefix, masa berlaku, dan parameter lain. SLAAC memungkinkan klien membuat alamat dari prefix yang sesuai; LAN umum menggunakan /64 untuk mekanisme ini.\n\nDHCPv6 dapat memberikan alamat atau parameter tertentu menurut konfigurasi serta dukungan klien. Default router biasanya dipelajari melalui RA, bukan dengan menganggap DHCPv6 identik dengan DHCPv4. DNS dapat diumumkan melalui mekanisme yang didukung klien dan router. Satu sistem operasi tidak selalu mendukung semua metode yang sama.\n\nPrefix delegation memungkinkan router menerima satu prefix dari hulu lalu membagikan subnet ke LAN. Misalnya alokasi /56 dapat direncanakan menjadi beberapa /64. Periksa dukungan dan ketentuan ISP, route, RA, firewall IPv6, serta DNS. Memblokir seluruh ICMPv6 dapat merusak fungsi penting; keamanan IPv6 perlu kebijakan sendiri, bukan bergantung pada NAT IPv4.",
+    "example": "Klien mempunyai alamat IPv6 tetapi tidak ada default route. Periksa RA dan keterjangkauan router, bukan sekadar mengaktifkan DHCPv6 berulang kali.",
+    "practice": [
+      "Di lab dual-stack, catat alamat dan default route IPv6 klien.",
+      "Periksa RA/ND router serta prefix LAN.",
+      "Bandingkan metode pemberian DNS yang didukung klien.",
+      "Jika ISP memberi prefix delegation, dokumentasikan subnet /64 tiap LAN.",
+      "Uji koneksi dan kebijakan firewall IPv6 secara terpisah dari IPv4."
+    ],
+    "warning": "Jangan memblokir seluruh ICMPv6 atau menganggap firewall IPv4 otomatis melindungi IPv6.",
+    "check": "Dari mana default router biasanya dipelajari klien IPv6?",
+    "answer": "Dari Router Advertisement melalui Neighbor Discovery, bukan sekadar dari DHCPv6.",
+    "nodes": [
+      "Router Advertisement",
+      "SLAAC / DHCPv6",
+      "Alamat + route klien"
+    ],
+    "source": "https://manual.mikrotik.com/docs/getting-started/networking-fundamentals/ipv6-neighbor-discovery/",
+    "stage": 11,
+    "minutes": 8
+  },
+  {
+    "slug": "dns-record-ttl",
+    "title": "DNS record, TTL, dan perubahan domain",
+    "summary": "Bedakan A, AAAA, CNAME, MX, TXT, dan cache saat domain diubah.",
+    "analogy": "DNS seperti buku alamat berlapis dengan salinan sementara. Memperbarui satu buku tidak langsung menghapus semua salinan yang masih berlaku.",
+    "explain": "Record A menghubungkan nama ke IPv4; AAAA ke IPv6; CNAME membuat nama alias ke nama lain. MX menunjuk layanan penerima email dengan prioritas, sedangkan TXT menyimpan teks untuk kebutuhan seperti verifikasi dan kebijakan email. Nilai record harus mengikuti kebutuhan layanan yang benar.\n\nTTL menyatakan berapa lama jawaban boleh disimpan di cache. Perubahan record tidak langsung menghapus jawaban lama pada semua resolver. Menurunkan TTL perlu dilakukan sebelum migrasi dengan mempertimbangkan TTL lama. Cache negatif juga dapat membuat nama yang baru dibuat belum segera terlihat.\n\nPisahkan nameserver otoritatif, resolver, dan hosting. Mengubah A tidak memindahkan file website; mengganti nameserver berarti pengelolaan jawaban berpindah dan semua record penting harus dibawa. HTTPS juga memerlukan sertifikat serta konfigurasi hosting untuk nama tersebut. Jangan menghapus MX atau TXT email ketika hanya memindahkan subdomain website.",
+    "example": "Website berpindah alamat, tetapi beberapa perangkat masih menuju server lama. Bandingkan jawaban resolver dan record otoritatif sebelum menyimpulkan server baru gagal.",
+    "practice": [
+      "Buat tabel record domain latihan beserta tujuannya.",
+      "Gunakan nslookup -type=A example.com dan periksa juga AAAA bila diperlukan.",
+      "Catat resolver yang menjawab dan TTL bila alat menampilkannya.",
+      "Untuk migrasi, rencanakan record, hosting, sertifikat, serta rollback.",
+      "Uji website dan email sebagai layanan terpisah."
+    ],
+    "warning": "CNAME menunjuk nama host, bukan URL lengkap dengan https:// atau path halaman.",
+    "check": "Apakah mengganti A record otomatis memindahkan file website?",
+    "answer": "Tidak. DNS mengubah jawaban alamat; konten dan konfigurasi hosting harus disiapkan tersendiri.",
+    "nodes": [
+      "Record otoritatif",
+      "Cache resolver / TTL",
+      "Jawaban ke klien"
+    ],
+    "source": "https://developers.cloudflare.com/dns/manage-dns-records/reference/dns-record-types/",
+    "stage": 11,
+    "minutes": 8
+  },
+  {
+    "slug": "mtu-mss-pmtud",
+    "title": "MTU, MSS, dan kasus situs hanya terbuka sebagian",
+    "summary": "Mengapa ping kecil berhasil tetapi upload atau halaman tertentu macet?",
+    "analogy": "MTU seperti batas ukuran barang yang boleh melewati satu gerbang. Ukuran yang muat di gerbang awal belum tentu muat sepanjang perjalanan.",
+    "explain": "MTU membatasi ukuran paket yang dapat dibawa pada lapisan yang dimaksud. Bedakan IP MTU, L2MTU, dan ukuran frame yang dilaporkan perangkat. Tunnel serta enkapsulasi menambah overhead sehingga kapasitas payload dapat lebih kecil. Jangan memakai satu angka universal untuk semua media.\n\nMSS berkaitan dengan ukuran data TCP dalam satu segmen dan dinegosiasikan saat pembentukan koneksi. MTU 1500 dengan header IPv4 dan TCP dasar masing-masing 20 byte memberi ilustrasi MSS 1460; opsi header atau mekanisme lain dapat mengubah kebutuhan. MSS bukan batas ukuran semua paket UDP.\n\nPath MTU Discovery membantu menemukan batas jalur. ICMP yang diperlukan harus dapat bekerja sesuai protokol. Jika pesan penting diblokir, paket besar dapat bermasalah sementara paket kecil berhasil. MSS clamping dapat membantu kasus TCP tertentu, tetapi bukan pengganti diagnosis semua masalah MTU atau UDP.",
+    "example": "VPN tersambung dan ping kecil berhasil, tetapi transfer besar macet. Periksa overhead tunnel, MTU jalur, pesan ICMP terkait, dan uji ukuran paket secara terkendali.",
+    "practice": [
+      "Catat MTU interface fisik dan tunnel pada lab.",
+      "Bandingkan akses layanan kecil dan transfer besar.",
+      "Gunakan alat uji ukuran paket sesuai dokumentasi OS, dengan batas dan flag yang dipahami.",
+      "Periksa firewall untuk ICMP yang diperlukan.",
+      "Ubah satu parameter di lab dan uji kembali layanan yang semula gagal."
+    ],
+    "warning": "Jangan menetapkan MSS 1460 atau MTU 1500 ke semua interface tanpa melihat enkapsulasi dan jalurnya.",
+    "check": "Apakah MSS clamping memperbaiki semua paket UDP?",
+    "answer": "Tidak. MSS adalah parameter TCP; UDP membutuhkan penanganan MTU yang sesuai pada aplikasinya dan jalur.",
+    "nodes": [
+      "Ukuran paket",
+      "Batas MTU jalur",
+      "PMTUD / MSS TCP"
+    ],
+    "source": "https://manual.mikrotik.com/docs/hardware/mtu-in-routeros/",
+    "stage": 12,
+    "minutes": 8
+  },
+  {
+    "slug": "loop-rstp",
+    "title": "Loop, broadcast storm, dan RSTP",
+    "summary": "Pahami mengapa satu kabel yang salah dapat mengganggu banyak pengguna.",
+    "analogy": "Jalur berputar seperti surat yang terus disalin dan dikirim ulang. RSTP membantu memilih jalur layer 2 agar tidak membentuk lingkaran aktif.",
+    "explain": "Switch meneruskan frame broadcast pada domain yang sesuai. Pada loop Ethernet yang tidak dikendalikan, frame dapat terus beredar, membuat banyak salinan dan membebani link serta perangkat. MAC table dapat terlihat berpindah-pindah antarport. Ini berbeda dari sekadar internet ISP lambat.\n\nSTP/RSTP membentuk topologi logis bebas loop dengan menempatkan jalur tertentu pada status yang sesuai. RSTP bertukar BPDU dan memilih peran port berdasarkan proses protokol. Jalur cadangan tidak selalu membawa trafik pengguna saat kondisi normal; ia dapat dipakai ketika topologi berubah.\n\nPastikan rancangan, perangkat, dan konfigurasi mendukung. Port yang menghadap perangkat pengguna dapat memerlukan perlindungan BPDU sesuai kebijakan, tetapi jangan mengaktifkan setting tanpa memahami akibatnya. Untuk jaringan VLAN yang kompleks, pemilihan protokol serta interoperabilitas perlu kajian lebih lanjut.",
+    "example": "Dua switch tersambung dua kabel tanpa LAG atau kendali loop yang benar. Menambah kabel kedua tidak otomatis menggandakan kapasitas; jaringan dapat terganggu.",
+    "practice": [
+      "Gambar jalur antarswitch dan cari kemungkinan lingkaran.",
+      "Di lab terisolasi, baca status RSTP dan peran port tanpa membuat loop produksi.",
+      "Catat root bridge dan jalur aktif.",
+      "Uji perpindahan jalur secara terkendali jika lab mendukung.",
+      "Simpan diagram serta alasan pemilihan jalur."
+    ],
+    "warning": "Jangan membuat loop pada jaringan aktif untuk melihat broadcast storm secara langsung.",
+    "check": "Mengapa link cadangan kadang tidak meneruskan trafik biasa?",
+    "answer": "Protokol spanning tree dapat menahan jalur tertentu agar topologi aktif tidak membentuk loop.",
+    "nodes": [
+      "Jalur ganda",
+      "RSTP memilih peran",
+      "Topologi bebas loop"
+    ],
+    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
+    "stage": 12,
+    "minutes": 8
+  },
+  {
+    "slug": "lacp-bonding",
+    "title": "LACP dan bonding: beberapa kabel menjadi satu grup",
+    "summary": "Bedakan agregasi link, redundansi, dan penggabungan dua ISP.",
+    "analogy": "Beberapa kasir dapat melayani banyak antrean, tetapi satu pelanggan tidak otomatis dilayani semua kasir sekaligus.",
+    "explain": "Link aggregation mengelompokkan beberapa sambungan sesuai mode yang didukung. LACP memakai negosiasi IEEE 802.1AX/802.3ad untuk anggota grup. Active-backup memilih jalur aktif dan cadangan; mode itu berbeda dari agregasi yang membagi trafik. Dukungan hardware offload tergantung model dan konfigurasi.\n\nDistribusi trafik biasanya memakai hash dari atribut tertentu. Satu aliran sering tetap berada pada satu link agar urutan paket terjaga. Dua port 1 Gbps dapat memberi kapasitas agregat untuk beberapa aliran, tetapi satu transfer tidak otomatis menjadi 2 Gbps. Kemampuan endpoint dan pola hash ikut menentukan hasil.\n\nKonfigurasi kedua ujung harus sesuai: anggota, mode, VLAN, MTU, dan kecepatan. Jangan menyambung dua kabel paralel lalu menyebutnya LACP. Agregasi antarswitch juga berbeda dari load balancing dua ISP yang mempunyai routing serta alamat publik berbeda.",
+    "example": "Server memiliki dua link gigabit ke switch dalam LAG yang benar. Banyak klien dapat memakai kapasitas grup, tetapi satu sesi transfer mungkin tetap dibatasi satu anggota.",
+    "practice": [
+      "Pastikan kedua perangkat mendukung mode yang dipilih.",
+      "Rancang anggota LAG dan jalur manajemen sebelum perubahan.",
+      "Di lab, periksa status anggota dan negosiasi pada kedua ujung.",
+      "Uji beberapa aliran, bukan hanya satu unduhan.",
+      "Putus satu anggota secara terkendali dan catat pemulihan."
+    ],
+    "warning": "Jangan membentuk satu LAG ke dua switch terpisah kecuali arsitektur keduanya memang mendukung rancangan tersebut.",
+    "check": "Apakah dua link 1 Gbps menjamin satu unduhan 2 Gbps?",
+    "answer": "Tidak. Satu aliran biasanya dipetakan ke satu anggota oleh hash; kapasitas agregat terutama berguna untuk beberapa aliran.",
+    "nodes": [
+      "Link anggota",
+      "Grup LACP",
+      "Distribusi aliran"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323193/Bonding",
+    "stage": 12,
+    "minutes": 8
+  },
+  {
+    "slug": "qos-bufferbloat",
+    "title": "Bufferbloat dan antrean: cepat tetapi terasa lambat",
+    "summary": "Hubungkan upload penuh, latency melonjak, dan pengelolaan antrean.",
+    "analogy": "Gudang tunggu terlalu besar dapat menumpuk barang lama. Jalannya lebar, tetapi setiap kiriman menghabiskan banyak waktu di antrean.",
+    "explain": "Bufferbloat terjadi ketika antrean berlebihan membuat delay tinggi saat jaringan terbebani. Koneksi dapat mencapai throughput bagus sementara rapat, gim, atau interaksi jarak jauh terasa tersendat. Ukur latency saat idle dan saat upload/download berjalan untuk melihat perubahan.\n\nPengelolaan antrean yang baik dapat mengurangi penumpukan dan membagi aliran secara lebih adil. Shaping sering perlu ditempatkan sehingga antrean yang dikendalikan menjadi titik pembatas, bukan antrean hulu yang tidak dikelola. Pilihan algoritma, laju, dan kemampuan CPU harus sesuai perangkat serta variasi kapasitas link.\n\nPada RouterOS, fitur seperti queue dan akselerasi harus dibaca bersama alur paket. FastTrack dapat melewati pemrosesan queue tertentu. Jangan menjanjikan QoS menambah bandwidth ISP; ia mengelola pemakaian kapasitas yang ada. Untuk radio dengan kapasitas berubah, hasil perlu diuji pada beberapa kondisi.",
+    "example": "Backup memenuhi upload kantor. Latency ke tujuan luar melonjak, tetapi kembali rendah saat backup dihentikan. Ini petunjuk antrean yang perlu diukur, bukan bukti semua server rapat rusak.",
+    "practice": [
+      "Ukur RTT idle dengan tujuan yang sama.",
+      "Aktifkan transfer terkontrol pada lab dan catat RTT serta loss.",
+      "Bandingkan kabel dan Wi-Fi untuk memisahkan radio dari uplink.",
+      "Uji kebijakan queue yang sesuai dan periksa pengaruh FastTrack.",
+      "Nilai throughput, latency saat beban, dan CPU bersama-sama."
+    ],
+    "warning": "Jangan menilai kualitas jaringan hanya dari angka download pada speed test.",
+    "check": "Apa petunjuk bufferbloat yang perlu diuji lebih lanjut?",
+    "answer": "Latency meningkat tajam saat link dibebani, lalu turun kembali saat beban berhenti; cocokkan dengan antrean dan kondisi jalur.",
+    "nodes": [
+      "Link dibebani",
+      "Antrean membesar",
+      "Latency meningkat"
+    ],
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/queues/",
+    "stage": 12,
+    "minutes": 8
+  },
+  {
+    "slug": "wireshark-dasar",
+    "title": "Wireshark: membaca paket untuk pemula",
+    "summary": "Bedakan capture filter, display filter, dan bukti gangguan.",
+    "analogy": "Packet capture seperti rekaman pada satu titik jalan. Kendaraan yang tidak melewati titik itu tidak akan terlihat di rekaman.",
+    "explain": "Wireshark menampilkan paket yang tertangkap pada interface serta posisi pengamatan tertentu. Pada switch, komputer biasa tidak otomatis melihat semua trafik port lain. Gunakan perangkat sendiri atau lab yang diizinkan; port mirroring dan TAP memerlukan rancangan serta otorisasi yang sesuai.\n\nCapture filter membatasi paket yang direkam, sedangkan display filter menyaring tampilan dari rekaman yang sudah ada. Sintaks keduanya berbeda. Contoh display filter sederhana adalah arp, dns, icmp, dan ip.addr == 192.168.10.10. Simpan file capture hanya jika memang diperlukan karena isinya dapat memuat informasi sensitif.\n\nMulai dari urutan kejadian: ARP untuk next hop, pertanyaan DNS, koneksi transport, lalu aplikasi. Label retransmission merupakan petunjuk analisis, bukan putusan otomatis sumber gangguan; kehilangan pada proses capture juga dapat memengaruhi pembacaan. HTTPS mengenkripsi isi aplikasi sehingga Wireshark tidak langsung menampilkan semua isi halaman.",
+    "example": "Klien gagal membuka nama domain. Capture di klien menunjukkan pertanyaan DNS tetapi tidak ada jawaban yang terlihat. Periksa resolver, jalur, firewall, serta posisi capture sebelum menyimpulkan server pasti mati.",
+    "practice": [
+      "Gunakan lab sendiri dan pilih interface yang benar.",
+      "Mulai rekaman singkat lalu lakukan satu aktivitas uji.",
+      "Gunakan display filter arp, dns, atau icmp.",
+      "Catat waktu, alamat sumber/tujuan, dan urutan permintaan/balasan.",
+      "Hentikan capture dan simpan secara terbatas bila dibutuhkan."
+    ],
+    "warning": "Jangan merekam jaringan orang lain tanpa izin atau membagikan file capture yang belum ditinjau.",
+    "check": "Apakah display filter menghapus paket dari file capture?",
+    "answer": "Tidak. Ia menyaring tampilan; paket lain masih dapat berada dalam rekaman.",
+    "nodes": [
+      "Capture pada interface",
+      "Filter tampilan",
+      "Urutan paket"
+    ],
+    "source": "https://www.wireshark.org/docs/wsug_html/",
+    "stage": 13,
+    "minutes": 8
+  },
+  {
+    "slug": "radio-ptp-los-fresnel",
+    "title": "Radio PTP: LOS, Fresnel, alignment, dan link budget",
+    "summary": "Kenali faktor sambungan radio antargedung sebelum memilih channel.",
+    "analogy": "Dua antena bukan hanya perlu saling terlihat; ruang di sekitar jalur gelombang juga memengaruhi sambungan.",
+    "explain": "Point-to-point menghubungkan dua titik radio. Optical line of sight berarti jalur pandang tampak terbuka, tetapi zona Fresnel di sekitar jalur juga perlu diperhitungkan. Pepohonan, bangunan, dan perubahan lingkungan dapat mengganggu walaupun kedua antena tampak saling melihat. Gunakan perencanaan lintasan dan survei lapangan.\n\nLink budget menilai daya pancar, gain antena, rugi kabel/konektor, kehilangan lintasan, serta daya terima yang dibutuhkan untuk performa tertentu. Angka prediksi bukan jaminan throughput. Interferensi, lebar channel, modulasi, alignment, cuaca, dan kemampuan perangkat ikut berpengaruh.\n\nBandingkan kedua arah: sinyal, kualitas, noise, kapasitas aktual, error, dan penggunaan airtime. Peningkatan daya bukan solusi tunggal dan harus sesuai regulasi serta spesifikasi. Instalasi antena, tiang, proteksi petir, dan kerja di ketinggian harus mengikuti prosedur serta tenaga yang kompeten.",
+    "example": "Link PTP sering turun saat pohon basah tertiup angin. Periksa lintasan dan perubahan halangan, bukan hanya berpindah channel setiap kali putus.",
+    "practice": [
+      "Gambar dua titik, jarak, elevasi, dan penghalang yang diketahui.",
+      "Gunakan alat perencanaan untuk estimasi lintasan lalu verifikasi lapangan.",
+      "Catat model radio, antena, band, dan batas regulasi.",
+      "Bandingkan statistik kedua sisi serta uji throughput lokal.",
+      "Dokumentasikan baseline dan perubahan alignment secara terukur."
+    ],
+    "warning": "Jangan menilai link hanya dari sinyal kuat; noise, kualitas kedua arah, dan kapasitas harus diperiksa.",
+    "check": "Apakah kedua antena terlihat berarti zona Fresnel pasti bersih?",
+    "answer": "Tidak. Halangan di sekitar garis pandang dapat mengganggu zona Fresnel.",
+    "nodes": [
+      "Radio titik A",
+      "LOS + zona Fresnel",
+      "Radio titik B"
+    ],
+    "source": "https://dl.ui.com/guides/training/courses/UBWA_Training_Guide.pdf",
+    "stage": 13,
+    "minutes": 8
+  },
+  {
+    "slug": "monitoring-snmp-baseline",
+    "title": "Monitoring: SNMP, baseline, dan alarm yang berguna",
+    "summary": "Ubah grafik menjadi informasi yang membantu menentukan tindakan.",
+    "analogy": "Alarm yang baik seperti pengingat terukur: menjelaskan apa yang berubah, seberapa lama, dan siapa yang perlu bertindak.",
+    "explain": "Baseline adalah gambaran kondisi normal: trafik jam sibuk, CPU, memori, latency, loss, serta kondisi interface. Ambang alarm perlu mempertimbangkan durasi dan pola, bukan hanya satu lonjakan. Pengukuran dari satu titik juga tidak selalu mewakili pengalaman semua pengguna.\n\nSNMP memungkinkan sistem monitoring membaca informasi perangkat. OID mengenali objek pengukuran dan MIB membantu menerjemahkan maknanya. Counter byte perlu dibaca sebagai selisih terhadap waktu untuk menjadi laju trafik; reset counter, reboot, dan kapasitas counter dapat memengaruhi perhitungan.\n\nBatasi akses monitoring ke sumber tepercaya. Gunakan SNMPv3 dengan autentikasi dan enkripsi yang sesuai dukungan perangkat, akun/izin minimum, serta pengelolaan kredensial yang aman. NTP membantu mencocokkan waktu log dan grafik. Alarm perlu label lokasi, perangkat, interface, waktu, dampak, dan jalur eskalasi.",
+    "example": "Port uplink menyentuh 95% selama dua detik saat backup berbeda dengan 95% selama satu jam disertai loss. Alarm berdurasi dan baseline memberi konteks yang lebih baik.",
+    "practice": [
+      "Pilih satu perangkat lab dan catat kondisi normal beberapa waktu.",
+      "Tentukan metrik serta satuan yang benar.",
+      "Batasi sumber polling dan akses baca sesuai kemampuan perangkat.",
+      "Buat ambang dengan durasi serta pesan tindakan yang jelas.",
+      "Uji alarm secara terkendali dan pastikan pemulihan juga tercatat."
+    ],
+    "warning": "Grafik trafik tinggi tidak otomatis berarti serangan atau gangguan; cocokkan dengan jadwal, kapasitas, dan dampak pengguna.",
+    "check": "Mengapa counter byte tidak langsung sama dengan Mbps?",
+    "answer": "Counter adalah jumlah kumulatif; laju diperoleh dari selisih counter dibagi waktu lalu dikonversi satuannya.",
+    "nodes": [
+      "Metrik perangkat",
+      "Baseline + durasi",
+      "Alarm + tindakan"
+    ],
+    "source": "https://manual.mikrotik.com/docs/diagnostics-monitoring-and-troubleshooting/snmp/",
+    "stage": 13,
+    "minutes": 8
+  },
+  {
+    "slug": "ipam-dokumentasi",
+    "title": "IPAM, label port, dan dokumentasi perubahan",
+    "summary": "Buat jaringan yang bisa dipahami teknisi berikutnya.",
+    "analogy": "Dokumentasi seperti peta dan buku alamat bersama. Ingatan satu teknisi tidak cukup untuk menjaga seluruh jaringan.",
+    "explain": "IP Address Management atau IPAM mencatat penggunaan subnet dan alamat. Mulai dari tabel yang sederhana: lokasi, VLAN, subnet/prefix, gateway, pool DHCP, alamat tetap, nama perangkat, peran, pemilik, dan status. Catat cadangan serta pengecualian agar alamat tidak dipakai dua kali.\n\nHubungkan tabel IP dengan diagram fisik dan logis. Label outlet, patch panel, switch, port, serta radio harus konsisten. Sertakan versi dan tanggal pembaruan, tetapi jangan menaruh password atau private key di tabel yang dibagikan luas. Rahasia memerlukan penyimpanan serta izin terpisah.\n\nSebelum perubahan, tulis tujuan, kondisi awal, langkah, dampak, uji keberhasilan, dan cara rollback. Setelah perubahan, simpan hasil serta perbarui diagram. Dokumentasi yang hanya dibuat sekali lalu tidak dirawat dapat menyesatkan; tentukan siapa yang memperbaruinya.",
+    "example": "Printer memakai IP manual .120 sementara DHCP pool juga mencakup .100–.200. Tabel IP yang mencantumkan pool dan reservation membantu menemukan potensi bentrok sebelum muncul keluhan.",
+    "practice": [
+      "Buat tabel satu LAN dengan subnet, gateway, pool, dan alamat tetap.",
+      "Tambahkan perangkat serta label port yang terhubung.",
+      "Tandai alamat kosong, dicadangkan, dan digunakan.",
+      "Buat satu contoh rencana perubahan berikut rollback.",
+      "Periksa silang tabel dengan konfigurasi yang benar-benar berjalan."
+    ],
+    "warning": "Jangan memasukkan password perangkat ke diagram atau spreadsheet yang dibagikan ke semua orang.",
+    "check": "Apa yang membuat IPAM lebih berguna daripada daftar IP saja?",
+    "answer": "Konteks subnet, gateway, pool, peran, lokasi, status, dan pemilik yang diperbarui sesuai kondisi nyata.",
+    "nodes": [
+      "Subnet + perangkat",
+      "Pemetaan port / IPAM",
+      "Catatan perubahan"
+    ],
+    "source": "https://docs.netbox.dev/en/stable/features/ipam/",
+    "stage": 13,
+    "minutes": 8
+  },
+  {
+    "slug": "dhcp-relay",
+    "title": "DHCP relay untuk beberapa subnet",
+    "summary": "Mengapa DHCP server pusat tidak mendengar permintaan VLAN lain?",
+    "analogy": "Relay seperti petugas penghubung: permintaan lokal diteruskan ke kantor layanan yang berada di jaringan lain.",
+    "explain": "DHCPv4 awal sering memakai broadcast pada jaringan lokal. Router biasa tidak meneruskan broadcast itu ke semua subnet. DHCP relay membantu mengirim permintaan klien menuju server DHCP yang ditentukan, beserta konteks yang diperlukan untuk memilih layanan jaringan yang sesuai.\n\nServer pusat perlu konfigurasi pool dan opsi untuk subnet klien, bukan sekadar satu pool bersama untuk semua VLAN. Relay harus ditempatkan pada interface serta jaringan yang tepat. Rute dua arah dan firewall yang sesuai diperlukan agar pertukaran pesan dapat berlangsung.\n\nBedakan DHCP relay, DHCP server, dan DNS forwarder. Relay tidak otomatis membuat subnet baru, memberi izin antar-VLAN, atau menggantikan default gateway. Dokumentasikan alamat relay, server, subnet klien, dan lingkup layanan. Hindari server lokal tambahan yang tidak direncanakan.",
+    "example": "VLAN staf dan tamu memakai satu server DHCP pusat. Masing-masing interface klien memiliki relay sesuai rancangan, sementara server menyediakan scope yang cocok untuk setiap subnet.",
+    "practice": [
+      "Gambar subnet klien, router/relay, dan server pusat.",
+      "Tentukan pool serta opsi DHCP setiap subnet pada server lab.",
+      "Periksa rute pergi dan balasan antara relay serta server.",
+      "Di lab, pasang relay pada interface klien yang benar.",
+      "Periksa lease dan IP/gateway/DNS dari klien tiap subnet."
+    ],
+    "warning": "Jangan menganggap satu pool DHCP dapat dipakai sembarang pada beberapa subnet berbeda.",
+    "check": "Mengapa DHCP broadcast tidak otomatis sampai ke server di subnet lain?",
+    "answer": "Broadcast lokal tidak diteruskan router seperti trafik biasa; relay menyediakan mekanisme penghubung yang dirancang untuk itu.",
+    "nodes": [
+      "Klien / broadcast",
+      "DHCP relay",
+      "Server / scope"
+    ],
+    "source": "https://manual.mikrotik.com/docs/network-management/dhcp/",
+    "stage": 14,
+    "minutes": 8
+  },
+  {
+    "slug": "wireguard-dasar",
+    "title": "WireGuard: peer, kunci, alamat, dan rute",
+    "summary": "Buat rencana VPN yang membedakan handshake dari akses layanan.",
+    "analogy": "Tunnel seperti jalur khusus dengan identitas kunci. Membuka jalur tidak otomatis menentukan semua tujuan yang boleh dilewati.",
+    "explain": "Setiap interface WireGuard memiliki private key dan public key. Public key dibagikan kepada peer yang sah, sedangkan private key harus dirahasiakan. Endpoint adalah alamat serta port untuk mencapai peer melalui jaringan dasar. Reachability endpoint harus dirancang, terutama jika ada NAT atau CGNAT.\n\nAlamat interface tunnel, allowed-address, dan route mempunyai fungsi terkait tetapi berbeda. Pada RouterOS, allowed-address membantu pemilihan peer dan pembatasan sumber sesuai pengaturannya; jangan menganggapnya selalu otomatis memasang semua route yang dibutuhkan. Pastikan subnet kedua lokasi tidak bertabrakan.\n\nHandshake menunjukkan pertukaran kriptografis berlangsung, bukan bukti aplikasi di LAN jauh dapat dipakai. Periksa route, firewall input untuk endpoint, forward untuk trafik yang melewati router, jalur balasan, MTU, serta layanan tujuan. Batasi akses sesuai kebutuhan; full tunnel dan split tunnel memiliki dampak berbeda terhadap jalur internet klien.",
+    "example": "Dua lokasi berhasil handshake tetapi printer kantor tidak terjangkau. Periksa subnet printer, allowed-address peer, rute ke LAN, filter forward, dan jalur balasan printer.",
+    "practice": [
+      "Rancang dua LAN yang tidak tumpang tindih dan alamat tunnel.",
+      "Siapkan peer lab dengan kunci masing-masing; jangan membagikan private key.",
+      "Tentukan endpoint yang dapat dijangkau dan izin firewall minimal.",
+      "Tambahkan pemetaan peer serta rute sesuai dokumentasi RouterOS.",
+      "Uji handshake, alamat tunnel, lalu layanan LAN yang diizinkan secara berurutan."
+    ],
+    "warning": "Jangan memasang 0.0.0.0/0 pada semua peer tanpa memahami pemilihan jalur dan dampaknya.",
+    "check": "Handshake aktif tetapi layanan gagal. Apa artinya?",
+    "answer": "Tunnel kriptografis sudah berkomunikasi, tetapi rute, izin, MTU, jalur balasan, atau layanan masih dapat bermasalah.",
+    "nodes": [
+      "Peer + public key",
+      "Tunnel + route",
+      "Layanan yang diizinkan"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/wireguard/",
+    "stage": 14,
+    "minutes": 8
+  },
+  {
+    "slug": "ospf-pengenalan",
+    "title": "Pengenalan OSPF: belajar rute secara dinamis",
+    "summary": "Lanjutan setelah memahami static route dan next hop.",
+    "analogy": "Static route seperti petunjuk yang ditulis manual; OSPF seperti para router bertukar peta agar bisa menghitung jalur berdasarkan informasi bersama.",
+    "explain": "OSPF adalah protokol routing link-state untuk jaringan dalam satu domain administrasi. Router bertukar informasi topologi dan menghitung jalur berdasarkan cost. Ini berbeda dari memberi IP otomatis melalui DHCP atau membagi bandwidth seperti queue. Pelajari static route serta jalur balasan terlebih dahulu.\n\nRouter ID mengidentifikasi router pada proses OSPF dan harus direncanakan unik. Area mengelompokkan informasi; lab awal dapat memakai satu area backbone 0.0.0.0. Neighbor atau adjacency memerlukan parameter yang cocok sesuai jenis link, termasuk area, autentikasi bila dipakai, serta kondisi jaringan. Nama menu RouterOS v6 dan v7 berbeda.\n\nNeighbor yang terbentuk belum membuktikan semua prefix sudah diumumkan atau dipasang sebagai rute aktif. Periksa route yang dipelajari, next hop, cost, filter, dan rute yang lebih disukai. Jangan memasukkan seluruh interface tanpa rancangan karena LAN pengguna tidak selalu perlu membentuk neighbor. Materi ini pengantar lanjutan, bukan pengganti modul routing dasar MTCNA.",
+    "example": "Tiga router pada lab saling belajar LAN masing-masing. Saat satu jalur lab diputus, amati perubahan adjacency dan route, lalu ukur pemulihan tanpa menjanjikan perpindahan tanpa jeda.",
+    "practice": [
+      "Gambar tiga router, transit, LAN, dan router ID unik.",
+      "Mulai dari IP serta ping transit yang benar.",
+      "Di lab RouterOS sesuai versi, rancang instance, area, dan interface yang ikut OSPF.",
+      "Periksa neighbor lalu prefix yang benar-benar masuk route table.",
+      "Uji perubahan satu link dan catat hasil serta rollback."
+    ],
+    "warning": "Jangan menyalin konfigurasi OSPF v6 ke v7 atau mengaktifkannya pada jaringan produksi tanpa desain dan kontrol prefix.",
+    "check": "Apakah neighbor OSPF aktif menjamin semua LAN sudah terjangkau?",
+    "answer": "Tidak. Pengumuman prefix, pemilihan rute, firewall, dan jalur aplikasi tetap harus diverifikasi.",
+    "nodes": [
+      "Neighbor / adjacency",
+      "Pertukaran topologi",
+      "Route + next hop"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "stage": 14,
+    "minutes": 8
+  },
+  {
+    "slug": "keamanan-lan-dhcp-arp",
+    "title": "Keamanan LAN: rogue DHCP, ARP, dan port pengguna",
+    "summary": "Lindungi jaringan lokal tanpa mengandalkan satu fitur saja.",
+    "analogy": "Tidak semua orang yang berada di dalam gedung otomatis boleh mengubah papan petunjuk atau membagikan kartu akses.",
+    "explain": "Rogue DHCP adalah layanan DHCP yang tidak direncanakan dan dapat membagikan gateway atau DNS yang salah. Sumbernya bisa perangkat yang salah konfigurasi, bukan selalu serangan. Mulai dari inventaris, pembatasan port, serta pemisahan tamu, perangkat, dan jaringan manajemen.\n\nARP tidak dirancang sebagai bukti identitas yang kuat. Beberapa switch menyediakan DHCP snooping, inspeksi ARP, atau pembatasan MAC dengan dukungan dan cara kerja berbeda. Port tepercaya untuk layanan hulu harus dipilih secara tepat. Jangan mengaktifkan proteksi tanpa menyiapkan binding atau pengecualian yang diperlukan karena klien sah bisa terputus.\n\nGunakan kebijakan berlapis: VLAN, firewall antarsegmen, akses admin terbatas, akun yang benar, pembaruan, serta pemantauan. MAC filtering saja tidak menjadi autentikasi yang kuat karena alamat dapat berubah. Di IPv6, pikirkan juga RA dan DHCPv6 yang tidak diinginkan sesuai fitur perangkat. Uji perubahan di lab dan siapkan jalur pemulihan.",
+    "example": "Pengguna memasang router pribadi ke LAN kantor melalui port LAN dan DHCP-nya masih aktif. Sebagian PC mendapat gateway salah. Identifikasi sumber lease sebelum mereset router utama.",
+    "practice": [
+      "Inventaris sumber DHCP dan port uplink yang sah.",
+      "Pisahkan port pengguna, tamu, dan manajemen dalam rancangan.",
+      "Di lab, baca dukungan DHCP snooping serta proteksi ARP/RA pada model perangkat.",
+      "Tentukan trusted port dan uji klien sah sebelum perluasan.",
+      "Catat gejala, sumber perubahan, dan langkah pemulihan tanpa melakukan serangan ke jaringan lain."
+    ],
+    "warning": "Jangan menandai semua port sebagai trusted atau menganggap MAC filtering menggantikan autentikasi.",
+    "check": "Apakah DHCP liar selalu berarti penyerang?",
+    "answer": "Tidak. Salah konfigurasi router tambahan juga dapat menjadi penyebab; investigasi berdasarkan bukti.",
+    "nodes": [
+      "Port pengguna",
+      "Kontrol layer 2 + VLAN",
+      "Layanan yang tepercaya"
+    ],
+    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
+    "stage": 14,
+    "minutes": 8
   }
 ]
