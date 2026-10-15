@@ -25,7 +25,7 @@ npm start
 npm run test:smoke
 ```
 
-Smoke test mengunjungi 36 halaman pada lebar 390px dan 1440px, menjawab dan mengulang kuis 32 modul, menguji progress setelah reload, sidebar mobile, lima simulator, kondisi localStorage ditolak, serta halaman 404. Untuk deployment, jalankan `BASE_URL=https://listrik.fikss.site npm run test:smoke`. Jika memakai instalasi Chromium lain, isi `CHROMIUM_PATH` dengan executable yang sesuai.
+Smoke test mengunjungi 36 halaman pada lebar 390px dan 1440px, menjawab dan mengulang kuis 32 modul, menguji progress setelah reload, sidebar mobile, lima simulator, kondisi localStorage ditolak, serta halaman 404. Untuk deployment, jalankan `BASE_URL=https://article.fikss.site npm run test:smoke`. Jika memakai instalasi Chromium lain, isi `CHROMIUM_PATH` dengan executable yang sesuai.
 
 ## Fitur
 
