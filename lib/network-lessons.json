@@ -69,6 +69,132 @@
     "minutes": 6
   },
   {
+    "slug": "hardware-nic-port",
+    "title": "NIC, port, dan bentuk hardware jaringan",
+    "summary": "Kenali kartu jaringan, port data, port console, dan indikator perangkat.",
+    "analogy": "NIC seperti pintu pengiriman milik komputer. Bentuk lubangnya belum cukup untuk menentukan jenis layanan yang tersedia.",
+    "explain": "Network Interface Card atau NIC menyediakan antarmuka jaringan. NIC bisa tertanam pada motherboard, berupa kartu PCIe, atau adaptor USB. Satu komputer dapat memiliki Ethernet dan Wi-Fi dengan IP serta MAC berbeda. Driver membantu sistem operasi menggunakan perangkat itu.\n\nPort Ethernet umumnya memakai konektor 8P8C. Port SFP adalah slot untuk modul transceiver, sedangkan port console dipakai untuk administrasi sesuai standar perangkat. Ada port console berbentuk mirip Ethernet, tetapi fungsi dan pinout-nya berbeda. USB pada router juga tidak otomatis menjadi port LAN.\n\nBaca label dan lembar spesifikasi: jumlah port, laju yang didukung, PoE input/output, kapasitas switching, kemampuan routing, RAM, dan penyimpanan. Throughput routing dapat turun ketika firewall atau enkripsi aktif. LED menunjukkan informasi menurut model; warna hijau tidak selalu berarti 1 Gbps. Pada NIC, cek status link, kecepatan negosiasi, dan penghitung error sebelum menyalahkan ISP.",
+    "example": "Laptop memakai adaptor USB Ethernet 100 Mbps pada internet 300 Mbps. Adaptor dapat menjadi pembatas meskipun router dan kabel mendukung gigabit.",
+    "practice": [
+      "Gambar port yang ada pada laptop dan router.",
+      "Cari label Ethernet, console, SFP, USB, serta PoE.",
+      "Buka status adaptor untuk melihat link speed.",
+      "Bandingkan dengan spesifikasi resmi model perangkat."
+    ],
+    "warning": "Jangan menyambung port yang mirip tanpa memastikan fungsi serta spesifikasi pin dan dayanya.",
+    "check": "Apakah bentuk port menjamin kecepatannya?",
+    "answer": "Tidak. Periksa spesifikasi port, kemampuan kedua ujung, kabel, dan hasil negosiasi.",
+    "nodes": [
+      "NIC komputer",
+      "Port Ethernet",
+      "Perangkat jaringan"
+    ],
+    "stage": 0,
+    "minutes": 7,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
+  },
+  {
+    "slug": "kabel-utp-kategori",
+    "title": "Kabel UTP: Cat5e, Cat6, solid, dan stranded",
+    "summary": "Pilih kabel berdasarkan jalur dan kebutuhan, bukan hanya warna jaket.",
+    "analogy": "Kategori kabel seperti kelas jalan dengan persyaratan teknis; warna cat tidak mengubah kapasitas jalannya.",
+    "explain": "UTP merupakan twisted pair tanpa pelindung logam menyeluruh. Pasangan dipilin untuk membantu menekan gangguan dan crosstalk. Cat5e, Cat6, dan kategori lain menunjukkan persyaratan performa, bukan sekadar tebal jaket. Cat5e yang memenuhi standar dapat mendukung 1000BASE-T hingga kanal 100 meter; Cat6 tidak berarti semua pemasangan otomatis berjalan 10 Gbps.\n\nSolid memakai satu konduktor padat per kawat dan umum untuk jalur permanen. Stranded memakai serabut dan lebih lentur untuk patch cord. Konektor dan terminal harus sesuai jenis serta ukuran konduktor. Kabel tembaga murni berbeda dari CCA, yaitu aluminium berlapis tembaga; jangan menganggap label kategori saja menjamin kualitas, terutama untuk PoE.\n\nUntuk instalasi umum, kanal tembaga biasanya mencakup permanent link hingga 90 meter ditambah total patch cord hingga 10 meter, sesuai standar aplikasinya. Jaga radius tekuk dan hindari tarikan berlebih. Pilih jaket indoor/outdoor sesuai lingkungan, pisahkan jalur dari sumber gangguan, dan ikuti ketentuan bangunan setempat.",
+    "example": "Ruang kerja memakai jalur solid dari patch panel ke keystone, lalu patch cord stranded pendek ke PC. Seluruh komponen jalur harus memenuhi kebutuhan aplikasi.",
+    "practice": [
+      "Baca tulisan kategori, jenis konduktor, dan rating jaket.",
+      "Ukur panjang jalur berikut patch cord.",
+      "Cocokkan plug atau keystone dengan jenis konduktor.",
+      "Catat kebutuhan PoE dan lokasi indoor/outdoor."
+    ],
+    "warning": "Kabel Cat6 tidak mengubah port 100 Mbps menjadi gigabit.",
+    "check": "Apa beda solid dan stranded?",
+    "answer": "Solid memiliki konduktor padat dan umum untuk jalur tetap; stranded berserabut dan lebih lentur untuk patch cord.",
+    "nodes": [
+      "Patch cord",
+      "Jalur permanen",
+      "Patch cord"
+    ],
+    "stage": 1,
+    "minutes": 7,
+    "source": "https://www.flukenetworks.com/"
+  },
+  {
+    "slug": "crimping-tester",
+    "title": "RJ45, T568A/T568B, crimping, dan cable tester",
+    "summary": "Pelajari pasangan pin dan cara memeriksa hasil terminasi.",
+    "analogy": "Dua ujung kabel seperti dua steker dengan jalur terpetakan: urutan harus benar, bukan hanya semua lampu menyala.",
+    "explain": "T568A dan T568B adalah pola terminasi pasangan untuk kabel twisted pair. Pada T568B, pin 1–8 adalah putih-oranye, oranye, putih-hijau, biru, putih-biru, hijau, putih-cokelat, cokelat. Pada T568A, posisi pasangan hijau dan oranye ditukar. Selalu pakai diagram konektor produsen untuk menentukan arah pandang pin.\n\nKabel straight memakai pola yang sama pada kedua ujung. Kabel crossover klasik memakai A di satu ujung dan B di ujung lain; banyak port modern mendukung auto-MDI/MDIX, tetapi jangan mengandalkan fitur ini untuk menutupi terminasi salah. Gigabit 1000BASE-T memerlukan keempat pasangan berfungsi.\n\nUntuk plug yang sesuai, kupas jaket secukupnya, jaga pilinan sedekat mungkin dengan terminasi, susun pasangan, potong rata, lalu pastikan semua kawat masuk penuh dan jaket dijepit sebelum crimp. Tester kontinuitas memeriksa hubungan pin, short, atau open sesuai kemampuannya. Tester murah belum tentu mendeteksi split pair atau membuktikan performa kategori; sertifikasi link memerlukan alat yang sesuai.",
+    "example": "Kabel bisa menyalakan semua LED tester tetapi gagal gigabit karena split pair atau kualitas terminasi buruk. Periksa pasangan dan uji link speed serta error.",
+    "practice": [
+      "Putuskan kabel latihan dari semua perangkat berdaya.",
+      "Pilih plug yang cocok dengan kabel dan ikuti diagram pin.",
+      "Terminasi kedua ujung dengan pola yang dipilih.",
+      "Periksa wire map menggunakan tester.",
+      "Uji link speed dan error pada lab."
+    ],
+    "warning": "Arah pandang plug dapat membalik urutan secara visual. Jangan menghafal kiri-kanan tanpa orientasi pin.",
+    "check": "Apakah tester kontinuitas menjamin Cat6 lulus performa?",
+    "answer": "Tidak. Kontinuitas bukan pengujian performa atau sertifikasi kategori.",
+    "nodes": [
+      "Pin 1–8",
+      "Pasangan terpilin",
+      "Wire-map tester"
+    ],
+    "stage": 1,
+    "minutes": 7,
+    "source": "https://www.flukenetworks.com/knowledge-base/application-or-standards-articles-copper/differences-between-wiring-codes-t568a-vs"
+  },
+  {
+    "slug": "fiber-sfp-konektor",
+    "title": "Fiber, SFP, LC/SC, dan single-mode",
+    "summary": "Cocokkan modul optik dengan media dan kedua ujung sambungan.",
+    "analogy": "Fiber seperti jalur cahaya; modul optik adalah pengirim dan penerimanya. Keduanya harus berbicara dengan karakter yang cocok.",
+    "explain": "SFP dan SFP+ adalah keluarga modul transceiver; dukungan kecepatan serta kompatibilitas tergantung slot dan perangkat. Modul optik harus cocok dengan tipe fiber, panjang gelombang, jarak, konektor, dan kemampuan perangkat di kedua ujung. Jangan menyimpulkan kompatibel hanya karena modul bisa masuk slot.\n\nSingle-mode dan multimode memiliki karakter serat serta penggunaan berbeda. LC dan SC menjelaskan bentuk konektor, bukan otomatis jenis serat. UPC dan APC menunjukkan polesan ujung; jangan memasangkan konektor dengan polesan yang tidak cocok. Duplex biasanya memakai dua serat untuk kirim/terima, sementara pasangan BiDi memakai satu serat dengan panjang gelombang berpasangan.\n\nAmati spesifikasi optical budget dan pembacaan daya optik jika didukung. Daya terima terlalu rendah maupun terlalu tinggi bisa bermasalah. Konektor kotor menambah redaman; gunakan prosedur inspeksi dan pembersihan yang sesuai. Jangan melihat langsung ujung fiber atau port; cahaya inframerah dapat tidak terlihat.",
+    "example": "Sisi A memakai BiDi TX 1310/RX 1550, maka sisi B perlu pasangan TX 1550/RX 1310 dengan spesifikasi yang kompatibel, bukan dua modul identik secara asal.",
+    "practice": [
+      "Catat model slot dan modul kedua ujung.",
+      "Cocokkan single-mode/multimode, konektor, serta panjang gelombang.",
+      "Periksa rentang daya optik menurut lembar data.",
+      "Beri label jalur fiber dan simpan tutup debu dengan bersih."
+    ],
+    "warning": "Jangan membersihkan atau menyambung serat sambil menganggap port optik aman hanya karena tidak tampak menyala.",
+    "check": "Apakah LC berarti pasti single-mode?",
+    "answer": "Tidak. LC adalah bentuk konektor; jenis serat dan modul harus diperiksa tersendiri.",
+    "nodes": [
+      "Modul TX / RX",
+      "Fiber yang sesuai",
+      "Modul pasangan"
+    ],
+    "stage": 1,
+    "minutes": 7,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
+  },
+  {
+    "slug": "rack-patch-panel",
+    "title": "Rack, patch panel, keystone, dan manajemen kabel",
+    "summary": "Kenali komponen pasif yang membuat jaringan mudah dirawat.",
+    "analogy": "Patch panel seperti papan alamat: jalur tetap berakhir rapi, lalu patch cord menentukan sambungan ke perangkat aktif.",
+    "explain": "Patch panel menampung terminasi kabel permanen, sedangkan keystone adalah modul outlet yang dapat dipasang pada faceplate atau panel tertentu. Keduanya komponen pasif: tidak memberi IP dan tidak menggantikan switch. Patch cord menghubungkan panel ke port switch.\n\nRack menata perangkat dalam ukuran unit atau U; 1U adalah 44,45 mm. Rencanakan ruang, ventilasi, akses servis, penyangga kabel, dan daya. UPS membantu pasokan saat gangguan singkat sesuai kapasitasnya. Grounding dan instalasi listrik harus ditangani sesuai spesifikasi serta ketentuan yang berlaku.\n\nBerikan identitas yang konsisten dari outlet, kabel, panel, hingga port switch. Contohnya outlet RUANG-A-01 menuju panel PP1-01 dan switch SW1 port 3. Simpan tabel pemetaan dan hasil uji. Jangan menekuk kabel tajam atau mengikatnya terlalu kuat; kerapian harus tetap menjaga performa dan akses perawatan.",
+    "example": "PC berpindah meja. Teknisi cukup membaca label outlet, mencari port panel, lalu menyesuaikan patch cord tanpa menelusuri seluruh plafon.",
+    "practice": [
+      "Gambar urutan PC → outlet → kabel tetap → panel → switch.",
+      "Buat label unik untuk kedua ujung.",
+      "Susun tabel pemetaan port.",
+      "Periksa ventilasi dan ruang perawatan."
+    ],
+    "warning": "Patch panel tidak membagi koneksi seperti switch. Setiap jalur perlu dihubungkan sesuai rancangan.",
+    "check": "Apakah patch panel memberi alamat IP?",
+    "answer": "Tidak. Ia menata terminasi pasif; layanan IP disediakan perangkat aktif.",
+    "nodes": [
+      "Outlet / keystone",
+      "Patch panel",
+      "Switch"
+    ],
+    "stage": 1,
+    "minutes": 7,
+    "source": "https://www.flukenetworks.com/"
+  },
+  {
     "slug": "kabel-fiber-poe",
     "title": "Kabel UTP, fiber optik, dan PoE",
     "summary": "Pahami media sambungan dan kompatibilitas daya perangkat.",
@@ -88,8 +214,84 @@
       "Kabel data + daya",
       "AP kompatibel"
     ],
-    "stage": 0,
+    "stage": 2,
     "minutes": 6
+  },
+  {
+    "slug": "ethernet-speed-duplex",
+    "title": "Kecepatan port, duplex, dan auto-negotiation",
+    "summary": "Pahami mengapa kabel terpasang tetapi link hanya 100 Mbps.",
+    "analogy": "Dua orang harus menyepakati cara bicara sebelum mengobrol. Auto-negotiation membantu kedua port menyepakati kemampuan sambungan.",
+    "explain": "Link speed adalah laju antarmuka, berbeda dari kapasitas paket ISP. Port 1 Gbps dapat terhubung pada laju lebih rendah jika kemampuan lawan, kabel, atau konfigurasi membatasinya. Auto-negotiation membantu memilih kemampuan yang didukung bersama dan parameter lain sesuai jenis Ethernet.\n\nFull duplex memungkinkan kirim dan terima bersamaan; half duplex berbagi waktu dan terkait mekanisme collision pada Ethernet lama. Jangan memaksa speed/duplex pada satu sisi lalu membiarkan sisi lain tanpa memeriksa hasil. Ketidakcocokan dapat menimbulkan performa buruk. Pada media dan standar tertentu, negosiasi juga memiliki fungsi teknis yang diperlukan.\n\nJika link gigabit turun menjadi 100 Mbps, periksa dukungan kedua port, keempat pasangan kabel, terminasi, adaptor, serta counter error. Uji dengan kabel pendek yang diketahui baik. Transfer lokal antarperangkat membantu mengisolasi jalur LAN dari layanan internet. Jangan menjadikan satu hasil speed test internet sebagai bukti kerusakan NIC.",
+    "example": "Laptop dan switch mendukung gigabit, tetapi kabel rusak pada salah satu pasangan. Link dapat terbentuk pada 100 Mbps meskipun internet tetap bisa dibuka.",
+    "practice": [
+      "Lihat negotiated rate di kedua ujung.",
+      "Periksa konfigurasi auto-negotiation.",
+      "Coba kabel pendek yang diketahui baik.",
+      "Bandingkan error counter sebelum dan sesudah.",
+      "Uji transfer lokal dengan perangkat pembanding."
+    ],
+    "warning": "Menetapkan 1 Gbps secara paksa tidak memperbaiki pasangan kabel yang putus.",
+    "check": "Apa diperiksa saat link hanya 100 Mbps?",
+    "answer": "Kemampuan kedua port, konfigurasi negosiasi, kabel, terminasi, dan counter error.",
+    "nodes": [
+      "Kemampuan NIC",
+      "Negosiasi link",
+      "Kemampuan switch"
+    ],
+    "stage": 2,
+    "minutes": 7,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
+  },
+  {
+    "slug": "topologi-jaringan",
+    "title": "Topologi star, mesh, dan diagram fisik/logis",
+    "summary": "Belajar menggambar jaringan agar hubungan perangkat mudah dibaca.",
+    "analogy": "Topologi fisik seperti denah jalan, sedangkan topologi logis seperti peta layanan yang melewati jalan tersebut.",
+    "explain": "Topologi menggambarkan hubungan antarperangkat. Star menghubungkan perangkat ke titik pusat seperti switch. Mesh menyediakan beberapa hubungan antarnode. Topologi yang terlihat sederhana secara fisik dapat membawa beberapa jaringan logis melalui VLAN.\n\nPada star, kerusakan satu kabel klien biasanya berdampak pada klien itu, sedangkan switch pusat dapat memengaruhi banyak pengguna. Redundansi menambah jalur cadangan tetapi perlu mekanisme yang mencegah loop. Menghubungkan switch dengan banyak kabel tanpa rancangan STP/RSTP atau link aggregation bukan otomatis menambah kapasitas dengan aman.\n\nBuat dua diagram bila perlu: fisik memuat perangkat, port, dan kabel; logis memuat subnet, VLAN, gateway, dan kebijakan. Gunakan label konsisten. Arah panah harus menjelaskan maksud, misalnya alur permintaan, bukan seolah kabel hanya dapat mengirim satu arah.",
+    "example": "Satu trunk menghubungkan dua switch. Diagram fisik menampilkan satu kabel, sedangkan diagram logis menampilkan VLAN staf dan tamu yang melewatinya.",
+    "practice": [
+      "Gambar topologi star kecil dengan satu switch dan tiga klien.",
+      "Tulis nomor port dan media sambungan.",
+      "Tambahkan subnet serta gateway pada diagram logis.",
+      "Tandai titik yang memengaruhi banyak pengguna bila rusak."
+    ],
+    "warning": "Jalur cadangan tanpa mekanisme pengendalian loop dapat membuat jaringan justru lumpuh.",
+    "check": "Mengapa perlu diagram fisik dan logis?",
+    "answer": "Karena kabel/port dan pembagian subnet/VLAN menjelaskan dua sisi jaringan yang berbeda.",
+    "nodes": [
+      "Klien A",
+      "Switch pusat",
+      "Klien B"
+    ],
+    "stage": 2,
+    "minutes": 7,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328068/Bridging+and+Switching"
+  },
+  {
+    "slug": "client-server-p2p",
+    "title": "Client–server, peer-to-peer, dan layanan jaringan",
+    "summary": "Kenali siapa meminta layanan dan siapa menjawabnya.",
+    "analogy": "Client seperti pengunjung restoran; server seperti penyedia layanan. Satu perangkat bisa menjadi pengunjung sekaligus penyedia pada layanan berbeda.",
+    "explain": "Client mengajukan permintaan dan server melayani permintaan. Istilah server dapat merujuk fungsi perangkat lunak, bukan hanya komputer besar di rack. Laptop bisa menjalankan web server lokal, sementara router dapat menjadi DHCP server dan DNS cache.\n\nDalam pola peer-to-peer, perangkat dapat berbagi sumber daya tanpa satu server pusat yang mengelola seluruh pertukaran. Implementasi sebenarnya bisa tetap menggunakan layanan bantu untuk menemukan peer. Bentuk jaringan tidak menentukan apakah semua pengguna memiliki izin yang sama.\n\nPisahkan server, service, dan protokol. Server adalah peran, service adalah layanan, dan protokol adalah aturan komunikasinya. DHCP membagikan konfigurasi IP, DNS menjawab nama, HTTP melayani sumber daya web. Untuk troubleshooting, pastikan perangkat terjangkau lalu periksa proses layanan, port, dan izin aksesnya.",
+    "example": "PC bisa ping ke printer, tetapi cetak gagal karena antrean atau layanan printer. Keterjangkauan IP saja tidak membuktikan aplikasi cetak sehat.",
+    "practice": [
+      "Daftar layanan jaringan yang dipakai sehari-hari.",
+      "Tentukan client dan server untuk tiap layanan.",
+      "Catat protokol serta kebutuhan izin.",
+      "Bedakan gagal menjangkau perangkat dengan gagal memakai layanan."
+    ],
+    "warning": "Server tidak harus berbentuk komputer besar dan tidak semua gangguan layanan berasal dari ISP.",
+    "check": "Bisakah router menjadi client dan server sekaligus?",
+    "answer": "Bisa. Misalnya DHCP client di WAN dan DHCP server di LAN.",
+    "nodes": [
+      "Client meminta",
+      "Service / protokol",
+      "Server menjawab"
+    ],
+    "stage": 2,
+    "minutes": 7,
+    "source": "https://www.cloudflare.com/learning/serverless/glossary/client-side-vs-server-side/"
   },
   {
     "slug": "ip-mac",
@@ -111,7 +313,7 @@
       "MAC gateway lokal",
       "Router ke internet"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 6
   },
   {
@@ -134,7 +336,7 @@
       "Router",
       "Subnet .128/25"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 6
   },
   {
@@ -157,7 +359,7 @@
       "DNS: nama ke IP",
       "Server tujuan"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 6
   },
   {
@@ -180,7 +382,7 @@
       "DHCP server",
       "Lease + opsi"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 6
   },
   {
@@ -203,7 +405,7 @@
       "Transport: TCP / UDP",
       "Internet: IP"
     ],
-    "stage": 2,
+    "stage": 4,
     "minutes": 6
   },
   {
@@ -226,7 +428,7 @@
       "Switch / broadcast",
       "PC .30 menjawab"
     ],
-    "stage": 2,
+    "stage": 4,
     "minutes": 6
   },
   {
@@ -249,7 +451,7 @@
       "Port TCP 443",
       "Layanan HTTPS"
     ],
-    "stage": 2,
+    "stage": 4,
     "minutes": 6
   },
   {
@@ -272,7 +474,7 @@
       "Router: source NAT",
       "Server internet"
     ],
-    "stage": 2,
+    "stage": 4,
     "minutes": 6
   },
   {
@@ -295,7 +497,7 @@
       "AP: udara bersama",
       "Uplink kabel"
     ],
-    "stage": 3,
+    "stage": 5,
     "minutes": 6
   },
   {
@@ -318,7 +520,7 @@
       "Trunk VLAN 10 + 20",
       "Access VLAN 20"
     ],
-    "stage": 3,
+    "stage": 5,
     "minutes": 6
   },
   {
@@ -341,7 +543,7 @@
       "Transit 10.10.10.0/30",
       "R2 — LAN B /24"
     ],
-    "stage": 3,
+    "stage": 5,
     "minutes": 6
   },
   {
@@ -364,7 +566,7 @@
       "Aturan firewall",
       "Tujuan / layanan"
     ],
-    "stage": 3,
+    "stage": 5,
     "minutes": 6
   },
   {
@@ -387,7 +589,7 @@
       "Winbox / RouterOS",
       "Router latihan"
     ],
-    "stage": 4,
+    "stage": 6,
     "minutes": 6
   },
   {
@@ -410,7 +612,7 @@
       "Router LAN .1/24",
       "WAN sesuai ISP"
     ],
-    "stage": 4,
+    "stage": 6,
     "minutes": 6
   },
   {
@@ -433,7 +635,7 @@
       "Uji tujuan luar",
       "Uji layanan / DNS"
     ],
-    "stage": 4,
+    "stage": 6,
     "minutes": 6
   },
   {
@@ -456,7 +658,7 @@
       "IP / gateway",
       "DNS / aplikasi"
     ],
-    "stage": 4,
+    "stage": 6,
     "minutes": 6
   },
   {
@@ -479,7 +681,7 @@
       "Throughput: hasil",
       "Latency: waktu tunda"
     ],
-    "stage": 5,
+    "stage": 7,
     "minutes": 6
   },
   {
@@ -502,7 +704,7 @@
       "Tunnel VPN",
       "Jaringan kantor"
     ],
-    "stage": 5,
+    "stage": 7,
     "minutes": 6
   },
   {
@@ -525,7 +727,7 @@
       "ISP A: utama",
       "ISP B: cadangan"
     ],
-    "stage": 5,
+    "stage": 7,
     "minutes": 6
   },
   {
@@ -548,7 +750,331 @@
       "Router + firewall",
       "Tamu: VLAN 20"
     ],
-    "stage": 5,
+    "stage": 7,
     "minutes": 6
+  },
+  {
+    "slug": "mtcna-routeros-cli",
+    "title": "MTCNA 01 · RouterOS, akses, dan CLI",
+    "summary": "Bangun lab dan kuasai navigasi Winbox serta terminal sebelum konfigurasi.",
+    "analogy": "Winbox dan CLI seperti panel tombol dan buku perintah untuk mesin yang sama: perubahan di salah satunya terlihat di yang lain.",
+    "explain": "Siapkan router cadangan atau CHR, komputer admin, dan diagram port. Catat model, versi RouterOS, paket, serta jenis lisensi; fitur dan batas CHR bergantung lisensinya. RouterBOARD adalah keluarga hardware, RouterOS sistem operasinya, dan RouterBOOT firmware boot pada perangkat yang relevan. Jangan menyamakan upgrade ketiganya.\n\nKenali akses Winbox berbasis IP dan MAC-Winbox pada segmen layer 2 yang mengizinkan. MAC-Winbox bukan cara menembus router di subnet jauh. WebFig memakai browser; SSH menyediakan terminal terenkripsi. Quick Set adalah alat konfigurasi cepat yang perlu dipahami sebelum digunakan pada konfigurasi manual yang sudah kompleks.\n\nDi terminal, path menunjukkan menu. Perintah print membaca, add menambah, set mengubah, dan remove menghapus. Tab membantu melengkapi perintah; bantuan serta tampilan bergantung versi. Nomor item dapat berubah setelah print sehingga periksa objek yang dipilih. Mulai dengan perintah baca: /system resource print, /interface print, dan /ip address print. Simpan catatan antarmuka sebelum perubahan.",
+    "example": "PC admin terhubung ke LAN lab. Buka IP Addresses di Winbox, lalu bandingkan dengan /ip address print. Keduanya menampilkan konfigurasi yang sama.",
+    "practice": [
+      "Siapkan perangkat latihan terpisah dan catat versi/model.",
+      "Masuk lewat Winbox dengan akun sah; identifikasi LAN dan WAN.",
+      "Buka New Terminal, jalankan /system resource print.",
+      "Jalankan /interface print dan /ip address print.",
+      "Tulis fungsi tiap port dan uji akses IP dari komputer admin."
+    ],
+    "warning": "Jangan memakai reset atau Quick Set pada router produksi untuk mengejar tampilan yang sama dengan tutorial.",
+    "check": "Apakah MAC-Winbox otomatis bekerja melewati beberapa router?",
+    "answer": "Tidak. Akses MAC biasanya memerlukan keterjangkauan layer 2 dan izin layanan yang sesuai.",
+    "nodes": [
+      "PC admin",
+      "Winbox / SSH",
+      "RouterOS lab"
+    ],
+    "stage": 8,
+    "minutes": 10,
+    "source": "https://manual.mikrotik.com/docs/getting-started/first-time-configuration/",
+    "mtcna": 1
+  },
+  {
+    "slug": "mtcna-backup-upgrade",
+    "title": "MTCNA 02 · Backup, export, upgrade, dan pemulihan",
+    "summary": "Pahami cara menyelamatkan konfigurasi sebelum belajar mengubahnya.",
+    "analogy": "Backup seperti salinan keadaan perangkat; export seperti daftar instruksi yang dapat dibaca dan ditinjau.",
+    "explain": "Binary backup dan export .rsc mempunyai tujuan berbeda. Backup menyimpan konfigurasi untuk pemulihan yang harus memperhatikan kompatibilitas perangkat dan versi. Export berupa teks perintah, berguna untuk dokumentasi dan pemindahan terencana; tidak semua data, file, atau rahasia selalu ikut. Periksa opsi ekspor pada versi yang dipakai dan simpan hasilnya secara aman di luar router.\n\nSebelum upgrade, baca release notes, arsitektur paket, ruang penyimpanan, serta jalur pembaruan yang didukung. RouterOS dan RouterBOOT merupakan komponen berbeda. Gunakan daya stabil, backup, dan rencana rollback; jangan menebak versi hanya dari nomor yang tampak paling besar. Netinstall adalah alat instalasi/pemulihan khusus yang dapat mengganti sistem dan konfigurasi.\n\nAtur identity yang jelas, akun admin yang sah, dan layanan administrasi yang dibutuhkan. Safe Mode membantu membatalkan perubahan tertentu bila sesi hilang. Reset mengubah konfigurasi dan dapat menghilangkan akses. Pelajari prosedur model perangkat di lab sebelum menggunakannya untuk pemulihan.",
+    "example": "Sebelum mengubah bridge, simpan export dan backup ke komputer admin. Beri nama berisi tanggal, model, dan versi agar tidak salah memilih file saat memulihkan.",
+    "practice": [
+      "Di lab, buka Files dan System → Backup sesuai versi Winbox.",
+      "Buat backup dengan perlindungan yang sesuai dan unduh ke komputer.",
+      "Jalankan /export file=sebelum-lab lalu unduh .rsc.",
+      "Buka salinan export secara lokal; pastikan tidak dipublikasikan.",
+      "Catat rencana pemulihan dan verifikasi file dapat dibaca; uji restore hanya pada lab yang sesuai."
+    ],
+    "warning": "Jangan menganggap export teks identik dengan backup lengkap, dan jangan mengunggah konfigurasi berisi rahasia ke forum publik.",
+    "check": "Mengapa backup dan export perlu disimpan di luar router?",
+    "answer": "Agar tetap tersedia jika router rusak, diinstal ulang, atau file lokal hilang.",
+    "nodes": [
+      "Konfigurasi",
+      "Backup + export",
+      "Salinan luar router"
+    ],
+    "stage": 8,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/40992852/Backup",
+    "mtcna": 1
+  },
+  {
+    "slug": "mtcna-dhcp-arp",
+    "title": "MTCNA 03 · Lab DHCP dan tabel ARP",
+    "summary": "Pisahkan DHCP client WAN dari DHCP server LAN dan verifikasi lease.",
+    "analogy": "Router bisa menjadi tamu yang meminta alamat di sisi ISP sekaligus resepsionis yang membagikan alamat di LAN.",
+    "explain": "Pada lab, gunakan LAN 192.168.50.0/24, gateway .1, dan pool .100–.150. WAN mengikuti DHCP hanya jika hulu memang menyediakannya. DHCP client WAN tidak membagikan alamat ke klien LAN; DHCP server LAN memerlukan antarmuka, pool, serta network options yang cocok.\n\nLease menunjukkan peminjaman IP. Static lease dapat menstabilkan alamat untuk klien tertentu; jangan menumpuk pool dengan IP manual. Periksa mask, gateway, DNS, lease time, dan status server. Jika DNS router dipakai, layanan resolver serta firewall harus mengizinkan klien tepercaya dan membatasi akses yang tidak diperlukan.\n\nARP memetakan IPv4 next hop ke MAC pada link Ethernet. Periksa tabel ARP setelah klien aktif. Mode enabled, disabled, proxy-arp, dan reply-only memiliki dampak berbeda; reply-only bukan tombol keamanan universal dan dapat memutus komunikasi jika entri yang diperlukan belum disiapkan. Buktikan kondisi default yang bekerja sebelum bereksperimen.",
+    "example": "WAN mendapat IP dari router hulu, sedangkan PC LAN mendapat 192.168.50.100. Alamat WAN dan LAN tidak harus berada pada subnet yang sama; justru subnet bertabrakan perlu dihindari.",
+    "practice": [
+      "Di lab, pastikan port WAN bukan anggota bridge LAN.",
+      "IP → DHCP Client: tambahkan pada WAN hanya bila hulu memakai DHCP.",
+      "IP → Addresses: tetapkan 192.168.50.1/24 di bridge LAN yang benar.",
+      "IP → DHCP Server → DHCP Setup: pilih LAN, pool .100–.150, gateway .1, DNS sesuai rancangan.",
+      "Sambungkan klien, periksa lease, IP/gateway/DNS, lalu lihat IP → ARP."
+    ],
+    "warning": "Jangan mengaktifkan DHCP server lab pada LAN produksi.",
+    "check": "Apakah DHCP client di WAN memberi IP ke PC LAN?",
+    "answer": "Tidak. DHCP server LAN merupakan layanan terpisah.",
+    "nodes": [
+      "DHCP hulu",
+      "Router: client + server",
+      "Klien LAN"
+    ],
+    "stage": 8,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/24805500/DHCP",
+    "mtcna": 2
+  },
+  {
+    "slug": "mtcna-bridge",
+    "title": "MTCNA 04 · Bridge, port, dan domain broadcast",
+    "summary": "Gabungkan port LAN dengan benar tanpa memasukkan WAN.",
+    "analogy": "Bridge seperti menyatukan beberapa pintu menjadi satu area lokal; routing menghubungkan area yang berbeda.",
+    "explain": "Bridge RouterOS menghubungkan antarmuka pada layer 2. Port di dalam bridge dapat berbagi domain broadcast sesuai konfigurasi VLAN. IP gateway LAN lazim ditempatkan pada bridge, bukan diberikan ulang dengan alamat yang sama pada setiap port anggota. Hardware offload tergantung perangkat dan konfigurasi; lihat dokumentasi model.\n\nPada lab dengan ether1 sebagai WAN, gabungkan ether2 dan ether3 ke br-lan. Jangan masukkan ether1 hanya agar semua perangkat terlihat. Memasukkan WAN ke bridge LAN bisa membawa broadcast atau DHCP hulu ke pengguna lokal dan mengubah batas keamanan. RSTP membantu menghadapi loop, tetapi tidak menggantikan rancangan kabel yang benar.\n\nBridging radio mempunyai batas tambahan. Mode station biasa tidak selalu membawa semua MAC di belakangnya secara transparan. Station-bridge memerlukan dukungan perangkat, driver, mode, dan pasangan yang sesuai. CHR tanpa radio dapat dipakai untuk lab bridge kabel; praktik wireless memerlukan hardware yang mendukung.",
+    "example": "PC A di ether2 dan PC B di ether3 dapat berada pada satu subnet melalui br-lan. Untuk tujuan subnet lain, mereka tetap membutuhkan routing.",
+    "practice": [
+      "Gunakan lab dengan jalur manajemen cadangan atau Safe Mode.",
+      "Bridge → tambah br-lan hanya jika belum ada bridge setara.",
+      "Ports → masukkan ether2 dan ether3; jangan masukkan WAN.",
+      "Tetapkan IP gateway serta DHCP pada br-lan sesuai rancangan.",
+      "Periksa host table, alamat klien, dan komunikasi lokal tanpa membuat kabel loop."
+    ],
+    "warning": "Bila sudah ada bridge bawaan, pahami dan gunakan konfigurasi tersebut; jangan membuat bridge duplikat tanpa tujuan.",
+    "check": "Di mana IP gateway LAN ditempatkan pada contoh ini?",
+    "answer": "Pada br-lan; port anggota tidak diberi salinan alamat gateway yang sama.",
+    "nodes": [
+      "PC ether2",
+      "Bridge br-lan",
+      "PC ether3"
+    ],
+    "stage": 8,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328068/Bridging+and+Switching",
+    "mtcna": 3
+  },
+  {
+    "slug": "mtcna-routing-lab",
+    "title": "MTCNA 05 · Lab static route dan default route",
+    "summary": "Latih destination, gateway, route flags, dan jalur kembali.",
+    "analogy": "Setiap router cukup tahu belokan berikutnya; tidak perlu menghafal setiap rumah di sepanjang perjalanan.",
+    "explain": "Siapkan R1 LAN 192.168.10.1/24, transit 10.10.10.1/30; R2 transit 10.10.10.2/30, LAN 192.168.20.1/24. Connected route berasal dari alamat antarmuka yang aktif. Static route ditambahkan administrator. Tampilan flags berbeda menurut versi, jadi baca legend yang ditampilkan daripada menghafal satu screenshot.\n\nR1 membutuhkan destination 192.168.20.0/24 dengan gateway 10.10.10.2. R2 membutuhkan rute balik ke 192.168.10.0/24 via 10.10.10.1. Default route 0.0.0.0/0 adalah jalur saat tidak ada kecocokan lebih spesifik. Status active dan keterjangkauan next hop perlu diperiksa.\n\nPC A 192.168.10.10/24 memakai gateway .10.1, PC B 192.168.20.10/24 memakai .20.1. Firewall router dan host harus mengizinkan trafik lab. Jangan menambahkan masquerade untuk menutupi rute balik yang belum dipahami; pada lab antar-LAN ini tujuan utamanya adalah routing dua arah.",
+    "example": "R1 bisa ping transit R2 tetapi PC A gagal ke PC B. Periksa route tujuan, gateway PC, rute balik, serta firewall—keberhasilan transit belum membuktikan semua jalur.",
+    "practice": [
+      "Tetapkan IP antarmuka serta gateway kedua PC sesuai topologi lab.",
+      "Uji ping antar IP transit terlebih dahulu.",
+      "IP → Routes di R1: destination 192.168.20.0/24 via 10.10.10.2.",
+      "Di R2: destination 192.168.10.0/24 via 10.10.10.1.",
+      "Periksa status route, uji PC A ke B dan balasan, lalu catat jalur."
+    ],
+    "warning": "Gateway PC harus dapat dijangkau pada jaringan lokalnya; jangan memakai IP router jauh sebagai gateway begitu saja.",
+    "check": "Apa rute balik R2 pada contoh ini?",
+    "answer": "192.168.10.0/24 melalui 10.10.10.1.",
+    "nodes": [
+      "LAN A — R1",
+      "Transit /30",
+      "R2 — LAN B"
+    ],
+    "stage": 9,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
+    "mtcna": 4
+  },
+  {
+    "slug": "mtcna-wireless",
+    "title": "MTCNA 06 · Wireless AP, station, dan keamanan",
+    "summary": "Pahami mode radio dan perbedaan menu wireless serta wifi.",
+    "analogy": "AP seperti titik pertemuan, station seperti peserta. Nama menu bisa berubah, tetapi peran komunikasinya tetap perlu dipahami.",
+    "explain": "MikroTik memiliki keluarga driver dan paket radio dengan menu berbeda seperti wireless dan wifi. Fitur tidak identik di setiap model. CHR tidak menyediakan radio fisik untuk menguji asosiasi; gunakan hardware yang mendukung dan catat paket serta versi sebelum mengikuti langkah.\n\nPada lab, satu perangkat menjadi AP dan perangkat lain station/client bila mode didukung. Pilih country sesuai lokasi, band yang didukung bersama, serta lebar channel berdasarkan kondisi. SSID membedakan jaringan radio; security profile mengatur autentikasi dan enkripsi. Gunakan WPA2-AES atau WPA3 jika didukung serta kredensial kuat sesuai kebutuhan.\n\nOutline lama memuat istilah dan fitur driver lama. Pahami access list, connect list, autentikasi, dan forwarding sesuai driver yang digunakan; jangan menyalin setting lintas paket secara buta. Periksa registration table, sinyal, negotiated rate, dan error. Asosiasi berhasil belum membuktikan DHCP, VLAN, atau internet bekerja.",
+    "example": "Station terhubung ke SSID tetapi tidak mendapat IP. Radio mungkin sudah berhasil, sementara bridge, VLAN, DHCP, atau keamanan LAN masih perlu diperiksa.",
+    "practice": [
+      "Identifikasi model, paket wireless/wifi, dan kemampuan radio.",
+      "Di lab, tetapkan AP dengan country, SSID, channel, dan keamanan yang sesuai.",
+      "Pada klien yang mendukung, pilih SSID dan autentikasi yang cocok.",
+      "Periksa registration table serta kekuatan/kualitas sinyal.",
+      "Uji DHCP, gateway, dan layanan secara terpisah; catat jika fitur berbeda dari outline lama."
+    ],
+    "warning": "Jangan mematikan enkripsi atau menggunakan country yang salah demi menaikkan daya pancar.",
+    "check": "Apakah menu wireless dan wifi selalu identik?",
+    "answer": "Tidak. Driver, model, paket, serta versi menentukan fitur dan nama menu.",
+    "nodes": [
+      "AP lab",
+      "Media radio",
+      "Station / klien"
+    ],
+    "stage": 9,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/224559120/WiFi",
+    "mtcna": 5
+  },
+  {
+    "slug": "mtcna-firewall",
+    "title": "MTCNA 07 · Connection tracking dan filter",
+    "summary": "Lindungi router serta klien dengan chain dan urutan aturan yang benar.",
+    "analogy": "Filter seperti penjaga berurutan: pemeriksaan pertama yang cocok dapat menentukan keputusan sebelum penjaga berikutnya sempat melihat.",
+    "explain": "Input memproses trafik menuju router sendiri, forward memproses trafik melewati router, dan output untuk trafik yang dibuat router. Bedakan tujuan akses Winbox dengan tujuan akses server di belakang router. Sebelum mengubah rule, catat alamat serta jalur manajemen dan siapkan pemulihan.\n\nConnection tracking mengikuti koneksi. State seperti new, established, related, dan invalid membantu aturan mengelompokkan paket. Balasan koneksi yang sudah diizinkan tidak selalu perlu diperlakukan seperti permintaan baru. Address list mengelompokkan alamat agar kebijakan lebih mudah dikelola.\n\nBuat kebijakan sebelum menyusun rule: admin tepercaya ke router, klien ke layanan yang dibutuhkan, dan penolakan sisanya sesuai rancangan. Periksa counter rule untuk membuktikan trafik melewati aturan yang dimaksud. Rule accept yang luas di atas dapat mengalahkan drop di bawah. Mencoba drop total tanpa izin admin yang benar bisa mengunci sesi sendiri.",
+    "example": "PC tamu mencoba panel router dan internet. Akses panel termasuk input, sedangkan akses internet termasuk forward. Dua kebutuhan ini memerlukan pemeriksaan berbeda.",
+    "practice": [
+      "Di lab, backup dan aktifkan jalur pemulihan/Safe Mode.",
+      "IP → Firewall → Connections: amati koneksi saat klien membuka layanan.",
+      "Buat address list sumber admin latihan sesuai IP yang benar.",
+      "Rancang dan terapkan rule terbatas sesuai chain; pertahankan akses admin sebelum penolakan umum.",
+      "Uji akses yang boleh dan ditolak sambil membaca counter, lalu simpan hasil."
+    ],
+    "warning": "Jangan menghapus firewall bawaan yang belum dipahami atau menambah drop total pada router yang dikelola dari jauh.",
+    "check": "Rule untuk membatasi login ke router memakai input atau forward?",
+    "answer": "Input, karena tujuan koneksinya adalah router sendiri.",
+    "nodes": [
+      "Trafik masuk",
+      "Chain + state",
+      "Accept / drop"
+    ],
+    "stage": 9,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/130220087/Connection+tracking",
+    "mtcna": 6
+  },
+  {
+    "slug": "mtcna-nat-fasttrack",
+    "title": "MTCNA 08 · Source NAT, destination NAT, dan FastTrack",
+    "summary": "Bedakan perubahan alamat dengan izin firewall dan optimasi jalur paket.",
+    "analogy": "NAT seperti petugas yang mengganti alamat pada kiriman; firewall seperti petugas yang menentukan kiriman boleh lewat atau tidak.",
+    "explain": "Source NAT mengubah sumber paket. Masquerade berguna untuk alamat keluar yang berubah, sementara src-nat dapat memakai alamat yang ditentukan. Batasi interface atau interface list keluar dengan benar agar NAT tidak diterapkan ke semua jalur tanpa sengaja. Destination NAT mengubah tujuan; redirect mengalihkan ke layanan lokal router sesuai konteks.\n\nPort forwarding bukan sekadar menambah dst-nat: jalur masuk, IP publik/CGNAT, rute balik, layanan server, dan filter forward juga menentukan hasil. Uji dari posisi jaringan yang tepat; akses memakai IP publik dari LAN yang sama dapat membutuhkan rancangan hairpin tersendiri.\n\nNAT diputuskan pada awal koneksi dan diingat connection tracking, sehingga perubahan rule mungkin baru terlihat pada koneksi baru. FastTrack mengoptimalkan trafik tertentu dan dapat melewati pemrosesan lain, termasuk Simple Queues untuk trafik yang di-FastTrack. Jangan menyimpulkan queue rusak sebelum memeriksa FastTrack dan jalur paket.",
+    "example": "PC mendapat internet setelah masquerade WAN sesuai rancangan. Saat belajar limit bandwidth, koneksi FastTrack perlu dikecualikan dari jalur itu agar Simple Queue dapat bekerja untuk trafik latihan.",
+    "practice": [
+      "Di lab, dokumentasikan WAN, LAN, dan jenis alamat WAN.",
+      "IP → Firewall → NAT: identifikasi source NAT keluar yang diperlukan.",
+      "Buka koneksi baru dan amati counter NAT serta connection tracking.",
+      "Rancang contoh dst-nat hanya ke server lab, dengan filter dan akses sumber yang terbatas.",
+      "Bandingkan trafik latihan dengan/tanpa FastTrack secara terkendali saat menguji queue; jangan mematikan seluruh firewall."
+    ],
+    "warning": "NAT tidak menggantikan firewall, dan port forwarding rumah tidak menghapus CGNAT ISP.",
+    "check": "Mengapa queue bisa tidak membatasi trafik FastTrack?",
+    "answer": "Karena trafik yang di-FastTrack dapat melewati Simple Queues dan bagian pemrosesan lain.",
+    "nodes": [
+      "Alamat sumber / tujuan",
+      "NAT + conntrack",
+      "Jalur paket"
+    ],
+    "stage": 9,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/3211299/NAT",
+    "mtcna": 6
+  },
+  {
+    "slug": "mtcna-queue-pcq",
+    "title": "MTCNA 09 · Simple Queue, burst, dan PCQ",
+    "summary": "Latih pembagian bandwidth dengan target dan arah trafik yang tepat.",
+    "analogy": "Queue seperti antrean kendaraan: kapasitas jalan tetap, tetapi aturan antrean membantu membagi penggunaan.",
+    "explain": "Simple Queue membatasi trafik target tertentu. Pada target subnet klien, pahami arah upload dari klien dan download menuju klien; pastikan antarmuka dan jalur uji cocok. max-limit adalah batas atas yang dikonfigurasi. limit-at berkaitan dengan jaminan dalam hierarki dan hanya bermakna jika kapasitas induk serta rancangan mendukung.\n\nBurst mengizinkan batas sementara berdasarkan parameter dan rata-rata trafik; bukan tambahan kapasitas ISP permanen. PCQ memecah antrean menjadi substream berdasarkan classifier. Untuk pembagian per alamat klien, upload lazim diklasifikasikan menurut source address dan download menurut destination address pada rancangan yang sesuai.\n\nLakukan uji satu klien sebelum banyak klien. Catat throughput, counter, CPU, dan latency. Pastikan trafik latihan tidak melewati FastTrack yang membypass Simple Queue. Batas total induk, jumlah substream, serta kemampuan perangkat memengaruhi hasil pembagian; angka queue tidak menjamin bandwidth minimum jika hulu kekurangan kapasitas.",
+    "example": "Pada lab internet 20 Mbps, satu klien dibatasi 5 Mbps. Setelah arah benar, dua klien diuji bersamaan untuk melihat pembagian PCQ dalam batas total yang dirancang.",
+    "practice": [
+      "Tetapkan satu PC lab dengan IP stabil dan ukur kondisi awal.",
+      "Queues → Simple Queues: buat target IP PC dan max-limit kecil sesuai kapasitas lab.",
+      "Pastikan trafik uji tidak di-FastTrack, lalu periksa counter upload/download.",
+      "Uji dengan dua klien, rancang parent serta PCQ classifier yang sesuai.",
+      "Bandingkan hasil, latency, dan CPU; dokumentasikan alasan perbedaan."
+    ],
+    "warning": "Jangan menjumlahkan jaminan anak melebihi kapasitas induk lalu menganggap semuanya pasti terpenuhi.",
+    "check": "PCQ upload per klien lazim membedakan alamat apa?",
+    "answer": "Source address klien; download lazim memakai destination address klien sesuai arah dan desain.",
+    "nodes": [
+      "Target klien",
+      "Simple Queue / PCQ",
+      "Batas uplink"
+    ],
+    "stage": 10,
+    "minutes": 10,
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/queues/",
+    "mtcna": 7
+  },
+  {
+    "slug": "mtcna-pppoe-tunnel",
+    "title": "MTCNA 10 · PPP, PPPoE, dan tunnel",
+    "summary": "Pelajari akun, profile, pool, dan sesi tanpa menganggap semua tunnel terenkripsi.",
+    "analogy": "PPP profile seperti paket aturan layanan; secret seperti identitas pengguna; sesi aktif menunjukkan siapa yang benar-benar tersambung.",
+    "explain": "PPP menyediakan pengelolaan sesi serta autentikasi untuk beberapa layanan. Pada RouterOS, profile menyimpan parameter bersama, secret menyimpan akun lokal, dan active menampilkan sesi. IP pool menyediakan rentang alamat; local-address dan remote-address menjelaskan kedua ujung koneksi point-to-point.\n\nPPPoE membawa PPP melalui Ethernet. Client memerlukan server yang dapat dijangkau pada layer 2 serta kredensial dan service-name bila diperlukan. PPPoE bukan enkripsi isi trafik. Pada lab, server dan client harus ditempatkan di segmen terpisah dari pengguna produksi agar tidak menawarkan layanan tak diinginkan.\n\nOutline lama juga memuat PPTP dan SSTP. PPTP dikenali untuk memahami konteks lama, bukan pilihan pengamanan baru. SSTP memakai TLS dan memerlukan validasi sertifikat serta pengaturan waktu yang benar untuk keamanan yang sesuai. Tunnel aktif belum menjamin subnet jauh terjangkau: rute, firewall, MTU, dan DNS tetap perlu diuji. WireGuard dapat dipelajari terpisah sebagai tambahan, bukan menggantikan pemahaman pokok PPP.",
+    "example": "Router lab menjadi PPPoE client ke server lab. Saat akun salah sesi tidak aktif; saat sesi aktif tetapi internet gagal, periksa alamat, default route, NAT bila diperlukan, dan layanan hulu.",
+    "practice": [
+      "Siapkan dua router/CHR pada segmen Ethernet lab terisolasi.",
+      "Pada server lab, rancang IP pool, PPP profile, dan akun secret khusus latihan.",
+      "Aktifkan PPPoE server pada antarmuka lab yang benar.",
+      "Pada client, buat PPPoE client dengan interface serta kredensial lab.",
+      "Periksa status active, alamat kedua ujung, route, lalu uji layanan; untuk SSTP verifikasi sertifikat sebelum akses sensitif."
+    ],
+    "warning": "Jangan memakai PPPoE atau PPTP seolah otomatis mengenkripsi seluruh komunikasi dengan aman.",
+    "check": "Apa bedanya PPP profile dan secret?",
+    "answer": "Profile berisi parameter bersama; secret berisi identitas serta parameter akun lokal.",
+    "nodes": [
+      "PPPoE client",
+      "Sesi PPP / profile",
+      "Server + pool"
+    ],
+    "stage": 10,
+    "minutes": 10,
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/pppoe/",
+    "mtcna": 8
+  },
+  {
+    "slug": "mtcna-tools-monitoring",
+    "title": "MTCNA 11 · Torch, Netwatch, log, dan monitoring",
+    "summary": "Gunakan alat RouterOS untuk mengumpulkan bukti gangguan.",
+    "analogy": "Alat monitoring seperti beberapa alat ukur: masing-masing menjawab pertanyaan berbeda, bukan semuanya memberi satu vonis sehat/rusak.",
+    "explain": "Interface traffic monitor menunjukkan laju pada antarmuka. Torch membantu melihat aliran trafik yang terlihat pada titik pengamatan, tetapi fitur akselerasi serta hardware offload dapat memengaruhi visibilitas. Ping dan traceroute menguji keterjangkauan; Profiler membantu mencari penggunaan CPU. Tentukan pertanyaan sebelum memilih alat.\n\nNetwatch dapat menguji target dan memicu tindakan sesuai kemampuan versi, tetapi target gagal bukan otomatis seluruh internet mati. System logs menyimpan kejadian yang perlu dikaitkan dengan waktu. Atur waktu/NTP yang benar. Graphs dan SNMP menyediakan pengamatan jangka panjang; The Dude adalah alat monitoring terpisah dengan dukungan yang perlu diperiksa sesuai platform.\n\nUntuk eskalasi, siapkan gejala, waktu, diagram, versi, log relevan, serta langkah reproduksi. supout.rif dan autosupout.rif dapat membantu dukungan resmi namun berpotensi memuat informasi sensitif. E-mail notifikasi harus memakai layanan dan kredensial yang dikelola dengan benar. Gunakan komentar rule serta nama interface yang jelas agar pemeriksaan berikutnya lebih mudah.",
+    "example": "CPU penuh saat throughput turun. Bandingkan Profiler, trafik interface, dan perubahan terakhir. Jangan langsung menuduh sinyal radio jika jalur yang dipakai ternyata kabel.",
+    "practice": [
+      "Catat waktu perangkat, gejala, dan kondisi sebelum uji.",
+      "Pakai Tools → Ping/Traceroute ke gateway dan tujuan layanan.",
+      "Jalankan Torch di interface yang relevan, lalu bandingkan dengan traffic monitor.",
+      "Lihat System → Resources/Profiler serta Log sesuai versi.",
+      "Buat catatan eskalasi tanpa membagikan password, private key, atau file dukungan secara publik."
+    ],
+    "warning": "Hasil satu alat harus dibaca bersama posisi pengamatan, waktu, dan pengaruh akselerasi trafik.",
+    "check": "Mengapa log perlu waktu perangkat yang benar?",
+    "answer": "Agar kejadian dapat dicocokkan dengan laporan pengguna dan log perangkat lain.",
+    "nodes": [
+      "Trafik / perangkat",
+      "Tools + log",
+      "Bukti gangguan"
+    ],
+    "stage": 10,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323150/Torch",
+    "mtcna": 9
+  },
+  {
+    "slug": "mtcna-lab-akhir",
+    "title": "MTCNA 12 · Lab terpadu dan cek kesiapan",
+    "summary": "Buktikan pemahaman melalui konfigurasi, pengujian, dan penjelasan hasil.",
+    "analogy": "Belajar jaringan seperti belajar mengemudi: hafal tombol belum cukup; kamu perlu menunjukkan keputusan dan hasilnya.",
+    "explain": "Siapkan satu router/CHR, satu koneksi hulu lab, dua klien, dan bila tersedia dua radio untuk praktik wireless. Gunakan LAN 192.168.50.0/24 dengan gateway .1, pool .100–.150, serta subnet hulu yang tidak bertabrakan. Simpan backup/export dan diagram sebelum mulai.\n\nBangun LAN bridge, DHCP, koneksi hulu, rute keluar, source NAT bila diperlukan, serta filter sesuai kebijakan. Tambahkan queue untuk satu klien dan buktikan pengaruhnya. Untuk routing dua LAN, gunakan dua router dan rute balik seperti modul routing. PPPoE serta wireless memerlukan topologi dan perangkat pendukung tersendiri; jangan menganggap semua latihan cukup pada satu CHR.\n\nUji kasus salah gateway, DNS tidak sesuai, kabel/antarmuka terputus, dan queue yang dilewati FastTrack secara terkendali. Untuk tiap kasus, tulis gejala, hipotesis, bukti, perubahan, dan hasil. Jelaskan mengapa input berbeda dari forward dan NAT berbeda dari izin firewall. Kesiapan ditentukan oleh kemampuan mengulang serta menjelaskan praktik, bukan sekadar jumlah halaman selesai.",
+    "example": "Klien bisa ping gateway tetapi pencarian nama gagal. Tunjukkan hasil konfigurasi IP, uji layanan luar, dan nslookup untuk memisahkan gangguan DNS dari jalur IP.",
+    "practice": [
+      "Selesaikan prasyarat IP/subnet/gateway dan buat topologi lab.",
+      "Bangun LAN dan WAN sesuai metode hulu, verifikasi DHCP serta rute.",
+      "Uji kebijakan filter dan koneksi internet; catat koneksi yang ditolak.",
+      "Pasang queue dan buktikan batasnya dengan trafik yang tidak di-FastTrack.",
+      "Suntikkan satu gangguan lab tiap kali, diagnosis, pulihkan, dan simpan laporan serta export."
+    ],
+    "warning": "Ini latihan mandiri dan cek kesiapan, bukan soal bocoran atau pengganti pelatihan/ujian sertifikasi resmi.",
+    "check": "Apa bukti praktik sudah dipahami?",
+    "answer": "Kamu dapat mengulang konfigurasi, menguji hasil yang boleh dan ditolak, menjelaskan keputusan, serta memulihkan gangguan.",
+    "nodes": [
+      "Rancang",
+      "Konfigurasi + uji",
+      "Jelaskan + pulihkan"
+    ],
+    "stage": 10,
+    "minutes": 10,
+    "source": "https://mikrotik.com/training/about",
+    "mtcna": 9
   }
 ]
