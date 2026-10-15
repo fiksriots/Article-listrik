@@ -64,3 +64,9 @@ Commit `0f2d5e7` sudah memperbaiki penutupan komponen PhaseLab dan deployment-ny
 - [Siemens S7-1200: siklus scan](https://docs.tia.siemens.cloud/r/simatic_s7_1200_manual_collection_enus_20/plc-concepts/execution-of-the-user-program/processing-the-scan-cycle-in-run-mode)
 
 Semua gambar dan simulasi merupakan model pendidikan. Pengawatan nyata, pemilihan proteksi, dan pekerjaan PLN memerlukan rancangan serta tenaga yang kompeten.
+
+## Learn Jaringan
+
+Akademi jaringan tersedia di `/jaringan`, dengan 24 bacaan pada enam tahap dan ilustrasi SVG lokal. Konten terstruktur: `lib/network-lessons.json`; daftar tahap dan tipe: `lib/network-course.ts`; aset: `public/network/`. Setiap materi mempunyai analogi, pembahasan, contoh, latihan, koreksi miskonsepsi, dan cek pemahaman.
+
+Katalog `/api/articles` menggabungkan materi listrik dan jaringan dengan ID, kategori, URL, serta thumbnail masing-masing. Portofolio mengonsumsi katalog ini; materi baru yang ditambahkan akan ikut pada deployment berikutnya. Cache HTTP katalog 5 menit; browser portofolio mengambil ulang saat halaman artikel dimuat. Progres jaringan menggunakan localStorage `fiks-network-progress-v1`, terpisah dari progres listrik; tidak tersinkron antarperangkat.

@@ -1,3 +1,4 @@
+import { networkLessons } from '@/lib/network-course';
 import { lessons } from '@/lib/course';
 import { getLesson } from '@/lib/content';
 import { devicePhotos } from '@/lib/device-photos';
@@ -69,7 +70,16 @@ export function GET() {
     }];
   });
 
-  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items }, {
+  const networkItems = networkLessons.map((lesson, index) => ({
+    id: `network-${lesson.slug}`, slug: lesson.slug, title: lesson.title,
+    summary: lesson.summary, url: `${origin}/jaringan/${lesson.slug}`,
+    category: 'Belajar Jaringan', tags: ['Jaringan', 'Network', 'Pemula'],
+    minutes: lesson.minutes, order: lessons.length + index + 1,
+    image: { url: `${origin}/network/${lesson.slug}.svg`, alt: lesson.title,
+      author: 'Learn Jaringan', source: `${origin}/jaringan/${lesson.slug}`,
+      license: 'Ilustrasi edukasi', licenseUrl: '', changes: 'Ilustrasi vektor skematis asli' },
+  }));
+  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items: [...items, ...networkItems] }, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',

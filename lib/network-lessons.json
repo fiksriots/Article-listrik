@@ -1,0 +1,554 @@
+[
+  {
+    "slug": "apa-itu-jaringan",
+    "title": "Apa itu jaringan komputer?",
+    "summary": "Dari dua perangkat yang berbagi data sampai internet yang menghubungkan dunia.",
+    "analogy": "Jaringan seperti jalan antar rumah. Jalan membawa kiriman, sedangkan jaringan membawa data.",
+    "explain": "Data adalah informasi digital seperti teks, foto, dan suara. Jaringan menghubungkan perangkat agar informasi ini dapat dipertukarkan melalui kabel atau gelombang radio. Aturan komunikasinya disebut protokol.\n\nLAN adalah jaringan dalam area terbatas seperti rumah atau kantor. Internet menghubungkan banyak jaringan. Wi-Fi adalah teknologi sambungan nirkabel, bukan nama lain untuk internet. Printer LAN dapat tetap digunakan saat internet putus selama komputer, printer, dan layanan lokalnya saling terjangkau.\n\nSatu router rumahan sering merangkap switch, access point, dan DHCP server. Karena itu satu kotak bisa menjalankan banyak fungsi. Kita akan mempelajari fungsi-fungsi tersebut secara terpisah agar tidak bingung saat perangkatnya berubah.",
+    "example": "Laptop memakai kabel dan ponsel memakai Wi-Fi pada router yang sama. Keduanya masuk LAN rumah; router meneruskan trafik ke ISP saat membuka situs luar.",
+    "practice": [
+      "Gambar laptop, ponsel, printer, dan router di rumah.",
+      "Hubungkan perangkat dengan garis kabel atau garis Wi-Fi.",
+      "Tandai koneksi lokal dan koneksi menuju ISP."
+    ],
+    "warning": "Wi-Fi connected belum menjamin internet tersedia.",
+    "check": "Apakah printer LAN selalu membutuhkan internet?",
+    "answer": "Tidak. Komunikasi lokal dapat berjalan tanpa internet jika perangkat dan layanan printer dapat dijangkau.",
+    "nodes": [
+      "Laptop",
+      "Jaringan lokal",
+      "Printer LAN"
+    ],
+    "stage": 0,
+    "minutes": 6
+  },
+  {
+    "slug": "lan-wan-internet",
+    "title": "LAN, WAN, dan internet",
+    "summary": "Kenali batas jaringan rumah dan perjalanan menuju jaringan luar.",
+    "analogy": "LAN seperti jalan kompleks. WAN seperti penghubung antarkota; internet merupakan gabungan banyak jaringan.",
+    "explain": "LAN biasanya dikelola satu rumah atau organisasi dalam area terbatas. WAN menghubungkan lokasi terpisah. Port bertuliskan WAN pada router rumah biasanya mengarah ke jaringan penyedia layanan atau ISP.\n\nSaat membuka situs, perangkat menyerahkan paket ke gateway lokal. Router meneruskannya ke ISP dan jaringan lain hingga tujuan. Paket balasan juga memerlukan jalur kembali. Internet tidak berada di satu kotak atau dimiliki satu operator.\n\nPemisahan lokal dan luar membantu menentukan lokasi gangguan. Jika printer lokal bisa diakses tetapi semua situs gagal, sebagian fungsi LAN sudah berjalan. Pemeriksaan selanjutnya mencakup gateway, WAN, rute, DNS, dan layanan tujuan.",
+    "example": "Kantor tetap dapat berbagi file lokal ketika sambungan ISP putus. Gangguan internet tidak otomatis mematikan seluruh LAN.",
+    "practice": [
+      "Tandai port LAN dan WAN tanpa mencabut kabel.",
+      "Catat layanan lokal yang bisa digunakan.",
+      "Bandingkan akses lokal dan akses luar ketika ada gangguan."
+    ],
+    "warning": "Mengganti DNS tidak akan memperbaiki kabel WAN yang putus.",
+    "check": "Jika WAN mati, apakah LAN pasti ikut mati?",
+    "answer": "Tidak selalu. Komunikasi lokal masih dapat berlangsung.",
+    "nodes": [
+      "LAN rumah",
+      "Gateway / router",
+      "ISP dan internet"
+    ],
+    "stage": 0,
+    "minutes": 6
+  },
+  {
+    "slug": "perangkat-jaringan",
+    "title": "Router, switch, AP, dan ONT",
+    "summary": "Kenali fungsi perangkat sebelum memasang dan menghubungkannya.",
+    "analogy": "Switch mengantar dalam satu gedung, router mengantar ke gedung lain, AP menyediakan pintu masuk lewat radio.",
+    "explain": "Switch Ethernet menyediakan beberapa port untuk perangkat lokal. Switch mempelajari alamat MAC sumber dan meneruskan frame berdasarkan tabel MAC. Frame adalah unit data pada jaringan Ethernet. Switch biasa bekerja terutama pada layer 2, sedangkan model tertentu juga memiliki fungsi routing.\n\nRouter meneruskan paket antarjaringan berdasarkan IP dan tabel rute. Access point atau AP menghubungkan klien Wi-Fi ke jaringan lokal. Router rumahan sering menggabungkan ketiga fungsi ini.\n\nPada akses fiber PON, ONT mengubah sambungan optik menjadi layanan seperti Ethernet. ONT ISP dapat sekaligus menjadi router. Jangan mengubahnya ke mode bridge tanpa mengetahui konfigurasi layanan dan cara pemulihannya.",
+    "example": "Kantor dengan delapan komputer dan ponsel membutuhkan port switch, akses radio dari AP, serta router menuju ISP.",
+    "practice": [
+      "Amati port Ethernet, antena, dan konektor fiber.",
+      "Baca model dan spesifikasi resmi perangkat.",
+      "Tulis fungsi setiap perangkat dalam topologi."
+    ],
+    "warning": "AP tambahan tidak menambah kapasitas paket internet dari ISP.",
+    "check": "Apa yang menghubungkan dua subnet berbeda?",
+    "answer": "Router, atau perangkat lain yang memiliki fungsi routing.",
+    "nodes": [
+      "Router",
+      "Switch Ethernet",
+      "Access point"
+    ],
+    "stage": 0,
+    "minutes": 6
+  },
+  {
+    "slug": "kabel-fiber-poe",
+    "title": "Kabel UTP, fiber optik, dan PoE",
+    "summary": "Pahami media sambungan dan kompatibilitas daya perangkat.",
+    "analogy": "Tembaga membawa sinyal listrik, fiber membawa cahaya. PoE membawa data sekaligus daya lewat kabel Ethernet.",
+    "explain": "Kabel twisted pair mempunyai pasangan kawat yang dipilin untuk mengurangi pengaruh gangguan. Konektor yang umum disebut RJ45 biasanya berupa konektor modular 8P8C. Kanal Ethernet tembaga yang umum biasanya dibatasi 100 meter sesuai kategori dan standar, termasuk patch cord.\n\nFiber cocok untuk jarak jauh atau area dengan gangguan elektromagnetik. Tipe fiber, konektor, panjang gelombang, dan modul transceiver harus cocok. Jangan melihat langsung ke ujung fiber atau port optik; cahaya berbahaya belum tentu terlihat.\n\nPoE standar IEEE 802.3af/at/bt melakukan deteksi dan negosiasi sesuai standarnya. Passive PoE dapat langsung memberi tegangan tertentu. Periksa tegangan, polaritas, pin, standar, dan kebutuhan daya sebelum menyambungkan perangkat.",
+    "example": "AP plafon mendapatkan data dan daya dari switch PoE yang kompatibel. Periksa juga anggaran daya total switch, bukan hanya daya per port.",
+    "practice": [
+      "Baca spesifikasi PoE AP dan switch.",
+      "Periksa kategori dan kondisi kabel.",
+      "Uji kabel dengan tester sebelum pemasangan."
+    ],
+    "warning": "Konektor yang sama tidak berarti tegangan PoE cocok.",
+    "check": "Apakah semua injector PoE aman untuk semua AP?",
+    "answer": "Tidak. Standar, tegangan, pin, dan daya harus sesuai.",
+    "nodes": [
+      "Switch PoE",
+      "Kabel data + daya",
+      "AP kompatibel"
+    ],
+    "stage": 0,
+    "minutes": 6
+  },
+  {
+    "slug": "ip-mac",
+    "title": "IP address dan MAC address",
+    "summary": "Bedakan alamat logis dengan identitas pengiriman lokal.",
+    "analogy": "IP seperti alamat tujuan surat; MAC seperti identitas penerima untuk satu tahap pengiriman lokal.",
+    "explain": "IPv4 terdiri dari 32 bit dan biasa ditulis empat angka 0–255, misalnya 192.168.10.20. IP dipakai bersama prefix atau subnet mask untuk menentukan batas jaringan. Alamat dapat diberikan secara otomatis atau manual.\n\nMAC Ethernet umumnya ditulis enam pasangan heksadesimal, misalnya 02:11:22:33:44:55. Switch memakai MAC untuk meneruskan frame di LAN. MAC dapat diubah, dan ponsel dapat memakai MAC acak untuk privasi, sehingga MAC bukan bukti identitas yang kuat.\n\nSaat paket melewati router, MAC sumber dan tujuan pada tiap segmen Ethernet berubah mengikuti pengirim dan penerima setempat. IP tujuan umumnya tetap, kecuali terdapat translasi seperti NAT.",
+    "example": "Laptop membuka server di subnet lain. IP tujuan paket adalah server, tetapi MAC tujuan frame pertama adalah gateway lokal.",
+    "practice": [
+      "Buka ipconfig /all di Windows atau ip address di Linux.",
+      "Temukan IPv4, prefix, dan physical address / link ether.",
+      "Bedakan antarmuka Ethernet dan Wi-Fi."
+    ],
+    "warning": "IP dan MAC bukan dua istilah untuk alamat yang sama.",
+    "check": "MAC tujuan frame pertama ke situs luar milik siapa?",
+    "answer": "Biasanya gateway pada LAN, bukan server situs jauh.",
+    "nodes": [
+      "IP tujuan server",
+      "MAC gateway lokal",
+      "Router ke internet"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "subnet-mask",
+    "title": "Subnet mask dan prefix /24",
+    "summary": "Tentukan perangkat satu jaringan melalui contoh angka sederhana.",
+    "analogy": "Prefix seperti batas kompleks: menentukan alamat mana yang masih dianggap tetangga lokal.",
+    "explain": "Pada IPv4, /24 berarti 24 bit pertama adalah bagian jaringan. Mask-nya 255.255.255.0. IP 192.168.10.20/24 dan .50/24 berada di jaringan 192.168.10.0/24. Aturan tiga angka pertama hanya cocok untuk /24, bukan semua prefix.\n\nPada subnet /24 biasa, .0 adalah network dan .255 broadcast. Host biasanya menggunakan .1 sampai .254, sehingga tersedia 254 alamat host. Rumus 2 pangkat bit host dikurangi 2 memiliki pengecualian seperti penggunaan khusus /31 dan /32.\n\nPada /25, rentang terbagi menjadi .0–.127 dan .128–.255. IP .20/25 dan .150/25 berada di subnet berbeda. Menghubungkannya ke switch saja tidak menyediakan fungsi routing antar subnet.",
+    "example": "192.168.10.150/25 memiliki network .128, broadcast .255, dan host .129–.254. Gateway harus dipilih dari alamat host yang sesuai dan belum digunakan.",
+    "practice": [
+      "Tentukan network dan broadcast 192.168.10.20/24.",
+      "Ulangi untuk 192.168.10.150/25.",
+      "Catat rentang host tanpa memasukkan network dan broadcast."
+    ],
+    "warning": "Gateway tidak wajib .1 atau .254; itu pilihan administrator.",
+    "check": "Apakah .20/25 dan .150/25 di 192.168.10.x satu subnet?",
+    "answer": "Tidak. Masing-masing berada di 192.168.10.0/25 dan 192.168.10.128/25.",
+    "nodes": [
+      "Subnet .0/25",
+      "Router",
+      "Subnet .128/25"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "gateway-dns",
+    "title": "Gateway dan DNS",
+    "summary": "Bedakan pintu keluar jaringan dengan layanan pencarian alamat.",
+    "analogy": "Gateway seperti pintu keluar kompleks; DNS seperti buku alamat yang mencari IP dari nama.",
+    "explain": "Default gateway dipakai untuk tujuan yang tidak memiliki rute lebih spesifik. Umumnya alamat gateway dapat dijangkau langsung dari subnet perangkat. Gateway di rumah sering berupa IP LAN router.\n\nDNS menyediakan informasi nama domain, termasuk alamat IPv4 melalui record A dan IPv6 melalui AAAA. DNS tidak membawa seluruh data penjelajahan. Setelah alamat ditemukan, perangkat berkomunikasi dengan server tujuan melalui jaringan.\n\nJika alamat luar dapat dijangkau tetapi pencarian nama gagal, periksa DNS. Jika gateway sendiri tidak terjangkau, periksa jaringan lokal dahulu. Perhatikan bahwa ping dapat diblokir sehingga harus dibandingkan dengan uji layanan sebenarnya.",
+    "example": "Laptop 192.168.10.20/24 memakai gateway .1 dan DNS yang diberikan router. Mengganti DNS tidak memperbaiki kabel putus ke router.",
+    "practice": [
+      "Lihat default gateway di konfigurasi perangkat.",
+      "Uji gateway dan layanan luar yang diketahui.",
+      "Jalankan nslookup example.com untuk menguji nama."
+    ],
+    "warning": "DNS cepat tidak menambah kapasitas paket internet.",
+    "check": "IP luar bisa diakses tetapi nslookup gagal. Apa diperiksa?",
+    "answer": "Konfigurasi dan keterjangkauan DNS resolver.",
+    "nodes": [
+      "Laptop",
+      "DNS: nama ke IP",
+      "Server tujuan"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "dhcp-ip-statis",
+    "title": "DHCP dan IP statis",
+    "summary": "Dapatkan alamat otomatis tanpa bentrok dengan perangkat lain.",
+    "analogy": "DHCP seperti resepsionis yang meminjamkan nomor kamar beserta informasi fasilitas dan masa berlaku.",
+    "explain": "DHCPv4 umumnya memakai Discover, Offer, Request, dan Acknowledge atau DORA. Server memberikan sewa IP beserta opsi seperti mask, gateway, dan DNS. Lease mempunyai masa berlaku sehingga klien perlu memperbaruinya.\n\nPrinter atau server sering membutuhkan alamat stabil. Pilih IP statis di luar pool DHCP, atau DHCP reservation yang diatur pada server. Reservation tetap memakai proses DHCP tetapi menetapkan alamat untuk identitas klien tertentu.\n\nDua perangkat tidak boleh memakai IPv4 yang sama pada LAN yang sama. DHCP server liar dapat memberi subnet atau gateway yang salah. Dokumentasikan pool, reservation, dan alamat statis agar tidak bertabrakan.",
+    "example": "LAN 192.168.10.0/24 memakai gateway .1 dan pool .100–.200. Printer dapat memakai .10 jika belum digunakan dan dikecualikan dari pool.",
+    "practice": [
+      "Catat pool dan gateway pada lab.",
+      "Lihat lease klien di router.",
+      "Tentukan IP printer yang tidak bertabrakan."
+    ],
+    "warning": "IP statis tidak otomatis lebih cepat; keuntungannya kestabilan alamat.",
+    "check": "Amankah printer memakai .120 pada pool .100–.200?",
+    "answer": "Tidak tanpa reservation atau exclusion karena bisa diberikan ke perangkat lain.",
+    "nodes": [
+      "Klien meminta IP",
+      "DHCP server",
+      "Lease + opsi"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "osi-tcp-ip",
+    "title": "Layer OSI dan TCP/IP",
+    "summary": "Gunakan lapisan untuk memahami perjalanan data tanpa hafalan membingungkan.",
+    "analogy": "Pengiriman barang membutuhkan isi, kemasan, alamat, kurir, dan jalan. Setiap bagian punya tugas.",
+    "explain": "OSI memiliki tujuh lapisan: physical, data link, network, transport, session, presentation, application. Model ini membantu membagi fungsi komunikasi; tidak semua implementasi harus cocok sempurna dengan satu kotak.\n\nPhysical berurusan dengan sinyal dan media. Data link mengurus frame dan MAC. Network mengurus IP dan routing. Transport seperti TCP dan UDP melayani komunikasi proses. HTTP dan DNS berada di sisi aplikasi. Model TCP/IP umum mengelompokkan fungsi menjadi link, internet, transport, application; beberapa bahan ajar memakai versi lima lapisan.\n\nGunakan model untuk memilih pemeriksaan. Kabel longgar diperiksa sebelum DNS. Jika situs sudah memberi pesan error aplikasi, kemungkinan sebagian jalur jaringan telah bekerja.",
+    "example": "Kabel longgar terkait physical. Subnet salah terkait IP. Kata sandi situs keliru terkait aplikasi, bukan otomatis gangguan ISP.",
+    "practice": [
+      "Tulis tiga contoh gangguan jaringan.",
+      "Kelompokkan ke media, MAC, IP, atau layanan.",
+      "Tentukan pemeriksaan termudah untuk setiap kelompok."
+    ],
+    "warning": "Sebutkan model yang dipakai: TCP/IP tidak selalu dihitung dengan jumlah layer yang sama di semua buku.",
+    "check": "Routing berada di layer OSI berapa?",
+    "answer": "Layer 3, yaitu network.",
+    "nodes": [
+      "Aplikasi: HTTP / DNS",
+      "Transport: TCP / UDP",
+      "Internet: IP"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
+    "slug": "switch-arp",
+    "title": "Switch dan ARP",
+    "summary": "Bagaimana komputer menemukan penerima pada jaringan lokal?",
+    "analogy": "Switch belajar meja mana ada di pintu tertentu; ARP bertanya siapa pemilik sebuah IPv4.",
+    "explain": "Switch mempelajari MAC sumber dari frame masuk beserta portnya. Jika MAC tujuan diketahui, frame diteruskan ke port yang sesuai. Broadcast dan unknown unicast dapat disebarkan ke port lain pada VLAN yang sama.\n\nARP pada IPv4 Ethernet memetakan IP next hop menjadi MAC. Jika tujuan satu subnet, klien mencari MAC tujuan. Jika tujuan di subnet lain, klien mencari MAC gateway. IPv6 memakai Neighbor Discovery, bukan ARP.\n\nRouter tidak meneruskan broadcast Ethernet biasa seperti switch. VLAN memisahkan domain broadcast. Loop pada switch dapat menyebabkan badai broadcast; RSTP membantu mencegah loop pada perangkat dan konfigurasi yang mendukung.",
+    "example": "PC .20 ingin mengirim ke .30 pada /24 yang sama. PC meminta MAC .30 melalui ARP, lalu mengirim frame lewat switch.",
+    "practice": [
+      "Buka arp -a di Windows atau ip neigh di Linux.",
+      "Akses gateway lab.",
+      "Cocokkan entri IP dengan MAC tetangga."
+    ],
+    "warning": "Jangan menyambung dua port switch dengan kabel untuk mencoba-coba; bisa membuat loop.",
+    "check": "Untuk server di subnet lain, ARP mencari MAC siapa?",
+    "answer": "Gateway yang menjadi next hop lokal.",
+    "nodes": [
+      "PC: siapa pemilik .30?",
+      "Switch / broadcast",
+      "PC .30 menjawab"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
+    "slug": "tcp-udp-port",
+    "title": "TCP, UDP, dan port",
+    "summary": "Bedakan alamat perangkat dengan pintu layanan di dalamnya.",
+    "analogy": "IP seperti alamat gedung; port seperti nomor loket; protokol transport adalah cara pengangkutannya.",
+    "explain": "TCP menyediakan aliran byte yang berurutan, mendeteksi kehilangan, dan mengirim ulang data. Koneksi biasanya diawali three-way handshake. Keandalan transport tidak menjamin aplikasi selalu berhasil; server masih bisa menolak permintaan.\n\nUDP mengirim datagram tanpa jaminan pengurutan dan pengiriman ulang bawaan. Aplikasi dapat menambahkan mekanismenya sendiri. DNS dan banyak aplikasi waktu nyata memakai UDP. QUIC memakai UDP sambil menambahkan keandalan dan keamanan.\n\nPort membantu mengarahkan komunikasi ke proses yang benar. HTTPS lazim memakai TCP 443, sedangkan HTTP/3 memakai QUIC di UDP 443. Port klien biasanya sementara. Port terbuka belum membuktikan layanan sehat atau aman.",
+    "example": "Laptop membuka situs dan melakukan pencarian DNS bersamaan. Nomor port membantu membedakan komunikasi masing-masing proses.",
+    "practice": [
+      "Catat tiga aplikasi yang digunakan.",
+      "Cari portnya di dokumentasi resmi.",
+      "Pisahkan IP tujuan dan port layanan."
+    ],
+    "warning": "UDP tidak selalu lebih cepat pada semua kondisi.",
+    "check": "Apa fungsi nomor port?",
+    "answer": "Membedakan layanan atau proses komunikasi pada suatu IP.",
+    "nodes": [
+      "IP perangkat",
+      "Port TCP 443",
+      "Layanan HTTPS"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
+    "slug": "nat-ip-publik",
+    "title": "IP privat, NAT, dan CGNAT",
+    "summary": "Mengapa banyak perangkat bisa berbagi satu akses internet?",
+    "analogy": "NAT seperti resepsionis yang mencatat kiriman dari banyak kamar memakai satu alamat gedung.",
+    "explain": "IPv4 privat meliputi 10.0.0.0/8, 172.16.0.0/12, dan 192.168.0.0/16. Alamat privat tidak dirutekan secara global di internet. IP publik dapat dirutekan secara global, tetapi akses masuk tetap dipengaruhi firewall dan kebijakan jaringan.\n\nSource NAT mengganti alamat sumber. PAT atau NAPT juga membedakan koneksi lewat port. Router menyimpan pemetaan supaya balasan kembali ke klien yang benar. Masquerade sering dipakai saat alamat WAN berubah.\n\nISP dapat memakai NAT tambahan atau CGNAT. Rentang 100.64.0.0/10 merupakan shared address space, berbeda dari rentang privat RFC1918. Port forwarding rumah saja tidak cukup jika NAT ISP tidak menyediakan jalur masuk.",
+    "example": "Laptop .20 dan ponsel .21 berbagi satu alamat keluar. Router mencatat koneksi agar balasan tidak tertukar.",
+    "practice": [
+      "Catat IP WAN tanpa mempublikasikannya.",
+      "Bandingkan dengan IP keluar yang terlihat di internet.",
+      "Tanyakan ISP tentang NAT tambahan jika berbeda."
+    ],
+    "warning": "NAT bukan pengganti firewall.",
+    "check": "Apakah port forwarding pasti berhasil di CGNAT?",
+    "answer": "Tidak. Jalur masuk juga perlu didukung sisi ISP atau solusi koneksi yang sesuai.",
+    "nodes": [
+      "Klien IP privat",
+      "Router: source NAT",
+      "Server internet"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
+    "slug": "wifi-sinyal-channel",
+    "title": "Wi-Fi, sinyal, dan channel",
+    "summary": "Sinyal penuh belum tentu lancar. Pahami udara yang dipakai bersama.",
+    "analogy": "Wi-Fi seperti percakapan di ruang bersama: suara keras tetap sulit dipahami jika semua orang bicara bersamaan.",
+    "explain": "RSSI biasanya ditulis dalam dBm negatif: -50 dBm lebih kuat daripada -75 dBm. Kualitas juga dipengaruhi noise, interferensi, airtime, kemampuan klien, dan uplink kabel AP. Bar sinyal tidak mengukur kecepatan internet.\n\nChannel berdekatan dapat bertumpang tindih. Pada 2,4 GHz, lebar 20 MHz sering menjadi awal yang masuk akal di area ramai. Pola 1, 6, 11 lazim dipakai untuk mengurangi tumpang tindih; pilihan akhirnya mengikuti regulasi setempat, dukungan klien, dan pengukuran.\n\nLetakkan AP terbuka dan cukup dekat pengguna. Menaikkan daya AP saja tidak memperkuat pancaran balik ponsel. Band 5 GHz dan 6 GHz memberi opsi tambahan dengan karakter jangkauan serta dukungan berbeda.",
+    "example": "Channel 7 tampak kosong pada scan tetapi dapat bertumpang tindih dengan channel 6. Lihat lebar kanal dan pemakaian, bukan hanya nama SSID.",
+    "practice": [
+      "Ukur beberapa lokasi pada jam sibuk.",
+      "Bandingkan sambungan kabel dan Wi-Fi.",
+      "Ubah satu parameter lalu ulangi uji."
+    ],
+    "warning": "Channel tanpa SSID tepat di nomornya belum tentu bebas gangguan.",
+    "check": "Apakah sinyal penuh menjamin internet cepat?",
+    "answer": "Tidak. Kemacetan radio, uplink, dan kapasitas ISP juga memengaruhi.",
+    "nodes": [
+      "Klien Wi-Fi",
+      "AP: udara bersama",
+      "Uplink kabel"
+    ],
+    "stage": 3,
+    "minutes": 6
+  },
+  {
+    "slug": "vlan-access-trunk",
+    "title": "VLAN, access, dan trunk",
+    "summary": "Pisahkan staf dan tamu meskipun memakai infrastruktur yang sama.",
+    "analogy": "VLAN seperti kelompok ruang dengan kartu berbeda; trunk seperti lorong bersama yang membawa kelompok berlabel.",
+    "explain": "VLAN memisahkan domain broadcast layer 2. Contohnya VLAN 10 untuk staf dan VLAN 20 untuk tamu. Setiap VLAN biasanya memakai subnet berbeda. Komunikasi antar-VLAN memerlukan routing serta kebijakan firewall yang sesuai.\n\nAccess port umumnya melayani perangkat akhir pada satu VLAN tanpa tag di kabel klien. Trunk membawa beberapa VLAN dengan tag IEEE 802.1Q. Beberapa konfigurasi mempunyai native atau untagged VLAN; kedua ujung harus cocok.\n\nSatu kabel antarswitch managed bisa membawa beberapa VLAN sekaligus. AP yang mendukung VLAN dapat memetakan SSID berbeda ke VLAN berbeda. Switch unmanaged tidak menyediakan kontrol keanggotaan yang diperlukan untuk desain ini. Saat mengaktifkan filtering, siapkan jalur manajemen dan rollback.",
+    "example": "Trunk dari switch A ke B membawa VLAN 10 dan 20. Port 2 switch B access VLAN 10, port 3 access VLAN 20.",
+    "practice": [
+      "Gambar staf dan tamu dengan warna berbeda.",
+      "Tandai access dan trunk.",
+      "Di lab, uji isolasi dan akses yang diizinkan."
+    ],
+    "warning": "VLAN saja tidak menetapkan izin antarjaringan; routing dan firewall tetap diperlukan.",
+    "check": "Bisakah satu kabel membawa VLAN 10 dan 20?",
+    "answer": "Bisa melalui trunk yang dikonfigurasi konsisten di kedua ujung.",
+    "nodes": [
+      "Access VLAN 10",
+      "Trunk VLAN 10 + 20",
+      "Access VLAN 20"
+    ],
+    "stage": 3,
+    "minutes": 6
+  },
+  {
+    "slug": "routing-statis",
+    "title": "Routing statis dan jalur balasan",
+    "summary": "Banyak router, satu tujuan: pahami keputusan setiap langkah.",
+    "analogy": "Rute seperti papan petunjuk: untuk ke kawasan tertentu, lewat persimpangan berikutnya.",
+    "explain": "Router memilih rute sesuai tujuan paket, umumnya memakai prefix paling spesifik yang cocok. Next hop adalah router berikutnya yang dapat dijangkau, bukan selalu router terakhir. Default route IPv4 0.0.0.0/0 dipakai jika tidak ada rute lebih spesifik.\n\nR1 mempunyai LAN 192.168.10.0/24 dan transit 10.10.10.1/30. R2 mempunyai transit 10.10.10.2/30 dan LAN 192.168.20.0/24. R1 perlu rute ke LAN R2 via 10.10.10.2. R2 perlu rute balik ke LAN R1 via 10.10.10.1.\n\nPC di LAN R1 memakai IP LAN R1 sebagai gateway. PC tidak harus mengetahui semua router di perjalanan. Rute dua arah, firewall, serta konfigurasi host harus benar agar komunikasi berhasil.",
+    "example": "PC A 192.168.10.10/24 memakai gateway 192.168.10.1. PC B 192.168.20.10/24 memakai gateway 192.168.20.1.",
+    "practice": [
+      "Gambar LAN A, transit, LAN B.",
+      "Tulis destination dan next hop pada kedua router.",
+      "Uji gateway lokal, router sebelah, lalu PC tujuan."
+    ],
+    "warning": "Rute satu arah belum cukup; jawaban juga memerlukan jalur kembali.",
+    "check": "Gateway PC A seharusnya router lokal atau router jauh?",
+    "answer": "IP LAN router lokal yang dapat dijangkau langsung.",
+    "nodes": [
+      "LAN A /24 — R1",
+      "Transit 10.10.10.0/30",
+      "R2 — LAN B /24"
+    ],
+    "stage": 3,
+    "minutes": 6
+  },
+  {
+    "slug": "firewall-dasar",
+    "title": "Firewall dan keamanan dasar",
+    "summary": "Atur siapa boleh mengakses apa dengan aturan yang jelas.",
+    "analogy": "Firewall seperti penjaga yang memeriksa asal, tujuan, dan jenis kunjungan.",
+    "explain": "Pada RouterOS, input menangani trafik menuju router sendiri, forward menangani trafik melewati router, dan output menangani trafik yang dibuat router. Membatasi akses Winbox berbeda dari membatasi klien menuju internet.\n\nAturan diperiksa menurut urutan dan kondisi. Accept yang terlalu luas di atas dapat membuat drop di bawahnya tidak terpakai. Connection tracking membantu membedakan koneksi baru dengan trafik balasan yang sudah dikenal.\n\nMulai dari kebutuhan: staf ke printer, tamu ke internet, admin ke router. Batasi manajemen ke sumber tepercaya, gunakan kredensial kuat, dan lakukan pembaruan resmi. Siapkan jalur pemulihan agar perubahan tidak mengunci akses administrator.",
+    "example": "Tamu boleh internet tetapi dilarang masuk subnet staf. Terapkan aturan forward sesuai topologi; menyembunyikan SSID tidak menyediakan isolasi ini.",
+    "practice": [
+      "Buat daftar sumber, tujuan, dan layanan.",
+      "Catat urutan aturan serta akses manajemen.",
+      "Uji koneksi yang harus boleh dan yang harus ditolak."
+    ],
+    "warning": "Mematikan seluruh firewall dapat membuka layanan router ke pihak yang tidak dipercaya.",
+    "check": "Trafik klien melewati router ke internet memakai chain apa?",
+    "answer": "Forward. Trafik menuju router sendiri memakai input.",
+    "nodes": [
+      "Klien / sumber",
+      "Aturan firewall",
+      "Tujuan / layanan"
+    ],
+    "stage": 3,
+    "minutes": 6
+  },
+  {
+    "slug": "mikrotik-winbox",
+    "title": "Mengenal MikroTik dan Winbox",
+    "summary": "Kenali ruang kontrol router sebelum mengubah konfigurasi.",
+    "analogy": "RouterOS adalah ruang kontrol, sedangkan Winbox adalah salah satu panel untuk mengoperasikannya.",
+    "explain": "Gunakan router cadangan atau CHR di lab virtual. Catat model, versi RouterOS, port ISP, dan port komputer. Konfigurasi bawaan berbeda antarperangkat; jangan reset router produksi untuk mengikuti pembelajaran.\n\nInterfaces menampilkan antarmuka dan status link. IP Addresses berisi alamat router, Routes menampilkan rute, DHCP Client meminta konfigurasi hulu, dan DHCP Server membagikannya ke LAN. Firewall mengelola filter serta NAT. Bridge menggabungkan port pada domain layer 2.\n\nSimpan export atau backup sesuai kebutuhan dan pahami pemulihannya. Safe Mode dapat membantu membatalkan perubahan jika sesi terputus, tetapi bukan pengganti cadangan. Unduh perangkat lunak resmi dan batasi akses administrasi.",
+    "example": "Sebelum menambah rute, lihat IP Addresses dan Routes untuk memahami kondisi awal. Jangan menambah default route kedua tanpa tujuan.",
+    "practice": [
+      "Unduh Winbox dari situs MikroTik.",
+      "Hubungkan ke port LAN sesuai dokumentasi perangkat.",
+      "Lihat Interfaces dan IP Addresses tanpa mengubah nilai."
+    ],
+    "warning": "Router kosong dan router dengan default configuration memerlukan langkah berbeda.",
+    "check": "Haruskah reset router kantor untuk belajar?",
+    "answer": "Tidak. Gunakan router atau simulasi latihan terpisah.",
+    "nodes": [
+      "Komputer admin",
+      "Winbox / RouterOS",
+      "Router latihan"
+    ],
+    "stage": 4,
+    "minutes": 6
+  },
+  {
+    "slug": "lab-jaringan-rumah",
+    "title": "Lab: satu router dan dua klien",
+    "summary": "Latih IP, gateway, dan DHCP melalui jaringan sederhana.",
+    "analogy": "Mulai dari satu kompleks kecil sebelum menyusun jalan antarkota.",
+    "explain": "Rancang LAN latihan 192.168.50.0/24, router .1, dan pool DHCP .100–.150. Pastikan subnet tidak bertabrakan dengan jaringan hulu. Jika perangkat sudah mempunyai default configuration yang aman, pelajari dahulu sebelum mengubahnya.\n\nDua klien berada pada LAN atau SSID yang dijembatani ke LAN. WAN mengikuti metode ISP: DHCP, statis, atau PPPoE. Jangan menebak kredensial atau IP WAN. Koneksi keluar membutuhkan rute, DNS yang sesuai, firewall, dan source NAT bila topologinya membutuhkan.\n\nPastikan klien menerima IP serta gateway benar. Uji router lokal, layanan luar, lalu DNS. Ping antarklien dapat diblokir firewall host atau client isolation; gunakan bukti tambahan sebelum menyimpulkan routing rusak.",
+    "example": "PC mendapat .100 dan ponsel .101. Keduanya memakai gateway .1. Jika hanya ponsel gagal, periksa sisi klien dan AP terlebih dahulu.",
+    "practice": [
+      "Label semua port LAN/WAN di lab.",
+      "Catat IP, prefix, gateway, DNS kedua klien.",
+      "Uji lokal, layanan luar, lalu nama domain."
+    ],
+    "warning": "Jangan sambungkan DHCP server lab ke LAN kantor.",
+    "check": "Dari mana klien mendapatkan gateway pada lab DHCP?",
+    "answer": "Dari opsi DHCP server LAN, yaitu 192.168.50.1 pada rancangan ini.",
+    "nodes": [
+      "Klien .100 / .101",
+      "Router LAN .1/24",
+      "WAN sesuai ISP"
+    ],
+    "stage": 4,
+    "minutes": 6
+  },
+  {
+    "slug": "monitoring-ping",
+    "title": "Ping dan traceroute",
+    "summary": "Kumpulkan bukti sebelum menyimpulkan jaringan rusak.",
+    "analogy": "Ping seperti mengetuk pintu. Tidak ada jawaban belum tentu rumahnya kosong.",
+    "explain": "Ping umumnya mengirim ICMP Echo Request dan menunggu Echo Reply. Waktu pulang-pergi disebut RTT. Packet loss pada pengujian berarti sebagian percobaan tidak mendapat balasan dalam batas waktu. ICMP dapat dibatasi, jadi bandingkan dengan pengujian layanan sebenarnya.\n\nTraceroute atau tracert mencoba menampilkan hop dengan TTL atau hop limit. Tanda bintang berarti probe tidak mendapat respons, bukan otomatis router rusak. Router dapat membatasi respons sambil tetap meneruskan trafik pengguna.\n\nBandingkan beberapa waktu, tujuan, kabel versus Wi-Fi, serta kondisi sepi dan sibuk. Latency yang melonjak saat upload penuh dapat menunjukkan antrean padat. Satu ping tidak mewakili seluruh kinerja ISP.",
+    "example": "Hop tengah loss 80%, tetapi tujuan akhir tidak loss dan situs normal. Hop itu mungkin membatasi jawaban probe, bukan membuang 80% semua trafik.",
+    "practice": [
+      "Windows: ping -n 10 alamat-gateway; Linux: ping -c 10 alamat-gateway.",
+      "Uji layanan luar yang diketahui.",
+      "Jalankan tracert example.com atau traceroute example.com bila tersedia."
+    ],
+    "warning": "Jangan menafsirkan semua bintang traceroute sebagai jalur terputus.",
+    "check": "Hop tidak menjawab berarti pasti terputus?",
+    "answer": "Tidak. Lihat hop berikutnya serta layanan tujuan.",
+    "nodes": [
+      "Uji gateway",
+      "Uji tujuan luar",
+      "Uji layanan / DNS"
+    ],
+    "stage": 4,
+    "minutes": 6
+  },
+  {
+    "slug": "troubleshooting-runtut",
+    "title": "Troubleshooting secara runtut",
+    "summary": "Ubah “tidak bisa internet” menjadi pemeriksaan yang terarah.",
+    "analogy": "Teknisi seperti dokter: kumpulkan gejala, buat dugaan, uji satu perubahan, lalu periksa hasilnya.",
+    "explain": "Tentukan cakupan: satu perangkat, satu SSID, satu ruangan, atau seluruh kantor. Catat waktu mulai dan perubahan terakhir. Perangkat pembanding membantu membedakan gangguan klien dari gangguan jaringan bersama.\n\nPeriksa daya, link, kabel, dan sambungan Wi-Fi. Lanjutkan ke IP, prefix, gateway, serta DNS. Uji gateway, tujuan luar, resolusi nama, lalu aplikasi. Alamat 169.254.x.x pada klien IPv4 otomatis dapat menunjukkan DHCP belum diperoleh, tetapi perlu konfirmasi kondisi perangkat.\n\nSimpan keadaan awal dan ubah satu hal setiap kali. Catat hasil sebelum dan sesudah. Restart berulang dapat menghilangkan petunjuk log dan mengganggu pengguna, jadi lakukan berdasarkan alasan yang jelas.",
+    "example": "Semua komputer kabel normal, Wi-Fi belakang lambat. Fokus pada cakupan, radio, uplink AP, dan klien sebelum mereset router utama.",
+    "practice": [
+      "Tulis gejala, cakupan, dan waktu.",
+      "Simpan hasil uji berurutan.",
+      "Ubah satu variabel dan uji ulang."
+    ],
+    "warning": "Connected hanya membuktikan sebagian sambungan, bukan seluruh layanan.",
+    "check": "Kabel normal, satu SSID gagal. Periksa apa dahulu?",
+    "answer": "AP, SSID/VLAN, DHCP untuk SSID itu, dan sambungan klien.",
+    "nodes": [
+      "Daya / link",
+      "IP / gateway",
+      "DNS / aplikasi"
+    ],
+    "stage": 4,
+    "minutes": 6
+  },
+  {
+    "slug": "bandwidth-latency",
+    "title": "Bandwidth, latency, dan jitter",
+    "summary": "Mengapa paket 100 Mbps masih terasa lambat saat rapat?",
+    "analogy": "Bandwidth seperti lebar jalan; latency seperti lama perjalanan. Keduanya mengukur hal berbeda.",
+    "explain": "Bandwidth adalah kapasitas nominal; throughput adalah laju data yang benar-benar tercapai pada pengujian. Overhead, kualitas Wi-Fi, server, dan beban pengguna dapat menurunkan hasil. Mbps berarti megabit per detik; MB/s berarti megabyte per detik. Satu byte sama dengan delapan bit.\n\nLatency adalah waktu tunda; ping mengukur RTT. Jitter adalah variasi delay antarpaket sesuai metode pengukuran. Suara dan rapat daring sensitif terhadap delay, jitter, serta kehilangan paket. Unduhan besar lebih mudah menunjukkan batas throughput.\n\nCatat media, jumlah pengguna, waktu, dan server uji. Paket 100 Mbps secara teoritis setara 12,5 MB/s sebelum overhead. Satu hasil speed test tidak menjamin semua server memberi laju yang sama.",
+    "example": "Backup memenuhi upload sehingga rapat tersendat walau unduhan masih cepat. Periksa upload, antrean, dan latency saat sibuk.",
+    "practice": [
+      "Bandingkan latency saat sepi dan upload aktif.",
+      "Samakan satuan throughput.",
+      "Uji kabel dengan server yang sama."
+    ],
+    "warning": "Jangan membandingkan Mbps dan MB/s seolah satuannya sama.",
+    "check": "100 Mbps setara berapa MB/s sebelum overhead?",
+    "answer": "12,5 MB/s.",
+    "nodes": [
+      "Bandwidth: kapasitas",
+      "Throughput: hasil",
+      "Latency: waktu tunda"
+    ],
+    "stage": 5,
+    "minutes": 6
+  },
+  {
+    "slug": "vpn-akses-remote",
+    "title": "VPN dan akses remote",
+    "summary": "Hubungkan lokasi tanpa sembarang membuka panel administrasi.",
+    "analogy": "VPN seperti jalur khusus di jalan umum; perlindungannya bergantung pada protokol dan konfigurasi.",
+    "explain": "VPN membangun koneksi logis melalui jaringan lain. WireGuard dan IPsec dapat mengenkripsi trafik. Remote-access menghubungkan pengguna ke jaringan, sedangkan site-to-site menghubungkan jaringan antarlokasi.\n\nTunnel aktif belum berarti semua subnet terjangkau. Tentukan alamat tunnel, subnet yang dirutekan, DNS, dan aturan firewall. Split tunnel hanya mengirim tujuan tertentu melalui VPN; full tunnel mengarahkan sebagian besar trafik sesuai pengaturan.\n\nJaga private key dan konfigurasi klien. Batasi siapa boleh masuk serta layanan yang boleh dijangkau. VPN tidak menjamin anonimitas atau keamanan perangkat akhir. Di balik CGNAT, desain jalur masuk juga perlu menyesuaikan kondisi jaringan.",
+    "example": "Teknisi memakai VPN untuk mengelola printer kantor dari rumah. Firewall hanya memberi akses yang diperlukan, bukan akses bebas ke seluruh LAN.",
+    "practice": [
+      "Tentukan pengguna dan layanan yang diperlukan.",
+      "Gambar subnet rumah, tunnel, dan kantor.",
+      "Uji akses yang boleh dan yang harus ditolak."
+    ],
+    "warning": "Jangan membuka Winbox langsung ke internet hanya agar mudah diakses.",
+    "check": "Apakah tunnel aktif menjamin LAN kantor terjangkau?",
+    "answer": "Tidak. Rute, alamat, firewall, dan layanan tujuan juga harus sesuai.",
+    "nodes": [
+      "Pengguna remote",
+      "Tunnel VPN",
+      "Jaringan kantor"
+    ],
+    "stage": 5,
+    "minutes": 6
+  },
+  {
+    "slug": "failover-dua-isp",
+    "title": "Failover dua ISP",
+    "summary": "Siapkan jalur cadangan dan pahami apa yang dideteksi.",
+    "analogy": "Failover seperti jalan cadangan. Gerbang terbuka belum membuktikan jalan sampai tujuan aman.",
+    "explain": "Dua WAN dapat memiliki prioritas berbeda. Jalur utama dipakai ketika sehat; jalur cadangan digunakan jika syarat perpindahan terpenuhi. Failover berbeda dengan load balancing dan tidak otomatis menjumlahkan kapasitas dua ISP.\n\nMengecek gateway ISP hanya membuktikan gateway menjawab. Recursive routing dapat memakai target lebih jauh, tetapi rute target, scope, target-scope, dan pemeriksaan kesehatan harus dirancang sesuai versi serta topologi RouterOS. Ini materi konsep, bukan konfigurasi siap tempel.\n\nIP publik sumber dapat berubah saat pindah ISP. Sesi aktif bisa terputus dan perlu tersambung ulang. Tiap jalur harus mempunyai alamat, rute, NAT, DNS, serta firewall yang sesuai. Uji juga saat jalur utama pulih.",
+    "example": "Port ISP A tetap link-up tetapi upstream mati. Failover yang hanya memeriksa status fisik mungkin tidak berpindah.",
+    "practice": [
+      "Uji setiap ISP secara terpisah di lab.",
+      "Putus WAN utama dan catat waktu pemulihan.",
+      "Uji gangguan upstream dan pemulihan utama secara terkendali."
+    ],
+    "warning": "Failover tidak menjamin perpindahan tanpa jeda atau semua sesi tetap aktif.",
+    "check": "Apakah link-up menjamin internet sehat?",
+    "answer": "Tidak. Media fisik aktif belum membuktikan jalur internet berfungsi.",
+    "nodes": [
+      "LAN / router",
+      "ISP A: utama",
+      "ISP B: cadangan"
+    ],
+    "stage": 5,
+    "minutes": 6
+  },
+  {
+    "slug": "proyek-kantor",
+    "title": "Proyek akhir: kantor kecil",
+    "summary": "Gabungkan IP, VLAN, DHCP, routing, dan keamanan dalam satu rancangan.",
+    "analogy": "Topologi adalah denah; tabel IP adalah daftar alamat; firewall adalah kebijakan akses.",
+    "explain": "Rancang kantor dengan 6 PC, 1 printer, 1 AP, Wi-Fi tamu, dan satu ISP. Catat port, cakupan radio, daya PoE, serta layanan penting sebelum memilih perangkat.\n\nVLAN 10 staf memakai 192.168.10.0/24: gateway 192.168.10.1 dan printer .10. VLAN 20 tamu memakai 192.168.20.0/24: gateway 192.168.20.1. Trunk router–switch–AP membawa VLAN yang diperlukan; port PC access staf dan SSID tamu masuk VLAN 20.\n\nStaf boleh ke printer dan internet. Tamu hanya ke internet dan layanan lokal minimum seperti DHCP/DNS. Batasi administrasi ke sumber tepercaya. Simpan topologi, tabel alamat, konfigurasi, dan hasil uji. Sesuaikan implementasi dengan model perangkat sebelum penerapan.",
+    "example": "Tamu harus bisa membuka situs tetapi tidak boleh mengakses printer 192.168.10.10. Kedua hasil perlu diuji untuk membuktikan isolasi.",
+    "practice": [
+      "Buat tabel VLAN, subnet, gateway, pool DHCP.",
+      "Tulis matriks izin staf, tamu, printer, admin.",
+      "Uji DHCP, internet, printer, isolasi, dan pemulihan di lab."
+    ],
+    "warning": "Internet berhasil saja belum membuktikan jaringan tamu sudah terisolasi.",
+    "check": "Apa dua uji wajib jaringan tamu?",
+    "answer": "Internet dapat dipakai dan akses ke subnet staf ditolak sesuai kebijakan.",
+    "nodes": [
+      "Staf: VLAN 10",
+      "Router + firewall",
+      "Tamu: VLAN 20"
+    ],
+    "stage": 5,
+    "minutes": 6
+  }
+]
