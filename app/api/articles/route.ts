@@ -2,6 +2,41 @@ import { lessons } from '@/lib/course';
 import { getLesson } from '@/lib/content';
 import { devicePhotos } from '@/lib/device-photos';
 
+const lessonPhotos: Record<string, string> = {
+  'apa-itu-listrik': 'saklar',
+  'volt-ampere-ohm': 'multimeter',
+  'konduktor-isolator-rangkaian': 'saklar',
+  'ac-dc-sumber-listrik': 'kapasitor',
+  'hukum-ohm-daya': 'resistor',
+  'rangkaian-seri-paralel': 'resistor',
+  'multimeter': 'multimeter',
+  'keselamatan-dc': 'mcb',
+  'komponen-pasif-led': 'resistor',
+  'dioda-transistor-ic': 'resistor',
+  'power-supply-baterai': 'kapasitor',
+  'sensor-relay-iot': 'relay',
+  'pembangkit-trafo': 'motor',
+  'satu-tiga-phase': 'motor',
+  'netral-grounding-proteksi': 'rccb',
+  'panel-kabel-beban': 'mcb',
+  'motor-elektromagnet': 'motor',
+  'kontaktor-relay-panel': 'relay',
+  'vfd-plc': 'plc',
+  'ups-genset-ats': 'relay',
+  'membaca-skema': 'saklar',
+  'troubleshooting-power': 'multimeter',
+  'daya-cctv-server': 'multimeter',
+  'simulasi-gangguan': 'mcb',
+  'mengenal-arus-kuat': 'mcb',
+  'komponen-ac-penggunaan': 'mcb',
+  'proteksi-motor': 'motor',
+  'daya-ac-faktor-daya': 'kapasitor',
+  'komponen-dc-penggunaan': 'resistor',
+  'penyearah-regulator': 'kapasitor',
+  'kapasitor-induktor-ac-dc': 'kapasitor',
+  'memilih-komponen-ac-dc': 'relay',
+};
+
 // The public catalogue is rebuilt whenever the learning site is deployed.
 export const dynamic = 'force-static';
 
@@ -11,7 +46,7 @@ export function GET() {
     const doc = getLesson(lesson.slug);
     if (!doc) return [];
     const photoKey = doc.content.match(/<DeviceGuide\s+type=["']([^"']+)["']/)?.[1];
-    const photo = photoKey ? devicePhotos[photoKey] : undefined;
+    const photo = devicePhotos[lessonPhotos[lesson.slug] || photoKey || 'saklar'] || devicePhotos.saklar;
     return [{
       id: `listrik-${lesson.slug}`,
       slug: lesson.slug,
