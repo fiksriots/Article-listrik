@@ -1,3 +1,4 @@
+import {iotLessons} from '@/lib/iot-course';
 import { networkLessons } from '@/lib/network-course';
 import { lessons } from '@/lib/course';
 import { getLesson } from '@/lib/content';
@@ -79,7 +80,8 @@ export function GET() {
       author: 'Learn Jaringan', source: `${origin}/jaringan/${lesson.slug}`,
       license: 'Ilustrasi edukasi', licenseUrl: '', changes: 'Ilustrasi vektor skematis asli' },
   }));
-  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items: [...items, ...networkItems] }, {
+  const iotItems = iotLessons.map((l,index)=>({id:`iot-${l.slug}`,slug:l.slug,title:l.title,summary:l.summary,url:`${origin}/iot/${l.slug}`,category:'Belajar IoT',tags:['IoT','ESP32','Pemula'],minutes:l.minutes,order:lessons.length+networkLessons.length+index+1,image:{url:`${origin}/iot/${l.slug}.svg`,alt:l.title,author:'Fiks Learn IoT',source:`${origin}/iot/${l.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Ilustrasi vektor skematis asli'}}));
+  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items: [...items, ...networkItems, ...iotItems] }, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',

@@ -1,0 +1,468 @@
+[
+  {
+    "slug": "apa-itu-iot",
+    "title": "Apa itu Internet of Things?",
+    "stage": 0,
+    "summary": "Benda sehari-hari yang bisa membaca keadaan dan bertukar data.",
+    "analogy": "Bayangkan penjaga rumah yang melapor lewat ponsel. Sensor menjadi mata, papan pengendali menjadi otak, dan jaringan menjadi jalur pesan.",
+    "explain": [
+      "Internet of Things, disingkat IoT, adalah kumpulan benda fisik yang memiliki perangkat elektronik, program, dan koneksi untuk bertukar data. Contohnya alat pemantau suhu ruangan yang mengirim hasil ukur ke dashboard.",
+      "Tidak semua alat otomatis adalah IoT. Lampu dengan timer dapat bekerja sendiri tanpa jaringan. Ketika data atau perintah dapat dipertukarkan melalui jaringan, perangkat mulai memiliki kemampuan yang kita gunakan dalam sistem IoT.",
+      "Internet membantu akses dari tempat berbeda. Namun pembacaan sensor dan aturan lokal dapat tetap berjalan saat internet terputus, jika program memang dirancang seperti itu. Jangan menganggap semua perangkat pasti tetap berfungsi tanpa cloud."
+    ],
+    "example": "Suhu ruang server terlihat dari ponsel; teknisi datang setelah melihat suhu meningkat, bukan menunggu perangkat mati.",
+    "practice": [
+      "Pilih satu benda di rumah.",
+      "Tulis keadaan yang ingin diketahui, data yang diperlukan, dan siapa penerimanya.",
+      "Bedakan fungsi otomatis lokal dengan fungsi yang memerlukan jaringan."
+    ],
+    "warning": "IoT bukan sekadar menambahkan Wi-Fi. Mulai dari masalah yang benar-benar perlu diselesaikan.",
+    "check": "Apakah kipas dengan timer tanpa koneksi termasuk contoh IoT dalam pelajaran ini?",
+    "answer": "Belum. Itu contoh otomatisasi lokal. Kemampuan bertukar data melalui jaringan membedakannya.",
+    "nodes": [
+      "Keadaan ruangan",
+      "Sensor",
+      "Pengendali",
+      "Jaringan",
+      "Dashboard"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "cara-kerja-iot",
+    "title": "Perjalanan data: dari sensor ke layar",
+    "stage": 0,
+    "summary": "Kenali input, pemrosesan, komunikasi, dan tindakan.",
+    "analogy": "Seperti petugas cuaca: mengukur, mencatat, mengirim laporan, lalu menindaklanjuti.",
+    "explain": [
+      "Sensor menghasilkan sinyal. Pengendali membaca sinyal itu, mengubahnya menjadi data yang bermakna, lalu memutuskan apakah perlu menyimpan, mengirim, atau menggerakkan sesuatu.",
+      "Gateway adalah penghubung antara jaringan atau protokol yang berbeda. Tidak semua proyek membutuhkan kotak gateway terpisah; ESP32 dengan Wi-Fi dapat terhubung langsung ke layanan yang sesuai.",
+      "Dashboard menampilkan hasil. Perintah dari dashboard melewati jalur balik menuju pengendali. Status perintah terkirim belum sama dengan bukti tindakan berhasil; konfirmasi perangkat atau sensor tambahan membantu memastikan hasil."
+    ],
+    "example": "Tombol ON dikirim dari aplikasi. ESP32 menerima perintah, menyalakan LED, dan mengirim status baru.",
+    "practice": [
+      "Gambar panah sensor → pengendali → jaringan → layar.",
+      "Tambahkan jalur balik untuk perintah.",
+      "Lingkari bagian yang tetap bisa bekerja tanpa internet."
+    ],
+    "warning": "Layar dapat menampilkan data lama. Tampilkan waktu pembaruan dan status koneksi.",
+    "check": "Mengapa tombol ON di aplikasi belum membuktikan lampu benar-benar menyala?",
+    "answer": "Pesan mungkin belum diterima, keluaran bisa gagal, atau lampu rusak. Perlu status balik atau pengukuran.",
+    "nodes": [
+      "Sensor membaca",
+      "ESP32 mengolah",
+      "Pesan dikirim",
+      "Layar menampilkan",
+      "Status kembali"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "sensor-aktuator",
+    "title": "Sensor dan aktuator: mata dan tangan",
+    "stage": 0,
+    "summary": "Bedakan perangkat yang mengukur dengan perangkat yang bertindak.",
+    "analogy": "Sensor seperti mata; aktuator seperti tangan. Keduanya memiliki tugas berbeda.",
+    "explain": [
+      "Sensor mendeteksi besaran fisik seperti suhu, cahaya, jarak, dan kelembapan. Hasilnya dapat berupa tegangan analog atau data digital, tergantung komponen.",
+      "Aktuator mengubah perintah menjadi tindakan fisik, misalnya motor berputar atau katup membuka. LED pada latihan dapat menjadi indikator keluaran sederhana sebelum memakai aktuator sungguhan.",
+      "Pilih sensor berdasarkan besaran, rentang, ketelitian, lingkungan, dan antarmuka. Sensor kelembapan udara berbeda dengan sensor kelembapan tanah, walaupun namanya mirip."
+    ],
+    "example": "Pada penyiram tanaman, sensor membaca tanah dan pompa mengalirkan air. Program menentukan kapan pompa aktif.",
+    "practice": [
+      "Kelompokkan termometer, motor, sensor cahaya, dan katup menjadi input atau output.",
+      "Untuk tanaman, tuliskan apa yang harus diukur.",
+      "Tentukan cara mengetahui apakah air benar-benar mengalir."
+    ],
+    "warning": "Pin ESP32 bukan sumber daya motor atau pompa. Beban membutuhkan penggerak dan catu daya yang sesuai.",
+    "check": "Apakah relay mengukur suhu?",
+    "answer": "Tidak. Relay adalah saklar yang dikendalikan. Pengukuran suhu membutuhkan sensor.",
+    "nodes": [
+      "Lingkungan",
+      "Sensor / input",
+      "Keputusan",
+      "Penggerak",
+      "Aktuator / output"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "mengenal-esp32",
+    "title": "Mengenal ESP32 dan papan pengembangan",
+    "stage": 1,
+    "summary": "Lihat bentuk papan, USB, pin, modul, dan tombol.",
+    "analogy": "Papan pengembangan adalah meja kerja kecil: chip, konektor, dan pendukungnya sudah disatukan.",
+    "explain": [
+      "ESP32 adalah keluarga chip mikrokontroler. Papan pengembangan menambahkan koneksi USB, regulator, dan pin agar lebih mudah dipakai. Nama ESP32 pada toko belum menjamin semua papan memiliki susunan pin yang sama.",
+      "GPIO adalah pin masukan/keluaran yang dapat diprogram. Label GPIO berbeda dari nomor urut kaki fisik. Cari diagram pin untuk model dan revisi papan yang benar sebelum menyambungkan kabel.",
+      "Pada ESP32 klasik, logika GPIO menggunakan 3,3 V; jangan memasukkan sinyal 5 V langsung. Kemampuan Wi-Fi, Bluetooth, USB, dan pin khusus berbeda antaranggota keluarga, sehingga contoh di akademi ini menyebut papan sasaran."
+    ],
+    "example": "Foto menunjukkan ESP32-DevKitC V4. Papan ESP32 lain mungkin memakai USB-C atau posisi tombol berbeda.",
+    "practice": [
+      "Temukan modul berpelindung logam, konektor USB, dan tombol pada foto.",
+      "Baca nama model papan milikmu.",
+      "Unduh pinout model tersebut sebelum praktik."
+    ],
+    "warning": "5V/VIN untuk catu papan tidak berarti GPIO tahan 5 V. Jangan menyamakan pin daya dengan pin sinyal.",
+    "check": "Bolehkah mengikuti gambar pin ESP32-S3 untuk semua ESP32?",
+    "answer": "Tidak. Gunakan pinout papan dan varian yang tepat.",
+    "nodes": [
+      "USB",
+      "Regulator",
+      "Chip ESP32",
+      "GPIO 3,3 V",
+      "Sensor"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "listrik-breadboard",
+    "title": "Tegangan, GND, dan breadboard",
+    "stage": 1,
+    "summary": "Fondasi sambungan aman untuk latihan tegangan rendah.",
+    "analogy": "Tegangan seperti beda tekanan; GND adalah titik acuan bersama untuk membaca sinyal.",
+    "explain": [
+      "Tegangan diukur antara dua titik. Ketika sensor dan ESP32 berkomunikasi dengan sinyal biasa, keduanya umumnya perlu acuan GND yang sama. Jalur GND bukan pengganti pemeriksaan spesifikasi daya.",
+      "Breadboard menyambungkan lubang dalam kelompok. Pada banyak model, lima lubang dalam satu baris terhubung, sedangkan celah tengah memisahkan kedua sisi. Rel daya panjang bisa terputus di tengah. Periksa model atau ukur kontinuitas ketika tanpa daya.",
+      "LED membutuhkan pembatas arus. Untuk latihan berikut, LED merah eksternal menggunakan resistor 330 Ω secara seri pada keluaran 3,3 V. Dengan perkiraan tegangan LED 2 V, arusnya sekitar (3,3−2)/330 = 0,0039 A atau 3,9 mA."
+    ],
+    "example": "LED tidak menyala karena dua kakinya ditempatkan dalam kelompok lubang yang sama sehingga tidak mendapat beda tegangan.",
+    "practice": [
+      "Cabut USB sebelum mengubah sambungan.",
+      "Tandai baris yang saling terhubung pada breadboard.",
+      "Rencanakan jalur GPIO → resistor → LED → GND."
+    ],
+    "warning": "Seluruh latihan awal memakai USB dan tegangan rendah. Jangan hubungkan breadboard ke listrik PLN.",
+    "check": "Mengapa LED memakai resistor seri?",
+    "answer": "Untuk membatasi arus. LED bukan beban yang aman dipasang langsung ke sumber tegangan.",
+    "nodes": [
+      "GPIO 23",
+      "Resistor 330 Ω",
+      "Anoda LED",
+      "Katoda LED",
+      "GND"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "persiapan-arduino-ide",
+    "title": "Menyiapkan Arduino IDE untuk ESP32",
+    "stage": 1,
+    "summary": "Dari papan terhubung hingga Serial Monitor terbaca.",
+    "analogy": "IDE seperti tempat menulis resep; proses upload mengirim resep itu ke pengendali.",
+    "explain": [
+      "Arduino IDE digunakan untuk menulis, memeriksa, dan mengunggah sketch. Dukungan ESP32 ditambahkan melalui Boards Manager dengan paket esp32 dari Espressif Systems. Ikuti panduan instalasi resmi agar alamat dan paket sesuai.",
+      "Hubungkan papan dengan kabel USB yang mendukung data. Pilih board sesuai model dan pilih port yang baru muncul. Kabel yang hanya bisa mengisi daya membuat papan menyala tetapi tidak dapat diunggah.",
+      "Mulai dengan sketch Serial sederhana. Kecepatan Serial Monitor harus sama dengan Serial.begin, misalnya 115200. Jika port tidak muncul, periksa kabel, izin port, dan driver USB-to-serial yang sesuai chip pada papan."
+    ],
+    "example": "Lampu daya menyala tetapi tidak ada port. Setelah kabel diganti dengan kabel data, port muncul.",
+    "practice": [
+      "Pasang paket esp32 resmi di Boards Manager.",
+      "Pilih papan dan port yang sesuai.",
+      "Unggah contoh berikut, buka Serial Monitor pada 115200, lalu tekan Reset."
+    ],
+    "warning": "Jangan memilih varian acak ketika upload gagal. Periksa model, kabel, dan pesan kesalahan terlebih dahulu.",
+    "check": "Mengapa tulisan Serial Monitor menjadi karakter acak?",
+    "answer": "Salah satu penyebab umum ialah baud rate monitor berbeda dari program. Samakan ke 115200 pada contoh ini.",
+    "nodes": [
+      "Tulis sketch",
+      "Pilih board",
+      "Pilih port",
+      "Upload",
+      "Serial Monitor"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "led-pertama",
+    "title": "Praktik pertama: LED berkedip",
+    "stage": 2,
+    "summary": "Buktikan alur program dan keluaran digital sebelum memakai internet.",
+    "analogy": "LED adalah tanda sederhana bahwa pengendali menjalankan instruksi.",
+    "explain": [
+      "Contoh menggunakan ESP32-DevKitC dengan ESP32 klasik dan LED merah eksternal pada GPIO23, bukan mengasumsikan LED bawaan. Periksa pinout papan sebelum meniru.",
+      "Dengan USB tercabut, sambungkan GPIO23 ke resistor 330 Ω, resistor ke anoda LED, dan katoda ke GND. Anoda biasanya kaki panjang, tetapi pastikan dari penanda komponen. Setelah diperiksa, hubungkan USB dan unggah kode.",
+      "pinMode menetapkan pin sebagai keluaran. digitalWrite HIGH memberi level logika tinggi, LOW rendah. delay menghentikan alur program sementara; cukup untuk demonstrasi ini, tetapi program dengan banyak pekerjaan nantinya lebih baik memakai penjadwalan millis."
+    ],
+    "example": "LED bergantian menyala 1 detik dan padam 1 detik, tanpa membutuhkan router atau cloud.",
+    "practice": [
+      "Rangkai LED eksternal sesuai uraian ketika USB tercabut.",
+      "Unggah sketch dan amati minimal lima siklus.",
+      "Ubah waktu padam menjadi 2000 ms lalu bandingkan pola."
+    ],
+    "warning": "Jika LED tidak menyala, cabut daya dan periksa polaritas serta nomor GPIO. Jangan meniadakan resistor.",
+    "check": "Apakah LED berkedip membuktikan Wi-Fi sudah terhubung?",
+    "answer": "Tidak. Program ini hanya menguji pengendali dan keluaran digital.",
+    "nodes": [
+      "GPIO23",
+      "330 Ω seri",
+      "LED merah",
+      "GND",
+      "Nyala / padam"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "membaca-sensor",
+    "title": "Membaca sensor: analog dan digital",
+    "stage": 2,
+    "summary": "Pahami angka mentah, satuan, dan pembacaan yang gagal.",
+    "analogy": "Angka sensor seperti hasil ujian: perlu tahu skala sebelum menafsirkan nilainya.",
+    "explain": [
+      "Sinyal analog berubah dalam rentang kontinu. ADC mengubah tegangan masukan menjadi angka. Angka mentah bukan otomatis volt, persen, atau derajat; konversi bergantung resolusi, konfigurasi, kalibrasi, dan sensor.",
+      "Sensor digital dapat mengirim hasil melalui protokol seperti I2C atau antarmuka khusus. DHT22 mengukur suhu dan kelembapan udara; bukan kelembapan tanah. Modul dan sensor tanpa papan tambahan mungkin membutuhkan pengawatan berbeda.",
+      "Catat nama sensor, satuan, interval baca, dan hasil gagal. Jangan mengganti kegagalan baca dengan angka 0 karena itu dapat disalahartikan sebagai pengukuran sungguhan. Gunakan status tidak valid dan waktu pembacaan terakhir."
+    ],
+    "example": "Dashboard menunjukkan 0 °C karena pembacaan gagal dan program menggantinya dengan nol. Status sensor seharusnya menjelaskan kegagalan.",
+    "practice": [
+      "Pilih satu datasheet sensor.",
+      "Cari tegangan kerja, antarmuka, satuan, dan interval pembacaannya.",
+      "Tulis contoh data valid serta data gagal tanpa menyalakan aktuator."
+    ],
+    "warning": "Rentang ADC dan toleransi tegangan pin berbeda menurut chip. Pastikan sinyal tidak melampaui batas masukan.",
+    "check": "Apakah angka ADC 2000 selalu berarti tanah 50% basah?",
+    "answer": "Tidak. Perlu kalibrasi dan pemetaan yang sesuai sensor serta kondisi pengukuran.",
+    "nodes": [
+      "Besaran fisik",
+      "Sinyal sensor",
+      "Pembacaan",
+      "Konversi satuan",
+      "Validasi"
+    ],
+    "minutes": 8
+  },
+  {
+    "slug": "wifi-ip",
+    "title": "Wi-Fi, IP, dan koneksi ke internet",
+    "stage": 3,
+    "summary": "Hubungkan konsep jaringan dengan papan IoT.",
+    "analogy": "Wi-Fi adalah pintu ke jaringan lokal; internet adalah perjalanan ke jaringan lain.",
+    "explain": [
+      "SSID adalah nama jaringan Wi-Fi. Setelah berhasil bergabung, perangkat memerlukan alamat IP, gateway, dan DNS agar dapat mengakses layanan dengan nama domain di luar jaringan lokal. Biasanya DHCP memberikan konfigurasi tersebut.",
+      "Contoh akademi memakai ESP32 klasik yang mendukung Wi-Fi 2,4 GHz. Jaringan 5 GHz saja tidak cocok untuk papan ini. Bergabung ke Wi-Fi juga belum membuktikan akses internet berhasil.",
+      "Periksa bertahap: papan menyala, Wi-Fi terhubung, IP didapat, nama layanan dapat dicari, lalu koneksi aplikasi berhasil. Hindari loop tunggu tanpa batas; beri waktu maksimum dan coba ulang dengan jeda."
+    ],
+    "example": "ESP32 mendapat IP tetapi tidak dapat mengirim data karena layanan tujuan tidak tersedia. Masalahnya tidak selalu sandi Wi-Fi.",
+    "practice": [
+      "Identifikasi SSID 2,4 GHz pada router milikmu.",
+      "Catat perbedaan alamat IP lokal dan alamat layanan tujuan.",
+      "Buat daftar pemeriksaan dari daya sampai aplikasi."
+    ],
+    "warning": "Jangan memasukkan sandi Wi-Fi asli dalam repository publik atau screenshot tutorial.",
+    "check": "Jika IP sudah didapat, apakah broker MQTT pasti dapat diakses?",
+    "answer": "Belum. DNS, rute, firewall, port, TLS, dan broker masih harus berfungsi.",
+    "nodes": [
+      "ESP32",
+      "Wi-Fi 2,4 GHz",
+      "IP / gateway",
+      "DNS",
+      "Layanan tujuan"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "http-json",
+    "title": "HTTP dan JSON: mengirim laporan",
+    "stage": 3,
+    "summary": "Kenali permintaan, respons, dan format isi pesan.",
+    "analogy": "HTTP seperti mengirim formulir; JSON seperti susunan kolom yang disepakati.",
+    "explain": [
+      "HTTP menggunakan permintaan dan respons. GET lazim dipakai untuk mengambil data; POST untuk mengirim data agar diproses. URL menunjukkan tujuan, header berisi metadata, dan body dapat membawa payload JSON.",
+      "JSON menyusun data sebagai pasangan nama dan nilai. Misalnya deviceId adalah teks, temperature bernilai angka 29.4, dan valid bernilai boolean true. Kirim satuan dan waktu agar data tidak ambigu.",
+      "Periksa kode status dan isi respons. Respons berhasil belum berarti data tampil benar; cocokkan identitas perangkat, waktu, dan nilai yang tersimpan. Untuk koneksi internet gunakan HTTPS dan validasi sertifikat."
+    ],
+    "example": "Perangkat mengirim suhu tiap 30 detik. Dashboard menampilkan hasil beserta waktu terakhir diterima.",
+    "practice": [
+      "Baca contoh JSON pada halaman ini.",
+      "Tentukan field identitas, angka, satuan, dan status.",
+      "Jelaskan apa yang terjadi jika server mengembalikan kesalahan dan mengapa retry perlu jeda."
+    ],
+    "warning": "Jangan menaruh API key pada URL publik. Jangan mematikan validasi TLS agar koneksi terlihat berhasil.",
+    "check": "Apa beda HTTP dan JSON?",
+    "answer": "HTTP mengatur pertukaran permintaan/respons. JSON adalah salah satu format isi data yang dibawa.",
+    "nodes": [
+      "Perangkat",
+      "POST HTTPS",
+      "JSON payload",
+      "Server memvalidasi",
+      "Respons"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "mqtt-topic",
+    "title": "MQTT: publisher, broker, dan subscriber",
+    "stage": 3,
+    "summary": "Belajar pengiriman pesan dengan analogi papan pengumuman.",
+    "analogy": "Publisher menitipkan kabar di papan bertema; subscriber menerima kabar dari tema yang diikutinya.",
+    "explain": [
+      "MQTT memakai broker sebagai perantara. Publisher mengirim pesan ke topic, sedangkan subscriber berlangganan topic. Satu perangkat dapat menjadi keduanya: mengirim suhu sekaligus menerima perintah.",
+      "Gunakan topic yang mudah dibaca, misalnya rumah/ruang1/suhu. Pisahkan topic telemetry, command, dan state agar angka sensor tidak tertukar dengan perintah. MQTT bukan format isi; payload bisa JSON atau teks sesuai kesepakatan.",
+      "QoS 0 dapat kehilangan pesan; QoS 1 dapat mengirim ulang sehingga penerima harus tahan duplikasi. Retained message adalah nilai terakhir pada topic, bukan riwayat lengkap. Jangan memakai retained command untuk tindakan berbahaya yang dapat terulang saat perangkat tersambung lagi."
+    ],
+    "example": "Sensor menerbitkan suhu ke rumah/ruang1/suhu. Dashboard berlangganan topic itu tanpa meminta data satu per satu.",
+    "practice": [
+      "Rancang tiga topic: suhu, perintah LED, dan status LED.",
+      "Tentukan siapa publisher dan subscriber untuk masing-masing.",
+      "Tuliskan respons aman terhadap perintah ON yang diterima dua kali."
+    ],
+    "warning": "Broker publik bukan tempat mengirim identitas, sandi, atau data privat. Gunakan autentikasi, izin topic, dan TLS pada implementasi nyata.",
+    "check": "Apakah retained message menyimpan semua pembacaan sebelumnya?",
+    "answer": "Tidak. Retained menyimpan pesan terakhir pada topic tersebut; histori membutuhkan penyimpanan lain.",
+    "nodes": [
+      "Publisher",
+      "Topic suhu",
+      "Broker",
+      "Subscriber",
+      "Dashboard"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "dashboard-data",
+    "title": "Dashboard dan data yang bisa dipercaya",
+    "stage": 4,
+    "summary": "Tampilkan satuan, waktu, histori, dan status perangkat.",
+    "analogy": "Dashboard seperti panel kendaraan: angka saja belum cukup tanpa satuan dan lampu status.",
+    "explain": [
+      "Dashboard membantu melihat keadaan terkini dan perubahan dari waktu ke waktu. Minimal tampilkan identitas perangkat, nilai beserta satuan, waktu pembaruan, dan apakah data masih segar.",
+      "Jika perangkat biasa mengirim tiap 30 detik tetapi tidak ada kabar selama beberapa interval, tandai data sebagai terlambat. Ambang harus disesuaikan kebutuhan; jangan terus menampilkan nilai lama seolah-olah baru.",
+      "Bedakan waktu pengukuran dengan waktu server menerima data. Untuk histori, simpan catatan berurutan dan jelaskan zona waktu. Grafik bukan bukti sensor benar; bandingkan dengan alat acuan dan kondisi fisik."
+    ],
+    "example": "Suhu terakhir 27 °C terlihat aman, tetapi cap waktunya dua jam lalu. Petugas perlu mengetahui perangkat sedang offline.",
+    "practice": [
+      "Sketsa kartu dashboard berisi suhu, satuan, waktu, dan status.",
+      "Tentukan kapan data dinyatakan terlambat.",
+      "Tambahkan tampilan pembacaan tidak valid yang berbeda dari 0 °C."
+    ],
+    "warning": "Jangan menampilkan angka terlalu presisi dibanding kemampuan sensor. Banyak angka desimal tidak menambah ketelitian.",
+    "check": "Mengapa cap waktu penting?",
+    "answer": "Untuk membedakan kondisi terkini dari data lama yang belum diperbarui.",
+    "nodes": [
+      "Pengukuran",
+      "Waktu ukur",
+      "Penyimpanan",
+      "Grafik",
+      "Status data"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "otomatisasi-histeresis",
+    "title": "Otomatisasi dan histeresis",
+    "stage": 4,
+    "summary": "Buat aturan yang tidak bolak-balik saat nilai berfluktuasi.",
+    "analogy": "Seperti pintu dengan dua batas: masuk pada satu batas, keluar pada batas yang berbeda.",
+    "explain": [
+      "Aturan satu ambang dapat membuat keluaran sering berubah ketika nilai sensor naik-turun sedikit di sekitar batas. Histeresis memakai dua ambang untuk menstabilkan keputusan.",
+      "Contoh simulasi: indikator pendingin ON saat suhu mencapai 30 °C, OFF ketika turun sampai 28 °C. Pada 29 °C status sebelumnya dipertahankan. Inilah sebabnya hasil tidak hanya bergantung angka saat ini.",
+      "Tentukan keadaan awal, penanganan sensor gagal, dan prioritas kontrol manual. Untuk beban sungguhan, batas waktu operasi dan proteksi harus mengikuti karakteristik alat. Simulator hanya menunjukkan logika dengan indikator, bukan pengawatan kipas atau listrik PLN."
+    ],
+    "example": "Tanpa histeresis, nilai 29,9 → 30,1 → 29,9 membuat keluaran berulang kali berubah. Dua ambang mengurangi perubahan tersebut.",
+    "practice": [
+      "Buka simulator pada beranda akademi.",
+      "Naikkan suhu sampai 30 lalu turunkan ke 29.",
+      "Turunkan ke 28 dan jelaskan perubahan status."
+    ],
+    "warning": "Saat sensor gagal, pilihan aman bergantung aplikasi. Jangan otomatis menyalakan semua beban sebagai respons umum.",
+    "check": "Setelah ON di 30 °C lalu turun ke 29 °C, statusnya apa?",
+    "answer": "Tetap ON. Status baru OFF ketika mencapai 28 °C atau lebih rendah.",
+    "nodes": [
+      "Baca suhu",
+      "≥30: ON",
+      "28–30: tahan",
+      "≤28: OFF",
+      "Ulangi"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "keamanan-iot",
+    "title": "Keamanan, privasi, dan perangkat offline",
+    "stage": 4,
+    "summary": "Bangun kebiasaan dasar sebelum perangkat dipakai sungguhan.",
+    "analogy": "Perangkat terhubung seperti rumah berpintu: koneksi juga membutuhkan kunci dan aturan akses.",
+    "explain": [
+      "Gunakan identitas dan kredensial per perangkat jika layanan mendukungnya. Batasi akses hanya ke data atau topic yang diperlukan. Jangan memakai akun administrator sebagai identitas seluruh sensor.",
+      "Enkripsi melindungi data dalam perjalanan, sedangkan autentikasi memeriksa identitas. Keduanya tidak menggantikan izin akses. Validasi sertifikat TLS; jangan menyimpan rahasia dalam kode publik.",
+      "Rancang saat koneksi hilang: tandai offline, batasi antrean data, gunakan jeda reconnect, dan simpan aturan lokal yang memang aman. Pembaruan firmware perlu sumber tepercaya serta mekanisme pemulihan sesuai platform."
+    ],
+    "example": "Satu sensor ruang tamu hanya boleh menerbitkan pembacaannya sendiri, bukan memerintah semua perangkat rumah.",
+    "practice": [
+      "Tulis data apa yang benar-benar perlu dikirim.",
+      "Buat izin minimal untuk sensor dan dashboard.",
+      "Simulasikan internet mati dan tentukan tampilan serta perilaku lokal yang diharapkan."
+    ],
+    "warning": "Jangan membuka port perangkat langsung ke internet hanya demi akses dari luar. Pilih akses yang terautentikasi dan terkelola.",
+    "check": "Apakah TLS membuat semua pengguna boleh membaca semua data?",
+    "answer": "Tidak. TLS melindungi koneksi. Hak membaca dan menulis tetap harus dibatasi.",
+    "nodes": [
+      "Identitas",
+      "Autentikasi",
+      "Izin minimum",
+      "TLS",
+      "Pemantauan"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "proyek-monitor-suhu",
+    "title": "Proyek terpandu: pemantau suhu ruangan",
+    "stage": 5,
+    "summary": "Gabungkan pengukuran, jaringan, dashboard, dan pengujian.",
+    "analogy": "Bangun satu rantai yang dapat diperiksa, bukan banyak fitur sekaligus.",
+    "explain": [
+      "Tujuan proyek adalah menampilkan suhu ruangan beserta waktu dan status pembacaan. Pilih ESP32 dan sensor digital yang kompatibel 3,3 V, lalu gunakan contoh resmi library sensor yang sesuai model. Proyek ini adalah panduan integrasi; kode sensor bergantung perangkat yang kamu pilih.",
+      "Buktikan sensor terbaca di Serial Monitor terlebih dahulu. Setelah satuan dan hasil masuk akal, tambahkan koneksi Wi-Fi lalu kirim payload berisi deviceId, temperature, unit, valid, dan waktu. Pilih HTTP atau MQTT yang sudah dipelajari.",
+      "Dashboard menampilkan hasil beserta usia data. Uji kondisi normal, sensor dicabut ketika daya mati lalu dinyalakan kembali, internet terputus, dan perangkat restart. Catat hasil yang diharapkan sebelum menguji. Jangan menghubungkan proyek pemula ke sistem keselamatan atau pengendali beban kritis."
+    ],
+    "example": "Pemantau ruang kerja menunjukkan suhu naik pada siang hari. Pengguna dapat melihat tren dan memeriksa ventilasi.",
+    "practice": [
+      "Siapkan daftar komponen dan pinout sensor.",
+      "Uji pembacaan lokal lalu simpan log beberapa menit.",
+      "Kirim data ke layanan milik sendiri dan verifikasi nilai yang sama di dashboard.",
+      "Putuskan internet sementara; pastikan status lama terdeteksi dan pengiriman pulih dengan jeda.",
+      "Dokumentasikan wiring, versi library, payload, dan hasil pengujian."
+    ],
+    "warning": "Jangan menghangatkan sensor dengan api atau mencelupkan modul yang tidak tahan air. Gunakan perubahan suhu lingkungan yang wajar.",
+    "check": "Apa tanda proyek sudah selesai selain angka tampil?",
+    "answer": "Data memiliki satuan dan waktu, hasil gagal ditangani, offline terlihat, serta koneksi dapat pulih setelah gangguan.",
+    "nodes": [
+      "Sensor suhu",
+      "ESP32",
+      "HTTP / MQTT",
+      "Penyimpanan",
+      "Dashboard"
+    ],
+    "minutes": 12
+  },
+  {
+    "slug": "troubleshooting-lanjutan",
+    "title": "Troubleshooting dan arah belajar berikutnya",
+    "stage": 5,
+    "summary": "Cari penyebab secara berurutan, lalu pilih proyek berikut.",
+    "analogy": "Memeriksa IoT seperti menelusuri paket: temukan tahap terakhir yang masih berhasil.",
+    "explain": [
+      "Mulai dari daya dan sambungan, lalu program, sensor, Wi-Fi, IP/DNS, koneksi layanan, dan akhirnya tampilan. Ubah satu hal setiap kali agar penyebab dapat diketahui. Catat pesan kesalahan, model papan, dan versi library.",
+      "Jika Serial Monitor benar tetapi dashboard kosong, fokus ke pengiriman dan server. Jika JSON diterima server tetapi kartu salah, fokus ke pemetaan field, satuan, dan waktu. Jangan langsung mengganti sensor untuk semua masalah.",
+      "Setelah proyek suhu lulus uji, pilih satu pengembangan: pencatat cahaya, alarm pintu dengan sensor magnet, atau kelembapan tanah dengan kalibrasi. Lanjutkan ke millis, I2C, manajemen daya, provisioning, dan pembaruan firmware setelah fondasi kuat."
+    ],
+    "example": "Suhu terkirim sebagai temperature, tetapi dashboard mencari temp. Koneksi baik; nama field yang tidak cocok menyebabkan tampilan kosong.",
+    "practice": [
+      "Buat tabel tahap, bukti berhasil, dan dugaan masalah.",
+      "Telusuri satu contoh gangguan dari paling bawah.",
+      "Pilih satu proyek lanjutan dan tulis kriteria berhasilnya sebelum membeli komponen."
+    ],
+    "warning": "Jangan mengubah wiring ketika masih diberi daya. Jangan memasukkan kata sandi atau token dalam log yang dibagikan.",
+    "check": "Serial benar, server menerima data, tetapi dashboard kosong. Tahap mana diperiksa lebih dulu?",
+    "answer": "Pemetaan data dan tampilan dashboard: nama field, tipe nilai, filter perangkat, serta rentang waktu.",
+    "nodes": [
+      "Daya",
+      "Program / sensor",
+      "Jaringan",
+      "Layanan",
+      "Tampilan"
+    ],
+    "minutes": 12
+  }
+]

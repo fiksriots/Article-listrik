@@ -21,3 +21,5 @@
 
 /* MTCRE learning path */
 .mtcre-group{margin:2.5rem 0}.mtcre-group h3{font-size:1.35rem;margin-bottom:1rem}.mtcre-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.mtcre-card{display:block;padding:1.5rem;border:1px solid #dbe5e0;border-radius:18px;background:#fff;color:#173c32;text-decoration:none}.mtcre-card:hover{border-color:#26735a;background:#f4faf6}.mtcre-card small{font-size:.7rem;letter-spacing:.08em}.mtcre-card h4{font-size:1.2rem;margin:.8rem 0}.mtcre-card p{line-height:1.7;color:#53675e}.mtcre-card span{display:block;margin-top:1rem;font-weight:700}.net-cli{overflow-x:auto;background:#132c25;color:#e1f4e9;border-radius:12px;padding:1.25rem;line-height:1.9;font-size:.85rem}@media(max-width:640px){.mtcre-grid{grid-template-columns:1fr}}
+
+.hub-iot{background:#f0effb}.hub-iot .hub-card-icon{color:#6366a5}@media(min-width:1100px){.hub-academies{grid-template-columns:repeat(3,minmax(0,1fr))}.hub-card{padding:30px}}
