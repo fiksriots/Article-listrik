@@ -100,3 +100,6 @@ Empat tahap setelah jalur MTCNA menambah VLSM, alamat IPv6, RA/SLAAC/DHCPv6, DNS
 
 ## Persiapan MTCRE
 20 modul tambahan di `/jaringan/mtcre`, mencakup pemilihan route, recursive failover, ECMP, policy routing, OSPF, area, redistribusi, dan tunnel. Setiap modul memiliki analogi, SVG original, lima langkah praktik dan cek pemahaman. Sumber PDF pengguna dicatat per halaman; berkas sumber tidak dipublikasikan. Terminologi RouterOS v7 disesuaikan dengan dokumentasi resmi.
+
+## Simulator OSPF
+`/jaringan/simulator/ospf`: empat router satu area, cost simetris 1–65535, cost LAN tujuan, pemilihan seluruh jalur termurah, ECMP, dan gangguan link. Model setelah konvergensi; tidak mengirim paket nyata atau menghitung timer. Jalankan `node scripts/check-ospf.cjs`.
