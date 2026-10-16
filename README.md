@@ -103,3 +103,6 @@ Empat tahap setelah jalur MTCNA menambah VLSM, alamat IPv6, RA/SLAAC/DHCPv6, DNS
 
 ## Simulator OSPF
 `/jaringan/simulator/ospf`: empat router satu area, cost simetris 1–65535, cost LAN tujuan, pemilihan seluruh jalur termurah, ECMP, dan gangguan link. Model setelah konvergensi; tidak mengirim paket nyata atau menghitung timer. Jalankan `node scripts/check-ospf.cjs`.
+
+## Lab MTCRE dan failover
+20 lab konfigurasi di `/jaringan/mtcre/lab/[slug]` dengan pemetaan referensi PDF, topologi SVG baru, tabel IP/port, konfigurasi per perangkat, panduan menu v7, prediksi hasil, diagnosis dan pemulihan. Mencakup static, gateway/recursive failover, ECMP, policy/mangle, dua TTL, single-area/redundancy/multi-area 3 dan 4 router, network type, stub/NSSA, E1/E2, GRE dan EoIP. Model interaktif dua ISP di `/jaringan/simulator/failover`. Semua contoh untuk CHR/router kosong di lab terisolasi; hasil perangkat nyata belum diuji otomatis. Feed portofolio juga mencakup semua lab.

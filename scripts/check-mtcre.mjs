@@ -14,7 +14,7 @@ for(const l of lessons){
  assert.ok(page.includes('Cek pemahaman')&&page.includes('Praktik lab langkah demi langkah'));
 }
 const api=JSON.parse(fs.readFileSync('.next/server/app/api/articles.body','utf8'));
-assert.equal(api.items.length,112);
-assert.equal(new Set(api.items.map(i=>i.id)).size,112);
+assert.ok(api.items.length>=112);
+assert.equal(new Set(api.items.map(i=>i.id)).size,api.items.length);
 for(const l of lessons)assert.ok(api.items.some(i=>i.slug===l.slug));
-console.log('PASS: 20 MTCRE routes rendered, roadmap links, page references, illustrations, labs, self-checks, and 112 unique portfolio feed entries');
+console.log('PASS: 20 MTCRE routes rendered, roadmap links, page references, illustrations, labs, self-checks, and unique portfolio feed entries');
