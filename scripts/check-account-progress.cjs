@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');const vm=require('node:vm');const ts=require('typescript');
+class Storage{constructor(){this.data=new Map()}get length(){return this.data.size}key(n){return [...this.data.keys()][n]??null}getItem(k){return this.data.get(k)??null}setItem(k,v){this.data.set(k,String(v))}removeItem(k){this.data.delete(k)}}
+const localStorage=new Storage();const moduleExports={};
+const code=ts.transpileModule(fs.readFileSync('lib/auth/progress-store.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
+const context={exports:moduleExports,localStorage,window:{dispatchEvent(){}},Event:class{constructor(type){this.type=type}},Date,Math};vm.runInNewContext(code,context);const s=moduleExports;
+localStorage.setItem('lesson-apa-itu-listrik','done');localStorage.setItem('fiks-network-progress-v1',JSON.stringify(['ip-mac',null,3,'../../bad']));localStorage.setItem('fiks-iot-progress-v1',JSON.stringify(['apa-itu-iot']));
+s.migrateLegacy();assert.equal(s.readDone('listrik','apa-itu-listrik'),true);assert.equal(s.readDone('jaringan','ip-mac'),true);assert.equal(s.readDone('iot','apa-itu-iot'),true);assert.equal(Object.keys(s.readMap()).length,3);
+s.saveDone('iot','apa-itu-iot',false);s.migrateLegacy();assert.equal(s.readDone('iot','apa-itu-iot'),false,'migration must not resurrect unmarked legacy progress');
+const guest=s.readMap(null);s.setOwner('account-A');assert.equal(s.readDone('listrik','apa-itu-listrik'),false,'guest and user must be isolated before merge');
+const remote=[{academy:'jaringan',lesson_slug:'ip-mac',completed:false}];const merged=s.mergeRemote(s.readMap(),remote,guest);assert.equal(merged['jaringan/ip-mac'].completed,false,'guest import must respect account false tombstones');assert.equal(merged['listrik/apa-itu-listrik'].completed,true);s.writeMap('account-A',merged);s.finishGuestImport('account-A',guest);assert.equal(s.guestImportDone('account-A'),true);assert.equal(Object.keys(s.readMap(null)).length,0);
+s.saveDone('iot','sensor-aktuator',true);const sent=s.readMap();s.saveDone('iot','sensor-aktuator',false);const ack=s.acknowledge(s.readMap(),sent);assert.equal(ack['iot/sensor-aktuator'].completed,false);assert.equal(ack['iot/sensor-aktuator'].dirty,true,'in-flight acknowledgement must preserve new click');
+const pulled=s.mergeRemote(ack,[{academy:'iot',lesson_slug:'sensor-aktuator',completed:true}]);assert.equal(pulled['iot/sensor-aktuator'].completed,false,'remote refresh must preserve offline removal');
+s.writeMap('account-A',s.acknowledge(pulled,pulled));const onOtherDevice=s.mergeRemote(s.readMap(),[{academy:'iot',lesson_slug:'sensor-aktuator',completed:true}]);assert.equal(onOtherDevice['iot/sensor-aktuator'].completed,true,'clean cached progress follows other device');
+s.setOwner(null);assert.equal(s.readDone('listrik','apa-itu-listrik'),false,'logout must not expose user progress as guest');s.setOwner('account-B');assert.equal(Object.keys(s.readMap()).length,0,'second account must not inherit first account');s.setOwner('account-A');assert.ok(Object.keys(s.readMap()).length>0,'first account cache remains intact');
+localStorage.setItem('fiks-learning-v2:account-A','null');assert.equal(Object.keys(s.readMap()).length,0,'corrupt cache is ignored');
+console.log('PASS: legacy migration, undo persistence, private account caches, guest merge, offline removal, in-flight edits, remote refresh, and corrupt cache handling.');
