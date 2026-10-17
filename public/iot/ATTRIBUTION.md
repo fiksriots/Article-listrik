@@ -5,3 +5,5 @@
 - Additional component photographs reuse the existing site collection; see public/devices/ATTRIBUTION.md and visible image credits.
 
 - atlas-sensor.svg and the eight hardware lesson SVGs: original Fiks Learn IoT vector illustrations. Simplified educational shapes, not photographs, physical scale, or pinout/wiring diagrams.
+
+- Arduino A–D lesson diagrams and button/LM35/I2C connection SVGs are original Fiks educational vectors. They show conceptual or named-pin relationships, not photographs or physical pin positions.

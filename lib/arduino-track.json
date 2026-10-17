@@ -1,0 +1,48 @@
+[
+  {
+    "id": "A",
+    "title": "Mengenal Dasar IoT dan Arduino",
+    "slugs": [
+      "apa-itu-iot",
+      "arduino-pengenalan",
+      "listrik-breadboard",
+      "persiapan-arduino-ide",
+      "arduino-pemrograman"
+    ]
+  },
+  {
+    "id": "B",
+    "title": "Input-Output Arduino dan Sensor",
+    "slugs": [
+      "arduino-led",
+      "arduino-tombol-led",
+      "arduino-relay-lampu",
+      "arduino-analog-pwm",
+      "arduino-lcd-paralel",
+      "arduino-pir",
+      "arduino-lm35"
+    ]
+  },
+  {
+    "id": "C",
+    "title": "Pengendalian Motor dan Komunikasi I2C",
+    "slugs": [
+      "arduino-motor-dc",
+      "arduino-servo",
+      "arduino-stepper",
+      "arduino-i2c",
+      "arduino-lcd-i2c",
+      "arduino-rtc-ds1307"
+    ]
+  },
+  {
+    "id": "D",
+    "title": "Komunikasi Arduino dengan Internet",
+    "slugs": [
+      "arduino-esp8266-at",
+      "arduino-platform-iot",
+      "arduino-web-lampu",
+      "arduino-kirim-data-web"
+    ]
+  }
+]

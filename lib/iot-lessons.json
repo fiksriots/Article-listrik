@@ -8,7 +8,8 @@
     "explain": [
       "Internet of Things, disingkat IoT, adalah kumpulan benda fisik yang memiliki perangkat elektronik, program, dan koneksi untuk bertukar data. Contohnya alat pemantau suhu ruangan yang mengirim hasil ukur ke dashboard.",
       "Tidak semua alat otomatis adalah IoT. Lampu dengan timer dapat bekerja sendiri tanpa jaringan. Ketika data atau perintah dapat dipertukarkan melalui jaringan, perangkat mulai memiliki kemampuan yang kita gunakan dalam sistem IoT.",
-      "Internet membantu akses dari tempat berbeda. Namun pembacaan sensor dan aturan lokal dapat tetap berjalan saat internet terputus, jika program memang dirancang seperti itu. Jangan menganggap semua perangkat pasti tetap berfungsi tanpa cloud."
+      "Internet membantu akses dari tempat berbeda. Namun pembacaan sensor dan aturan lokal dapat tetap berjalan saat internet terputus, jika program memang dirancang seperti itu. Jangan menganggap semua perangkat pasti tetap berfungsi tanpa cloud.",
+      "Pada jalur Arduino A–D, UNO menangani input/output dan ESP8266 berfirmware AT menambahkan koneksi. Pekerjaan lokal seperti membaca tombol tetap berbeda dari pertukaran data melalui jaringan."
     ],
     "example": "Suhu ruang server terlihat dari ponsel; teknisi datang setelah melihat suhu meningkat, bukan menunggu perangkat mati.",
     "practice": [
@@ -866,7 +867,8 @@
     "explain": [
       "Tegangan diukur antara dua titik. Ketika sensor dan ESP32 berkomunikasi dengan sinyal biasa, keduanya umumnya perlu acuan GND yang sama. Jalur GND bukan pengganti pemeriksaan spesifikasi daya.",
       "Breadboard menyambungkan lubang dalam kelompok. Pada banyak model, lima lubang dalam satu baris terhubung, sedangkan celah tengah memisahkan kedua sisi. Rel daya panjang bisa terputus di tengah. Periksa model atau ukur kontinuitas ketika tanpa daya.",
-      "LED membutuhkan pembatas arus. Untuk latihan berikut, LED merah eksternal menggunakan resistor 330 Ω secara seri pada keluaran 3,3 V. Dengan perkiraan tegangan LED 2 V, arusnya sekitar (3,3−2)/330 = 0,0039 A atau 3,9 mA."
+      "LED membutuhkan pembatas arus. Untuk latihan berikut, LED merah eksternal menggunakan resistor 330 Ω secara seri pada keluaran 3,3 V. Dengan perkiraan tegangan LED 2 V, arusnya sekitar (3,3−2)/330 = 0,0039 A atau 3,9 mA.",
+      "Pada jalur Arduino UNO R3, gunakan 5V dan GND papan sebagai acuan hanya untuk komponen yang cocok. Project board dan breadboard adalah istilah untuk papan prototipe tanpa solder; ikuti peta kelompok kontak dan jangan menganggap rel daya selalu tersambung penuh."
     ],
     "example": "LED tidak menyala karena dua kakinya ditempatkan dalam kelompok lubang yang sama sehingga tidak mendapat beda tegangan.",
     "practice": [
@@ -895,7 +897,8 @@
     "explain": [
       "Arduino IDE digunakan untuk menulis, memeriksa, dan mengunggah sketch. Dukungan ESP32 ditambahkan melalui Boards Manager dengan paket esp32 dari Espressif Systems. Ikuti panduan instalasi resmi agar alamat dan paket sesuai.",
       "Hubungkan papan dengan kabel USB yang mendukung data. Pilih board sesuai model dan pilih port yang baru muncul. Kabel yang hanya bisa mengisi daya membuat papan menyala tetapi tidak dapat diunggah.",
-      "Mulai dengan sketch Serial sederhana. Kecepatan Serial Monitor harus sama dengan Serial.begin, misalnya 115200. Jika port tidak muncul, periksa kabel, izin port, dan driver USB-to-serial yang sesuai chip pada papan."
+      "Mulai dengan sketch Serial sederhana. Kecepatan Serial Monitor harus sama dengan Serial.begin, misalnya 115200. Jika port tidak muncul, periksa kabel, izin port, dan driver USB-to-serial yang sesuai chip pada papan.",
+      "Khusus jalur Arduino UNO R3: pilih Arduino Uno pada paket Arduino AVR Boards, bukan ESP32. Jika paket belum ada, pasang Arduino AVR Boards melalui Boards Manager. Pilih port UNO dan mulai dengan contoh Serial; baud monitor mengikuti Serial.begin. Library tambahan dipasang per modul, tidak perlu menginstal semuanya sekaligus."
     ],
     "example": "Lampu daya menyala tetapi tidak ada port. Setelah kabel diganti dengan kabel data, port muncul.",
     "practice": [
@@ -1206,5 +1209,1436 @@
       "Tampilan"
     ],
     "minutes": 12
+  },
+  {
+    "slug": "arduino-pengenalan",
+    "title": "Apa itu Arduino dan bagaimana memilih papan?",
+    "summary": "Kenali ekosistem Arduino, UNO R3, pin, sketch, dan alur belajar yang akan diikuti.",
+    "stage": 6,
+    "minutes": 18,
+    "analogy": "Arduino seperti meja kerja siap pakai: papan menjadi alatnya, IDE tempat menulis instruksi, dan library menyediakan alat bantu.",
+    "explain": [
+      "Arduino mencakup papan, perangkat lunak, serta ekosistem library. Nama Arduino bukan nama satu chip. Dalam jalur ini, contoh utama memakai UNO R3 berbasis ATmega328P agar pin, ADC, dan contoh rangkaiannya konsisten.",
+      "UNO R3 memiliki pin digital, pin analog, USB, dan catu daya. Pin berlabel ~ mendukung PWM pada papan ini. Konektor bertuliskan 5V adalah jalur daya, sedangkan D2 atau A0 adalah pin yang dipakai untuk sinyal sesuai fungsinya.",
+      "Jalur A memahami papan dan program. Jalur B membaca input dan mengatur output. Jalur C menambahkan motor serta perangkat I2C. Jalur D menghubungkan UNO ke jaringan melalui ESP8266 berfirmware AT. Jalankan satu sketch latihan setiap kali; contoh tidak otomatis aman digabung tanpa meninjau pin dan daya."
+    ],
+    "example": "Kamu dapat membedakan papan, chip, IDE, dan library sebelum mulai merangkai.",
+    "practice": [
+      "Temukan tulisan UNO dan chip ATmega328P pada papan atau dokumentasinya.",
+      "Identifikasi USB, 5V, GND, A0, D2, dan tanda ~.",
+      "Buka jalur A–D dan tentukan target proyek kecil pertama."
+    ],
+    "warning": "Pin UNO R3 tidak sama dengan ESP32. Seluruh wiring pada jalur Arduino ini harus dibaca bersama nama papan yang disebutkan.",
+    "check": "Apakah menginstal IDE berarti mikrokontroler pada papan berubah menjadi Arduino?",
+    "answer": "Tidak. IDE adalah perangkat lunak untuk memprogram papan; jenis chip dan kemampuan listrik papan tetap sama.",
+    "nodes": [
+      "Papan UNO R3",
+      "Arduino IDE",
+      "Sketch",
+      "Upload",
+      "Input / output"
+    ],
+    "sources": [
+      {
+        "title": "Arduino UNO R3",
+        "url": "https://docs.arduino.cc/hardware/uno-rev3/"
+      }
+    ],
+    "arduino": {
+      "section": "A",
+      "parts": [
+        "Arduino UNO R3",
+        "Kabel USB data",
+        "Komputer dengan Arduino IDE"
+      ],
+      "wiring": [
+        [
+          "Papan",
+          "UNO R3 / ATmega328P; contoh bukan UNO R4 atau ESP32."
+        ],
+        [
+          "USB",
+          "Hubungkan kabel data ke komputer untuk pemrograman awal."
+        ],
+        [
+          "Pin",
+          "Belum perlu memasang komponen untuk tahap pengenalan."
+        ]
+      ],
+      "blocks": [],
+      "result": "Kamu dapat membedakan papan, chip, IDE, dan library sebelum mulai merangkai.",
+      "troubleshoot": [
+        "Jika model papan berbeda, cari dokumentasi model tersebut; jangan menebak susunan pinnya."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-pemrograman",
+    "title": "Pemrograman Arduino: setup, loop, dan logika",
+    "summary": "Mulai dari variabel, fungsi, kondisi, dan waktu menggunakan Serial Monitor.",
+    "stage": 6,
+    "minutes": 18,
+    "analogy": "setup seperti persiapan membuka toko; loop seperti kegiatan yang diulang selama toko masih buka.",
+    "explain": [
+      "setup dijalankan sekali ketika papan mulai atau di-reset. loop dipanggil berulang setelah setup selesai. Variabel menyimpan nilai, sedangkan fungsi membantu memecah tugas menjadi bagian yang mudah dipahami.",
+      "Contoh ini menghitung detik tanpa menghentikan seluruh program dengan delay panjang. millis memberikan waktu berjalan dalam milidetik. Pengurangan unsigned seperti now - last menjaga perbandingan interval tetap bekerja saat penghitung berputar kembali.",
+      "Serial.begin menyiapkan komunikasi ke komputer. Serial.print menulis tanpa pindah baris dan Serial.println mengakhiri baris. Jika if berisi kondisi benar, instruksi di dalamnya dijalankan. Setelah contoh ini, pola yang sama bisa dipakai membaca tombol sambil memperbarui indikator."
+    ],
+    "example": "Serial Monitor menampilkan Detik: 1, Detik: 2, dan seterusnya.",
+    "practice": [
+      "Pilih board Arduino Uno dan port yang tepat.",
+      "Unggah sketch, buka Serial Monitor pada 115200.",
+      "Amati nilai bertambah setiap sekitar satu detik.",
+      "Tekan Reset dan lihat hitungan dimulai kembali."
+    ],
+    "warning": "Gunakan contoh untuk UNO R3. Pada proyek besar, bedakan nilai waktu bertipe unsigned long dan nilai sensor; jangan memakai int untuk semua data.",
+    "check": "Apa yang terjadi pada setup ketika tombol Reset ditekan?",
+    "answer": "setup berjalan lagi satu kali, lalu loop kembali berulang.",
+    "nodes": [
+      "Variabel",
+      "setup sekali",
+      "loop berulang",
+      "if / kondisi",
+      "Serial Monitor"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "A",
+      "parts": [
+        "UNO R3",
+        "USB data",
+        "Arduino IDE"
+      ],
+      "wiring": [
+        [
+          "USB",
+          "UNO R3 → komputer."
+        ],
+        [
+          "Serial Monitor",
+          "115200 baud; tidak memerlukan komponen tambahan."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "unsigned long last = 0;\nunsigned long seconds = 0;\nvoid setup() {\n  Serial.begin(115200);\n  Serial.println(F(\"Belajar Arduino dimulai\"));\n}\nvoid loop() {\n  unsigned long now = millis();\n  if (now - last >= 1000UL) {\n    last = now;\n    seconds++;\n    Serial.print(F(\"Detik: \"));\n    Serial.println(seconds);\n  }\n}\n"
+        }
+      ],
+      "result": "Serial Monitor menampilkan Detik: 1, Detik: 2, dan seterusnya.",
+      "troubleshoot": [
+        "Tulisan acak: samakan baud rate.",
+        "Tidak tampil: periksa board, port, kabel data, dan tekan Reset."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-led",
+    "title": "LED Arduino: hidup, mati, dan urutan program",
+    "summary": "Praktik output digital pertama menggunakan LED bawaan UNO R3.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "HIGH dan LOW seperti dua posisi saklar; program menentukan kapan berpindah.",
+    "explain": [
+      "LED bawaan UNO R3 yang berlabel L terhubung ke pin yang diwakili LED_BUILTIN. Contoh ini menghindari kesalahan polaritas pada latihan pertama dan tidak memerlukan resistor eksternal untuk LED bawaan tersebut.",
+      "pinMode mengatur pin sebagai OUTPUT. digitalWrite HIGH atau LOW memilih level keluarannya. Untuk LED eksternal, tetap gunakan resistor seri; contoh sambungan opsional memakai D8 → 330 Ω → anoda LED merah, katoda → GND.",
+      "delay cukup untuk memahami urutan berkedip. Namun selama delay, loop tidak mengerjakan tugas lain. Setelah pola dasarnya dipahami, bandingkan dengan contoh millis di materi pemrograman."
+    ],
+    "example": "LED berkedip dengan pola yang berubah ketika nilai delay diubah.",
+    "practice": [
+      "Mulai dari LED bawaan dan unggah sketch.",
+      "Amati satu detik menyala, satu detik padam.",
+      "Ubah jeda padam menjadi 2000 ms.",
+      "Jika beralih ke LED eksternal, cabut daya sebelum merangkai."
+    ],
+    "warning": "Jangan melepas resistor seri untuk membuat LED lebih terang. Pin GPIO bukan sumber daya untuk lampu rumah.",
+    "check": "Apakah LED eksternal juga boleh dipasang tanpa resistor karena LED bawaan sudah memilikinya?",
+    "answer": "Tidak. Jalur LED eksternal tetap memerlukan pembatas arus yang sesuai.",
+    "nodes": [
+      "OUTPUT",
+      "HIGH",
+      "LED menyala",
+      "LOW",
+      "LED padam"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "USB data",
+        "Opsional LED merah dan resistor 330 Ω"
+      ],
+      "wiring": [
+        [
+          "Pilihan awal",
+          "LED bawaan L; tidak perlu wiring eksternal."
+        ],
+        [
+          "Pilihan eksternal",
+          "Ubah konstanta LED menjadi 8. D8 → resistor 330 Ω → anoda LED; katoda → GND."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "const byte LED = LED_BUILTIN;\nvoid setup() { pinMode(LED, OUTPUT); }\nvoid loop() {\n  digitalWrite(LED, HIGH);\n  delay(1000);\n  digitalWrite(LED, LOW);\n  delay(1000);\n}\n"
+        }
+      ],
+      "result": "LED berkedip dengan pola yang berubah ketika nilai delay diubah.",
+      "troubleshoot": [
+        "LED eksternal tidak menyala: cabut USB, periksa polaritas dan resistor.",
+        "LED menyala terus: pastikan sketch terbaru benar-benar terunggah."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-tombol-led",
+    "title": "Push button mengendalikan LED",
+    "summary": "Baca tombol dengan INPUT_PULLUP dan pahami mengapa ditekan menghasilkan LOW.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "Pull-up seperti penjaga posisi awal: saat tombol lepas, sinyal tetap punya keadaan yang jelas.",
+    "explain": [
+      "Input yang tidak memiliki keadaan jelas dapat berubah-ubah akibat gangguan. INPUT_PULLUP mengaktifkan resistor internal sehingga pin terbaca HIGH ketika tombol terbuka.",
+      "Tombol dalam contoh menghubungkan D2 ke GND saat ditekan, sehingga bacaannya LOW. Logikanya tampak terbalik hanya jika kita menganggap ditekan selalu berarti HIGH. Nama variabel pressed membantu menerjemahkannya.",
+      "Tombol empat kaki biasanya memiliki pasangan kaki yang sudah terhubung di dalam. Gunakan dua sisi kontak yang berbeda. Untuk fungsi satu tekan satu hitungan, kontak mekanis memerlukan debounce; contoh ini hanya mengikuti keadaan tombol, bukan menghitung penekanan."
+    ],
+    "example": "LED menyala selama tombol ditekan dan padam saat dilepas.",
+    "practice": [
+      "Cabut USB, tempatkan tombol melintasi celah breadboard bila sesuai bentuknya.",
+      "Pastikan kontak yang dipakai terpisah ketika tombol tidak ditekan.",
+      "Unggah dan tekan/lepas tombol.",
+      "Amati status di Serial Monitor 115200."
+    ],
+    "warning": "Jangan menambahkan kabel 5V langsung ke tombol pada rangkaian ini; salah kontak dapat menghubungkan 5V ke GND.",
+    "check": "Mengapa tombol ditekan terbaca LOW?",
+    "answer": "Karena tombol menyambungkan pin ke GND, mengalahkan pull-up internal yang menahan pin HIGH saat lepas.",
+    "nodes": [
+      "INPUT_PULLUP",
+      "Tombol lepas HIGH",
+      "Tombol ditekan LOW",
+      "Baca D2",
+      "Atur LED"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "Push button",
+        "Breadboard dan jumper"
+      ],
+      "wiring": [
+        [
+          "D2",
+          "Satu sisi kontak push button."
+        ],
+        [
+          "GND",
+          "Sisi kontak lainnya; tidak memakai sambungan ke 5V."
+        ],
+        [
+          "Output",
+          "LED bawaan L."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "const byte BUTTON = 2;\nvoid setup() {\n  pinMode(BUTTON, INPUT_PULLUP);\n  pinMode(LED_BUILTIN, OUTPUT);\n  Serial.begin(115200);\n}\nvoid loop() {\n  bool pressed = digitalRead(BUTTON) == LOW;\n  digitalWrite(LED_BUILTIN, pressed ? HIGH : LOW);\n  Serial.println(pressed ? F(\"Ditekan\") : F(\"Dilepas\"));\n  delay(50);\n}\n"
+        }
+      ],
+      "result": "LED menyala selama tombol ditekan dan padam saat dilepas.",
+      "troubleshoot": [
+        "Selalu ditekan: periksa pasangan kaki tombol dan hubungan D2–GND.",
+        "Pembacaan acak: periksa INPUT_PULLUP, jumper, dan kontak breadboard."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-relay-lampu",
+    "title": "Relay untuk lampu: konsep rumah, latihan DC rendah",
+    "summary": "Pahami kontak COM/NO/NC dan praktik on/off dengan lampu DC kecil.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "Relay seperti tangan yang memindahkan saklar; energi lampu tetap berasal dari sumber lampu.",
+    "explain": [
+      "Relay memisahkan bagian pengendali kumparan dan kontak saklar secara fungsional. Pada modul, sisi input dapat memiliki driver, diode, dan optocoupler; susunannya harus diperiksa dari dokumentasi model, bukan dari warna PCB.",
+      "COM adalah kontak bersama. NO terbuka saat relay tidak aktif, sedangkan NC tertutup. Latihan memakai COM–NO agar lampu DC kecil padam ketika relay tidak aktif. Jangan menggunakan kumparan relay lepas langsung pada GPIO.",
+      "Konsep kontak ini juga dipakai pada pengendalian lampu rumah, tetapi pemasangan AC memerlukan enclosure, proteksi, rating, jarak isolasi, dan tenaga kompeten. Contoh ini tidak mengajarkan pengawatan PLN. Ganti lampu rumah dengan lampu DC 5 V kecil agar logika dapat dipelajari di meja.",
+      "Banyak modul bersifat active LOW, tetapi tidak semuanya. Sketch memakai konstanta RELAY_ON/RELAY_OFF; pastikan level pemicu modul sebelum memasang beban. Keadaan kontak saat boot tetap harus diperiksa pada model nyata; sketch saja tidak menjamin bebas pulsa awal."
+    ],
+    "example": "Lampu DC kecil mengikuti keadaan kontak relay; latihan tidak melibatkan listrik rumah.",
+    "practice": [
+      "Identifikasi level aktif dan rating modul dari dokumentasi.",
+      "Uji sketch tanpa beban terlebih dahulu.",
+      "Dengan seluruh catu tercabut, sambungkan lampu DC sesuai tabel.",
+      "Amati lampu aktif dua detik lalu padam tiga detik.",
+      "Matikan catu dan periksa bahwa kontak NO kembali terbuka."
+    ],
+    "warning": "Jangan menggunakan breadboard, jumper terbuka, atau modul tanpa enclosure untuk PLN. Untuk lampu rumah, pemasangan harus dirancang dan dikerjakan tenaga kompeten.",
+    "check": "Apakah relay memasok energi untuk lampu?",
+    "answer": "Tidak. Relay mengubah keadaan kontak; lampu tetap membutuhkan sumber dayanya sendiri.",
+    "nodes": [
+      "GPIO D7",
+      "Driver relay",
+      "COM / NO",
+      "Catu lampu DC",
+      "Lampu latihan"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "Modul relay dengan driver, input kompatibel logika 5 V",
+        "Catu modul sesuai spesifikasi",
+        "Lampu DC 5 V kecil dan catu terpisah yang sesuai"
+      ],
+      "wiring": [
+        [
+          "D7",
+          "IN modul relay yang inputnya kompatibel 5 V."
+        ],
+        [
+          "VCC / GND modul",
+          "Catu sesuai modul; untuk modul input non-terisolasi biasa, GND kendali dihubungkan ke GND UNO. Periksa skema jika modul memakai JD-VCC/isolasi."
+        ],
+        [
+          "Sisi beban DC",
+          "Positif catu lampu → COM; NO → positif lampu; negatif lampu → negatif catu lampu."
+        ],
+        [
+          "Uji awal",
+          "Tanpa lampu terpasang; cek COM/NO ketika relay tidak diberi daya."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "const byte RELAY_PIN = 7;\nconst byte RELAY_ON = LOW;   // sesuaikan modul\nconst byte RELAY_OFF = HIGH;\nvoid setup() {\n  digitalWrite(RELAY_PIN, RELAY_OFF);\n  pinMode(RELAY_PIN, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(RELAY_PIN, RELAY_ON);\n  delay(2000);\n  digitalWrite(RELAY_PIN, RELAY_OFF);\n  delay(3000);\n}\n"
+        }
+      ],
+      "result": "Lampu DC kecil mengikuti keadaan kontak relay; latihan tidak melibatkan listrik rumah.",
+      "troubleshoot": [
+        "Relay terbalik: periksa active LOW/HIGH.",
+        "Ada klik tetapi lampu mati: periksa COM/NO, catu lampu, dan rating.",
+        "Papan reset: evaluasi catu relay dan gangguan beban."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-analog-pwm",
+    "title": "Analog input dan PWM: baca potensiometer, atur LED",
+    "summary": "Bedakan analogRead, analogWrite, duty cycle, dan DAC pada UNO R3.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "PWM seperti lampu yang dinyalakan-putus sangat cepat; persentase waktu nyalanya mengubah energi rata-rata.",
+    "explain": [
+      "Pada UNO R3, analogRead biasanya menghasilkan angka 0–1023 dari ADC 10-bit. Angka itu adalah representasi tegangan terhadap referensi ADC, bukan satuan fisik sensor secara otomatis.",
+      "analogWrite pada pin PWM UNO R3 menghasilkan pulsa, bukan tegangan analog halus dari DAC. Nilai 0–255 mengatur duty cycle. DAC yang benar-benar menghasilkan level analog adalah fitur berbeda dan tidak tersedia sebagai keluaran DAC pada UNO R3.",
+      "Contoh membaca potensiometer dan memetakan angka ADC menjadi PWM di D9. LED membutuhkan resistor seri. Jika digunakan untuk motor, PWM harus masuk driver yang sesuai; jangan menghubungkan motor langsung ke pin."
+    ],
+    "example": "Terang LED berubah saat potensiometer diputar, disertai nilai ADC dan PWM.",
+    "practice": [
+      "Rangkai saat daya tercabut dan unggah kode.",
+      "Putar potensiometer perlahan dari satu ujung ke ujung lain.",
+      "Bandingkan angka ADC dan PWM di Serial Monitor.",
+      "Jelaskan mengapa PWM bukan DAC."
+    ],
+    "warning": "Jangan melebihi rentang masukan ADC. Contoh resolusi dan level ini khusus UNO R3, bukan salinan langsung untuk ESP32.",
+    "check": "Apakah analogWrite(9, 128) pada UNO R3 membuat pin menjadi sumber DC analog 2,5 V yang rata?",
+    "answer": "Tidak. Pin menghasilkan PWM sekitar setengah duty cycle; rata-rata energi berubah, tetapi sinyal tetap pulsa.",
+    "nodes": [
+      "Potensiometer",
+      "ADC 0–1023",
+      "Pemetaan",
+      "PWM 0–255",
+      "Terang LED"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "Potensiometer 10 kΩ",
+        "LED merah",
+        "Resistor 330 Ω",
+        "Breadboard"
+      ],
+      "wiring": [
+        [
+          "Potensiometer",
+          "Dua ujung → 5V dan GND; kaki tengah/wiper → A0."
+        ],
+        [
+          "LED",
+          "D9 → 330 Ω → anoda LED; katoda → GND."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "void setup() {\n  pinMode(9, OUTPUT);\n  Serial.begin(115200);\n}\nvoid loop() {\n  int raw = analogRead(A0);\n  int duty = map(raw, 0, 1023, 0, 255);\n  analogWrite(9, duty);\n  Serial.print(raw); Serial.print(F(\" -> \")); Serial.println(duty);\n  delay(50);\n}\n"
+        }
+      ],
+      "result": "Terang LED berubah saat potensiometer diputar, disertai nilai ADC dan PWM.",
+      "troubleshoot": [
+        "LED hanya hidup/mati: cek pin D9 dan jalur potensiometer.",
+        "Nilai melompat: periksa wiper dan GND."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-lcd-paralel",
+    "title": "Menampilkan data pada LCD 16×2 paralel",
+    "summary": "Hubungkan LCD kompatibel HD44780 dalam mode 4-bit dan tampilkan waktu berjalan.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "LCD seperti papan pengumuman kecil: program memilih baris dan kolom tempat menulis.",
+    "explain": [
+      "LCD 16×2 menyediakan dua baris dengan 16 karakter per baris. Mode 4-bit memakai empat jalur data ditambah RS dan E. Library LiquidCrystal membantu menangani urutan sinyal ke LCD.",
+      "V0/VO mengatur kontras, bukan data. Potensiometer kontras sering menjadi penyebab layar terlihat kosong walaupun rangkaian hidup. RW dihubungkan ke GND karena contoh hanya menulis ke layar.",
+      "Nomor LCD D4–D7 adalah nama pin data pada LCD, bukan nomor pin Arduino yang harus sama. Tabel berikut sengaja menunjukkan pemetaan keduanya. Nama dan polaritas backlight harus dicocokkan dengan datasheet modul."
+    ],
+    "example": "LCD menampilkan salam dan nilai detik berjalan.",
+    "practice": [
+      "Instal library LiquidCrystal dari Arduino jika belum tersedia.",
+      "Rangkai sesuai nama pin LCD, bukan posisi yang ditebak.",
+      "Unggah lalu putar kontras perlahan.",
+      "Periksa baris pertama dan penghitung detik pada baris kedua."
+    ],
+    "warning": "Cabut daya sebelum memindahkan kabel. Jangan menganggap semua LCD memiliki resistor backlight atau pinout yang sama.",
+    "check": "Apakah LCD D4 harus dihubungkan ke Arduino D4?",
+    "answer": "Tidak. Pada contoh ini LCD D4 dihubungkan ke Arduino D5 sesuai urutan constructor library.",
+    "nodes": [
+      "UNO",
+      "RS / E",
+      "Data 4-bit",
+      "Kontras VO",
+      "LCD 16×2"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "LCD 16×2 kompatibel HD44780 5 V tanpa backpack I2C",
+        "Potensiometer 10 kΩ",
+        "Resistor backlight 220 Ω untuk modul yang sesuai contoh"
+      ],
+      "wiring": [
+        [
+          "LCD VSS / VDD",
+          "GND / 5V."
+        ],
+        [
+          "LCD VO",
+          "Wiper potensiometer; ujung potensiometer ke 5V dan GND."
+        ],
+        [
+          "LCD RS / RW / E",
+          "D12 / GND / D11 UNO."
+        ],
+        [
+          "LCD D4 / D5 / D6 / D7",
+          "D5 / D4 / D3 / D2 UNO; LCD D0–D3 tidak dipakai."
+        ],
+        [
+          "Backlight A / K",
+          "A ke 5V melalui resistor sesuai modul (contoh 220 Ω), K ke GND; periksa resistor bawaan dan rating LCD."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <LiquidCrystal.h>\nLiquidCrystal lcd(12, 11, 5, 4, 3, 2);\nvoid setup() {\n  lcd.begin(16, 2);\n  lcd.print(\"Halo, Arduino!\");\n}\nvoid loop() {\n  lcd.setCursor(0, 1);\n  lcd.print(\"Detik: \");\n  lcd.print(millis() / 1000UL);\n  delay(200);\n}\n"
+        }
+      ],
+      "result": "LCD menampilkan salam dan nilai detik berjalan.",
+      "troubleshoot": [
+        "Layar kosong/kotak: atur kontras, periksa RW ke GND serta catu.",
+        "Karakter acak: periksa urutan pin di constructor LiquidCrystal."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-pir",
+    "title": "PIR sebagai input digital Arduino",
+    "summary": "Baca gerakan dengan PIR dan gunakan LED sebagai indikator.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "PIR seperti penjaga yang memperhatikan perubahan dalam bidang pandangnya, bukan kamera yang mengenali orang.",
+    "explain": [
+      "Contoh memakai modul PIR HC-SR501 yang didokumentasikan sesuai kebutuhan catu dan keluarannya. Modul memberi keluaran digital saat terpicu, sehingga cukup dibaca digitalRead.",
+      "PIR perlu waktu stabil setelah diberi daya. Contoh menyediakan pemanasan 60 detik sebelum membaca. Pengaturan sensitivitas, waktu tahan, dan mode pemicu pada modul memengaruhi lamanya sinyal HIGH.",
+      "PIR merespons perubahan radiasi inframerah, bukan menghitung manusia secara pasti. Pengujian dilakukan dengan bergerak melintasi bidang pandang lalu diam; hasilnya membantu memahami keterbatasan alat."
+    ],
+    "example": "LED mengikuti status keluaran PIR setelah masa stabilisasi.",
+    "practice": [
+      "Periksa label pin dan rangkai saat USB tercabut.",
+      "Unggah dan tunggu pesan Siap setelah sekitar 60 detik.",
+      "Berjalan melintasi area sensor, lalu diam.",
+      "Bandingkan keluaran dengan pengaturan waktu tahan modul."
+    ],
+    "warning": "Periksa pinout modul; urutan pin bisa berbeda. Hasil PIR tidak boleh menjadi satu-satunya bukti bahwa ruangan kosong.",
+    "check": "Apakah orang yang diam pasti terus memicu PIR?",
+    "answer": "Tidak. Gerakan dan perubahan termal dalam bidang pandang memengaruhi pemicu.",
+    "nodes": [
+      "Perubahan termal",
+      "PIR stabil",
+      "OUT digital",
+      "D2 Arduino",
+      "LED status"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Arduino",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "Modul PIR HC-SR501 sesuai spesifikasi",
+        "Jumper"
+      ],
+      "wiring": [
+        [
+          "PIR VCC / GND",
+          "5V / GND UNO jika modul mendukung catu tersebut."
+        ],
+        [
+          "PIR OUT",
+          "D2 UNO; periksa pinout modul."
+        ],
+        [
+          "Indikator",
+          "LED bawaan L."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "void setup() {\n  pinMode(2, INPUT);\n  pinMode(LED_BUILTIN, OUTPUT);\n  Serial.begin(115200);\n  Serial.println(F(\"Tunggu PIR stabil 60 detik...\"));\n  delay(60000);\n  Serial.println(F(\"Siap\"));\n}\nvoid loop() {\n  bool motion = digitalRead(2) == HIGH;\n  digitalWrite(LED_BUILTIN, motion ? HIGH : LOW);\n  Serial.println(motion ? F(\"Gerakan terdeteksi\") : F(\"Tidak terpicu\"));\n  delay(200);\n}\n"
+        }
+      ],
+      "result": "LED mengikuti status keluaran PIR setelah masa stabilisasi.",
+      "troubleshoot": [
+        "Selalu HIGH: periksa waktu tahan, mode retrigger, dan posisi sensor.",
+        "Tidak merespons: tunggu pemanasan, cek catu dan OUT."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-lm35",
+    "title": "LM35: dari tegangan analog menjadi suhu",
+    "summary": "Hitung suhu dari sensor 10 mV/°C dan pahami batas resolusi ADC UNO.",
+    "stage": 7,
+    "minutes": 18,
+    "analogy": "LM35 seperti penerjemah suhu ke tegangan: kenaikan suhu menghasilkan kenaikan tegangan yang sebanding.",
+    "explain": [
+      "LM35 menghasilkan keluaran sekitar 10 mV untuk setiap 1 °C pada konfigurasi pengukuran positif yang sesuai datasheet. Tegangan 0,25 V berarti kira-kira 25 °C, sebelum mempertimbangkan galat sensor, referensi, dan pembacaan.",
+      "Contoh memakai catu 5 V untuk LM35 dan referensi ADC default UNO R3. Dengan ADC 10-bit, satu langkah kira-kira 5/1024 V atau 4,88 mV. Pada LM35 ini setara sekitar 0,49 °C; menampilkan banyak angka desimal tidak membuat pengukuran lebih teliti.",
+      "VREF pada program adalah perkiraan referensi aktual. Untuk pengujian lebih baik, ukur catu dan bandingkan dengan termometer acuan. Kode ini untuk suhu lingkungan positif, bukan rangkaian pengukuran lengkap sampai suhu negatif."
+    ],
+    "example": "Terlihat perubahan tegangan dan suhu lingkungan yang masuk akal, dengan batas ketelitian yang dipahami.",
+    "practice": [
+      "Periksa pinout dan rangkai tanpa daya.",
+      "Unggah lalu baca nilai ADC, volt, dan suhu.",
+      "Sentuh bagian kemasan dengan jari bersih secara wajar dan amati perubahan pelan.",
+      "Bandingkan dengan termometer ruangan; jangan memakai api atau cairan."
+    ],
+    "warning": "Jangan membalik catu LM35. Periksa paket dan rating; contoh bukan termometer medis atau sistem keselamatan.",
+    "check": "Jika VOUT sekitar 0,30 V, berapa perkiraan suhu?",
+    "answer": "Sekitar 30 °C, karena 0,30 V / 0,01 V per °C = 30 °C.",
+    "nodes": [
+      "Suhu",
+      "LM35 10 mV/°C",
+      "A0 / ADC",
+      "Konversi volt",
+      "Perkiraan °C"
+    ],
+    "sources": [
+      {
+        "title": "TI LM35 datasheet dan pinout",
+        "url": "https://www.ti.com/product/LM35"
+      }
+    ],
+    "arduino": {
+      "section": "B",
+      "parts": [
+        "UNO R3",
+        "LM35 asli dengan tipe paket yang diketahui",
+        "Breadboard dan jumper"
+      ],
+      "wiring": [
+        [
+          "LM35 VS",
+          "5V UNO; periksa rentang catu datasheet."
+        ],
+        [
+          "LM35 VOUT",
+          "A0 UNO."
+        ],
+        [
+          "LM35 GND",
+          "GND UNO."
+        ],
+        [
+          "Arah kaki",
+          "Identifikasi dari datasheet paket yang dipakai; jangan menebak dari sisi datar."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "const float VREF = 5.0;\nvoid setup() { Serial.begin(115200); }\nvoid loop() {\n  int raw = analogRead(A0);\n  float volts = raw * VREF / 1024.0;\n  float celsius = volts * 100.0;\n  Serial.print(F(\"ADC=\")); Serial.print(raw);\n  Serial.print(F(\" V=\")); Serial.print(volts, 3);\n  Serial.print(F(\" Suhu C=\")); Serial.println(celsius, 1);\n  delay(500);\n}\n"
+        }
+      ],
+      "result": "Terlihat perubahan tegangan dan suhu lingkungan yang masuk akal, dengan batas ketelitian yang dipahami.",
+      "troubleshoot": [
+        "Nilai mendekati 0 atau penuh: cek VS, VOUT, GND, dan pin A0.",
+        "Nilai bergeser: cek referensi aktual, kontak kabel, dan alat pembanding."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-motor-dc",
+    "title": "Motor DC dan driver TB6612FNG",
+    "summary": "Atur motor DC kecil melalui driver, bukan langsung dari GPIO.",
+    "stage": 8,
+    "minutes": 18,
+    "analogy": "Arduino memberi aba-aba, driver menyediakan jalur tenaga, dan motor melakukan kerja mekanis.",
+    "explain": [
+      "Motor DC membutuhkan arus yang bisa jauh lebih besar ketika mulai atau tertahan daripada saat berputar bebas. Pilih motor, catu, serta driver berdasarkan arus stall dan kondisi termal, bukan hanya ukuran motor.",
+      "Contoh memakai breakout TB6612FNG dengan satu kanal. AIN1/AIN2 mengatur arah logika dan PWMA mengatur kecepatan melalui PWM; STBY harus diaktifkan. Ikuti dokumentasi carrier, termasuk kapasitor catu yang diperlukan.",
+      "Latihan hanya satu arah: mulai pelan, berhenti, kemudian ulang. Menggabungkan driver dengan sensor membutuhkan perencanaan pin baru. Motor dipasang tanpa beban yang dapat menjepit atau menarik benda."
+    ],
+    "example": "Motor kecil berputar dan berhenti melalui driver tanpa dibebankan pada pin Arduino.",
+    "practice": [
+      "Periksa rating motor dan breakout.",
+      "Rangkai ketika semua catu tercabut.",
+      "Unggah dengan motor bebas tanpa beban.",
+      "Amati motor berjalan dua detik dan berhenti dua detik.",
+      "Jika panas berlebihan atau arus melonjak, putuskan catu dan evaluasi."
+    ],
+    "warning": "Jangan menahan poros motor untuk menguji stall. Driver dan kabel harus sesuai arus beban; latihan bukan kontrol mesin produksi.",
+    "check": "Mengapa motor tidak langsung dipasang ke D5?",
+    "answer": "Karena GPIO hanya memberi sinyal; arus motor dan lonjakan beban dapat melampaui batas pin.",
+    "nodes": [
+      "D5 PWM",
+      "TB6612 driver",
+      "Catu motor",
+      "Motor DC",
+      "Berhenti terkontrol"
+    ],
+    "sources": [
+      {
+        "title": "Toshiba TB6612FNG",
+        "url": "https://toshiba.semicon-storage.com/info/TB6612FNG_datasheet_en_20141001.pdf"
+      }
+    ],
+    "arduino": {
+      "section": "C",
+      "parts": [
+        "UNO R3",
+        "Breakout TB6612FNG",
+        "Motor DC kecil yang tegangan dan arus stall-nya cocok",
+        "Catu motor 5 V dengan kemampuan arus sesuai motor"
+      ],
+      "wiring": [
+        [
+          "TB6612 VCC / GND",
+          "5V logika UNO / GND bersama; periksa carrier."
+        ],
+        [
+          "VM / GND daya",
+          "Catu motor 5V terpisah / ground catu, disatukan dengan GND kendali pada carrier."
+        ],
+        [
+          "AIN1 / AIN2 / PWMA / STBY",
+          "D7 / D6 / D5 / D8 UNO."
+        ],
+        [
+          "A01 / A02",
+          "Dua terminal motor; jangan memakai GPIO untuk daya motor."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "const byte AIN1 = 7, AIN2 = 6, PWM_A = 5, STBY = 8;\nvoid setup() {\n  pinMode(AIN1, OUTPUT); pinMode(AIN2, OUTPUT);\n  pinMode(PWM_A, OUTPUT); pinMode(STBY, OUTPUT);\n  digitalWrite(AIN1, HIGH); digitalWrite(AIN2, LOW);\n  analogWrite(PWM_A, 0);\n  digitalWrite(STBY, HIGH);\n}\nvoid loop() {\n  analogWrite(PWM_A, 160); delay(2000);\n  analogWrite(PWM_A, 0); delay(2000);\n}\n"
+        }
+      ],
+      "result": "Motor kecil berputar dan berhenti melalui driver tanpa dibebankan pada pin Arduino.",
+      "troubleshoot": [
+        "Tidak berputar: periksa STBY, VM, PWMA, dan ground.",
+        "UNO reset: periksa penurunan tegangan serta pemisahan catu motor."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-servo",
+    "title": "Servo: mengendalikan posisi sudut",
+    "summary": "Gunakan library Servo dengan catu yang sesuai dan gerakan kecil tanpa beban.",
+    "stage": 8,
+    "minutes": 18,
+    "analogy": "Servo seperti penunjuk arah: kita meminta posisi, bukan sekadar menyuruh motor berputar terus.",
+    "explain": [
+      "Servo posisi menerima sinyal pengendali dan berusaha mencapai posisi dalam rentangnya. Servo continuous rotation berperilaku berbeda; perintah yang tampak seperti sudut biasanya menjadi pengaturan putaran.",
+      "Contoh memakai servo posisi kecil dengan catu 5 V yang sesuai dokumentasinya. Kabel sinyal ke D9, sedangkan energi servo berasal dari catu eksternal yang sesuai. Ground catu servo disatukan dengan GND UNO.",
+      "Library Servo mengelola timing pulsa. Pada UNO R3, penggunaan timer library memengaruhi PWM di pin tertentu, termasuk 9/10. Jangan menggabungkan contoh PWM dan Servo tanpa memeriksa penggunaan timer serta pin."
+    ],
+    "example": "Servo posisi bergerak ke tiga posisi dalam rentang yang sesuai model.",
+    "practice": [
+      "Pasang library Servo.",
+      "Lepas horn/beban yang dapat menabrak mekanisme.",
+      "Rangkai dan unggah contoh.",
+      "Amati tiga posisi kecil; hentikan jika servo menekan batas mekanis."
+    ],
+    "warning": "Jangan menganggap semua servo aman pada 0–180°. Gunakan rentang yang diizinkan dan hindari bagian bergerak yang dapat menjepit.",
+    "check": "Mengapa servo continuous rotation tidak cocok untuk latihan menunjuk sudut ini?",
+    "answer": "Karena karakter perintahnya umumnya mengatur arah/kecepatan, bukan posisi sudut absolut.",
+    "nodes": [
+      "D9 sinyal",
+      "Catu eksternal",
+      "Servo posisi",
+      "60 / 90 / 120",
+      "Amati gerakan"
+    ],
+    "sources": [
+      {
+        "title": "Arduino Servo library",
+        "url": "https://docs.arduino.cc/libraries/servo/"
+      }
+    ],
+    "arduino": {
+      "section": "C",
+      "parts": [
+        "UNO R3",
+        "Servo posisi kecil kompatibel sinyal kendali UNO",
+        "Catu servo 5V sesuai rating dan arus gerak/stall",
+        "Library Servo"
+      ],
+      "wiring": [
+        [
+          "Sinyal servo",
+          "D9 UNO; pastikan identitas kabel dari dokumentasi."
+        ],
+        [
+          "Daya servo",
+          "Positif catu eksternal 5V sesuai servo; bukan pin GPIO."
+        ],
+        [
+          "Ground",
+          "Negatif catu servo, ground servo, dan GND UNO bersama."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <Servo.h>\nServo pointer;\nvoid setup() { pointer.attach(9); }\nvoid loop() {\n  pointer.write(60); delay(1000);\n  pointer.write(90); delay(1000);\n  pointer.write(120); delay(1000);\n}\n"
+        }
+      ],
+      "result": "Servo posisi bergerak ke tiga posisi dalam rentang yang sesuai model.",
+      "troubleshoot": [
+        "Bergetar/reset: periksa catu, ground bersama, dan beban.",
+        "Berputar terus: pastikan bukan servo continuous rotation."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-stepper",
+    "title": "Stepper 28BYJ-48 dan driver ULN2003",
+    "summary": "Pahami urutan kumparan, langkah, arah, dan batas akurasi mekanis.",
+    "stage": 8,
+    "minutes": 18,
+    "analogy": "Stepper seperti berjalan dengan langkah kecil berurutan; urutan kaki harus benar agar maju.",
+    "explain": [
+      "Stepper bergerak melalui urutan pengaktifan kumparan. Contoh memakai versi 28BYJ-48 5 V dan modul ULN2003 yang sesuai, bukan motor bipolar dengan driver yang berbeda.",
+      "Angka 2048 dipakai sebagai perkiraan jumlah full-step keluaran per putaran pada contoh ini. Rasio gearbox dan pola langkah dapat berbeda, sehingga nilai tersebut bukan jaminan posisi presisi. Sistem tanpa umpan balik juga dapat kehilangan langkah saat beban terlalu besar.",
+      "Urutan constructor Stepper pada contoh adalah 8,10,9,11, sementara wiring fisik IN1–IN4 tetap 8,9,10,11. Penukaran urutan program diperlukan untuk pola full-step pada rangkaian ini. Setelah gerakan, contoh mematikan keluaran untuk mengurangi waktu kumparan terus aktif."
+    ],
+    "example": "Motor bergerak bertahap ke satu arah lalu kembali dengan gerak kecil yang dapat diamati.",
+    "practice": [
+      "Pasang library Stepper.",
+      "Pastikan motor dan catu sama-sama versi 5V.",
+      "Jalankan tanpa beban dan amati arah gerak.",
+      "Bandingkan gerak +256 dan -256 langkah.",
+      "Jangan mengandalkan hitungan untuk posisi absolut tanpa homing/umpan balik."
+    ],
+    "warning": "Kumparan tetap membutuhkan driver dan catu yang sesuai. Jangan memasang motor langsung ke pin atau memutar paksa gearbox.",
+    "check": "Apakah 2048 selalu menjamin tepat satu putaran pada semua motor sejenis?",
+    "answer": "Tidak. Tipe, rasio gearbox, pola langkah, dan kehilangan langkah dapat membuat hasil berbeda.",
+    "nodes": [
+      "Urutan pin",
+      "ULN2003",
+      "Kumparan",
+      "Langkah motor",
+      "Arah gerakan"
+    ],
+    "sources": [
+      {
+        "title": "Arduino Stepper library",
+        "url": "https://docs.arduino.cc/libraries/stepper/"
+      }
+    ],
+    "arduino": {
+      "section": "C",
+      "parts": [
+        "UNO R3",
+        "28BYJ-48 versi 5V",
+        "Modul ULN2003 yang sesuai motor",
+        "Catu 5V eksternal sesuai arus motor",
+        "Library Stepper"
+      ],
+      "wiring": [
+        [
+          "IN1 / IN2 / IN3 / IN4",
+          "D8 / D9 / D10 / D11 UNO."
+        ],
+        [
+          "Soket motor",
+          "Konektor motor → modul ULN2003 yang sesuai."
+        ],
+        [
+          "VCC / GND modul",
+          "Catu eksternal 5V / ground; ground disatukan dengan GND UNO."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <Stepper.h>\nconst int STEPS_PER_REV = 2048;\nStepper motor(STEPS_PER_REV, 8, 10, 9, 11);\nvoid releaseCoils() {\n  for (byte pin = 8; pin <= 11; pin++) digitalWrite(pin, LOW);\n}\nvoid setup() { motor.setSpeed(8); }\nvoid loop() {\n  motor.step(256); releaseCoils(); delay(1000);\n  motor.step(-256); releaseCoils(); delay(1000);\n}\n"
+        }
+      ],
+      "result": "Motor bergerak bertahap ke satu arah lalu kembali dengan gerak kecil yang dapat diamati.",
+      "troubleshoot": [
+        "Hanya bergetar: periksa urutan IN dan constructor.",
+        "Gerak lemah: cek catu, kecepatan, beban, dan tipe motor."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-i2c",
+    "title": "Mengenal I2C dan mencari alamat perangkat",
+    "summary": "Gunakan SDA/SCL dan scanner untuk memahami alamat bus.",
+    "stage": 8,
+    "minutes": 18,
+    "analogy": "I2C seperti percakapan dalam satu ruangan: dua jalur dipakai bersama, dan alamat membantu memilih lawan bicara.",
+    "explain": [
+      "I2C dibaca I-squared-C atau I dua C, bukan angka 12C. Bus menggunakan SDA untuk data dan SCL untuk clock. Pada UNO R3, SDA berada di A4 dan SCL di A5; konektor SDA/SCL khusus terhubung ke jalur yang sama.",
+      "Perangkat pada bus biasanya memiliki alamat 7-bit. LCD backpack dapat memakai alamat yang berbeda antarproduk, sedangkan DS1307 menggunakan 0x68. Dua perangkat dengan alamat sama tidak dapat dipilih terpisah tanpa pengaturan tambahan.",
+      "SDA/SCL memerlukan pull-up. Banyak modul sudah memilikinya, sehingga menambah banyak modul dapat mengubah nilai gabungan. Untuk latihan, pilih modul yang bus dan pull-up-nya memang kompatibel 5 V; jangan mencampur sensor 3,3 V tanpa pemeriksaan."
+    ],
+    "example": "Scanner menampilkan alamat perangkat yang merespons, bukan identitas atau kepastian seluruh fungsinya sehat.",
+    "practice": [
+      "Hubungkan satu modul terlebih dahulu.",
+      "Unggah scanner dan buka Serial Monitor 115200.",
+      "Catat alamat yang ditemukan.",
+      "Jika menambah modul, ulangi pemeriksaan alamat dan level bus."
+    ],
+    "warning": "Scanner hanya memeriksa respons alamat. Jangan menganggap perangkat aman atau terkonfigurasi benar hanya karena muncul di daftar.",
+    "check": "Jika scanner menampilkan 0x68, apakah itu pasti DS1307?",
+    "answer": "Tidak. Alamat dapat dipakai berbagai perangkat. Cocokkan dengan label model dan dokumentasinya.",
+    "nodes": [
+      "SDA",
+      "SCL",
+      "Alamat 7-bit",
+      "Perangkat merespons",
+      "Catat hasil"
+    ],
+    "sources": [
+      {
+        "title": "Arduino Wire",
+        "url": "https://docs.arduino.cc/language-reference/en/functions/communication/wire/"
+      }
+    ],
+    "arduino": {
+      "section": "C",
+      "parts": [
+        "UNO R3",
+        "Satu modul I2C kompatibel 5V untuk diuji",
+        "Library Wire bawaan core"
+      ],
+      "wiring": [
+        [
+          "SDA modul",
+          "A4 / SDA UNO R3."
+        ],
+        [
+          "SCL modul",
+          "A5 / SCL UNO R3."
+        ],
+        [
+          "VCC / GND",
+          "Catu sesuai modul dan GND bersama; pastikan pull-up bus cocok levelnya."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <Wire.h>\nvoid setup() { Wire.begin(); Serial.begin(115200); }\nvoid loop() {\n  byte found = 0;\n  for (byte address = 1; address < 127; address++) {\n    Wire.beginTransmission(address);\n    if (Wire.endTransmission() == 0) {\n      Serial.print(F(\"Alamat 0x\"));\n      if (address < 16) Serial.print('0');\n      Serial.println(address, HEX);\n      found++;\n    }\n  }\n  Serial.print(F(\"Jumlah: \")); Serial.println(found);\n  delay(3000);\n}\n"
+        }
+      ],
+      "result": "Scanner menampilkan alamat perangkat yang merespons, bukan identitas atau kepastian seluruh fungsinya sehat.",
+      "troubleshoot": [
+        "Tidak ada alamat: periksa SDA/SCL, catu, GND, dan pull-up.",
+        "Alamat berubah-ubah: periksa kontak serta panjang kabel."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-lcd-i2c",
+    "title": "LCD 16×2 dengan backpack I2C",
+    "summary": "Kurangi kabel data LCD dan gunakan library yang jelas agar contoh tidak tertukar.",
+    "stage": 8,
+    "minutes": 18,
+    "analogy": "Backpack I2C seperti juru bicara LCD: Arduino mengirim melalui bus, lalu backpack mengatur sinyal layar.",
+    "explain": [
+      "LCD I2C pada materi ini adalah LCD 16×2 kompatibel HD44780 dengan backpack I/O expander yang didukung library hd44780. Ini berbeda dari LCD paralel tanpa backpack; jangan menambahkan kabel RS/E yang tidak diperlukan pada modul ini.",
+      "Contoh memakai library hd44780 oleh Bill Perry/duinoWitchery, kelas hd44780_I2Cexp. Library dapat mengenali banyak konfigurasi backpack yang didukung. Nama ini penting karena berbagai library LiquidCrystal_I2C memiliki constructor dan fungsi awal yang tidak selalu sama.",
+      "Jalankan scanner dari pelajaran sebelumnya, lalu contoh I2CexpDiag dari library bila layar belum tampil. Memutar kontras tetap diperlukan; I2C tidak menghilangkan kebutuhan catu dan pengaturan kontras yang benar."
+    ],
+    "example": "LCD menampilkan teks dengan empat kabel utama: daya, ground, SDA, SCL.",
+    "practice": [
+      "Instal library hd44780 dengan nama/pengembang tersebut.",
+      "Periksa alamat memakai scanner.",
+      "Unggah kode berikut dan putar kontras.",
+      "Jika gagal, jalankan File → Examples → hd44780 → ioClass → hd44780_I2Cexp → I2CexpDiag."
+    ],
+    "warning": "Tidak semua backpack dan tegangan modul sama. Jangan menyalin library atau alamat 0x27 tanpa memeriksa perangkat.",
+    "check": "Mengapa library harus disebutkan secara spesifik?",
+    "answer": "Karena library bernama mirip dapat memiliki API dan dukungan backpack yang berbeda.",
+    "nodes": [
+      "UNO A4/A5",
+      "Bus I2C",
+      "Backpack expander",
+      "Kontras",
+      "LCD 16×2"
+    ],
+    "sources": [
+      {
+        "title": "hd44780: library dan contoh diagnostik",
+        "url": "https://github.com/duinoWitchery/hd44780"
+      }
+    ],
+    "arduino": {
+      "section": "C",
+      "parts": [
+        "UNO R3",
+        "LCD 16×2 + backpack I2C kompatibel 5V",
+        "Library hd44780 (Bill Perry)"
+      ],
+      "wiring": [
+        [
+          "LCD VCC / GND",
+          "5V / GND UNO sesuai modul."
+        ],
+        [
+          "LCD SDA / SCL",
+          "A4 / A5 UNO R3."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <Wire.h>\n#include <hd44780.h>\n#include <hd44780ioClass/hd44780_I2Cexp.h>\nhd44780_I2Cexp lcd;\nvoid setup() {\n  Serial.begin(115200);\n  int status = lcd.begin(16, 2);\n  if (status != 0) {\n    Serial.println(F(\"LCD gagal. Jalankan I2CexpDiag.\"));\n    while (true) { delay(1000); }\n  }\n  lcd.print(\"LCD via I2C\");\n}\nvoid loop() {\n  lcd.setCursor(0, 1);\n  lcd.print(\"Detik: \"); lcd.print(millis() / 1000UL);\n  delay(200);\n}\n"
+        }
+      ],
+      "result": "LCD menampilkan teks dengan empat kabel utama: daya, ground, SDA, SCL.",
+      "troubleshoot": [
+        "Error saat compile: pastikan library hd44780 yang digunakan.",
+        "Alamat ada tetapi layar kosong: atur kontras dan jalankan diagnostik."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-rtc-ds1307",
+    "title": "RTC DS1307: menyimpan waktu ketika Arduino mati",
+    "summary": "Bedakan jam kalender dengan millis dan pahami baterai cadangan RTC.",
+    "stage": 8,
+    "minutes": 18,
+    "analogy": "RTC seperti jam meja dengan baterai sendiri: waktunya tetap berjalan saat pengendali utama dimatikan.",
+    "explain": [
+      "millis menghitung waktu sejak Arduino mulai, sedangkan RTC menyimpan tanggal dan jam kalender. DS1307 terhubung melalui I2C dan menggunakan baterai cadangan yang sesuai untuk mempertahankan waktu ketika catu utama tidak tersedia.",
+      "Contoh memakai library RTClib oleh Adafruit. begin memeriksa perangkat, isrunning membaca apakah osilator berjalan, dan now mengambil tanggal/jam. Set waktu secara sadar; bila rtc.adjust dipanggil setiap boot, jam dapat kembali ke nilai program lama.",
+      "SetClock di contoh hanya diaktifkan saat menyetel waktu pertama. Nilai __DATE__ dan __TIME__ adalah waktu kompilasi komputer, bukan waktu internet. Tentukan zona waktu yang konsisten dan nonaktifkan SET_CLOCK setelah jam diperiksa.",
+      "Baterai dan modul harus diperiksa bersama. Sebagian modul pasaran memiliki rangkaian pengisian yang tidak sesuai untuk baterai koin non-rechargeable. Pilih modul terdokumentasi tanpa pengisian untuk CR2032, atau gunakan konfigurasi baterai yang benar menurut pembuatnya; jangan menebak dari dudukan baterai."
+    ],
+    "example": "Tanggal dan jam dibaca dari RTC; setelah catu utama mati sebentar, waktu tetap maju jika baterai dan osilator bekerja.",
+    "practice": [
+      "Instal RTClib dan dependensinya.",
+      "Jalankan scanner; DS1307 umumnya merespons di 0x68.",
+      "Untuk set pertama, ubah SET_CLOCK menjadi true, upload dan periksa jam.",
+      "Ubah kembali false dan upload.",
+      "Cabut daya utama sebentar, sambungkan lagi, lalu bandingkan waktu."
+    ],
+    "warning": "Jangan mengisi CR2032 non-rechargeable. DS1307 tidak menyediakan sinkronisasi internet atau zona waktu otomatis.",
+    "check": "Mengapa rtc.adjust tidak dipanggil setiap loop?",
+    "answer": "Karena akan terus mengatur ulang jam, bukan membiarkan RTC menghitung waktu berjalan.",
+    "nodes": [
+      "Jam kalender",
+      "DS1307 0x68",
+      "Baterai cadangan",
+      "RTClib now()",
+      "Waktu tetap maju"
+    ],
+    "sources": [
+      {
+        "title": "Analog Devices DS1307",
+        "url": "https://www.analog.com/en/products/ds1307.html"
+      },
+      {
+        "title": "Adafruit RTClib",
+        "url": "https://adafruit.github.io/RTClib/html/class_r_t_c___d_s1307.html"
+      }
+    ],
+    "arduino": {
+      "section": "C",
+      "parts": [
+        "UNO R3",
+        "Modul DS1307 terdokumentasi, kompatibel bus 5V",
+        "Baterai cadangan sesuai modul",
+        "Library RTClib + dependensi Adafruit BusIO"
+      ],
+      "wiring": [
+        [
+          "DS1307 VCC / GND",
+          "5V / GND UNO menurut modul."
+        ],
+        [
+          "DS1307 SDA / SCL",
+          "A4 / A5 UNO."
+        ],
+        [
+          "Baterai",
+          "Hanya tipe yang sesuai rangkaian modul; periksa ada/tidaknya pengisian."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <Wire.h>\n#include <RTClib.h>\nRTC_DS1307 rtc;\nconst bool SET_CLOCK = false;\nvoid setup() {\n  Serial.begin(115200);\n  if (!rtc.begin()) {\n    Serial.println(F(\"RTC tidak ditemukan\"));\n    while (true) { delay(1000); }\n  }\n  if (SET_CLOCK) rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));\n  if (!rtc.isrunning()) {\n    Serial.println(F(\"Set jam sekali dengan SET_CLOCK=true\"));\n    while (true) { delay(1000); }\n  }\n}\nvoid loop() {\n  DateTime now = rtc.now();\n  Serial.print(now.year()); Serial.print('-');\n  Serial.print(now.month()); Serial.print('-');\n  Serial.print(now.day()); Serial.print(' ');\n  Serial.print(now.hour()); Serial.print(':');\n  Serial.print(now.minute()); Serial.print(':');\n  Serial.println(now.second());\n  delay(1000);\n}\n"
+        }
+      ],
+      "result": "Tanggal dan jam dibaca dari RTC; setelah catu utama mati sebentar, waktu tetap maju jika baterai dan osilator bekerja.",
+      "troubleshoot": [
+        "Jam kembali lama: pastikan SET_CLOCK tidak terus true.",
+        "Jam berhenti: periksa baterai, rangkaian modul, dan osilator sesuai dokumentasi."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-esp8266-at",
+    "title": "ESP8266 dengan AT Command dari Arduino",
+    "summary": "Jadikan ESP8266 modem Wi-Fi dan bedakan firmware AT dengan sketch mandiri ESP.",
+    "stage": 9,
+    "minutes": 18,
+    "analogy": "UNO seperti petugas utama; ESP8266 seperti operator telepon yang menerima instruksi singkat lalu melaporkan hasil.",
+    "explain": [
+      "Pada alur ini UNO menjalankan sketch utama. ESP8266 tetap memakai firmware AT dan dikendalikan melalui UART. Mengunggah sketch Arduino langsung ke ESP8266 dapat mengganti firmware AT, sehingga modul tidak lagi menjawab AT seperti sebelumnya.",
+      "Mulai dengan USB-to-UART logika 3,3V serta catu 3,3V yang memadai untuk menguji AT dan AT+GMR. Baud firmware dapat 115200 atau nilai lain; pastikan dahulu. Jangan menganggap UNO dapat memasok kebutuhan radio melalui pin 3,3V-nya.",
+      "Untuk SoftwareSerial UNO, gunakan 9600 baud setelah disetel dari sambungan serial yang stabil. Pada firmware yang mendukungnya, AT+UART_DEF=9600,8,1,0,0 menyimpan pengaturan tersebut. Ganti baud terminal sesudah menerima OK. Pilih line ending CR+LF.",
+      "Materi web berikut memakai WiFiEspAT 1.5.0 dengan firmware ESP8266 AT 1.7.x yang mendukung passive receive; contoh dokumentasi library menyebut 1.7.4. Firmware ESP8266 AT 2.0/2.1/2.2 tidak boleh dianggap pengganti kompatibel. Jalankan contoh CheckFirmware dari library sebelum melanjutkan.",
+      "Setelah bridge bekerja, perintah mode station dan join di bawah dapat dicoba pada firmware 1.7.x yang menyediakan akhiran _CUR. Tunggu respons Wi-Fi terhubung lalu periksa alamat dengan AT+CIFSR. Nama perintah dapat berbeda pada firmware lain; bila ERROR, cocokkan dokumentasinya, bukan mengirim ulang tanpa batas. Isi sandi hanya pada terminal lokal dan jangan bagikan tangkapan layarnya."
+    ],
+    "example": "AT dijawab OK dan AT+GMR melaporkan versi. Tidak ada kredensial Wi-Fi nyata dalam contoh.",
+    "practice": [
+      "Dengan USB-to-UART 3,3V, uji AT dan AT+GMR terlebih dahulu; simpan identitas firmware.",
+      "Jika didukung firmware, ubah UART ke 9600 dengan perintah di bawah dan konfirmasikan OK.",
+      "Lepaskan USB-to-UART sebelum menghubungkan UNO dan rangkai menurut tabel.",
+      "Unggah bridge dan buka Serial Monitor pada 9600, Both NL & CR.",
+      "Kirim AT satu per satu dan tunggu respons; bridge bukan parser jaringan lengkap.",
+      "Kirim perintah Wi-Fi satu per satu memakai SSID lab sendiri; catat alamat IP tanpa membagikan sandi."
+    ],
+    "warning": "Jangan memasukkan 5V ke RX atau catu ESP8266. Pengaturan baud harus dilakukan lewat komunikasi stabil sebelum bridge 9600 dipakai.",
+    "check": "Mengapa ESP yang sudah diisi sketch mandiri mungkin tidak menjawab AT?",
+    "answer": "Karena firmware AT sudah digantikan oleh sketch tersebut.",
+    "nodes": [
+      "UNO R3",
+      "UART 9600",
+      "ESP8266 AT",
+      "Wi-Fi",
+      "Respons OK"
+    ],
+    "sources": [
+      {
+        "title": "WiFiEspAT: firmware, wiring, dan baud",
+        "url": "https://github.com/JAndrassy/WiFiEspAT"
+      },
+      {
+        "title": "Espressif: AT instruction set ESP8266",
+        "url": "https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf"
+      }
+    ],
+    "arduino": {
+      "section": "D",
+      "parts": [
+        "UNO R3",
+        "ESP8266 adaptor yang terdokumentasi",
+        "Regulator 3,3V yang memadai",
+        "USB-to-UART logika 3,3V untuk penyiapan",
+        "Resistor 1kΩ dan 2kΩ atau level shifter UART"
+      ],
+      "wiring": [
+        [
+          "ESP8266",
+          "Modul/adaptor ESP-01 yang terdokumentasi dengan konfigurasi boot normal dan firmware AT yang sesuai."
+        ],
+        [
+          "Catu ESP",
+          "Regulator 3,3V terpisah dengan kemampuan transien memadai (rencanakan minimal 500 mA sesuai modul), bukan pin 3,3V UNO. GND disatukan."
+        ],
+        [
+          "ESP TX → UNO RX",
+          "ESP TX ke D6 (RX SoftwareSerial). Keluaran 3,3V modul harus memenuhi ambang input UNO."
+        ],
+        [
+          "UNO TX → ESP RX",
+          "D7 → pembagi: 1 kΩ seri ke node RX ESP, 2 kΩ node ke GND (sekitar 3,3V dari 5V), atau level shifter yang sesuai UART."
+        ],
+        [
+          "EN / reset / boot",
+          "Ikuti adaptor dan pinout modul; jangan memakai GPIO yang mengubah boot tanpa pemeriksaan."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Terminal AT · kirim bertahap",
+          "language": "text",
+          "code": "AT\nAT+GMR\nAT+UART_DEF=9600,8,1,0,0\n"
+        },
+        {
+          "label": "Sketch bridge · UNO R3",
+          "language": "cpp",
+          "code": "#include <SoftwareSerial.h>\nSoftwareSerial esp(6, 7); // RX, TX\nvoid setup() { Serial.begin(9600); esp.begin(9600); }\nvoid loop() {\n  while (Serial.available()) esp.write(Serial.read());\n  while (esp.available()) Serial.write(esp.read());\n}\n"
+        },
+        {
+          "label": "Terminal AT · bergabung ke Wi-Fi (firmware 1.7.x)",
+          "language": "text",
+          "code": "AT+CWMODE_CUR=1\nAT+CWJAP_CUR=\"NAMA_WIFI\",\"SANDI_WIFI\"\nAT+CIFSR\n"
+        }
+      ],
+      "result": "AT dijawab OK dan AT+GMR melaporkan versi. Tidak ada kredensial Wi-Fi nyata dalam contoh.",
+      "troubleshoot": [
+        "Tidak ada respons: cek firmware AT, baud, CRLF, catu, EN, RX/TX.",
+        "Karakter boot acak dapat berasal dari baud boot ROM yang berbeda; nilai aplikasi AT tetap harus diperiksa."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-platform-iot",
+    "title": "Mengenal platform IoT dan memilih alur data",
+    "summary": "Bedakan perangkat, broker, dashboard, database, dan platform layanan.",
+    "stage": 9,
+    "minutes": 18,
+    "analogy": "Platform seperti kantor penerima laporan: ada pintu masuk, penyimpanan arsip, dan papan informasi; tidak semuanya harus berupa satu layanan.",
+    "explain": [
+      "Platform IoT membantu mendaftarkan perangkat, menerima data, menampilkan informasi, dan mengirim perintah sesuai kemampuannya. Broker MQTT bukan otomatis database histori; dashboard bukan otomatis pengelola identitas perangkat.",
+      "Beberapa pilihan pendekatan adalah platform terkelola seperti Arduino Cloud atau layanan sejenis, serta gabungan server dan dashboard yang dikelola sendiri. Dukungan board, autentikasi, batas data, dan biaya harus diperiksa pada dokumentasi saat memilih.",
+      "Jalur ini memakai server lokal sederhana pada komputer untuk memahami HTTP tanpa membuat akun layanan berbayar. Komputer dan ESP berada di LAN lab yang sama. Ini langkah belajar, bukan platform produksi yang sudah memiliki autentikasi, TLS, histori tahan lama, serta pemulihan gangguan.",
+      "Sebelum memilih layanan, gambar alur sensor → pengendali → koneksi → penerima → tampilan. Tentukan unit, identitas perangkat, waktu, hak akses, serta perilaku ketika offline. Materi HTTP/JSON dan MQTT sebelumnya menjadi pengantar, bukan pelajaran yang perlu disalin ulang."
+    ],
+    "example": "Kamu dapat menjelaskan peran tiap bagian sebelum memilih produk atau layanan.",
+    "practice": [
+      "Tuliskan satu masalah nyata dan satu besaran yang diperlukan.",
+      "Gambar alur data dan jalur balik perintah.",
+      "Bandingkan kebutuhan platform: dukungan board, kredensial, histori, batas penggunaan.",
+      "Jelaskan apa yang terjadi ketika internet atau server mati."
+    ],
+    "warning": "Jangan memasukkan API key, sandi Wi-Fi, atau data pribadi ke kode publik. Lab HTTP lokal tidak diklaim aman untuk internet.",
+    "check": "Apakah broker MQTT pasti menyimpan semua riwayat pembacaan sensor?",
+    "answer": "Tidak. Histori memerlukan penyimpanan dan rancangan tambahan, kecuali layanan secara jelas menyediakannya.",
+    "nodes": [
+      "Identitas perangkat",
+      "Pengiriman",
+      "Penerima",
+      "Penyimpanan",
+      "Dashboard"
+    ],
+    "sources": [
+      {
+        "title": "Arduino Cloud",
+        "url": "https://docs.arduino.cc/arduino-cloud/"
+      },
+      {
+        "title": "MQTT",
+        "url": "https://mqtt.org/"
+      }
+    ],
+    "arduino": {
+      "section": "D",
+      "parts": [
+        "Kertas/diagram alur",
+        "Browser",
+        "Komputer untuk lab lokal pada materi berikutnya"
+      ],
+      "wiring": [
+        [
+          "Perangkat",
+          "UNO membaca sensor; ESP8266 menyediakan koneksi Wi-Fi."
+        ],
+        [
+          "Server / platform",
+          "Komputer lokal untuk contoh awal; layanan cloud adalah pilihan tahap berikutnya."
+        ],
+        [
+          "Dashboard",
+          "Tampilan yang memperlihatkan data, waktu, dan status."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Contoh kesepakatan payload",
+          "language": "json",
+          "code": "{\"deviceId\":\"uno-01\",\"temperatureC\":28.5,\"valid\":true}\n"
+        }
+      ],
+      "result": "Kamu dapat menjelaskan peran tiap bagian sebelum memilih produk atau layanan.",
+      "troubleshoot": [
+        "Jika kebutuhan hanya angka terkini, jangan menyebutnya sudah memiliki histori.",
+        "Jika memilih layanan, cek dokumentasi dan paket yang berlaku, bukan asumsi gratis selamanya."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-web-lampu",
+    "title": "Mengendalikan lampu lewat web: lab LED lokal",
+    "summary": "Buka halaman web dari UNO + ESP8266 AT dan ubah status LED latihan.",
+    "stage": 9,
+    "minutes": 18,
+    "analogy": "Browser seperti panel tombol jarak dekat; permintaan dikirim melalui Wi-Fi lalu UNO mengubah keluarannya.",
+    "explain": [
+      "UNO tetap menjadi pengendali, sementara WiFiEspAT menerjemahkan operasi jaringan menjadi AT command untuk ESP8266. Pastikan modul lolos CheckFirmware dan sudah memakai UART 9600 seperti materi AT sebelumnya.",
+      "Browser dan ESP harus berada pada LAN lab yang sama. Buka alamat IP yang dicetak Serial Monitor. Halaman menyediakan form POST untuk ON dan OFF; ini mengubah LED bawaan, bukan beban AC.",
+      "Contoh membatasi ukuran header dan waktu tunggu agar koneksi tidak ditunggu tanpa batas. Meski demikian, lab belum memiliki autentikasi, TLS, atau ketahanan untuk banyak klien. Jangan meneruskannya ke internet atau menghubungkan keluaran ke lampu rumah.",
+      "Mengendalikan lampu rumah membutuhkan jalur driver/relay, proteksi fisik, dan pengaturan akses yang dirancang benar. Tujuan latihan ini adalah memahami perjalanan permintaan web dan konfirmasi status output melalui LED yang aman."
+    ],
+    "example": "Tombol web mengubah LED dan halaman menampilkan status keluaran UNO.",
+    "practice": [
+      "Selesaikan lab AT dan jalankan contoh CheckFirmware dari WiFiEspAT.",
+      "Instal library WiFiEspAT; ganti SSID/PASS secara lokal, jangan commit sandi asli.",
+      "Unggah sketch, buka Serial Monitor 115200 dan catat IP.",
+      "Dari browser pada LAN yang sama, buka http://IP-yang-tercetak.",
+      "Tekan ON/OFF dan cocokkan status web dengan LED.",
+      "Uji jaringan putus; periksa lalu reset untuk menghubungkan ulang pada sketch sederhana ini."
+    ],
+    "warning": "Ini kontrol LED di LAN lab tepercaya tanpa autentikasi, bukan kontrol listrik rumah. Jangan port-forward atau buka layanan ini ke internet.",
+    "check": "Mengapa status di halaman juga diperiksa pada LED fisik?",
+    "answer": "Karena keberhasilan mengirim permintaan tidak selalu membuktikan keluaran fisik sudah sesuai.",
+    "nodes": [
+      "Browser LAN",
+      "POST ON / OFF",
+      "ESP8266 AT",
+      "UNO mengatur LED",
+      "Status keluaran"
+    ],
+    "sources": [
+      {
+        "title": "WiFiEspAT: API dan kompatibilitas firmware",
+        "url": "https://github.com/JAndrassy/WiFiEspAT"
+      }
+    ],
+    "arduino": {
+      "section": "D",
+      "parts": [
+        "UNO R3",
+        "Rangkaian ESP8266 AT dari D1",
+        "Wi-Fi 2,4 GHz lab",
+        "Library WiFiEspAT 1.5.0 + firmware ESP8266 AT 1.7.x yang didukung"
+      ],
+      "wiring": [
+        [
+          "ESP8266",
+          "Modul/adaptor ESP-01 yang terdokumentasi dengan konfigurasi boot normal dan firmware AT yang sesuai."
+        ],
+        [
+          "Catu ESP",
+          "Regulator 3,3V terpisah dengan kemampuan transien memadai (rencanakan minimal 500 mA sesuai modul), bukan pin 3,3V UNO. GND disatukan."
+        ],
+        [
+          "ESP TX → UNO RX",
+          "ESP TX ke D6 (RX SoftwareSerial). Keluaran 3,3V modul harus memenuhi ambang input UNO."
+        ],
+        [
+          "UNO TX → ESP RX",
+          "D7 → pembagi: 1 kΩ seri ke node RX ESP, 2 kΩ node ke GND (sekitar 3,3V dari 5V), atau level shifter yang sesuai UART."
+        ],
+        [
+          "EN / reset / boot",
+          "Ikuti adaptor dan pinout modul; jangan memakai GPIO yang mengubah boot tanpa pemeriksaan."
+        ],
+        [
+          "Output",
+          "LED bawaan UNO; tanpa relay atau lampu PLN."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · Arduino UNO R3",
+          "language": "cpp",
+          "code": "#include <SoftwareSerial.h>\n#include <WiFiEspAT.h>\nSoftwareSerial esp(6, 7);\nconst char SSID[] = \"NAMA_WIFI\";\nconst char PASS[] = \"SANDI_WIFI\";\nbool networkReady = false;\nbool connectNetwork() {\n  esp.begin(9600);\n  WiFi.init(esp);\n  if (WiFi.status() == WL_NO_MODULE) return false;\n  WiFi.begin(SSID, PASS);\n  unsigned long start = millis();\n  while (WiFi.status() != WL_CONNECTED && millis() - start < 30000UL) delay(250);\n  return WiFi.status() == WL_CONNECTED;\n}\nWiFiServer server(80);\nvoid setup() {\n  pinMode(LED_BUILTIN, OUTPUT);\n  digitalWrite(LED_BUILTIN, LOW);\n  Serial.begin(115200);\n  networkReady = connectNetwork();\n  if (!networkReady) { Serial.println(F(\"Koneksi gagal. Periksa AT/Wi-Fi lalu reset.\")); return; }\n  server.begin();\n  Serial.print(F(\"Buka http://\")); Serial.println(WiFi.localIP());\n}\nvoid loop() {\n  if (!networkReady) return;\n  WiFiClient client = server.accept();\n  if (!client) return;\n  char request[96] = {0};\n  byte used = 0;\n  unsigned long start = millis();\n  bool firstLine = true, blank = true, complete = false;\n  unsigned int received = 0;\n  while (client.connected() && millis() - start < 8000UL && received < 2048) {\n    if (!client.available()) continue;\n    char c = client.read(); received++;\n    if (firstLine && c != '\\r' && c != '\\n' && used < sizeof(request) - 1) request[used++] = c;\n    if (c == '\\n') {\n      if (blank) { complete = true; break; }\n      blank = true; firstLine = false;\n    } else if (c != '\\r') blank = false;\n  }\n  if (complete) {\n    if (strcmp(request, \"POST /on HTTP/1.1\") == 0) digitalWrite(LED_BUILTIN, HIGH);\n    if (strcmp(request, \"POST /off HTTP/1.1\") == 0) digitalWrite(LED_BUILTIN, LOW);\n    client.println(F(\"HTTP/1.1 200 OK\"));\n    client.println(F(\"Content-Type: text/html; charset=utf-8\"));\n    client.println(F(\"Cache-Control: no-store\"));\n    client.println(F(\"Connection: close\")); client.println();\n    client.println(F(\"<!doctype html><html lang='id'><meta name='viewport' content='width=device-width'><title>LED UNO</title><h1>LED latihan</h1>\"));\n    client.print(F(\"<p>Status: \"));\n    client.print(digitalRead(LED_BUILTIN) ? F(\"ON\") : F(\"OFF\"));\n    client.println(F(\"</p><form method='post' action='/on'><button>ON</button></form><form method='post' action='/off'><button>OFF</button></form></html>\"));\n  }\n  client.stop();\n}\n"
+        }
+      ],
+      "result": "Tombol web mengubah LED dan halaman menampilkan status keluaran UNO.",
+      "troubleshoot": [
+        "Tidak mendapat IP: cek Wi-Fi, firmware AT, baud 9600, dan catu radio.",
+        "IP ada tetapi halaman tidak terbuka: cek isolasi klien AP, LAN yang sama, dan alamat aktual.",
+        "Output tidak sesuai: gunakan LED bawaan dan sketch ini sendiri tanpa menggabungkan wiring lab lain."
+      ]
+    }
+  },
+  {
+    "slug": "arduino-kirim-data-web",
+    "title": "Mengirim data LM35 ke web lokal",
+    "summary": "Kirim JSON dari UNO lewat ESP8266 AT ke penerima Python dan tampilkan hasil di browser.",
+    "stage": 9,
+    "minutes": 18,
+    "analogy": "Sensor mengukur, UNO menulis laporan, ESP mengantar, dan web menampilkan laporan terakhir yang diterima.",
+    "explain": [
+      "Selesaikan LM35 dan koneksi AT sebelum menggabungkannya. Contoh menggunakan A0 untuk LM35 dan D6/D7 untuk UART modem. Data dikirim lewat HTTP POST setiap 10 detik ke komputer lab.",
+      "Penerima Python di bawah menyimpan satu pembacaan terakhir dalam memori dan menampilkannya pada halaman web. Ini belum database histori; datanya hilang ketika server dihentikan. Server memeriksa ukuran dan bentuk payload untuk latihan validasi dasar.",
+      "Ganti IP receiver di sketch dengan alamat LAN komputer. Browser membuka http://IP-KOMPUTER:8080, bukan alamat UNO. Sesuaikan izin firewall hanya pada jaringan lab tepercaya. Python 3 diperlukan; pada sebagian Windows gunakan py menggantikan python.",
+      "HTTP lab ini tidak terenkripsi dan tidak diautentikasi. Jangan mengirim token atau data privat. Untuk penggunaan internet, pilih platform dengan HTTPS/TLS, identitas perangkat, validasi, dan penyimpanan yang sesuai; keterbatasan firmware AT harus dipertimbangkan."
+    ],
+    "example": "Browser menampilkan pembacaan terakhir yang diterima dari UNO; Serial Monitor menunjukkan respons HTTP penerima.",
+    "practice": [
+      "Uji LM35 lokal dan CheckFirmware lebih dahulu.",
+      "Simpan kode Python sebagai penerima.py lalu jalankan perintah terminal.",
+      "Buka halaman penerima di komputer; data awal null sampai ada kiriman.",
+      "Ganti SSID/PASS dan IP receiver pada sketch secara lokal; unggah UNO.",
+      "Buka Serial Monitor untuk melihat respons HTTP.",
+      "Bandingkan hasil di browser; hentikan server dan amati kegagalan, lalu hidupkan lagi."
+    ],
+    "warning": "Server contoh hanya untuk lab lokal. Jangan mempublikasikannya dengan port-forward atau menganggapnya penyimpanan permanen.",
+    "check": "Jika server Python dimatikan lalu dinyalakan lagi, apakah histori lama tetap ada?",
+    "answer": "Tidak. Contoh menyimpan satu nilai terakhir di memori, bukan riwayat dalam database.",
+    "nodes": [
+      "LM35 A0",
+      "UNO membuat JSON",
+      "ESP AT / HTTP",
+      "Penerima Python",
+      "Web nilai terakhir"
+    ],
+    "sources": [
+      {
+        "title": "WiFiEspAT",
+        "url": "https://github.com/JAndrassy/WiFiEspAT"
+      },
+      {
+        "title": "Python http.server",
+        "url": "https://docs.python.org/3/library/http.server.html"
+      }
+    ],
+    "arduino": {
+      "section": "D",
+      "parts": [
+        "UNO R3 + LM35",
+        "Rangkaian ESP8266 AT dari D1",
+        "WiFiEspAT 1.5.0 dan firmware yang didukung",
+        "Komputer dengan Python 3 pada LAN lab"
+      ],
+      "wiring": [
+        [
+          "ESP8266",
+          "Modul/adaptor ESP-01 yang terdokumentasi dengan konfigurasi boot normal dan firmware AT yang sesuai."
+        ],
+        [
+          "Catu ESP",
+          "Regulator 3,3V terpisah dengan kemampuan transien memadai (rencanakan minimal 500 mA sesuai modul), bukan pin 3,3V UNO. GND disatukan."
+        ],
+        [
+          "ESP TX → UNO RX",
+          "ESP TX ke D6 (RX SoftwareSerial). Keluaran 3,3V modul harus memenuhi ambang input UNO."
+        ],
+        [
+          "UNO TX → ESP RX",
+          "D7 → pembagi: 1 kΩ seri ke node RX ESP, 2 kΩ node ke GND (sekitar 3,3V dari 5V), atau level shifter yang sesuai UART."
+        ],
+        [
+          "EN / reset / boot",
+          "Ikuti adaptor dan pinout modul; jangan memakai GPIO yang mengubah boot tanpa pemeriksaan."
+        ],
+        [
+          "LM35",
+          "VS ke 5V, VOUT ke A0, GND bersama; periksa pinout paket seperti lab LM35."
+        ],
+        [
+          "Komputer",
+          "Catat IP LAN komputer dan sediakan port 8080 hanya untuk LAN lab."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Penerima · simpan sebagai penerima.py",
+          "language": "python",
+          "code": "from http.server import HTTPServer, BaseHTTPRequestHandler\nimport json\nimport html\nlast = None\nclass Handler(BaseHTTPRequestHandler):\n    def do_GET(self):\n        if self.path != \"/\":\n            self.send_error(404); return\n        body = (\"<!doctype html><meta charset='utf-8'>\"\n                \"<meta http-equiv='refresh' content='5'>\"\n                \"<h1>Data terakhir dari UNO</h1><pre>\" +\n                html.escape(json.dumps(last, indent=2)) + \"</pre>\").encode()\n        self.send_response(200)\n        self.send_header(\"Content-Type\", \"text/html; charset=utf-8\")\n        self.send_header(\"Content-Length\", str(len(body)))\n        self.end_headers(); self.wfile.write(body)\n    def do_POST(self):\n        global last\n        if self.path != \"/telemetry\":\n            self.send_error(404); return\n        try:\n            length = int(self.headers.get(\"Content-Length\", \"0\"))\n            if not 0 < length <= 512:\n                raise ValueError(\"invalid length\")\n            value = json.loads(self.rfile.read(length))\n            if not isinstance(value, dict): raise ValueError(\"object required\")\n            temperature = value.get(\"temperatureC\")\n            if (value.get(\"deviceId\") != \"uno-01\" or\n                not isinstance(temperature, (int, float)) or\n                isinstance(temperature, bool) or not -10 <= temperature <= 100):\n                raise ValueError(\"invalid data\")\n            last = {\"deviceId\": \"uno-01\", \"temperatureC\": temperature}\n        except (ValueError, TypeError):\n            self.send_error(400); return\n        body = b'{\"ok\":true}'\n        self.send_response(200)\n        self.send_header(\"Content-Type\", \"application/json\")\n        self.send_header(\"Content-Length\", str(len(body)))\n        self.end_headers(); self.wfile.write(body)\nprint(\"Lab lokal: buka http://IP-KOMPUTER:8080 ; Ctrl+C untuk berhenti\")\nHTTPServer((\"0.0.0.0\", 8080), Handler).serve_forever()\n"
+        },
+        {
+          "label": "Terminal · komputer lab",
+          "language": "sh",
+          "code": "python penerima.py\n"
+        },
+        {
+          "label": "Sketch pengirim · UNO R3",
+          "language": "cpp",
+          "code": "#include <SoftwareSerial.h>\n#include <WiFiEspAT.h>\nSoftwareSerial esp(6, 7);\nconst char SSID[] = \"NAMA_WIFI\";\nconst char PASS[] = \"SANDI_WIFI\";\nbool networkReady = false;\nbool connectNetwork() {\n  esp.begin(9600);\n  WiFi.init(esp);\n  if (WiFi.status() == WL_NO_MODULE) return false;\n  WiFi.begin(SSID, PASS);\n  unsigned long start = millis();\n  while (WiFi.status() != WL_CONNECTED && millis() - start < 30000UL) delay(250);\n  return WiFi.status() == WL_CONNECTED;\n}\nIPAddress receiver(192, 168, 1, 10); // ganti IP komputer lab\nunsigned long lastSend = 0;\nvoid setup() {\n  Serial.begin(115200);\n  networkReady = connectNetwork();\n  Serial.println(networkReady ? F(\"Wi-Fi siap\") : F(\"Koneksi gagal; periksa lalu reset\"));\n}\nvoid loop() {\n  if (!networkReady || millis() - lastSend < 10000UL) return;\n  lastSend = millis();\n  float celsius = analogRead(A0) * (5.0 / 1024.0) * 100.0;\n  char number[16];\n  dtostrf(celsius, 0, 1, number);\n  char payload[80];\n  snprintf(payload, sizeof(payload), \"{\\\"deviceId\\\":\\\"uno-01\\\",\\\"temperatureC\\\":%s}\", number);\n  WiFiClient client;\n  if (!client.connect(receiver, 8080)) { Serial.println(F(\"Server tidak terhubung\")); return; }\n  client.println(F(\"POST /telemetry HTTP/1.1\"));\n  client.print(F(\"Host: \")); client.print(receiver); client.println(F(\":8080\"));\n  client.println(F(\"Content-Type: application/json\"));\n  client.print(F(\"Content-Length: \")); client.println(strlen(payload));\n  client.println(F(\"Connection: close\")); client.println();\n  client.print(payload);\n  unsigned long start = millis();\n  while (client.connected() && millis() - start < 3000UL) {\n    while (client.available()) Serial.write(client.read());\n  }\n  client.stop();\n}\n"
+        }
+      ],
+      "result": "Browser menampilkan pembacaan terakhir yang diterima dari UNO; Serial Monitor menunjukkan respons HTTP penerima.",
+      "troubleshoot": [
+        "Server tidak terhubung: cek IP komputer, port, firewall, dan isolasi AP.",
+        "HTTP 400: periksa payload, sensor, dan rentang nilai lab.",
+        "Data tidak berubah: tunggu 10 detik dan refresh setelah kiriman baru; periksa Serial."
+      ]
+    }
   }
 ]
