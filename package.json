@@ -15,7 +15,8 @@
     "check:mtcre": "node scripts/check-mtcre.mjs",
     "check:failover": "node scripts/check-failover.cjs",
     "check:mtcre-labs": "python scripts/check-mtcre-labs.py",
-    "check:mtcre-curriculum": "python scripts/check-mtcre-curriculum.py"
+    "check:mtcre-curriculum": "python scripts/check-mtcre-curriculum.py",
+    "check:mtcna": "python scripts/check-mtcna.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

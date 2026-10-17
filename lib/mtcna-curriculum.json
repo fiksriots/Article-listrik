@@ -1,0 +1,303 @@
+[
+  {
+    "number": 1,
+    "title": "MikroTik RouterOS Introduction",
+    "description": "Kenali router, sambungkan layanan dasar, lalu siapkan cara pemulihan.",
+    "items": [
+      {
+        "id": "first-access",
+        "title": "First time accessing the router + LAB",
+        "theory": "/jaringan/mtcna/panduan/akses-pertama",
+        "lab": "/jaringan/mtcna/panduan/akses-pertama#praktik",
+        "note": ""
+      },
+      {
+        "id": "internet",
+        "title": "Setup internet connection via router + LAB",
+        "theory": "/jaringan/mtcna/panduan/internet-dhcp",
+        "lab": "/jaringan/mtcna/panduan/internet-dhcp#praktik",
+        "note": ""
+      },
+      {
+        "id": "tcp-ip",
+        "title": "TCP/IP Basics",
+        "theory": "/jaringan/osi-tcp-ip",
+        "lab": "",
+        "note": "Lanjutkan ke IP, subnet mask, gateway, DNS dan simulator subnetting dari prasyarat."
+      },
+      {
+        "id": "upgrade-login",
+        "title": "Upgrade RouterOS dan manajemen login + LAB",
+        "theory": "/jaringan/mtcna/panduan/upgrade-login",
+        "lab": "/jaringan/mtcna/panduan/upgrade-login#praktik",
+        "note": "Butir “Upgrade RouterOS logins” dibahas sebagai upgrade paket serta pengelolaan akun/login."
+      },
+      {
+        "id": "services",
+        "title": "Manage RouterOS services",
+        "theory": "/jaringan/mtcna/panduan/layanan-router",
+        "lab": "/jaringan/mtcna/panduan/layanan-router#praktik",
+        "note": ""
+      },
+      {
+        "id": "backup",
+        "title": "Backup dan export/import configuration + LAB",
+        "theory": "/jaringan/mtcna/panduan/backup-restore",
+        "lab": "/jaringan/mtcna/panduan/backup-restore#praktik",
+        "note": ""
+      },
+      {
+        "id": "license",
+        "title": "RouterOS license",
+        "theory": "/jaringan/mtcna/panduan/lisensi",
+        "lab": "",
+        "note": ""
+      },
+      {
+        "id": "ntp",
+        "title": "NTP client configuration",
+        "theory": "/jaringan/mtcna/panduan/ntp",
+        "lab": "/jaringan/mtcna/panduan/ntp#praktik",
+        "note": ""
+      },
+      {
+        "id": "netinstall",
+        "title": "Netinstall + LAB",
+        "theory": "/jaringan/mtcna/panduan/netinstall",
+        "lab": "/jaringan/mtcna/panduan/netinstall#praktik",
+        "note": "Praktik pemulihan pada perangkat fisik cadangan; proses Install menghapus konfigurasi/file."
+      }
+    ]
+  },
+  {
+    "number": 2,
+    "title": "MikroTik RouterOS Firewall",
+    "description": "Pisahkan keputusan filter, catatan koneksi dan translasi alamat.",
+    "items": [
+      {
+        "id": "firewall-principles",
+        "title": "Firewall principles",
+        "theory": "/jaringan/mtcna/panduan/firewall-filter",
+        "lab": "/jaringan/mtcna/panduan/firewall-filter#praktik",
+        "note": ""
+      },
+      {
+        "id": "firewall-action",
+        "title": "Firewall filter in action",
+        "theory": "/jaringan/mtcna/panduan/firewall-filter",
+        "lab": "/jaringan/mtcna/panduan/firewall-filter#praktik",
+        "note": "Input, forward, output, urutan rule dan pengujian izin/tolak."
+      },
+      {
+        "id": "conntrack",
+        "title": "RouterOS connection tracking",
+        "theory": "/jaringan/mtcna/panduan/connection-tracking",
+        "lab": "/jaringan/mtcna/panduan/connection-tracking#praktik",
+        "note": ""
+      },
+      {
+        "id": "address-list",
+        "title": "Basic address list + LAB",
+        "theory": "/jaringan/mtcna/panduan/address-list-srcnat",
+        "lab": "/jaringan/mtcna/panduan/address-list-srcnat#praktik",
+        "note": ""
+      },
+      {
+        "id": "src-nat",
+        "title": "Source NAT + LAB",
+        "theory": "/jaringan/mtcna/panduan/address-list-srcnat",
+        "lab": "/jaringan/mtcna/panduan/address-list-srcnat#praktik",
+        "note": "Address list dan Source NAT dipetakan terpisah dalam satu studi kasus."
+      },
+      {
+        "id": "dst-nat",
+        "title": "Destination NAT",
+        "theory": "/jaringan/mtcna/panduan/destination-nat",
+        "lab": "/jaringan/mtcna/panduan/destination-nat#praktik",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "number": 3,
+    "title": "MikroTik RouterOS QoS",
+    "description": "Batasi kapasitas dengan benar dan ukur tanpa mengabaikan bottleneck.",
+    "items": [
+      {
+        "id": "simple-queue",
+        "title": "Simple Queue + LAB",
+        "theory": "/jaringan/mtcna/panduan/simple-queue",
+        "lab": "/jaringan/mtcna/panduan/simple-queue#praktik",
+        "note": ""
+      },
+      {
+        "id": "bandwidth",
+        "title": "Bandwidth test + LAB",
+        "theory": "/jaringan/mtcna/panduan/bandwidth-monitor",
+        "lab": "/jaringan/mtcna/panduan/bandwidth-monitor#praktik",
+        "note": ""
+      },
+      {
+        "id": "traffic-monitor",
+        "title": "Interface traffic monitor",
+        "theory": "/jaringan/mtcna/panduan/bandwidth-monitor",
+        "lab": "/jaringan/mtcna/panduan/bandwidth-monitor#praktik",
+        "note": "Amati trafik interface, arah Tx/Rx, counter dan CPU saat tes."
+      },
+      {
+        "id": "pcq",
+        "title": "PCQ Queueing",
+        "theory": "/jaringan/mtcna/panduan/pcq",
+        "lab": "/jaringan/mtcna/panduan/pcq#praktik",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "number": 4,
+    "title": "MikroTik RouterOS Network Management",
+    "description": "Pahami tetangga lokal dan pembagian konfigurasi otomatis.",
+    "items": [
+      {
+        "id": "arp-modes",
+        "title": "ARP modes",
+        "theory": "/jaringan/mtcna/panduan/arp",
+        "lab": "/jaringan/mtcna/panduan/arp#praktik",
+        "note": ""
+      },
+      {
+        "id": "arp-table",
+        "title": "RouterOS ARP table",
+        "theory": "/jaringan/mtcna/panduan/arp",
+        "lab": "/jaringan/mtcna/panduan/arp#praktik",
+        "note": ""
+      },
+      {
+        "id": "dhcp",
+        "title": "DHCP server dan client + LAB",
+        "theory": "/jaringan/mtcna/panduan/internet-dhcp",
+        "lab": "/jaringan/mtcna/panduan/internet-dhcp#praktik",
+        "note": "WAN sebagai DHCP client, LAN sebagai DHCP server, pool, lease, gateway dan DNS."
+      }
+    ]
+  },
+  {
+    "number": 5,
+    "title": "MikroTik RouterOS Wireless",
+    "description": "Mulai dari link aman, lalu access list dan perbandingan protokol.",
+    "items": [
+      {
+        "id": "wireless-link",
+        "title": "Setup simple wireless link + LAB",
+        "theory": "/jaringan/mtcna/panduan/wireless-link",
+        "lab": "/jaringan/mtcna/panduan/wireless-link#praktik",
+        "note": ""
+      },
+      {
+        "id": "wireless-mac",
+        "title": "MAC address filtering + LAB",
+        "theory": "/jaringan/mtcna/panduan/wireless-mac",
+        "lab": "/jaringan/mtcna/panduan/wireless-mac#praktik",
+        "note": "Dua butir MAC filtering yang sama digabung; lab mencakup station diizinkan dan ditolak."
+      },
+      {
+        "id": "wireless-protocols",
+        "title": "MikroTik wireless protocols + LAB",
+        "theory": "/jaringan/mtcna/panduan/wireless-protocols",
+        "lab": "/jaringan/mtcna/panduan/wireless-protocols#praktik",
+        "note": "802.11, Nstreme, Nv2; dukungan paket wireless dibedakan dari wifi."
+      }
+    ]
+  },
+  {
+    "number": 6,
+    "title": "MikroTik RouterOS Bridging",
+    "description": "Bangun satu LAN dan pahami batas antara transport dengan overlay.",
+    "items": [
+      {
+        "id": "bridge-concepts",
+        "title": "Bridging concepts + LAB",
+        "theory": "/jaringan/mtcna/panduan/bridge-lan",
+        "lab": "/jaringan/mtcna/panduan/bridge-lan#praktik",
+        "note": ""
+      },
+      {
+        "id": "bridge-wireless",
+        "title": "Bridge wireless networks + LAB",
+        "theory": "/jaringan/mtcna/panduan/bridge-wireless",
+        "lab": "/jaringan/mtcna/panduan/bridge-wireless#praktik",
+        "note": ""
+      },
+      {
+        "id": "bridge-remote",
+        "title": "Bridge wireless dan remote networks + LAB",
+        "theory": "/jaringan/mtcna/panduan/bridge-remote",
+        "lab": "/jaringan/mtcna/panduan/bridge-remote#praktik",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "number": 7,
+    "title": "MikroTik RouterOS Routing",
+    "description": "Baca tabel route, tentukan next hop dan buktikan rute balik.",
+    "items": [
+      {
+        "id": "routing-overview",
+        "title": "Routing overview",
+        "theory": "/jaringan/mtcna-routing-lab",
+        "lab": "/jaringan/simulator/next-hop",
+        "note": "Latihan visual dua router: gateway, next hop serta rute balik."
+      },
+      {
+        "id": "static-routing",
+        "title": "Static routing",
+        "theory": "/jaringan/mtcna-routing-lab",
+        "lab": "/jaringan/mtcre/lab/static-tiga-router",
+        "note": "Lab bersama MTCRE: static route tiga router; mulai dari alamat transit dan route balik."
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "title": "MikroTik RouterOS Tunnels",
+    "description": "Bedakan akses PPP, tunnel Layer 2/3 dan kebutuhan keamanannya.",
+    "items": [
+      {
+        "id": "tunnel-overview",
+        "title": "Tunnel Overview",
+        "theory": "/jaringan/mtcna-pppoe-tunnel",
+        "lab": "",
+        "note": "Perbandingan tambahan tersedia di materi VPN MTCRE. Tunnel tidak otomatis berarti terenkripsi."
+      },
+      {
+        "id": "pppoe",
+        "title": "PPPoE",
+        "theory": "/jaringan/mtcna-pppoe-tunnel",
+        "lab": "/jaringan/mtcre/lab/vpn-pppoe",
+        "note": "Lab bersama: server, client, profil, pool dan autentikasi PPPoE; bukan enkripsi VPN."
+      },
+      {
+        "id": "pptp",
+        "title": "PPTP",
+        "theory": "/jaringan/mtcre/materi/vpn-comparison",
+        "lab": "/jaringan/mtcre/lab/vpn-pptp",
+        "note": "Protokol lama untuk pengenalan di lab terisolasi, bukan pilihan untuk layanan baru."
+      },
+      {
+        "id": "l2tp",
+        "title": "L2TP",
+        "theory": "/jaringan/mtcre/materi/vpn-comparison",
+        "lab": "/jaringan/mtcre/lab/vpn-l2tp",
+        "note": "Lab bersama memakai L2TP/IPsec; bedakan L2TP dari lapisan enkripsi IPsec."
+      },
+      {
+        "id": "eoip",
+        "title": "EoIP",
+        "theory": "/jaringan/mtcna-pppoe-tunnel",
+        "lab": "/jaringan/mtcre/lab/tunnel-eoip",
+        "note": "Lab bersama dua router CHR; perlu IP underlay, tunnel-id dan bridge yang benar."
+      }
+    ]
+  }
+]

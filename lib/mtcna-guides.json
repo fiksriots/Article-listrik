@@ -1,0 +1,2243 @@
+[
+  {
+    "slug": "akses-pertama",
+    "title": "Akses pertama: Winbox, IP, MAC dan console",
+    "module": 1,
+    "summary": "Masuk ke router, mengenali interface, lalu menguji akses IP dengan aman.",
+    "analogy": "Kenali pintu serta kunci sebelum mengubah isi ruangan.",
+    "explain": [
+      "RouterOS dapat dikelola melalui Winbox, WebFig, SSH atau console sesuai layanan dan kondisi jaringan. Akses IP memerlukan alamat/rute yang benar; akses Winbox MAC bekerja pada kedekatan Layer 2 dan tidak melintasi router seperti koneksi IP biasa. Jangan menganggap MAC login selalu tersedia atau dapat diandalkan.",
+      "RouterBOARD baru dapat mempunyai konfigurasi serta password pabrik pada label. CHR kosong mempunyai kondisi awal berbeda. Baca quick guide model dan periksa konfigurasi yang ada; jangan reset perangkat aktif hanya agar cocok dengan tutorial. Jika diminta membuat password, gunakan milik sendiri dan simpan secara pribadi.",
+      "Pada lab CHR kosong, tetapkan IP LAN pada interface yang benar lewat console, kemudian hubungkan PC dengan subnet yang sama. Periksa interface dan identitas sebelum perubahan. Simpan snapshot serta buka akses console cadangan agar salah alamat atau pembatasan layanan tidak membuatmu kehilangan akses."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "NIC ↔ ether2 / LAN admin"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "alamat admin lab"
+      ],
+      [
+        "PC",
+        "NIC",
+        "192.168.50.10/24",
+        "gateway .1 bila diperlukan"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Pilih kondisi awal",
+        "text": "Router fisik: ikuti label password dan quick guide model. CHR: gunakan console hypervisor. Winbox diunduh dari MikroTik resmi. Catat perangkat dan izin pengelolaannya.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Kenali port",
+        "text": "Jalankan pada console router lab kosong. Pastikan ether2 benar-benar menuju PC sebelum memberi alamat. Jangan menambah alamat duplikat pada router berkonfigurasi.",
+        "device": "RTR",
+        "code": "/system/resource/print\n/interface/print\n/system/identity/set name=MTCNA-RTR\n/ip/address/add address=192.168.50.1/24 interface=ether2 comment=\"MTCNA-LAB\"\n"
+      },
+      {
+        "title": "3. PC dan Winbox",
+        "text": "Beri PC 192.168.50.10/24, hubungkan ke ether2, ping .1, lalu Winbox Connect To 192.168.50.1. Catat beda tab Neighbors dan alamat IP yang dipakai.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "4. Simpan titik awal",
+        "text": "Export dibaca kembali melalui Files; simpan di luar router. Login serta password tidak dibagikan ke publik.",
+        "device": "RTR",
+        "code": "/export file=mtcna-awal"
+      }
+    ],
+    "tests": [
+      [
+        "PC",
+        "ping 192.168.50.1",
+        "IP admin menjawab jika link, subnet dan firewall benar."
+      ],
+      [
+        "Winbox",
+        "System → Identity; Interfaces",
+        "Identitas dan port sesuai perangkat lab."
+      ],
+      [
+        "Console",
+        "/ip/address/print",
+        "Alamat .1 berada pada ether2, bukan WAN."
+      ]
+    ],
+    "faults": [
+      [
+        "Tidak muncul di Neighbors",
+        "Periksa Layer 2, NIC, kabel serta pengaturan neighbor/MAC server; gunakan console/IP yang benar."
+      ],
+      [
+        "IP tidak dapat diakses",
+        "Periksa subnet PC, link dan firewall tanpa menonaktifkan proteksi produksi."
+      ]
+    ],
+    "restore": "Tidak perlu reset. Pulihkan snapshot jika salah port; lanjut ke lab internet pada snapshot kosong terpisah agar alamat tidak ditambahkan dua kali.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/first-time-configuration/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "internet-dhcp",
+    "title": "Internet melalui router: WAN DHCP, LAN DHCP, NAT dan filter",
+    "module": 1,
+    "summary": "Membangun koneksi klien sambil memisahkan IP, route, DNS, NAT dan izin firewall.",
+    "analogy": "Alamat rumah, pintu keluar, buku nama dan izin perjalanan adalah kebutuhan yang berbeda.",
+    "explain": [
+      "Klien LAN memerlukan IP/prefix, gateway dan DNS. Router memerlukan alamat WAN serta route menuju tujuan. DHCP client pada WAN dapat menerima alamat/default route dari hulu; DHCP server LAN membagikan konfigurasi ke klien. Dua peran DHCP ini tidak boleh tertukar atau diaktifkan pada port yang salah.",
+      "DHCP IPv4 biasanya dimulai dengan Discover, Offer, Request dan ACK (DORA). Pool adalah persediaan IP, network menyatakan subnet/gateway/DNS yang dibagikan, sedangkan lease mencatat peminjaman untuk klien. Status bound pada WAN dan lease klien adalah bukti yang berbeda: WAN berhasil belum membuktikan server LAN bekerja. Periksa IP, mask, gateway, DNS dan lease pada PC, lalu lakukan renew dari OS klien untuk mengulangi pengujian.",
+      "NAT masquerade cocok untuk contoh WAN beralamat dinamis. Ia menerjemahkan sumber LAN saat keluar melalui ether1, bukan memberikan izin firewall. Filter input melindungi router itu sendiri; forward mengatur trafik klien melewatinya. Lab kosong ini membuat keduanya secara eksplisit dan tidak menambahkan FastTrack agar pengamatan serta queue berikutnya mudah dibuktikan.",
+      "Gunakan hulu lab yang benar-benar menyediakan DHCP serta internet, misalnya NAT node GNS3 atau jaringan uji milik sendiri. Jika hulu hanya router tiruan tanpa akses luar, ping internet dan DNS memang tidak akan bekerja. Jangan mempublikasikan router CHR kosong sebelum filter, password dan layanan pengelolaan selesai dirancang."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC",
+        "NIC",
+        "DHCP",
+        "pool .100–.150; gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Topologi dan baseline",
+        "text": "Mulai dari snapshot CHR kosong tersendiri. ether1 ke hulu DHCP yang diizinkan; ether2 ke PC. Jika sebelumnya sudah ada alamat/server/rule, gunakan snapshot lab bersih atau sesuaikan satu per satu, bukan menumpuk konfigurasi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. WAN, LAN dan NAT",
+        "text": "Winbox IP → Addresses, DHCP Client, Pool, DHCP Server dan Firewall → NAT. PC diatur DHCP otomatis. DNS klien memakai resolver luar, bukan membuka resolver router ke WAN.",
+        "device": "RTR",
+        "code": "/ip/address/add address=192.168.50.1/24 interface=ether2 comment=\"MTCNA-LAB\"\n/ip/dhcp-client/add interface=ether1 add-default-route=yes use-peer-dns=yes disabled=no\n/ip/pool/add name=lan-pool ranges=192.168.50.100-192.168.50.150\n/ip/dhcp-server/add name=lan-dhcp interface=ether2 address-pool=lan-pool disabled=no\n/ip/dhcp-server/network/add address=192.168.50.0/24 gateway=192.168.50.1 dns-server=1.1.1.1,8.8.8.8\n/ip/dns/set allow-remote-requests=no\n/ip/firewall/nat/add chain=srcnat src-address=192.168.50.0/24 out-interface=ether1 action=masquerade comment=\"MTCNA-NAT\""
+      },
+      {
+        "title": "3. Filter router dan trafik klien",
+        "text": "Masukkan dari console lokal setelah IP LAN benar. Rule LAN-admin memberi akses dari LAN lab tepercaya. Ini baseline belajar, bukan kebijakan produksi universal.",
+        "device": "RTR",
+        "code": "/ip/firewall/filter/add chain=input connection-state=established,related action=accept\n/ip/firewall/filter/add chain=input connection-state=invalid action=drop\n/ip/firewall/filter/add chain=input in-interface=ether1 protocol=udp src-port=67 dst-port=68 action=accept comment=\"MTCNA-WAN-DHCP\"\n/ip/firewall/filter/add chain=input in-interface=ether2 action=accept comment=\"MTCNA-ADMIN-LAN\"\n/ip/firewall/filter/add chain=input action=drop comment=\"MTCNA-INPUT-DROP\"\n/ip/firewall/filter/add chain=forward connection-state=established,related action=accept\n/ip/firewall/filter/add chain=forward connection-state=invalid action=drop\n/ip/firewall/filter/add chain=forward in-interface=ether2 out-interface=ether1 action=accept comment=\"MTCNA-LAN-WAN\"\n/ip/firewall/filter/add chain=forward action=drop comment=\"MTCNA-FWD-DROP\""
+      },
+      {
+        "title": "4. Periksa urutannya",
+        "text": "IP klien → gateway → route WAN → IP luar → DNS → aplikasi. Catat sumber paket uji; ping router dan ping klien melewati chain berbeda.",
+        "device": "RTR",
+        "code": "/ip/dhcp-client/print detail\n/ip/dhcp-server/lease/print\n/ip/route/print detail\n/ip/firewall/nat/print stats"
+      }
+    ],
+    "tests": [
+      [
+        "PC",
+        "Lihat konfigurasi IP otomatis",
+        "Alamat .100–.150/24, gateway .1, DNS sesuai jaringan DHCP."
+      ],
+      [
+        "PC",
+        "Ping gateway, kemudian IP layanan luar yang diizinkan",
+        "Gateway berhasil belum membuktikan hulu internet sehat. ICMP tujuan juga dapat dibatasi."
+      ],
+      [
+        "PC",
+        "nslookup example.com lalu buka HTTPS",
+        "DNS serta aplikasi diuji terpisah dari ping IP."
+      ],
+      [
+        "RTR",
+        "/ip/firewall/filter/print stats",
+        "Trafik LAN-WAN melewati forward; koneksi ke router melewati input."
+      ]
+    ],
+    "faults": [
+      [
+        "WAN tidak bound",
+        "Periksa DHCP hulu, port dan konfigurasi NAT node; jangan menyalakan DHCP server LAN di WAN."
+      ],
+      [
+        "Ping IP luar berhasil, domain gagal",
+        "Periksa DNS yang diterima klien dan izin trafik resolver."
+      ],
+      [
+        "Router bisa internet, klien tidak",
+        "Periksa gateway PC, rule forward, sumber NAT dan jalur balik."
+      ]
+    ],
+    "restore": "Simpan snapshot baseline ini untuk lab firewall, address list, DHCP, NTP dan QoS. Jangan menghapus seluruh firewall untuk mencoba memperbaiki koneksi.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/first-time-configuration/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "upgrade-login",
+    "title": "Upgrade RouterOS dan pengelolaan login",
+    "module": 1,
+    "summary": "Memisahkan pembaruan sistem, firmware RouterBOOT dan akun pengelola.",
+    "analogy": "Mengganti mesin berbeda dengan mengganti kunci, walaupun keduanya membutuhkan rencana pemulihan.",
+    "explain": [
+      "Butir “Upgrade RouterOS logins” dipelajari sebagai upgrade RouterOS sekaligus pengelolaan login. Catat versi, arsitektur, paket, ruang penyimpanan, model serta fitur yang dipakai. Baca changelog dan kompatibilitas, terutama perpindahan wireless/wifi atau major release; versi lebih baru tidak otomatis cocok untuk semua perangkat lama.",
+      "Backup terenkripsi, export dan snapshot harus tersedia di luar router sebelum pembaruan. Pada CHR simpan snapshot hypervisor. Upgrade dapat memerlukan reboot dan memutus koneksi. RouterBOOT adalah firmware pada RouterBOARD dan berbeda dari paket RouterOS; CHR tidak mengikuti semua langkah firmware RouterBOARD.",
+      "Akun administrator baru perlu diuji pada sesi kedua sebelum akun lama dibatasi. Gunakan password unik milik sendiri, batasi layanan ke jaringan admin dan pilih grup dengan hak yang sesuai pekerjaan. Credential contoh dalam lab tidak boleh dipakai pada perangkat yang dapat diakses orang lain."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "LAN admin / console cadangan"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "contoh IP admin"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Inventaris dan cadangan",
+        "text": "Gunakan lab cadangan, catat versi serta paket. Export dan binary backup dipelajari rinci di panduan backup; simpan keduanya sebelum melanjutkan.",
+        "device": "RTR",
+        "code": "/system/resource/print\n/system/package/print\n/system/license/print"
+      },
+      {
+        "title": "2. Periksa update",
+        "text": "Winbox System → Packages → Check For Updates. Perintah check belum memasang update. Gunakan koneksi internet lab dan pilih channel yang memang ingin diuji.",
+        "device": "RTR",
+        "code": "/system/package/update/set channel=stable\n/system/package/update/check-for-updates"
+      },
+      {
+        "title": "3. Unduh dan pasang pada lab",
+        "text": "Sesudah changelog, arsitektur, paket, ruang dan snapshot diperiksa, unduh paket. Reboot hanya pada jadwal lab yang siap putus. Winbox menyediakan Download & Install; catat versi sesudah restart.",
+        "device": "RTR",
+        "code": "/system/package/update/download\n# Setelah unduhan selesai dan siap restart pada lab:\n/system/reboot"
+      },
+      {
+        "title": "4. Login baru, lalu uji sesi kedua",
+        "text": "Ganti password contoh sebelum dipakai. Buka login lab-admin dari sesi kedua dan buktikan akses. Jangan menonaktifkan akun lama sebelum akses pengganti benar-benar teruji.",
+        "device": "RTR",
+        "code": "/user/add name=lab-admin group=full password=\"GANTI-Password-Unik-Sebelum-Lab\"\n/user/print detail"
+      },
+      {
+        "title": "5. RouterBOOT hanya pada RouterBOARD",
+        "text": "Periksa System → RouterBOARD jika model memang memilikinya. Cocokkan current/upgrade firmware dan dokumentasi model; lakukan upgrade firmware dan reboot terpisah bila diperlukan. CHR tidak perlu meniru menu yang tidak ada.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "RTR",
+        "/system/resource/print dan /system/package/print",
+        "Versi serta paket sesuai rencana setelah reboot."
+      ],
+      [
+        "PC",
+        "Login sesi kedua sebagai akun baru",
+        "Akses berhasil sebelum akun lama diubah."
+      ],
+      [
+        "PC/RTR",
+        "Ulangi DHCP, routing, filter dan wireless yang dipakai",
+        "Fitur penting tetap bekerja; jangan menilai sukses hanya dari nomor versi."
+      ]
+    ],
+    "faults": [
+      [
+        "Login baru tidak bisa",
+        "Periksa grup, password, layanan dan subnet admin melalui console; pertahankan akses cadangan."
+      ],
+      [
+        "Fitur wireless menghilang",
+        "Periksa driver/paket dan dukungan model sebelum mencoba downgrade sembarang."
+      ]
+    ],
+    "restore": "Pulihkan snapshot bila hasil upgrade tidak sesuai. Gunakan prosedur pemulihan resmi untuk perangkat fisik; jangan mengandalkan backup beda versi tanpa pemeriksaan.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/installation-and-upgrade/upgrade/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "layanan-router",
+    "title": "Layanan RouterOS: Winbox, SSH, WebFig dan pembatasan akses",
+    "module": 1,
+    "summary": "Mengurangi layanan yang tidak diperlukan tanpa kehilangan jalur pengelolaan.",
+    "analogy": "Tidak semua pintu harus dibuka; pintu yang dipakai perlu dikenal dan dibatasi.",
+    "explain": [
+      "IP Services mengatur layanan seperti SSH, Winbox, HTTP/HTTPS dan API sesuai dukungan versi. Mematikan layanan yang tidak dipakai mengurangi permukaan akses. Mengubah port saja tidak menggantikan autentikasi yang kuat dan firewall.",
+      "Pembatasan address pada service menentukan sumber yang boleh memakai layanan itu, sedangkan filter input mengatur paket menuju router. Keduanya harus sesuai jaringan admin. MAC Winbox, neighbor discovery serta MAC server merupakan mekanisme lain dan tidak otomatis diatur oleh IP Services.",
+      "Kerjakan dari LAN admin yang sudah dipastikan benar serta console cadangan. Uji layanan baru dari sesi kedua sebelum menutup cara masuk lama. Untuk akses jarak jauh gunakan rancangan VPN/manajemen yang sesuai, bukan membuka semua layanan pengelolaan ke internet."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "LAN tepercaya / ether2"
+      ]
+    ],
+    "addresses": [
+      [
+        "PC",
+        "NIC",
+        "192.168.50.10/24",
+        "admin lab"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "IP pengelolaan"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Inventaris layanan",
+        "text": "Winbox IP → Services. Catat layanan yang benar-benar dipakai dan IP sesi pengelolaan saat ini.",
+        "device": "RTR",
+        "code": "/ip/service/print detail"
+      },
+      {
+        "title": "2. Batasi sumber layanan",
+        "text": "Hanya lakukan bila PC memang berada di 192.168.50.0/24. Pada router produksi rentang admin harus direncanakan sendiri.",
+        "device": "RTR",
+        "code": "/ip/service/set [find name=winbox] address=192.168.50.0/24\n/ip/service/set [find name=ssh] address=192.168.50.0/24"
+      },
+      {
+        "title": "3. Tutup layanan tak dipakai",
+        "text": "Lab ini memakai Winbox/SSH. Jangan menonaktifkan layanan yang masih menjadi satu-satunya aksesmu. Perubahan berikut hanya untuk layanan yang tidak dipakai dalam lab.",
+        "device": "RTR",
+        "code": "/ip/service/disable [find name=telnet]\n/ip/service/disable [find name=ftp]\n/ip/service/disable [find name=www]\n/ip/service/disable [find name=api]"
+      },
+      {
+        "title": "4. Uji akses baru",
+        "text": "Buka sesi Winbox/SSH kedua dari LAN yang diizinkan dan coba dari subnet uji lain. Filter input baseline tetap dipertahankan.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC admin",
+        "Winbox/SSH ke .1",
+        "Akses dari rentang admin bekerja."
+      ],
+      [
+        "Subnet lain di lab",
+        "Uji layanan sama",
+        "Pembatasan address/filter menolak sumber yang tidak diizinkan."
+      ],
+      [
+        "RTR",
+        "/ip/service/print detail",
+        "Layanan serta rentang sesuai rencana."
+      ]
+    ],
+    "faults": [
+      [
+        "Sesi pengelolaan putus",
+        "Gunakan console/sesi cadangan dan koreksi subnet layanan; jangan reset seluruh router."
+      ]
+    ],
+    "restore": "Kembalikan hanya properti layanan yang salah melalui console. Simpan daftar layanan final dan alasan masing-masing.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/securing-your-router/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "backup-restore",
+    "title": "Backup, export dan import: pilih alat pemulihan yang benar",
+    "module": 1,
+    "summary": "Membuktikan pemulihan binary backup dan import konfigurasi terpilih pada snapshot lab.",
+    "analogy": "Foto lengkap isi ruangan berbeda dari daftar instruksi untuk menyusunnya kembali.",
+    "explain": [
+      "Binary backup menyimpan banyak konfigurasi perangkat dan cocok untuk pemulihan yang kompatibel, tetapi jangan menganggapnya portabel ke semua model atau versi. Lindungi dengan password dan simpan di luar router. File backup dapat memuat informasi sensitif sehingga tidak boleh dipublikasikan.",
+      "Export adalah teks perintah .rsc untuk dibaca, ditinjau dan diimpor. Tidak semua data, file, sertifikat, user atau secret selalu ikut dalam bentuk yang dibutuhkan. Import menerapkan perintah; ia bukan tombol menggabungkan semua konfigurasi tanpa konflik. Menambahkan alamat/bridge yang sudah ada dapat menimbulkan duplikasi atau error.",
+      "Lab memakai perubahan identity agar hasil mudah dilihat. Restore binary bisa memerlukan reboot; percobaan dilakukan pada router cadangan. Import terpilih dari menu identity memberi contoh yang lebih kecil sebelum mencoba full import pada CHR kosong terpisah. Tinjau script dan isikan secret secara pribadi sesuai kebutuhan."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "Files / salinan di luar router"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "contoh alamat admin"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Buat tanda awal",
+        "text": "Gunakan nama yang mudah dikenali dan simpan cadangan dengan password unik. Ganti password contoh sebelum dipakai.",
+        "device": "RTR",
+        "code": "/system/identity/set name=MTCNA-SEBELUM\n/system/backup/save name=mtcna-before password=\"GANTI-Password-Backup-Pribadi\"\n/export file=mtcna-full\n/system/identity/export file=mtcna-identity"
+      },
+      {
+        "title": "2. Simpan di luar router",
+        "text": "Winbox Files: unduh .backup dan .rsc ke penyimpanan pribadi. Periksa export di editor teks; jangan membagikan konfigurasi yang memuat data sensitif.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "3. Uji import terpilih",
+        "text": "Ubah identity lalu import hanya export identity. Tidak perlu reset.",
+        "device": "RTR",
+        "code": "/system/identity/set name=MTCNA-DIUBAH\n/import file-name=mtcna-identity.rsc\n/system/identity/print"
+      },
+      {
+        "title": "4. Uji binary restore pada snapshot lab",
+        "text": "Ubah identity lagi, lalu load backup dan ikuti konfirmasi restart. Password harus sama dengan saat backup dibuat. Jangan menjalankan restore pada router yang sedang melayani pengguna.",
+        "device": "RTR",
+        "code": "/system/identity/set name=MTCNA-UJI-BINARY\n/system/backup/load name=mtcna-before.backup password=\"GANTI-Password-Backup-Pribadi\""
+      },
+      {
+        "title": "5. Full import terpisah",
+        "text": "Pada CHR kosong lain yang kompatibel, baca seluruh export dan sesuaikan interface/paket. Import full hanya setelah konflik nama, data yang tidak ikut export, serta secret dipahami; simpan hasil error dan uji ulang layanan.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "RTR",
+        "/system/identity/print setelah import terpilih",
+        "Nama kembali MTCNA-SEBELUM."
+      ],
+      [
+        "RTR",
+        "Periksa identity dan akses sesudah restore/reboot",
+        "Konfigurasi sesuai backup dan dapat dikelola kembali."
+      ],
+      [
+        "PC",
+        "Periksa file di penyimpanan pribadi",
+        "Cadangan tersedia di luar perangkat dan dilindungi."
+      ]
+    ],
+    "faults": [
+      [
+        "Import berhenti/error",
+        "Baca baris penyebab; jangan berulang kali mengimpor seluruh file ke konfigurasi yang sudah berubah."
+      ],
+      [
+        "Backup beda model/versi",
+        "Periksa kompatibilitas, gunakan export yang ditinjau dan snapshot; jangan menjanjikan restore lintas perangkat selalu berhasil."
+      ]
+    ],
+    "restore": "Pulihkan snapshot lab. Simpan backup final beserta model, versi, tanggal dan password secara terpisah serta pribadi.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/configuration-management/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "lisensi",
+    "title": "Lisensi RouterOS: RouterBOARD, x86 dan CHR",
+    "module": 1,
+    "summary": "Mengenali identitas lisensi serta batas fiturnya sebelum membangun lab.",
+    "analogy": "Kunci penggunaan perangkat tidak sama dengan sertifikat kemampuan orang yang memakainya.",
+    "explain": [
+      "Lisensi RouterOS berkaitan dengan hak penggunaan perangkat/sistem dan batas yang berlaku. Sertifikasi MTCNA adalah hal berbeda: lisensi router tidak membuktikan kemampuan pemiliknya dan kursus tidak memberikan lisensi software otomatis.",
+      "RouterBOARD, instalasi x86 dan CHR mempunyai mekanisme identitas/lisensi yang perlu dibaca pada dokumentasi masing-masing. CHR menyediakan pilihan dengan batas throughput sesuai lisensi; hasil bandwidth test dapat dibatasi lisensi, bukan hanya kualitas topologi. Jangan mengira image yang dapat boot selalu mempunyai seluruh kapasitas yang dibutuhkan.",
+      "Catat Software/System ID, versi, model dan level/paket lisensi melalui menu yang tersedia. Jangan membagikan key atau identitas akun lisensi. Gunakan image resmi; tidak diperlukan bypass lisensi untuk mengikuti materi ini. Harga dan ketentuan terkini diperiksa melalui MikroTik, bukan angka yang dihafal dari slide lama."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "Winbox System / License"
+      ]
+    ],
+    "addresses": [],
+    "steps": [
+      {
+        "title": "1. Kenali platform",
+        "text": "Tentukan apakah perangkat RouterBOARD, x86 atau CHR. Baca dokumentasi lisensi yang sesuai.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Baca status saja",
+        "text": "Perintah ini tidak membeli, mengganti atau menghapus lisensi.",
+        "device": "RTR",
+        "code": "/system/license/print\n/system/resource/print"
+      },
+      {
+        "title": "3. Hubungkan dengan hasil lab",
+        "text": "Catat batas lisensi pada laporan throughput. Untuk CHR periksa dokumentasi CHR resmi serta pilihan trial/paid yang tersedia; jangan menggunakan key milik pihak lain.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "RTR",
+        "System → License",
+        "Platform dan status dicatat secara pribadi."
+      ],
+      [
+        "Laporan lab",
+        "Catat batas throughput/fitur yang relevan",
+        "Batas lisensi dibedakan dari CPU dan kemampuan link."
+      ],
+      [
+        "Dokumentasi",
+        "Baca lisensi resmi sesuai platform",
+        "Tidak menyamakan lisensi RouterOS dengan sertifikasi."
+      ]
+    ],
+    "faults": [
+      [
+        "Menu/level berbeda",
+        "CHR dan RouterBOARD tidak selalu menampilkan properti yang sama; gunakan panduan platform yang benar."
+      ]
+    ],
+    "restore": "Tidak ada perubahan lisensi yang diperlukan. Simpan hanya catatan nonrahasia untuk laporan lab.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/routeros-licensing/",
+    "kind": "theory",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "ntp",
+    "title": "NTP client v7: waktu yang benar untuk log dan sertifikat",
+    "module": 1,
+    "summary": "Menyinkronkan jam dan membedakan timezone dari sinkronisasi waktu.",
+    "analogy": "Jam yang sama membuat catatan kejadian dari banyak perangkat bisa dicocokkan.",
+    "explain": [
+      "NTP membantu router menyamakan waktu dengan sumber yang dapat dijangkau. Zona waktu menentukan cara waktu ditampilkan; mengganti Asia/Jakarta saja tidak membuat jam yang salah menjadi tersinkron. Log, jadwal dan validasi sertifikat membutuhkan waktu yang benar.",
+      "RouterOS v7 mempunyai implementasi NTP berbeda dari menu v6. Daftar server menerima alamat/nama sesuai versi dan kemampuan DNS. Periksa route serta DNS jika memakai nama server. WAN DHCP juga dapat menyumbang server NTP, jadi lihat sumber dinamis sebelum menambahkan banyak server.",
+      "Status menunggu belum berarti sinkron. Baca NTP client dan monitor-peers serta bandingkan jam. Pada lab tanpa internet, gunakan server NTP internal milik sendiri yang benar; alamat contoh pool publik tidak akan bekerja tanpa jalur dan DNS. Jangan membuat router menjadi server NTP publik ketika hanya membutuhkan client."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC",
+        "NIC",
+        "DHCP",
+        "pool .100–.150; gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Prasyarat",
+        "text": "Gunakan baseline internet-dhcp yang sudah bekerja atau jaringan lab dengan NTP internal. Buktikan DNS jika menggunakan nama server.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Zona waktu dan client",
+        "text": "Winbox System → Clock dan NTP Client. Pilih sumber yang diizinkan pada jaringanmu. Jangan menambah baris server yang sama berulang kali.",
+        "device": "RTR",
+        "code": "/system/clock/set time-zone-name=Asia/Jakarta\n/system/ntp/client/set enabled=yes\n/system/ntp/client/servers/add address=id.pool.ntp.org"
+      },
+      {
+        "title": "3. Amati sinkronisasi",
+        "text": "Tunggu proses sinkronisasi; jangan menganggap status langsung synchronized setelah menekan Apply.",
+        "device": "RTR",
+        "code": "/system/ntp/client/print\n/system/ntp/client/servers/print detail\n/system/ntp/monitor-peers\n/system/clock/print"
+      }
+    ],
+    "tests": [
+      [
+        "RTR",
+        "NTP client status",
+        "Mencapai synchronized jika sumber dan jalur mendukung."
+      ],
+      [
+        "RTR",
+        "Monitor peers dan server list",
+        "Peer/resolved address terlihat sesuai sumber yang dipilih."
+      ],
+      [
+        "RTR",
+        "Bandingkan log sebelum/sesudah waktu benar",
+        "Waktu kejadian dapat dicocokkan dengan perangkat lain."
+      ]
+    ],
+    "faults": [
+      [
+        "Terus waiting",
+        "Periksa route, DNS, UDP NTP, waktu sumber dan server yang benar."
+      ],
+      [
+        "Jam tampak beda tujuh jam",
+        "Pisahkan timezone tampilan dari nilai waktu/sinkronisasi."
+      ]
+    ],
+    "restore": "Kembalikan daftar server/timezone jika perlu sesuai kebijakan jaringan; jangan menonaktifkan firewall keseluruhan untuk NTP.",
+    "source": "https://manual.mikrotik.com/docs/system-information-and-utilities/ntp/",
+    "kind": "lab",
+    "prereq": "Baseline internet-dhcp atau jaringan uji dengan NTP internal yang benar sudah berfungsi."
+  },
+  {
+    "slug": "netinstall",
+    "title": "Netinstall LAB: instalasi ulang perangkat cadangan",
+    "module": 1,
+    "summary": "Mengenali Etherboot, paket arsitektur, proses instalasi dan verifikasi sesudahnya.",
+    "analogy": "Memasang ulang sistem seperti membangun kembali ruangan: isi lama harus diselamatkan terlebih dahulu.",
+    "explain": [
+      "Netinstall digunakan untuk instalasi atau pemulihan RouterOS pada perangkat yang sesuai. Proses ini memformat penyimpanan sistem dan menghapus konfigurasi serta file pengguna. Ini bukan langkah pertama untuk semua gangguan dan bukan perintah reset ringan. Hanya gunakan router cadangan yang memang boleh dihapus.",
+      "Siapkan backup/export di luar perangkat, model, arsitektur paket, versi yang direncanakan dan panduan Etherboot model tersebut. Netinstall resmi tidak menghapus license key RouterOS atau otomatis mereset seluruh pengaturan RouterBOOT. Jangan menggantinya dengan perintah format storage atau penghapusan key yang berbeda akibatnya.",
+      "Komputer installer dan perangkat berada pada Layer 2 yang sama melalui NIC khusus/segmen uji. Port boot, urutan tombol dan indikator dapat berbeda antar model; jangan memakai durasi tombol universal. CHR di GNS3 bukan pengganti seluruh latihan pemulihan RouterBOARD fisik. Materi ini panduan pelaksanaan, bukan klaim instalasi sudah diuji pada perangkatmu."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "NIC khusus ↔ port Etherboot model"
+      ]
+    ],
+    "addresses": [
+      [
+        "PC",
+        "NIC installer",
+        "192.168.88.2/24",
+        "contoh IP statis segmen uji"
+      ],
+      [
+        "RTR",
+        "BOOTP client",
+        "192.168.88.3/24",
+        "contoh alamat Net booting"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "0. Sebelum tindakan yang menghapus data",
+        "text": "Gunakan perangkat cadangan dengan izin untuk dihapus, cadangan tersimpan di luar router, catatan password/lisensi, daya stabil dan rencana konfigurasi sesudah install. Jangan mencoba di router layanan aktif.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "1. Siapkan alat resmi",
+        "text": "Unduh Netinstall serta RouterOS .npk yang sesuai arsitektur dari MikroTik. Untuk contoh GUI gunakan Netinstall Windows; pilih NIC installer, beri IP .2/24, dan pisahkan segmen dari DHCP/BOOTP lain.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Net booting dan Etherboot",
+        "text": "Atur Net booting client IP .3 sesuai segmen contoh. Hubungkan port yang ditentukan quick guide model. Ikuti prosedur Etherboot/backup booter dan indikator resmi perangkat; jangan menebak tombol dari model lain.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "3. Pilih perangkat dan paket",
+        "text": "Pastikan MAC/perangkat yang muncul benar-benar router cadangan. Pilih paket arsitektur/versi yang sesuai, pahami pilihan konfigurasi/default, lalu mulai Install. Inilah tahap yang menghapus konfigurasi/file; jangan memutus daya sampai proses selesai.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "4. Boot dan konfigurasi ulang",
+        "text": "Reboot sesuai petunjuk Netinstall, masuk melalui metode/credential yang sesuai hasil instalasi, beri password baru, pulihkan konfigurasi yang sudah ditinjau lalu uji DHCP/routing/filter. Jangan mengimpor export besar tanpa melihat konflik serta secret yang tidak tersimpan.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "Netinstall",
+        "Perangkat terdeteksi lewat Etherboot",
+        "MAC dan arsitektur cocok sebelum Install."
+      ],
+      [
+        "Sesudah boot",
+        "/system/resource/print dan /system/package/print",
+        "Versi serta paket sesuai rencana."
+      ],
+      [
+        "Sesudah pemulihan",
+        "Uji akses admin, DHCP, route dan firewall",
+        "Perangkat dapat dikelola dan konfigurasi final sesuai tujuan."
+      ]
+    ],
+    "faults": [
+      [
+        "Tidak terdeteksi",
+        "Periksa port Etherboot model, NIC L2, driver, firewall host yang relevan dan konflik DHCP/BOOTP; jangan mematikan semua proteksi komputer secara permanen."
+      ],
+      [
+        "Paket tidak cocok",
+        "Cocokkan arsitektur, versi dan ruang perangkat; gunakan unduhan resmi."
+      ]
+    ],
+    "restore": "Tidak ada undo instan untuk data yang terformat. Pulihkan dari backup/export yang kompatibel atau konfigurasi ulang; simpan laporan hasil instalasi dan tes sesudahnya.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/installation-and-upgrade/netinstall/",
+    "kind": "hardware",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "firewall-filter",
+    "title": "Firewall: prinsip, chain dan filter dalam praktik",
+    "module": 2,
+    "summary": "Membedakan trafik menuju router, melewati router dan dibuat router sendiri.",
+    "analogy": "Satpam pintu kantor berbeda dengan petugas yang mengatur kendaraan melintas.",
+    "explain": [
+      "Filter input memproses paket menuju layanan router; forward memproses paket yang dirutekan melewatinya; output untuk trafik yang dibuat router. Karena itu ping dari router dan ping dari PC tidak menguji rule yang sama. NAT dan routing juga bukan pengganti filter yang memberi izin atau menolak.",
+      "Rule diproses berurutan dalam chain. Rule terminal yang cocok dapat menghentikan pencarian, sehingga izin umum sebelum blok khusus dapat membuat blok tidak pernah terpakai. Connection-state established/related mengizinkan balasan koneksi yang telah dikenali, sedangkan invalid memerlukan penanganan yang sesuai. Baca counter untuk menghubungkan aturan dengan trafik nyata.",
+      "Action accept mengizinkan paket pada chain tersebut, drop membuangnya tanpa balasan penolakan, sedangkan reject memberi respons penolakan yang sesuai. log mencatat paket dan bukan izin atau blok terminal dengan sendirinya; rule sesudahnya tetap perlu dipahami. Match src-address, protocol dan in/out-interface menyatakan paket mana yang terkena. Jika tak ada rule yang cocok, perilaku default chain filter harus dipertimbangkan; baseline lab menambahkan drop eksplisit di akhir agar kebijakannya jelas.",
+      "Baseline internet-dhcp sudah memiliki filter input/forward tanpa FastTrack. Lab menambah blok spesifik ICMP klien menuju hulu sebelum izin LAN-WAN. Trafik administrasi ke gateway tetap dapat berjalan karena berada pada chain berbeda. Uji satu layanan dan satu sumber dahulu, jangan mematikan semua rule ketika hasil tidak sesuai."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC",
+        "NIC",
+        "DHCP",
+        "pool .100–.150; gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline",
+        "text": "Selesaikan internet-dhcp dan simpan snapshot. Pakai PC 192.168.50.10/24 gateway .1 di luar pool DHCP untuk percobaan ini. Pastikan hulu/tujuan uji mengizinkan ping sebelum membuat blok.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Baca chain dan urutan",
+        "text": "Winbox IP → Firewall → Filter Rules. Bedakan rule input dan forward serta counter-nya.",
+        "device": "RTR",
+        "code": "/ip/firewall/filter/print stats"
+      },
+      {
+        "title": "3. Blok ICMP forward klien",
+        "text": "Rule dibatasi PC dan arah WAN serta ditempatkan sebelum izin LAN-WAN baseline. Balasan koneksi ICMP yang sudah tercatat dapat memerlukan koneksi baru/timeout; gunakan tujuan baru untuk pengujian.",
+        "device": "RTR",
+        "code": "/ip/firewall/filter/add chain=forward src-address=192.168.50.10 out-interface=ether1 protocol=icmp action=drop place-before=[find comment=\"MTCNA-LAN-WAN\"] comment=\"MTCNA-UJI-ICMP\""
+      },
+      {
+        "title": "4. Bandingkan sumber tes",
+        "text": "PC ping gateway masih menuju input; PC ping IP luar menuju forward dapat diblok. Ping dari RTR sendiri memakai output, bukan forward klien.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC",
+        "Ping .1 lalu tujuan IP luar baru",
+        "Gateway tetap menjawab; ICMP baru ke luar diblok jika rule cocok."
+      ],
+      [
+        "RTR",
+        "/ip/firewall/filter/print stats",
+        "Counter MTCNA-UJI-ICMP meningkat untuk trafik yang diblok."
+      ],
+      [
+        "RTR",
+        "Ping tujuan luar yang sama",
+        "Trafik output router tidak diblok oleh rule forward klien."
+      ]
+    ],
+    "faults": [
+      [
+        "Blok tidak kena",
+        "Periksa urutan, sumber PC, connection-state rule sebelumnya dan tujuan uji baru."
+      ],
+      [
+        "Semua akses hilang",
+        "Pastikan hanya rule khusus yang ditambahkan; gunakan console/snapshot, bukan menghapus firewall seluruhnya."
+      ]
+    ],
+    "restore": "Nonaktifkan/hapus hanya MTCNA-UJI-ICMP dan ulangi tes. Simpan urutan rule serta penjelasan chain.",
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/firewall/filter/",
+    "kind": "lab",
+    "prereq": "Baseline internet-dhcp yang sudah berhasil; lab ini hanya perubahan pada filter baseline."
+  },
+  {
+    "slug": "connection-tracking",
+    "title": "Connection tracking: melihat keadaan koneksi",
+    "module": 2,
+    "summary": "Menghubungkan state, NAT dan counter tanpa menyamakan koneksi dengan paket tunggal.",
+    "analogy": "Petugas mencatat percakapan yang sedang berlangsung, bukan menilai setiap kalimat tanpa konteks.",
+    "explain": [
+      "Connection tracking menyimpan keadaan koneksi yang dipakai firewall, NAT dan fitur lain. TCP mempunyai tahap seperti pembentukan koneksi dan penutupan, sedangkan UDP/ICMP juga dapat dilacak dengan timeout meskipun bukan sesi TCP. Status new tidak selalu sama dengan satu paket saja.",
+      "NAT umumnya menentukan translasi pada awal koneksi yang lalu diingat oleh connection tracking. Mengubah rule NAT atau filter tidak selalu mengubah sesi yang sudah berjalan. Uji koneksi baru atau tunggu state yang relevan berakhir; jangan menghapus seluruh connection table pada jaringan aktif hanya untuk menyegarkan satu tes.",
+      "FastTrack dapat mengubah visibilitas counter dan melewati pemrosesan tertentu. Baseline belajar tidak memasangnya agar inspeksi lebih mudah. Lihat source/destination asli serta arah balasan, status dan timeout yang benar-benar ditampilkan versi RouterOS. Data koneksi merupakan informasi operasional pribadi, bukan sesuatu yang dibagikan sembarang."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC",
+        "NIC",
+        "DHCP",
+        "pool .100–.150; gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Siapkan aktivitas terkontrol",
+        "text": "Pakai baseline internet-dhcp dan PC sendiri. Buka satu layanan HTTPS yang diizinkan; hindari merekam trafik pengguna lain.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Lihat tabel",
+        "text": "Winbox IP → Firewall → Connections. Filter menurut protokol atau sumber klien; tampilan detail dapat berbeda versi.",
+        "device": "RTR",
+        "code": "/ip/firewall/connection/tracking/print\n/ip/firewall/connection/print detail where protocol=tcp"
+      },
+      {
+        "title": "3. Kaitkan dengan filter/NAT",
+        "text": "Catat koneksi yang terlihat, rule established/related dan counter NAT. Tutup aplikasi lalu amati timeout/penutupan. Saat mengubah rule di snapshot, buat koneksi baru untuk membandingkan hasil.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC/RTR",
+        "Buka lalu tutup satu layanan uji",
+        "Koneksi muncul dan berubah/berakhir sesuai protokol dan timeout."
+      ],
+      [
+        "RTR",
+        "Bandingkan tuple original/reply dan NAT yang ditampilkan",
+        "Alamat klien privat dan translasi dapat dikaitkan dengan trafik yang sama."
+      ],
+      [
+        "RTR",
+        "/ip/firewall/filter/print stats",
+        "Balasan established/related dapat diterima oleh rule sebelum aturan koneksi baru."
+      ]
+    ],
+    "faults": [
+      [
+        "Koneksi tak terlihat sesuai dugaan",
+        "Periksa titik pengamatan, waktu tes, FastTrack/offload dan apakah aktivitas benar-benar melewati router."
+      ],
+      [
+        "Rule baru tidak memengaruhi sesi lama",
+        "Uji koneksi baru; jangan menghapus semua sesi produksi."
+      ]
+    ],
+    "restore": "Hentikan aktivitas uji, kembalikan rule yang diubah, simpan hasil yang telah disamarkan bila perlu.",
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/connection-tracking/",
+    "kind": "lab",
+    "prereq": "Baseline internet-dhcp dan satu klien milik sendiri."
+  },
+  {
+    "slug": "address-list-srcnat",
+    "title": "Address list dan Source NAT: kelompok klien serta alamat keluar",
+    "module": 2,
+    "summary": "Memakai address list sebagai matcher dan membuktikan fungsi source NAT secara terpisah.",
+    "analogy": "Daftar tamu menentukan siapa yang diberi izin; mengganti alamat pengirim adalah pekerjaan lain.",
+    "explain": [
+      "Address list mengelompokkan alamat/prefix agar rule dapat mencocokkan sumber atau tujuan dengan lebih mudah. Daftar itu sendiri tidak menerima, menolak atau menerjemahkan paket. Rule filter/NAT yang merujuknya menentukan tindakan. Lab membuat izin baru hanya bagi PC uji tertentu.",
+      "Source NAT mengubah alamat sumber pada jalur keluar. Baseline WAN dinamis memakai masquerade, sedangkan WAN statis dapat memakai src-nat ke alamat yang benar. NAT bukan firewall; tanpa route dan izin forward yang benar klien tetap gagal. Jangan menambahkan NAT antar-LAN untuk menyamarkan route balik yang hilang.",
+      "Izin established/related yang berada lebih awal dapat membuat sesi lama tetap berjalan saat izin koneksi baru diubah. Uji koneksi baru dan lihat counter. NAT counter bukan meter seluruh byte setiap sesi; pemrosesan awal koneksi dan tracking harus dibaca bersama. Jangan menyatakan internet sudah aman hanya karena IP LAN tidak terlihat sebagai sumber di WAN."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC",
+        "NIC",
+        "DHCP",
+        "pool .100–.150; gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline dan klien",
+        "text": "Gunakan internet-dhcp. Set PC-A manual .10/24, gateway .1; bila ada PC-B gunakan .20/24. Alamat ini di luar pool .100–.150, jadi hindari konflik lease.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Isi daftar dan izin baru",
+        "text": "Winbox IP → Firewall → Address Lists. Izin baru dimasukkan sebelum default drop, lalu izin LAN-WAN umum baseline dinonaktifkan. Akses admin input tetap ada.",
+        "device": "RTR",
+        "code": "/ip/firewall/address-list/add list=lab-allowed address=192.168.50.10 comment=\"MTCNA-LIST\"\n/ip/firewall/filter/add chain=forward in-interface=ether2 out-interface=ether1 src-address-list=lab-allowed action=accept place-before=[find comment=\"MTCNA-FWD-DROP\"] comment=\"MTCNA-LIST-WAN\"\n/ip/firewall/filter/disable [find comment=\"MTCNA-LAN-WAN\"]"
+      },
+      {
+        "title": "3. Periksa source NAT baseline",
+        "text": "Masquerade sudah dibuat di internet-dhcp; jangan menumpuk rule identik. Periksa rule sumber LAN dan out-interface WAN, lalu cocokkan dengan connection table pada koneksi baru.",
+        "device": "RTR",
+        "code": "/ip/firewall/nat/print stats\n/ip/firewall/connection/print detail"
+      },
+      {
+        "title": "4. Uji perubahan keanggotaan",
+        "text": "PC-A membuat koneksi baru ke layanan yang diizinkan; PC-B tidak termasuk daftar. Tambahkan/hapus anggota hanya pada snapshot lab dan amati counter. Untuk WAN statis nyata, src-nat memerlukan IP yang dialokasikan, bukan IP contoh sembarang.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC-A",
+        "Akses layanan baru",
+        "Diterima rule daftar, lalu diterjemahkan masquerade ketika keluar WAN."
+      ],
+      [
+        "PC-B",
+        "Akses layanan baru yang sama",
+        "Ditolak default forward drop jika tidak ada izin lain."
+      ],
+      [
+        "RTR",
+        "/ip/firewall/filter/print stats dan NAT stats",
+        "Rule list serta translasi dibedakan fungsinya."
+      ]
+    ],
+    "faults": [
+      [
+        "PC-B masih bisa koneksi",
+        "Periksa sesi established lama dan rule izin lain; gunakan koneksi/tujuan baru."
+      ],
+      [
+        "Tidak ada akses meski terdaftar",
+        "Periksa route, NAT, DNS dan firewall hulu; address list bukan konfigurasi lengkap internet."
+      ]
+    ],
+    "restore": "Aktifkan MTCNA-LAN-WAN lalu nonaktifkan izin list percobaan; kembalikan snapshot bila perlu. Jangan membagikan connection table berisi alamat pengguna.",
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/firewall/nat/",
+    "kind": "lab",
+    "prereq": "Baseline internet-dhcp, termasuk rule MTCNA-LAN-WAN dan MTCNA-FWD-DROP, sudah ada."
+  },
+  {
+    "slug": "destination-nat",
+    "title": "Destination NAT: publikasi HTTP hanya dalam lab",
+    "module": 2,
+    "summary": "Meneruskan port WAN ke server LAN sambil menguji arah balasan dan izin forward.",
+    "analogy": "Resepsionis menerima kiriman di alamat depan lalu mengarahkannya ke ruang tertentu.",
+    "explain": [
+      "Destination NAT mengubah tujuan paket, misalnya 192.0.2.2:8080 diarahkan ke server 192.168.50.100:80. Setelah translasi, trafik tetap memerlukan routing dan izin forward. Server harus memakai jalur balik yang sesuai; dst-nat bukan pengganti gateway server.",
+      "Connection tracking membantu mengembalikan balasan sehingga klien melihat layanan melalui alamat/port yang dihubunginya. Mengubah aturan tidak otomatis memperbarui sesi lama. Uji koneksi baru serta baca counter NAT dan filter. Router sendiri tidak menjadi web server hanya karena ia menerima port 8080 untuk diteruskan.",
+      "Lab menggunakan klien OUTSIDE di sisi WAN dan server milik sendiri, tanpa mengekspos port ke internet. Pengujian dari LAN ke alamat WAN atau hairpin mempunyai kebutuhan berbeda dan tidak diwakili oleh tes ini. Untuk publikasi nyata pertimbangkan autentikasi, patch, TLS, pembatasan sumber, CGNAT serta risiko layanan; jangan membuka DVR atau admin router begitu saja."
+    ],
+    "nodes": [
+      "OUTSIDE",
+      "RTR",
+      "SERVER"
+    ],
+    "edges": [
+      [
+        "OUTSIDE",
+        "RTR",
+        "ether1 / 192.0.2.0/30"
+      ],
+      [
+        "RTR",
+        "SERVER",
+        "ether2 / LAN HTTP"
+      ]
+    ],
+    "addresses": [
+      [
+        "OUTSIDE",
+        "NIC",
+        "192.0.2.1/30",
+        "klien penguji WAN"
+      ],
+      [
+        "RTR",
+        "ether1",
+        "192.0.2.2/30",
+        "alamat layanan yang dipublikasikan"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway server"
+      ],
+      [
+        "SERVER",
+        "NIC",
+        "192.168.50.100/24",
+        "gateway 192.168.50.1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Bangun baseline kosong terpisah",
+        "text": "Set OUTSIDE .1/30 dan SERVER .100/24 gateway .1 pada LAN. Hanya segmen uji ini yang terhubung; tidak ada kebutuhan default route internet.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat router",
+        "text": "Jangan menumpuk dengan WAN DHCP dari lab internet.",
+        "device": "RTR",
+        "code": "/ip/address/add address=192.0.2.2/30 interface=ether1 comment=\"MTCNA-LAB\"\n/ip/address/add address=192.168.50.1/24 interface=ether2 comment=\"MTCNA-LAB\"\n"
+      },
+      {
+        "title": "3. Server HTTP uji",
+        "text": "Buat folder kosong hanya berisi file uji, lalu jalankan HTTP di port80 memakai hak yang sesuai OS. Pastikan firewall host mengizinkan sumber lab saja. Bisa memakai aplikasi HTTP lokal lain; jangan menyajikan folder pribadi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "4. NAT dan filter forward",
+        "text": "Winbox IP → Firewall → NAT: dstnat TCP8080 ke server80. Rule forward menerima koneksi dstnat dari sumber uji yang spesifik; sisanya ditolak.",
+        "device": "RTR",
+        "code": "/ip/firewall/nat/add chain=dstnat in-interface=ether1 dst-address=192.0.2.2 protocol=tcp dst-port=8080 action=dst-nat to-addresses=192.168.50.100 to-ports=80 comment=\"MTCNA-DNAT\"\n/ip/firewall/filter/add chain=forward connection-state=established,related action=accept\n/ip/firewall/filter/add chain=forward in-interface=ether1 src-address=192.0.2.1 connection-nat-state=dstnat protocol=tcp dst-address=192.168.50.100 dst-port=80 action=accept\n/ip/firewall/filter/add chain=forward action=drop"
+      },
+      {
+        "title": "5. Tes dari sisi luar",
+        "text": "OUTSIDE membuka http://192.0.2.2:8080. Ini akses HTTP file lab, bukan login admin atau layanan publik.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "OUTSIDE",
+        "HTTP ke 192.0.2.2:8080",
+        "Halaman file uji dari SERVER tampil."
+      ],
+      [
+        "RTR",
+        "/ip/firewall/nat/print stats dan /ip/firewall/filter/print stats",
+        "Counter NAT dan izin forward terkait bertambah."
+      ],
+      [
+        "SERVER",
+        "Periksa gateway dan log HTTP",
+        "Request datang dari OUTSIDE; balasan melalui RTR."
+      ]
+    ],
+    "faults": [
+      [
+        "Counter NAT naik tetapi halaman gagal",
+        "Periksa server mendengarkan port80, firewall host, gateway server dan rule forward."
+      ],
+      [
+        "Dari LAN tidak sama hasilnya",
+        "Tes ini dari WAN; hairpin/NAT reflection merupakan skenario terpisah."
+      ]
+    ],
+    "restore": "Hapus/disable MTCNA-DNAT dan hentikan server HTTP setelah uji. Jangan mengekspos layanan ke jaringan lain.",
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/firewall/nat/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "simple-queue",
+    "title": "Simple Queue: upload, download dan pembuktian batas",
+    "module": 3,
+    "summary": "Membatasi satu klien dengan target yang benar serta trafik uji terkontrol.",
+    "analogy": "Antrean membagi kapasitas yang ada, bukan menciptakan kapasitas ISP baru.",
+    "explain": [
+      "Simple Queue dapat mengatur trafik menurut target alamat pada konfigurasi yang sesuai. Dalam contoh max-limit 2M/5M, urutan adalah upload/download dari sudut target. Membaca hasil dari arah interface yang berlawanan dapat membuat angka terasa tertukar; tentukan sumber dan arah sebelum menguji.",
+      "Batas maksimum bukan jaminan klien selalu mencapai angka itu. Kapasitas hulu, Wi-Fi, server, CPU dan lisensi dapat menjadi pembatas lebih awal. Gunakan server uji milik sendiri di sisi hulu atau jalur yang kapasitasnya diketahui, bukan menyimpulkan queue gagal dari satu download internet yang berubah-ubah.",
+      "FastTrack dapat melewati Simple Queue. Baseline internet-dhcp tidak menambah FastTrack; jika snapshot lain sudah memilikinya, kecualikan trafik uji atau nonaktifkan rule yang relevan hanya di lab. Uji beberapa detik dengan pemantauan counter dan CPU, lalu bandingkan saat queue aktif serta nonaktif."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC",
+        "NIC",
+        "192.168.50.10/24",
+        "target queue, gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Siapkan target tetap",
+        "text": "Gunakan baseline internet-dhcp, PC .10/24 gateway .1 di luar pool. Siapkan server transfer terkontrol milik sendiri di sisi WAN dan kapasitas di atas batas uji.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Queue klien",
+        "text": "Winbox Queues → Simple Queues. Target adalah IP klien, bukan alamat WAN router.",
+        "device": "RTR",
+        "code": "/queue/simple/add name=MTCNA-ONE target=192.168.50.10/32 max-limit=2M/5M"
+      },
+      {
+        "title": "3. Bandingkan dua arah",
+        "text": "Transfer dari PC ke server untuk upload, lalu server ke PC untuk download. Catat throughput, latency dan CPU; jangan menjalankan tes yang membebani jaringan pengguna lain.",
+        "device": "RTR",
+        "code": "/queue/simple/print stats\n/system/resource/print"
+      },
+      {
+        "title": "4. Kontrol pembanding",
+        "text": "Nonaktifkan hanya MTCNA-ONE, ulangi transfer dengan kondisi sama, kemudian aktifkan lagi. Counter serta perubahan batas menjadi bukti lebih baik daripada hanya satu angka speed test.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC → WAN uji",
+        "Transfer terkendali",
+        "Upload target dibatasi sekitar maksimum 2M jika tidak dibatasi hal lain."
+      ],
+      [
+        "WAN uji → PC",
+        "Transfer arah balik",
+        "Download target dibatasi sekitar maksimum 5M."
+      ],
+      [
+        "RTR",
+        "Queue stats, CPU dan status FastTrack",
+        "Counter sesuai dan pengecualian pemrosesan dipahami."
+      ]
+    ],
+    "faults": [
+      [
+        "Queue tidak kena",
+        "Periksa target, arah trafik, urutan queue dan FastTrack."
+      ],
+      [
+        "Throughput lebih rendah dari batas",
+        "Periksa bottleneck link/server/CPU/lisensi; max-limit bukan minimum terjamin."
+      ]
+    ],
+    "restore": "Aktifkan kembali queue saat membandingkan hasil akhir, atau hapus MTCNA-ONE untuk kembali ke baseline.",
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/queues/",
+    "kind": "lab",
+    "prereq": "Baseline internet-dhcp; tidak ada queue/FastTrack lain yang menutupi percobaan."
+  },
+  {
+    "slug": "bandwidth-monitor",
+    "title": "Bandwidth test dan interface traffic monitor",
+    "module": 3,
+    "summary": "Mengukur link dua RouterOS dengan durasi/laju dibatasi dan membaca beban perangkat.",
+    "analogy": "Alat ukur juga memerlukan tenaga; hasil bisa dibatasi oleh alatnya sendiri.",
+    "explain": [
+      "Bandwidth Test memakai layanan bandwidth-server pada RouterOS lawan. Uji hanya antarperangkat milik sendiri yang diizinkan; tool ini dapat memenuhi link dan membebani CPU. Membuat trafik dari router yang sedang diukur bukan ukuran murni kapasitas forwarding; perangkat pembuat serta penerima trafik ikut bekerja.",
+      "Interface traffic monitor menampilkan laju RX/TX dari sudut interface yang dibaca. Arah itu berbeda dari upload/download pengguna. Bandingkan kedua ujung, durasi, protokol, CPU dan batas lisensi. Angka naik di interface bukan otomatis jumlah trafik aplikasi berguna, karena overhead dan trafik lain dapat ikut terlihat.",
+      "Lab memakai TCP selama 10 detik dengan batas 5 Mbps di masing-masing arah. Mulai kecil, jangan mengaktifkan server tanpa autentikasi pada WAN publik, dan periksa izin device-mode serta policy akun. Untuk evaluasi forwarding nyata, gunakan generator di luar router dan catat kondisi kedua endpoint."
+    ],
+    "nodes": [
+      "R1",
+      "R2"
+    ],
+    "edges": [
+      [
+        "R1",
+        "R2",
+        "ether1 / 10.90.0.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.90.0.1/30",
+        "test client"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.90.0.2/30",
+        "test server"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Link dan IP",
+        "text": "Beri R1 .1/30 dan R2 .2/30 pada ether1, lalu ping peer. Gunakan console lokal untuk konfigurasi filter R2.",
+        "device": "R1",
+        "code": "/ip/address/add address=10.90.0.1/30 interface=ether1 comment=\"MTCNA-LAB\"\n"
+      },
+      {
+        "title": "2. Server terautentikasi",
+        "text": "Ganti password contoh. Policy test/winbox dibutuhkan tool sesuai dokumentasi; group minimal ini hanya akun lab. Filter menerima peer uji saja; administrasi R2 tetap melalui console.",
+        "device": "R2",
+        "code": "/ip/address/add address=10.90.0.2/30 interface=ether1 comment=\"MTCNA-LAB\"\n/user/group/add name=lab-btest policy=read,test,winbox\n/user/add name=lab-test group=lab-btest password=\"GANTI-Password-Test-Pribadi\"\n/tool/bandwidth-server/set enabled=yes authenticate=yes\n/ip/firewall/filter/add chain=input connection-state=established,related action=accept\n/ip/firewall/filter/add chain=input in-interface=ether1 src-address=10.90.0.1 action=accept\n/ip/firewall/filter/add chain=input action=drop"
+      },
+      {
+        "title": "3. Ukur singkat dan terbatas",
+        "text": "Jalankan hanya ketika tidak mengganggu layanan lain; bila device-mode menolak, ikuti prosedur resmi perangkat dan jangan mengakali proteksi.",
+        "device": "R1",
+        "code": "/tool/bandwidth-test address=10.90.0.2 user=lab-test password=\"GANTI-Password-Test-Pribadi\" protocol=tcp direction=both duration=10s local-tx-speed=5M remote-tx-speed=5M"
+      },
+      {
+        "title": "4. Monitor dan matikan server",
+        "text": "Baca RX/TX di kedua router serta CPU. Hentikan tool monitor dengan Ctrl+C bila berjalan terus. Seusai pengujian nonaktifkan bandwidth-server R2.",
+        "device": "Kedua router",
+        "code": "/interface/monitor-traffic ether1 once\n/system/resource/print"
+      }
+    ],
+    "tests": [
+      [
+        "R1/R2",
+        "Bandwidth test dibatasi laju/durasi",
+        "Transfer muncul tanpa sengaja memenuhi kapasitas maksimum link."
+      ],
+      [
+        "Kedua router",
+        "Monitor-traffic dan CPU",
+        "Arah RX/TX serta beban pembuat/penerima tercatat."
+      ],
+      [
+        "R2",
+        "/tool/bandwidth-server/set enabled=no",
+        "Server uji tidak dibiarkan aktif setelah selesai."
+      ]
+    ],
+    "faults": [
+      [
+        "Not allowed / authentication failed",
+        "Periksa device-mode, policy akun, password dan firewall peer sesuai dokumentasi."
+      ],
+      [
+        "CPU penuh saat throughput rendah",
+        "Catat keterbatasan endpoint; jangan menyatakan kabel pasti lambat hanya dari tool yang CPU-bound."
+      ]
+    ],
+    "restore": "Matikan bandwidth-server, hapus akun lab jika tidak dipakai, dan pulihkan snapshot/filter yang sesuai.",
+    "source": "https://manual.mikrotik.com/docs/diagnostics-monitoring-and-troubleshooting/bandwidth-test/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "pcq",
+    "title": "PCQ: membagi kapasitas untuk beberapa klien",
+    "module": 3,
+    "summary": "Membuktikan classifier upload/download dan kapasitas agregat tanpa membuat queue bertumpuk.",
+    "analogy": "Banyak antrean kecil berbagi satu kapasitas total agar satu pelanggan tidak mengambil semuanya.",
+    "explain": [
+      "PCQ mengelompokkan sub-stream menurut classifier. Untuk target LAN pada contoh ini, upload dibagi menurut src-address dan download menurut dst-address. Menggunakan classifier yang terbalik dapat membagi trafik dengan cara yang tidak diinginkan; selalu tentukan arah serta titik queue.",
+      "pcq-rate=0 pada contoh berarti sub-stream berbagi kapasitas queue, bukan berarti throughput nol atau setiap pengguna mendapat angka tetap. Parent/queue membatasi agregat. Ketika hanya satu klien aktif ia bisa memakai bagian lebih besar; ketika beberapa klien aktif pembagian dipengaruhi jumlah sub-stream, beban, kapasitas dan algoritma.",
+      "Lab menggunakan dua PC di LAN dan satu Simple Queue dengan tipe PCQ, tanpa Simple Queue klien lain yang lebih dulu menangkap trafik. Hindari FastTrack untuk trafik percobaan. Uji masing-masing klien sendiri, lalu bersamaan dengan server milik sendiri; jangan menjanjikan pembagian tepat 50:50 pada semua pola trafik."
+    ],
+    "nodes": [
+      "HULU",
+      "RTR",
+      "PC"
+    ],
+    "edges": [
+      [
+        "HULU",
+        "RTR",
+        "ether1 / WAN DHCP"
+      ],
+      [
+        "RTR",
+        "PC",
+        "ether2 / LAN 192.168.50.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether1",
+        "DHCP",
+        "IP/gateway dari hulu"
+      ],
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC-A",
+        "NIC",
+        "192.168.50.10/24",
+        "gateway .1"
+      ],
+      [
+        "PC-B",
+        "NIC",
+        "192.168.50.20/24",
+        "gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Snapshot baseline",
+        "text": "Gunakan internet-dhcp. Jika sebelumnya menambah MTCNA-ONE, nonaktifkan/hapus hanya queue percobaan tersebut. Siapkan dua PC dan trafik terkontrol ke WAN.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Tipe PCQ dan queue agregat",
+        "text": "Winbox Queues → Queue Types, kemudian Simple Queues. Upload menggunakan src-address, download dst-address.",
+        "device": "RTR",
+        "code": "/queue/type/add name=mtcna-pcq-up kind=pcq pcq-classifier=src-address pcq-rate=0\n/queue/type/add name=mtcna-pcq-down kind=pcq pcq-classifier=dst-address pcq-rate=0\n/queue/simple/add name=MTCNA-PCQ target=192.168.50.0/24 max-limit=6M/10M queue=mtcna-pcq-up/mtcna-pcq-down"
+      },
+      {
+        "title": "3. Uji satu lalu dua klien",
+        "text": "Ukur A sendiri, B sendiri, kemudian keduanya bersamaan. Catat laju per PC, agregat, CPU dan counter queue.",
+        "device": "RTR",
+        "code": "/queue/simple/print stats\n/queue/type/print detail"
+      }
+    ],
+    "tests": [
+      [
+        "PC-A saja",
+        "Transfer terkontrol",
+        "Dapat memakai kapasitas agregat yang tersedia, tidak harus setengah."
+      ],
+      [
+        "PC-A + PC-B",
+        "Transfer bersamaan dengan arah/pola sebanding",
+        "Berbagi kapasitas total dengan sub-stream yang sesuai classifier."
+      ],
+      [
+        "RTR",
+        "Queue stats dan FastTrack",
+        "Queue aktif, counter cocok dan tidak tertutupi queue sebelumnya."
+      ]
+    ],
+    "faults": [
+      [
+        "Satu klien mendominasi",
+        "Periksa classifier, target, arah, jumlah aliran, kapasitas server dan queue lain; jangan langsung menggandakan max-limit."
+      ]
+    ],
+    "restore": "Hapus MTCNA-PCQ serta tipe PCQ lab jika tidak dipakai lagi, atau simpan snapshot hasil percobaan.",
+    "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/queues/",
+    "kind": "lab",
+    "prereq": "Baseline internet-dhcp, dua klien, tanpa queue lain/FastTrack untuk trafik uji."
+  },
+  {
+    "slug": "arp",
+    "title": "ARP modes dan ARP table: IP ke MAC pada link lokal",
+    "module": 4,
+    "summary": "Membandingkan enabled dan reply-only serta kebutuhan binding yang benar.",
+    "analogy": "Alamat jalan IP perlu dicocokkan dengan identitas penerima di link setempat, bukan di seluruh internet.",
+    "explain": [
+      "ARP memetakan alamat IPv4 ke MAC pada link Ethernet lokal. Untuk tujuan di subnet lain, host mencari MAC gateway, bukan MAC komputer jauh. Tabel ARP bersifat per-router/interface dan tidak sama dengan bridge host table yang mempelajari MAC switching.",
+      "Mode enabled menjalankan ARP dan mempelajari tetangga secara dinamis. disabled mematikan ARP pada interface, sehingga kebutuhan pemetaan harus dirancang secara manual. reply-only tidak belajar entri dinamis dan memerlukan pasangan IP–MAC statis yang benar untuk komunikasi. proxy-arp membuat router menjawab atas nama tujuan yang dapat dicapai melalui interface lain; local-proxy-arp dapat menjawab bagi tujuan melalui interface yang sama, misalnya desain isolasi host tertentu. Keduanya memerlukan route dan desain yang sesuai, bukan obat untuk route balik yang hilang.",
+      "Pada ARP table, cocokkan address, mac-address dan interface; baca flag serta status sesuai legenda versi RouterOS. Entri dynamic berasal dari pembelajaran, sedangkan entri static dibuat/dikelola eksplisit. Status incomplete atau failed mengarahkan pemeriksaan ke link, VLAN, subnet, host dan respons ARP; bukan otomatis berarti DNS rusak. Satu IP dapat terlihat pada konteks interface yang berbeda, sehingga jangan hanya membaca kolom alamat.",
+      "Lab reply-only harus dikerjakan dari console karena PC admin dapat kehilangan akses bila binding IP–MAC salah. DHCP static lease tidak otomatis identik dengan entri ARP statis, walaupun DHCP server memiliki opsi integrasi add-arp yang harus dipahami terpisah. MAC filtering/ARP binding juga bukan jaminan autentikasi kriptografis."
+    ],
+    "nodes": [
+      "PC",
+      "RTR"
+    ],
+    "edges": [
+      [
+        "PC",
+        "RTR",
+        "NIC ↔ ether2 / LAN lokal"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "ether2",
+        "192.168.50.1/24",
+        "gateway"
+      ],
+      [
+        "PC",
+        "NIC",
+        "192.168.50.10/24",
+        "gunakan MAC nyata PC"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline tanpa DHCP",
+        "text": "Router kosong dengan .1/24 pada ether2; PC .10/24. Ping gateway dan baca tabel ARP.",
+        "device": "RTR",
+        "code": "/ip/address/add address=192.168.50.1/24 interface=ether2 comment=\"MTCNA-LAB\"\n/ip/arp/print detail"
+      },
+      {
+        "title": "2. Catat MAC sebenarnya",
+        "text": "Ambil MAC PC dari OS serta ARP table. Contoh 02:11:22:33:44:55 berikut wajib diganti MAC PC nyata sebelum menjalankan; jangan menyalin nilai contoh lalu mengaktifkan reply-only.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "3. Binding dan mode",
+        "text": "Tambahkan binding benar dari console. Mode reply-only merupakan percobaan terpisah, bukan setting otomatis untuk semua LAN.",
+        "device": "RTR",
+        "code": "/ip/arp/add address=192.168.50.10 mac-address=02:11:22:33:44:55 interface=ether2 comment=\"MTCNA-ARP\"\n/interface/ethernet/set ether2 arp=reply-only"
+      },
+      {
+        "title": "4. Bandingkan",
+        "text": "Coba PC yang terdaftar dan alamat klien lain yang tidak terdaftar di segmen lab. Tunggu/segarkan cache host sesuai OS bila diperlukan; catat kedua sisi tabel.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC terdaftar",
+        "Ping .1",
+        "Bekerja dengan binding yang benar."
+      ],
+      [
+        "PC tak terdaftar",
+        "Uji komunikasi dengan gateway",
+        "Tidak memperoleh perilaku ARP normal yang sama pada reply-only; cache/route perlu diperhatikan."
+      ],
+      [
+        "RTR",
+        "/ip/arp/print detail",
+        "Entri statis serta interface sesuai, berbeda dari bridge host table."
+      ]
+    ],
+    "faults": [
+      [
+        "Admin tidak bisa akses",
+        "Kembalikan arp=enabled melalui console, koreksi binding dan ulangi tes."
+      ],
+      [
+        "Masih terlihat berhasil sementara",
+        "Perhatikan cache host/router, IP/MAC aktual dan sumber tes; jangan menyimpulkan dari satu paket."
+      ]
+    ],
+    "restore": "Kembalikan /interface/ethernet/set ether2 arp=enabled dan hapus hanya MTCNA-ARP. Jangan menguji mode ini pada interface manajemen produksi.",
+    "source": "https://manual.mikrotik.com/docs/getting-started/networking-fundamentals/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "wireless-link",
+    "title": "Wireless link: AP dan station dengan keamanan",
+    "module": 5,
+    "summary": "Membuat link radio sederhana dan menguji IP sebelum mencoba bridge.",
+    "analogy": "AP seperti tempat berkumpul, station bergabung dengan nama dan kunci yang sesuai.",
+    "explain": [
+      "SSID adalah nama jaringan, bukan password. AP menyediakan layanan radio dan station bergabung; frekuensi/band harus didukung kedua perangkat serta mematuhi pengaturan negara. Link radio yang tersambung belum tentu mempunyai alamat IP atau routing yang benar.",
+      "RouterOS memiliki keluarga paket wireless lama dan wifi baru. Nama interface serta menu berbeda, dan fitur tidak selalu setara. Contoh di bawah adalah dua pilihan terpisah, bukan satu skrip gabungan. CHR tidak mempunyai radio fisik; gunakan dua router radio yang kompatibel dan akses console/kabel cadangan.",
+      "Mulai dari link IP antar-radio, tanpa bridge, DHCP atau internet. WPA2 dengan kunci kuat dipakai agar contoh tidak membuka jaringan. Pengaturan negara harus sesuai lokasi sebenarnya; contoh Indonesia hanya untuk perangkat yang dioperasikan di Indonesia. Jangan menyalin band 2,4 GHz ke perangkat yang hanya mendukung band lain."
+    ],
+    "nodes": [
+      "AP",
+      "STA"
+    ],
+    "edges": [
+      [
+        "AP",
+        "STA",
+        "radio / 10.80.0.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "AP",
+        "wlan1 atau wifi1",
+        "10.80.0.1/30",
+        "pilih satu keluarga driver"
+      ],
+      [
+        "STA",
+        "wlan1 atau wifi1",
+        "10.80.0.2/30",
+        "router radio pasangan"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Periksa perangkat dan simpan konfigurasi",
+        "text": "Catat model, paket, versi, lisensi untuk mode AP, nama interface dan negara operasi. Backup lalu pisahkan dari jaringan aktif. Pilih jalur wireless ATAU wifi berikut.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2A. Jalur wireless lama: AP",
+        "text": "Contoh pasangan 2,4 GHz dengan wlan1. Ganti kunci contoh dengan kunci pribadi yang sama pada kedua sisi.",
+        "device": "AP",
+        "code": "/interface/wireless/security-profiles/add name=mtcna-sec mode=dynamic-keys authentication-types=wpa2-psk unicast-ciphers=aes-ccm group-ciphers=aes-ccm wpa2-pre-shared-key=\"GANTI-Kunci-Radio-Pribadi\"\n/interface/wireless/set wlan1 disabled=no mode=ap-bridge band=2ghz-b/g/n channel-width=20mhz country=indonesia frequency=auto ssid=MTCNA-LAB security-profile=mtcna-sec\n/ip/address/add address=10.80.0.1/30 interface=wlan1 comment=\"MTCNA-LAB\"\n"
+      },
+      {
+        "title": "2B. Jalur wireless lama: station",
+        "text": "Buat security profile identik terlebih dahulu di STA; lalu gunakan perintah berikut.",
+        "device": "STA",
+        "code": "/interface/wireless/security-profiles/add name=mtcna-sec mode=dynamic-keys authentication-types=wpa2-psk unicast-ciphers=aes-ccm group-ciphers=aes-ccm wpa2-pre-shared-key=\"GANTI-Kunci-Radio-Pribadi\"\n/interface/wireless/set wlan1 disabled=no mode=station band=2ghz-b/g/n channel-width=20mhz country=indonesia ssid=MTCNA-LAB security-profile=mtcna-sec\n/ip/address/add address=10.80.0.2/30 interface=wlan1 comment=\"MTCNA-LAB\"\n"
+      },
+      {
+        "title": "3. Alternatif wifi: bukan lanjutan langkah 2",
+        "text": "Hanya jika kedua perangkat memakai menu wifi. Sesuaikan country ke negara nyata dan band/channel yang tersedia; jangan jalankan perintah wlan1 pada cabang ini.",
+        "device": "AP lalu STA",
+        "code": "/interface/wifi/set wifi1 disabled=no configuration.mode=ap configuration.ssid=MTCNA-LAB configuration.country=Indonesia security.authentication-types=wpa2-psk security.passphrase=\"GANTI-Kunci-Radio-Pribadi\"\n# Di AP saja:\n/ip/address/add address=10.80.0.1/30 interface=wifi1 comment=\"MTCNA-LAB\"\n# Di STA saja:\n/interface/wifi/set wifi1 disabled=no configuration.mode=station configuration.ssid=MTCNA-LAB configuration.country=Indonesia security.authentication-types=wpa2-psk security.passphrase=\"GANTI-Kunci-Radio-Pribadi\"\n/ip/address/add address=10.80.0.2/30 interface=wifi1 comment=\"MTCNA-LAB\""
+      },
+      {
+        "title": "4. Amati link",
+        "text": "Lihat registration table pada menu keluarga radio yang dipakai. Catat signal, Tx/Rx rate serta paket hilang; ping AP–STA, bukan internet.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "AP/STA",
+        "Registration table wireless atau wifi",
+        "Peer terdaftar dengan SSID dan keamanan yang benar."
+      ],
+      [
+        "STA",
+        "ping 10.80.0.1",
+        "IP radio AP menjawab setelah alamat/interface dan firewall sesuai."
+      ],
+      [
+        "Kedua sisi",
+        "Bandingkan signal dan hasil ping",
+        "Hasil dicatat; radio terdaftar saja belum membuktikan kualitas layanan."
+      ]
+    ],
+    "faults": [
+      [
+        "Tidak terdaftar",
+        "Cocokkan driver, band, country/channel, SSID dan kunci; periksa lisensi mode AP dan jarak/halangan."
+      ],
+      [
+        "Terdaftar tetapi ping gagal",
+        "Periksa alamat /30, interface, filter input serta konfigurasi bridge lama."
+      ]
+    ],
+    "restore": "Pulihkan backup radio atau hapus hanya alamat/profil lab setelah tidak dirujuk. Simpan cabang yang dipilih; jangan menyatukan konfigurasi wireless dan wifi.",
+    "source": "https://manual.mikrotik.com/docs/wireless/wifi/",
+    "kind": "hardware",
+    "prereq": "Dua router radio kompatibel; CHR saja tidak bisa menjalankan RF. Akses manajemen kabel/console terpisah."
+  },
+  {
+    "slug": "wireless-mac",
+    "title": "MAC address filtering: izin radio tambahan",
+    "module": 5,
+    "summary": "Menguji access list tanpa menganggap MAC sebagai password.",
+    "analogy": "Daftar nomor kendaraan membantu seleksi, tetapi nomor dapat disalin sehingga kunci pintu tetap diperlukan.",
+    "explain": [
+      "Access list radio mencocokkan identitas seperti MAC untuk menerima atau menolak station. Ini berbeda dari bridge filter, IP firewall dan password Wi-Fi. MAC dapat dipalsukan; tetap gunakan WPA2/WPA3 yang didukung serta kunci yang kuat.",
+      "Kurikulum menuliskan MAC address filtering dua kali. Di sini dijadikan satu kompetensi dengan tes positif dan negatif. Catat MAC interface radio station yang benar, bukan MAC Ethernet, dan perhatikan randomisasi MAC pada klien.",
+      "Urutan rule dan perilaku ketika tak ada kecocokan penting. wireless lama mempunyai default-authentication; wifi memakai urutan access list. Lakukan dari kabel/console agar rule percobaan tidak mengunci admin. Pilih satu cabang sesuai lab wireless-link."
+    ],
+    "nodes": [
+      "AP",
+      "STA"
+    ],
+    "edges": [
+      [
+        "AP",
+        "STA",
+        "radio / 10.80.0.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "AP",
+        "wlan1 atau wifi1",
+        "10.80.0.1/30",
+        "pilih satu keluarga driver"
+      ],
+      [
+        "STA",
+        "wlan1 atau wifi1",
+        "10.80.0.2/30",
+        "router radio pasangan"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline dan MAC nyata",
+        "text": "Pastikan wireless-link berhasil. Catat MAC radio STA dari registration table. Ganti contoh 02:11:22:33:44:55 dengan MAC tersebut sebelum lanjut.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Cabang wireless lama",
+        "text": "AP saja: tambahkan izin dahulu, lalu tutup penerimaan default. Pertahankan profil keamanan yang sudah ada.",
+        "device": "AP",
+        "code": "/interface/wireless/access-list/add interface=wlan1 mac-address=02:11:22:33:44:55 authentication=yes forwarding=yes comment=\"MTCNA-MAC\"\n/interface/wireless/set wlan1 default-authentication=no"
+      },
+      {
+        "title": "3. Alternatif wifi",
+        "text": "AP saja, bukan kelanjutan cabang wireless: rule accept peer nyata berada sebelum reject sisanya. Periksa rule lama yang mungkin lebih dulu cocok.",
+        "device": "AP",
+        "code": "/interface/wifi/access-list/add interface=wifi1 mac-address=02:11:22:33:44:55 action=accept comment=\"MTCNA-MAC-ALLOW\"\n/interface/wifi/access-list/add interface=wifi1 action=reject comment=\"MTCNA-MAC-DENY\""
+      },
+      {
+        "title": "4. Uji dua kondisi",
+        "text": "Sambungkan ulang STA yang diizinkan, lalu station kedua milik sendiri yang tak ada dalam daftar dengan kunci benar. Jangan mengganti MAC untuk meniru pengguna lain. Amati log/registration table.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "STA diizinkan",
+        "Reconnect dan ping AP",
+        "Peer terdaftar dan komunikasi IP baseline berhasil."
+      ],
+      [
+        "STA lain milik sendiri",
+        "Coba bergabung dengan kunci benar",
+        "Ditolak oleh kebijakan MAC AP."
+      ],
+      [
+        "AP",
+        "Lihat rule dan registration table",
+        "MAC serta interface cocok dengan perangkat uji."
+      ]
+    ],
+    "faults": [
+      [
+        "Semua ditolak",
+        "Koreksi MAC radio serta urutan rule melalui kabel/console."
+      ],
+      [
+        "Klien terlarang tetap tersambung",
+        "Periksa sesi lama, rule terdahulu dan interface; ulangi reconnect terkontrol."
+      ]
+    ],
+    "restore": "Cabang wireless: kembalikan default-authentication sesuai baseline lalu hapus MTCNA-MAC. Cabang wifi: hapus hanya dua rule MTCNA-MAC-ALLOW/DENY. Jangan menghapus profil WPA2.",
+    "source": "https://manual.mikrotik.com/docs/wireless/wifi/",
+    "kind": "hardware",
+    "prereq": "Wireless-link sudah berfungsi; satu station tambahan untuk tes penolakan dan akses admin lewat kabel."
+  },
+  {
+    "slug": "wireless-protocols",
+    "title": "802.11, Nstreme dan Nv2: memilih protokol radio",
+    "module": 5,
+    "summary": "Membedakan protokol akses radio, driver dan pengamanan tiap percobaan.",
+    "analogy": "Dua orang harus memakai aturan giliran bicara yang sama agar percakapan tersambung.",
+    "explain": [
+      "802.11 adalah keluarga standar Wi-Fi. Nstreme dan Nv2 merupakan protokol MikroTik pada perangkat/paket wireless lama yang mendukungnya. Jangan menyimpulkan semua radio MikroTik atau driver wifi baru mendukung kedua protokol tersebut.",
+      "Nv2 memakai TDMA dan mempunyai pengaturan keamanan sendiri; security profile WPA2 802.11 tidak otomatis menjadi enkripsi Nv2. Kedua sisi harus cocok. Pergantian protokol dapat memutus link sehingga akses manajemen kabel/console merupakan syarat lab.",
+      "Bandingkan hasil dengan kondisi radio, beban, jarak serta perangkat yang sama. Ping dan uji throughput singkat bukan jaminan kapasitas produksi. Tidak ada protokol yang selalu paling cepat untuk setiap topologi. Untuk wifi yang tak mendukung Nstreme/Nv2, kerjakan 802.11 dan identifikasi batas dukungannya; jangan mengarang perintah padanan."
+    ],
+    "nodes": [
+      "AP",
+      "STA"
+    ],
+    "edges": [
+      [
+        "AP",
+        "STA",
+        "radio / 10.80.0.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "AP",
+        "wlan1 atau wifi1",
+        "10.80.0.1/30",
+        "pilih satu keluarga driver"
+      ],
+      [
+        "STA",
+        "wlan1 atau wifi1",
+        "10.80.0.2/30",
+        "router radio pasangan"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline 802.11",
+        "text": "Gunakan dua perangkat legacy wireless yang dokumentasinya menyebut dukungan Nstreme/Nv2. Simpan snapshot/export, koneksikan kabel admin. Profil WPA2 dari wireless-link tetap dipakai.",
+        "device": "AP dan STA",
+        "code": "/interface/wireless/set wlan1 wireless-protocol=802.11\n/interface/wireless/registration-table/print stats"
+      },
+      {
+        "title": "2. Percobaan Nstreme terpisah",
+        "text": "Dari console di KEDUA sisi, aktifkan sesuai dukungan perangkat. Catat reconnect dan hasil tes sebelum kembali ke baseline. Jangan mengubah satu sisi lalu bergantung pada link yang putus.",
+        "device": "AP dan STA",
+        "code": "/interface/wireless/nstreme/set wlan1 enable-nstreme=yes\n/interface/wireless/set wlan1 wireless-protocol=nstreme"
+      },
+      {
+        "title": "3. Percobaan Nv2 terpisah",
+        "text": "Kembali ke baseline dahulu. Di KEDUA sisi gunakan kunci Nv2 pribadi yang sama; ini pengaturan terpisah dari WPA2. Jangan gunakan contoh tanpa security.",
+        "device": "AP dan STA",
+        "code": "/interface/wireless/nstreme/set wlan1 enable-nstreme=no\n/interface/wireless/set wlan1 wireless-protocol=nv2 nv2-security=enabled nv2-preshared-key=\"GANTI-Kunci-Nv2-Pribadi\""
+      },
+      {
+        "title": "4. Bandingkan dan pulihkan",
+        "text": "Setiap tahap: periksa registration, ping antar-IP radio dan transfer terbatas milik sendiri. Catat CPU, signal serta hasil, lalu pulihkan baseline 802.11+WPA2 di kedua sisi.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "802.11",
+        "Registration dan ping .1/.2",
+        "Link baseline berhasil dengan keamanan WPA2."
+      ],
+      [
+        "Nstreme / Nv2",
+        "Ulangi tes pada kedua konfigurasi terpisah",
+        "Hanya berhasil jika kedua radio mendukung dan parameter cocok."
+      ],
+      [
+        "Pemulihan",
+        "Ping setelah kembali ke 802.11",
+        "Baseline kembali berfungsi dan profile WPA2 tetap aktif."
+      ]
+    ],
+    "faults": [
+      [
+        "Menu/protokol tidak ada",
+        "Periksa paket, arsitektur, model dan dokumentasi. wifi bukan pengganti menu legacy ini."
+      ],
+      [
+        "Link hilang saat ganti protokol",
+        "Gunakan console kedua sisi; cocokkan protokol serta kunci keamanan Nv2."
+      ]
+    ],
+    "restore": "Pada kedua radio legacy: /interface/wireless/nstreme/set wlan1 enable-nstreme=no kemudian /interface/wireless/set wlan1 wireless-protocol=802.11 security-profile=mtcna-sec. Verifikasi profil WPA2, ping, dan konfigurasi baseline.",
+    "source": "https://manual.mikrotik.com/docs/wireless/abgn/wireless-interface/",
+    "kind": "hardware",
+    "prereq": "Dua radio legacy wireless dengan dukungan protokol yang dikonfirmasi; lab ini tidak dijalankan pada CHR atau dipaksakan ke wifi."
+  },
+  {
+    "slug": "bridge-lan",
+    "title": "Bridge: menyatukan port Ethernet menjadi satu LAN",
+    "module": 6,
+    "summary": "Membuktikan forwarding Layer 2 dan membedakan host table dari ARP.",
+    "analogy": "Switch meneruskan kiriman dalam satu lingkungan; router menghubungkan lingkungan yang berbeda.",
+    "explain": [
+      "Bridge menggabungkan interface pada Layer 2. Host table belajar MAC dan port sumber, lalu membantu keputusan forwarding. ARP memetakan IPv4 ke MAC, sehingga kedua tabel tidak boleh disamakan.",
+      "Alamat IP manajemen diberikan pada interface bridge, bukan disebar duplikat ke semua port anggotanya. Dua PC pada subnet yang sama berkomunikasi lewat switching tanpa memerlukan gateway untuk tujuan lokal. Untuk subnet lain tetap perlu routing.",
+      "RSTP membantu mencegah loop Layer 2, tetapi bukan alasan memasang kabel melingkar tanpa desain. Mulai dengan satu jalur dan jangan menggabungkan WAN internet ke bridge LAN. Hardware offload tergantung switch chip serta fitur; jangan menganggap semua trafik diproses CPU dengan cara sama."
+    ],
+    "nodes": [
+      "PC-A",
+      "RTR",
+      "PC-B"
+    ],
+    "edges": [
+      [
+        "PC-A",
+        "RTR",
+        "ether2 / br-lan"
+      ],
+      [
+        "RTR",
+        "PC-B",
+        "ether3 / br-lan"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "br-lan",
+        "192.168.60.1/24",
+        "IP manajemen bridge"
+      ],
+      [
+        "PC-A",
+        "NIC",
+        "192.168.60.10/24",
+        "gateway .1"
+      ],
+      [
+        "PC-B",
+        "NIC",
+        "192.168.60.20/24",
+        "gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Router kosong dan port",
+        "text": "Gunakan snapshot terpisah dari baseline internet. Pastikan ether2/ether3 tersedia, tanpa IP/bridge lama dan tanpa loop. Konfigurasi dari console.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Buat bridge dan anggota",
+        "text": "IP berada di br-lan. Jangan menambah ether1 WAN ke bridge.",
+        "device": "RTR",
+        "code": "/interface/bridge/add name=br-lan protocol-mode=rstp\n/interface/bridge/port/add bridge=br-lan interface=ether2\n/interface/bridge/port/add bridge=br-lan interface=ether3\n/ip/address/add address=192.168.60.1/24 interface=br-lan comment=\"MTCNA-LAB\"\n"
+      },
+      {
+        "title": "3. Hubungkan PC dan amati",
+        "text": "Set IP PC sesuai tabel. Uji A ke B dan ke .1, lalu baca host table serta ARP.",
+        "device": "RTR",
+        "code": "/interface/bridge/port/print\n/interface/bridge/host/print\n/ip/arp/print detail"
+      },
+      {
+        "title": "4. Uji putus satu port",
+        "text": "Cabut kabel PC-B lalu ulangi ping, sambung kembali dan amati pembelajaran MAC. Jangan membuat loop untuk menguji RSTP secara sembarang.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC-A",
+        "ping 192.168.60.20",
+        "Host lain di LAN menjawab jika firewall host mengizinkan."
+      ],
+      [
+        "PC-A / PC-B",
+        "ping 192.168.60.1",
+        "IP manajemen bridge dapat diakses."
+      ],
+      [
+        "RTR",
+        "Bridge host dan ARP table",
+        "MAC dipelajari pada port, ARP mempunyai pemetaan IPv4 yang berbeda fungsinya."
+      ]
+    ],
+    "faults": [
+      [
+        "Ping antar-PC gagal",
+        "Periksa IP/mask, firewall host, port membership dan link."
+      ],
+      [
+        "IP tidak terjangkau setelah bridge",
+        "Pindahkan IP manajemen ke bridge melalui console; hindari IP duplikat pada port anggota."
+      ]
+    ],
+    "restore": "Pulihkan snapshot atau hapus hanya IP/port/bridge lab dari console. Bila menambah DHCP untuk latihan berikutnya, server ditempatkan pada bridge, bukan port anggota.",
+    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
+    "kind": "lab",
+    "prereq": "RouterOS v7 pada CHR atau router cadangan dengan snapshot/backup. Gunakan segmen lab terisolasi serta console lokal; jangan menempel semua lab pada satu konfigurasi."
+  },
+  {
+    "slug": "bridge-wireless",
+    "title": "Bridge wireless: memperpanjang LAN melalui radio",
+    "module": 6,
+    "summary": "Menguji satu broadcast domain melewati AP–station yang mendukung bridge transparan.",
+    "analogy": "Dua ruangan dapat menjadi satu lingkungan jaringan bila pintu penghubung meneruskan identitas perangkat dengan benar.",
+    "explain": [
+      "Mode station biasa tidak otomatis meneruskan banyak MAC Ethernet secara transparan. station-bridge memerlukan pasangan AP serta dukungan driver yang sesuai. Legacy wireless station-bridge tidak bisa dianggap kompatibel dengan station-bridge keluarga wifi lain.",
+      "Lab ini memilih pasangan legacy MikroTik yang mendukung ap-bridge dan station-bridge. Jika memakai wifi, periksa dukungan model/versi kedua sisi di dokumentasi; jangan menyalin perintah wlan1 atau menganggap station-pseudobridge setara dengan bridge transparan.",
+      "Bridge membawa broadcast dan memperluas domain kegagalan. Gunakan satu jalur tanpa loop, pertahankan keamanan radio, dan pindahkan IP manajemen ke bridge. Menghubungkan WAN publik ke bridge ini bukan tujuan latihan."
+    ],
+    "nodes": [
+      "PC-A",
+      "AP",
+      "STA",
+      "PC-B"
+    ],
+    "edges": [
+      [
+        "PC-A",
+        "AP",
+        "ether2 / br-lan"
+      ],
+      [
+        "AP",
+        "STA",
+        "wlan1 / station-bridge"
+      ],
+      [
+        "STA",
+        "PC-B",
+        "ether2 / br-lan"
+      ]
+    ],
+    "addresses": [
+      [
+        "AP",
+        "br-lan",
+        "192.168.60.1/24",
+        "manajemen AP"
+      ],
+      [
+        "STA",
+        "br-lan",
+        "192.168.60.2/24",
+        "manajemen STA"
+      ],
+      [
+        "PC-A",
+        "NIC",
+        "192.168.60.10/24",
+        "LAN yang sama"
+      ],
+      [
+        "PC-B",
+        "NIC",
+        "192.168.60.20/24",
+        "LAN yang sama"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Cabang lab terpisah",
+        "text": "Snapshot wireless-link legacy; jangan gunakan bersamaan dengan lab EoIP remote. Dari console hapus hanya dua alamat link lab 10.80.0.1/30 dan .2/30 pada radio masing-masing sebelum memberi IP bridge. Pertahankan SSID, channel, negara dan WPA2.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Mode kedua radio",
+        "text": "Kedua perangkat legacy kompatibel; mode AP memerlukan lisensi yang sesuai.",
+        "device": "AP lalu STA",
+        "code": "# AP saja:\n/interface/wireless/set wlan1 mode=ap-bridge\n# STA saja:\n/interface/wireless/set wlan1 mode=station-bridge"
+      },
+      {
+        "title": "3. Bridge pada KEDUA perangkat",
+        "text": "Anggotakan radio serta port LAN; jangan menambah jalur kedua.",
+        "device": "AP dan STA",
+        "code": "/interface/bridge/add name=br-lan protocol-mode=rstp\n/interface/bridge/port/add bridge=br-lan interface=wlan1\n/interface/bridge/port/add bridge=br-lan interface=ether2"
+      },
+      {
+        "title": "4. IP bridge dan klien",
+        "text": "AP br-lan .1/24, STA .2/24; PC-A .10/24 dan PC-B .20/24. Alamat radio lama sudah dihapus melalui console.",
+        "device": "AP lalu STA",
+        "code": "# AP saja:\n/ip/address/add address=192.168.60.1/24 interface=br-lan comment=\"MTCNA-LAB\"\n# STA saja:\n/ip/address/add address=192.168.60.2/24 interface=br-lan comment=\"MTCNA-LAB\""
+      },
+      {
+        "title": "5. Buktikan forwarding",
+        "text": "Ping antar-PC, lihat registration table dan bridge host kedua sisi. Periksa apakah MAC PC di seberang dipelajari, bukan hanya melihat radio berstatus connected.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "PC-A",
+        "ping 192.168.60.20",
+        "PC-B satu LAN dapat dijangkau, dengan firewall host sesuai."
+      ],
+      [
+        "AP/STA",
+        "/interface/bridge/host/print",
+        "MAC PC di seberang terlihat pada jalur radio."
+      ],
+      [
+        "PC-A",
+        "Ping .1 dan .2",
+        "Kedua alamat manajemen bridge dapat dijangkau."
+      ]
+    ],
+    "faults": [
+      [
+        "Radio connected tetapi PC seberang gagal",
+        "Periksa dukungan station-bridge, paket kedua sisi, port bridge, IP host dan firewall."
+      ],
+      [
+        "Broadcast berulang/CPU naik",
+        "Putus jalur tambahan dan koreksi loop; jangan mematikan RSTP sembarang."
+      ]
+    ],
+    "restore": "Pulihkan snapshot wireless-link masing-masing melalui console. Jangan meninggalkan IP 10.80.0.0/30 dan 192.168.60.0/24 secara tak sengaja pada port anggota.",
+    "source": "https://manual.mikrotik.com/docs/wireless/abgn/wireless-interface/",
+    "kind": "hardware",
+    "prereq": "Wireless-link legacy sudah berhasil; dua radio mendukung bridge transparan, dua PC, console/kabel admin terpisah."
+  },
+  {
+    "slug": "bridge-remote",
+    "title": "Bridge jaringan remote: EoIP di atas link wireless",
+    "module": 6,
+    "summary": "Memisahkan transport IP radio dari LAN yang diperpanjang dengan tunnel.",
+    "analogy": "Jalan pengantar dan paket di dalam kendaraan adalah dua lapisan yang berbeda.",
+    "explain": [
+      "Underlay adalah jalur IP yang membawa tunnel. Overlay EoIP membawa frame Ethernet di atasnya. Dalam contoh, radio tetap menjadi transport IP 10.80.0.0/30, sedangkan LAN di dalam tunnel memakai 192.168.77.0/24.",
+      "EoIP dan port LAN dimasukkan ke bridge, tetapi interface radio underlay tidak. Menggabungkan radio langsung ke bridge LAN sekaligus membuat tunnel paralel dapat menghasilkan desain salah atau loop. Kedua endpoint EoIP harus saling terjangkau dan tunnel-id sama.",
+      "EoIP sendiri bukan enkripsi VPN. WPA2 pada link radio melindungi link udara sesuai konfigurasinya, bukan otomatis seluruh jalur internet. Untuk jaringan publik pelajari pengamanan seperti IPsec dan periksa overhead/MTU. Membawa broadcast ke cabang juga memperluas domain kegagalan."
+    ],
+    "nodes": [
+      "PC-A",
+      "AP",
+      "STA",
+      "PC-B"
+    ],
+    "edges": [
+      [
+        "PC-A",
+        "AP",
+        "ether2 / br-site"
+      ],
+      [
+        "AP",
+        "STA",
+        "EoIP 55 di atas radio 10.80.0.0/30"
+      ],
+      [
+        "STA",
+        "PC-B",
+        "ether2 / br-site"
+      ]
+    ],
+    "addresses": [
+      [
+        "AP",
+        "wlan1",
+        "10.80.0.1/30",
+        "underlay radio; bukan port bridge"
+      ],
+      [
+        "STA",
+        "wlan1",
+        "10.80.0.2/30",
+        "underlay radio"
+      ],
+      [
+        "AP",
+        "br-site",
+        "192.168.77.1/24",
+        "overlay LAN"
+      ],
+      [
+        "STA",
+        "br-site",
+        "192.168.77.2/24",
+        "overlay LAN"
+      ],
+      [
+        "PC-A",
+        "NIC",
+        "192.168.77.10/24",
+        "LAN overlay"
+      ],
+      [
+        "PC-B",
+        "NIC",
+        "192.168.77.20/24",
+        "LAN overlay"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline routed wireless",
+        "text": "Gunakan snapshot wireless-link legacy dengan AP ap-bridge dan STA station biasa, IP radio .1/.2/30. Jangan pakai snapshot bridge-wireless. Ping radio dua arah dahulu; firewall underlay harus mengizinkan EoIP/GRE protokol IP 47 hanya dari peer.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. EoIP per endpoint",
+        "text": "Parameter lokal dan remote berlawanan; tunnel-id sama. GRE bukan port TCP/UDP 47.",
+        "device": "AP lalu STA",
+        "code": "# AP saja:\n/interface/eoip/add name=eoip-lab local-address=10.80.0.1 remote-address=10.80.0.2 tunnel-id=55\n# STA saja:\n/interface/eoip/add name=eoip-lab local-address=10.80.0.2 remote-address=10.80.0.1 tunnel-id=55"
+      },
+      {
+        "title": "3. Bridge overlay pada KEDUA sisi",
+        "text": "Hanya ether2 dan eoip-lab menjadi anggota; wlan1 tetap underlay dan tidak dimasukkan.",
+        "device": "AP dan STA",
+        "code": "/interface/bridge/add name=br-site protocol-mode=rstp\n/interface/bridge/port/add bridge=br-site interface=ether2\n/interface/bridge/port/add bridge=br-site interface=eoip-lab"
+      },
+      {
+        "title": "4. Alamat overlay dan PC",
+        "text": "AP br-site .77.1/24, STA .77.2/24; PC-A .77.10/24 dan PC-B .77.20/24.",
+        "device": "AP lalu STA",
+        "code": "# AP saja:\n/ip/address/add address=192.168.77.1/24 interface=br-site comment=\"MTCNA-LAB\"\n# STA saja:\n/ip/address/add address=192.168.77.2/24 interface=br-site comment=\"MTCNA-LAB\""
+      },
+      {
+        "title": "5. Uji lapis demi lapis",
+        "text": "Ping underlay .80.1/.2 dahulu, lalu manajemen overlay .77.1/.2 dan antar-PC. Lihat counter EoIP/bridge, MAC PC, dan coba ukuran paket bertahap untuk mengenali MTU tanpa mengasumsikan satu angka universal.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "AP/STA",
+        "Ping 10.80.0.1 / .2",
+        "Underlay radio tersedia sebelum tunnel dinilai."
+      ],
+      [
+        "PC-A",
+        "ping 192.168.77.20",
+        "Overlay membawa komunikasi LAN PC."
+      ],
+      [
+        "Kedua router",
+        "Bridge ports, host table dan counter EoIP",
+        "wlan1 bukan anggota bridge; MAC remote lewat eoip-lab."
+      ]
+    ],
+    "faults": [
+      [
+        "Underlay benar tetapi overlay gagal",
+        "Periksa GRE input, endpoint, tunnel-id, port bridge dan firewall host."
+      ],
+      [
+        "Paket kecil berhasil, besar gagal",
+        "Periksa MTU/MRU, fragmentasi dan overhead jalur; jangan menambah NAT untuk menyembunyikan masalah L2."
+      ]
+    ],
+    "restore": "Pulihkan snapshot wireless-link atau hapus hanya IP overlay, port/bridge br-site dan eoip-lab melalui console. Pertahankan underlay untuk membandingkan sebelum/sesudah.",
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/eoip/",
+    "kind": "hardware",
+    "prereq": "Wireless-link legacy teruji dan dua PC; untuk latihan EoIP tanpa radio gunakan lab EoIP bersama di modul Tunnels."
+  }
+]
