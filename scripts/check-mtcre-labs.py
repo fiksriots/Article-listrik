@@ -1,8 +1,8 @@
 import json,re,ipaddress,pathlib,collections
 r=pathlib.Path(__file__).resolve().parents[1];labs=json.loads((r/'lib/mtcre-labs.json').read_text());lessons={l['slug'] for l in json.loads((r/'lib/network-lessons.json').read_text())}
-assert len(labs)==20 and len({l['slug'] for l in labs})==20
+assert len(labs)>=20 and len({l['slug'] for l in labs})==len(labs)
 required={'static-tiga-router','failover-gateway','failover-recursive','ecmp-dua-jalur','policy-routing','mangle-ping-traceroute','ttl-client','ttl-isp','ospf-single-3','ospf-single-4','ospf-redundancy-3','ospf-redundancy-4','ospf-multiarea-3','ospf-multiarea-4','ospf-network-type','ospf-stub-nssa','redistribute-e1','redistribute-e2','tunnel-gre','tunnel-eoip'}
-assert {l['slug'] for l in labs}==required
+assert required<={l['slug'] for l in labs}
 for l in labs:
  assert l['pages'] and l['restore'] and l['source'].startswith('https://')
  assert set(l['modules'])<=lessons
@@ -36,4 +36,4 @@ if (r/'.next/server/app/jaringan/mtcre/lab').exists():
  feed=json.loads((r/'.next/server/app/api/articles.body').read_text())['items']
  for l in labs:assert any(x['id']=='mtcre-lab-'+l['slug'] for x in feed)
  assert len({x['id'] for x in feed})==len(feed)
-print('PASS: 20 lab topics, valid IPs, consistent OSPF peer area/cost, unique router IPs, code safety, topology assets and rendered integration when available')
+print('PASS: all lab topics, valid IPs, consistent OSPF peer area/cost, unique router IPs, code safety, topology assets and rendered integration when available')

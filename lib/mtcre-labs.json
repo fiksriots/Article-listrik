@@ -3673,5 +3673,2357 @@
     "restore": "Aktifkan kembali CORE ether2. Pulihkan snapshot untuk berpindah varian. Hindari loop bridge serta broadcast meluas pada EoIP; jangan memperpanjang jaringan produksi tanpa desain.",
     "source": "https://manual.mikrotik.com/docs/virtual-private-networks/eoip/",
     "prereq": "CHR RouterOS v7 kosong tanpa konfigurasi default; adapter sesuai tabel. Kerjakan pada lab terisolasi, bukan router produksi."
+  },
+  {
+    "slug": "connected-route",
+    "title": "Connected route: terbentuk otomatis dan flag DAC",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-keputusan-routing"
+    ],
+    "goal": "Membuktikan connected route muncul dari IP/prefix pada interface aktif, bukan dari static route.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "PC-A",
+      "R1",
+      "PC-B"
+    ],
+    "edges": [
+      [
+        "PC-A",
+        "R1",
+        "ether1 / 192.168.10.0/24"
+      ],
+      [
+        "R1",
+        "PC-B",
+        "ether2 / 192.168.20.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "192.168.10.1/24",
+        "gateway PC-A"
+      ],
+      [
+        "R1",
+        "ether2",
+        "192.168.20.1/24",
+        "gateway PC-B"
+      ],
+      [
+        "PC-A",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway 192.168.10.1"
+      ],
+      [
+        "PC-B",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway 192.168.20.1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Dua LAN langsung ke satu router",
+        "text": "Hubungkan kedua PC dan tetapkan IP/gateway sesuai tabel. Tidak perlu NAT atau static route antara dua LAN yang langsung terhubung.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat membentuk connected route",
+        "text": "Winbox IP → Addresses, lalu IP → Routes. Pada versi lama sering ditulis DAC/ADC; v7 memakai legenda seperti DAc. Baca D dynamic, A active, c/C connected sebagai atribut, bukan nama satu protokol.",
+        "device": "R1",
+        "code": "/ip/address/add address=192.168.10.1/24 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether2 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Amati sumber route",
+        "text": "Nonaktifkan alamat LAN20 dari console lokal, lalu amati route connected menghilang/tidak lagi aktif. Jangan menghapus route dinamis secara manual.",
+        "device": "R1",
+        "code": "/ip/route/print detail\n/ip/address/disable [find address=\"192.168.20.1/24\"]\n/ip/route/print detail"
+      }
+    ],
+    "tests": [
+      [
+        "R1",
+        "/ip/route/print detail",
+        "Awalnya kedua subnet connected aktif ketika link serta alamat valid."
+      ],
+      [
+        "PC-A",
+        "ping 192.168.20.10",
+        "Berhasil sebelum alamat LAN20 dinonaktifkan; gagal setelahnya."
+      ],
+      [
+        "R1",
+        "/ip/address/enable [find address=\"192.168.20.1/24\"]",
+        "Connected LAN20 dan konektivitas kembali."
+      ]
+    ],
+    "faults": [
+      [
+        "PC mendapat IP, gateway belum menjawab",
+        "Periksa kabel, prefix, interface dan firewall host."
+      ],
+      [
+        "Route terlihat tetapi tidak aktif",
+        "Pastikan link dan interface pembawa alamat aktif."
+      ]
+    ],
+    "restore": "Aktifkan kembali alamat LAN20. Simpan hasil route sebelum/sesudah; jangan menambah static route untuk subnet yang sudah connected.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "route-flags-dhcp-static",
+    "title": "Flag DAS/AS: route DHCP dibanding static manual",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-keputusan-routing"
+    ],
+    "goal": "Membedakan sumber otomatis dan manual serta status aktif tanpa menyamakan huruf antarversi.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "ISP",
+      "EDGE"
+    ],
+    "edges": [
+      [
+        "ISP",
+        "EDGE",
+        "ether1 / DHCP 10.60.0.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "ISP",
+        "ether1",
+        "10.60.0.1/24",
+        "server DHCP / gateway"
+      ],
+      [
+        "EDGE",
+        "ether1",
+        "10.60.0.100/24",
+        "contoh lease; hasil pool bisa berbeda"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. DHCP server lab",
+        "text": "Buat pool pada segmen terisolasi. Jangan mengaktifkan server DHCP pada LAN produksi.",
+        "device": "ISP",
+        "code": "/ip/address/add address=10.60.0.1/24 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/pool/add name=lab-dhcp ranges=10.60.0.100-10.60.0.110\n/ip/dhcp-server/add name=lab interface=ether1 address-pool=lab-dhcp disabled=no\n/ip/dhcp-server/network/add address=10.60.0.0/24 gateway=10.60.0.1"
+      },
+      {
+        "title": "2. Route dari DHCP",
+        "text": "DHCP client mendapat alamat dan default route dari lease. Huruf D berarti dibuat dinamis; pada v7 asal DHCP biasanya d, bukan S besar dari screenshot lama.",
+        "device": "EDGE",
+        "code": "/ip/dhcp-client/add interface=ether1 add-default-route=yes default-route-distance=1 use-peer-dns=no disabled=no\n/ip/dhcp-client/print detail\n/ip/route/print detail"
+      },
+      {
+        "title": "3. Tambah route manual sebagai pembanding",
+        "text": "Prefix ini hanya untuk melihat atribut route, bukan jaringan layanan yang benar-benar ada. Aktifnya route menunjukkan next hop bisa diresolusikan, bukan jaminan tujuan menjawab.",
+        "device": "EDGE",
+        "code": "/ip/route/add dst-address=192.168.99.0/24 gateway=10.60.0.1 comment=\"LAB-MANUAL\"\n/ip/route/print detail"
+      }
+    ],
+    "tests": [
+      [
+        "EDGE",
+        "/ip/route/print detail",
+        "Default DHCP lazimnya DAd; route manual /24 lazimnya As pada v7. Cocokkan dengan legenda aktual."
+      ],
+      [
+        "EDGE",
+        "/ip/dhcp-client/disable [find interface=ether1]",
+        "Alamat lease dan default DHCP ditarik. Route manual tetap tersimpan tetapi bisa inactive karena connected gateway hilang."
+      ],
+      [
+        "EDGE",
+        "/ip/dhcp-client/enable [find interface=ether1]",
+        "Lease/connected/default DHCP kembali setelah bound."
+      ]
+    ],
+    "faults": [
+      [
+        "Mengapa screenshot menyebut DAS?",
+        "Pada v6 route otomatis dari layanan seperti DHCP dapat muncul DAS; D dynamic, A active, S static-style. Itu tidak sama dengan route statis yang kamu tambahkan manual."
+      ],
+      [
+        "Mengira D adalah distance",
+        "Distance adalah kolom angka terpisah; D merupakan flag dynamic."
+      ]
+    ],
+    "restore": "Aktifkan DHCP client kembali; hapus hanya LAB-MANUAL jika selesai. Bandingkan atribut asal serta status, bukan urutan huruf yang dihafal.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "static-hub-cabang",
+    "title": "Static route kasus 2: kantor pusat dan dua cabang",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-static-multihop"
+    ],
+    "goal": "BR1 dan BR2 berkomunikasi melalui HQ dengan route pergi serta balik eksplisit.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "BR1",
+      "HQ",
+      "BR2"
+    ],
+    "edges": [
+      [
+        "BR1",
+        "HQ",
+        "10.1.0.0/30"
+      ],
+      [
+        "HQ",
+        "BR2",
+        "10.2.0.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "HQ",
+        "ether1",
+        "10.1.0.1/30",
+        "ke BR1"
+      ],
+      [
+        "BR1",
+        "ether1",
+        "10.1.0.2/30",
+        "ke HQ"
+      ],
+      [
+        "HQ",
+        "ether2",
+        "10.2.0.1/30",
+        "ke BR2"
+      ],
+      [
+        "BR2",
+        "ether1",
+        "10.2.0.2/30",
+        "ke HQ"
+      ],
+      [
+        "HQ",
+        "ether3",
+        "192.168.10.1/24",
+        "LAN HQ"
+      ],
+      [
+        "BR1",
+        "ether3",
+        "192.168.20.1/24",
+        "LAN BR1"
+      ],
+      [
+        "BR2",
+        "ether3",
+        "192.168.30.1/24",
+        "LAN BR2"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Rencana host",
+        "text": "PC tiap site memakai .10/24 dan gateway .1 pada LAN terkait. Komunikasi BR1–BR2 melewati HQ; tidak ada link cabang langsung.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Konfigurasi HQ",
+        "text": "Winbox IP → Addresses dan Routes. Gateway cabang adalah alamat HQ pada transit setempat.",
+        "device": "HQ",
+        "code": "/ip/address/add address=10.1.0.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=10.2.0.1/30 interface=ether2 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/ip/route/add dst-address=192.168.20.0/24 gateway=10.1.0.2\n/ip/route/add dst-address=192.168.30.0/24 gateway=10.2.0.2"
+      },
+      {
+        "title": "2. Konfigurasi BR1",
+        "text": "Winbox IP → Addresses dan Routes. Gateway cabang adalah alamat HQ pada transit setempat.",
+        "device": "BR1",
+        "code": "/ip/address/add address=10.1.0.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/ip/route/add dst-address=192.168.10.0/24 gateway=10.1.0.1\n/ip/route/add dst-address=192.168.30.0/24 gateway=10.1.0.1"
+      },
+      {
+        "title": "2. Konfigurasi BR2",
+        "text": "Winbox IP → Addresses dan Routes. Gateway cabang adalah alamat HQ pada transit setempat.",
+        "device": "BR2",
+        "code": "/ip/address/add address=10.2.0.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.30.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/ip/route/add dst-address=192.168.10.0/24 gateway=10.2.0.1\n/ip/route/add dst-address=192.168.20.0/24 gateway=10.2.0.1"
+      }
+    ],
+    "tests": [
+      [
+        "BR1",
+        "/ping 192.168.30.1 src-address=192.168.20.1 count=5",
+        "Route balik dari BR2 ke LAN BR1 tersedia."
+      ],
+      [
+        "PC BR1",
+        "traceroute ke 192.168.30.10",
+        "Melalui BR1 → HQ → BR2; balasan tiap hop tergantung alat/firewall."
+      ],
+      [
+        "HQ",
+        "/ip/route/print detail",
+        "Dua subnet cabang menuju gateway berbeda."
+      ]
+    ],
+    "faults": [
+      [
+        "Cabang hanya bisa ping HQ",
+        "Periksa route menuju LAN cabang lain pada HQ dan kedua cabang, serta gateway PC."
+      ]
+    ],
+    "restore": "Hapus satu route cabang pada snapshot percobaan dan buktikan arah yang terputus, kemudian pulihkan snapshot.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "recursive-next-hop",
+    "title": "Recursive next hop: gateway logis melalui router tengah",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-keputusan-routing",
+      "mtcre-recursive-failover"
+    ],
+    "goal": "Membaca perbedaan gateway logis dan immediate gateway fisik.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "edges": [
+      [
+        "R1",
+        "R2",
+        "ether1 ↔ ether1 / area 0 / 10"
+      ],
+      [
+        "R2",
+        "R3",
+        "ether2 ↔ ether1 / area 0 / 10"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.12.0.1/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.12.0.2/30",
+        "ke R1 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether2",
+        "10.23.0.1/30",
+        "ke R3 / area 0 / cost 10"
+      ],
+      [
+        "R3",
+        "ether1",
+        "10.23.0.2/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R1",
+        "ether3",
+        "192.168.10.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC1",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway 192.168.10.1"
+      ],
+      [
+        "R2",
+        "ether3",
+        "192.168.20.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC2",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway 192.168.20.1"
+      ],
+      [
+        "R3",
+        "ether3",
+        "192.168.30.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC3",
+        "NIC",
+        "192.168.30.10/24",
+        "gateway 192.168.30.1"
+      ],
+      [
+        "R3",
+        "lo-rec",
+        "10.3.3.3/32",
+        "next hop logis R1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Mulai dari static tiga router",
+        "text": "Gunakan baseline static-tiga-router sampai PC saling ping. Kali ini R1 memakai gateway logis loopback R3 yang harus diresolusikan melalui R2, bukan langsung terhubung.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat loopback R3",
+        "text": "Alamat ini menjadi next hop logis. R2 membutuhkan route /32 menuju alamat tersebut.",
+        "device": "R3",
+        "code": "/interface/bridge/add name=lo-rec protocol-mode=none\n/ip/address/add address=10.3.3.3/32 interface=lo-rec comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Rute resolusi pada R2",
+        "text": "Tetangga R3 tetap next hop fisik R2.",
+        "device": "R2",
+        "code": "/ip/route/add dst-address=10.3.3.3/32 gateway=10.23.0.2 comment=\"LAB-RECUR\""
+      },
+      {
+        "title": "4. Rute host dan recursive di R1",
+        "text": "Nonaktifkan route lama hanya untuk LAN30 agar tidak menutupi hasil. Route /32 scope 10 menjadi resolver default target-scope 11.",
+        "device": "R1",
+        "code": "/ip/route/disable [find dst-address=\"192.168.30.0/24\"]\n/ip/route/add dst-address=10.3.3.3/32 gateway=10.12.0.2 scope=10 comment=\"LAB-RESOLVER\"\n/ip/route/add dst-address=192.168.30.0/24 gateway=10.3.3.3 target-scope=11 comment=\"LAB-RECUR\""
+      }
+    ],
+    "tests": [
+      [
+        "R1",
+        "/ip/route/print detail where dst-address=192.168.30.0/24",
+        "Gateway 10.3.3.3, immediate gateway 10.12.0.2 melalui ether1."
+      ],
+      [
+        "R1",
+        "/ping 192.168.30.1 src-address=192.168.10.1 count=5",
+        "Balasan melalui route balik baseline."
+      ],
+      [
+        "R1",
+        "Nonaktifkan route LAB-RESOLVER lalu periksa route LAN30",
+        "Recursive route menjadi tidak dapat diresolusikan; aktifkan resolver kembali."
+      ]
+    ],
+    "faults": [
+      [
+        "Gateway logis tidak reachable",
+        "Periksa rantai resolusi /32, scope/target-scope dan route R2 ke loopback R3."
+      ]
+    ],
+    "restore": "Pulihkan snapshot static baseline; jangan menyisakan dua route yang membuat hasil pemilihan ambigu.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/",
+    "prereq": "Lab static-tiga-router sudah bekerja; kerjakan pada snapshot baru.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "route-type",
+    "title": "Route type: unicast, blackhole dan penolakan ICMP",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-keputusan-routing"
+    ],
+    "goal": "Membedakan forward, silent discard, dan reject sambil memahami perbedaan v6/v7.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "PC",
+      "R1",
+      "R2"
+    ],
+    "edges": [
+      [
+        "PC",
+        "R1",
+        "LAN 192.168.10.0/24"
+      ],
+      [
+        "R1",
+        "R2",
+        "10.90.0.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "PC",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway .1"
+      ],
+      [
+        "R1",
+        "ether3",
+        "192.168.10.1/24",
+        "LAN PC"
+      ],
+      [
+        "R1",
+        "ether1",
+        "10.90.0.1/30",
+        "transit"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.90.0.2/30",
+        "transit"
+      ],
+      [
+        "R2",
+        "lo",
+        "192.168.90.1/24",
+        "tujuan lab"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline unicast",
+        "text": "Bangun route menuju R2 dan route balik. Ping dari PC harus berhasil dahulu.",
+        "device": "R1",
+        "code": "/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/ip/address/add address=10.90.0.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/route/add dst-address=192.168.90.0/24 gateway=10.90.0.2 comment=\"LAB-UNICAST\""
+      },
+      {
+        "title": "2. Target R2",
+        "text": "Interface lo tanpa port merepresentasikan LAN tujuan.",
+        "device": "R2",
+        "code": "/ip/address/add address=10.90.0.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=lo protocol-mode=none\n/ip/address/add address=192.168.90.1/24 interface=lo comment=\"LAB-MTCRE\"\n/ip/route/add dst-address=192.168.10.0/24 gateway=10.90.0.1"
+      },
+      {
+        "title": "3. Blackhole lebih spesifik",
+        "text": "Route /32 ini membuang paket tanpa meneruskan ke R2; /24 tetap ada.",
+        "device": "R1",
+        "code": "/ip/route/add dst-address=192.168.90.1/32 blackhole comment=\"LAB-DISCARD\""
+      },
+      {
+        "title": "4. Varian ICMP reject",
+        "text": "Hapus blackhole sebelum percobaan ini. Pada v7 contoh ini memakai firewall reject, bukan mengklaim type=unreachable/prohibit dari v6 masih diterima pada /ip/route v7. Fungsinya mirip bagi pengamat paket tetapi posisinya dalam sistem berbeda.",
+        "device": "R1",
+        "code": "/ip/route/remove [find comment=\"LAB-DISCARD\"]\n/ip/firewall/filter/add chain=forward dst-address=192.168.90.1 protocol=icmp action=reject reject-with=icmp-admin-prohibited comment=\"LAB-REJECT\""
+      }
+    ],
+    "tests": [
+      [
+        "PC",
+        "ping 192.168.90.1 pada baseline",
+        "Balasan normal."
+      ],
+      [
+        "PC",
+        "Ulangi ping setelah blackhole",
+        "Timeout; paket dibuang diam-diam."
+      ],
+      [
+        "PC",
+        "Ulangi setelah varian reject",
+        "Pesan ICMP penolakan bisa terlihat; tampilannya bergantung OS."
+      ]
+    ],
+    "faults": [
+      [
+        "Mengapa type=prohibit gagal pada v7?",
+        "Menu route v7 yang dirujuk menyediakan blackhole; legacy unreachable/prohibit tidak disalin sebagai sintaks v7. Bandingkan fungsi dan dokumentasi versi."
+      ]
+    ],
+    "restore": "Hapus LAB-REJECT, kembalikan baseline dan uji ping. Penolakan firewall bukan pengganti semua fungsi route type historis.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "tiga-isp",
+    "title": "Failover dan ECMP: tiga ISP, tiga prioritas",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-lab-multiwan",
+      "mtcre-ecmp"
+    ],
+    "goal": "Menguji urutan A→B→C, lalu membandingkan tiga jalur ber-distance setara.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "PC",
+      "EDGE",
+      "ISP-A",
+      "ISP-B",
+      "ISP-C"
+    ],
+    "edges": [
+      [
+        "PC",
+        "EDGE",
+        "ether4 / LAN"
+      ],
+      [
+        "EDGE",
+        "ISP-A",
+        "ether1 / 192.0.2.0/30"
+      ],
+      [
+        "EDGE",
+        "ISP-B",
+        "ether2 / 198.51.100.0/30"
+      ],
+      [
+        "EDGE",
+        "ISP-C",
+        "ether3 / 203.0.113.0/30"
+      ]
+    ],
+    "addresses": [
+      [
+        "EDGE",
+        "ether4",
+        "192.168.50.1/24",
+        "LAN PC"
+      ],
+      [
+        "PC",
+        "NIC",
+        "192.168.50.10/24",
+        "gateway .1"
+      ],
+      [
+        "EDGE",
+        "ether1",
+        "192.0.2.2/30",
+        "ke ISP-A"
+      ],
+      [
+        "ISP-A",
+        "ether1",
+        "192.0.2.1/30",
+        "gateway"
+      ],
+      [
+        "ISP-A",
+        "remote",
+        "198.18.1.10/32",
+        "layanan tiruan pada segmen terpisah"
+      ],
+      [
+        "EDGE",
+        "ether2",
+        "198.51.100.2/30",
+        "ke ISP-B"
+      ],
+      [
+        "ISP-B",
+        "ether1",
+        "198.51.100.1/30",
+        "gateway"
+      ],
+      [
+        "ISP-B",
+        "remote",
+        "198.18.1.10/32",
+        "layanan tiruan pada segmen terpisah"
+      ],
+      [
+        "EDGE",
+        "ether3",
+        "203.0.113.2/30",
+        "ke ISP-C"
+      ],
+      [
+        "ISP-C",
+        "ether1",
+        "203.0.113.1/30",
+        "gateway"
+      ],
+      [
+        "ISP-C",
+        "remote",
+        "198.18.1.10/32",
+        "layanan tiruan pada segmen terpisah"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Siapkan empat adapter EDGE",
+        "text": "Lab ini memerlukan EDGE ether1/2/3 untuk ISP dan ether4 untuk LAN. PC memakai gateway LAN .1. Cek nama adapter sebelum menempel konfigurasi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. ISP-A",
+        "text": "Alamat layanan sama ada pada router ISP yang terpisah. Ini simulasi, bukan IP layanan internet nyata.",
+        "device": "ISP-A",
+        "code": "/ip/address/add address=192.0.2.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=remote protocol-mode=none\n/ip/address/add address=198.18.1.10/32 interface=remote comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. ISP-B",
+        "text": "Alamat layanan sama ada pada router ISP yang terpisah. Ini simulasi, bukan IP layanan internet nyata.",
+        "device": "ISP-B",
+        "code": "/ip/address/add address=198.51.100.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=remote protocol-mode=none\n/ip/address/add address=198.18.1.10/32 interface=remote comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. ISP-C",
+        "text": "Alamat layanan sama ada pada router ISP yang terpisah. Ini simulasi, bukan IP layanan internet nyata.",
+        "device": "ISP-C",
+        "code": "/ip/address/add address=203.0.113.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=remote protocol-mode=none\n/ip/address/add address=198.18.1.10/32 interface=remote comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. EDGE: route dan NAT",
+        "text": "Distance 1,2,3 membentuk prioritas, bukan load balance. Cek gateway hanya menguji hulu langsung; prinsip recursive pada lab dua ISP dapat diperluas per-target tiap ISP.",
+        "device": "EDGE",
+        "code": "/ip/address/add address=192.168.50.1/24 interface=ether4 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.0.2.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/firewall/nat/add chain=srcnat src-address=192.168.50.0/24 out-interface=ether1 action=src-nat to-addresses=192.0.2.2\n/ip/route/add dst-address=0.0.0.0/0 gateway=192.0.2.1 distance=1 check-gateway=ping comment=\"LAB-ISP-A\"\n/ip/address/add address=198.51.100.2/30 interface=ether2 comment=\"LAB-MTCRE\"\n/ip/firewall/nat/add chain=srcnat src-address=192.168.50.0/24 out-interface=ether2 action=src-nat to-addresses=198.51.100.2\n/ip/route/add dst-address=0.0.0.0/0 gateway=198.51.100.1 distance=2 check-gateway=ping comment=\"LAB-ISP-B\"\n/ip/address/add address=203.0.113.2/30 interface=ether3 comment=\"LAB-MTCRE\"\n/ip/firewall/nat/add chain=srcnat src-address=192.168.50.0/24 out-interface=ether3 action=src-nat to-addresses=203.0.113.2\n/ip/route/add dst-address=0.0.0.0/0 gateway=203.0.113.1 distance=3 check-gateway=ping comment=\"LAB-ISP-C\"\n"
+      },
+      {
+        "title": "4. Varian ECMP",
+        "text": "Pulihkan semua kabel dahulu. Samakan distance ketiga default route menjadi 1. Pengujian ini varian terpisah; amati beberapa aliran dan jangan menjanjikan satu transfer menjadi tiga kali cepat.",
+        "device": "EDGE",
+        "code": "/ip/route/set [find comment=\"LAB-ISP-B\"] distance=1\n/ip/route/set [find comment=\"LAB-ISP-C\"] distance=1"
+      }
+    ],
+    "tests": [
+      [
+        "PC",
+        "ping 198.18.1.10",
+        "Normal lewat A; ketika kabel A putus pindah B; A dan B putus pindah C."
+      ],
+      [
+        "EDGE",
+        "/ip/route/print detail where dst-address=0.0.0.0/0",
+        "Periksa next hop aktif dan distance; setelah varian ECMP ada tiga next hop setara."
+      ],
+      [
+        "EDGE",
+        "/ip/firewall/nat/print stats",
+        "NAT jalur terpilih bertambah pada koneksi baru."
+      ]
+    ],
+    "faults": [
+      [
+        "Route aktif tetapi remote bridge ISP mati",
+        "Cek gateway tidak mendeteksi gangguan setelah gateway. Gunakan pola recursive per ISP dari lab failover-recursive."
+      ]
+    ],
+    "restore": "Pulihkan link A/B/C. Kembalikan distance B=2 dan C=3 untuk prioritas, atau pulihkan snapshot. Uji sesi baru setelah IP NAT berubah.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "static-vs-dynamic",
+    "title": "Static versus dynamic: topologi sama, sumber route berbeda",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-ospf-identitas",
+      "mtcre-static-multihop"
+    ],
+    "goal": "Membandingkan route manual dan hasil OSPF tanpa mencampur keduanya secara tidak sengaja.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "edges": [
+      [
+        "R1",
+        "R2",
+        "ether1 ↔ ether1 / area 0 / 10"
+      ],
+      [
+        "R2",
+        "R3",
+        "ether2 ↔ ether1 / area 0 / 10"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.12.0.1/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.12.0.2/30",
+        "ke R1 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether2",
+        "10.23.0.1/30",
+        "ke R3 / area 0 / cost 10"
+      ],
+      [
+        "R3",
+        "ether1",
+        "10.23.0.2/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R1",
+        "ether3",
+        "192.168.10.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC1",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway 192.168.10.1"
+      ],
+      [
+        "R2",
+        "ether3",
+        "192.168.20.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC2",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway 192.168.20.1"
+      ],
+      [
+        "R3",
+        "ether3",
+        "192.168.30.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC3",
+        "NIC",
+        "192.168.30.10/24",
+        "gateway 192.168.30.1"
+      ],
+      [
+        "R1",
+        "lo",
+        "10.1.1.1/32",
+        "alamat pada konfigurasi"
+      ],
+      [
+        "R2",
+        "lo",
+        "10.2.2.2/32",
+        "alamat pada konfigurasi"
+      ],
+      [
+        "R3",
+        "lo",
+        "10.3.3.3/32",
+        "alamat pada konfigurasi"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline static",
+        "text": "Gunakan lab static-tiga-router dan simpan snapshot setelah semua PC saling ping. Catat jumlah static route yang diperlukan di setiap router.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Ganti sumber route R1",
+        "text": "Nonaktifkan static route lab, lalu buat loopback serta OSPF tanpa menambah ulang IP antarmuka.",
+        "device": "R1",
+        "code": "/ip/route/disable [find comment=\"LAB-MTCRE\"]\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.1.1.1/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.1.1.1\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area0 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area0 passive=yes comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. Ganti sumber route R2",
+        "text": "Nonaktifkan static route lab, lalu buat loopback serta OSPF tanpa menambah ulang IP antarmuka.",
+        "device": "R2",
+        "code": "/ip/route/disable [find comment=\"LAB-MTCRE\"]\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.2.2.2/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.2.2.2\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether2 area=area0 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area0 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area0 passive=yes comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. Ganti sumber route R3",
+        "text": "Nonaktifkan static route lab, lalu buat loopback serta OSPF tanpa menambah ulang IP antarmuka.",
+        "device": "R3",
+        "code": "/ip/route/disable [find comment=\"LAB-MTCRE\"]\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.3.3.3/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.3.3.3\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area0 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area0 passive=yes comment=\"LAB-MTCRE\"\n"
+      }
+    ],
+    "tests": [
+      [
+        "Semua router",
+        "/ip/route/print detail",
+        "Static route tersimpan tetapi disabled; LAN jauh kini dipelajari dari OSPF."
+      ],
+      [
+        "PC1",
+        "ping 192.168.30.10",
+        "Konektivitas tetap ada sesudah adjacency dan route dinamis terbentuk."
+      ],
+      [
+        "Lab",
+        "Nonaktifkan link R2–R3 pada snapshot OSPF",
+        "Prefix remote ditarik setelah perubahan terdeteksi. Pada rantai tanpa jalur cadangan tidak ada failover yang bisa dipilih."
+      ]
+    ],
+    "faults": [
+      [
+        "Mengapa masih tampil static?",
+        "Route disabled masih tersimpan. Periksa active/source, bukan hanya keberadaan baris."
+      ],
+      [
+        "OSPF dianggap selalu lebih cepat",
+        "Dynamic mengurangi pengelolaan manual, tetapi menambah protokol dan kebutuhan diagnosis; desain menentukan pilihan."
+      ]
+    ],
+    "restore": "Pulihkan snapshot static atau nonaktifkan instance OSPF lalu aktifkan route manual; dokumentasikan sumber route aktif.",
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "prereq": "Lab static-tiga-router sudah bekerja; konfigurasi di sini adalah perubahan terhadap baseline, bukan router kosong.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "ospf-virtual-link",
+    "title": "OSPF Virtual Link: area jauh tanpa backbone fisik",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-ospf-multiarea"
+    ],
+    "goal": "Membuat hubungan backbone logis antara R2 dan R3 melalui area 1 normal.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "edges": [
+      [
+        "R1",
+        "R2",
+        "ether1 ↔ ether1 / area 0 / 10"
+      ],
+      [
+        "R2",
+        "R3",
+        "ether2 ↔ ether1 / area 1 / 10"
+      ],
+      [
+        "R3",
+        "R4",
+        "ether2 ↔ ether1 / area 2 / 10"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.12.0.1/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.12.0.2/30",
+        "ke R1 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether2",
+        "10.23.0.1/30",
+        "ke R3 / area 1 / cost 10"
+      ],
+      [
+        "R3",
+        "ether1",
+        "10.23.0.2/30",
+        "ke R2 / area 1 / cost 10"
+      ],
+      [
+        "R3",
+        "ether2",
+        "10.34.0.1/30",
+        "ke R4 / area 2 / cost 10"
+      ],
+      [
+        "R4",
+        "ether1",
+        "10.34.0.2/30",
+        "ke R3 / area 2 / cost 10"
+      ],
+      [
+        "R1",
+        "ether3",
+        "192.168.10.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC1",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway 192.168.10.1"
+      ],
+      [
+        "R2",
+        "ether3",
+        "192.168.20.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC2",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway 192.168.20.1"
+      ],
+      [
+        "R3",
+        "ether3",
+        "192.168.30.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC3",
+        "NIC",
+        "192.168.30.10/24",
+        "gateway 192.168.30.1"
+      ],
+      [
+        "R4",
+        "ether3",
+        "192.168.40.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC4",
+        "NIC",
+        "192.168.40.10/24",
+        "gateway 192.168.40.1"
+      ],
+      [
+        "R1",
+        "lo",
+        "10.1.1.1/32",
+        "alamat pada konfigurasi"
+      ],
+      [
+        "R2",
+        "lo",
+        "10.2.2.2/32",
+        "alamat pada konfigurasi"
+      ],
+      [
+        "R3",
+        "lo",
+        "10.3.3.3/32",
+        "alamat pada konfigurasi"
+      ],
+      [
+        "R4",
+        "lo",
+        "10.4.4.4/32",
+        "alamat pada konfigurasi"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Bentuk backbone dan transit area",
+        "text": "R1–R2 area 0, R2–R3 area 1 normal, R3–R4 area 2. R3 tidak mempunyai link fisik backbone. Jangan memakai stub/NSSA sebagai transit virtual link.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Baseline 1",
+        "text": "Siapkan Router ID unik serta area sesuai tabel. LAN1/LAN2 di backbone, LAN3/LAN4 di area2.",
+        "device": "R1",
+        "code": "/system/identity/set name=R1\n/ip/address/add address=10.12.0.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.1.1.1/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.1.1.1\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/area/add name=area1 area-id=0.0.0.1 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area0 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area0 passive=yes comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. Baseline 2",
+        "text": "Siapkan Router ID unik serta area sesuai tabel. LAN1/LAN2 di backbone, LAN3/LAN4 di area2.",
+        "device": "R2",
+        "code": "/system/identity/set name=R2\n/ip/address/add address=10.12.0.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=10.23.0.1/30 interface=ether2 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.2.2.2/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.2.2.2\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/area/add name=area1 area-id=0.0.0.1 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether2 area=area1 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area0 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area0 passive=yes comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. Baseline 3",
+        "text": "Siapkan Router ID unik serta area sesuai tabel. LAN1/LAN2 di backbone, LAN3/LAN4 di area2.",
+        "device": "R3",
+        "code": "/system/identity/set name=R3\n/ip/address/add address=10.23.0.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=10.34.0.1/30 interface=ether2 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.30.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.3.3.3/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.3.3.3\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/area/add name=area1 area-id=0.0.0.1 instance=lab\n/routing/ospf/area/add name=area2 area-id=0.0.0.2 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area1 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether2 area=area2 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area2 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area2 passive=yes comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "2. Baseline 4",
+        "text": "Siapkan Router ID unik serta area sesuai tabel. LAN1/LAN2 di backbone, LAN3/LAN4 di area2.",
+        "device": "R4",
+        "code": "/system/identity/set name=R4\n/ip/address/add address=10.34.0.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.40.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n/interface/bridge/add name=lo protocol-mode=none comment=\"LAB-MTCRE\"\n/ip/address/add address=10.4.4.4/32 interface=lo comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.4.4.4\n/routing/ospf/area/add name=area2 area-id=0.0.0.2 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area2 type=ptp cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=ether3 area=area2 passive=yes cost=10 comment=\"LAB-MTCRE\"\n/routing/ospf/interface-template/add interfaces=lo area=area2 passive=yes comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Virtual link di R2",
+        "text": "Contoh ini memakai jalur interface-template yang didokumentasikan untuk banyak rilis v7. Cek bantuan CLI pada versi lab. Dokumentasi v7 yang lebih baru juga menampilkan objek virtual-link di /routing/ospf/interface; gunakan menu yang memang menyediakan add serta parameter vlink pada versi tersebut. Jangan menjalankan kedua varian sekaligus.",
+        "device": "R2",
+        "code": "/routing/ospf/interface-template/add area=area0 type=virtual-link vlink-transit-area=area1 vlink-neighbor-id=10.3.3.3"
+      },
+      {
+        "title": "3. Virtual link di R3",
+        "text": "Contoh ini memakai jalur interface-template yang didokumentasikan untuk banyak rilis v7. Cek bantuan CLI pada versi lab. Dokumentasi v7 yang lebih baru juga menampilkan objek virtual-link di /routing/ospf/interface; gunakan menu yang memang menyediakan add serta parameter vlink pada versi tersebut. Jangan menjalankan kedua varian sekaligus.",
+        "device": "R3",
+        "code": "/routing/ospf/interface-template/add area=area0 type=virtual-link vlink-transit-area=area1 vlink-neighbor-id=10.2.2.2"
+      }
+    ],
+    "tests": [
+      [
+        "R2/R3",
+        "/routing/ospf/interface/print detail",
+        "Virtual interface tercatat; peer memakai router ID yang benar, bukan sekadar IP transit."
+      ],
+      [
+        "R2/R3",
+        "/routing/ospf/neighbor/print detail",
+        "Adjacency virtual mencapai Full ketika transit area sudah sehat."
+      ],
+      [
+        "PC1",
+        "ping 192.168.40.10",
+        "Route antararea menuju LAN4 dapat bekerja setelah backbone logis terbentuk."
+      ]
+    ],
+    "faults": [
+      [
+        "Parameter vlink tidak dikenali",
+        "Periksa versi dan bantuan /routing/ospf/interface-template add ?. Jika versi mendokumentasikan add pada interface, gunakan /routing/ospf/interface/add dengan parameter area/type/vlink yang sama. Jangan mengubah menu tanpa verifikasi versi."
+      ],
+      [
+        "Transit dibuat stub",
+        "Virtual link membutuhkan area transit yang mendukung; kembalikan area1 normal dan cocokkan konfigurasi kedua ujung."
+      ]
+    ],
+    "restore": "Nonaktifkan virtual link pada kedua endpoint dan bandingkan route. Pulihkan snapshot. Virtual link adalah solusi khusus; desain backbone fisik yang jelas lebih mudah dirawat.",
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "ospf-ptmp",
+    "title": "OSPF PTMP: tetangga individual tanpa DR/BDR",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-ospf-dr-networktype"
+    ],
+    "goal": "Membedakan discovery dan peran neighbor pada tipe jaringan yang berbeda.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "R1",
+      "Switch",
+      "R2",
+      "R3"
+    ],
+    "edges": [
+      [
+        "R1",
+        "Switch",
+        "ether1"
+      ],
+      [
+        "R2",
+        "Switch",
+        "ether1"
+      ],
+      [
+        "R3",
+        "Switch",
+        "ether1"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.70.0.1/24",
+        "segmen bersama"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.70.0.2/24",
+        "segmen bersama"
+      ],
+      [
+        "R3",
+        "ether1",
+        "10.70.0.3/24",
+        "segmen bersama"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Satu segmen bersama",
+        "text": "Hubungkan ketiga ether1 ke switch virtual. Ini cara mengamati perilaku OSPF network type di lab Ethernet, bukan klaim medium Ethernet berubah menjadi Frame Relay.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. R1: tipe dan neighbor",
+        "text": "Static neighbor dibuat eksplisit untuk menguji discovery unicast. Semua router sepakat type, area, timer dan autentikasi. Perilaku ptmp/ptmp-broadcast bervariasi versi; lab ini memakai ptmp dengan peer yang ditentukan.",
+        "device": "R1",
+        "code": "/ip/address/add address=10.70.0.1/24 interface=ether1 comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.1.1.1\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptmp\n/routing/ospf/static-neighbor/add address=10.70.0.2%ether1 area=area0\n/routing/ospf/static-neighbor/add address=10.70.0.3%ether1 area=area0\n"
+      },
+      {
+        "title": "2. R2: tipe dan neighbor",
+        "text": "Static neighbor dibuat eksplisit untuk menguji discovery unicast. Semua router sepakat type, area, timer dan autentikasi. Perilaku ptmp/ptmp-broadcast bervariasi versi; lab ini memakai ptmp dengan peer yang ditentukan.",
+        "device": "R2",
+        "code": "/ip/address/add address=10.70.0.2/24 interface=ether1 comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.2.2.2\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptmp\n/routing/ospf/static-neighbor/add address=10.70.0.1%ether1 area=area0\n/routing/ospf/static-neighbor/add address=10.70.0.3%ether1 area=area0\n"
+      },
+      {
+        "title": "2. R3: tipe dan neighbor",
+        "text": "Static neighbor dibuat eksplisit untuk menguji discovery unicast. Semua router sepakat type, area, timer dan autentikasi. Perilaku ptmp/ptmp-broadcast bervariasi versi; lab ini memakai ptmp dengan peer yang ditentukan.",
+        "device": "R3",
+        "code": "/ip/address/add address=10.70.0.3/24 interface=ether1 comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.3.3.3\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=ptmp\n/routing/ospf/static-neighbor/add address=10.70.0.1%ether1 area=area0\n/routing/ospf/static-neighbor/add address=10.70.0.2%ether1 area=area0\n"
+      }
+    ],
+    "tests": [
+      [
+        "Semua router",
+        "/routing/ospf/static-neighbor/print detail",
+        "Alamat peer dan area sesuai; zone %ether1 menunjuk interface lab."
+      ],
+      [
+        "Semua router",
+        "/routing/ospf/neighbor/print detail",
+        "Neighbor terbentuk sesuai desain; bila tidak, periksa discovery serta timer."
+      ],
+      [
+        "Semua router",
+        "/routing/ospf/interface/print detail",
+        "PTMP tidak memilih DR/BDR."
+      ]
+    ],
+    "faults": [
+      [
+        "Hello tidak mencapai peer",
+        "Periksa static-neighbor, firewall protocol 89, subnet dan kemampuan unicast medium."
+      ],
+      [
+        "Type berbeda pada ujung link",
+        "Samakan tipe serta timer; jangan menganggap default semua network type identik."
+      ]
+    ],
+    "restore": "Pulihkan snapshot; bandingkan output dengan lab broadcast serta point-to-point. Jangan mengubah network type pada jaringan aktif untuk sekadar mengejar status Full.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/routing/ospf/static-neighbor/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "ospf-nbma",
+    "title": "OSPF NBMA: neighbor manual dan DR/BDR",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-ospf-dr-networktype"
+    ],
+    "goal": "Membedakan discovery dan peran neighbor pada tipe jaringan yang berbeda.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "R1",
+      "Switch",
+      "R2",
+      "R3"
+    ],
+    "edges": [
+      [
+        "R1",
+        "Switch",
+        "ether1"
+      ],
+      [
+        "R2",
+        "Switch",
+        "ether1"
+      ],
+      [
+        "R3",
+        "Switch",
+        "ether1"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.70.0.1/24",
+        "segmen bersama"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.70.0.2/24",
+        "segmen bersama"
+      ],
+      [
+        "R3",
+        "ether1",
+        "10.70.0.3/24",
+        "segmen bersama"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Satu segmen bersama",
+        "text": "Hubungkan ketiga ether1 ke switch virtual. Ini cara mengamati perilaku OSPF network type di lab Ethernet, bukan klaim medium Ethernet berubah menjadi Frame Relay.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. R1: tipe dan neighbor",
+        "text": "Static neighbor dibuat eksplisit untuk menguji discovery unicast. Semua router sepakat type, area, timer dan autentikasi. Perilaku ptmp/ptmp-broadcast bervariasi versi; lab ini memakai ptmp dengan peer yang ditentukan.",
+        "device": "R1",
+        "code": "/ip/address/add address=10.70.0.1/24 interface=ether1 comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.1.1.1\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=nbma priority=200\n/routing/ospf/static-neighbor/add address=10.70.0.2%ether1 area=area0\n/routing/ospf/static-neighbor/add address=10.70.0.3%ether1 area=area0\n"
+      },
+      {
+        "title": "2. R2: tipe dan neighbor",
+        "text": "Static neighbor dibuat eksplisit untuk menguji discovery unicast. Semua router sepakat type, area, timer dan autentikasi. Perilaku ptmp/ptmp-broadcast bervariasi versi; lab ini memakai ptmp dengan peer yang ditentukan.",
+        "device": "R2",
+        "code": "/ip/address/add address=10.70.0.2/24 interface=ether1 comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.2.2.2\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=nbma priority=100\n/routing/ospf/static-neighbor/add address=10.70.0.1%ether1 area=area0\n/routing/ospf/static-neighbor/add address=10.70.0.3%ether1 area=area0\n"
+      },
+      {
+        "title": "2. R3: tipe dan neighbor",
+        "text": "Static neighbor dibuat eksplisit untuk menguji discovery unicast. Semua router sepakat type, area, timer dan autentikasi. Perilaku ptmp/ptmp-broadcast bervariasi versi; lab ini memakai ptmp dengan peer yang ditentukan.",
+        "device": "R3",
+        "code": "/ip/address/add address=10.70.0.3/24 interface=ether1 comment=\"LAB-MTCRE\"\n/routing/ospf/instance/add name=lab version=2 router-id=10.3.3.3\n/routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=lab\n/routing/ospf/interface-template/add interfaces=ether1 area=area0 type=nbma priority=0\n/routing/ospf/static-neighbor/add address=10.70.0.1%ether1 area=area0\n/routing/ospf/static-neighbor/add address=10.70.0.2%ether1 area=area0\n"
+      }
+    ],
+    "tests": [
+      [
+        "Semua router",
+        "/routing/ospf/static-neighbor/print detail",
+        "Alamat peer dan area sesuai; zone %ether1 menunjuk interface lab."
+      ],
+      [
+        "Semua router",
+        "/routing/ospf/neighbor/print detail",
+        "Neighbor terbentuk sesuai desain; bila tidak, periksa discovery serta timer."
+      ],
+      [
+        "Semua router",
+        "/routing/ospf/interface/print detail",
+        "NBMA memilih DR/BDR dari priority/router ID yang memenuhi syarat pada pemilihan awal."
+      ]
+    ],
+    "faults": [
+      [
+        "Hello tidak mencapai peer",
+        "Periksa static-neighbor, firewall protocol 89, subnet dan kemampuan unicast medium."
+      ],
+      [
+        "Type berbeda pada ujung link",
+        "Samakan tipe serta timer; jangan menganggap default semua network type identik."
+      ]
+    ],
+    "restore": "Pulihkan snapshot; bandingkan output dengan lab broadcast serta point-to-point. Jangan mengubah network type pada jaringan aktif untuk sekadar mengejar status Full.",
+    "source": "https://manual.mikrotik.com/docs/cli-reference/routing/ospf/static-neighbor/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "ospf-routing-filter",
+    "title": "OSPF routing filter: terima satu prefix, tolak lainnya",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-ospf-redistribute"
+    ],
+    "goal": "Membuktikan filter redistribusi berbeda dari menghapus informasi topologi intra-area.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "R1",
+      "R2",
+      "R3",
+      "EXT"
+    ],
+    "edges": [
+      [
+        "R1",
+        "R2",
+        "ether1 ↔ ether1 / area 0 / 10"
+      ],
+      [
+        "R2",
+        "R3",
+        "ether2 ↔ ether1 / area 0 / 10"
+      ],
+      [
+        "R1",
+        "EXT",
+        "ether3 / 192.168.10.0/24"
+      ]
+    ],
+    "addresses": [
+      [
+        "R1",
+        "ether1",
+        "10.12.0.1/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether1",
+        "10.12.0.2/30",
+        "ke R1 / area 0 / cost 10"
+      ],
+      [
+        "R2",
+        "ether2",
+        "10.23.0.1/30",
+        "ke R3 / area 0 / cost 10"
+      ],
+      [
+        "R3",
+        "ether1",
+        "10.23.0.2/30",
+        "ke R2 / area 0 / cost 10"
+      ],
+      [
+        "R1",
+        "ether3",
+        "192.168.10.1/24",
+        "gateway LAN"
+      ],
+      [
+        "R2",
+        "ether3",
+        "192.168.20.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC2",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway 192.168.20.1"
+      ],
+      [
+        "R3",
+        "ether3",
+        "192.168.30.1/24",
+        "gateway LAN"
+      ],
+      [
+        "PC3",
+        "NIC",
+        "192.168.30.10/24",
+        "gateway 192.168.30.1"
+      ],
+      [
+        "EXT",
+        "ether1",
+        "192.168.10.2/24",
+        "next hop eksternal R1"
+      ],
+      [
+        "EXT",
+        "lo",
+        "10.10.10.1/24",
+        "jaringan luar uji"
+      ],
+      [
+        "R1",
+        "lo",
+        "10.1.1.1/32",
+        "loopback / identitas"
+      ],
+      [
+        "R2",
+        "lo",
+        "10.2.2.2/32",
+        "loopback / identitas"
+      ],
+      [
+        "R3",
+        "lo",
+        "10.3.3.3/32",
+        "loopback / identitas"
+      ],
+      [
+        "EXT",
+        "lo",
+        "10.10.20.1/24",
+        "prefix kedua untuk ditolak"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Baseline E1",
+        "text": "Selesaikan lab redistribute-e1 sampai PC3 dapat ping 10.10.10.1. Baseline sudah memakai chain lab-ext yang hanya menerima 10.10.10.0/24.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Tambah prefix pembanding",
+        "text": "EXT membuat jaringan kedua. Route di R1 aktif agar jelas filter, bukan next hop yang gagal, yang menolak iklan.",
+        "device": "EXT",
+        "code": "/ip/address/add address=10.10.20.1/24 interface=lo comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Route sumber kedua",
+        "text": "Route lokal R1 ini tidak otomatis boleh tersebar karena chain baseline memiliki reject untuk yang lain.",
+        "device": "R1",
+        "code": "/ip/route/add dst-address=10.10.20.0/24 gateway=192.168.10.2 comment=\"LAB-DENY-EXT\"\n/routing/filter/rule/print detail\n/routing/ospf/instance/print detail"
+      },
+      {
+        "title": "4. Bandingkan policy yang disengaja",
+        "text": "Periksa chain baseline: accept 10.10.10.0/24, lalu reject. Jangan menghapus reject secara acak. Untuk mengizinkan prefix kedua pada snapshot terpisah, tambahkan accept sebelum rule reject melalui Winbox dan amati perubahan LSA.",
+        "device": "",
+        "code": ""
+      }
+    ],
+    "tests": [
+      [
+        "R1",
+        "/ping 10.10.20.1 src-address=192.168.10.1 count=5",
+        "Sumber route kedua benar-benar bekerja di R1."
+      ],
+      [
+        "R3",
+        "/routing/route/print detail where dst-address=10.10.20.0/24",
+        "Tidak diiklankan pada baseline filter. Prefix 10.10.10.0/24 tetap ada."
+      ],
+      [
+        "R1/R3",
+        "Periksa filter, LSA dan route sebelum/sesudah accept prefix kedua",
+        "Hanya prefix yang diizinkan tersebar sebagai eksternal."
+      ]
+    ],
+    "faults": [
+      [
+        "Mengapa filter tidak menyembunyikan LAN intra-area?",
+        "Filter output redistribusi bukan alat menghapus LSA connected intra-area. Gunakan desain area/range yang sesuai untuk kebutuhan antararea."
+      ],
+      [
+        "Default tetap teriklankan",
+        "Originate-default mempunyai perilaku khusus; atur properti instance, jangan hanya mengandalkan reject filter umum."
+      ]
+    ],
+    "restore": "Pulihkan chain baseline serta hapus route LAB-DENY-EXT jika selesai. Simpan prefix yang lolos dan ditolak sebagai bukti.",
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/74678285/Route+Selection+and+Filters",
+    "prereq": "Lab redistribute-e1 sudah berfungsi; kerjakan pada snapshot terpisah.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "vlan-kantor",
+    "title": "VLAN kantor: tanpa VLAN, access, trunk dan isolasi",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-jenis-tunnel"
+    ],
+    "goal": "Memisahkan broadcast staf/tamu, membawa dua VLAN pada satu kabel, lalu menguji routing dan firewall.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "RTR",
+      "SW1",
+      "SW2",
+      "STAFF-A",
+      "STAFF-B",
+      "GUEST"
+    ],
+    "edges": [
+      [
+        "RTR",
+        "SW1",
+        "ether1 ↔ ether1 / trunk 10,20"
+      ],
+      [
+        "SW1",
+        "SW2",
+        "ether2 ↔ ether1 / trunk 10,20"
+      ],
+      [
+        "SW1",
+        "STAFF-B",
+        "ether3 / access 10"
+      ],
+      [
+        "SW2",
+        "STAFF-A",
+        "ether2 / access 10"
+      ],
+      [
+        "SW2",
+        "GUEST",
+        "ether3 / access 20"
+      ]
+    ],
+    "addresses": [
+      [
+        "RTR",
+        "vlan10@ether1",
+        "192.168.10.1/24",
+        "gateway staf"
+      ],
+      [
+        "RTR",
+        "vlan20@ether1",
+        "192.168.20.1/24",
+        "gateway tamu"
+      ],
+      [
+        "STAFF-A",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway 192.168.10.1"
+      ],
+      [
+        "STAFF-B",
+        "NIC",
+        "192.168.10.20/24",
+        "gateway 192.168.10.1"
+      ],
+      [
+        "GUEST",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway 192.168.20.1"
+      ],
+      [
+        "RTR",
+        "vlan10",
+        "192.168.10.1/24",
+        "alamat pada konfigurasi"
+      ],
+      [
+        "RTR",
+        "vlan20",
+        "192.168.20.1/24",
+        "alamat pada konfigurasi"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Bandingkan tanpa VLAN pada snapshot awal",
+        "text": "Pada SW1/SW2 kosong, buat satu bridge dan masukkan ether1/2/3 tanpa VLAN filtering. Beri tiga PC sementara 192.168.1.10/.20/.30 dengan /24. Ketiganya satu broadcast domain dan dapat saling ARP/ping. Simpan bukti, lalu pulihkan snapshot switch kosong sebelum konfigurasi VLAN berikutnya. Jangan mencampur dua baseline bridge.",
+        "device": "SW1 dan SW2 (percobaan awal saja)",
+        "code": "/interface/bridge/add name=br-flat\n/interface/bridge/port/add bridge=br-flat interface=ether1\n/interface/bridge/port/add bridge=br-flat interface=ether2\n/interface/bridge/port/add bridge=br-flat interface=ether3"
+      },
+      {
+        "title": "2. Router-on-a-stick",
+        "text": "Setelah kembali ke baseline kosong, buat interface VLAN pada port trunk RTR. Router hanya menerima frame tagged. Beri PC alamat akhir pada tabel.",
+        "device": "RTR",
+        "code": "/interface/vlan/add name=vlan10 interface=ether1 vlan-id=10\n/interface/vlan/add name=vlan20 interface=ether1 vlan-id=20\n/ip/address/add address=192.168.10.1/24 interface=vlan10 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=vlan20 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. SW1: trunk ke router dan switch kedua",
+        "text": "Winbox Bridge → Ports/VLANs. CPU bridge tidak diberi IP pada lab ini; manajemen melalui console, bukan trunk yang belum dipetakan. Sesuaikan hardware offload menurut model.",
+        "device": "SW1",
+        "code": "/interface/bridge/add name=br-vlan vlan-filtering=no\n/interface/bridge/port/add bridge=br-vlan interface=ether1 ingress-filtering=yes frame-types=admit-only-vlan-tagged\n/interface/bridge/port/add bridge=br-vlan interface=ether2 ingress-filtering=yes frame-types=admit-only-vlan-tagged\n/interface/bridge/port/add bridge=br-vlan interface=ether3 pvid=10 ingress-filtering=yes frame-types=admit-only-untagged-and-priority-tagged\n/interface/bridge/vlan/add bridge=br-vlan vlan-ids=10 tagged=ether1,ether2 untagged=ether3\n/interface/bridge/vlan/add bridge=br-vlan vlan-ids=20 tagged=ether1,ether2\n/interface/bridge/set [find name=br-vlan] vlan-filtering=yes"
+      },
+      {
+        "title": "4. SW2: dua access port",
+        "text": "PVID menentukan VLAN untuk frame masuk tanpa tag; tagged/untagged menentukan keluaran. Aktifkan vlan-filtering terakhir setelah tabel benar.",
+        "device": "SW2",
+        "code": "/interface/bridge/add name=br-vlan vlan-filtering=no\n/interface/bridge/port/add bridge=br-vlan interface=ether1 ingress-filtering=yes frame-types=admit-only-vlan-tagged\n/interface/bridge/port/add bridge=br-vlan interface=ether2 pvid=10 ingress-filtering=yes frame-types=admit-only-untagged-and-priority-tagged\n/interface/bridge/port/add bridge=br-vlan interface=ether3 pvid=20 ingress-filtering=yes frame-types=admit-only-untagged-and-priority-tagged\n/interface/bridge/vlan/add bridge=br-vlan vlan-ids=10 tagged=ether1 untagged=ether2\n/interface/bridge/vlan/add bridge=br-vlan vlan-ids=20 tagged=ether1 untagged=ether3\n/interface/bridge/set [find name=br-vlan] vlan-filtering=yes"
+      },
+      {
+        "title": "5. Buktikan VLAN bukan firewall",
+        "text": "Sebelum filter RTR, komunikasi antar-VLAN dapat berjalan karena dua connected route. Setelah itu blok antar-VLAN dua arah di router.",
+        "device": "RTR",
+        "code": "/ip/firewall/filter/add chain=forward in-interface=vlan10 out-interface=vlan20 action=drop comment=\"LAB-ISOLATE\"\n/ip/firewall/filter/add chain=forward in-interface=vlan20 out-interface=vlan10 action=drop comment=\"LAB-ISOLATE\""
+      }
+    ],
+    "tests": [
+      [
+        "STAFF-A → STAFF-B",
+        "ping 192.168.10.20",
+        "Berhasil lintas trunk tanpa melalui routing antar-VLAN."
+      ],
+      [
+        "GUEST",
+        "ping 192.168.20.1",
+        "Gateway VLAN20 menjawab jika tagging/PVID benar."
+      ],
+      [
+        "GUEST → STAFF-A",
+        "ping 192.168.10.10 sebelum dan sesudah filter",
+        "Bisa sebelum filter routing, diblok sesudahnya. VLAN sendiri tidak menyatakan izin antar-LAN."
+      ],
+      [
+        "SW1/SW2",
+        "/interface/bridge/vlan/print detail",
+        "Keanggotaan tagged/untagged sesuai desain; jangan mengandalkan nomor port saja."
+      ]
+    ],
+    "faults": [
+      [
+        "VLAN10 jalan, VLAN20 tidak",
+        "Periksa VLAN20 tagged di kedua trunk, VLAN ID router, PVID guest dan egress untagged."
+      ],
+      [
+        "Manajemen switch hilang",
+        "Lab memakai console. Untuk manajemen IP nyata, buat VLAN manajemen serta CPU/bridge tagged yang sesuai sebelum filtering; jangan mengaktifkannya tanpa jalur pemulihan."
+      ]
+    ],
+    "restore": "Nonaktifkan hanya filter LAB-ISOLATE untuk membandingkan izin, atau pulihkan snapshot. Simpan tabel port: trunk membawa banyak VLAN, access melayani perangkat tanpa tag.",
+    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "vpn-pptp",
+    "title": "PPTP legacy: lab terisolasi dan rute antarkantor",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-jenis-tunnel",
+      "mtcre-tunnel-underlay"
+    ],
+    "goal": "Membangun sesi, route dua LAN, lalu membuktikan hasil serta batas keamanan protokol.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "HQ",
+      "BR"
+    ],
+    "edges": [
+      [
+        "HQ",
+        "BR",
+        "ether1 / transport 192.0.2.0/30"
+      ],
+      [
+        "HQ",
+        "BR",
+        "PPTP / PPP 10.250.0.1–.2"
+      ]
+    ],
+    "addresses": [
+      [
+        "HQ",
+        "ether1",
+        "192.0.2.1/30",
+        "server transport lab"
+      ],
+      [
+        "BR",
+        "ether1",
+        "192.0.2.2/30",
+        "client transport lab"
+      ],
+      [
+        "HQ",
+        "ether3",
+        "192.168.10.1/24",
+        "LAN pusat"
+      ],
+      [
+        "BR",
+        "ether3",
+        "192.168.20.1/24",
+        "LAN cabang"
+      ],
+      [
+        "HQ",
+        "PPP",
+        "10.250.0.1/32",
+        "alamat lokal profil PPP"
+      ],
+      [
+        "BR",
+        "PPP",
+        "10.250.0.2/32",
+        "alamat peer PPP"
+      ],
+      [
+        "PC-HQ",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway .1"
+      ],
+      [
+        "PC-BR",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "Khusus legacy, bukan rekomendasi VPN baru",
+        "text": "MikroTik memperingatkan kelemahan keamanan PPTP. Lab ini hanya pada dua router terisolasi untuk memahami sistem lama; MPPE atau MSCHAPv2 tidak mengubahnya menjadi pilihan modern yang direkomendasikan. Jangan membuka TCP 1723/GRE dari internet untuk mengikuti lab ini.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "1. Persiapan dua router",
+        "text": "Hubungkan ether1 HQ–BR langsung pada segmen transport lab terisolasi; ether3 ke PC lokal. Semua IP dokumentasi dan credential LAB-ONLY hanya untuk percobaan, harus diganti sebelum pemakaian lain. Tidak ada NAT antar-LAN. Pastikan device-mode mengizinkan fitur yang diuji melalui prosedur resmi perangkat, jangan mematikan proteksi produksi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat HQ",
+        "text": "Winbox IP → Addresses. Transport harus bekerja sebelum PPP dinilai.",
+        "device": "HQ",
+        "code": "/ip/address/add address=192.0.2.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Alamat BR",
+        "text": "Alamat /30 pada ether1 dipakai untuk memeriksa transport. PPPoE discovery sendiri memakai L2, tidak membutuhkan IP /30 ini.",
+        "device": "BR",
+        "code": "/ip/address/add address=192.0.2.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "6. Profil, user dan server HQ",
+        "text": "Winbox PPP → Profiles/Secrets serta server protokol terkait. Endpoint PPP memakai pool satu alamat agar route site-to-site mudah diprediksi. Tidak ada klaim keamanan dari nama default-profile semata.",
+        "device": "HQ",
+        "code": "/ppp/profile/add name=lab-ppp local-address=10.250.0.1 remote-address=10.250.0.2 change-tcp-mss=yes use-encryption=required\n/ppp/secret/add name=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" service=pptp profile=lab-ppp\n/interface/pptp-server/server/set enabled=yes authentication=mschap2 default-profile=lab-ppp"
+      },
+      {
+        "title": "7. Client BR",
+        "text": "Winbox Interfaces → tambah client sesuai protokol. Tidak menambah default route agar transport serta koneksi lain tidak tertimpa.",
+        "device": "BR",
+        "code": "/interface/pptp-client/add name=vpn-out connect-to=192.0.2.1 user=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" profile=default-encryption allow=mschap2 add-default-route=no disabled=no"
+      },
+      {
+        "title": "8. Route LAN cabang di HQ",
+        "text": "Route peer PPP aktif setelah sesi tersambung. Route ke LAN remote diperlukan selain alamat tunnel.",
+        "device": "HQ",
+        "code": "/ip/route/add dst-address=192.168.20.0/24 gateway=10.250.0.2 comment=\"LAB-PPP-LAN\""
+      },
+      {
+        "title": "9. Route LAN pusat di BR",
+        "text": "Interface point-to-point menjadi gateway route LAN pusat. Kedua PC tetap memakai router lokal sebagai gateway.",
+        "device": "BR",
+        "code": "/ip/route/add dst-address=192.168.10.0/24 gateway=vpn-out comment=\"LAB-PPP-LAN\""
+      }
+    ],
+    "tests": [
+      [
+        "HQ",
+        "/ppp/active/print detail",
+        "User lab-branch aktif dan alamat peer 10.250.0.2 sesuai profil."
+      ],
+      [
+        "BR",
+        "/interface/print detail where name=vpn-out",
+        "Interface running; baca log bila negosiasi gagal."
+      ],
+      [
+        "PC-HQ → PC-BR",
+        "ping 192.168.20.10",
+        "Berhasil jika PPP, route balik, firewall host dan transport benar."
+      ]
+    ],
+    "faults": [
+      [
+        "Sesi aktif, PC belum terhubung",
+        "Periksa route kedua LAN, gateway PC, firewall forward serta MTU; PPP up bukan bukti layanan end-to-end."
+      ],
+      [
+        "Sesi gagal terbentuk",
+        "Periksa user/service/profile, transport, log dan batasan device-mode. Pada internet nyata periksa firewall/NAT dan dukungan provider sesuai protokol."
+      ]
+    ],
+    "restore": "Nonaktifkan client vpn-out serta server lab dan pulihkan snapshot. Jangan menyalakan protokol legacy atau memakai credential contoh pada router produksi. Pada HQ: /interface/pptp-server/server/set enabled=no.",
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/2031638/PPTP",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "vpn-l2tp",
+    "title": "L2TP/IPsec: pusat–cabang dengan IPsec wajib",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-jenis-tunnel",
+      "mtcre-tunnel-underlay"
+    ],
+    "goal": "Membangun sesi, route dua LAN, lalu membuktikan hasil serta batas keamanan protokol.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "HQ",
+      "BR"
+    ],
+    "edges": [
+      [
+        "HQ",
+        "BR",
+        "ether1 / transport 192.0.2.0/30"
+      ],
+      [
+        "HQ",
+        "BR",
+        "L2TP / PPP 10.250.0.1–.2"
+      ]
+    ],
+    "addresses": [
+      [
+        "HQ",
+        "ether1",
+        "192.0.2.1/30",
+        "server transport lab"
+      ],
+      [
+        "BR",
+        "ether1",
+        "192.0.2.2/30",
+        "client transport lab"
+      ],
+      [
+        "HQ",
+        "ether3",
+        "192.168.10.1/24",
+        "LAN pusat"
+      ],
+      [
+        "BR",
+        "ether3",
+        "192.168.20.1/24",
+        "LAN cabang"
+      ],
+      [
+        "HQ",
+        "PPP",
+        "10.250.0.1/32",
+        "alamat lokal profil PPP"
+      ],
+      [
+        "BR",
+        "PPP",
+        "10.250.0.2/32",
+        "alamat peer PPP"
+      ],
+      [
+        "PC-HQ",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway .1"
+      ],
+      [
+        "PC-BR",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Persiapan dua router",
+        "text": "Hubungkan ether1 HQ–BR langsung pada segmen transport lab terisolasi; ether3 ke PC lokal. Semua IP dokumentasi dan credential LAB-ONLY hanya untuk percobaan, harus diganti sebelum pemakaian lain. Tidak ada NAT antar-LAN. Pastikan device-mode mengizinkan fitur yang diuji melalui prosedur resmi perangkat, jangan mematikan proteksi produksi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat HQ",
+        "text": "Winbox IP → Addresses. Transport harus bekerja sebelum PPP dinilai.",
+        "device": "HQ",
+        "code": "/ip/address/add address=192.0.2.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Alamat BR",
+        "text": "Alamat /30 pada ether1 dipakai untuk memeriksa transport. PPPoE discovery sendiri memakai L2, tidak membutuhkan IP /30 ini.",
+        "device": "BR",
+        "code": "/ip/address/add address=192.0.2.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "6. Profil, user dan server HQ",
+        "text": "Winbox PPP → Profiles/Secrets serta server protokol terkait. Endpoint PPP memakai pool satu alamat agar route site-to-site mudah diprediksi. Tidak ada klaim keamanan dari nama default-profile semata.",
+        "device": "HQ",
+        "code": "/ppp/profile/add name=lab-ppp local-address=10.250.0.1 remote-address=10.250.0.2 change-tcp-mss=yes\n/ppp/secret/add name=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" service=l2tp profile=lab-ppp\n/interface/l2tp-server/server/set enabled=yes authentication=mschap2 use-ipsec=required ipsec-secret=\"LAB-ONLY-Ganti-PSK-2026\" default-profile=lab-ppp"
+      },
+      {
+        "title": "7. Client BR",
+        "text": "Winbox Interfaces → tambah client sesuai protokol. Tidak menambah default route agar transport serta koneksi lain tidak tertimpa.",
+        "device": "BR",
+        "code": "/interface/l2tp-client/add name=vpn-out connect-to=192.0.2.1 user=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" allow=mschap2 use-ipsec=yes ipsec-secret=\"LAB-ONLY-Ganti-PSK-2026\" add-default-route=no disabled=no"
+      },
+      {
+        "title": "8. Route LAN cabang di HQ",
+        "text": "Route peer PPP aktif setelah sesi tersambung. Route ke LAN remote diperlukan selain alamat tunnel.",
+        "device": "HQ",
+        "code": "/ip/route/add dst-address=192.168.20.0/24 gateway=10.250.0.2 comment=\"LAB-PPP-LAN\""
+      },
+      {
+        "title": "9. Route LAN pusat di BR",
+        "text": "Interface point-to-point menjadi gateway route LAN pusat. Kedua PC tetap memakai router lokal sebagai gateway.",
+        "device": "BR",
+        "code": "/ip/route/add dst-address=192.168.10.0/24 gateway=vpn-out comment=\"LAB-PPP-LAN\""
+      },
+      {
+        "title": "10a. Varian OSPF melalui L2TP/IPsec: HQ",
+        "text": "Selesaikan uji static dua LAN dahulu dan simpan snapshot. Buat server interface statis berdasarkan user agar nama template stabil. Setelah dibuat, putus/sambung ulang client BR sehingga sesi memakai binding ini. IPsec tetap required; protocol 89 adalah trafik di dalam PPP.",
+        "device": "HQ",
+        "code": "/interface/l2tp-server/add name=vpn-branch user=lab-branch\n/ip/route/disable [find comment=\"LAB-PPP-LAN\"]\n/routing/ospf/instance/add name=lab-vpn version=2 router-id=10.1.1.1\n/routing/ospf/area/add name=vpn-area0 area-id=0.0.0.0 instance=lab-vpn\n/routing/ospf/interface-template/add interfaces=vpn-branch area=vpn-area0 type=ptp\n/routing/ospf/interface-template/add interfaces=ether3 area=vpn-area0 passive=yes"
+      },
+      {
+        "title": "10b. Varian OSPF melalui L2TP/IPsec: BR",
+        "text": "Lanjut hanya pada snapshot varian OSPF. Route LAN dari static dinonaktifkan agar route OSPF bisa diperiksa. Kedua endpoint memakai area sama dan router ID unik.",
+        "device": "BR",
+        "code": "/interface/l2tp-client/disable [find name=vpn-out]\n/interface/l2tp-client/enable [find name=vpn-out]\n/ip/route/disable [find comment=\"LAB-PPP-LAN\"]\n/routing/ospf/instance/add name=lab-vpn version=2 router-id=10.2.2.2\n/routing/ospf/area/add name=vpn-area0 area-id=0.0.0.0 instance=lab-vpn\n/routing/ospf/interface-template/add interfaces=vpn-out area=vpn-area0 type=ptp\n/routing/ospf/interface-template/add interfaces=ether3 area=vpn-area0 passive=yes"
+      }
+    ],
+    "tests": [
+      [
+        "HQ",
+        "/ppp/active/print detail",
+        "User lab-branch aktif dan alamat peer 10.250.0.2 sesuai profil."
+      ],
+      [
+        "BR",
+        "/interface/print detail where name=vpn-out",
+        "Interface running; baca log bila negosiasi gagal."
+      ],
+      [
+        "PC-HQ → PC-BR",
+        "ping 192.168.20.10",
+        "Berhasil jika PPP, route balik, firewall host dan transport benar."
+      ],
+      [
+        "HQ/BR",
+        "/ip/ipsec/active-peers/print\n/ip/ipsec/installed-sa/print",
+        "IPsec SA terbentuk; counter enkripsi naik ketika trafik tunnel berjalan. Sesi PPP saja tidak membuktikan enkripsi."
+      ],
+      [
+        "HQ/BR varian OSPF",
+        "/routing/ospf/neighbor/print detail\n/ip/route/print detail",
+        "Neighbor PPP Full; LAN remote dipelajari OSPF, IPsec SA tetap aktif dan counter bertambah."
+      ]
+    ],
+    "faults": [
+      [
+        "Sesi aktif, PC belum terhubung",
+        "Periksa route kedua LAN, gateway PC, firewall forward serta MTU; PPP up bukan bukti layanan end-to-end."
+      ],
+      [
+        "Sesi gagal terbentuk",
+        "Periksa user/service/profile, transport, log dan batasan device-mode. Pada internet nyata periksa firewall/NAT dan dukungan provider sesuai protokol."
+      ]
+    ],
+    "restore": "Nonaktifkan client vpn-out serta server lab dan pulihkan snapshot. Jangan menyalakan protokol legacy atau memakai credential contoh pada router produksi.",
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/l2tp/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "vpn-sstp",
+    "title": "SSTP: sertifikat server, validasi CA, dan LAN cabang",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-jenis-tunnel",
+      "mtcre-tunnel-underlay"
+    ],
+    "goal": "Membangun sesi, route dua LAN, lalu membuktikan hasil serta batas keamanan protokol.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "HQ",
+      "BR"
+    ],
+    "edges": [
+      [
+        "HQ",
+        "BR",
+        "ether1 / transport 192.0.2.0/30"
+      ],
+      [
+        "HQ",
+        "BR",
+        "SSTP / PPP 10.250.0.1–.2"
+      ]
+    ],
+    "addresses": [
+      [
+        "HQ",
+        "ether1",
+        "192.0.2.1/30",
+        "server transport lab"
+      ],
+      [
+        "BR",
+        "ether1",
+        "192.0.2.2/30",
+        "client transport lab"
+      ],
+      [
+        "HQ",
+        "ether3",
+        "192.168.10.1/24",
+        "LAN pusat"
+      ],
+      [
+        "BR",
+        "ether3",
+        "192.168.20.1/24",
+        "LAN cabang"
+      ],
+      [
+        "HQ",
+        "PPP",
+        "10.250.0.1/32",
+        "alamat lokal profil PPP"
+      ],
+      [
+        "BR",
+        "PPP",
+        "10.250.0.2/32",
+        "alamat peer PPP"
+      ],
+      [
+        "PC-HQ",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway .1"
+      ],
+      [
+        "PC-BR",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Persiapan dua router",
+        "text": "Hubungkan ether1 HQ–BR langsung pada segmen transport lab terisolasi; ether3 ke PC lokal. Semua IP dokumentasi dan credential LAB-ONLY hanya untuk percobaan, harus diganti sebelum pemakaian lain. Tidak ada NAT antar-LAN. Pastikan device-mode mengizinkan fitur yang diuji melalui prosedur resmi perangkat, jangan mematikan proteksi produksi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat HQ",
+        "text": "Winbox IP → Addresses. Transport harus bekerja sebelum PPP dinilai.",
+        "device": "HQ",
+        "code": "/ip/address/add address=192.0.2.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Alamat BR",
+        "text": "Alamat /30 pada ether1 dipakai untuk memeriksa transport. PPPoE discovery sendiri memakai L2, tidak membutuhkan IP /30 ini.",
+        "device": "BR",
+        "code": "/ip/address/add address=192.0.2.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "4. Buat CA dan sertifikat server di HQ",
+        "text": "Pastikan jam HQ/BR benar pada System → Clock sebelum signing. SAN IP sama dengan connect-to client. CA private key tetap di HQ; ekspor hanya sertifikat publik CA untuk BR.",
+        "device": "HQ",
+        "code": "/certificate/add name=lab-ca common-name=LAB-CA key-size=2048 days-valid=365 key-usage=key-cert-sign,crl-sign\n/certificate/sign lab-ca name=lab-ca\n/certificate/set [find name=lab-ca] trusted=yes\n/certificate/add name=lab-server common-name=192.0.2.1 subject-alt-name=IP:192.0.2.1 key-size=2048 days-valid=365 key-usage=digital-signature,key-encipherment,tls-server\n/certificate/sign lab-server ca=lab-ca name=lab-server\n/certificate/export-certificate lab-ca file-name=lab-ca"
+      },
+      {
+        "title": "5. Import CA publik di BR",
+        "text": "Melalui Winbox Files, salin hanya lab-ca.crt dari HQ ke BR. Jangan menyalin private key atau berkas .key. Bandingkan fingerprint CA pada kedua router melalui Certificates agar tidak mempercayai CA yang salah.",
+        "device": "BR",
+        "code": "/certificate/import file-name=lab-ca.crt passphrase=\"\"\n/certificate/set [find common-name=\"LAB-CA\"] trusted=yes\n/certificate/print detail"
+      },
+      {
+        "title": "6. Profil, user dan server HQ",
+        "text": "Winbox PPP → Profiles/Secrets serta server protokol terkait. Endpoint PPP memakai pool satu alamat agar route site-to-site mudah diprediksi. Tidak ada klaim keamanan dari nama default-profile semata.",
+        "device": "HQ",
+        "code": "/ppp/profile/add name=lab-ppp local-address=10.250.0.1 remote-address=10.250.0.2 change-tcp-mss=yes\n/ppp/secret/add name=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" service=sstp profile=lab-ppp\n/interface/sstp-server/server/set enabled=yes certificate=lab-server authentication=mschap2 default-profile=lab-ppp tls-version=only-1.2"
+      },
+      {
+        "title": "7. Client BR",
+        "text": "Winbox Interfaces → tambah client sesuai protokol. Tidak menambah default route agar transport serta koneksi lain tidak tertimpa.",
+        "device": "BR",
+        "code": "/interface/sstp-client/add name=vpn-out connect-to=192.0.2.1 user=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" authentication=mschap2 verify-server-certificate=yes verify-server-address-from-certificate=yes tls-version=only-1.2 add-default-route=no disabled=no"
+      },
+      {
+        "title": "8. Route LAN cabang di HQ",
+        "text": "Route peer PPP aktif setelah sesi tersambung. Route ke LAN remote diperlukan selain alamat tunnel.",
+        "device": "HQ",
+        "code": "/ip/route/add dst-address=192.168.20.0/24 gateway=10.250.0.2 comment=\"LAB-PPP-LAN\""
+      },
+      {
+        "title": "9. Route LAN pusat di BR",
+        "text": "Interface point-to-point menjadi gateway route LAN pusat. Kedua PC tetap memakai router lokal sebagai gateway.",
+        "device": "BR",
+        "code": "/ip/route/add dst-address=192.168.10.0/24 gateway=vpn-out comment=\"LAB-PPP-LAN\""
+      }
+    ],
+    "tests": [
+      [
+        "HQ",
+        "/ppp/active/print detail",
+        "User lab-branch aktif dan alamat peer 10.250.0.2 sesuai profil."
+      ],
+      [
+        "BR",
+        "/interface/print detail where name=vpn-out",
+        "Interface running; baca log bila negosiasi gagal."
+      ],
+      [
+        "PC-HQ → PC-BR",
+        "ping 192.168.20.10",
+        "Berhasil jika PPP, route balik, firewall host dan transport benar."
+      ],
+      [
+        "BR",
+        "Pada snapshot uji, hilangkan trust CA atau ubah connect-to sehingga tidak cocok SAN",
+        "Validasi sertifikat harus gagal. Pulihkan CA/SAN; jangan menyelesaikan masalah dengan verify-server-certificate=no."
+      ]
+    ],
+    "faults": [
+      [
+        "Sesi aktif, PC belum terhubung",
+        "Periksa route kedua LAN, gateway PC, firewall forward serta MTU; PPP up bukan bukti layanan end-to-end."
+      ],
+      [
+        "Sesi gagal terbentuk",
+        "Periksa user/service/profile, transport, log dan batasan device-mode. Pada internet nyata periksa firewall/NAT dan dukungan provider sesuai protokol."
+      ],
+      [
+        "Certificate invalid/expired",
+        "Cocokkan jam, CA trusted, SAN connect-to, key usage tls-server dan rantai sertifikat. Jangan menonaktifkan validasi."
+      ]
+    ],
+    "restore": "Nonaktifkan client vpn-out serta server lab dan pulihkan snapshot. Jangan menyalakan protokol legacy atau memakai credential contoh pada router produksi.",
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/sstp/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
+  },
+  {
+    "slug": "vpn-pppoe",
+    "title": "PPPoE: server, client, profil, dan routing LAN",
+    "pages": "Kurikulum tambahan pengguna",
+    "modules": [
+      "mtcre-jenis-tunnel",
+      "mtcre-tunnel-underlay"
+    ],
+    "goal": "Membangun sesi, route dua LAN, lalu membuktikan hasil serta batas keamanan protokol.",
+    "analogy": "Prediksi dahulu, lihat perubahan tabel dan paket, lalu jelaskan alasan hasilnya.",
+    "nodes": [
+      "HQ",
+      "BR"
+    ],
+    "edges": [
+      [
+        "HQ",
+        "BR",
+        "ether1 / transport 192.0.2.0/30"
+      ],
+      [
+        "HQ",
+        "BR",
+        "PPPOE / PPP 10.250.0.1–.2"
+      ]
+    ],
+    "addresses": [
+      [
+        "HQ",
+        "ether1",
+        "192.0.2.1/30",
+        "server transport lab"
+      ],
+      [
+        "BR",
+        "ether1",
+        "192.0.2.2/30",
+        "client transport lab"
+      ],
+      [
+        "HQ",
+        "ether3",
+        "192.168.10.1/24",
+        "LAN pusat"
+      ],
+      [
+        "BR",
+        "ether3",
+        "192.168.20.1/24",
+        "LAN cabang"
+      ],
+      [
+        "HQ",
+        "PPP",
+        "10.250.0.1/32",
+        "alamat lokal profil PPP"
+      ],
+      [
+        "BR",
+        "PPP",
+        "10.250.0.2/32",
+        "alamat peer PPP"
+      ],
+      [
+        "PC-HQ",
+        "NIC",
+        "192.168.10.10/24",
+        "gateway .1"
+      ],
+      [
+        "PC-BR",
+        "NIC",
+        "192.168.20.10/24",
+        "gateway .1"
+      ]
+    ],
+    "steps": [
+      {
+        "title": "1. Persiapan dua router",
+        "text": "Hubungkan ether1 HQ–BR langsung pada segmen transport lab terisolasi; ether3 ke PC lokal. Semua IP dokumentasi dan credential LAB-ONLY hanya untuk percobaan, harus diganti sebelum pemakaian lain. Tidak ada NAT antar-LAN. Pastikan device-mode mengizinkan fitur yang diuji melalui prosedur resmi perangkat, jangan mematikan proteksi produksi.",
+        "device": "",
+        "code": ""
+      },
+      {
+        "title": "2. Alamat HQ",
+        "text": "Winbox IP → Addresses. Transport harus bekerja sebelum PPP dinilai.",
+        "device": "HQ",
+        "code": "/ip/address/add address=192.0.2.1/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.10.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "3. Alamat BR",
+        "text": "Alamat /30 pada ether1 dipakai untuk memeriksa transport. PPPoE discovery sendiri memakai L2, tidak membutuhkan IP /30 ini.",
+        "device": "BR",
+        "code": "/ip/address/add address=192.0.2.2/30 interface=ether1 comment=\"LAB-MTCRE\"\n/ip/address/add address=192.168.20.1/24 interface=ether3 comment=\"LAB-MTCRE\"\n"
+      },
+      {
+        "title": "6. Profil, user dan server HQ",
+        "text": "Winbox PPP → Profiles/Secrets serta server protokol terkait. Endpoint PPP memakai pool satu alamat agar route site-to-site mudah diprediksi. Tidak ada klaim keamanan dari nama default-profile semata.",
+        "device": "HQ",
+        "code": "/ppp/profile/add name=lab-ppp local-address=10.250.0.1 remote-address=10.250.0.2 change-tcp-mss=yes\n/ppp/secret/add name=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" service=pppoe profile=lab-ppp\n/interface/pppoe-server/server/add service-name=LAB-PPPOE interface=ether1 default-profile=lab-ppp authentication=chap disabled=no"
+      },
+      {
+        "title": "7. Client BR",
+        "text": "Winbox Interfaces → tambah client sesuai protokol. Tidak menambah default route agar transport serta koneksi lain tidak tertimpa.",
+        "device": "BR",
+        "code": "/interface/pppoe-client/add name=vpn-out interface=ether1 service-name=LAB-PPPOE user=lab-branch password=\"LAB-ONLY-Ubah-Password-2026\" allow=chap add-default-route=no use-peer-dns=no disabled=no"
+      },
+      {
+        "title": "8. Route LAN cabang di HQ",
+        "text": "Route peer PPP aktif setelah sesi tersambung. Route ke LAN remote diperlukan selain alamat tunnel.",
+        "device": "HQ",
+        "code": "/ip/route/add dst-address=192.168.20.0/24 gateway=10.250.0.2 comment=\"LAB-PPP-LAN\""
+      },
+      {
+        "title": "9. Route LAN pusat di BR",
+        "text": "Interface point-to-point menjadi gateway route LAN pusat. Kedua PC tetap memakai router lokal sebagai gateway.",
+        "device": "BR",
+        "code": "/ip/route/add dst-address=192.168.10.0/24 gateway=vpn-out comment=\"LAB-PPP-LAN\""
+      }
+    ],
+    "tests": [
+      [
+        "HQ",
+        "/ppp/active/print detail",
+        "User lab-branch aktif dan alamat peer 10.250.0.2 sesuai profil."
+      ],
+      [
+        "BR",
+        "/interface/print detail where name=vpn-out",
+        "Interface running; baca log bila negosiasi gagal."
+      ],
+      [
+        "PC-HQ → PC-BR",
+        "ping 192.168.20.10",
+        "Berhasil jika PPP, route balik, firewall host dan transport benar."
+      ],
+      [
+        "HQ",
+        "/interface/pppoe-server/print",
+        "Session berada pada segmen L2 yang benar. PPPoE bukan penghubung aman melewati internet dengan sendirinya."
+      ]
+    ],
+    "faults": [
+      [
+        "Sesi aktif, PC belum terhubung",
+        "Periksa route kedua LAN, gateway PC, firewall forward serta MTU; PPP up bukan bukti layanan end-to-end."
+      ],
+      [
+        "Sesi gagal terbentuk",
+        "Periksa user/service/profile, transport, log dan batasan device-mode. Pada internet nyata periksa firewall/NAT dan dukungan provider sesuai protokol."
+      ]
+    ],
+    "restore": "Nonaktifkan client vpn-out serta server lab dan pulihkan snapshot. Jangan menyalakan protokol legacy atau memakai credential contoh pada router produksi.",
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/pppoe/",
+    "prereq": "RouterOS v7 kosong di CHR/perangkat lab terisolasi. Port sesuai tabel; simpan snapshot dan akses console lokal.",
+    "referenceKind": "curriculum"
   }
 ]

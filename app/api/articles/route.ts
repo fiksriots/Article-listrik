@@ -1,3 +1,4 @@
+import {mtcreTopics} from '@/lib/mtcre-curriculum';
 import {mtcreLabs} from '@/lib/mtcre-labs';
 import {iotLessons} from '@/lib/iot-course';
 import { networkLessons } from '@/lib/network-course';
@@ -83,7 +84,8 @@ export function GET() {
   }));
   const iotItems = iotLessons.map((l,index)=>({id:`iot-${l.slug}`,slug:l.slug,title:l.title,summary:l.summary,url:`${origin}/iot/${l.slug}`,category:'Belajar IoT',tags:['IoT','ESP32','Pemula'],minutes:l.minutes,order:lessons.length+networkLessons.length+index+1,image:{url:`${origin}/iot/${l.slug}.svg`,alt:l.title,author:'Fiks Learn IoT',source:`${origin}/iot/${l.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Ilustrasi vektor skematis asli'}}));
   const labItems = mtcreLabs.map((l,index)=>({id:`mtcre-lab-${l.slug}`,slug:`mtcre-lab-${l.slug}`,title:`Lab MTCRE · ${l.title}`,summary:l.goal,url:`${origin}/jaringan/mtcre/lab/${l.slug}`,category:'Belajar Jaringan',tags:['MTCRE','Lab','RouterOS v7'],minutes:45,order:lessons.length+networkLessons.length+iotLessons.length+index+1,image:{url:`${origin}/network/lab-${l.slug}.svg`,alt:l.title,author:'Fiks Learn Jaringan',source:`${origin}/jaringan/mtcre/lab/${l.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Topologi lab skematis asli'}}));
-  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items: [...items, ...networkItems, ...iotItems, ...labItems] }, {
+  const topicItems=mtcreTopics.map((t,index)=>({id:`mtcre-topic-${t.slug}`,slug:`mtcre-topic-${t.slug}`,title:t.title,summary:t.summary,url:`${origin}/jaringan/mtcre/materi/${t.slug}`,category:'Belajar Jaringan',tags:['MTCRE','Pendalaman'],minutes:10,order:lessons.length+networkLessons.length+iotLessons.length+mtcreLabs.length+index+1,image:{url:`${origin}/network/lab-${t.labs[0]}.svg`,alt:t.title,author:'Fiks Learn Jaringan',source:`${origin}/jaringan/mtcre/materi/${t.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Topologi lab skematis asli'}}));
+  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items: [...items, ...networkItems, ...iotItems, ...labItems, ...topicItems] }, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',

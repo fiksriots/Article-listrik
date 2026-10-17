@@ -1,0 +1,684 @@
+[
+  {
+    "slug": "connected-route",
+    "title": "Connected route: jaringan yang router kenal langsung",
+    "summary": "Pahami asal connected route, kegunaannya, dan flag DAC/DAc.",
+    "analogy": "Router seperti petugas persimpangan yang langsung mengenal jalan yang menempel pada posnya.",
+    "paragraphs": [
+      "Ketika alamat IP beserta prefix dipasang pada interface yang aktif, RouterOS dapat membentuk connected route untuk network tersebut. IP 192.168.10.1/24 mengenalkan 192.168.10.0/24 sebagai jaringan yang langsung terhubung. Tidak perlu menambah static route menuju subnet lokal yang sama hanya agar router mengenalnya.",
+      "Connected route dipakai untuk mencapai perangkat pada link tersebut dan untuk meresolusikan next hop route lain. Misalnya gateway static 10.1.0.2 dapat dipakai bila router mempunyai connected transit 10.1.0.0/30 yang sesuai. Satu connected route tidak otomatis mengenalkan seluruh LAN di belakang router tetangga.",
+      "Pada tampilan lama sering ditemukan DAC/ADC: Dynamic, Active, Connected. RouterOS v7 dapat menampilkan DAc, dengan c kecil. Huruf serta urutan tampil bisa berbeda antar menu dan versi. Baca legenda hasil print. Jika alamat dinonaktifkan atau interface/link tidak layak, connected route dapat hilang atau tidak aktif. Keberadaan route tetap berbeda dari keberhasilan ARP, firewall host dan layanan."
+    ],
+    "table": [
+      [
+        "IP interface",
+        "Connected network",
+        "Dampak"
+      ],
+      [
+        "192.168.10.1/24",
+        "192.168.10.0/24",
+        "LAN lokal dikenali"
+      ],
+      [
+        "10.1.0.1/30",
+        "10.1.0.0/30",
+        "Next hop .2 dapat diresolusikan"
+      ]
+    ],
+    "practice": [
+      "Tulis IP/prefix dua interface.",
+      "Prediksi network yang muncul.",
+      "Bandingkan IP Addresses dan IP Routes.",
+      "Nonaktifkan satu alamat hanya pada lab.",
+      "Aktifkan lagi dan periksa connected route."
+    ],
+    "check": "Apakah router perlu static route ke subnet yang langsung terhubung?",
+    "answer": "Biasanya tidak; connected route terbentuk dari alamat/prefix dan kondisi interface yang sesuai.",
+    "labs": [
+      "connected-route"
+    ],
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/"
+  },
+  {
+    "slug": "route-flags",
+    "title": "Membaca DAC, DAS dan AS tanpa salah versi",
+    "summary": "Pisahkan sumber route, status aktif dan angka distance.",
+    "analogy": "Label surat menjelaskan asal dan status; nomor prioritas ditulis di kolom yang berbeda.",
+    "paragraphs": [
+      "Flag A berarti active, D berarti dynamic. Pada tampilan v6, S static-style dapat muncul bersama D ketika layanan seperti DHCP membuat route otomatis, sehingga terlihat DAS. AS pada route manual berarti route static yang sedang aktif. Huruf D bukan distance dan tidak berarti route itu berasal dari protokol dynamic routing seperti OSPF.",
+      "RouterOS v7 membedakan sumber dengan huruf kecil seperti s static, c connected, d DHCP dan o OSPF. Default dari DHCP lazimnya DAd; route manual yang aktif As. Jangan memaksakan screenshot DAS dari v6 muncul identik pada v7. Menu /routing/route juga dapat mempunyai penyajian atribut berbeda dari /ip/route.",
+      "Gunakan lab DHCP untuk melihat route datang dan ditarik ketika lease tidak lagi tersedia. Tambah route manual sebagai pembanding; route manual dapat tetap tersimpan tetapi inactive jika gateway tidak bisa diresolusikan. A aktif hanya menyatakan pemilihan route, bukan bukti server tujuan atau jalur balik benar."
+    ],
+    "table": [
+      [
+        "Konteks",
+        "Contoh flag",
+        "Makna"
+      ],
+      [
+        "v6 connected",
+        "DAC / ADC",
+        "Dynamic, active, connected"
+      ],
+      [
+        "v6 DHCP-style",
+        "DAS",
+        "Otomatis dibuat layanan, aktif, static-style"
+      ],
+      [
+        "v7 DHCP",
+        "DAd",
+        "Dynamic, active, DHCP"
+      ],
+      [
+        "v7 manual",
+        "As",
+        "Active static"
+      ]
+    ],
+    "practice": [
+      "Catat versi perangkat.",
+      "Baca legenda print aktual.",
+      "Bentuk default route melalui DHCP lab.",
+      "Tambahkan route manual pembanding.",
+      "Putus lease dan bedakan tersimpan dengan aktif."
+    ],
+    "check": "Apakah DAS berarti distance otomatis kecil?",
+    "answer": "Tidak. D adalah dynamic; distance adalah nilai angka pada kolom/properti tersendiri.",
+    "labs": [
+      "route-flags-dhcp-static"
+    ],
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/"
+  },
+  {
+    "slug": "route-type",
+    "title": "Route type dan efek yang terlihat pada paket",
+    "summary": "Bedakan unicast, blackhole, unreachable dan prohibit beserta konteks versinya.",
+    "analogy": "Ada petunjuk jalan, tempat pembuangan tanpa jawaban, dan petugas yang terang-terangan menolak.",
+    "paragraphs": [
+      "Route unicast meneruskan paket melalui next hop yang dipilih. Blackhole membuang paket secara diam-diam. Kurikulum RouterOS lama juga menyebut unreachable dan prohibit: keduanya menjelaskan penolakan dengan pesan ICMP yang berbeda. Jangan menyamakan tipe route dengan status next hop unreachable.",
+      "Antarmuka route v7 yang dirujuk menyediakan flag blackhole, sedangkan sintaks type=unreachable atau type=prohibit dari v6 tidak boleh dianggap selalu tersedia pada v7. Untuk belajar dampak ICMP penolakan di v7, lab membandingkan blackhole dengan firewall reject. Keduanya dapat memberi pengalaman berbeda bagi pengamat paket, tetapi firewall bukan implementasi route type yang sama.",
+      "Prefix paling spesifik tetap penting. Blackhole /32 menuju satu IP dapat mengalahkan route /24 yang normal. Gunakan untuk tujuan yang direncanakan, misalnya mencegah kebocoran probe atau membuang rentang tertentu; jangan menghapus route default produksi untuk percobaan. Simpan konfigurasi awal dan uji sumber serta tujuan yang dibatasi."
+    ],
+    "table": [
+      [
+        "Perilaku",
+        "Efek umum",
+        "Catatan"
+      ],
+      [
+        "Unicast",
+        "Diteruskan ke next hop",
+        "Masih perlu jalur balik"
+      ],
+      [
+        "Blackhole",
+        "Dibuang tanpa balasan",
+        "Bukan gangguan gateway"
+      ],
+      [
+        "Unreachable/prohibit legacy",
+        "ICMP kegagalan/larangan",
+        "Periksa dukungan versi"
+      ],
+      [
+        "Firewall reject v7",
+        "ICMP sesuai reject-with",
+        "Bukan tipe route legacy"
+      ]
+    ],
+    "practice": [
+      "Bangun unicast lab yang berhasil.",
+      "Tambah blackhole /32.",
+      "Bandingkan timeout.",
+      "Ganti dengan reject lab.",
+      "Pulihkan dan jelaskan perbedaan letak pemrosesan."
+    ],
+    "check": "Apakah status unreachable sama dengan route type unreachable?",
+    "answer": "Tidak. Status next hop yang tidak terjangkau berbeda dari kebijakan route yang sengaja menolak.",
+    "labs": [
+      "route-type"
+    ],
+    "source": "https://manual.mikrotik.com/docs/cli-reference/ip/route/"
+  },
+  {
+    "slug": "routing-protocols",
+    "title": "Static, dynamic, IGP/EGP dan RIP–OSPF–BGP",
+    "summary": "Pilih mekanisme routing dari kebutuhan, bukan banyaknya singkatan.",
+    "analogy": "Static seperti petunjuk yang ditulis petugas; dynamic seperti petugas yang saling bertukar informasi jalan.",
+    "paragraphs": [
+      "Static route ditetapkan administrator. Cocok untuk jaringan kecil, jalur yang sederhana, default route atau kebijakan yang eksplisit. Ketika jaringan membesar atau ada banyak jalur, pemeliharaan manual menjadi lebih berat. Dynamic routing bertukar informasi melalui protokol sehingga prefix dan perubahan jalur dapat dipelajari; konfigurasi awal serta kebijakan tetap diperlukan.",
+      "IGP dipakai di dalam satu domain routing, contohnya RIP dan OSPF. EGP menghubungkan domain/AS, dengan BGP sebagai contoh utama. AS bukan sekadar satu gedung atau satu subnet. Satu organisasi dapat memiliki beberapa kebutuhan routing; memilih protokol tidak cukup berdasarkan lokasi kabel.",
+      "RIP adalah distance-vector dengan metric hop count dan batas 15 hop yang dapat dijangkau. OSPF adalah link-state yang menghitung cost melalui SPF di dalam desain area. BGP adalah path-vector yang berfokus pada kebijakan pertukaran prefix antar-AS dan juga dapat dipakai internal melalui iBGP. Tidak tepat menyebut BGP selalu memilih jalan paling sedikit hop fisik. Lab membandingkan static dan OSPF pada topologi yang sama, tanpa berpura-pura itu lab konfigurasi RIP/BGP penuh."
+    ],
+    "table": [
+      [
+        "Aspek",
+        "RIP",
+        "OSPF",
+        "BGP"
+      ],
+      [
+        "Keluarga",
+        "Distance-vector",
+        "Link-state",
+        "Path-vector"
+      ],
+      [
+        "Pemakaian umum",
+        "IGP sederhana",
+        "IGP berbasis area",
+        "Kebijakan antar-AS / iBGP"
+      ],
+      [
+        "Dasar keputusan",
+        "Hop count",
+        "Cost + aturan OSPF",
+        "Atribut dan kebijakan"
+      ]
+    ],
+    "practice": [
+      "Gambar satu domain routing.",
+      "Tandai static route yang diperlukan.",
+      "Bangun OSPF di topologi yang sama.",
+      "Bandingkan sumber route dan penarikan prefix.",
+      "Jelaskan alasan memilih static atau dynamic."
+    ],
+    "check": "Apakah dynamic routing menghilangkan kebutuhan gateway PC dan firewall?",
+    "answer": "Tidak; pengalamatan host, gateway, izin trafik dan layanan tetap harus benar.",
+    "labs": [
+      "static-vs-dynamic",
+      "static-tiga-router"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF"
+  },
+  {
+    "slug": "ospf-virtual-link",
+    "title": "OSPF Virtual Link: backbone logis",
+    "summary": "Pahami syarat transit area dan identitas endpoint sebelum konfigurasi.",
+    "analogy": "Dua kantor penghubung memakai jalur logis untuk menyatukan peta backbone yang tidak tersambung langsung.",
+    "paragraphs": [
+      "Desain OSPF multi-area biasanya memakai backbone area 0 yang kontinu. Virtual link membuat hubungan backbone logis antara dua endpoint melalui area non-backbone yang sama. Kebutuhannya khusus, misalnya backbone terfragmentasi atau area jauh tidak memiliki hubungan backbone yang semestinya.",
+      "Endpoint menunjuk router ID tetangga virtual, bukan asal memilih alamat interface. Transit area harus mendukung virtual link; stub dan NSSA bukan transit yang sesuai. Adjacency dan keterjangkauan dalam area transit harus berfungsi sebelum menilai hubungan virtual. Virtual link sendiri bukan VPN terenkripsi.",
+      "Pada rilis v7 yang umum, contoh MikroTik memakai interface-template type=virtual-link; dokumentasi baru juga menampilkan objek konfigurasi pada interface. Karena ada perbedaan dokumentasi/versi, lab menyebut pemeriksaan bantuan CLI dan menyediakan parameter yang sama tanpa menyuruh menempel dua varian sekaligus. Utamakan desain backbone yang mudah dijelaskan; virtual link bukan obat untuk area-ID salah."
+    ],
+    "table": [
+      [
+        "Parameter",
+        "Arti"
+      ],
+      [
+        "area",
+        "Backbone area 0"
+      ],
+      [
+        "vlink-transit-area",
+        "Area normal yang sama pada kedua endpoint"
+      ],
+      [
+        "vlink-neighbor-id",
+        "Router ID endpoint lawan"
+      ]
+    ],
+    "practice": [
+      "Gambar batas area 0/1/2.",
+      "Buktikan neighbor area transit.",
+      "Catat router ID kedua endpoint.",
+      "Tambahkan virtual link dua arah.",
+      "Periksa interface virtual, neighbor dan LAN jauh."
+    ],
+    "check": "Bolehkah memakai stub sebagai transit virtual link?",
+    "answer": "Tidak; gunakan area transit yang mendukung dan periksa dokumentasi versi.",
+    "labs": [
+      "ospf-virtual-link"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF"
+  },
+  {
+    "slug": "ospf-network-types",
+    "title": "OSPF network type: broadcast, PTP, PTMP, NBMA",
+    "summary": "Pisahkan cara menemukan tetangga dari cara memilih DR/BDR.",
+    "analogy": "Rapat satu ruangan berbeda dengan beberapa panggilan langsung ke peserta yang sudah diketahui.",
+    "paragraphs": [
+      "Broadcast mendukung segmen multiaccess dan memilih DR/BDR. Point-to-point dirancang untuk hubungan dua endpoint dan tidak memilih DR/BDR. Nama network type menggambarkan perilaku OSPF; memilih tipe bukan berarti mengganti teknologi fisik kabel secara ajaib.",
+      "NBMA memerlukan penentuan neighbor yang sesuai karena discovery broadcast/multicast tidak diasumsikan tersedia. DR/BDR tetap digunakan. Point-to-multipoint memperlakukan hubungan sebagai kumpulan hubungan individual dan tidak memilih DR/BDR. Pada RouterOS terdapat perbedaan mode ptmp/ptmp-broadcast serta perubahan antarrilis; jangan menganggap discovery multicast bekerja sama pada semua varian.",
+      "Lab PTMP/NBMA memakai static-neighbor eksplisit agar cara discovery dapat diperiksa. Samakan area, timer, type, autentikasi serta izin protocol 89. Baca interface dan neighbor detail. State 2-Way antar-DROther bisa normal di broadcast; target status pada PTP atau PTMP berbeda sesuai hubungan yang perlu adjacency."
+    ],
+    "table": [
+      [
+        "Type",
+        "DR/BDR",
+        "Discovery dalam lab"
+      ],
+      [
+        "Broadcast",
+        "Ada",
+        "Hello segmen bersama"
+      ],
+      [
+        "PTP",
+        "Tidak",
+        "Dua endpoint langsung"
+      ],
+      [
+        "PTMP",
+        "Tidak",
+        "Peer eksplisit untuk percobaan unicast"
+      ],
+      [
+        "NBMA",
+        "Ada",
+        "Static neighbor"
+      ]
+    ],
+    "practice": [
+      "Bandingkan satu segmen broadcast dengan PTP.",
+      "Catat peran DR/BDR.",
+      "Jalankan PTMP pada snapshot baru.",
+      "Jalankan NBMA dengan peer manual.",
+      "Bandingkan timer dan state tetangga."
+    ],
+    "check": "Apakah network type berbeda pada kedua ujung aman diabaikan?",
+    "answer": "Tidak. Ketidakcocokan dapat mengganggu adjacency dan interpretasi topologi.",
+    "labs": [
+      "ospf-network-type",
+      "ospf-ptmp",
+      "ospf-nbma"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF"
+  },
+  {
+    "slug": "ospf-filter",
+    "title": "Routing filter OSPF dan batas pengaruhnya",
+    "summary": "Filter redistribusi bukan tombol menghapus semua LSA intra-area.",
+    "analogy": "Memilih pengumuman dari luar berbeda dengan menyembunyikan persimpangan yang sudah menjadi bagian peta bersama.",
+    "paragraphs": [
+      "Routing filter pada output OSPF dipakai untuk mengendalikan route eksternal yang diimpor dan atribut seperti external metric/type. Buat daftar prefix yang boleh tersebar dan tolak sisanya secara sadar. Jangan mengumumkan seluruh static atau connected route hanya karena satu prefix dibutuhkan.",
+      "Informasi link-state intra-area harus tetap konsisten. Menolak route pada satu filter bukan cara menghapus topologi dari LSDB seluruh area. Kebutuhan pengelompokan antararea ditangani lewat desain area dan range/summarization yang sesuai. Default route mempunyai mekanisme originate-default dan perilaku khusus; uji tersendiri.",
+      "Lab memakai dua prefix eksternal yang keduanya reachable dari ASBR, lalu hanya satu yang diterima chain. Dengan demikian kegagalan iklan tidak tertukar dengan next hop mati. Verifikasi filter, instance, LSA dan route penerima; simpan bukti accepted serta rejected, bukan hanya screenshot daftar rule."
+    ],
+    "table": [
+      [
+        "Kebutuhan",
+        "Tempat yang relevan"
+      ],
+      [
+        "Pilih prefix eksternal",
+        "Redistribute + out-filter-chain"
+      ],
+      [
+        "Atur E1/E2 dan metric",
+        "Properti filter eksternal"
+      ],
+      [
+        "Ringkas antararea",
+        "Area range pada ABR"
+      ],
+      [
+        "Default route",
+        "Originate-default dan kebijakan terkait"
+      ]
+    ],
+    "practice": [
+      "Buktikan dua route sumber aktif.",
+      "Izinkan hanya satu prefix.",
+      "Periksa penerima serta LSDB.",
+      "Ubah kebijakan pada snapshot terpisah.",
+      "Pulihkan filter dan catat hasil."
+    ],
+    "check": "Apakah out-filter OSPF menghapus LAN connected intra-area dari seluruh LSDB?",
+    "answer": "Tidak. Filter redistribusi dan desain link-state intra-area adalah mekanisme berbeda.",
+    "labs": [
+      "ospf-routing-filter",
+      "redistribute-e1",
+      "redistribute-e2"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/74678285/Route+Selection+and+Filters"
+  },
+  {
+    "slug": "vlan",
+    "title": "VLAN: dari satu broadcast domain ke access dan trunk",
+    "summary": "Pahami proses frame masuk, keanggotaan VLAN dan kapan routing diperlukan.",
+    "analogy": "VLAN seperti kelompok ruang berkartu berbeda; trunk membawa kiriman beberapa kelompok dengan label.",
+    "paragraphs": [
+      "Tanpa pemisahan VLAN, perangkat dalam satu domain Layer 2 dapat menerima broadcast yang sama. Memakai subnet IP berbeda saja tidak otomatis memisahkan domain broadcast Ethernet. VLAN memisahkan domain tersebut pada infrastruktur yang mendukung, misalnya staf VLAN10 dan tamu VLAN20.",
+      "Access port biasanya menerima frame tanpa tag dan memasukkannya ke VLAN menurut PVID. Trunk membawa beberapa VLAN dengan tag 802.1Q. Tabel VLAN menyatakan anggota tagged/untagged saat keluar; ingress filtering dan frame-types menentukan frame yang boleh masuk. Kedua ujung trunk harus cocok, bukan sekadar memilih nomor port tertentu.",
+      "Komunikasi lintas VLAN memerlukan routing. Jika router mempunyai dua connected VLAN dan tidak ada filter, keduanya bisa saling berkomunikasi. Karena itu VLAN bukan pengganti firewall. Saat mengaktifkan bridge VLAN filtering, rencanakan akses CPU/manajemen dan rollback. Lab memakai console serta mengaktifkan filtering terakhir; hardware offload mengikuti model switch."
+    ],
+    "table": [
+      [
+        "Kondisi",
+        "Broadcast",
+        "Komunikasi antar kelompok"
+      ],
+      [
+        "Satu bridge tanpa VLAN",
+        "Satu domain L2",
+        "Ditentukan IP/host; tidak ada isolasi VLAN"
+      ],
+      [
+        "Dua VLAN tanpa router",
+        "Terpisah",
+        "Tidak dirutekan"
+      ],
+      [
+        "Dua VLAN dengan router",
+        "Tetap terpisah di L2",
+        "Bisa dirutekan sesuai firewall"
+      ]
+    ],
+    "practice": [
+      "Bandingkan tiga PC satu bridge.",
+      "Pisahkan access staf/tamu.",
+      "Bawa VLAN10/20 pada trunk.",
+      "Uji antar-VLAN sebelum filter.",
+      "Pasang filter dan uji kebijakan."
+    ],
+    "check": "Apakah dua subnet berbeda sudah sama dengan dua VLAN?",
+    "answer": "Tidak. Subnet adalah pengalamatan Layer 3; VLAN memisahkan domain Layer 2.",
+    "labs": [
+      "vlan-kantor"
+    ],
+    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/"
+  },
+  {
+    "slug": "vpn-comparison",
+    "title": "VPN dan tunnel MikroTik: pilih sesuai kebutuhan",
+    "summary": "Bedakan koneksi site-to-site, remote access, Layer 2/3 dan perlindungan data.",
+    "analogy": "Terowongan adalah cara membungkus kiriman; gembok adalah perlindungan terpisah yang harus benar-benar ada.",
+    "paragraphs": [
+      "VPN menghubungkan pengguna atau lokasi melalui jaringan pembawa sesuai desain. Untuk pusat–cabang, tentukan subnet LAN yang tidak tumpang tindih, endpoint luar yang dapat dicapai, alamat tunnel dan route dua arah. Untuk remote access, perhatikan identitas pengguna, akses yang diizinkan dan pengelolaan kredensial.",
+      "EoIP memperpanjang Ethernet; GRE/IPIP membawa payload Layer 3 sesuai protokol. Ketiganya tidak otomatis menyediakan enkripsi. L2TP memerlukan lapisan seperti IPsec untuk kerahasiaan yang sesuai. SSTP memakai TLS dan perlu validasi sertifikat server. WireGuard serta IPsec merupakan pilihan dengan model kunci/identitas dan interoperabilitas tersendiri; jangan memilih hanya dari daftar port.",
+      "PPTP dipelajari sebagai legacy karena peringatan keamanan vendor. PPPoE adalah PPP melalui Ethernet, umum untuk akses pelanggan, bukan VPN terenkripsi antarkantor melalui internet. MME adalah routing mesh, bukan VPN. Selain itu NAT, CGNAT, firewall, MTU, enkripsi, dukungan client dan kemampuan hardware harus diperiksa secara terpisah."
+    ],
+    "table": [
+      [
+        "Teknologi",
+        "Tujuan / lapisan",
+        "Catatan perlindungan"
+      ],
+      [
+        "EoIP",
+        "Ethernet antarlokasi",
+        "Enkripsi perlu lapisan lain"
+      ],
+      [
+        "GRE / IPIP",
+        "Tunnel L3",
+        "Tidak otomatis terenkripsi"
+      ],
+      [
+        "PPTP",
+        "PPP legacy",
+        "Tidak direkomendasikan untuk VPN baru"
+      ],
+      [
+        "L2TP/IPsec",
+        "PPP dilindungi IPsec",
+        "Wajib verifikasi SA dan kebijakan"
+      ],
+      [
+        "SSTP",
+        "PPP melalui TLS",
+        "CA, SAN, jam dan validasi sertifikat"
+      ],
+      [
+        "PPPoE",
+        "PPP di Ethernet",
+        "Bukan enkripsi antarkantor"
+      ],
+      [
+        "MME",
+        "Routing mesh legacy",
+        "Bukan VPN"
+      ]
+    ],
+    "practice": [
+      "Tulis kebutuhan L2 atau L3.",
+      "Pisahkan endpoint luar dan IP tunnel.",
+      "Pilih autentikasi dan enkripsi.",
+      "Rencanakan route balik dan firewall.",
+      "Uji layanan nyata setelah sesi tunnel aktif."
+    ],
+    "check": "Apakah tunnel berstatus running menjamin data rahasia dan semua LAN terjangkau?",
+    "answer": "Tidak. Verifikasi enkripsi/identitas, route, firewall, MTU dan layanan secara terpisah.",
+    "labs": [
+      "tunnel-gre",
+      "tunnel-eoip",
+      "vpn-l2tp",
+      "vpn-sstp"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/"
+  },
+  {
+    "slug": "pptp",
+    "title": "PPTP: mengenali VPN legacy",
+    "summary": "Dari negosiasi sesi sampai komunikasi dua LAN, dengan batasan protokol yang jelas.",
+    "analogy": "Sesi membuka pintu hubungan; route menentukan ruangan mana yang dapat dicapai setelah pintu terbuka.",
+    "paragraphs": [
+      "PPTP memakai kanal kontrol TCP1723 dan GRE untuk data. MikroTik memperingatkan kelemahan keamanannya; memaksa MSCHAPv2 atau MPPE tidak menjadikannya pilihan baru yang direkomendasikan.",
+      "Gunakan dua router lab terisolasi dengan LAN pusat dan cabang yang berbeda. Profil PPP pada HQ memberikan alamat lokal 10.250.0.1 dan peer 10.250.0.2. Sesudah sesi terbentuk, tambahkan route menuju LAN remote serta jalur balik. Gateway PC tetap alamat router pada LAN setempat; tidak perlu menambah NAT antar-LAN untuk menyembunyikan masalah routing.",
+      "Periksa log ketika autentikasi gagal, status interface serta alamat peer saat sesi up, dan ping LAN dengan sumber yang jelas. Capture serta export dapat memuat data sensitif, jadi simpan pribadi. PPTP hanya dijalankan untuk pembelajaran legacy dan harus dimatikan setelah lab; jangan mengeksposnya ke internet."
+    ],
+    "table": [
+      [
+        "Yang diuji",
+        "Bukti"
+      ],
+      [
+        "Transport / discovery",
+        "Peer/server dapat ditemukan"
+      ],
+      [
+        "Sesi PPP",
+        "User dan alamat aktif"
+      ],
+      [
+        "LAN jauh",
+        "Route pergi dan balik"
+      ],
+      [
+        "Keamanan",
+        "Perlindungan sesuai protokol, bukan nama profil"
+      ]
+    ],
+    "practice": [
+      "Siapkan transport sesuai protokol.",
+      "Buat profil dan akun lab.",
+      "Aktifkan server serta client.",
+      "Verifikasi sesi lalu route LAN.",
+      "Uji kegagalan dan pulihkan snapshot."
+    ],
+    "check": "Mengapa sesi PPP aktif belum cukup?",
+    "answer": "Sesi belum membuktikan route LAN, jalur balik, firewall, MTU atau validasi keamanan sudah benar.",
+    "labs": [
+      "vpn-pptp"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/2031638/PPTP"
+  },
+  {
+    "slug": "l2tp",
+    "title": "L2TP/IPsec: PPP dan perlindungan IPsec",
+    "summary": "Dari negosiasi sesi sampai komunikasi dua LAN, dengan batasan protokol yang jelas.",
+    "analogy": "Sesi membuka pintu hubungan; route menentukan ruangan mana yang dapat dicapai setelah pintu terbuka.",
+    "paragraphs": [
+      "L2TP membawa PPP dan tidak menyediakan enkripsi sendiri. Dalam lab ini server mewajibkan IPsec, client mengaktifkan IPsec, dan active peers/installed SA diperiksa selain sesi PPP.",
+      "Gunakan dua router lab terisolasi dengan LAN pusat dan cabang yang berbeda. Profil PPP pada HQ memberikan alamat lokal 10.250.0.1 dan peer 10.250.0.2. Sesudah sesi terbentuk, tambahkan route menuju LAN remote serta jalur balik. Gateway PC tetap alamat router pada LAN setempat; tidak perlu menambah NAT antar-LAN untuk menyembunyikan masalah routing.",
+      "Periksa log ketika autentikasi gagal, status interface serta alamat peer saat sesi up, dan ping LAN dengan sumber yang jelas. Capture serta export dapat memuat data sensitif, jadi simpan pribadi. Periksa firewall, MTU, dukungan client dan device-mode pada versi yang dipakai. Untuk penggunaan nyata, ganti seluruh kredensial contoh serta sesuaikan kebijakan akses."
+    ],
+    "table": [
+      [
+        "Yang diuji",
+        "Bukti"
+      ],
+      [
+        "Transport / discovery",
+        "Peer/server dapat ditemukan"
+      ],
+      [
+        "Sesi PPP",
+        "User dan alamat aktif"
+      ],
+      [
+        "LAN jauh",
+        "Route pergi dan balik"
+      ],
+      [
+        "Keamanan",
+        "Perlindungan sesuai protokol, bukan nama profil"
+      ]
+    ],
+    "practice": [
+      "Siapkan transport sesuai protokol.",
+      "Buat profil dan akun lab.",
+      "Aktifkan server serta client.",
+      "Verifikasi sesi lalu route LAN.",
+      "Uji kegagalan dan pulihkan snapshot."
+    ],
+    "check": "Mengapa sesi PPP aktif belum cukup?",
+    "answer": "Sesi belum membuktikan route LAN, jalur balik, firewall, MTU atau validasi keamanan sudah benar.",
+    "labs": [
+      "vpn-l2tp"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/l2tp/"
+  },
+  {
+    "slug": "sstp",
+    "title": "SSTP: TLS, sertifikat dan identitas server",
+    "summary": "Dari negosiasi sesi sampai komunikasi dua LAN, dengan batasan protokol yang jelas.",
+    "analogy": "Sesi membuka pintu hubungan; route menentukan ruangan mana yang dapat dicapai setelah pintu terbuka.",
+    "paragraphs": [
+      "SSTP memakai TLS melalui TCP, lazimnya port443. Client harus memeriksa CA, masa berlaku, tujuan sertifikat serta alamat server/SAN. Mematikan validasi untuk membuat sesi up justru menghilangkan pemeriksaan identitas.",
+      "Gunakan dua router lab terisolasi dengan LAN pusat dan cabang yang berbeda. Profil PPP pada HQ memberikan alamat lokal 10.250.0.1 dan peer 10.250.0.2. Sesudah sesi terbentuk, tambahkan route menuju LAN remote serta jalur balik. Gateway PC tetap alamat router pada LAN setempat; tidak perlu menambah NAT antar-LAN untuk menyembunyikan masalah routing.",
+      "Periksa log ketika autentikasi gagal, status interface serta alamat peer saat sesi up, dan ping LAN dengan sumber yang jelas. Capture serta export dapat memuat data sensitif, jadi simpan pribadi. Periksa firewall, MTU, dukungan client dan device-mode pada versi yang dipakai. Untuk penggunaan nyata, ganti seluruh kredensial contoh serta sesuaikan kebijakan akses."
+    ],
+    "table": [
+      [
+        "Yang diuji",
+        "Bukti"
+      ],
+      [
+        "Transport / discovery",
+        "Peer/server dapat ditemukan"
+      ],
+      [
+        "Sesi PPP",
+        "User dan alamat aktif"
+      ],
+      [
+        "LAN jauh",
+        "Route pergi dan balik"
+      ],
+      [
+        "Keamanan",
+        "Perlindungan sesuai protokol, bukan nama profil"
+      ]
+    ],
+    "practice": [
+      "Siapkan transport sesuai protokol.",
+      "Buat profil dan akun lab.",
+      "Aktifkan server serta client.",
+      "Verifikasi sesi lalu route LAN.",
+      "Uji kegagalan dan pulihkan snapshot."
+    ],
+    "check": "Mengapa sesi PPP aktif belum cukup?",
+    "answer": "Sesi belum membuktikan route LAN, jalur balik, firewall, MTU atau validasi keamanan sudah benar.",
+    "labs": [
+      "vpn-sstp"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/sstp/"
+  },
+  {
+    "slug": "pppoe",
+    "title": "PPPoE: discovery L2, profil dan sesi PPP",
+    "summary": "Dari negosiasi sesi sampai komunikasi dua LAN, dengan batasan protokol yang jelas.",
+    "analogy": "Sesi membuka pintu hubungan; route menentukan ruangan mana yang dapat dicapai setelah pintu terbuka.",
+    "paragraphs": [
+      "PPPoE menemukan server melalui Ethernet, kemudian membangun sesi PPP. Discovery tidak melewati router IP biasa dengan sendirinya. Service-name, user, password dan profil harus cocok; alamat tunnel tidak sama dengan IP pada kabel transport.",
+      "Gunakan dua router lab terisolasi dengan LAN pusat dan cabang yang berbeda. Profil PPP pada HQ memberikan alamat lokal 10.250.0.1 dan peer 10.250.0.2. Sesudah sesi terbentuk, tambahkan route menuju LAN remote serta jalur balik. Gateway PC tetap alamat router pada LAN setempat; tidak perlu menambah NAT antar-LAN untuk menyembunyikan masalah routing.",
+      "Periksa log ketika autentikasi gagal, status interface serta alamat peer saat sesi up, dan ping LAN dengan sumber yang jelas. Capture serta export dapat memuat data sensitif, jadi simpan pribadi. Periksa firewall, MTU, dukungan client dan device-mode pada versi yang dipakai. Untuk penggunaan nyata, ganti seluruh kredensial contoh serta sesuaikan kebijakan akses."
+    ],
+    "table": [
+      [
+        "Yang diuji",
+        "Bukti"
+      ],
+      [
+        "Transport / discovery",
+        "Peer/server dapat ditemukan"
+      ],
+      [
+        "Sesi PPP",
+        "User dan alamat aktif"
+      ],
+      [
+        "LAN jauh",
+        "Route pergi dan balik"
+      ],
+      [
+        "Keamanan",
+        "Perlindungan sesuai protokol, bukan nama profil"
+      ]
+    ],
+    "practice": [
+      "Siapkan transport sesuai protokol.",
+      "Buat profil dan akun lab.",
+      "Aktifkan server serta client.",
+      "Verifikasi sesi lalu route LAN.",
+      "Uji kegagalan dan pulihkan snapshot."
+    ],
+    "check": "Mengapa sesi PPP aktif belum cukup?",
+    "answer": "Sesi belum membuktikan route LAN, jalur balik, firewall, MTU atau validasi keamanan sudah benar.",
+    "labs": [
+      "vpn-pppoe"
+    ],
+    "source": "https://manual.mikrotik.com/docs/virtual-private-networks/pppoe/"
+  },
+  {
+    "slug": "mme",
+    "title": "MME: routing mesh legacy, bukan VPN",
+    "summary": "Kenali Mesh Made Easy dalam konteks materi MikroTik lama.",
+    "analogy": "Pada jaringan mesh, simpul mencari jalan melalui simpul lain; itu tidak sama dengan membuat terowongan terenkripsi.",
+    "paragraphs": [
+      "MME berarti Mesh Made Easy, protokol routing untuk jaringan mesh IP yang muncul dalam materi MikroTik generasi lama. Fungsinya berkaitan dengan pemilihan jalur antarnode, bukan membuat sesi VPN seperti SSTP/L2TP dan bukan otomatis mengenkripsi data.",
+      "Kurikulum lama sering meletakkan MME di akhir bahasan tunnel, tetapi pengelompokan itu tidak mengubah jenis teknologinya. Dukungan versi/paket harus diperiksa pada perangkat. Jangan menganggap menu serta sintaks /routing mme dari v6 tersedia pada v7. Dokumentasi lama juga telah berpindah; label legacy pada materi ini sengaja mencegah pembaca menempel perintah yang tidak didukung.",
+      "Untuk belajar konsep, gambar tiga simpul mesh dengan dua kemungkinan jalur, jelaskan dampak satu link putus, lalu bandingkan dengan OSPF redundancy yang didukung lab v7. Jika perlu mereproduksi MME historis, gunakan image v6 berlisensi yang sesuai pada lingkungan terisolasi dan dokumentasi versi tersebut. Jangan menurunkan RouterOS produksi hanya demi mengikuti materi lama. Tidak ada klaim lab konfigurasi MME v7 pada halaman ini."
+    ],
+    "table": [
+      [
+        "Konsep",
+        "MME",
+        "VPN"
+      ],
+      [
+        "Tujuan",
+        "Routing mesh IP",
+        "Hubungan privat sesuai desain"
+      ],
+      [
+        "Enkripsi otomatis",
+        "Tidak diasumsikan",
+        "Tergantung protokol dan konfigurasi"
+      ],
+      [
+        "Konteks versi",
+        "Materi legacy; cek dukungan",
+        "Periksa implementasi masing-masing"
+      ]
+    ],
+    "practice": [
+      "Tulis kepanjangan MME.",
+      "Gambar tiga simpul mesh.",
+      "Pisahkan kebutuhan routing dan enkripsi.",
+      "Catat versi serta menu yang benar-benar tersedia.",
+      "Bandingkan kegagalan link dengan lab OSPF redundancy."
+    ],
+    "check": "Apakah MME merupakan jenis VPN?",
+    "answer": "Tidak. MME adalah protokol routing mesh dalam konteks MikroTik lama.",
+    "labs": [
+      "ospf-redundancy-3"
+    ],
+    "source": "https://mum.mikrotik.com/presentations/ZA20/presentation_7324_1581310668.pdf"
+  }
+]

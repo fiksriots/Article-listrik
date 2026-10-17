@@ -1,0 +1,421 @@
+[
+  {
+    "name": "Connected Route",
+    "items": [
+      {
+        "id": "1-1",
+        "title": "Apa itu Connected Route",
+        "theory": "/jaringan/mtcre/materi/connected-route",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "1-2",
+        "title": "Kegunaan Connected Route",
+        "theory": "/jaringan/mtcre/materi/connected-route",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "1-3",
+        "title": "Flag DAC",
+        "theory": "/jaringan/mtcre/materi/route-flags",
+        "labs": [
+          "connected-route"
+        ],
+        "note": "Huruf/urutan flag mengikuti versi; v7 dapat menampilkan DAc."
+      },
+      {
+        "id": "1-4",
+        "title": "Connected Route LAB",
+        "theory": "/jaringan/mtcre/materi/connected-route",
+        "labs": [
+          "connected-route"
+        ],
+        "note": ""
+      }
+    ]
+  },
+  {
+    "name": "Static Route",
+    "items": [
+      {
+        "id": "2-1",
+        "title": "Kapan buat static route?",
+        "theory": "/jaringan/mtcre/materi/routing-protocols",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "2-2",
+        "title": "Apa bedanya DAS dan AS pada IP–Route + LAB",
+        "theory": "/jaringan/mtcre/materi/route-flags",
+        "labs": [
+          "route-flags-dhcp-static"
+        ],
+        "note": "DAS adalah konteks tampilan lama; v7 DHCP lazimnya DAd."
+      },
+      {
+        "id": "2-3",
+        "title": "Studi Kasus Static Route 1 + LAB",
+        "theory": "/jaringan/mtcre-static-multihop",
+        "labs": [
+          "static-tiga-router"
+        ],
+        "note": ""
+      },
+      {
+        "id": "2-4",
+        "title": "Studi Kasus Static Route 2 + LAB",
+        "theory": "/jaringan/mtcre-static-multihop",
+        "labs": [
+          "static-hub-cabang"
+        ],
+        "note": ""
+      },
+      {
+        "id": "2-5",
+        "title": "Recursive Next Hop + LAB",
+        "theory": "/jaringan/mtcre-keputusan-routing",
+        "labs": [
+          "recursive-next-hop"
+        ],
+        "note": ""
+      },
+      {
+        "id": "2-6",
+        "title": "Failover kalau ada 2 ISP/lebih + LAB",
+        "theory": "/jaringan/mtcre-recursive-failover",
+        "labs": [
+          "failover-gateway",
+          "failover-recursive",
+          "tiga-isp"
+        ],
+        "note": ""
+      },
+      {
+        "id": "2-7",
+        "title": "Loadbalance kalau ada 2 ISP/lebih + LAB",
+        "theory": "/jaringan/mtcre-ecmp",
+        "labs": [
+          "ecmp-dua-jalur",
+          "tiga-isp"
+        ],
+        "note": "ECMP dengan next hop setara; bukan janji satu unduhan berlipat."
+      },
+      {
+        "id": "2-8",
+        "title": "Policy Routing + Mangle + LAB",
+        "theory": "/jaringan/mtcre-policy-routing",
+        "labs": [
+          "policy-routing",
+          "mangle-ping-traceroute"
+        ],
+        "note": ""
+      },
+      {
+        "id": "2-9",
+        "title": "Route Type + LAB",
+        "theory": "/jaringan/mtcre/materi/route-type",
+        "labs": [
+          "route-type"
+        ],
+        "note": "Blackhole v7 dan eksperimen ICMP reject; unreachable/prohibit dibahas sebagai konteks legacy."
+      },
+      {
+        "id": "2-10",
+        "title": "Time to Live + LAB",
+        "theory": "/jaringan/mtcre-ttl-traceroute",
+        "labs": [
+          "ttl-client",
+          "ttl-isp"
+        ],
+        "note": ""
+      }
+    ]
+  },
+  {
+    "name": "Dynamic Routing",
+    "items": [
+      {
+        "id": "3-1",
+        "title": "Apa itu Dynamic Routing?",
+        "theory": "/jaringan/mtcre/materi/routing-protocols",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "3-2",
+        "title": "Static Route vs Dynamic Route + LAB",
+        "theory": "/jaringan/mtcre/materi/routing-protocols",
+        "labs": [
+          "static-vs-dynamic"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-3",
+        "title": "IGP vs EGP",
+        "theory": "/jaringan/mtcre/materi/routing-protocols",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "3-4",
+        "title": "Perbedaan RIP, OSPF, BGP",
+        "theory": "/jaringan/mtcre/materi/routing-protocols",
+        "labs": [],
+        "note": "Perbandingan konsep; daftar ini tidak meminta lab konfigurasi RIP/BGP."
+      },
+      {
+        "id": "3-5",
+        "title": "Apa itu OSPF?",
+        "theory": "/jaringan/mtcre-ospf-identitas",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "3-6",
+        "title": "Cara kerja OSPF",
+        "theory": "/jaringan/mtcre-ospf-neighbor",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "3-7",
+        "title": "OSPF Single Area + LAB",
+        "theory": "/jaringan/mtcre-ospf-single-area",
+        "labs": [
+          "ospf-single-3",
+          "ospf-single-4"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-8",
+        "title": "OSPF Multi-Area + LAB",
+        "theory": "/jaringan/mtcre-ospf-multiarea",
+        "labs": [
+          "ospf-multiarea-3",
+          "ospf-multiarea-4"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-9",
+        "title": "OSPF Virtual Link + LAB",
+        "theory": "/jaringan/mtcre/materi/ospf-virtual-link",
+        "labs": [
+          "ospf-virtual-link"
+        ],
+        "note": "Periksa menu/parameter virtual-link sesuai rilis v7."
+      },
+      {
+        "id": "3-10",
+        "title": "OSPF DR-BDR + LAB",
+        "theory": "/jaringan/mtcre-ospf-dr-networktype",
+        "labs": [
+          "ospf-network-type"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-11",
+        "title": "OSPF Network Type (PTP, NBMA, dll.) + LAB",
+        "theory": "/jaringan/mtcre/materi/ospf-network-types",
+        "labs": [
+          "ospf-single-3",
+          "ospf-network-type",
+          "ospf-ptmp",
+          "ospf-nbma"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-12",
+        "title": "OSPF Redistribution (Type1, Type2) + LAB",
+        "theory": "/jaringan/mtcre-ospf-redistribute",
+        "labs": [
+          "redistribute-e1",
+          "redistribute-e2"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-13",
+        "title": "OSPF Cost Calculation + LAB",
+        "theory": "/jaringan/mtcre-ospf-cost",
+        "labs": [
+          "ospf-redundancy-3",
+          "ospf-redundancy-4"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-14",
+        "title": "OSPF Failover + LAB",
+        "theory": "/jaringan/mtcre-ospf-cost",
+        "labs": [
+          "ospf-redundancy-3",
+          "ospf-redundancy-4"
+        ],
+        "note": ""
+      },
+      {
+        "id": "3-15",
+        "title": "OSPF Loadbalance + LAB",
+        "theory": "/jaringan/mtcre-ospf-cost",
+        "labs": [
+          "ospf-redundancy-4"
+        ],
+        "note": "Varian ECMP di langkah 6, dengan cost kedua jalur disamakan."
+      },
+      {
+        "id": "3-16",
+        "title": "OSPF Routing Filter + LAB",
+        "theory": "/jaringan/mtcre/materi/ospf-filter",
+        "labs": [
+          "ospf-routing-filter"
+        ],
+        "note": "Filter redistribusi dibedakan dari informasi intra-area."
+      }
+    ]
+  },
+  {
+    "name": "VLAN",
+    "items": [
+      {
+        "id": "4-1",
+        "title": "Apa itu VLAN",
+        "theory": "/jaringan/mtcre/materi/vlan",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "4-2",
+        "title": "Bagaimana cara kerja VLAN",
+        "theory": "/jaringan/mtcre/materi/vlan",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "4-3",
+        "title": "Dengan VLAN vs Tanpa VLAN",
+        "theory": "/jaringan/mtcre/materi/vlan",
+        "labs": [
+          "vlan-kantor"
+        ],
+        "note": ""
+      },
+      {
+        "id": "4-4",
+        "title": "VLAN Access dan VLAN Trunk",
+        "theory": "/jaringan/vlan-access-trunk",
+        "labs": [
+          "vlan-kantor"
+        ],
+        "note": ""
+      },
+      {
+        "id": "4-5",
+        "title": "Studi Kasus VLAN + LAB",
+        "theory": "/jaringan/mtcre/materi/vlan",
+        "labs": [
+          "vlan-kantor"
+        ],
+        "note": "Dua switch, trunk 10/20, access staf/tamu, routing dan firewall."
+      }
+    ]
+  },
+  {
+    "name": "VPN dan materi terkait",
+    "items": [
+      {
+        "id": "5-1",
+        "title": "Apa itu VPN",
+        "theory": "/jaringan/mtcre/materi/vpn-comparison",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "5-2",
+        "title": "Perbedaan VPN di MikroTik",
+        "theory": "/jaringan/mtcre/materi/vpn-comparison",
+        "labs": [],
+        "note": ""
+      },
+      {
+        "id": "5-3",
+        "title": "Hubungkan Kantor Pusat–Cabang dengan VPN",
+        "theory": "/jaringan/mtcre/materi/vpn-comparison",
+        "labs": [
+          "vpn-l2tp",
+          "vpn-sstp"
+        ],
+        "note": ""
+      },
+      {
+        "id": "5-4",
+        "title": "EoIP + LAB",
+        "theory": "/jaringan/mtcre-jenis-tunnel",
+        "labs": [
+          "tunnel-eoip"
+        ],
+        "note": "EoIP sendiri tidak otomatis mengenkripsi."
+      },
+      {
+        "id": "5-5",
+        "title": "PPTP + LAB",
+        "theory": "/jaringan/mtcre/materi/pptp",
+        "labs": [
+          "vpn-pptp"
+        ],
+        "note": "Legacy: hanya lab terisolasi, bukan rekomendasi VPN baru."
+      },
+      {
+        "id": "5-6",
+        "title": "L2TP + LAB",
+        "theory": "/jaringan/mtcre/materi/l2tp",
+        "labs": [
+          "vpn-l2tp"
+        ],
+        "note": "Lab mewajibkan IPsec."
+      },
+      {
+        "id": "5-7",
+        "title": "SSTP + LAB",
+        "theory": "/jaringan/mtcre/materi/sstp",
+        "labs": [
+          "vpn-sstp"
+        ],
+        "note": "CA, SAN dan verifikasi sertifikat tetap diaktifkan."
+      },
+      {
+        "id": "5-8",
+        "title": "PPPoE + LAB",
+        "theory": "/jaringan/mtcre/materi/pppoe",
+        "labs": [
+          "vpn-pppoe"
+        ],
+        "note": "PPP di Ethernet; bukan VPN terenkripsi antarkantor."
+      },
+      {
+        "id": "5-9",
+        "title": "OSPF over VPN",
+        "theory": "/jaringan/mtcre-ospf-tunnel",
+        "labs": [
+          "vpn-l2tp",
+          "tunnel-gre"
+        ],
+        "note": "Varian OSPF melalui L2TP/IPsec serta perbandingan GRE."
+      },
+      {
+        "id": "5-10",
+        "title": "MME",
+        "theory": "/jaringan/mtcre/materi/mme",
+        "labs": [],
+        "note": "Konsep Mesh Made Easy legacy, bukan VPN; tidak diklaim sebagai lab MME v7."
+      }
+    ]
+  }
+]

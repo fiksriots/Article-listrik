@@ -106,3 +106,6 @@ Empat tahap setelah jalur MTCNA menambah VLSM, alamat IPv6, RA/SLAAC/DHCPv6, DNS
 
 ## Lab MTCRE dan failover
 20 lab konfigurasi di `/jaringan/mtcre/lab/[slug]` dengan pemetaan referensi PDF, topologi SVG baru, tabel IP/port, konfigurasi per perangkat, panduan menu v7, prediksi hasil, diagnosis dan pemulihan. Mencakup static, gateway/recursive failover, ECMP, policy/mangle, dua TTL, single-area/redundancy/multi-area 3 dan 4 router, network type, stub/NSSA, E1/E2, GRE dan EoIP. Model interaktif dua ISP di `/jaringan/simulator/failover`. Semua contoh untuk CHR/router kosong di lab terisolasi; hasil perangkat nyata belum diuji otomatis. Feed portofolio juga mencakup semua lab.
+
+## Kurikulum MTCRE tambahan
+`/jaringan/mtcre/kurikulum` memetakan 45 butir pengguna ke 20 modul awal, 14 materi pendalaman dan 36 lab. Tambahan mencakup connected/flags, static kasus kedua, recursive standalone, tiga ISP, route type, static vs dynamic, virtual link, PTMP/NBMA, filter OSPF, VLAN dua switch serta PPTP/L2TP-IPsec/SSTP/PPPoE. PPTP legacy dan MME bukan rekomendasi VPN baru; MME berupa konsep/kompatibilitas, bukan klaim lab v7. Seluruh konfigurasi belum dijalankan pada CHR nyata.
