@@ -1,0 +1,4 @@
+import {Children,isValidElement,type ReactNode} from 'react';
+import CodeBlock from '@/components/code-block';
+function plainText(node:ReactNode):string{return Children.toArray(node).map(child=>{if(typeof child==='string'||typeof child==='number')return String(child);if(isValidElement<{children?:ReactNode}>(child))return plainText(child.props.children);return '';}).join('');}
+export function MDXCodeBlock({children}:{children?:ReactNode}){const child=Children.toArray(children)[0];const language=isValidElement<{className?:string}>(child)?child.props.className?.match(/language-([\w+-]+)/)?.[1]:undefined;const terminal=!!language&&['sh','shell','bash','zsh','console','terminal','powershell','cmd','bat','routeros'].includes(language);return <CodeBlock code={plainText(children)} label={terminal?'Terminal':'Source code'} language={language}/>}
