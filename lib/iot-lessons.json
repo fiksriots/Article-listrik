@@ -116,6 +116,748 @@
     "minutes": 8
   },
   {
+    "slug": "macam-mikrokontroler",
+    "title": "Macam-macam mikrokontroler dan papan IoT",
+    "summary": "Kenali Arduino, ESP8266, ESP32, Pico, STM32, AVR, dan PIC tanpa bingung antara chip dan papan.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "Chip mikrokontroler seperti mesin; papan pengembangan seperti kendaraan lengkap yang sudah memiliki konektor dan pendukung mesin.",
+    "explain": [
+      "Mikrokontroler atau MCU menyatukan pemroses, memori, serta perangkat masukan/keluaran dalam sebuah chip. Programnya mengulang pekerjaan seperti membaca sensor, mengatur waktu, dan mengendalikan keluaran. Wi-Fi tidak wajib ada di dalam setiap MCU.",
+      "Arduino adalah ekosistem papan dan perangkat lunak, bukan satu jenis chip. UNO R3 menggunakan ATmega328P. UNO R4 memakai Renesas RA4M1; varian R4 WiFi menambahkan modul ESP32-S3. Program dari satu papan mungkin memerlukan penyesuaian pada papan lain.",
+      "NodeMCU sering dipakai penjual sebagai nama papan ESP8266, sedangkan ESP8266 adalah keluarga chip. ESP32 juga keluarga: ESP32 klasik, C3, S3, dan anggota lain dapat berbeda pada pin, prosesor, radio, dan USB. Baca nama model lengkap, jangan hanya tulisan ESP.",
+      "Untuk belajar, tentukan dahulu apakah proyek perlu radio, berapa sensor yang dipakai, dan bahasa yang ingin digunakan. Memilih papan yang didukung tutorialmu biasanya lebih berguna daripada mengejar angka kecepatan tertinggi."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "Arduino UNO R3 / ATmega328P",
+          "Kontrol input/output dasar",
+          "Latihan tombol, LED, dan sensor sederhana",
+          "Tidak ada Wi-Fi bawaan; logika papan UNO R3 umumnya 5 V."
+        ],
+        [
+          "Arduino UNO R4 WiFi / RA4M1 + ESP32-S3",
+          "Kontrol dengan tambahan koneksi nirkabel",
+          "Latihan ekosistem Arduino yang membutuhkan koneksi",
+          "RA4M1 bekerja pada 5 V; modul ESP32-S3 pada 3,3 V. Jangan menyamakan semua jalur."
+        ],
+        [
+          "ESP8266 / papan NodeMCU",
+          "Kontrol dan Wi-Fi 2,4 GHz",
+          "Proyek sensor Wi-Fi sederhana berbasis contoh ESP8266",
+          "Logika 3,3 V; pin dan kemampuan ADC bergantung papan."
+        ],
+        [
+          "ESP32 klasik / ESP32-C3 / ESP32-S3",
+          "Kontrol dengan fitur koneksi menurut varian",
+          "Pengiriman data sensor dan kontrol lewat jaringan",
+          "Gunakan pinout dan dukungan library sesuai chip serta papan."
+        ],
+        [
+          "Raspberry Pi Pico / RP2040",
+          "Kontrol dengan antarmuka digital",
+          "Latihan C/C++ atau MicroPython dan pengolahan input/output",
+          "Pico tanpa W tidak memiliki radio bawaan."
+        ],
+        [
+          "Raspberry Pi Pico 2 / RP2350",
+          "Papan MCU generasi Pico berikutnya",
+          "Proyek kendali; varian 2 W untuk koneksi nirkabel",
+          "Pico 2 dan Pico 2 W tidak sama dalam kemampuan radio."
+        ],
+        [
+          "STM32 / contoh papan Nucleo",
+          "Keluarga MCU untuk beragam kebutuhan kendali",
+          "Mempelajari timer, ADC, kontrol, dan debug terstruktur",
+          "Periferal dan pin berbeda antarseri; periksa debugger serta toolchain."
+        ],
+        [
+          "AVR / contoh ATtiny dan ATmega",
+          "Keluarga MCU, termasuk yang dipakai sebagian papan Arduino",
+          "Kontrol kecil dan pembelajaran embedded",
+          "Chip lepas memerlukan rangkaian pendukung dan alat pemrograman yang sesuai."
+        ],
+        [
+          "PIC / Microchip",
+          "Keluarga MCU untuk bermacam aplikasi embedded",
+          "Belajar perancangan kontrol sesuai ekosistem PIC",
+          "Tentukan model tepat, programmer, tegangan, dan bahasa pemrogramannya."
+        ]
+      ]
+    },
+    "example": "Untuk proyek suhu lewat Wi-Fi, papan ESP32 yang sesuai tutorial dapat mengurangi kebutuhan modul radio tambahan. Untuk latihan LED tanpa jaringan, banyak MCU lain juga mampu.",
+    "practice": [
+      "Temukan nama papan dan nama chip dari satu foto produk.",
+      "Tulis kebutuhan proyek: jaringan, jumlah input, keluaran, dan catu daya.",
+      "Bandingkan dua papan berdasarkan kebutuhan itu, bukan hanya MHz."
+    ],
+    "warning": "Port USB yang sama tidak berarti logika GPIO sama. Papan 5 V dan 3,3 V tidak boleh disambungkan sembarangan; periksa batas masukan dan kebutuhan level shifter.",
+    "check": "Apakah Arduino UNO R3 dan UNO R4 memakai chip yang sama?",
+    "answer": "Tidak. UNO R3 memakai ATmega328P, sedangkan UNO R4 memakai RA4M1. R4 WiFi juga memiliki modul ESP32-S3.",
+    "nodes": [
+      "Tentukan kebutuhan",
+      "Bedakan chip / papan",
+      "Periksa koneksi",
+      "Cocokkan tegangan",
+      "Pilih tutorial"
+    ],
+    "sources": [
+      {
+        "title": "Arduino UNO R3",
+        "url": "https://docs.arduino.cc/hardware/uno-rev3/"
+      },
+      {
+        "title": "Arduino UNO R4 WiFi",
+        "url": "https://docs.arduino.cc/hardware/uno-r4-wifi/"
+      },
+      {
+        "title": "Raspberry Pi Pico-series",
+        "url": "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html"
+      },
+      {
+        "title": "STM32",
+        "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html"
+      },
+      {
+        "title": "PIC dan AVR",
+        "url": "https://www.microchip.com/en-us/products/microcontrollers/8-bit-mcus"
+      }
+    ]
+  },
+  {
+    "slug": "mikrokontroler-sbc-plc",
+    "title": "Mikrokontroler, Raspberry Pi, dan PLC: apa bedanya?",
+    "summary": "Bedakan papan kendali, komputer kecil, dan pengendali industri.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "MCU seperti petugas dengan pekerjaan khusus; komputer kecil seperti meja kantor yang dapat menjalankan banyak aplikasi.",
+    "explain": [
+      "Mikrokontroler cocok menjalankan firmware untuk pekerjaan input/output. Program dapat bekerja langsung pada perangkat keras atau memakai sistem operasi waktu nyata. Ini berbeda dari komputer papan tunggal yang biasanya menjalankan sistem operasi umum.",
+      "Raspberry Pi Pico adalah papan mikrokontroler. Raspberry Pi 4 atau 5 adalah contoh single-board computer atau SBC yang dapat menjalankan Linux. Nama merek yang sama tidak membuat keduanya memiliki fungsi dan cara pemrograman identik.",
+      "PLC merupakan pengendali yang dirancang dalam ekosistem otomasi industri, dengan modul input/output, karakteristik listrik, pemasangan, dan perangkat pemrograman sesuai model. Tidak semua PLC memiliki fitur keselamatan bersertifikat. Papan hobi juga tidak otomatis menjadi PLC hanya karena ditempatkan dalam kotak.",
+      "Dalam satu sistem, perangkat dapat bekerja sama: MCU membaca sensor, SBC menyimpan data atau menjalankan dashboard lokal, dan PLC menangani kendali mesin. Pemilihan untuk mesin nyata harus mempertimbangkan keandalan, lingkungan, serta persyaratan sistem."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "MCU / ESP32, Pico",
+          "Menjalankan firmware dan membaca input/output",
+          "Sensor, indikator, alat kendali sederhana",
+          "Memori, pin, waktu respons, dan batas listrik."
+        ],
+        [
+          "SBC / Raspberry Pi 4 atau 5",
+          "Menjalankan OS, aplikasi, dan layanan jaringan",
+          "Gateway, dashboard lokal, pengolahan data",
+          "Catu daya, media penyimpanan, shutdown, serta pembaruan OS."
+        ],
+        [
+          "PLC / sesuai model industri",
+          "Mengendalikan otomasi dengan modul I/O",
+          "Panel dan mesin yang dirancang untuk platform tersebut",
+          "Rating I/O, kondisi lingkungan, dokumentasi, dan persyaratan keselamatan."
+        ]
+      ]
+    },
+    "example": "ESP32 mengirim hasil ukur; komputer lokal menyimpan riwayat. Memisahkan pengukuran dan tampilan dapat membantu sistem tetap teratur.",
+    "practice": [
+      "Kelompokkan ESP32, Pico 2, Raspberry Pi 5, dan PLC menjadi MCU/SBC/PLC.",
+      "Tentukan bagian yang membaca sensor dan bagian yang menyimpan histori.",
+      "Jelaskan mengapa logo merek saja tidak cukup untuk memilih perangkat."
+    ],
+    "warning": "Jangan mengganti sistem keselamatan mesin dengan papan hobi. Latihan akademi ini memakai indikator dan tegangan rendah.",
+    "check": "Apakah Raspberry Pi Pico sama dengan Raspberry Pi 5?",
+    "answer": "Tidak. Pico adalah papan MCU; Raspberry Pi 5 adalah SBC yang menjalankan sistem operasi seperti Linux.",
+    "nodes": [
+      "Input fisik",
+      "MCU / PLC",
+      "Jaringan",
+      "SBC / server",
+      "Dashboard"
+    ],
+    "sources": [
+      {
+        "title": "Dokumentasi Raspberry Pi",
+        "url": "https://www.raspberrypi.com/documentation/"
+      },
+      {
+        "title": "Pico-series MCU",
+        "url": "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html"
+      }
+    ]
+  },
+  {
+    "slug": "sensor-suhu-lingkungan",
+    "title": "Sensor suhu, kelembapan, tekanan, dan kualitas udara",
+    "summary": "Kenali DHT22, SHT4x, DS18B20, BME280, serta sensor CO₂.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "Istilah sensor lingkungan seperti kotak alat cuaca: tiap alat mengukur hal tertentu, bukan semuanya sekaligus.",
+    "explain": [
+      "Suhu, kelembapan relatif, tekanan udara, dan konsentrasi gas adalah besaran berbeda. Tulis terlebih dahulu apa yang ingin diketahui dan satuannya. Sensor suhu ruangan tidak langsung memberi informasi apakah ventilasi sudah cukup.",
+      "DHT22 dan keluarga SHT4x dapat mengukur suhu serta kelembapan udara. DS18B20 mengukur suhu lewat antarmuka 1-Wire. Bentuk probe berlapis logam tidak otomatis menjamin seluruh kabel, sambungan, dan elektroniknya tahan air.",
+      "BME280 mengukur suhu, kelembapan, dan tekanan udara; BMP280 bukan pengganti identik untuk pengukuran kelembapan. Periksa identitas chip dan datasheet, bukan hanya foto modul yang terlihat mirip.",
+      "Untuk CO₂, gunakan sensor yang memang mengukur CO₂ dengan prinsip yang sesuai, misalnya seri SCD4x. Nilai eCO₂ dari perkiraan sensor VOC bukan pengukuran CO₂ langsung. Sensor gas hobi seperti seri MQ memerlukan pemanasan dan kalibrasi; bukan pengganti alarm keselamatan tersertifikasi."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "DHT22 / AM2302",
+          "Suhu dan kelembapan relatif udara",
+          "Latihan pemantauan ruangan",
+          "Interval baca, antarmuka, catu daya, dan kebutuhan pull-up modul."
+        ],
+        [
+          "SHT40 / SHT45",
+          "Suhu dan kelembapan relatif udara",
+          "Pengukuran lingkungan dengan antarmuka I2C",
+          "Varian sensor, alamat I2C, dan batas listrik breakout."
+        ],
+        [
+          "DS18B20",
+          "Suhu",
+          "Membandingkan suhu pada titik tertentu",
+          "Rangkaian 1-Wire, resistor pull-up, serta spesifikasi probe."
+        ],
+        [
+          "BME280",
+          "Suhu, kelembapan, dan tekanan udara",
+          "Stasiun lingkungan sederhana",
+          "Pastikan benar BME280; cek dukungan I2C/SPI pada modul."
+        ],
+        [
+          "BMP280",
+          "Tekanan udara dan suhu",
+          "Percobaan tekanan dan estimasi perubahan ketinggian",
+          "Tidak mengukur kelembapan udara."
+        ],
+        [
+          "SCD4x",
+          "Konsentrasi CO₂ sesuai model",
+          "Pemantauan ventilasi berbasis data CO₂",
+          "Kondisi pemasangan, kalibrasi, dan interval menurut datasheet."
+        ],
+        [
+          "Seri MQ",
+          "Respons terhadap gas menurut model",
+          "Eksperimen karakteristik sensor di lab terkendali",
+          "Pemanas, kalibrasi, silang sensitivitas, dan konsumsi daya."
+        ]
+      ]
+    },
+    "example": "Untuk ruang belajar, pilih sensor suhu dan kelembapan jika itu dua data yang diperlukan. Jika tujuannya mengevaluasi ventilasi melalui CO₂, diperlukan sensor CO₂ yang sesuai.",
+    "practice": [
+      "Tulis tiga besaran dan satuannya: °C, %RH, dan hPa atau ppm.",
+      "Cari apakah modul yang dilihat bertuliskan BME280 atau BMP280.",
+      "Catat interval baca dan kondisi pemasangan dari datasheet sensor pilihan."
+    ],
+    "warning": "Jangan menguji sensor gas dengan membocorkan gas atau membakar bahan. Sensor proyek belajar tidak menggantikan perangkat deteksi kebakaran atau kebocoran gas tersertifikasi.",
+    "check": "Apakah BMP280 mengukur kelembapan udara seperti BME280?",
+    "answer": "Tidak. BMP280 mengukur tekanan dan suhu, sedangkan BME280 juga memiliki pengukuran kelembapan.",
+    "nodes": [
+      "Pilih besaran",
+      "Pilih sensor",
+      "Baca datasheet",
+      "Tentukan satuan",
+      "Validasi hasil"
+    ],
+    "sources": [
+      {
+        "title": "Sensirion SHT4x",
+        "url": "https://sensirion.com/products/catalog/series/sht4x"
+      },
+      {
+        "title": "Bosch BME280",
+        "url": "https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/"
+      },
+      {
+        "title": "Bosch BMP280",
+        "url": "https://www.bosch-sensortec.com/products/environmental-sensors/pressure-sensors/bmp280/"
+      },
+      {
+        "title": "Sensirion SCD4x",
+        "url": "https://sensirion.com/products/catalog/series/scd4x"
+      }
+    ]
+  },
+  {
+    "slug": "sensor-gerak-jarak",
+    "title": "Sensor gerak, jarak, posisi, dan pintu",
+    "summary": "Bedakan PIR, ultrasonik, ToF, reed switch, Hall, dan IMU.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "Mengetahui ada orang lewat berbeda dengan mengetahui jaraknya atau apakah pintu tertutup. Masing-masing membutuhkan alat berbeda.",
+    "explain": [
+      "Sensor kehadiran atau gerak tidak selalu menghasilkan jarak. PIR merespons perubahan radiasi inframerah dalam bidang pandangnya. Orang yang diam dapat tidak memicu PIR; keluaran tidak bisa dianggap sebagai penghitung orang yang pasti akurat.",
+      "Sensor ultrasonik menilai waktu perjalanan gelombang suara, sementara sensor ToF optik memakai cahaya. Bentuk, bahan, sudut, pencahayaan, jarak minimum, dan medan pandang dapat memengaruhi hasil sesuai prinsip sensornya.",
+      "Reed switch berubah keadaan ketika dipengaruhi magnet, sehingga cocok untuk status pintu. Sensor Hall juga merespons medan magnet; ada yang keluarannya saklar dan ada yang analog. Jangan menganggap semua Hall mengukur jarak dalam sentimeter.",
+      "IMU menggabungkan beberapa pengukuran gerak. Akselerometer mengukur percepatan termasuk pengaruh gravitasi; giroskop mengukur laju rotasi. Menentukan posisi atau sudut memerlukan pengolahan dan kalibrasi, bukan sekadar membaca satu angka."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "PIR / contoh HC-SR501",
+          "Perubahan gerak termal dalam area pandang",
+          "Lampu indikator saat ada gerakan",
+          "Waktu tunda, kondisi lingkungan, dan sinyal keluar modul."
+        ],
+        [
+          "Ultrasonik / contoh HC-SR04",
+          "Perkiraan jarak lewat pantulan suara",
+          "Latihan deteksi objek",
+          "Banyak HC-SR04 memakai Echo 5 V; jangan langsung ke GPIO 3,3 V."
+        ],
+        [
+          "ToF / contoh VL53L0X",
+          "Jarak optik sesuai kemampuan model",
+          "Deteksi jarak dengan area ukur tertentu",
+          "Batas chip vs breakout, medan pandang, dan kondisi objek."
+        ],
+        [
+          "Reed switch + magnet",
+          "Status kontak",
+          "Pintu terbuka / tertutup",
+          "Posisi magnet, jarak kerja, pull-up, serta debounce."
+        ],
+        [
+          "Sensor Hall",
+          "Medan magnet atau saklar magnet sesuai tipe",
+          "Deteksi putaran atau posisi magnet",
+          "Jenis keluaran analog/digital, polaritas, dan catu."
+        ],
+        [
+          "IMU / contoh akselerometer + giroskop",
+          "Percepatan dan laju rotasi",
+          "Mendeteksi perubahan gerak atau kemiringan",
+          "Kalibrasi, orientasi sumbu, noise, serta pemrosesan data."
+        ]
+      ]
+    },
+    "example": "Pintu yang terbuka lebih mudah dideteksi dengan magnet dan reed switch dibanding mencoba menyimpulkan status pintu dari PIR.",
+    "practice": [
+      "Pilih sensor untuk tiga kasus: pintu terbuka, objek mendekat, dan perangkat miring.",
+      "Tuliskan apakah data keluar berupa status, jarak, atau percepatan.",
+      "Periksa tegangan keluaran sebelum memilih pin MCU."
+    ],
+    "warning": "Jangan mengasumsikan sensor berdaya 5 V memiliki keluaran aman untuk ESP32. Periksa spesifikasi; gunakan penyesuaian level yang sesuai bila diperlukan.",
+    "check": "Apakah PIR pasti mengetahui bahwa seseorang masih duduk diam di ruangan?",
+    "answer": "Tidak. PIR mendeteksi perubahan dalam bidang pandangnya dan dapat tidak memicu saat orang diam.",
+    "nodes": [
+      "Apa yang dideteksi?",
+      "Status / jarak / gerak",
+      "Pilih prinsip sensor",
+      "Cek sinyal keluar",
+      "Uji batasnya"
+    ],
+    "sources": [
+      {
+        "title": "ST VL53L0X",
+        "url": "https://www.st.com/en/imaging-and-photonics-solutions/vl53l0x.html"
+      },
+      {
+        "title": "Adafruit: level sinyal HC-SR04",
+        "url": "https://learn.adafruit.com/distance-measurement-ultrasound-hcsr04/connect-the-sensor"
+      }
+    ]
+  },
+  {
+    "slug": "sensor-cahaya-tanah-arus",
+    "title": "Sensor cahaya, tanah, air, dan listrik DC",
+    "summary": "Kenali LDR, BH1750, sensor tanah, pelampung, dan sensor arus.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "Nilai sensor seperti angka pada timbangan: skala dan arti angkanya harus jelas sebelum dipakai mengambil keputusan.",
+    "explain": [
+      "LDR berubah resistansi terhadap cahaya. Bersama rangkaian pembagi tegangan, ia dapat menghasilkan sinyal analog. BH1750 adalah contoh sensor cahaya digital yang menyediakan pembacaan iluminansi. Penempatan sensor dan bayangan tetap memengaruhi hasil.",
+      "Sensor tanah resistif memperkirakan kondisi melalui konduktivitas dan rentan korosi; sensor kapasitif memakai prinsip yang berbeda tetapi tetap perlu kalibrasi. Angka ADC atau label persen buatan program bukan otomatis kadar air volumetrik yang terukur secara ilmiah.",
+      "Untuk tinggi air, bedakan status batas dengan pengukuran kontinu. Pelampung dapat memberi status pada ketinggian tertentu; sensor jarak di atas permukaan atau transduser yang sesuai dapat dipakai pada rancangan pengukuran lain. Pilih komponen yang memang sesuai lingkungan basah.",
+      "Pengukuran listrik memerlukan alat dan cara sambung khusus. INA219 adalah contoh monitor arus/tegangan DC berbasis shunt dalam batas spesifikasinya. Sensor Hall arus juga tersedia dalam berbagai rentang dan isolasi. Modul ini tidak boleh diperlakukan sebagai alat ukur listrik PLN tanpa rancangan yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "LDR + pembagi tegangan",
+          "Perubahan terang / gelap",
+          "Latihan lampu indikator mengikuti cahaya",
+          "Rangkaian analog, rentang ADC, dan kalibrasi."
+        ],
+        [
+          "BH1750",
+          "Iluminansi",
+          "Memantau terang ruangan",
+          "Posisi, arah sensor, antarmuka, dan tegangan modul."
+        ],
+        [
+          "Sensor tanah resistif",
+          "Respons konduktivitas pada media",
+          "Membandingkan kondisi media pada latihan",
+          "Korosi, salinitas, dan hasil yang dipengaruhi bahan tanah."
+        ],
+        [
+          "Sensor tanah kapasitif",
+          "Perubahan respons kapasitif",
+          "Percobaan kelembapan media tanam",
+          "Kalibrasi kering/basah dan bagian papan yang boleh terkena air."
+        ],
+        [
+          "Pelampung / float switch",
+          "Status batas permukaan air",
+          "Indikator tandon rendah atau penuh",
+          "Orientasi, rating kontak, dan bahan yang sesuai cairan."
+        ],
+        [
+          "Sensor kebocoran air",
+          "Keberadaan air pada titik deteksi",
+          "Latihan alarm tetesan di meja",
+          "Penempatan dan ketahanan modul terhadap korosi."
+        ],
+        [
+          "INA219 / monitor DC",
+          "Arus, tegangan, dan daya DC dalam rentang model",
+          "Mengamati konsumsi rangkaian tegangan rendah",
+          "Nilai shunt, batas tegangan/arus, polaritas, dan cara sambung."
+        ]
+      ]
+    },
+    "example": "Sensor tanah dicoba pada dua kondisi media yang diketahui. Nilainya dipakai sebagai acuan lokal, lalu aturan penyiraman dievaluasi dengan pengamatan langsung.",
+    "practice": [
+      "Bedakan keluaran status batas air dengan hasil ukur jarak permukaan.",
+      "Tulis dua kondisi acuan untuk latihan sensor tanah.",
+      "Pilih pengukuran DC kecil sebagai latihan; jangan membuka panel listrik."
+    ],
+    "warning": "Jangan merendam seluruh papan sensor. Jangan menghubungkan modul pengukuran DC atau breadboard ke listrik PLN.",
+    "check": "Mengapa angka tanah 50% pada proyek sederhana belum tentu berarti kadar air sebenarnya 50%?",
+    "answer": "Karena sering merupakan pemetaan dari dua nilai ADC, bukan pengukuran kadar air yang sudah dikalibrasi untuk media tersebut.",
+    "nodes": [
+      "Besaran / kondisi",
+      "Sensor yang sesuai",
+      "Data mentah",
+      "Kalibrasi acuan",
+      "Keputusan lokal"
+    ],
+    "sources": [
+      {
+        "title": "TI INA219",
+        "url": "https://www.ti.com/product/INA219"
+      }
+    ]
+  },
+  {
+    "slug": "aktuator-driver-output",
+    "title": "Aktuator, driver, relay, dan perangkat keluaran",
+    "summary": "Bedakan pemberi perintah, penguat daya, dan perangkat yang melakukan pekerjaan.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "GPIO seperti jari yang menekan tombol; driver seperti tenaga tambahan yang menggerakkan beban.",
+    "explain": [
+      "Perangkat keluaran dapat sekadar memberi informasi, seperti LED, buzzer, dan layar, atau melakukan kerja mekanis seperti motor, servo, solenoid, dan pompa. Tentukan dulu tindakan yang dibutuhkan.",
+      "GPIO hanya mengirim sinyal dengan batas arus kecil. MOSFET, transistor, H-bridge, atau driver khusus menjembatani sinyal kendali dan kebutuhan daya beban. Memakai driver tidak menghilangkan kebutuhan catu daya, proteksi, dan perhitungan panas.",
+      "Relay elektromekanis memakai kumparan untuk memindahkan kontak. Relay bukan sensor dan bukan sumber daya. Modul relay dapat memiliki logika pemicu serta kebutuhan arus berbeda; adanya optocoupler tidak otomatis berarti pemasangan sudah terisolasi secara benar.",
+      "Servo biasanya menerima sinyal pengatur posisi, sedangkan motor DC membutuhkan pengaturan arah/kecepatan melalui driver yang sesuai. Motor stepper membutuhkan urutan langkah dan driver. Pilih berdasarkan torsi, gerakan, tegangan, arus saat mulai, dan kondisi mekanis."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "LED / buzzer",
+          "Indikasi cahaya atau suara",
+          "Status alat dan latihan awal",
+          "Resistor LED, tipe buzzer, serta arus yang dibutuhkan."
+        ],
+        [
+          "OLED / LCD",
+          "Menampilkan teks atau nilai",
+          "Pembacaan lokal tanpa dashboard",
+          "Antarmuka, level sinyal, ukuran, dan alamat modul."
+        ],
+        [
+          "Motor DC + driver",
+          "Putaran mekanis",
+          "Kipas atau mekanisme latihan tegangan rendah",
+          "Arus awal/stall, arah, dan kapasitas driver."
+        ],
+        [
+          "Servo",
+          "Gerak posisi sesuai tipe",
+          "Penunjuk atau mekanisme ringan",
+          "Catu terpisah sesuai kebutuhan; jangan ambil daya dari GPIO."
+        ],
+        [
+          "Stepper + driver",
+          "Gerakan bertahap",
+          "Latihan posisi atau putaran terkontrol",
+          "Jenis motor, batas arus driver, urutan, dan pendinginan."
+        ],
+        [
+          "Solenoid / pompa DC",
+          "Dorongan atau perpindahan cairan",
+          "Percobaan mekanis yang dirancang aman",
+          "Rating beban induktif, flyback yang sesuai, dan batas waktu aktif."
+        ],
+        [
+          "Relay / MOSFET / H-bridge",
+          "Saklar atau penggerak, bukan beban utama",
+          "Mengendalikan daya sesuai jenis beban",
+          "Cocokkan rangkaian DC/AC, arus, level kendali, dan proteksi."
+        ]
+      ]
+    },
+    "example": "Sebelum mengendalikan pompa, uji logikanya dengan LED. Setelah logika benar, rancangan penggerak dan catu daya pompa dievaluasi secara terpisah.",
+    "practice": [
+      "Pisahkan daftar perangkat menjadi indikator, aktuator, dan driver.",
+      "Untuk satu motor DC, temukan tegangan serta arus start/stall dari dokumentasinya.",
+      "Buat skema blok GPIO → driver → motor, lalu tambahkan jalur catu daya."
+    ],
+    "warning": "Praktik awal cukup LED dan beban DC kecil yang dipahami. Jangan mencoba pengawatan listrik rumah melalui modul relay dari tutorial pemula.",
+    "check": "Apakah menambahkan relay membuat GPIO menjadi sumber daya pompa?",
+    "answer": "Tidak. Relay hanya mengendalikan jalur kontak; pompa tetap membutuhkan sumber daya dan proteksi yang sesuai.",
+    "nodes": [
+      "Program / GPIO",
+      "Sinyal kendali",
+      "Driver",
+      "Catu beban",
+      "Aktuator"
+    ],
+    "sources": [
+      {
+        "title": "Arduino: dasar elektronika dan pemrograman",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ]
+  },
+  {
+    "slug": "antarmuka-modul-komunikasi",
+    "title": "GPIO, I2C, SPI, UART, dan modul komunikasi",
+    "summary": "Bedakan jalur komunikasi pada papan dari jaringan yang menghubungkan perangkat.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "I2C/SPI/UART seperti jalur percakapan antarkomponen; Wi-Fi dan jaringan lain membantu pesan pergi lebih jauh.",
+    "explain": [
+      "Antarmuka menjelaskan bagaimana data atau sinyal dipertukarkan. GPIO digital membaca/menulis status, ADC membaca sinyal analog dalam batasnya, dan PWM mengatur pola pulsa. PWM bukan otomatis tegangan analog yang benar-benar rata.",
+      "I2C memakai jalur SDA dan SCL pada bus dengan aturan alamat dan pull-up. SPI biasanya memakai clock, jalur data, dan pemilih chip. UART memakai jalur TX/RX; pada sambungan biasa, TX satu perangkat menuju RX perangkat lain dan keduanya membutuhkan acuan serta level tegangan yang sesuai.",
+      "UART level TTL bukan RS-232 dan bukan RS-485. Keduanya memerlukan perangkat antarmuka yang sesuai. Banyak alat industri memakai RS-485 dengan protokol seperti Modbus RTU; protokol dan lapisan listrik adalah dua hal berbeda.",
+      "Untuk menghubungkan alat ke jaringan, pilihan meliputi Wi-Fi, Ethernet, Bluetooth LE, radio LoRa, dan modem seluler sesuai rancangan. LoRa sebagai teknologi radio berbeda dari LoRaWAN sebagai protokol jaringan. Modul radio atau transceiver tidak selalu dapat terhubung langsung ke internet tanpa gateway atau layanan tambahan."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "GPIO / ADC / PWM",
+          "Status digital, pembacaan analog, atau pola pulsa",
+          "Tombol, LED, dan sensor analog",
+          "Batas tegangan, arus, fungsi pin, serta frekuensi."
+        ],
+        [
+          "I2C",
+          "Bus data beralamat",
+          "Banyak sensor digital dan layar kecil",
+          "Alamat tidak bentrok, pull-up, level, dan panjang bus."
+        ],
+        [
+          "SPI",
+          "Data sinkron dengan pemilihan perangkat",
+          "Layar, kartu memori, dan sebagian sensor",
+          "Pemilih chip, mode SPI, clock, dan pin."
+        ],
+        [
+          "UART TTL",
+          "Komunikasi serial TX/RX",
+          "Modul GNSS atau perangkat serial kompatibel",
+          "Baud rate, format, TX/RX, GND, dan level."
+        ],
+        [
+          "RS-485 transceiver",
+          "Lapisan listrik komunikasi diferensial",
+          "Komunikasi perangkat yang memang memakai RS-485",
+          "Transceiver, terminasi, bias, isolasi bila perlu, dan protokol aplikasi."
+        ],
+        [
+          "Wi-Fi / Ethernet",
+          "Koneksi ke jaringan lokal",
+          "Dashboard atau layanan IP sesuai rancangan",
+          "Radio/kabel, IP, catu, dan dukungan library."
+        ],
+        [
+          "Bluetooth LE",
+          "Pertukaran data nirkabel jarak dekat sesuai kondisi",
+          "Sensor ke aplikasi atau gateway kompatibel",
+          "Profil/layanan, pemasangan, serta dukungan chip."
+        ],
+        [
+          "LoRa / LoRaWAN",
+          "Radio atau jaringan sesuai platform",
+          "Telemetri dengan rancangan radio yang sesuai",
+          "Frekuensi yang diizinkan, antena, gateway, dan batas airtime."
+        ],
+        [
+          "Modem seluler",
+          "Koneksi lewat jaringan operator",
+          "Lokasi dengan cakupan dan layanan data yang sesuai",
+          "Teknologi/operator, SIM, antena, dan lonjakan arus catu."
+        ]
+      ]
+    },
+    "example": "Sensor I2C dibaca oleh ESP32, lalu ESP32 mengirim data lewat Wi-Fi. I2C menghubungkan sensor ke MCU; Wi-Fi menghubungkan alat ke jaringan lokal.",
+    "practice": [
+      "Lingkari hubungan sensor → MCU dan MCU → jaringan pada gambar.",
+      "Kelompokkan I2C, UART, Wi-Fi, dan MQTT menurut perannya.",
+      "Cari level sinyal sebelum menghubungkan modul serial."
+    ],
+    "warning": "Jangan menyambungkan UART TTL langsung ke RS-232/RS-485. Jangan menyalakan pemancar radio tanpa antena dan konfigurasi yang sesuai dokumentasi.",
+    "check": "Apakah MQTT sama dengan I2C?",
+    "answer": "Tidak. I2C adalah bus antarkomponen; MQTT adalah protokol pertukaran pesan yang digunakan melalui koneksi jaringan yang mendukungnya.",
+    "nodes": [
+      "Sensor / modul",
+      "I2C / SPI / UART",
+      "MCU",
+      "Wi-Fi / Ethernet",
+      "Layanan data"
+    ],
+    "sources": [
+      {
+        "title": "Arduino: komunikasi antarkomponen",
+        "url": "https://docs.arduino.cc/learn/communication/"
+      },
+      {
+        "title": "LoRa Alliance: LoRaWAN",
+        "url": "https://lora-alliance.org/about-lorawan/"
+      }
+    ]
+  },
+  {
+    "slug": "catu-daya-komponen-pendukung",
+    "title": "Sumber daya dan komponen pendukung IoT",
+    "summary": "Kenali adaptor, regulator, baterai, resistor, kapasitor, dan level shifter.",
+    "stage": 1,
+    "minutes": 12,
+    "analogy": "Sistem IoT seperti tim kerja: papan pengendali perlu listrik yang stabil dan pendukung yang sesuai agar tugasnya tidak terganggu.",
+    "explain": [
+      "Banyak masalah IoT bermula dari catu daya. Tegangan harus cocok, kemampuan arus mencukupi, polaritas benar, dan kabel tidak menyebabkan penurunan tegangan berlebihan. Kebutuhan saat radio mengirim atau motor mulai berputar dapat berbeda dari saat diam.",
+      "Regulator menyediakan tegangan yang dibutuhkan dalam batas tertentu. Buck menurunkan tegangan DC; boost menaikkan tegangan DC. Modul konverter bukan izin untuk memasukkan sembarang sumber daya; periksa batas masukan/keluaran, panas, efisiensi, dan kemampuan arusnya.",
+      "Resistor dapat membatasi arus atau membentuk pull-up/pull-down. Kapasitor membantu penyimpanan energi lokal dan penyaringan sesuai rangkaian. Dioda proteksi, sekering, konektor, serta level shifter dipilih berdasarkan kebutuhan listrik, bukan warna atau bentuk fisiknya.",
+      "Baterai memerlukan pengisian dan proteksi sesuai kimia serta jumlah sel. Modul charger dan BMS memiliki fungsi yang tidak selalu sama. Untuk pemula, mulai dari USB atau adaptor berkualitas dengan tegangan yang sesuai papan, kemudian pelajari baterai secara terpisah."
+    ],
+    "table": {
+      "headers": [
+        "Jenis / contoh",
+        "Apa fungsinya?",
+        "Kapan digunakan?",
+        "Yang perlu diperiksa"
+      ],
+      "rows": [
+        [
+          "USB / adaptor DC",
+          "Menyediakan energi",
+          "Latihan meja dengan papan pengembangan",
+          "Tegangan, kapasitas arus, mutu kabel, dan konektor."
+        ],
+        [
+          "Buck / boost / regulator",
+          "Mengubah atau mengatur tegangan",
+          "Catu perangkat dengan kebutuhan yang berbeda",
+          "Rentang kerja, panas, efisiensi, dan batas arus."
+        ],
+        [
+          "Baterai + pengisi/proteksi yang sesuai",
+          "Energi portabel dengan pengelolaan",
+          "Proyek bergerak setelah dasar daya dipahami",
+          "Kimia, jumlah sel, proteksi, pengisian, dan penyimpanan."
+        ],
+        [
+          "Resistor / pull-up / pull-down",
+          "Membatasi atau menetapkan kondisi sinyal",
+          "LED, tombol, dan sebagian bus sensor",
+          "Nilai resistor, disipasi daya, dan persyaratan antarmuka."
+        ],
+        [
+          "Kapasitor",
+          "Decoupling atau penyaringan sesuai rancangan",
+          "Mengurangi gangguan catu lokal",
+          "Nilai, jenis, tegangan kerja, dan polaritas bila ada."
+        ],
+        [
+          "Level shifter",
+          "Menyesuaikan level sinyal yang kompatibel",
+          "Menghubungkan sebagian antarmuka 3,3 V dan 5 V",
+          "Arah sinyal, kecepatan, serta dukungan push-pull/open-drain."
+        ],
+        [
+          "Breadboard / jumper / konektor",
+          "Menyusun hubungan antarbagian",
+          "Prototipe tegangan rendah berarus kecil",
+          "Kualitas kontak, arus, dan baris yang saling terhubung."
+        ]
+      ]
+    },
+    "example": "Papan restart hanya ketika Wi-Fi mengirim. Selain kode, periksa catu dan kabel: penurunan tegangan bisa memicu reset.",
+    "practice": [
+      "Tuliskan tegangan dan arus kebutuhan tiap modul dari dokumentasinya.",
+      "Pisahkan jalur sinyal dari jalur catu beban pada diagram.",
+      "Periksa polaritas dan koneksi ketika seluruh catu tercabut."
+    ],
+    "warning": "Jangan menyusun baterai lithium atau mengisi sel tanpa rangkaian yang sesuai. Jangan memakai breadboard untuk listrik PLN atau beban berarus besar.",
+    "check": "Apakah adaptor berkapasitas arus besar selalu aman untuk semua papan?",
+    "answer": "Tidak. Tegangan, polaritas, kualitas, serta batas papan tetap harus sesuai. Kapasitas arus saja tidak membuktikan kecocokan.",
+    "nodes": [
+      "Sumber energi",
+      "Regulator / proteksi",
+      "Daya stabil",
+      "MCU + sensor",
+      "Periksa saat beban"
+    ],
+    "sources": [
+      {
+        "title": "Espressif ESP32-DevKitC: catu dan pin",
+        "url": "https://documentation.espressif.com/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html"
+      },
+      {
+        "title": "Arduino: dasar elektronika",
+        "url": "https://docs.arduino.cc/learn/"
+      }
+    ]
+  },
+  {
     "slug": "listrik-breadboard",
     "title": "Tegangan, GND, dan breadboard",
     "stage": 1,
