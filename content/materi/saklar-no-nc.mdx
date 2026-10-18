@@ -1,0 +1,36 @@
+---
+title: "Saklar, Push Button, dan Kontak NO/NC"
+summary: "Kenali tombol sesaat, saklar menetap, serta arti kontak normal sebelum membaca kontrol."
+---
+<LearningHook>Mengapa tombol bel kembali naik, tetapi saklar lampu tetap pada posisinya?</LearningHook>
+
+## 1. Tombol dan saklar punya perilaku berbeda
+Bayangkan pintu: ada yang menutup sendiri setelah dilepas, ada yang tetap terbuka. **Push button sesaat** kembali ke posisi awal ketika dilepas. Saklar **menetap** mempertahankan pilihan sampai diubah lagi. Selector memilih mode, misalnya manual atau otomatis. Bentuk tombol bukan jaminan perilaku kontaknya.
+
+<DeviceGuide type="saklar" />
+
+## 2. Apa arti normal pada NO dan NC?
+Normal adalah keadaan aktuator belum ditekan, atau koil relay belum diberi energi. **NO (normally open)** berarti kontak terbuka pada keadaan itu. **NC (normally closed)** berarti kontak tertutup. Untuk limit switch, baca keadaan mekanis normal pada dokumentasinya; pemasangan dapat membuat tuas selalu tertekan.
+
+| Kontak | Saat normal | Saat diaktifkan | Contoh fungsi |
+|---|---|---|---|
+| NO | Terbuka | Tertutup | Perintah mulai |
+| NC | Tertutup | Terbuka | Perintah berhenti pada kontrol dasar |
+| Changeover | COM terhubung ke NC | COM berpindah ke NO | Memilih dua jalur |
+
+<img src="/diagrams/kontak-no-nc.svg" alt="Perbandingan kontak NO terbuka dan NC tertutup ketika tombol tidak ditekan" width="800" height="260" />
+
+## 3. Jangan tertukar: kontak dan koil
+Pada relay, koil menerima energi untuk menggerakkan kontak. Terminal koil bukan terminal beban. Kontak NO bukan berarti relay rusak saat tidak menghantar. Angka terminal harus mengikuti diagram model; jangan menebak dari letaknya.
+
+## Studi kasus: Tombol bel dan saklar lampu
+Bel ingin berbunyi selama tombol ditekan: contoh fungsi NO sesaat. Lampu meja ingin tetap menyala setelah tangan dilepas: pilih fungsi menetap yang sesuai rating. Untuk motor, tombol START sesaat bisa dibantu kontak pengunci; kita pelajari nanti.
+
+## 4. Latihan tanpa tegangan
+Gunakan gambar kontak. Gambar jalur yang terbuka dan tertutup sebelum dan sesudah tombol ditekan. Jika memakai uji kontinuitas, lepaskan komponen dari semua sumber, pastikan tidak ada energi tersimpan, dan ikuti panduan multimeter. Jangan menguji kontinuitas pada rangkaian bertegangan.
+
+<Note>Kontak NC pada tombol STOP biasa tidak otomatis menjadikannya sistem emergency stop. Fungsi keselamatan mesin membutuhkan desain dan perangkat keselamatan yang sesuai.</Note>
+<LearningCheck question="Apakah NO berarti tombol selalu mematikan perangkat?" answer="Tidak. NO menjelaskan keadaan kontak saat normal. Perilaku perangkat juga ditentukan oleh rangkaian dan program." />
+
+## Referensi
+- [Schneider Electric: kontak NO dan NC](https://www.se.com/us/en/faqs/FA238772/)

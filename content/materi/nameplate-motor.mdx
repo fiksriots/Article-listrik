@@ -1,0 +1,43 @@
+---
+title: "Membaca Nameplate Motor"
+summary: "Pahami kW, volt, ampere, RPM, frekuensi, efisiensi, dan tanda delta–star."
+---
+<LearningHook>Motor bertuliskan 230/400 V. Apakah bebas disambung ke salah satu sumber dengan cara yang sama?</LearningHook>
+
+<DeviceGuide type="motor" />
+
+## 1. Pelat kecil yang menentukan banyak hal
+Nameplate seperti kartu identitas motor: memberi data operasi terukur pada kondisi tertentu. Foto bentuk motor membantu mengenali perangkat, tetapi data motor harus dibaca dari pelat dan manual model yang benar. Jangan menyalin nilai dari motor yang mirip.
+
+<img src="/diagrams/nameplate-latihan.svg" alt="Pelat latihan motor fiktif: keluaran 1,5 kW, 50 Hz, 230 delta atau 400 star, arus 6 atau 3,5 ampere dan 1420 RPM" width="800" height="340" />
+
+## 2. Membaca kolom satu per satu
+| Tulisan | Makna | Kegunaan |
+|---|---|---|
+| kW | Daya mekanis nominal di poros | Menilai kebutuhan beban mekanis |
+| V dan Δ/Y | Tegangan saluran dan hubungan belitan yang terkait | Memeriksa kecocokan sumber sesuai manual |
+| A | Arus nominal pada kondisi yang dinyatakan | Acuan data operasi dan perancangan proteksi |
+| Hz | Frekuensi nominal | Memeriksa kecocokan sumber/VFD |
+| RPM | Putaran nominal | Menilai kecepatan beban |
+| cos φ dan η | Faktor daya dan efisiensi | Menghubungkan daya masuk dengan daya poros |
+| IP dan duty | Proteksi enclosure dan pola kerja | Menilai lingkungan dan pemakaian |
+
+## 3. Pasangan angka harus dibaca bersama
+Contoh motor fiktif berlabel **230 V Δ / 400 V Y, 50 Hz** berarti hubungan delta pada tegangan saluran 230 V dan star pada 400 V, sesuai data produk. Pada star, tegangan belitan adalah tegangan saluran dibagi √3. Ini penjelasan konsep, bukan instruksi menjumper terminal motor nyata.
+
+<Formula label="Tegangan belitan pada star" expression="Vbelitan = Vsaluran / √3">
+1. Tegangan saluran contoh 400 V.
+2. Vbelitan = 400 / 1,732 ≈ 231 V.
+3. Karena itu pasangan 230 Δ / 400 Y dapat menggunakan belitan dengan tegangan kira-kira sama pada dua kondisi sumber tersebut.
+</Formula>
+
+## Studi kasus: Salah memahami 1,5 kW
+Angka 1,5 kW pada motor biasanya menyatakan daya poros nominal, bukan konsumsi listrik yang selalu tetap. Daya masuk dipengaruhi beban dan efisiensi. Jangan menghitung arus tiga phase hanya dengan membagi 1.500 oleh 400; faktor √3, faktor daya, dan efisiensi perlu diperhitungkan sesuai besaran yang digunakan.
+
+## 4. Latihan membaca tanpa menyambung
+Tulis lima data dari pelat contoh. Cocokkan arus dengan tegangan dan hubungan masing-masing. Jika pelat tidak terbaca, cari dokumentasi model; jangan menebak hubungan. Pemilihan starter star–delta juga tidak otomatis dibenarkan hanya karena motor punya enam terminal.
+
+<LearningCheck question="Motor 230 Δ / 400 Y pada sumber 400 V berarti delta?" answer="Tidak. Contoh pelat tersebut memasangkan 400 V dengan star. Sambungan nyata tetap mengikuti manual dan perancangan teknisi." />
+
+## Referensi
+- [ABB: panduan manual motor starter dan data pelat motor](https://library.e.abb.com/public/ec6fb130663a4e6ba9c1e9cc56df2035/2CDC131060M0202%20-%20Manual%20motor%20starters%20Guide.pdf)

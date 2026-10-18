@@ -190,5 +190,41 @@
     "title": "Memilih Komponen AC/DC dari Label dan Datasheet",
     "summary": "Urutan memilih saklar, relay, adaptor, dan pengaman tanpa menebak dari bentuk.",
     "minutes": 25
+  },
+  {
+    "slug": "saklar-no-nc",
+    "title": "Saklar, Push Button, dan Kontak NO/NC",
+    "summary": "Kenali tombol sesaat, saklar menetap, serta arti kontak normal sebelum membaca kontrol.",
+    "minutes": 22
+  },
+  {
+    "slug": "sekering-proteksi-dc",
+    "title": "Sekering dan Pemilihan Pengaman DC",
+    "summary": "Bedakan arus nominal, tegangan DC, kemampuan pemutusan, dan karakteristik waktu.",
+    "minutes": 25
+  },
+  {
+    "slug": "terminal-sambungan-kabel",
+    "title": "Konektor, Terminal, dan Sambungan Kabel",
+    "summary": "Kenali skun, ferrule, terminal block, dan alasan sambungan harus sesuai spesifikasi.",
+    "minutes": 22
+  },
+  {
+    "slug": "nameplate-motor",
+    "title": "Membaca Nameplate Motor",
+    "summary": "Pahami kW, volt, ampere, RPM, frekuensi, efisiensi, dan tanda delta–star.",
+    "minutes": 25
+  },
+  {
+    "slug": "kontrol-start-stop",
+    "title": "Kontrol Start–Stop dan Pengunci Kontaktor",
+    "summary": "Simulasikan tombol sesaat, kontak pengunci, overload, dan hilangnya suplai kontrol.",
+    "minutes": 28
+  },
+  {
+    "slug": "sensor-industri-sinyal",
+    "title": "Sensor Industri PNP/NPN dan Sinyal 4–20 mA",
+    "summary": "Bedakan sinyal ON/OFF dengan pengukuran kontinu sebelum menghubungkannya ke PLC.",
+    "minutes": 28
   }
 ]

@@ -1,0 +1,36 @@
+---
+title: "Sekering dan Pemilihan Pengaman DC"
+summary: "Bedakan arus nominal, tegangan DC, kemampuan pemutusan, dan karakteristik waktu."
+---
+<LearningHook>Baterai kecil bisa menghasilkan arus hubung singkat besar. Mengapa pengamannya tidak cukup dipilih dari angka ampere?</LearningHook>
+
+## 1. Sekering adalah bagian yang sengaja dikorbankan
+Bayangkan jalur distribusi dengan bagian yang dirancang putus saat kondisi tertentu. Elemen sekering memanas akibat arus dan membuka rangkaian sesuai karakteristiknya. Sekering tidak mengatur tegangan dan tidak menjamin orang terlindung dari sengatan. Setelah bekerja, sekering diganti setelah penyebab gangguan diselesaikan.
+
+## 2. Empat data yang wajib dibedakan
+| Data | Artinya | Kesalahan umum |
+|---|---|---|
+| Arus nominal | Acuan kemampuan membawa arus pada kondisi tertentu | Menganggap langsung putus tepat di angka itu |
+| Rating tegangan DC | Batas penggunaan DC sesuai pengujian produk | Memakai rating AC sebagai pengganti DC |
+| Kemampuan pemutusan | Arus gangguan maksimum yang dapat diputus dengan aman pada kondisi rating | Mengabaikan besarnya arus baterai |
+| Kurva waktu–arus | Hubungan besarnya arus dan waktu kerja | Menyamakan fast acting dan time delay |
+
+## 3. Urutan pertimbangan
+Mulai dari sumber, tegangan maksimum, arus kerja, lonjakan awal, kemampuan kabel, arus gangguan prospektif, suhu, holder, serta kurva sekering. Pengaman perlu melindungi penghantar dan dikoordinasikan dengan perangkat. Jalur dari sumber sampai pengaman juga harus diperhitungkan. Tidak ada aturan universal “arus beban ditambah sekian persen” untuk semua rangkaian.
+
+<Formula label="Menghitung arus kerja, bukan menentukan sekering" expression="I = P / V">
+1. Beban DC contoh memakai 24 W pada 12 V.
+2. I = 24 / 12 = 2 A.
+3. Angka 2 A adalah arus kerja ideal; belum menentukan rating sekering. Periksa inrush, kabel, suhu, dan datasheet.
+</Formula>
+
+## Studi kasus: Sekering kamera terus putus
+Jangan menggantinya dengan rating lebih besar atau kawat. Catat apakah putus saat mulai, sesudah lama bekerja, atau ketika kabel tertentu dipasang. Teknisi memeriksa gangguan serta kecocokan kurva, kabel, dan beban sebelum memilih pengganti sesuai desain.
+
+## 4. Latihan membaca katalog
+Bandingkan dua sekering berarus sama tetapi tegangan DC dan kemampuan pemutusan berbeda. Tuliskan data yang belum tersedia. Jangan membuat hubung singkat untuk mencoba sekering; gunakan analisis kertas atau simulator.
+
+<LearningCheck question="Sekering 5 A pasti putus seketika pada 5,1 A?" answer="Tidak. Waktu kerjanya mengikuti kurva waktu–arus dan kondisi penggunaan. Angka nominal bukan ambang putus instan." />
+
+## Referensi
+- [Littelfuse: jenis sekering dan pertimbangan pemilihan](https://www.littelfuse.com/products/fuses-overcurrent-protection/fuses)

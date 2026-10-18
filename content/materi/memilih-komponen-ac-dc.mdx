@@ -36,3 +36,21 @@ Buat dua daftar: kebutuhan beban dan spesifikasi komponen calon. Tandai mana yan
 ## Bacaan lanjutan
 - [Omron: kondisi dan rating penggunaan relay](https://www.ia.omron.com/product/cautions/36/safety_precautions.html)
 - [Schneider Electric: desain pemutusan AC/DC](https://www.se.com/us/en/faqs/FA326780/)
+
+## 5. Latihan membaca label adaptor asli
+Ambil foto label adaptor milikmu tanpa membukanya. Cari **INPUT** dan **OUTPUT**: input 100–240 V AC menjelaskan sumber yang diterima, sedangkan output 12 V DC 2 A menjelaskan keluaran nominalnya. Batas arus 2 A bukan berarti setiap beban dipaksa menerima 2 A; beban menarik arus sesuai perilakunya dalam batas suplai.
+
+| Periksa | Contoh | Pertanyaan sebelum digunakan |
+|---|---|---|
+| Jenis keluaran | 12 V DC | Apakah perangkat memang meminta DC 12 V? |
+| Arus maksimum | 2 A | Cukup untuk arus kerja dan lonjakan awal? |
+| Polaritas | Diagram positif tengah | Cocok dengan perangkat dan konektornya? |
+| Ukuran konektor | Sesuai datasheet | Cocok secara mekanis dan listrik? |
+
+<Formula label="Daya keluaran nominal contoh" expression="P = V × I = 12 × 2 = 24 W">
+1. Baca tegangan output: 12 V.
+2. Baca batas arus output: 2 A.
+3. Kalikan menjadi 24 W. Ini bukan konsumsi tetap dari stopkontak; rugi konversi dan beban memengaruhi daya masuk.
+</Formula>
+
+Bedakan angka nominal, maksimum, dan kondisi pengujian pada datasheet. Jangan mencoba adaptor jika jenis sumber, polaritas, atau kebutuhan perangkat belum jelas. Bandingkan dua label dan tandai data yang belum diketahui sebelum membeli.

@@ -1,0 +1,36 @@
+---
+title: "Kontrol Start–Stop dan Pengunci Kontaktor"
+summary: "Simulasikan tombol sesaat, kontak pengunci, overload, dan hilangnya suplai kontrol."
+---
+<LearningHook>Setelah tombol START dilepas, bagaimana mesin tetap berjalan sampai STOP ditekan?</LearningHook>
+
+## 1. Mengingat perintah dengan kontak bantu
+Bayangkan pintu yang terbuka sesaat lalu ditahan pengait. Tombol START NO memberi perintah awal. Ketika koil kontaktor aktif, kontak bantu NO menutup dan mempertahankan jalur koil. Kontak pengunci dipasang paralel dengan START dalam konsep kontrol ini; STOP NC dan kontak overload berada di jalur seri.
+
+<DeviceGuide type="relay" />
+
+<img src="/diagrams/start-stop-konsep.svg" alt="Diagram logika kontrol: STOP dan overload seri dengan cabang START atau kontak bantu K, lalu koil K" width="800" height="320" />
+
+## 2. Ikuti perubahan keadaannya
+| Kejadian | Kontak pengunci | Koil |
+|---|---|---|
+| Awal, suplai tersedia | Terbuka | OFF |
+| START ditekan, STOP/overload normal | Menutup | ON |
+| START dilepas | Tetap tertutup | Tetap ON |
+| STOP ditekan atau overload membuka | Membuka setelah koil lepas | OFF |
+| Suplai hilang | Kembali terbuka | OFF |
+| Suplai kembali, START dilepas | Tetap terbuka | Tetap OFF dalam model ini |
+
+## 3. Overload berbeda dari pengaman hubung singkat
+Kontak bantu overload dapat membuka jalur koil saat trip. Overload bukan pengganti pemutus hubung singkat. Penempatan pengaman, kategori kontaktor, tegangan koil, serta koordinasi starter memerlukan desain yang sesuai. Tombol STOP biasa bukan pengganti isolator atau emergency stop tersertifikasi.
+
+## Studi kasus: Kontaktor hanya aktif selama START ditekan
+Dalam model latihan, kemungkinan jalur pengunci tidak tersambung atau kontak yang dipilih bukan NO yang benar. Periksa diagram dan keadaan simulasi dahulu. Jangan menjumper STOP atau overload pada mesin nyata untuk membuatnya tetap berjalan.
+
+## 4. Coba simulator di bawah
+Tekan START, lepaskan, kemudian STOP. Coba overload dan putuskan suplai. Reset overload tidak menjalankan motor; perlu START baru. Simulator hanya menggambarkan logika koil, bukan arus motor, kegagalan kontak, rangkaian keselamatan, atau panduan wiring.
+
+<LearningCheck question="Mengapa kontak pengunci dipasang paralel dengan START?" answer="Supaya ada jalur alternatif setelah START dilepas, sementara STOP dan overload tetap bisa memutus jalur koil." />
+
+## Referensi
+- [Schneider Electric: starter dan kontak pengunci kontrol tiga kawat](https://productinfo.se.com/8502ct9701fvcs/8502ct9701-fv-contactors-and-starters/8502CT9701%20FV%20Contactors%20and%20Starters/English/8502CT9701%20%28bookmap%29_0000088590.xml/%24/FullVoltageContactorsAndStartersNEM-EEADFFA4)

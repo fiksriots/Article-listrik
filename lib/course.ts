@@ -35,6 +35,7 @@ export const stages = [
       "komponen-pasif-led",
       "dioda-transistor-ic",
       "komponen-dc-penggunaan",
+      "sekering-proteksi-dc",
       "power-supply-baterai"
     ]
   },
@@ -47,6 +48,7 @@ export const stages = [
       "kapasitor-induktor-ac-dc",
       "penyearah-regulator",
       "memilih-komponen-ac-dc",
+      "saklar-no-nc",
       "sensor-relay-iot"
     ]
   },
@@ -70,6 +72,7 @@ export const stages = [
     "prerequisite": "Kenali tiga phase, sifat beban, dan perangkat AC.",
     "slugs": [
       "netral-grounding-proteksi",
+      "terminal-sambungan-kabel",
       "panel-kabel-beban"
     ]
   },
@@ -80,8 +83,11 @@ export const stages = [
     "prerequisite": "Pahami distribusi dan fungsi pengaman; mulai dari simulasi.",
     "slugs": [
       "motor-elektromagnet",
+      "nameplate-motor",
       "kontaktor-relay-panel",
       "proteksi-motor",
+      "kontrol-start-stop",
+      "sensor-industri-sinyal",
       "vfd-plc"
     ]
   },

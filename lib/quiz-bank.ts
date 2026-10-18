@@ -703,5 +703,137 @@ export const quizBank: Record<string, Question[]> = {
       "a": 1,
       "why": "Kecocokan fisik saja tidak menjamin cocok secara listrik."
     }
+  ],
+  "saklar-no-nc": [
+    {
+      "q": "NO pada tombol berarti apa saat tidak ditekan?",
+      "o": [
+        "Kontak terbuka",
+        "Kontak selalu rusak",
+        "Kontak selalu menghantar"
+      ],
+      "a": 0,
+      "why": "Normal mengacu pada keadaan aktuator belum ditekan."
+    },
+    {
+      "q": "Push button sesaat setelah dilepas akan…",
+      "o": [
+        "Kembali ke posisi awal",
+        "Selalu mengunci ON",
+        "Mengubah tegangan sumber"
+      ],
+      "a": 0,
+      "why": "Tombol sesaat kembali; fungsi menetap mempertahankan pilihan."
+    }
+  ],
+  "sekering-proteksi-dc": [
+    {
+      "q": "Sekering dipilih hanya dari ampere beban?",
+      "o": [
+        "Tidak, periksa rating DC, kurva, kabel dan kemampuan pemutusan",
+        "Ya, selalu sama",
+        "Cukup dari warna"
+      ],
+      "a": 0,
+      "why": "Arus nominal bukan satu-satunya syarat penggunaan aman."
+    },
+    {
+      "q": "Sekering terus putus sebaiknya…",
+      "o": [
+        "Dicari penyebabnya sebelum penggantian sesuai desain",
+        "Diganti kawat",
+        "Selalu dinaikkan ratingnya"
+      ],
+      "a": 0,
+      "why": "Menghilangkan fungsi pengaman dapat membahayakan kabel dan perangkat."
+    }
+  ],
+  "terminal-sambungan-kabel": [
+    {
+      "q": "Ferrule cocok untuk semua terminal tanpa pemeriksaan?",
+      "o": [
+        "Tidak, ikuti spesifikasi terminal",
+        "Ya, semua sama",
+        "Hanya warna yang penting"
+      ],
+      "a": 0,
+      "why": "Jenis penghantar dan kapasitas koneksi harus sesuai datasheet."
+    },
+    {
+      "q": "Arus naik dua kali pada hambatan kontak tetap. Panasnya…",
+      "o": [
+        "Empat kali",
+        "Dua kali",
+        "Tetap"
+      ],
+      "a": 0,
+      "why": "P = I²R, sehingga penggandaan arus menghasilkan empat kali daya panas."
+    }
+  ],
+  "nameplate-motor": [
+    {
+      "q": "kW pada nameplate motor umumnya menyatakan…",
+      "o": [
+        "Daya poros nominal",
+        "Konsumsi tetap setiap saat",
+        "Tegangan koil"
+      ],
+      "a": 0,
+      "why": "Daya masuk juga dipengaruhi efisiensi dan beban."
+    },
+    {
+      "q": "Contoh pelat 230 V Δ / 400 V Y memasangkan 400 V dengan…",
+      "o": [
+        "Star",
+        "Delta",
+        "Sembarang hubungan"
+      ],
+      "a": 0,
+      "why": "Pasangan tegangan dan hubungan pada pelat harus dibaca bersama."
+    }
+  ],
+  "kontrol-start-stop": [
+    {
+      "q": "Kontak pengunci pada model dipasang…",
+      "o": [
+        "Paralel START",
+        "Paralel STOP untuk melewatinya",
+        "Menggantikan semua pengaman"
+      ],
+      "a": 0,
+      "why": "Jalur alternatif START mempertahankan koil, STOP tetap memutus seri."
+    },
+    {
+      "q": "Sesudah overload direset dalam model, motor…",
+      "o": [
+        "Menunggu START baru",
+        "Otomatis harus berjalan",
+        "Tidak perlu pengaman lagi"
+      ],
+      "a": 0,
+      "why": "Reset mengizinkan kontrol kembali, bukan memberi perintah mulai."
+    }
+  ],
+  "sensor-industri-sinyal": [
+    {
+      "q": "PNP pada contoh sensor DC aktif akan…",
+      "o": [
+        "Menyuplai arus menuju input",
+        "Selalu menghasilkan sinyal analog",
+        "Mengukur tegangan PLN"
+      ],
+      "a": 0,
+      "why": "PNP adalah sourcing output; cocokkan dengan input dan common."
+    },
+    {
+      "q": "Skala 0–10 bar = 4–20 mA. Nilai 12 mA adalah…",
+      "o": [
+        "5 bar",
+        "12 bar",
+        "0 bar"
+      ],
+      "a": 0,
+      "why": "(12−4)/16 × 10 = 5 bar."
+    }
   ]
 };

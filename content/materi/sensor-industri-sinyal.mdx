@@ -1,0 +1,45 @@
+---
+title: "Sensor Industri PNP/NPN dan Sinyal 4–20 mA"
+summary: "Bedakan sinyal ON/OFF dengan pengukuran kontinu sebelum menghubungkannya ke PLC."
+---
+<LearningHook>Sensor mendeteksi benda, tetapi input PLC tetap mati. Apakah sensornya pasti rusak?</LearningHook>
+
+## 1. Digital dan analog menjawab pertanyaan berbeda
+Sensor digital menjawab “ada atau tidak?”. Sensor analog menjawab “berapa banyak?”. Detektor benda pada conveyor dapat memberi sinyal ON/OFF, sementara transmitter tekanan mengirim nilai yang berubah terus. Keduanya membutuhkan input PLC yang sesuai.
+
+<DeviceGuide type="plc" />
+
+## 2. PNP dan NPN pada sensor DC
+Dalam contoh sensor tiga kawat transistor, **PNP menyuplai arus keluar menuju input**, sedangkan **NPN menyediakan jalur arus menuju 0 V**. Sensor PNP umumnya dipasangkan dengan input sinking; NPN dengan input sourcing. Istilah pada katalog bisa membingungkan: periksa diagram arus, common input, tegangan, serta batas arus model tersebut.
+
+| Output sensor | Ketika aktif | Yang perlu diperiksa |
+|---|---|---|
+| PNP | Menghubungkan output ke sisi positif melalui transistor | Input menerima arus dan common yang sesuai |
+| NPN | Menghubungkan output ke sisi 0 V melalui transistor | Input menyediakan jalur arus yang sesuai |
+| 4–20 mA | Mengirim besaran kontinu sebagai arus loop | Input arus, rentang, suplai loop, dan beban |
+
+Jangan mengandalkan warna kabel saja. Sensor dua kawat, tiga kawat, IO-Link, serta jenis output lain memiliki kebutuhan berbeda. Modul input tegangan bukan otomatis input arus.
+
+## 3. Mengubah 4–20 mA menjadi nilai proses
+Misalkan transmitter contoh dikonfigurasi **0–10 bar = 4–20 mA**. Rentang arusnya 16 mA. Angka 4 mA mewakili nol pada rentang proses itu, bukan tekanan 4 bar.
+
+<Formula label="Skala linear transmitter contoh" expression="Tekanan = (I − 4) / 16 × 10 bar">
+1. Sinyal yang dibaca 12 mA.
+2. Kurangi titik awal: 12 − 4 = 8 mA.
+3. Bagi rentang arus: 8 / 16 = 0,5.
+4. Kalikan rentang tekanan: 0,5 × 10 = 5 bar.
+</Formula>
+
+Sinyal 0 mA berada di luar rentang pengukuran normal contoh ini; penyebabnya dapat berupa suplai mati, loop terbuka, atau gangguan lain. Batas diagnostik persis bergantung konfigurasi transmitter dan modul. Jangan memaksakan semua angka di luar rentang menjadi nilai proses valid.
+
+## Studi kasus: Sensor baru tidak terbaca PLC
+Periksa nomor model dan jenis output sebelum mengganti perangkat. Sensor PNP dan NPN yang bentuknya sama belum tentu cocok dengan konfigurasi input. Untuk analog, periksa mode mA/V, range, konfigurasi active/passive, serta common/isolasi sesuai manual.
+
+## 4. Latihan kertas
+Dengan rentang 0–10 bar tadi, hitung 8 mA dan 20 mA: hasilnya 2,5 bar dan 10 bar. Gambarkan arah arus pada contoh PNP dan NPN berdasarkan manual. Jangan memasukkan tegangan ke terminal mA tanpa memahami rangkaiannya; alat ukur arus juga tidak dipasang paralel seperti voltmeter.
+
+<LearningCheck question="Pada skala 0–10 bar yang dipetakan ke 4–20 mA, apakah 4 mA berarti gangguan?" answer="Tidak. Pada konfigurasi contoh ini, 4 mA adalah nilai normal yang mewakili 0 bar. Diagnosis gangguan mengikuti rentang dan konfigurasi perangkat." />
+
+## Referensi
+- [Omron: perbedaan output NPN dan PNP](https://www.ia.omron.com/support/faq/answer/41/faq00379/)
+- [Fluke: prinsip loop 4–20 mA](https://www.fluke.com/en-ph/learn/blog/electrical/how-to-measure-a-4-20ma-loop-signal)
