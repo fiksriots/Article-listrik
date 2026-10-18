@@ -94,6 +94,243 @@
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
   },
   {
+    "slug": "topologi-jaringan",
+    "title": "Topologi star, mesh, dan diagram fisik/logis",
+    "summary": "Belajar menggambar jaringan agar hubungan perangkat mudah dibaca.",
+    "analogy": "Topologi fisik seperti denah jalan, sedangkan topologi logis seperti peta layanan yang melewati jalan tersebut.",
+    "explain": "Topologi menggambarkan hubungan antarperangkat. Star menghubungkan perangkat ke titik pusat seperti switch. Mesh menyediakan beberapa hubungan antarnode. Topologi yang terlihat sederhana secara fisik dapat membawa beberapa jaringan logis melalui VLAN.\n\nPada star, kerusakan satu kabel klien biasanya berdampak pada klien itu, sedangkan switch pusat dapat memengaruhi banyak pengguna. Redundansi menambah jalur cadangan tetapi perlu mekanisme yang mencegah loop. Menghubungkan switch dengan banyak kabel tanpa rancangan STP/RSTP atau link aggregation bukan otomatis menambah kapasitas dengan aman.\n\nBuat dua diagram bila perlu: fisik memuat perangkat, port, dan kabel; logis memuat subnet, VLAN, gateway, dan kebijakan. Gunakan label konsisten. Arah panah harus menjelaskan maksud, misalnya alur permintaan, bukan seolah kabel hanya dapat mengirim satu arah.",
+    "example": "Satu trunk menghubungkan dua switch. Diagram fisik menampilkan satu kabel, sedangkan diagram logis menampilkan VLAN staf dan tamu yang melewatinya.",
+    "practice": [
+      "Gambar topologi star kecil dengan satu switch dan tiga klien.",
+      "Tulis nomor port dan media sambungan.",
+      "Tambahkan subnet serta gateway pada diagram logis.",
+      "Tandai titik yang memengaruhi banyak pengguna bila rusak."
+    ],
+    "warning": "Jalur cadangan tanpa mekanisme pengendalian loop dapat membuat jaringan justru lumpuh.",
+    "check": "Mengapa perlu diagram fisik dan logis?",
+    "answer": "Karena kabel/port dan pembagian subnet/VLAN menjelaskan dua sisi jaringan yang berbeda.",
+    "nodes": [
+      "Klien A",
+      "Switch pusat",
+      "Klien B"
+    ],
+    "stage": 0,
+    "minutes": 7,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328068/Bridging+and+Switching"
+  },
+  {
+    "slug": "client-server-p2p",
+    "title": "Client–server, peer-to-peer, dan layanan jaringan",
+    "summary": "Kenali siapa meminta layanan dan siapa menjawabnya.",
+    "analogy": "Client seperti pengunjung restoran; server seperti penyedia layanan. Satu perangkat bisa menjadi pengunjung sekaligus penyedia pada layanan berbeda.",
+    "explain": "Client mengajukan permintaan dan server melayani permintaan. Istilah server dapat merujuk fungsi perangkat lunak, bukan hanya komputer besar di rack. Laptop bisa menjalankan web server lokal, sementara router dapat menjadi DHCP server dan DNS cache.\n\nDalam pola peer-to-peer, perangkat dapat berbagi sumber daya tanpa satu server pusat yang mengelola seluruh pertukaran. Implementasi sebenarnya bisa tetap menggunakan layanan bantu untuk menemukan peer. Bentuk jaringan tidak menentukan apakah semua pengguna memiliki izin yang sama.\n\nPisahkan server, service, dan protokol. Server adalah peran, service adalah layanan, dan protokol adalah aturan komunikasinya. DHCP membagikan konfigurasi IP, DNS menjawab nama, HTTP melayani sumber daya web. Untuk troubleshooting, pastikan perangkat terjangkau lalu periksa proses layanan, port, dan izin aksesnya.",
+    "example": "PC bisa ping ke printer, tetapi cetak gagal karena antrean atau layanan printer. Keterjangkauan IP saja tidak membuktikan aplikasi cetak sehat.",
+    "practice": [
+      "Daftar layanan jaringan yang dipakai sehari-hari.",
+      "Tentukan client dan server untuk tiap layanan.",
+      "Catat protokol serta kebutuhan izin.",
+      "Bedakan gagal menjangkau perangkat dengan gagal memakai layanan."
+    ],
+    "warning": "Server tidak harus berbentuk komputer besar dan tidak semua gangguan layanan berasal dari ISP.",
+    "check": "Bisakah router menjadi client dan server sekaligus?",
+    "answer": "Bisa. Misalnya DHCP client di WAN dan DHCP server di LAN.",
+    "nodes": [
+      "Client meminta",
+      "Service / protokol",
+      "Server menjawab"
+    ],
+    "stage": 0,
+    "minutes": 7,
+    "source": "https://www.cloudflare.com/learning/serverless/glossary/client-side-vs-server-side/"
+  },
+  {
+    "slug": "osi-tcp-ip",
+    "title": "Layer OSI dan TCP/IP",
+    "summary": "Gunakan lapisan untuk memahami perjalanan data tanpa hafalan membingungkan.",
+    "analogy": "Pengiriman barang membutuhkan isi, kemasan, alamat, kurir, dan jalan. Setiap bagian punya tugas.",
+    "explain": "OSI memiliki tujuh lapisan: physical, data link, network, transport, session, presentation, application. Model ini membantu membagi fungsi komunikasi; tidak semua implementasi harus cocok sempurna dengan satu kotak.\n\nPhysical berurusan dengan sinyal dan media. Data link mengurus frame dan MAC. Network mengurus IP dan routing. Transport seperti TCP dan UDP melayani komunikasi proses. HTTP dan DNS berada di sisi aplikasi. Model TCP/IP umum mengelompokkan fungsi menjadi link, internet, transport, application; beberapa bahan ajar memakai versi lima lapisan.\n\nGunakan model untuk memilih pemeriksaan. Kabel longgar diperiksa sebelum DNS. Jika situs sudah memberi pesan error aplikasi, kemungkinan sebagian jalur jaringan telah bekerja.",
+    "example": "Kabel longgar terkait physical. Subnet salah terkait IP. Kata sandi situs keliru terkait aplikasi, bukan otomatis gangguan ISP.",
+    "practice": [
+      "Tulis tiga contoh gangguan jaringan.",
+      "Kelompokkan ke media, MAC, IP, atau layanan.",
+      "Tentukan pemeriksaan termudah untuk setiap kelompok."
+    ],
+    "warning": "Sebutkan model yang dipakai: TCP/IP tidak selalu dihitung dengan jumlah layer yang sama di semua buku.",
+    "check": "Routing berada di layer OSI berapa?",
+    "answer": "Layer 3, yaitu network.",
+    "nodes": [
+      "Aplikasi: HTTP / DNS",
+      "Transport: TCP / UDP",
+      "Internet: IP"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "ethernet-speed-duplex",
+    "title": "Kecepatan port, duplex, dan auto-negotiation",
+    "summary": "Pahami mengapa kabel terpasang tetapi link hanya 100 Mbps.",
+    "analogy": "Dua orang harus menyepakati cara bicara sebelum mengobrol. Auto-negotiation membantu kedua port menyepakati kemampuan sambungan.",
+    "explain": "Link speed adalah laju antarmuka, berbeda dari kapasitas paket ISP. Port 1 Gbps dapat terhubung pada laju lebih rendah jika kemampuan lawan, kabel, atau konfigurasi membatasinya. Auto-negotiation membantu memilih kemampuan yang didukung bersama dan parameter lain sesuai jenis Ethernet.\n\nFull duplex memungkinkan kirim dan terima bersamaan; half duplex berbagi waktu dan terkait mekanisme collision pada Ethernet lama. Jangan memaksa speed/duplex pada satu sisi lalu membiarkan sisi lain tanpa memeriksa hasil. Ketidakcocokan dapat menimbulkan performa buruk. Pada media dan standar tertentu, negosiasi juga memiliki fungsi teknis yang diperlukan.\n\nJika link gigabit turun menjadi 100 Mbps, periksa dukungan kedua port, keempat pasangan kabel, terminasi, adaptor, serta counter error. Uji dengan kabel pendek yang diketahui baik. Transfer lokal antarperangkat membantu mengisolasi jalur LAN dari layanan internet. Jangan menjadikan satu hasil speed test internet sebagai bukti kerusakan NIC.",
+    "example": "Laptop dan switch mendukung gigabit, tetapi kabel rusak pada salah satu pasangan. Link dapat terbentuk pada 100 Mbps meskipun internet tetap bisa dibuka.",
+    "practice": [
+      "Lihat negotiated rate di kedua ujung.",
+      "Periksa konfigurasi auto-negotiation.",
+      "Coba kabel pendek yang diketahui baik.",
+      "Bandingkan error counter sebelum dan sesudah.",
+      "Uji transfer lokal dengan perangkat pembanding."
+    ],
+    "warning": "Menetapkan 1 Gbps secara paksa tidak memperbaiki pasangan kabel yang putus.",
+    "check": "Apa diperiksa saat link hanya 100 Mbps?",
+    "answer": "Kemampuan kedua port, konfigurasi negosiasi, kabel, terminasi, dan counter error.",
+    "nodes": [
+      "Kemampuan NIC",
+      "Negosiasi link",
+      "Kemampuan switch"
+    ],
+    "stage": 1,
+    "minutes": 7,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
+  },
+  {
+    "slug": "ip-mac",
+    "title": "IP address dan MAC address",
+    "summary": "Bedakan alamat logis dengan identitas pengiriman lokal.",
+    "analogy": "IP seperti alamat tujuan surat; MAC seperti identitas penerima untuk satu tahap pengiriman lokal.",
+    "explain": "IPv4 terdiri dari 32 bit dan biasa ditulis empat angka 0–255, misalnya 192.168.10.20. IP dipakai bersama prefix atau subnet mask untuk menentukan batas jaringan. Alamat dapat diberikan secara otomatis atau manual.\n\nMAC Ethernet umumnya ditulis enam pasangan heksadesimal, misalnya 02:11:22:33:44:55. Switch memakai MAC untuk meneruskan frame di LAN. MAC dapat diubah, dan ponsel dapat memakai MAC acak untuk privasi, sehingga MAC bukan bukti identitas yang kuat.\n\nSaat paket melewati router, MAC sumber dan tujuan pada tiap segmen Ethernet berubah mengikuti pengirim dan penerima setempat. IP tujuan umumnya tetap, kecuali terdapat translasi seperti NAT.",
+    "example": "Laptop membuka server di subnet lain. IP tujuan paket adalah server, tetapi MAC tujuan frame pertama adalah gateway lokal.",
+    "practice": [
+      "Buka ipconfig /all di Windows atau ip address di Linux.",
+      "Temukan IPv4, prefix, dan physical address / link ether.",
+      "Bedakan antarmuka Ethernet dan Wi-Fi."
+    ],
+    "warning": "IP dan MAC bukan dua istilah untuk alamat yang sama.",
+    "check": "MAC tujuan frame pertama ke situs luar milik siapa?",
+    "answer": "Biasanya gateway pada LAN, bukan server situs jauh.",
+    "nodes": [
+      "IP tujuan server",
+      "MAC gateway lokal",
+      "Router ke internet"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "switch-arp",
+    "title": "Switch dan ARP",
+    "summary": "Bagaimana komputer menemukan penerima pada jaringan lokal?",
+    "analogy": "Switch belajar meja mana ada di pintu tertentu; ARP bertanya siapa pemilik sebuah IPv4.",
+    "explain": "Switch mempelajari MAC sumber dari frame masuk beserta portnya. Jika MAC tujuan diketahui, frame diteruskan ke port yang sesuai. Broadcast dan unknown unicast dapat disebarkan ke port lain pada VLAN yang sama.\n\nARP pada IPv4 Ethernet memetakan IP next hop menjadi MAC. Jika tujuan satu subnet, klien mencari MAC tujuan. Jika tujuan di subnet lain, klien mencari MAC gateway. IPv6 memakai Neighbor Discovery, bukan ARP.\n\nRouter tidak meneruskan broadcast Ethernet biasa seperti switch. VLAN memisahkan domain broadcast. Loop pada switch dapat menyebabkan badai broadcast; RSTP membantu mencegah loop pada perangkat dan konfigurasi yang mendukung.",
+    "example": "PC .20 ingin mengirim ke .30 pada /24 yang sama. PC meminta MAC .30 melalui ARP, lalu mengirim frame lewat switch.",
+    "practice": [
+      "Buka arp -a di Windows atau ip neigh di Linux.",
+      "Akses gateway lab.",
+      "Cocokkan entri IP dengan MAC tetangga."
+    ],
+    "warning": "Jangan menyambung dua port switch dengan kabel untuk mencoba-coba; bisa membuat loop.",
+    "check": "Untuk server di subnet lain, ARP mencari MAC siapa?",
+    "answer": "Gateway yang menjadi next hop lokal.",
+    "nodes": [
+      "PC: siapa pemilik .30?",
+      "Switch / broadcast",
+      "PC .30 menjawab"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "tcp-udp-port",
+    "title": "TCP, UDP, dan port",
+    "summary": "Bedakan alamat perangkat dengan pintu layanan di dalamnya.",
+    "analogy": "IP seperti alamat gedung; port seperti nomor loket; protokol transport adalah cara pengangkutannya.",
+    "explain": "TCP menyediakan aliran byte yang berurutan, mendeteksi kehilangan, dan mengirim ulang data. Koneksi biasanya diawali three-way handshake. Keandalan transport tidak menjamin aplikasi selalu berhasil; server masih bisa menolak permintaan.\n\nUDP mengirim datagram tanpa jaminan pengurutan dan pengiriman ulang bawaan. Aplikasi dapat menambahkan mekanismenya sendiri. DNS dan banyak aplikasi waktu nyata memakai UDP. QUIC memakai UDP sambil menambahkan keandalan dan keamanan.\n\nPort membantu mengarahkan komunikasi ke proses yang benar. HTTPS lazim memakai TCP 443, sedangkan HTTP/3 memakai QUIC di UDP 443. Port klien biasanya sementara. Port terbuka belum membuktikan layanan sehat atau aman.",
+    "example": "Laptop membuka situs dan melakukan pencarian DNS bersamaan. Nomor port membantu membedakan komunikasi masing-masing proses.",
+    "practice": [
+      "Catat tiga aplikasi yang digunakan.",
+      "Cari portnya di dokumentasi resmi.",
+      "Pisahkan IP tujuan dan port layanan."
+    ],
+    "warning": "UDP tidak selalu lebih cepat pada semua kondisi.",
+    "check": "Apa fungsi nomor port?",
+    "answer": "Membedakan layanan atau proses komunikasi pada suatu IP.",
+    "nodes": [
+      "IP perangkat",
+      "Port TCP 443",
+      "Layanan HTTPS"
+    ],
+    "stage": 1,
+    "minutes": 6
+  },
+  {
+    "slug": "subnet-mask",
+    "title": "Subnet mask dan prefix /24",
+    "summary": "Tentukan perangkat satu jaringan melalui contoh angka sederhana.",
+    "analogy": "Prefix seperti batas kompleks: menentukan alamat mana yang masih dianggap tetangga lokal.",
+    "explain": "Pada IPv4, /24 berarti 24 bit pertama adalah bagian jaringan. Mask-nya 255.255.255.0. IP 192.168.10.20/24 dan .50/24 berada di jaringan 192.168.10.0/24. Aturan tiga angka pertama hanya cocok untuk /24, bukan semua prefix.\n\nPada subnet /24 biasa, .0 adalah network dan .255 broadcast. Host biasanya menggunakan .1 sampai .254, sehingga tersedia 254 alamat host. Rumus 2 pangkat bit host dikurangi 2 memiliki pengecualian seperti penggunaan khusus /31 dan /32.\n\nPada /25, rentang terbagi menjadi .0–.127 dan .128–.255. IP .20/25 dan .150/25 berada di subnet berbeda. Menghubungkannya ke switch saja tidak menyediakan fungsi routing antar subnet.",
+    "example": "192.168.10.150/25 memiliki network .128, broadcast .255, dan host .129–.254. Gateway harus dipilih dari alamat host yang sesuai dan belum digunakan.",
+    "practice": [
+      "Tentukan network dan broadcast 192.168.10.20/24.",
+      "Ulangi untuk 192.168.10.150/25.",
+      "Catat rentang host tanpa memasukkan network dan broadcast."
+    ],
+    "warning": "Gateway tidak wajib .1 atau .254; itu pilihan administrator.",
+    "check": "Apakah .20/25 dan .150/25 di 192.168.10.x satu subnet?",
+    "answer": "Tidak. Masing-masing berada di 192.168.10.0/25 dan 192.168.10.128/25.",
+    "nodes": [
+      "Subnet .0/25",
+      "Router",
+      "Subnet .128/25"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
+    "slug": "gateway-dns",
+    "title": "Gateway dan DNS",
+    "summary": "Bedakan pintu keluar jaringan dengan layanan pencarian alamat.",
+    "analogy": "Gateway seperti pintu keluar kompleks; DNS seperti buku alamat yang mencari IP dari nama.",
+    "explain": "Default gateway dipakai untuk tujuan yang tidak memiliki rute lebih spesifik. Umumnya alamat gateway dapat dijangkau langsung dari subnet perangkat. Gateway di rumah sering berupa IP LAN router.\n\nDNS menyediakan informasi nama domain, termasuk alamat IPv4 melalui record A dan IPv6 melalui AAAA. DNS tidak membawa seluruh data penjelajahan. Setelah alamat ditemukan, perangkat berkomunikasi dengan server tujuan melalui jaringan.\n\nJika alamat luar dapat dijangkau tetapi pencarian nama gagal, periksa DNS. Jika gateway sendiri tidak terjangkau, periksa jaringan lokal dahulu. Perhatikan bahwa ping dapat diblokir sehingga harus dibandingkan dengan uji layanan sebenarnya.",
+    "example": "Laptop 192.168.10.20/24 memakai gateway .1 dan DNS yang diberikan router. Mengganti DNS tidak memperbaiki kabel putus ke router.",
+    "practice": [
+      "Lihat default gateway di konfigurasi perangkat.",
+      "Uji gateway dan layanan luar yang diketahui.",
+      "Jalankan nslookup example.com untuk menguji nama."
+    ],
+    "warning": "DNS cepat tidak menambah kapasitas paket internet.",
+    "check": "IP luar bisa diakses tetapi nslookup gagal. Apa diperiksa?",
+    "answer": "Konfigurasi dan keterjangkauan DNS resolver.",
+    "nodes": [
+      "Laptop",
+      "DNS: nama ke IP",
+      "Server tujuan"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
+    "slug": "dhcp-ip-statis",
+    "title": "DHCP dan IP statis",
+    "summary": "Dapatkan alamat otomatis tanpa bentrok dengan perangkat lain.",
+    "analogy": "DHCP seperti resepsionis yang meminjamkan nomor kamar beserta informasi fasilitas dan masa berlaku.",
+    "explain": "DHCPv4 umumnya memakai Discover, Offer, Request, dan Acknowledge atau DORA. Server memberikan sewa IP beserta opsi seperti mask, gateway, dan DNS. Lease mempunyai masa berlaku sehingga klien perlu memperbaruinya.\n\nPrinter atau server sering membutuhkan alamat stabil. Pilih IP statis di luar pool DHCP, atau DHCP reservation yang diatur pada server. Reservation tetap memakai proses DHCP tetapi menetapkan alamat untuk identitas klien tertentu.\n\nDua perangkat tidak boleh memakai IPv4 yang sama pada LAN yang sama. DHCP server liar dapat memberi subnet atau gateway yang salah. Dokumentasikan pool, reservation, dan alamat statis agar tidak bertabrakan.",
+    "example": "LAN 192.168.10.0/24 memakai gateway .1 dan pool .100–.200. Printer dapat memakai .10 jika belum digunakan dan dikecualikan dari pool.",
+    "practice": [
+      "Catat pool dan gateway pada lab.",
+      "Lihat lease klien di router.",
+      "Tentukan IP printer yang tidak bertabrakan."
+    ],
+    "warning": "IP statis tidak otomatis lebih cepat; keuntungannya kestabilan alamat.",
+    "check": "Amankah printer memakai .120 pada pool .100–.200?",
+    "answer": "Tidak tanpa reservation atau exclusion karena bisa diberikan ke perangkat lain.",
+    "nodes": [
+      "Klien meminta IP",
+      "DHCP server",
+      "Lease + opsi"
+    ],
+    "stage": 2,
+    "minutes": 6
+  },
+  {
     "slug": "kabel-utp-kategori",
     "title": "Kabel UTP: Cat5e, Cat6, solid, dan stranded",
     "summary": "Pilih kabel berdasarkan jalur dan kebutuhan, bukan hanya warna jaket.",
@@ -114,7 +351,7 @@
       "Jalur permanen",
       "Patch cord"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 7,
     "source": "https://www.flukenetworks.com/"
   },
@@ -140,7 +377,7 @@
       "Pasangan terpilin",
       "Wire-map tester"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 7,
     "source": "https://www.flukenetworks.com/knowledge-base/application-or-standards-articles-copper/differences-between-wiring-codes-t568a-vs"
   },
@@ -165,9 +402,32 @@
       "Fiber yang sesuai",
       "Modul pasangan"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 7,
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
+  },
+  {
+    "slug": "kabel-fiber-poe",
+    "title": "Kabel UTP, fiber optik, dan PoE",
+    "summary": "Pahami media sambungan dan kompatibilitas daya perangkat.",
+    "analogy": "Tembaga membawa sinyal listrik, fiber membawa cahaya. PoE membawa data sekaligus daya lewat kabel Ethernet.",
+    "explain": "Kabel twisted pair mempunyai pasangan kawat yang dipilin untuk mengurangi pengaruh gangguan. Konektor yang umum disebut RJ45 biasanya berupa konektor modular 8P8C. Kanal Ethernet tembaga yang umum biasanya dibatasi 100 meter sesuai kategori dan standar, termasuk patch cord.\n\nFiber cocok untuk jarak jauh atau area dengan gangguan elektromagnetik. Tipe fiber, konektor, panjang gelombang, dan modul transceiver harus cocok. Jangan melihat langsung ke ujung fiber atau port optik; cahaya berbahaya belum tentu terlihat.\n\nPoE standar IEEE 802.3af/at/bt melakukan deteksi dan negosiasi sesuai standarnya. Passive PoE dapat langsung memberi tegangan tertentu. Periksa tegangan, polaritas, pin, standar, dan kebutuhan daya sebelum menyambungkan perangkat.",
+    "example": "AP plafon mendapatkan data dan daya dari switch PoE yang kompatibel. Periksa juga anggaran daya total switch, bukan hanya daya per port.",
+    "practice": [
+      "Baca spesifikasi PoE AP dan switch.",
+      "Periksa kategori dan kondisi kabel.",
+      "Uji kabel dengan tester sebelum pemasangan."
+    ],
+    "warning": "Konektor yang sama tidak berarti tegangan PoE cocok.",
+    "check": "Apakah semua injector PoE aman untuk semua AP?",
+    "answer": "Tidak. Standar, tegangan, pin, dan daya harus sesuai.",
+    "nodes": [
+      "Switch PoE",
+      "Kabel data + daya",
+      "AP kompatibel"
+    ],
+    "stage": 3,
+    "minutes": 6
   },
   {
     "slug": "rack-patch-panel",
@@ -190,266 +450,75 @@
       "Patch panel",
       "Switch"
     ],
-    "stage": 1,
+    "stage": 3,
     "minutes": 7,
     "source": "https://www.flukenetworks.com/"
   },
   {
-    "slug": "kabel-fiber-poe",
-    "title": "Kabel UTP, fiber optik, dan PoE",
-    "summary": "Pahami media sambungan dan kompatibilitas daya perangkat.",
-    "analogy": "Tembaga membawa sinyal listrik, fiber membawa cahaya. PoE membawa data sekaligus daya lewat kabel Ethernet.",
-    "explain": "Kabel twisted pair mempunyai pasangan kawat yang dipilin untuk mengurangi pengaruh gangguan. Konektor yang umum disebut RJ45 biasanya berupa konektor modular 8P8C. Kanal Ethernet tembaga yang umum biasanya dibatasi 100 meter sesuai kategori dan standar, termasuk patch cord.\n\nFiber cocok untuk jarak jauh atau area dengan gangguan elektromagnetik. Tipe fiber, konektor, panjang gelombang, dan modul transceiver harus cocok. Jangan melihat langsung ke ujung fiber atau port optik; cahaya berbahaya belum tentu terlihat.\n\nPoE standar IEEE 802.3af/at/bt melakukan deteksi dan negosiasi sesuai standarnya. Passive PoE dapat langsung memberi tegangan tertentu. Periksa tegangan, polaritas, pin, standar, dan kebutuhan daya sebelum menyambungkan perangkat.",
-    "example": "AP plafon mendapatkan data dan daya dari switch PoE yang kompatibel. Periksa juga anggaran daya total switch, bukan hanya daya per port.",
+    "slug": "wifi-sinyal-channel",
+    "title": "Wi-Fi, sinyal, dan channel",
+    "summary": "Sinyal penuh belum tentu lancar. Pahami udara yang dipakai bersama.",
+    "analogy": "Wi-Fi seperti percakapan di ruang bersama: suara keras tetap sulit dipahami jika semua orang bicara bersamaan.",
+    "explain": "RSSI biasanya ditulis dalam dBm negatif: -50 dBm lebih kuat daripada -75 dBm. Kualitas juga dipengaruhi noise, interferensi, airtime, kemampuan klien, dan uplink kabel AP. Bar sinyal tidak mengukur kecepatan internet.\n\nChannel berdekatan dapat bertumpang tindih. Pada 2,4 GHz, lebar 20 MHz sering menjadi awal yang masuk akal di area ramai. Pola 1, 6, 11 lazim dipakai untuk mengurangi tumpang tindih; pilihan akhirnya mengikuti regulasi setempat, dukungan klien, dan pengukuran.\n\nLetakkan AP terbuka dan cukup dekat pengguna. Menaikkan daya AP saja tidak memperkuat pancaran balik ponsel. Band 5 GHz dan 6 GHz memberi opsi tambahan dengan karakter jangkauan serta dukungan berbeda.",
+    "example": "Channel 7 tampak kosong pada scan tetapi dapat bertumpang tindih dengan channel 6. Lihat lebar kanal dan pemakaian, bukan hanya nama SSID.",
     "practice": [
-      "Baca spesifikasi PoE AP dan switch.",
-      "Periksa kategori dan kondisi kabel.",
-      "Uji kabel dengan tester sebelum pemasangan."
+      "Ukur beberapa lokasi pada jam sibuk.",
+      "Bandingkan sambungan kabel dan Wi-Fi.",
+      "Ubah satu parameter lalu ulangi uji."
     ],
-    "warning": "Konektor yang sama tidak berarti tegangan PoE cocok.",
-    "check": "Apakah semua injector PoE aman untuk semua AP?",
-    "answer": "Tidak. Standar, tegangan, pin, dan daya harus sesuai.",
+    "warning": "Channel tanpa SSID tepat di nomornya belum tentu bebas gangguan.",
+    "check": "Apakah sinyal penuh menjamin internet cepat?",
+    "answer": "Tidak. Kemacetan radio, uplink, dan kapasitas ISP juga memengaruhi.",
     "nodes": [
-      "Switch PoE",
-      "Kabel data + daya",
-      "AP kompatibel"
-    ],
-    "stage": 2,
-    "minutes": 6
-  },
-  {
-    "slug": "ethernet-speed-duplex",
-    "title": "Kecepatan port, duplex, dan auto-negotiation",
-    "summary": "Pahami mengapa kabel terpasang tetapi link hanya 100 Mbps.",
-    "analogy": "Dua orang harus menyepakati cara bicara sebelum mengobrol. Auto-negotiation membantu kedua port menyepakati kemampuan sambungan.",
-    "explain": "Link speed adalah laju antarmuka, berbeda dari kapasitas paket ISP. Port 1 Gbps dapat terhubung pada laju lebih rendah jika kemampuan lawan, kabel, atau konfigurasi membatasinya. Auto-negotiation membantu memilih kemampuan yang didukung bersama dan parameter lain sesuai jenis Ethernet.\n\nFull duplex memungkinkan kirim dan terima bersamaan; half duplex berbagi waktu dan terkait mekanisme collision pada Ethernet lama. Jangan memaksa speed/duplex pada satu sisi lalu membiarkan sisi lain tanpa memeriksa hasil. Ketidakcocokan dapat menimbulkan performa buruk. Pada media dan standar tertentu, negosiasi juga memiliki fungsi teknis yang diperlukan.\n\nJika link gigabit turun menjadi 100 Mbps, periksa dukungan kedua port, keempat pasangan kabel, terminasi, adaptor, serta counter error. Uji dengan kabel pendek yang diketahui baik. Transfer lokal antarperangkat membantu mengisolasi jalur LAN dari layanan internet. Jangan menjadikan satu hasil speed test internet sebagai bukti kerusakan NIC.",
-    "example": "Laptop dan switch mendukung gigabit, tetapi kabel rusak pada salah satu pasangan. Link dapat terbentuk pada 100 Mbps meskipun internet tetap bisa dibuka.",
-    "practice": [
-      "Lihat negotiated rate di kedua ujung.",
-      "Periksa konfigurasi auto-negotiation.",
-      "Coba kabel pendek yang diketahui baik.",
-      "Bandingkan error counter sebelum dan sesudah.",
-      "Uji transfer lokal dengan perangkat pembanding."
-    ],
-    "warning": "Menetapkan 1 Gbps secara paksa tidak memperbaiki pasangan kabel yang putus.",
-    "check": "Apa diperiksa saat link hanya 100 Mbps?",
-    "answer": "Kemampuan kedua port, konfigurasi negosiasi, kabel, terminasi, dan counter error.",
-    "nodes": [
-      "Kemampuan NIC",
-      "Negosiasi link",
-      "Kemampuan switch"
-    ],
-    "stage": 2,
-    "minutes": 7,
-    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
-  },
-  {
-    "slug": "topologi-jaringan",
-    "title": "Topologi star, mesh, dan diagram fisik/logis",
-    "summary": "Belajar menggambar jaringan agar hubungan perangkat mudah dibaca.",
-    "analogy": "Topologi fisik seperti denah jalan, sedangkan topologi logis seperti peta layanan yang melewati jalan tersebut.",
-    "explain": "Topologi menggambarkan hubungan antarperangkat. Star menghubungkan perangkat ke titik pusat seperti switch. Mesh menyediakan beberapa hubungan antarnode. Topologi yang terlihat sederhana secara fisik dapat membawa beberapa jaringan logis melalui VLAN.\n\nPada star, kerusakan satu kabel klien biasanya berdampak pada klien itu, sedangkan switch pusat dapat memengaruhi banyak pengguna. Redundansi menambah jalur cadangan tetapi perlu mekanisme yang mencegah loop. Menghubungkan switch dengan banyak kabel tanpa rancangan STP/RSTP atau link aggregation bukan otomatis menambah kapasitas dengan aman.\n\nBuat dua diagram bila perlu: fisik memuat perangkat, port, dan kabel; logis memuat subnet, VLAN, gateway, dan kebijakan. Gunakan label konsisten. Arah panah harus menjelaskan maksud, misalnya alur permintaan, bukan seolah kabel hanya dapat mengirim satu arah.",
-    "example": "Satu trunk menghubungkan dua switch. Diagram fisik menampilkan satu kabel, sedangkan diagram logis menampilkan VLAN staf dan tamu yang melewatinya.",
-    "practice": [
-      "Gambar topologi star kecil dengan satu switch dan tiga klien.",
-      "Tulis nomor port dan media sambungan.",
-      "Tambahkan subnet serta gateway pada diagram logis.",
-      "Tandai titik yang memengaruhi banyak pengguna bila rusak."
-    ],
-    "warning": "Jalur cadangan tanpa mekanisme pengendalian loop dapat membuat jaringan justru lumpuh.",
-    "check": "Mengapa perlu diagram fisik dan logis?",
-    "answer": "Karena kabel/port dan pembagian subnet/VLAN menjelaskan dua sisi jaringan yang berbeda.",
-    "nodes": [
-      "Klien A",
-      "Switch pusat",
-      "Klien B"
-    ],
-    "stage": 2,
-    "minutes": 7,
-    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328068/Bridging+and+Switching"
-  },
-  {
-    "slug": "client-server-p2p",
-    "title": "Client–server, peer-to-peer, dan layanan jaringan",
-    "summary": "Kenali siapa meminta layanan dan siapa menjawabnya.",
-    "analogy": "Client seperti pengunjung restoran; server seperti penyedia layanan. Satu perangkat bisa menjadi pengunjung sekaligus penyedia pada layanan berbeda.",
-    "explain": "Client mengajukan permintaan dan server melayani permintaan. Istilah server dapat merujuk fungsi perangkat lunak, bukan hanya komputer besar di rack. Laptop bisa menjalankan web server lokal, sementara router dapat menjadi DHCP server dan DNS cache.\n\nDalam pola peer-to-peer, perangkat dapat berbagi sumber daya tanpa satu server pusat yang mengelola seluruh pertukaran. Implementasi sebenarnya bisa tetap menggunakan layanan bantu untuk menemukan peer. Bentuk jaringan tidak menentukan apakah semua pengguna memiliki izin yang sama.\n\nPisahkan server, service, dan protokol. Server adalah peran, service adalah layanan, dan protokol adalah aturan komunikasinya. DHCP membagikan konfigurasi IP, DNS menjawab nama, HTTP melayani sumber daya web. Untuk troubleshooting, pastikan perangkat terjangkau lalu periksa proses layanan, port, dan izin aksesnya.",
-    "example": "PC bisa ping ke printer, tetapi cetak gagal karena antrean atau layanan printer. Keterjangkauan IP saja tidak membuktikan aplikasi cetak sehat.",
-    "practice": [
-      "Daftar layanan jaringan yang dipakai sehari-hari.",
-      "Tentukan client dan server untuk tiap layanan.",
-      "Catat protokol serta kebutuhan izin.",
-      "Bedakan gagal menjangkau perangkat dengan gagal memakai layanan."
-    ],
-    "warning": "Server tidak harus berbentuk komputer besar dan tidak semua gangguan layanan berasal dari ISP.",
-    "check": "Bisakah router menjadi client dan server sekaligus?",
-    "answer": "Bisa. Misalnya DHCP client di WAN dan DHCP server di LAN.",
-    "nodes": [
-      "Client meminta",
-      "Service / protokol",
-      "Server menjawab"
-    ],
-    "stage": 2,
-    "minutes": 7,
-    "source": "https://www.cloudflare.com/learning/serverless/glossary/client-side-vs-server-side/"
-  },
-  {
-    "slug": "ip-mac",
-    "title": "IP address dan MAC address",
-    "summary": "Bedakan alamat logis dengan identitas pengiriman lokal.",
-    "analogy": "IP seperti alamat tujuan surat; MAC seperti identitas penerima untuk satu tahap pengiriman lokal.",
-    "explain": "IPv4 terdiri dari 32 bit dan biasa ditulis empat angka 0–255, misalnya 192.168.10.20. IP dipakai bersama prefix atau subnet mask untuk menentukan batas jaringan. Alamat dapat diberikan secara otomatis atau manual.\n\nMAC Ethernet umumnya ditulis enam pasangan heksadesimal, misalnya 02:11:22:33:44:55. Switch memakai MAC untuk meneruskan frame di LAN. MAC dapat diubah, dan ponsel dapat memakai MAC acak untuk privasi, sehingga MAC bukan bukti identitas yang kuat.\n\nSaat paket melewati router, MAC sumber dan tujuan pada tiap segmen Ethernet berubah mengikuti pengirim dan penerima setempat. IP tujuan umumnya tetap, kecuali terdapat translasi seperti NAT.",
-    "example": "Laptop membuka server di subnet lain. IP tujuan paket adalah server, tetapi MAC tujuan frame pertama adalah gateway lokal.",
-    "practice": [
-      "Buka ipconfig /all di Windows atau ip address di Linux.",
-      "Temukan IPv4, prefix, dan physical address / link ether.",
-      "Bedakan antarmuka Ethernet dan Wi-Fi."
-    ],
-    "warning": "IP dan MAC bukan dua istilah untuk alamat yang sama.",
-    "check": "MAC tujuan frame pertama ke situs luar milik siapa?",
-    "answer": "Biasanya gateway pada LAN, bukan server situs jauh.",
-    "nodes": [
-      "IP tujuan server",
-      "MAC gateway lokal",
-      "Router ke internet"
-    ],
-    "stage": 3,
-    "minutes": 6
-  },
-  {
-    "slug": "subnet-mask",
-    "title": "Subnet mask dan prefix /24",
-    "summary": "Tentukan perangkat satu jaringan melalui contoh angka sederhana.",
-    "analogy": "Prefix seperti batas kompleks: menentukan alamat mana yang masih dianggap tetangga lokal.",
-    "explain": "Pada IPv4, /24 berarti 24 bit pertama adalah bagian jaringan. Mask-nya 255.255.255.0. IP 192.168.10.20/24 dan .50/24 berada di jaringan 192.168.10.0/24. Aturan tiga angka pertama hanya cocok untuk /24, bukan semua prefix.\n\nPada subnet /24 biasa, .0 adalah network dan .255 broadcast. Host biasanya menggunakan .1 sampai .254, sehingga tersedia 254 alamat host. Rumus 2 pangkat bit host dikurangi 2 memiliki pengecualian seperti penggunaan khusus /31 dan /32.\n\nPada /25, rentang terbagi menjadi .0–.127 dan .128–.255. IP .20/25 dan .150/25 berada di subnet berbeda. Menghubungkannya ke switch saja tidak menyediakan fungsi routing antar subnet.",
-    "example": "192.168.10.150/25 memiliki network .128, broadcast .255, dan host .129–.254. Gateway harus dipilih dari alamat host yang sesuai dan belum digunakan.",
-    "practice": [
-      "Tentukan network dan broadcast 192.168.10.20/24.",
-      "Ulangi untuk 192.168.10.150/25.",
-      "Catat rentang host tanpa memasukkan network dan broadcast."
-    ],
-    "warning": "Gateway tidak wajib .1 atau .254; itu pilihan administrator.",
-    "check": "Apakah .20/25 dan .150/25 di 192.168.10.x satu subnet?",
-    "answer": "Tidak. Masing-masing berada di 192.168.10.0/25 dan 192.168.10.128/25.",
-    "nodes": [
-      "Subnet .0/25",
-      "Router",
-      "Subnet .128/25"
-    ],
-    "stage": 3,
-    "minutes": 6
-  },
-  {
-    "slug": "gateway-dns",
-    "title": "Gateway dan DNS",
-    "summary": "Bedakan pintu keluar jaringan dengan layanan pencarian alamat.",
-    "analogy": "Gateway seperti pintu keluar kompleks; DNS seperti buku alamat yang mencari IP dari nama.",
-    "explain": "Default gateway dipakai untuk tujuan yang tidak memiliki rute lebih spesifik. Umumnya alamat gateway dapat dijangkau langsung dari subnet perangkat. Gateway di rumah sering berupa IP LAN router.\n\nDNS menyediakan informasi nama domain, termasuk alamat IPv4 melalui record A dan IPv6 melalui AAAA. DNS tidak membawa seluruh data penjelajahan. Setelah alamat ditemukan, perangkat berkomunikasi dengan server tujuan melalui jaringan.\n\nJika alamat luar dapat dijangkau tetapi pencarian nama gagal, periksa DNS. Jika gateway sendiri tidak terjangkau, periksa jaringan lokal dahulu. Perhatikan bahwa ping dapat diblokir sehingga harus dibandingkan dengan uji layanan sebenarnya.",
-    "example": "Laptop 192.168.10.20/24 memakai gateway .1 dan DNS yang diberikan router. Mengganti DNS tidak memperbaiki kabel putus ke router.",
-    "practice": [
-      "Lihat default gateway di konfigurasi perangkat.",
-      "Uji gateway dan layanan luar yang diketahui.",
-      "Jalankan nslookup example.com untuk menguji nama."
-    ],
-    "warning": "DNS cepat tidak menambah kapasitas paket internet.",
-    "check": "IP luar bisa diakses tetapi nslookup gagal. Apa diperiksa?",
-    "answer": "Konfigurasi dan keterjangkauan DNS resolver.",
-    "nodes": [
-      "Laptop",
-      "DNS: nama ke IP",
-      "Server tujuan"
-    ],
-    "stage": 3,
-    "minutes": 6
-  },
-  {
-    "slug": "dhcp-ip-statis",
-    "title": "DHCP dan IP statis",
-    "summary": "Dapatkan alamat otomatis tanpa bentrok dengan perangkat lain.",
-    "analogy": "DHCP seperti resepsionis yang meminjamkan nomor kamar beserta informasi fasilitas dan masa berlaku.",
-    "explain": "DHCPv4 umumnya memakai Discover, Offer, Request, dan Acknowledge atau DORA. Server memberikan sewa IP beserta opsi seperti mask, gateway, dan DNS. Lease mempunyai masa berlaku sehingga klien perlu memperbaruinya.\n\nPrinter atau server sering membutuhkan alamat stabil. Pilih IP statis di luar pool DHCP, atau DHCP reservation yang diatur pada server. Reservation tetap memakai proses DHCP tetapi menetapkan alamat untuk identitas klien tertentu.\n\nDua perangkat tidak boleh memakai IPv4 yang sama pada LAN yang sama. DHCP server liar dapat memberi subnet atau gateway yang salah. Dokumentasikan pool, reservation, dan alamat statis agar tidak bertabrakan.",
-    "example": "LAN 192.168.10.0/24 memakai gateway .1 dan pool .100–.200. Printer dapat memakai .10 jika belum digunakan dan dikecualikan dari pool.",
-    "practice": [
-      "Catat pool dan gateway pada lab.",
-      "Lihat lease klien di router.",
-      "Tentukan IP printer yang tidak bertabrakan."
-    ],
-    "warning": "IP statis tidak otomatis lebih cepat; keuntungannya kestabilan alamat.",
-    "check": "Amankah printer memakai .120 pada pool .100–.200?",
-    "answer": "Tidak tanpa reservation atau exclusion karena bisa diberikan ke perangkat lain.",
-    "nodes": [
-      "Klien meminta IP",
-      "DHCP server",
-      "Lease + opsi"
-    ],
-    "stage": 3,
-    "minutes": 6
-  },
-  {
-    "slug": "osi-tcp-ip",
-    "title": "Layer OSI dan TCP/IP",
-    "summary": "Gunakan lapisan untuk memahami perjalanan data tanpa hafalan membingungkan.",
-    "analogy": "Pengiriman barang membutuhkan isi, kemasan, alamat, kurir, dan jalan. Setiap bagian punya tugas.",
-    "explain": "OSI memiliki tujuh lapisan: physical, data link, network, transport, session, presentation, application. Model ini membantu membagi fungsi komunikasi; tidak semua implementasi harus cocok sempurna dengan satu kotak.\n\nPhysical berurusan dengan sinyal dan media. Data link mengurus frame dan MAC. Network mengurus IP dan routing. Transport seperti TCP dan UDP melayani komunikasi proses. HTTP dan DNS berada di sisi aplikasi. Model TCP/IP umum mengelompokkan fungsi menjadi link, internet, transport, application; beberapa bahan ajar memakai versi lima lapisan.\n\nGunakan model untuk memilih pemeriksaan. Kabel longgar diperiksa sebelum DNS. Jika situs sudah memberi pesan error aplikasi, kemungkinan sebagian jalur jaringan telah bekerja.",
-    "example": "Kabel longgar terkait physical. Subnet salah terkait IP. Kata sandi situs keliru terkait aplikasi, bukan otomatis gangguan ISP.",
-    "practice": [
-      "Tulis tiga contoh gangguan jaringan.",
-      "Kelompokkan ke media, MAC, IP, atau layanan.",
-      "Tentukan pemeriksaan termudah untuk setiap kelompok."
-    ],
-    "warning": "Sebutkan model yang dipakai: TCP/IP tidak selalu dihitung dengan jumlah layer yang sama di semua buku.",
-    "check": "Routing berada di layer OSI berapa?",
-    "answer": "Layer 3, yaitu network.",
-    "nodes": [
-      "Aplikasi: HTTP / DNS",
-      "Transport: TCP / UDP",
-      "Internet: IP"
+      "Klien Wi-Fi",
+      "AP: udara bersama",
+      "Uplink kabel"
     ],
     "stage": 4,
     "minutes": 6
   },
   {
-    "slug": "switch-arp",
-    "title": "Switch dan ARP",
-    "summary": "Bagaimana komputer menemukan penerima pada jaringan lokal?",
-    "analogy": "Switch belajar meja mana ada di pintu tertentu; ARP bertanya siapa pemilik sebuah IPv4.",
-    "explain": "Switch mempelajari MAC sumber dari frame masuk beserta portnya. Jika MAC tujuan diketahui, frame diteruskan ke port yang sesuai. Broadcast dan unknown unicast dapat disebarkan ke port lain pada VLAN yang sama.\n\nARP pada IPv4 Ethernet memetakan IP next hop menjadi MAC. Jika tujuan satu subnet, klien mencari MAC tujuan. Jika tujuan di subnet lain, klien mencari MAC gateway. IPv6 memakai Neighbor Discovery, bukan ARP.\n\nRouter tidak meneruskan broadcast Ethernet biasa seperti switch. VLAN memisahkan domain broadcast. Loop pada switch dapat menyebabkan badai broadcast; RSTP membantu mencegah loop pada perangkat dan konfigurasi yang mendukung.",
-    "example": "PC .20 ingin mengirim ke .30 pada /24 yang sama. PC meminta MAC .30 melalui ARP, lalu mengirim frame lewat switch.",
+    "slug": "vlan-access-trunk",
+    "title": "VLAN, access, dan trunk",
+    "summary": "Pisahkan staf dan tamu meskipun memakai infrastruktur yang sama.",
+    "analogy": "VLAN seperti kelompok ruang dengan kartu berbeda; trunk seperti lorong bersama yang membawa kelompok berlabel.",
+    "explain": "VLAN memisahkan domain broadcast layer 2. Contohnya VLAN 10 untuk staf dan VLAN 20 untuk tamu. Setiap VLAN biasanya memakai subnet berbeda. Komunikasi antar-VLAN memerlukan routing serta kebijakan firewall yang sesuai.\n\nAccess port umumnya melayani perangkat akhir pada satu VLAN tanpa tag di kabel klien. Trunk membawa beberapa VLAN dengan tag IEEE 802.1Q. Beberapa konfigurasi mempunyai native atau untagged VLAN; kedua ujung harus cocok.\n\nSatu kabel antarswitch managed bisa membawa beberapa VLAN sekaligus. AP yang mendukung VLAN dapat memetakan SSID berbeda ke VLAN berbeda. Switch unmanaged tidak menyediakan kontrol keanggotaan yang diperlukan untuk desain ini. Saat mengaktifkan filtering, siapkan jalur manajemen dan rollback.",
+    "example": "Trunk dari switch A ke B membawa VLAN 10 dan 20. Port 2 switch B access VLAN 10, port 3 access VLAN 20.",
     "practice": [
-      "Buka arp -a di Windows atau ip neigh di Linux.",
-      "Akses gateway lab.",
-      "Cocokkan entri IP dengan MAC tetangga."
+      "Gambar staf dan tamu dengan warna berbeda.",
+      "Tandai access dan trunk.",
+      "Di lab, uji isolasi dan akses yang diizinkan."
     ],
-    "warning": "Jangan menyambung dua port switch dengan kabel untuk mencoba-coba; bisa membuat loop.",
-    "check": "Untuk server di subnet lain, ARP mencari MAC siapa?",
-    "answer": "Gateway yang menjadi next hop lokal.",
+    "warning": "VLAN saja tidak menetapkan izin antarjaringan; routing dan firewall tetap diperlukan.",
+    "check": "Bisakah satu kabel membawa VLAN 10 dan 20?",
+    "answer": "Bisa melalui trunk yang dikonfigurasi konsisten di kedua ujung.",
     "nodes": [
-      "PC: siapa pemilik .30?",
-      "Switch / broadcast",
-      "PC .30 menjawab"
+      "Access VLAN 10",
+      "Trunk VLAN 10 + 20",
+      "Access VLAN 20"
     ],
     "stage": 4,
     "minutes": 6
   },
   {
-    "slug": "tcp-udp-port",
-    "title": "TCP, UDP, dan port",
-    "summary": "Bedakan alamat perangkat dengan pintu layanan di dalamnya.",
-    "analogy": "IP seperti alamat gedung; port seperti nomor loket; protokol transport adalah cara pengangkutannya.",
-    "explain": "TCP menyediakan aliran byte yang berurutan, mendeteksi kehilangan, dan mengirim ulang data. Koneksi biasanya diawali three-way handshake. Keandalan transport tidak menjamin aplikasi selalu berhasil; server masih bisa menolak permintaan.\n\nUDP mengirim datagram tanpa jaminan pengurutan dan pengiriman ulang bawaan. Aplikasi dapat menambahkan mekanismenya sendiri. DNS dan banyak aplikasi waktu nyata memakai UDP. QUIC memakai UDP sambil menambahkan keandalan dan keamanan.\n\nPort membantu mengarahkan komunikasi ke proses yang benar. HTTPS lazim memakai TCP 443, sedangkan HTTP/3 memakai QUIC di UDP 443. Port klien biasanya sementara. Port terbuka belum membuktikan layanan sehat atau aman.",
-    "example": "Laptop membuka situs dan melakukan pencarian DNS bersamaan. Nomor port membantu membedakan komunikasi masing-masing proses.",
+    "slug": "routing-statis",
+    "title": "Routing statis dan jalur balasan",
+    "summary": "Banyak router, satu tujuan: pahami keputusan setiap langkah.",
+    "analogy": "Rute seperti papan petunjuk: untuk ke kawasan tertentu, lewat persimpangan berikutnya.",
+    "explain": "Router memilih rute sesuai tujuan paket, umumnya memakai prefix paling spesifik yang cocok. Next hop adalah router berikutnya yang dapat dijangkau, bukan selalu router terakhir. Default route IPv4 0.0.0.0/0 dipakai jika tidak ada rute lebih spesifik.\n\nR1 mempunyai LAN 192.168.10.0/24 dan transit 10.10.10.1/30. R2 mempunyai transit 10.10.10.2/30 dan LAN 192.168.20.0/24. R1 perlu rute ke LAN R2 via 10.10.10.2. R2 perlu rute balik ke LAN R1 via 10.10.10.1.\n\nPC di LAN R1 memakai IP LAN R1 sebagai gateway. PC tidak harus mengetahui semua router di perjalanan. Rute dua arah, firewall, serta konfigurasi host harus benar agar komunikasi berhasil.",
+    "example": "PC A 192.168.10.10/24 memakai gateway 192.168.10.1. PC B 192.168.20.10/24 memakai gateway 192.168.20.1.",
     "practice": [
-      "Catat tiga aplikasi yang digunakan.",
-      "Cari portnya di dokumentasi resmi.",
-      "Pisahkan IP tujuan dan port layanan."
+      "Gambar LAN A, transit, LAN B.",
+      "Tulis destination dan next hop pada kedua router.",
+      "Uji gateway lokal, router sebelah, lalu PC tujuan."
     ],
-    "warning": "UDP tidak selalu lebih cepat pada semua kondisi.",
-    "check": "Apa fungsi nomor port?",
-    "answer": "Membedakan layanan atau proses komunikasi pada suatu IP.",
+    "warning": "Rute satu arah belum cukup; jawaban juga memerlukan jalur kembali.",
+    "check": "Gateway PC A seharusnya router lokal atau router jauh?",
+    "answer": "IP LAN router lokal yang dapat dijangkau langsung.",
     "nodes": [
-      "IP perangkat",
-      "Port TCP 443",
-      "Layanan HTTPS"
+      "LAN A /24 — R1",
+      "Transit 10.10.10.0/30",
+      "R2 — LAN B /24"
     ],
     "stage": 4,
     "minutes": 6
@@ -478,75 +547,6 @@
     "minutes": 6
   },
   {
-    "slug": "wifi-sinyal-channel",
-    "title": "Wi-Fi, sinyal, dan channel",
-    "summary": "Sinyal penuh belum tentu lancar. Pahami udara yang dipakai bersama.",
-    "analogy": "Wi-Fi seperti percakapan di ruang bersama: suara keras tetap sulit dipahami jika semua orang bicara bersamaan.",
-    "explain": "RSSI biasanya ditulis dalam dBm negatif: -50 dBm lebih kuat daripada -75 dBm. Kualitas juga dipengaruhi noise, interferensi, airtime, kemampuan klien, dan uplink kabel AP. Bar sinyal tidak mengukur kecepatan internet.\n\nChannel berdekatan dapat bertumpang tindih. Pada 2,4 GHz, lebar 20 MHz sering menjadi awal yang masuk akal di area ramai. Pola 1, 6, 11 lazim dipakai untuk mengurangi tumpang tindih; pilihan akhirnya mengikuti regulasi setempat, dukungan klien, dan pengukuran.\n\nLetakkan AP terbuka dan cukup dekat pengguna. Menaikkan daya AP saja tidak memperkuat pancaran balik ponsel. Band 5 GHz dan 6 GHz memberi opsi tambahan dengan karakter jangkauan serta dukungan berbeda.",
-    "example": "Channel 7 tampak kosong pada scan tetapi dapat bertumpang tindih dengan channel 6. Lihat lebar kanal dan pemakaian, bukan hanya nama SSID.",
-    "practice": [
-      "Ukur beberapa lokasi pada jam sibuk.",
-      "Bandingkan sambungan kabel dan Wi-Fi.",
-      "Ubah satu parameter lalu ulangi uji."
-    ],
-    "warning": "Channel tanpa SSID tepat di nomornya belum tentu bebas gangguan.",
-    "check": "Apakah sinyal penuh menjamin internet cepat?",
-    "answer": "Tidak. Kemacetan radio, uplink, dan kapasitas ISP juga memengaruhi.",
-    "nodes": [
-      "Klien Wi-Fi",
-      "AP: udara bersama",
-      "Uplink kabel"
-    ],
-    "stage": 5,
-    "minutes": 6
-  },
-  {
-    "slug": "vlan-access-trunk",
-    "title": "VLAN, access, dan trunk",
-    "summary": "Pisahkan staf dan tamu meskipun memakai infrastruktur yang sama.",
-    "analogy": "VLAN seperti kelompok ruang dengan kartu berbeda; trunk seperti lorong bersama yang membawa kelompok berlabel.",
-    "explain": "VLAN memisahkan domain broadcast layer 2. Contohnya VLAN 10 untuk staf dan VLAN 20 untuk tamu. Setiap VLAN biasanya memakai subnet berbeda. Komunikasi antar-VLAN memerlukan routing serta kebijakan firewall yang sesuai.\n\nAccess port umumnya melayani perangkat akhir pada satu VLAN tanpa tag di kabel klien. Trunk membawa beberapa VLAN dengan tag IEEE 802.1Q. Beberapa konfigurasi mempunyai native atau untagged VLAN; kedua ujung harus cocok.\n\nSatu kabel antarswitch managed bisa membawa beberapa VLAN sekaligus. AP yang mendukung VLAN dapat memetakan SSID berbeda ke VLAN berbeda. Switch unmanaged tidak menyediakan kontrol keanggotaan yang diperlukan untuk desain ini. Saat mengaktifkan filtering, siapkan jalur manajemen dan rollback.",
-    "example": "Trunk dari switch A ke B membawa VLAN 10 dan 20. Port 2 switch B access VLAN 10, port 3 access VLAN 20.",
-    "practice": [
-      "Gambar staf dan tamu dengan warna berbeda.",
-      "Tandai access dan trunk.",
-      "Di lab, uji isolasi dan akses yang diizinkan."
-    ],
-    "warning": "VLAN saja tidak menetapkan izin antarjaringan; routing dan firewall tetap diperlukan.",
-    "check": "Bisakah satu kabel membawa VLAN 10 dan 20?",
-    "answer": "Bisa melalui trunk yang dikonfigurasi konsisten di kedua ujung.",
-    "nodes": [
-      "Access VLAN 10",
-      "Trunk VLAN 10 + 20",
-      "Access VLAN 20"
-    ],
-    "stage": 5,
-    "minutes": 6
-  },
-  {
-    "slug": "routing-statis",
-    "title": "Routing statis dan jalur balasan",
-    "summary": "Banyak router, satu tujuan: pahami keputusan setiap langkah.",
-    "analogy": "Rute seperti papan petunjuk: untuk ke kawasan tertentu, lewat persimpangan berikutnya.",
-    "explain": "Router memilih rute sesuai tujuan paket, umumnya memakai prefix paling spesifik yang cocok. Next hop adalah router berikutnya yang dapat dijangkau, bukan selalu router terakhir. Default route IPv4 0.0.0.0/0 dipakai jika tidak ada rute lebih spesifik.\n\nR1 mempunyai LAN 192.168.10.0/24 dan transit 10.10.10.1/30. R2 mempunyai transit 10.10.10.2/30 dan LAN 192.168.20.0/24. R1 perlu rute ke LAN R2 via 10.10.10.2. R2 perlu rute balik ke LAN R1 via 10.10.10.1.\n\nPC di LAN R1 memakai IP LAN R1 sebagai gateway. PC tidak harus mengetahui semua router di perjalanan. Rute dua arah, firewall, serta konfigurasi host harus benar agar komunikasi berhasil.",
-    "example": "PC A 192.168.10.10/24 memakai gateway 192.168.10.1. PC B 192.168.20.10/24 memakai gateway 192.168.20.1.",
-    "practice": [
-      "Gambar LAN A, transit, LAN B.",
-      "Tulis destination dan next hop pada kedua router.",
-      "Uji gateway lokal, router sebelah, lalu PC tujuan."
-    ],
-    "warning": "Rute satu arah belum cukup; jawaban juga memerlukan jalur kembali.",
-    "check": "Gateway PC A seharusnya router lokal atau router jauh?",
-    "answer": "IP LAN router lokal yang dapat dijangkau langsung.",
-    "nodes": [
-      "LAN A /24 — R1",
-      "Transit 10.10.10.0/30",
-      "R2 — LAN B /24"
-    ],
-    "stage": 5,
-    "minutes": 6
-  },
-  {
     "slug": "firewall-dasar",
     "title": "Firewall dan keamanan dasar",
     "summary": "Atur siapa boleh mengakses apa dengan aturan yang jelas.",
@@ -566,7 +566,7 @@
       "Aturan firewall",
       "Tujuan / layanan"
     ],
-    "stage": 5,
+    "stage": 4,
     "minutes": 6
   },
   {
@@ -589,7 +589,7 @@
       "Winbox / RouterOS",
       "Router latihan"
     ],
-    "stage": 6,
+    "stage": 5,
     "minutes": 6
   },
   {
@@ -612,7 +612,7 @@
       "Router LAN .1/24",
       "WAN sesuai ISP"
     ],
-    "stage": 6,
+    "stage": 5,
     "minutes": 6
   },
   {
@@ -634,6 +634,29 @@
       "Uji gateway",
       "Uji tujuan luar",
       "Uji layanan / DNS"
+    ],
+    "stage": 5,
+    "minutes": 6
+  },
+  {
+    "slug": "bandwidth-latency",
+    "title": "Bandwidth, latency, dan jitter",
+    "summary": "Mengapa paket 100 Mbps masih terasa lambat saat rapat?",
+    "analogy": "Bandwidth seperti lebar jalan; latency seperti lama perjalanan. Keduanya mengukur hal berbeda.",
+    "explain": "Bandwidth adalah kapasitas nominal; throughput adalah laju data yang benar-benar tercapai pada pengujian. Overhead, kualitas Wi-Fi, server, dan beban pengguna dapat menurunkan hasil. Mbps berarti megabit per detik; MB/s berarti megabyte per detik. Satu byte sama dengan delapan bit.\n\nLatency adalah waktu tunda; ping mengukur RTT. Jitter adalah variasi delay antarpaket sesuai metode pengukuran. Suara dan rapat daring sensitif terhadap delay, jitter, serta kehilangan paket. Unduhan besar lebih mudah menunjukkan batas throughput.\n\nCatat media, jumlah pengguna, waktu, dan server uji. Paket 100 Mbps secara teoritis setara 12,5 MB/s sebelum overhead. Satu hasil speed test tidak menjamin semua server memberi laju yang sama.",
+    "example": "Backup memenuhi upload sehingga rapat tersendat walau unduhan masih cepat. Periksa upload, antrean, dan latency saat sibuk.",
+    "practice": [
+      "Bandingkan latency saat sepi dan upload aktif.",
+      "Samakan satuan throughput.",
+      "Uji kabel dengan server yang sama."
+    ],
+    "warning": "Jangan membandingkan Mbps dan MB/s seolah satuannya sama.",
+    "check": "100 Mbps setara berapa MB/s sebelum overhead?",
+    "answer": "12,5 MB/s.",
+    "nodes": [
+      "Bandwidth: kapasitas",
+      "Throughput: hasil",
+      "Latency: waktu tunda"
     ],
     "stage": 6,
     "minutes": 6
@@ -659,29 +682,6 @@
       "DNS / aplikasi"
     ],
     "stage": 6,
-    "minutes": 6
-  },
-  {
-    "slug": "bandwidth-latency",
-    "title": "Bandwidth, latency, dan jitter",
-    "summary": "Mengapa paket 100 Mbps masih terasa lambat saat rapat?",
-    "analogy": "Bandwidth seperti lebar jalan; latency seperti lama perjalanan. Keduanya mengukur hal berbeda.",
-    "explain": "Bandwidth adalah kapasitas nominal; throughput adalah laju data yang benar-benar tercapai pada pengujian. Overhead, kualitas Wi-Fi, server, dan beban pengguna dapat menurunkan hasil. Mbps berarti megabit per detik; MB/s berarti megabyte per detik. Satu byte sama dengan delapan bit.\n\nLatency adalah waktu tunda; ping mengukur RTT. Jitter adalah variasi delay antarpaket sesuai metode pengukuran. Suara dan rapat daring sensitif terhadap delay, jitter, serta kehilangan paket. Unduhan besar lebih mudah menunjukkan batas throughput.\n\nCatat media, jumlah pengguna, waktu, dan server uji. Paket 100 Mbps secara teoritis setara 12,5 MB/s sebelum overhead. Satu hasil speed test tidak menjamin semua server memberi laju yang sama.",
-    "example": "Backup memenuhi upload sehingga rapat tersendat walau unduhan masih cepat. Periksa upload, antrean, dan latency saat sibuk.",
-    "practice": [
-      "Bandingkan latency saat sepi dan upload aktif.",
-      "Samakan satuan throughput.",
-      "Uji kabel dengan server yang sama."
-    ],
-    "warning": "Jangan membandingkan Mbps dan MB/s seolah satuannya sama.",
-    "check": "100 Mbps setara berapa MB/s sebelum overhead?",
-    "answer": "12,5 MB/s.",
-    "nodes": [
-      "Bandwidth: kapasitas",
-      "Throughput: hasil",
-      "Latency: waktu tunda"
-    ],
-    "stage": 7,
     "minutes": 6
   },
   {
@@ -808,33 +808,6 @@
     "mtcna": 1
   },
   {
-    "slug": "mtcna-dhcp-arp",
-    "title": "MTCNA 03 · Lab DHCP dan tabel ARP",
-    "summary": "Pisahkan DHCP client WAN dari DHCP server LAN dan verifikasi lease.",
-    "analogy": "Router bisa menjadi tamu yang meminta alamat di sisi ISP sekaligus resepsionis yang membagikan alamat di LAN.",
-    "explain": "Pada lab, gunakan LAN 192.168.50.0/24, gateway .1, dan pool .100–.150. WAN mengikuti DHCP hanya jika hulu memang menyediakannya. DHCP client WAN tidak membagikan alamat ke klien LAN; DHCP server LAN memerlukan antarmuka, pool, serta network options yang cocok.\n\nLease menunjukkan peminjaman IP. Static lease dapat menstabilkan alamat untuk klien tertentu; jangan menumpuk pool dengan IP manual. Periksa mask, gateway, DNS, lease time, dan status server. Jika DNS router dipakai, layanan resolver serta firewall harus mengizinkan klien tepercaya dan membatasi akses yang tidak diperlukan.\n\nARP memetakan IPv4 next hop ke MAC pada link Ethernet. Periksa tabel ARP setelah klien aktif. Mode enabled, disabled, proxy-arp, dan reply-only memiliki dampak berbeda; reply-only bukan tombol keamanan universal dan dapat memutus komunikasi jika entri yang diperlukan belum disiapkan. Buktikan kondisi default yang bekerja sebelum bereksperimen.",
-    "example": "WAN mendapat IP dari router hulu, sedangkan PC LAN mendapat 192.168.50.100. Alamat WAN dan LAN tidak harus berada pada subnet yang sama; justru subnet bertabrakan perlu dihindari.",
-    "practice": [
-      "Di lab, pastikan port WAN bukan anggota bridge LAN.",
-      "IP → DHCP Client: tambahkan pada WAN hanya bila hulu memakai DHCP.",
-      "IP → Addresses: tetapkan 192.168.50.1/24 di bridge LAN yang benar.",
-      "IP → DHCP Server → DHCP Setup: pilih LAN, pool .100–.150, gateway .1, DNS sesuai rancangan.",
-      "Sambungkan klien, periksa lease, IP/gateway/DNS, lalu lihat IP → ARP."
-    ],
-    "warning": "Jangan mengaktifkan DHCP server lab pada LAN produksi.",
-    "check": "Apakah DHCP client di WAN memberi IP ke PC LAN?",
-    "answer": "Tidak. DHCP server LAN merupakan layanan terpisah.",
-    "nodes": [
-      "DHCP hulu",
-      "Router: client + server",
-      "Klien LAN"
-    ],
-    "stage": 8,
-    "minutes": 10,
-    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/24805500/DHCP",
-    "mtcna": 2
-  },
-  {
     "slug": "mtcna-bridge",
     "title": "MTCNA 04 · Bridge, port, dan domain broadcast",
     "summary": "Gabungkan port LAN dengan benar tanpa memasukkan WAN.",
@@ -860,6 +833,33 @@
     "minutes": 10,
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328068/Bridging+and+Switching",
     "mtcna": 3
+  },
+  {
+    "slug": "mtcna-dhcp-arp",
+    "title": "MTCNA 03 · Lab DHCP dan tabel ARP",
+    "summary": "Pisahkan DHCP client WAN dari DHCP server LAN dan verifikasi lease.",
+    "analogy": "Router bisa menjadi tamu yang meminta alamat di sisi ISP sekaligus resepsionis yang membagikan alamat di LAN.",
+    "explain": "Pada lab, gunakan LAN 192.168.50.0/24, gateway .1, dan pool .100–.150. WAN mengikuti DHCP hanya jika hulu memang menyediakannya. DHCP client WAN tidak membagikan alamat ke klien LAN; DHCP server LAN memerlukan antarmuka, pool, serta network options yang cocok.\n\nLease menunjukkan peminjaman IP. Static lease dapat menstabilkan alamat untuk klien tertentu; jangan menumpuk pool dengan IP manual. Periksa mask, gateway, DNS, lease time, dan status server. Jika DNS router dipakai, layanan resolver serta firewall harus mengizinkan klien tepercaya dan membatasi akses yang tidak diperlukan.\n\nARP memetakan IPv4 next hop ke MAC pada link Ethernet. Periksa tabel ARP setelah klien aktif. Mode enabled, disabled, proxy-arp, dan reply-only memiliki dampak berbeda; reply-only bukan tombol keamanan universal dan dapat memutus komunikasi jika entri yang diperlukan belum disiapkan. Buktikan kondisi default yang bekerja sebelum bereksperimen.",
+    "example": "WAN mendapat IP dari router hulu, sedangkan PC LAN mendapat 192.168.50.100. Alamat WAN dan LAN tidak harus berada pada subnet yang sama; justru subnet bertabrakan perlu dihindari.",
+    "practice": [
+      "Di lab, pastikan port WAN bukan anggota bridge LAN.",
+      "IP → DHCP Client: tambahkan pada WAN hanya bila hulu memakai DHCP.",
+      "IP → Addresses: tetapkan 192.168.50.1/24 di bridge LAN yang benar.",
+      "IP → DHCP Server → DHCP Setup: pilih LAN, pool .100–.150, gateway .1, DNS sesuai rancangan.",
+      "Sambungkan klien, periksa lease, IP/gateway/DNS, lalu lihat IP → ARP."
+    ],
+    "warning": "Jangan mengaktifkan DHCP server lab pada LAN produksi.",
+    "check": "Apakah DHCP client di WAN memberi IP ke PC LAN?",
+    "answer": "Tidak. DHCP server LAN merupakan layanan terpisah.",
+    "nodes": [
+      "DHCP hulu",
+      "Router: client + server",
+      "Klien LAN"
+    ],
+    "stage": 8,
+    "minutes": 10,
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/24805500/DHCP",
+    "mtcna": 2
   },
   {
     "slug": "mtcna-routing-lab",
@@ -1104,6 +1104,32 @@
     "minutes": 8
   },
   {
+    "slug": "dns-record-ttl",
+    "title": "DNS record, TTL, dan perubahan domain",
+    "summary": "Bedakan A, AAAA, CNAME, MX, TXT, dan cache saat domain diubah.",
+    "analogy": "DNS seperti buku alamat berlapis dengan salinan sementara. Memperbarui satu buku tidak langsung menghapus semua salinan yang masih berlaku.",
+    "explain": "Record A menghubungkan nama ke IPv4; AAAA ke IPv6; CNAME membuat nama alias ke nama lain. MX menunjuk layanan penerima email dengan prioritas, sedangkan TXT menyimpan teks untuk kebutuhan seperti verifikasi dan kebijakan email. Nilai record harus mengikuti kebutuhan layanan yang benar.\n\nTTL menyatakan berapa lama jawaban boleh disimpan di cache. Perubahan record tidak langsung menghapus jawaban lama pada semua resolver. Menurunkan TTL perlu dilakukan sebelum migrasi dengan mempertimbangkan TTL lama. Cache negatif juga dapat membuat nama yang baru dibuat belum segera terlihat.\n\nPisahkan nameserver otoritatif, resolver, dan hosting. Mengubah A tidak memindahkan file website; mengganti nameserver berarti pengelolaan jawaban berpindah dan semua record penting harus dibawa. HTTPS juga memerlukan sertifikat serta konfigurasi hosting untuk nama tersebut. Jangan menghapus MX atau TXT email ketika hanya memindahkan subdomain website.",
+    "example": "Website berpindah alamat, tetapi beberapa perangkat masih menuju server lama. Bandingkan jawaban resolver dan record otoritatif sebelum menyimpulkan server baru gagal.",
+    "practice": [
+      "Buat tabel record domain latihan beserta tujuannya.",
+      "Gunakan nslookup -type=A example.com dan periksa juga AAAA bila diperlukan.",
+      "Catat resolver yang menjawab dan TTL bila alat menampilkannya.",
+      "Untuk migrasi, rencanakan record, hosting, sertifikat, serta rollback.",
+      "Uji website dan email sebagai layanan terpisah."
+    ],
+    "warning": "CNAME menunjuk nama host, bukan URL lengkap dengan https:// atau path halaman.",
+    "check": "Apakah mengganti A record otomatis memindahkan file website?",
+    "answer": "Tidak. DNS mengubah jawaban alamat; konten dan konfigurasi hosting harus disiapkan tersendiri.",
+    "nodes": [
+      "Record otoritatif",
+      "Cache resolver / TTL",
+      "Jawaban ke klien"
+    ],
+    "source": "https://developers.cloudflare.com/dns/manage-dns-records/reference/dns-record-types/",
+    "stage": 11,
+    "minutes": 8
+  },
+  {
     "slug": "ipv6-alamat-prefix",
     "title": "IPv6: membaca alamat, prefix, dan jenisnya",
     "summary": "Kenali heksadesimal, penyingkatan, link-local, serta global unicast.",
@@ -1156,55 +1182,29 @@
     "minutes": 8
   },
   {
-    "slug": "dns-record-ttl",
-    "title": "DNS record, TTL, dan perubahan domain",
-    "summary": "Bedakan A, AAAA, CNAME, MX, TXT, dan cache saat domain diubah.",
-    "analogy": "DNS seperti buku alamat berlapis dengan salinan sementara. Memperbarui satu buku tidak langsung menghapus semua salinan yang masih berlaku.",
-    "explain": "Record A menghubungkan nama ke IPv4; AAAA ke IPv6; CNAME membuat nama alias ke nama lain. MX menunjuk layanan penerima email dengan prioritas, sedangkan TXT menyimpan teks untuk kebutuhan seperti verifikasi dan kebijakan email. Nilai record harus mengikuti kebutuhan layanan yang benar.\n\nTTL menyatakan berapa lama jawaban boleh disimpan di cache. Perubahan record tidak langsung menghapus jawaban lama pada semua resolver. Menurunkan TTL perlu dilakukan sebelum migrasi dengan mempertimbangkan TTL lama. Cache negatif juga dapat membuat nama yang baru dibuat belum segera terlihat.\n\nPisahkan nameserver otoritatif, resolver, dan hosting. Mengubah A tidak memindahkan file website; mengganti nameserver berarti pengelolaan jawaban berpindah dan semua record penting harus dibawa. HTTPS juga memerlukan sertifikat serta konfigurasi hosting untuk nama tersebut. Jangan menghapus MX atau TXT email ketika hanya memindahkan subdomain website.",
-    "example": "Website berpindah alamat, tetapi beberapa perangkat masih menuju server lama. Bandingkan jawaban resolver dan record otoritatif sebelum menyimpulkan server baru gagal.",
+    "slug": "dhcp-relay",
+    "title": "DHCP relay untuk beberapa subnet",
+    "summary": "Mengapa DHCP server pusat tidak mendengar permintaan VLAN lain?",
+    "analogy": "Relay seperti petugas penghubung: permintaan lokal diteruskan ke kantor layanan yang berada di jaringan lain.",
+    "explain": "DHCPv4 awal sering memakai broadcast pada jaringan lokal. Router biasa tidak meneruskan broadcast itu ke semua subnet. DHCP relay membantu mengirim permintaan klien menuju server DHCP yang ditentukan, beserta konteks yang diperlukan untuk memilih layanan jaringan yang sesuai.\n\nServer pusat perlu konfigurasi pool dan opsi untuk subnet klien, bukan sekadar satu pool bersama untuk semua VLAN. Relay harus ditempatkan pada interface serta jaringan yang tepat. Rute dua arah dan firewall yang sesuai diperlukan agar pertukaran pesan dapat berlangsung.\n\nBedakan DHCP relay, DHCP server, dan DNS forwarder. Relay tidak otomatis membuat subnet baru, memberi izin antar-VLAN, atau menggantikan default gateway. Dokumentasikan alamat relay, server, subnet klien, dan lingkup layanan. Hindari server lokal tambahan yang tidak direncanakan.",
+    "example": "VLAN staf dan tamu memakai satu server DHCP pusat. Masing-masing interface klien memiliki relay sesuai rancangan, sementara server menyediakan scope yang cocok untuk setiap subnet.",
     "practice": [
-      "Buat tabel record domain latihan beserta tujuannya.",
-      "Gunakan nslookup -type=A example.com dan periksa juga AAAA bila diperlukan.",
-      "Catat resolver yang menjawab dan TTL bila alat menampilkannya.",
-      "Untuk migrasi, rencanakan record, hosting, sertifikat, serta rollback.",
-      "Uji website dan email sebagai layanan terpisah."
+      "Gambar subnet klien, router/relay, dan server pusat.",
+      "Tentukan pool serta opsi DHCP setiap subnet pada server lab.",
+      "Periksa rute pergi dan balasan antara relay serta server.",
+      "Di lab, pasang relay pada interface klien yang benar.",
+      "Periksa lease dan IP/gateway/DNS dari klien tiap subnet."
     ],
-    "warning": "CNAME menunjuk nama host, bukan URL lengkap dengan https:// atau path halaman.",
-    "check": "Apakah mengganti A record otomatis memindahkan file website?",
-    "answer": "Tidak. DNS mengubah jawaban alamat; konten dan konfigurasi hosting harus disiapkan tersendiri.",
+    "warning": "Jangan menganggap satu pool DHCP dapat dipakai sembarang pada beberapa subnet berbeda.",
+    "check": "Mengapa DHCP broadcast tidak otomatis sampai ke server di subnet lain?",
+    "answer": "Broadcast lokal tidak diteruskan router seperti trafik biasa; relay menyediakan mekanisme penghubung yang dirancang untuk itu.",
     "nodes": [
-      "Record otoritatif",
-      "Cache resolver / TTL",
-      "Jawaban ke klien"
+      "Klien / broadcast",
+      "DHCP relay",
+      "Server / scope"
     ],
-    "source": "https://developers.cloudflare.com/dns/manage-dns-records/reference/dns-record-types/",
+    "source": "https://manual.mikrotik.com/docs/network-management/dhcp/",
     "stage": 11,
-    "minutes": 8
-  },
-  {
-    "slug": "mtu-mss-pmtud",
-    "title": "MTU, MSS, dan kasus situs hanya terbuka sebagian",
-    "summary": "Mengapa ping kecil berhasil tetapi upload atau halaman tertentu macet?",
-    "analogy": "MTU seperti batas ukuran barang yang boleh melewati satu gerbang. Ukuran yang muat di gerbang awal belum tentu muat sepanjang perjalanan.",
-    "explain": "MTU membatasi ukuran paket yang dapat dibawa pada lapisan yang dimaksud. Bedakan IP MTU, L2MTU, dan ukuran frame yang dilaporkan perangkat. Tunnel serta enkapsulasi menambah overhead sehingga kapasitas payload dapat lebih kecil. Jangan memakai satu angka universal untuk semua media.\n\nMSS berkaitan dengan ukuran data TCP dalam satu segmen dan dinegosiasikan saat pembentukan koneksi. MTU 1500 dengan header IPv4 dan TCP dasar masing-masing 20 byte memberi ilustrasi MSS 1460; opsi header atau mekanisme lain dapat mengubah kebutuhan. MSS bukan batas ukuran semua paket UDP.\n\nPath MTU Discovery membantu menemukan batas jalur. ICMP yang diperlukan harus dapat bekerja sesuai protokol. Jika pesan penting diblokir, paket besar dapat bermasalah sementara paket kecil berhasil. MSS clamping dapat membantu kasus TCP tertentu, tetapi bukan pengganti diagnosis semua masalah MTU atau UDP.",
-    "example": "VPN tersambung dan ping kecil berhasil, tetapi transfer besar macet. Periksa overhead tunnel, MTU jalur, pesan ICMP terkait, dan uji ukuran paket secara terkendali.",
-    "practice": [
-      "Catat MTU interface fisik dan tunnel pada lab.",
-      "Bandingkan akses layanan kecil dan transfer besar.",
-      "Gunakan alat uji ukuran paket sesuai dokumentasi OS, dengan batas dan flag yang dipahami.",
-      "Periksa firewall untuk ICMP yang diperlukan.",
-      "Ubah satu parameter di lab dan uji kembali layanan yang semula gagal."
-    ],
-    "warning": "Jangan menetapkan MSS 1460 atau MTU 1500 ke semua interface tanpa melihat enkapsulasi dan jalurnya.",
-    "check": "Apakah MSS clamping memperbaiki semua paket UDP?",
-    "answer": "Tidak. MSS adalah parameter TCP; UDP membutuhkan penanganan MTU yang sesuai pada aplikasinya dan jalur.",
-    "nodes": [
-      "Ukuran paket",
-      "Batas MTU jalur",
-      "PMTUD / MSS TCP"
-    ],
-    "source": "https://manual.mikrotik.com/docs/hardware/mtu-in-routeros/",
-    "stage": 12,
     "minutes": 8
   },
   {
@@ -1256,6 +1256,32 @@
       "Distribusi aliran"
     ],
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323193/Bonding",
+    "stage": 12,
+    "minutes": 8
+  },
+  {
+    "slug": "mtu-mss-pmtud",
+    "title": "MTU, MSS, dan kasus situs hanya terbuka sebagian",
+    "summary": "Mengapa ping kecil berhasil tetapi upload atau halaman tertentu macet?",
+    "analogy": "MTU seperti batas ukuran barang yang boleh melewati satu gerbang. Ukuran yang muat di gerbang awal belum tentu muat sepanjang perjalanan.",
+    "explain": "MTU membatasi ukuran paket yang dapat dibawa pada lapisan yang dimaksud. Bedakan IP MTU, L2MTU, dan ukuran frame yang dilaporkan perangkat. Tunnel serta enkapsulasi menambah overhead sehingga kapasitas payload dapat lebih kecil. Jangan memakai satu angka universal untuk semua media.\n\nMSS berkaitan dengan ukuran data TCP dalam satu segmen dan dinegosiasikan saat pembentukan koneksi. MTU 1500 dengan header IPv4 dan TCP dasar masing-masing 20 byte memberi ilustrasi MSS 1460; opsi header atau mekanisme lain dapat mengubah kebutuhan. MSS bukan batas ukuran semua paket UDP.\n\nPath MTU Discovery membantu menemukan batas jalur. ICMP yang diperlukan harus dapat bekerja sesuai protokol. Jika pesan penting diblokir, paket besar dapat bermasalah sementara paket kecil berhasil. MSS clamping dapat membantu kasus TCP tertentu, tetapi bukan pengganti diagnosis semua masalah MTU atau UDP.",
+    "example": "VPN tersambung dan ping kecil berhasil, tetapi transfer besar macet. Periksa overhead tunnel, MTU jalur, pesan ICMP terkait, dan uji ukuran paket secara terkendali.",
+    "practice": [
+      "Catat MTU interface fisik dan tunnel pada lab.",
+      "Bandingkan akses layanan kecil dan transfer besar.",
+      "Gunakan alat uji ukuran paket sesuai dokumentasi OS, dengan batas dan flag yang dipahami.",
+      "Periksa firewall untuk ICMP yang diperlukan.",
+      "Ubah satu parameter di lab dan uji kembali layanan yang semula gagal."
+    ],
+    "warning": "Jangan menetapkan MSS 1460 atau MTU 1500 ke semua interface tanpa melihat enkapsulasi dan jalurnya.",
+    "check": "Apakah MSS clamping memperbaiki semua paket UDP?",
+    "answer": "Tidak. MSS adalah parameter TCP; UDP membutuhkan penanganan MTU yang sesuai pada aplikasinya dan jalur.",
+    "nodes": [
+      "Ukuran paket",
+      "Batas MTU jalur",
+      "PMTUD / MSS TCP"
+    ],
+    "source": "https://manual.mikrotik.com/docs/hardware/mtu-in-routeros/",
     "stage": 12,
     "minutes": 8
   },
@@ -1390,28 +1416,28 @@
     "minutes": 8
   },
   {
-    "slug": "dhcp-relay",
-    "title": "DHCP relay untuk beberapa subnet",
-    "summary": "Mengapa DHCP server pusat tidak mendengar permintaan VLAN lain?",
-    "analogy": "Relay seperti petugas penghubung: permintaan lokal diteruskan ke kantor layanan yang berada di jaringan lain.",
-    "explain": "DHCPv4 awal sering memakai broadcast pada jaringan lokal. Router biasa tidak meneruskan broadcast itu ke semua subnet. DHCP relay membantu mengirim permintaan klien menuju server DHCP yang ditentukan, beserta konteks yang diperlukan untuk memilih layanan jaringan yang sesuai.\n\nServer pusat perlu konfigurasi pool dan opsi untuk subnet klien, bukan sekadar satu pool bersama untuk semua VLAN. Relay harus ditempatkan pada interface serta jaringan yang tepat. Rute dua arah dan firewall yang sesuai diperlukan agar pertukaran pesan dapat berlangsung.\n\nBedakan DHCP relay, DHCP server, dan DNS forwarder. Relay tidak otomatis membuat subnet baru, memberi izin antar-VLAN, atau menggantikan default gateway. Dokumentasikan alamat relay, server, subnet klien, dan lingkup layanan. Hindari server lokal tambahan yang tidak direncanakan.",
-    "example": "VLAN staf dan tamu memakai satu server DHCP pusat. Masing-masing interface klien memiliki relay sesuai rancangan, sementara server menyediakan scope yang cocok untuk setiap subnet.",
+    "slug": "keamanan-lan-dhcp-arp",
+    "title": "Keamanan LAN: rogue DHCP, ARP, dan port pengguna",
+    "summary": "Lindungi jaringan lokal tanpa mengandalkan satu fitur saja.",
+    "analogy": "Tidak semua orang yang berada di dalam gedung otomatis boleh mengubah papan petunjuk atau membagikan kartu akses.",
+    "explain": "Rogue DHCP adalah layanan DHCP yang tidak direncanakan dan dapat membagikan gateway atau DNS yang salah. Sumbernya bisa perangkat yang salah konfigurasi, bukan selalu serangan. Mulai dari inventaris, pembatasan port, serta pemisahan tamu, perangkat, dan jaringan manajemen.\n\nARP tidak dirancang sebagai bukti identitas yang kuat. Beberapa switch menyediakan DHCP snooping, inspeksi ARP, atau pembatasan MAC dengan dukungan dan cara kerja berbeda. Port tepercaya untuk layanan hulu harus dipilih secara tepat. Jangan mengaktifkan proteksi tanpa menyiapkan binding atau pengecualian yang diperlukan karena klien sah bisa terputus.\n\nGunakan kebijakan berlapis: VLAN, firewall antarsegmen, akses admin terbatas, akun yang benar, pembaruan, serta pemantauan. MAC filtering saja tidak menjadi autentikasi yang kuat karena alamat dapat berubah. Di IPv6, pikirkan juga RA dan DHCPv6 yang tidak diinginkan sesuai fitur perangkat. Uji perubahan di lab dan siapkan jalur pemulihan.",
+    "example": "Pengguna memasang router pribadi ke LAN kantor melalui port LAN dan DHCP-nya masih aktif. Sebagian PC mendapat gateway salah. Identifikasi sumber lease sebelum mereset router utama.",
     "practice": [
-      "Gambar subnet klien, router/relay, dan server pusat.",
-      "Tentukan pool serta opsi DHCP setiap subnet pada server lab.",
-      "Periksa rute pergi dan balasan antara relay serta server.",
-      "Di lab, pasang relay pada interface klien yang benar.",
-      "Periksa lease dan IP/gateway/DNS dari klien tiap subnet."
+      "Inventaris sumber DHCP dan port uplink yang sah.",
+      "Pisahkan port pengguna, tamu, dan manajemen dalam rancangan.",
+      "Di lab, baca dukungan DHCP snooping serta proteksi ARP/RA pada model perangkat.",
+      "Tentukan trusted port dan uji klien sah sebelum perluasan.",
+      "Catat gejala, sumber perubahan, dan langkah pemulihan tanpa melakukan serangan ke jaringan lain."
     ],
-    "warning": "Jangan menganggap satu pool DHCP dapat dipakai sembarang pada beberapa subnet berbeda.",
-    "check": "Mengapa DHCP broadcast tidak otomatis sampai ke server di subnet lain?",
-    "answer": "Broadcast lokal tidak diteruskan router seperti trafik biasa; relay menyediakan mekanisme penghubung yang dirancang untuk itu.",
+    "warning": "Jangan menandai semua port sebagai trusted atau menganggap MAC filtering menggantikan autentikasi.",
+    "check": "Apakah DHCP liar selalu berarti penyerang?",
+    "answer": "Tidak. Salah konfigurasi router tambahan juga dapat menjadi penyebab; investigasi berdasarkan bukti.",
     "nodes": [
-      "Klien / broadcast",
-      "DHCP relay",
-      "Server / scope"
+      "Port pengguna",
+      "Kontrol layer 2 + VLAN",
+      "Layanan yang tepercaya"
     ],
-    "source": "https://manual.mikrotik.com/docs/network-management/dhcp/",
+    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
     "stage": 14,
     "minutes": 8
   },
@@ -1464,32 +1490,6 @@
       "Route + next hop"
     ],
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
-    "stage": 14,
-    "minutes": 8
-  },
-  {
-    "slug": "keamanan-lan-dhcp-arp",
-    "title": "Keamanan LAN: rogue DHCP, ARP, dan port pengguna",
-    "summary": "Lindungi jaringan lokal tanpa mengandalkan satu fitur saja.",
-    "analogy": "Tidak semua orang yang berada di dalam gedung otomatis boleh mengubah papan petunjuk atau membagikan kartu akses.",
-    "explain": "Rogue DHCP adalah layanan DHCP yang tidak direncanakan dan dapat membagikan gateway atau DNS yang salah. Sumbernya bisa perangkat yang salah konfigurasi, bukan selalu serangan. Mulai dari inventaris, pembatasan port, serta pemisahan tamu, perangkat, dan jaringan manajemen.\n\nARP tidak dirancang sebagai bukti identitas yang kuat. Beberapa switch menyediakan DHCP snooping, inspeksi ARP, atau pembatasan MAC dengan dukungan dan cara kerja berbeda. Port tepercaya untuk layanan hulu harus dipilih secara tepat. Jangan mengaktifkan proteksi tanpa menyiapkan binding atau pengecualian yang diperlukan karena klien sah bisa terputus.\n\nGunakan kebijakan berlapis: VLAN, firewall antarsegmen, akses admin terbatas, akun yang benar, pembaruan, serta pemantauan. MAC filtering saja tidak menjadi autentikasi yang kuat karena alamat dapat berubah. Di IPv6, pikirkan juga RA dan DHCPv6 yang tidak diinginkan sesuai fitur perangkat. Uji perubahan di lab dan siapkan jalur pemulihan.",
-    "example": "Pengguna memasang router pribadi ke LAN kantor melalui port LAN dan DHCP-nya masih aktif. Sebagian PC mendapat gateway salah. Identifikasi sumber lease sebelum mereset router utama.",
-    "practice": [
-      "Inventaris sumber DHCP dan port uplink yang sah.",
-      "Pisahkan port pengguna, tamu, dan manajemen dalam rancangan.",
-      "Di lab, baca dukungan DHCP snooping serta proteksi ARP/RA pada model perangkat.",
-      "Tentukan trusted port dan uji klien sah sebelum perluasan.",
-      "Catat gejala, sumber perubahan, dan langkah pemulihan tanpa melakukan serangan ke jaringan lain."
-    ],
-    "warning": "Jangan menandai semua port sebagai trusted atau menganggap MAC filtering menggantikan autentikasi.",
-    "check": "Apakah DHCP liar selalu berarti penyerang?",
-    "answer": "Tidak. Salah konfigurasi router tambahan juga dapat menjadi penyebab; investigasi berdasarkan bukti.",
-    "nodes": [
-      "Port pengguna",
-      "Kontrol layer 2 + VLAN",
-      "Layanan yang tepercaya"
-    ],
-    "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
     "stage": 14,
     "minutes": 8
   },
@@ -1664,6 +1664,35 @@
     "diagram": "dual"
   },
   {
+    "slug": "mtcre-ttl-traceroute",
+    "title": "MTCRE 07 · TTL dan membaca traceroute",
+    "summary": "Kenali batas hop dan pesan dari router sepanjang perjalanan.",
+    "analogy": "TTL seperti kupon jumlah persimpangan, bukan jam hitung mundur.",
+    "explain": "TTL pada IPv4 membatasi jumlah hop. Router menguranginya ketika meneruskan paket. Ketika habis, router membuang paket dan dapat mengirim ICMP Time Exceeded. Ini membantu mencegah paket berputar tanpa batas akibat routing loop.\n\nTraceroute mengirim probe dengan TTL bertahap untuk mengamati perangkat yang merespons. Jenis probe dapat berbeda antaralat. Angka waktu adalah waktu respons probe, bukan otomatis waktu pemrosesan satu router.\n\nTanda bintang berarti respons probe tidak diterima, bukan bukti pasti link itu mati. Firewall, pembatasan ICMP, jalur balasan, dan penyeimbangan jalur bisa mengubah hasil. Cocokkan traceroute dengan ping tujuan dan route sebelum menyimpulkan.",
+    "example": "Hop kedua tidak menjawab tetapi tujuan akhir menjawab: layanan tetap dapat dijangkau.",
+    "practice": [
+      "Gunakan rantai tiga router lab.",
+      "Prediksi titik TTL 1 dan 2 habis.",
+      "Jalankan traceroute ke tujuan.",
+      "Bandingkan dengan ping tujuan.",
+      "Catat kemungkinan penyebab hop tanpa respons."
+    ],
+    "warning": "TTL adalah batas hop, bukan sisa waktu dalam detik.",
+    "check": "Apakah bintang di satu hop selalu berarti trafik tidak dapat lewat?",
+    "answer": "Tidak; perangkat mungkin meneruskan trafik tetapi tidak membalas probe.",
+    "nodes": [
+      "TTL 3 → 2",
+      "TTL 2 → 1",
+      "TTL habis: ICMP"
+    ],
+    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
+    "sourcePages": "36–38",
+    "mtcre": 7,
+    "stage": 16,
+    "minutes": 12,
+    "diagram": "ttl"
+  },
+  {
     "slug": "mtcre-policy-routing",
     "title": "MTCRE 05 · Policy routing dan tabel terpisah",
     "summary": "Pilih jalur berdasarkan kebijakan, bukan hanya tujuan di tabel main.",
@@ -1725,35 +1754,6 @@
     "stage": 16,
     "minutes": 12,
     "diagram": "policy"
-  },
-  {
-    "slug": "mtcre-ttl-traceroute",
-    "title": "MTCRE 07 · TTL dan membaca traceroute",
-    "summary": "Kenali batas hop dan pesan dari router sepanjang perjalanan.",
-    "analogy": "TTL seperti kupon jumlah persimpangan, bukan jam hitung mundur.",
-    "explain": "TTL pada IPv4 membatasi jumlah hop. Router menguranginya ketika meneruskan paket. Ketika habis, router membuang paket dan dapat mengirim ICMP Time Exceeded. Ini membantu mencegah paket berputar tanpa batas akibat routing loop.\n\nTraceroute mengirim probe dengan TTL bertahap untuk mengamati perangkat yang merespons. Jenis probe dapat berbeda antaralat. Angka waktu adalah waktu respons probe, bukan otomatis waktu pemrosesan satu router.\n\nTanda bintang berarti respons probe tidak diterima, bukan bukti pasti link itu mati. Firewall, pembatasan ICMP, jalur balasan, dan penyeimbangan jalur bisa mengubah hasil. Cocokkan traceroute dengan ping tujuan dan route sebelum menyimpulkan.",
-    "example": "Hop kedua tidak menjawab tetapi tujuan akhir menjawab: layanan tetap dapat dijangkau.",
-    "practice": [
-      "Gunakan rantai tiga router lab.",
-      "Prediksi titik TTL 1 dan 2 habis.",
-      "Jalankan traceroute ke tujuan.",
-      "Bandingkan dengan ping tujuan.",
-      "Catat kemungkinan penyebab hop tanpa respons."
-    ],
-    "warning": "TTL adalah batas hop, bukan sisa waktu dalam detik.",
-    "check": "Apakah bintang di satu hop selalu berarti trafik tidak dapat lewat?",
-    "answer": "Tidak; perangkat mungkin meneruskan trafik tetapi tidak membalas probe.",
-    "nodes": [
-      "TTL 3 → 2",
-      "TTL 2 → 1",
-      "TTL habis: ICMP"
-    ],
-    "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328084/IP+Routing",
-    "sourcePages": "36–38",
-    "mtcre": 7,
-    "stage": 16,
-    "minutes": 12,
-    "diagram": "ttl"
   },
   {
     "slug": "mtcre-lab-multiwan",
@@ -1925,7 +1925,7 @@
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
     "sourcePages": "66–75",
     "mtcre": 13,
-    "stage": 18,
+    "stage": 17,
     "minutes": 12,
     "diagram": "diamond"
   },
