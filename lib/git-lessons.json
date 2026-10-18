@@ -1,0 +1,887 @@
+[
+  {
+    "slug": "apa-itu-git",
+    "title": "Apa itu Git dan mengapa kita membutuhkannya?",
+    "stage": 0,
+    "minutes": 12,
+    "summary": "Berhenti menumpuk file final, final-baru, dan final-banget. Kenali pencatatan versi.",
+    "analogy": "Bayangkan album foto perkembangan sebuah rumah. Setiap foto menyimpan keadaan pada waktu tertentu; kamu bisa membandingkan sebelum dan sesudah renovasi.",
+    "explain": [
+      "Git adalah sistem kontrol versi terdistribusi: alat untuk mencatat riwayat perubahan proyek. Ia membantu menjawab apa yang berubah, siapa yang mencatatnya, dan mengapa.",
+      "Git menyimpan snapshot yang disebut commit. Snapshot adalah keadaan file yang dilacak pada satu titik, bukan sekadar tombol simpan otomatis.",
+      "Sebagian besar pekerjaan Git berlangsung lokal tanpa internet. Untuk berbagi, kita mengirim riwayat ke repository lain, misalnya di GitHub.",
+      "Git cocok untuk kode, catatan Markdown, dan konfigurasi teks. File biner bisa dilacak, tetapi perbedaan isinya biasanya tidak senyaman file teks."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git --version"
+      }
+    ],
+    "result": "Jika Git tersedia, terminal menampilkan nomor versinya. Jika belum, lanjut ke instalasi.",
+    "practice": [
+      "Bayangkan tiga perubahan pada catatan belajar.",
+      "Tulis alasan mengapa tiap perubahan perlu dicatat."
+    ],
+    "warning": "Git bukan backup otomatis seluruh komputer. Perubahan yang belum dicatat masih bisa hilang.",
+    "check": "Apakah setiap kali menekan Save berarti sudah membuat commit?",
+    "answer": "Belum. Save menyimpan file kerja; commit mencatat snapshot yang dipilih ke riwayat Git.",
+    "nodes": [
+      "File kerja",
+      "Snapshot A",
+      "Snapshot B",
+      "Riwayat"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control"
+  },
+  {
+    "slug": "git-dan-github",
+    "title": "Git, GitHub, repository, dan istilah dasar",
+    "stage": 0,
+    "minutes": 12,
+    "summary": "Bedakan alat pencatat versi dan tempat berbagi proyek.",
+    "analogy": "Git seperti kamera pencatat perkembangan; GitHub seperti tempat berbagi album dengan tim.",
+    "explain": [
+      "Git adalah perangkat lunak, sedangkan GitHub adalah layanan hosting repository dan kolaborasi. Layanan lain juga dapat menjadi remote.",
+      "Repository atau repo adalah proyek beserta basis data riwayatnya. Folder .git menyimpan data Git; jangan mengedit isinya sembarangan.",
+      "Commit adalah satu catatan snapshot; branch adalah penunjuk jalur kerja; remote adalah nama alamat repo lain; clone membuat salinan repo beserta riwayatnya.",
+      "HEAD biasanya menunjuk branch aktif. Nama main hanyalah kebiasaan nama branch utama, bukan nama wajib."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git help glossary"
+      }
+    ],
+    "result": "Halaman bantuan istilah Git terbuka jika dokumentasi lokal tersedia. Referensi web tetap bisa digunakan.",
+    "practice": [
+      "Cocokkan kata commit, branch, remote dengan artinya.",
+      "Jelaskan perbedaan Git dan GitHub dengan kalimatmu."
+    ],
+    "warning": "Repo private membatasi akses, tetapi tetap bukan tempat menyimpan password.",
+    "check": "Bisakah belajar Git tanpa akun GitHub?",
+    "answer": "Bisa. Instalasi, commit, branch, dan merge bisa dikerjakan sepenuhnya di komputer sendiri.",
+    "nodes": [
+      "Git lokal",
+      "Repository",
+      "Remote",
+      "GitHub"
+    ],
+    "source": "https://git-scm.com/docs/gitglossary"
+  },
+  {
+    "slug": "instalasi-git",
+    "title": "Instal Git di Windows, Ubuntu, dan macOS",
+    "stage": 0,
+    "minutes": 12,
+    "summary": "Siapkan alat sebelum mulai latihan.",
+    "analogy": "Sebelum belajar menyetir, pastikan kendaraan dan kuncinya tersedia.",
+    "explain": [
+      "Windows: unduh installer dari git-scm.com lalu buka Git Bash setelah instalasi. Gunakan pilihan bawaan jika belum memahami pengaturannya.",
+      "Ubuntu/Debian: gunakan pengelola paket apt. macOS: jalankan git --version; sistem bisa menawarkan Command Line Tools. Alternatifnya ikuti installer resmi untuk platformmu.",
+      "Contoh materi memakai Git Bash atau terminal Ubuntu/macOS. Perintah membuat file dapat berbeda di PowerShell, jadi pengguna Windows sebaiknya memakai Git Bash.",
+      "Buka terminal baru sesudah instalasi. Materi ini memakai git switch dan git restore, tersedia sejak Git 2.23."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "# Ubuntu/Debian saja:\nsudo apt update\nsudo apt install git\n\n# Semua platform, sesudah instalasi:\ngit --version"
+      }
+    ],
+    "result": "Muncul git version diikuti angka. Jika command not found, periksa instalasi dan buka ulang terminal.",
+    "practice": [
+      "Pasang sesuai sistem operasi, jangan menyalin perintah Ubuntu ke Windows.",
+      "Jalankan pemeriksaan versi."
+    ],
+    "warning": "Unduh dari sumber resmi. Instalasi paket sistem membutuhkan hak administrator.",
+    "check": "Mengapa terminal perlu dibuka ulang?",
+    "answer": "Agar terminal baru membaca PATH yang telah diperbarui installer.",
+    "nodes": [
+      "Pilih OS",
+      "Instal Git",
+      "Buka terminal",
+      "Cek versi"
+    ],
+    "source": "https://git-scm.com/downloads"
+  },
+  {
+    "slug": "terminal-dan-identitas",
+    "title": "Terminal, folder kerja, dan identitas commit",
+    "stage": 0,
+    "minutes": 12,
+    "summary": "Kenali lokasi kerja serta nama dan email penulis commit.",
+    "analogy": "Alamat rumah menentukan di mana paket diletakkan; lokasi terminal menentukan folder yang menerima perintah.",
+    "explain": [
+      "pwd menunjukkan folder aktif. ls menampilkan isi; cd berpindah folder. Tanda titik berarti folder sekarang, dua titik berarti folder induk.",
+      "Atur user.name dan user.email untuk identitas commit. Keduanya bukan username dan password login GitHub.",
+      "--global menjadi nilai bawaan pengguna komputer. Di komputer bersama, atur tanpa --global dari dalam repo agar hanya berlaku untuk proyek itu.",
+      "Gunakan email noreply dari pengaturan GitHub jika ingin membatasi paparan email pribadi pada commit publik."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "pwd\nls\ngit config --global user.name \"Nama Kamu\"\ngit config --global user.email \"email-kamu@example.com\"\ngit config --get user.name\ngit config --get user.email"
+      }
+    ],
+    "result": "Nama dan email yang dipilih muncul. Ganti contoh dengan identitasmu sebelum membuat commit.",
+    "practice": [
+      "Periksa folder aktif.",
+      "Atur identitas lalu baca kembali hasilnya."
+    ],
+    "warning": "Email commit dapat terlihat dalam riwayat publik. Gunakan alamat yang memang kamu izinkan dipublikasikan.",
+    "check": "Apakah user.name membuat kita login ke GitHub?",
+    "answer": "Tidak. Itu metadata penulis commit; autentikasi GitHub diatur terpisah.",
+    "nodes": [
+      "Terminal",
+      "Folder aktif",
+      "Nama penulis",
+      "Email penulis"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup"
+  },
+  {
+    "slug": "repo-pertama",
+    "title": "Membuat repository latihan pertama",
+    "stage": 1,
+    "minutes": 12,
+    "summary": "Mulai proyek catatan belajar dengan git init.",
+    "analogy": "Kamu menyiapkan buku kosong lalu memberi halaman indeks untuk riwayatnya.",
+    "explain": [
+      "Gunakan folder baru bernama latihan-git agar aman bereksperimen. Semua latihan lokal selanjutnya memakai folder ini kecuali disebutkan lain.",
+      "git init -b main membuat repository dengan branch awal bernama main. Folder .git muncul tetapi biasanya tersembunyi.",
+      "Buat README.md melalui editor teks, isi: Catatan belajar Git. README adalah pengantar proyek, bukan syarat wajib Git.",
+      "git status menunjukkan branch aktif dan file untracked. Untracked berarti file belum masuk pelacakan Git."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "mkdir latihan-git\ncd latihan-git\ngit init -b main\n# Buat README.md melalui editor, lalu simpan.\ngit status"
+      }
+    ],
+    "result": "README.md terlihat sebagai untracked setelah disimpan. Repo belum memiliki commit.",
+    "practice": [
+      "Buat folder dan init.",
+      "Buat README.md berisi satu kalimat.",
+      "Periksa status sebelum lanjut."
+    ],
+    "warning": "Jangan menjalankan init berulang di folder proyek lain atau membuat repo bersarang tanpa tujuan.",
+    "check": "Mengapa README belum ada di riwayat?",
+    "answer": "Karena file baru belum dipilih dengan add dan belum dicatat dengan commit.",
+    "nodes": [
+      "Folder baru",
+      "git init",
+      "README.md",
+      "Untracked"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository"
+  },
+  {
+    "slug": "tiga-area",
+    "title": "Working tree, staging area, dan repository",
+    "stage": 1,
+    "minutes": 12,
+    "summary": "Pahami tiga area agar tidak sekadar menghafal perintah.",
+    "analogy": "Meja kerja berisi semua perubahan; nampan berisi yang dipilih; album menyimpan hasil yang sudah dicatat.",
+    "explain": [
+      "Working tree adalah file yang sedang kamu edit. Staging area atau index menyimpan isi yang disiapkan untuk commit berikutnya.",
+      "git add menyalin keadaan file saat itu ke index. Jika setelah add kamu mengedit file lagi, perubahan baru belum otomatis ikut staging.",
+      "git commit mencatat snapshot dari index ke repository lokal. Commit tidak otomatis mengirim apa pun ke GitHub.",
+      "Gunakan status dan diff untuk memeriksa area yang berubah. Satu file dapat memiliki perubahan staged dan unstaged sekaligus."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git status\ngit diff\ngit diff --staged"
+      }
+    ],
+    "result": "Pada file baru sebelum add, diff biasa dapat kosong: file untracked belum dibandingkan sebagai file terlacak.",
+    "practice": [
+      "Gambarkan tiga area di kertas.",
+      "Jelaskan tindakan add dan commit pada masing-masing area."
+    ],
+    "warning": "Staging bukan folder fisik untuk memindah file lewat file manager.",
+    "check": "Setelah add lalu mengedit lagi, versi mana yang masuk commit?",
+    "answer": "Versi saat add terakhir, kecuali kamu melakukan add lagi untuk perubahan baru.",
+    "nodes": [
+      "Working tree",
+      "git add",
+      "Staging",
+      "git commit"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F"
+  },
+  {
+    "slug": "commit-pertama",
+    "title": "Add dan commit pertama",
+    "stage": 1,
+    "minutes": 12,
+    "summary": "Catat satu perubahan kecil dengan pesan yang jelas.",
+    "analogy": "Kamu memilih satu foto, memberi keterangan, lalu menempelkannya ke album.",
+    "explain": [
+      "Pastikan README.md dari materi sebelumnya sudah tersimpan. Pilih nama file tertentu dengan git add README.md agar tahu apa yang ikut.",
+      "git diff --staged menampilkan isi yang akan dicatat. Pada file baru, baris isinya tampil sebagai tambahan.",
+      "Gunakan commit -m untuk menulis pesan langsung tanpa membuka editor. Pesan menerangkan tujuan perubahan, bukan sekadar update.",
+      "Setelah commit, status biasanya working tree clean. Artinya tidak ada perubahan terhadap snapshot aktif, bukan berarti file sudah diunggah."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git add README.md\ngit diff --staged\ngit commit -m \"Tambah pengantar catatan belajar\"\ngit status"
+      }
+    ],
+    "result": "Git menampilkan ringkasan commit; status bersih jika tidak ada perubahan lain.",
+    "practice": [
+      "Ikuti empat perintah berurutan.",
+      "Cocokkan isi commit dengan README.",
+      "Tulis alasan commit dengan bahasa sederhana."
+    ],
+    "warning": "Jangan langsung memakai git add . tanpa memeriksa file rahasia atau file besar.",
+    "check": "Apakah commit pertama sudah terlihat di GitHub?",
+    "answer": "Belum. Ini baru tercatat lokal, belum ada remote dan push.",
+    "nodes": [
+      "README",
+      "Pilih isi",
+      "Periksa staging",
+      "Commit lokal"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository"
+  },
+  {
+    "slug": "status-diff-log",
+    "title": "Membaca status, diff, dan log",
+    "stage": 1,
+    "minutes": 12,
+    "summary": "Lihat keadaan sekarang, perbedaan isi, dan perjalanan proyek.",
+    "analogy": "Status adalah papan kondisi; diff adalah kaca pembanding; log adalah daftar perjalanan.",
+    "explain": [
+      "Tambahkan baris Tujuan: memahami Git ke README.md lalu simpan. status --short merangkum file berubah.",
+      "git diff memperlihatkan perubahan working tree terhadap staging. Baris + berarti tambahan dan - berarti penghapusan; bukan selalu kesalahan.",
+      "git diff --staged membandingkan staging dengan commit terakhir. Periksa keduanya sebelum mencatat.",
+      "git log --oneline merangkum commit. --graph --all juga menampilkan cabang; hash pendek adalah identitas commit. Tekan q jika pager terbuka."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git status --short\ngit diff\ngit add README.md\ngit diff --staged\ngit commit -m \"Jelaskan tujuan belajar Git\"\ngit log --oneline --graph --all"
+      }
+    ],
+    "result": "Dua commit muncul, yang terbaru biasanya di atas.",
+    "practice": [
+      "Edit baris tujuan.",
+      "Bandingkan diff sebelum dan sesudah add.",
+      "Catat hash pendek commit terbaru."
+    ],
+    "warning": "Output hash setiap orang berbeda. Jangan menyalin hash contoh orang lain.",
+    "check": "Mengapa git diff kosong setelah add?",
+    "answer": "Karena working tree sudah sama dengan staging. Lihat git diff --staged untuk isi yang akan dicatat.",
+    "nodes": [
+      "Status",
+      "Diff kerja",
+      "Diff staging",
+      "Log"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History"
+  },
+  {
+    "slug": "gitignore",
+    "title": "Memilih file dengan .gitignore",
+    "stage": 1,
+    "minutes": 12,
+    "summary": "Pisahkan kode penting dari file lokal, rahasia, dan hasil build.",
+    "analogy": "Saat mengirim dokumen, kamu menyertakan naskah, bukan kunci rumah dan sampah meja.",
+    "explain": [
+      ".gitignore berisi pola file yang tidak perlu dilacak: misalnya .env, node_modules/, dan dist/. Sesuaikan dengan proyek.",
+      "Buat .gitignore dengan tiga pola tersebut, satu per baris. Buat file .env latihan berisi MODE=latihan tanpa rahasia sungguhan.",
+      "Pola ignore memengaruhi file yang belum dilacak. File yang sudah masuk riwayat tidak otomatis hilang karena ditambah ke .gitignore.",
+      "Jika file terlanjur tracked, git rm --cached dapat menghentikan pelacakan tanpa menghapus salinan kerja, tetapi riwayat lama tetap ada."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git status --ignored --short\ngit check-ignore -v .env\ngit add .gitignore\ngit commit -m \"Abaikan file lokal dan hasil build\""
+      }
+    ],
+    "result": "File .env latihan muncul sebagai ignored; .gitignore sendiri dicatat.",
+    "practice": [
+      "Buat .gitignore dan .env dummy.",
+      "Periksa pola yang cocok.",
+      "Commit hanya .gitignore."
+    ],
+    "warning": "Jika kredensial pernah terunggah, cabut atau rotasi kredensialnya; menghapus file saja tidak mencabut akses.",
+    "check": "Apakah .gitignore menghapus password dari commit lama?",
+    "answer": "Tidak. Ignore bukan penghapus riwayat atau pencabut kredensial.",
+    "nodes": [
+      "File proyek",
+      "Pola ignore",
+      "File lokal",
+      "Commit terpilih"
+    ],
+    "source": "https://git-scm.com/docs/gitignore"
+  },
+  {
+    "slug": "branch",
+    "title": "Branch dan HEAD: jalur percobaan",
+    "stage": 2,
+    "minutes": 12,
+    "summary": "Coba ide baru tanpa langsung mengubah jalur utama.",
+    "analogy": "Branch seperti jalur renovasi alternatif dari denah yang sama.",
+    "explain": [
+      "Branch adalah penunjuk commit yang bergerak saat kamu membuat commit. Membuat branch tidak menduplikasi seluruh folder proyek.",
+      "git switch -c fitur-catatan membuat branch lalu berpindah ke sana. HEAD umumnya mengikuti branch aktif.",
+      "Buat tips.md berisi Periksa status sebelum commit, lalu catat. main masih menunjuk commit sebelum perubahan tips.",
+      "Saat pindah branch, Git menyesuaikan file kerja. Simpan dan commit perubahan terlebih dahulu agar tidak bingung atau tertolak."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git status\ngit switch -c fitur-catatan\n# Buat tips.md melalui editor.\ngit add tips.md\ngit commit -m \"Tambah tips pemeriksaan status\"\ngit branch\ngit switch main"
+      }
+    ],
+    "result": "tips.md tidak ada di main karena commitnya masih pada fitur-catatan.",
+    "practice": [
+      "Ikuti langkah membuat branch.",
+      "Bandingkan isi folder di dua branch.",
+      "Kembali ke main dengan status bersih."
+    ],
+    "warning": "Perubahan belum commit bisa ikut berpindah branch atau menghalangi switch. Branch bukan tempat menyimpan otomatis.",
+    "check": "Mengapa tips.md hilang setelah switch main?",
+    "answer": "Working tree disesuaikan dengan snapshot main. File masih ada dalam riwayat branch fitur-catatan.",
+    "nodes": [
+      "Commit dasar",
+      "main",
+      "fitur-catatan",
+      "Commit tips"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell"
+  },
+  {
+    "slug": "merge",
+    "title": "Menggabungkan branch dengan merge",
+    "stage": 2,
+    "minutes": 12,
+    "summary": "Bawa perubahan yang sudah siap ke jalur utama.",
+    "analogy": "Ide renovasi disetujui lalu dimasukkan ke denah utama.",
+    "explain": [
+      "Merge dijalankan dari branch penerima. Untuk memasukkan fitur-catatan ke main, aktifkan main terlebih dahulu.",
+      "Jika main belum bergerak sejak percabangan, Git dapat melakukan fast-forward: memajukan penunjuk main tanpa merge commit baru.",
+      "Jika kedua branch punya commit berbeda, Git dapat membuat merge commit dengan dua parent. Isi yang tidak bertabrakan sering digabung otomatis.",
+      "Periksa hasil setelah merge. Branch fitur tetap ada sampai dihapus; menghapus branch yang sudah tergabung tidak menghapus commit yang masih terjangkau dari main."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git switch main\ngit merge fitur-catatan\ngit log --oneline --graph --all\ngit status"
+      }
+    ],
+    "result": "tips.md sekarang tersedia di main. Pada latihan sebelumnya biasanya terjadi fast-forward.",
+    "practice": [
+      "Gabungkan branch tips.",
+      "Baca hasil log.",
+      "Buka tips.md untuk memastikan isinya."
+    ],
+    "warning": "Pastikan branch penerima benar. Jika editor pesan merge terbuka, simpan pesan dan tutup editor sesuai aplikasinya.",
+    "check": "Dari branch mana menjalankan merge untuk memasukkan fitur ke main?",
+    "answer": "Dari main, kemudian jalankan git merge nama-branch-fitur.",
+    "nodes": [
+      "main awal",
+      "Commit fitur",
+      "Merge",
+      "main terbaru"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging"
+  },
+  {
+    "slug": "konflik",
+    "title": "Memahami konflik saat merge",
+    "stage": 2,
+    "minutes": 12,
+    "summary": "Git meminta keputusan saat dua perubahan tidak bisa digabung otomatis.",
+    "analogy": "Dua orang mengganti kalimat yang sama dengan maksud berbeda; editor harus memilih hasil akhirnya.",
+    "explain": [
+      "Lab ini membuat dua branch mengubah baris sama di salam.txt. Mulai dari main yang bersih; gunakan editor untuk mengganti seluruh isi sesuai komentar.",
+      "Saat merge konflik, Git berhenti agar kamu memutuskan. Buka file dan cari penanda <<<<<<<, =======, dan >>>>>>>.",
+      "Gabungkan atau pilih isi yang benar, hapus seluruh penanda, simpan lalu git add salam.txt dan commit. Konflik bukan berarti semua perubahan hilang.",
+      "Untuk membatalkan merge yang sedang konflik, gunakan git merge --abort. Mulailah dengan working tree bersih agar pemulihan lebih jelas."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git switch main\n# Buat salam.txt berisi Halo\ngit add salam.txt\ngit commit -m \"Tambah salam awal\"\ngit switch -c konflik-latihan\n# Ubah salam.txt menjadi Halo teman\ngit add salam.txt\ngit commit -m \"Sapa teman\"\ngit switch main\n# Ubah salam.txt menjadi Selamat belajar\ngit add salam.txt\ngit commit -m \"Sapa pembaca\"\ngit merge konflik-latihan\n# Selesaikan file menjadi Selamat belajar, teman\ngit add salam.txt\ngit commit -m \"Gabungkan sapaan\""
+      }
+    ],
+    "result": "Merge awal menampilkan CONFLICT; commit terakhir mencatat hasil penyelesaian setelah penanda dihapus.",
+    "practice": [
+      "Ikuti setiap komentar dengan edit nyata.",
+      "Amati status saat konflik.",
+      "Periksa hasil final tidak mengandung penanda konflik."
+    ],
+    "warning": "Jangan menghapus satu sisi secara asal; pahami maksud perubahan kedua sisi.",
+    "check": "Apakah menyimpan file saja menyelesaikan merge?",
+    "answer": "Belum. Tandai penyelesaian dengan add lalu selesaikan commit merge.",
+    "nodes": [
+      "Dasar sama",
+      "Versi main",
+      "Versi fitur",
+      "Hasil pilihan"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging"
+  },
+  {
+    "slug": "github-remote",
+    "title": "Membuat GitHub dan menghubungkan remote",
+    "stage": 3,
+    "minutes": 12,
+    "summary": "Kenalkan alamat tujuan berbagi riwayat lokal.",
+    "analogy": "Remote adalah kontak alamat pengiriman, belum berarti paket sudah terkirim.",
+    "explain": [
+      "Buat akun GitHub melalui situs resminya, aktifkan keamanan akun, lalu buat repository latihan-git. Untuk latihan ini pilih repo kosong tanpa README, license, atau .gitignore otomatis.",
+      "Repo kosong memudahkan mengirim riwayat lokal tanpa dua riwayat awal yang terpisah. Pilih public hanya jika semua isi layak dilihat umum.",
+      "Ganti USERNAME pada URL dengan akun sendiri. origin hanyalah nama pendek remote yang lazim, bukan kata khusus untuk GitHub.",
+      "git remote -v menampilkan alamat fetch dan push. Periksa pemilik dan nama repository sebelum autentikasi."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git remote add origin https://github.com/USERNAME/latihan-git.git\ngit remote -v"
+      }
+    ],
+    "result": "origin menampilkan URL repository milikmu, belum ada commit yang terkirim.",
+    "practice": [
+      "Buat repo kosong melalui GitHub.",
+      "Tambahkan remote setelah URL diganti.",
+      "Periksa alamatnya dua kali."
+    ],
+    "warning": "Jika origin sudah ada, periksa dulu dengan remote -v. Jangan menambahkan ulang atau mengganti alamat tanpa memahami repo tujuan.",
+    "check": "Apakah menambahkan remote langsung mengunggah proyek?",
+    "answer": "Tidak. Remote hanya menyimpan alamat; pengiriman dilakukan melalui push.",
+    "nodes": [
+      "Repo lokal",
+      "Nama origin",
+      "URL tujuan",
+      "Repo GitHub"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes"
+  },
+  {
+    "slug": "autentikasi",
+    "title": "HTTPS, token, SSH, dan akses GitHub",
+    "stage": 3,
+    "minutes": 12,
+    "summary": "Pahami izin akses tanpa menyimpan password di kode.",
+    "analogy": "Alamat rumah menunjukkan tujuan; kunci menentukan apakah kamu boleh masuk.",
+    "explain": [
+      "HTTPS dan SSH adalah dua cara koneksi Git ke GitHub. Keduanya tetap tunduk pada izin akses akun terhadap repo.",
+      "GitHub tidak menerima password akun untuk operasi Git lewat HTTPS. Gunakan credential manager dengan login browser, GitHub CLI jika tersedia, atau token berizin minimum.",
+      "SSH menggunakan pasangan public key dan private key. Public key boleh didaftarkan di GitHub; private key harus tetap di perangkat dan sebaiknya dilindungi passphrase.",
+      "Contoh pemeriksaan di bawah untuk pengguna yang telah menyiapkan SSH sesuai dokumentasi GitHub. Jika memilih HTTPS, tidak perlu menjalankannya."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "ssh -T git@github.com"
+      }
+    ],
+    "result": "Pada SSH yang dikonfigurasi benar, GitHub menyebut username dan menjelaskan tidak menyediakan shell. Exit code 1 dapat normal untuk pengujian ini.",
+    "practice": [
+      "Pilih HTTPS atau SSH.",
+      "Ikuti tautan dokumentasi resmi di bawah.",
+      "Periksa identitas akun sebelum push."
+    ],
+    "warning": "Jangan menaruh token di URL remote, screenshot, README, atau chat. Saat SSH pertama kali, cocokkan fingerprint host dengan dokumentasi GitHub.",
+    "check": "Public key atau private key yang didaftarkan ke GitHub?",
+    "answer": "Public key. Private key tidak dibagikan dan tetap disimpan di perangkatmu.",
+    "nodes": [
+      "Akun",
+      "Metode akses",
+      "Kredensial",
+      "Izin repo"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols"
+  },
+  {
+    "slug": "push-clone",
+    "title": "Push pertama dan clone ke folder baru",
+    "stage": 3,
+    "minutes": 12,
+    "summary": "Kirim commit lalu buat salinan untuk latihan dua komputer.",
+    "analogy": "Push mengirim isi album; clone menyalin album beserta riwayatnya ke meja lain.",
+    "explain": [
+      "Setelah remote dan autentikasi siap, push -u origin main mengirim branch main dan memasang upstream sebagai pasangan default.",
+      "Commit lokal tidak memerlukan internet; push dan clone melalui GitHub memerlukan koneksi dan izin yang sesuai.",
+      "Clone membuat folder baru beserta .git dan file kerja. Jalankan dari folder induk, bukan dari dalam repo latihan yang sama.",
+      "Gunakan nama latihan-git-salinan untuk simulasi komputer kedua. Setelah mengecek salinan, kembali ke repo pertama untuk materi berikutnya."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git switch main\ngit push -u origin main\ncd ..\ngit clone https://github.com/USERNAME/latihan-git.git latihan-git-salinan\ncd latihan-git-salinan\ngit log --oneline\ncd ../latihan-git"
+      }
+    ],
+    "result": "GitHub menampilkan commit; salinan memiliki riwayat yang sama. Ganti USERNAME terlebih dahulu.",
+    "practice": [
+      "Push dan cek halaman GitHub.",
+      "Clone ke folder saudara.",
+      "Bandingkan log kedua folder."
+    ],
+    "warning": "Jika push ditolak karena remote sudah berisi commit, jangan force push. Pelajari fetch dan pemeriksaan riwayat.",
+    "check": "Apa beda mengunduh ZIP dengan clone?",
+    "answer": "ZIP memberi file snapshot tanpa repo Git lokal; clone menyertakan riwayat dan remote untuk kolaborasi.",
+    "nodes": [
+      "Commit lokal",
+      "Push",
+      "GitHub",
+      "Clone baru"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository"
+  },
+  {
+    "slug": "fetch-pull",
+    "title": "Fetch, pull, upstream, dan sinkronisasi",
+    "stage": 3,
+    "minutes": 12,
+    "summary": "Ambil perubahan dengan memahami apa yang terjadi.",
+    "analogy": "Fetch mengambil kabar terbaru; merge memasukkan kabar itu ke catatan kerja.",
+    "explain": [
+      "origin/main adalah catatan lokal tentang keadaan main pada origin saat terakhir diambil. Ia tidak selalu mencerminkan kondisi server detik ini.",
+      "git fetch origin memperbarui remote-tracking branches tanpa menggabungkan ke branch aktif. Bandingkan riwayat terlebih dahulu.",
+      "git pull menggabungkan fetch dan langkah integrasi. Di latihan pemula gunakan --ff-only agar berhenti jika branch bercabang, bukannya menggabungkan tanpa disadari.",
+      "Jika divergen, simpan pekerjaan, fetch, periksa log, lalu sepakati merge atau rebase. Jangan menggunakan force sebagai cara mengatasi ketidaktahuan."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git switch main\ngit status\ngit fetch origin\ngit log --oneline --graph --all\ngit diff main..origin/main\ngit pull --ff-only"
+      }
+    ],
+    "result": "Jika sudah sinkron, muncul Already up to date. Jika remote lebih maju tanpa divergensi, main maju secara fast-forward.",
+    "practice": [
+      "Di salinan, tambah catatan lalu commit dan push.",
+      "Di repo pertama, jalankan fetch dan lihat log sebelum pull.",
+      "Pastikan file berubah hanya setelah integrasi."
+    ],
+    "warning": "Lakukan latihan dengan status bersih. ff-only sengaja menolak jika kedua sisi memiliki commit berbeda.",
+    "check": "Apakah fetch langsung mengubah file kerjamu?",
+    "answer": "Tidak. Fetch memperbarui referensi remote; integrasi adalah langkah terpisah.",
+    "nodes": [
+      "Remote baru",
+      "Fetch",
+      "origin/main",
+      "Integrasi main"
+    ],
+    "source": "https://git-scm.com/docs/git-pull"
+  },
+  {
+    "slug": "pull-request",
+    "title": "Workflow tim dan pull request",
+    "stage": 4,
+    "minutes": 12,
+    "summary": "Ajukan perubahan kecil agar mudah diperiksa sebelum digabung.",
+    "analogy": "Pull request seperti mengajukan revisi dokumen untuk dibaca dan disetujui rekan.",
+    "explain": [
+      "Mulai dari main yang sudah sinkron lalu buat branch fitur. Kerjakan satu tujuan kecil dan periksa diff sebelum commit.",
+      "Push branch fitur ke GitHub lalu buka Compare & pull request. Base adalah branch penerima, compare adalah branch perubahan.",
+      "Tulis masalah, perubahan, dan cara menguji. PR bukan perintah Git; ia fitur layanan kolaborasi GitHub.",
+      "Tanggapi review dengan commit baru pada branch yang sama. Sesudah digabung lewat GitHub, switch main dan pull --ff-only untuk memperbarui lokal."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git switch main\ngit pull --ff-only\ngit switch -c docs-panduan\n# Tambah panduan.md berisi cara membaca catatan\ngit add panduan.md\ngit commit -m \"Tambah panduan pembaca\"\ngit push -u origin docs-panduan"
+      }
+    ],
+    "result": "Branch docs-panduan tersedia di GitHub untuk diajukan sebagai PR ke main.",
+    "practice": [
+      "Buat PR di repo latihan sendiri.",
+      "Isi deskripsi dan cek tab Files changed.",
+      "Gabungkan setelah diperiksa lalu sinkronkan main lokal."
+    ],
+    "warning": "Jangan memasukkan perubahan tidak terkait ke PR yang sama. Hindari menggabungkan ketika pemeriksaan penting gagal.",
+    "check": "Apakah membuka PR otomatis menggabungkan branch?",
+    "answer": "Tidak. PR membuka proses peninjauan; penggabungan merupakan langkah tersendiri.",
+    "nodes": [
+      "Branch fitur",
+      "Push branch",
+      "Review PR",
+      "Merge main"
+    ],
+    "source": "https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project"
+  },
+  {
+    "slug": "fork",
+    "title": "Fork, origin, upstream, dan kontribusi",
+    "stage": 4,
+    "minutes": 12,
+    "summary": "Berkontribusi ke repo yang tidak bisa kamu tulis langsung.",
+    "analogy": "Fork seperti salinan buku di perpustakaan pribadimu; usulan revisinya dikirim ke pemilik buku asli.",
+    "explain": [
+      "Fork adalah repo terpisah di akun GitHubmu. Clone kemudian membuat salinan lokal dari fork tersebut.",
+      "Dalam workflow fork, origin biasanya menunjuk forkmu. Nama remote upstream lazim dipakai untuk repo asli; berbeda dari istilah upstream branch pada push -u.",
+      "Tambahkan remote upstream dan fetch untuk membaca perkembangan repo asal. Push perubahan ke fork milikmu, bukan memaksa menulis ke repo orang lain.",
+      "PR lintas fork memakai base repo asli dan compare branch di fork. Ikuti CONTRIBUTING dan ketentuan lisensi proyek."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "# Jalankan di clone forkmu, bukan repo latihan utama.\ngit remote -v\ngit remote add upstream https://github.com/PEMILIK/REPO.git\ngit fetch upstream\ngit log --oneline --graph --all"
+      }
+    ],
+    "result": "Remote upstream terdaftar dan branch repo asal dapat diperiksa setelah URL contoh diganti.",
+    "practice": [
+      "Cari repo latihan yang mengizinkan kontribusi.",
+      "Fork melalui GitHub dan clone forkmu.",
+      "Identifikasi origin dan upstream sebelum mengubah file."
+    ],
+    "warning": "Jangan mengirim PR latihan kosong ke proyek orang lain. Gunakan repo milik sendiri untuk simulasi.",
+    "check": "Apa beda fork dan branch?",
+    "answer": "Fork adalah repo terpisah; branch adalah penunjuk jalur riwayat di dalam sebuah repo.",
+    "nodes": [
+      "Repo asal",
+      "Fork GitHub",
+      "Clone lokal",
+      "PR ke asal"
+    ],
+    "source": "https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project"
+  },
+  {
+    "slug": "restore-revert",
+    "title": "Undo aman: unstage, restore, dan revert",
+    "stage": 5,
+    "minutes": 12,
+    "summary": "Tentukan apa yang ingin dibatalkan sebelum memilih perintah.",
+    "analogy": "Mengeluarkan foto dari nampan berbeda dari membuang foto, dan berbeda lagi dari menambahkan koreksi pada album.",
+    "explain": [
+      "Untuk membatalkan pilihan staging, gunakan git restore --staged README.md. Isi file kerja tetap ada; butuh setidaknya satu commit sebagai acuan default.",
+      "git restore README.md mengganti isi working tree dengan isi index dan dapat membuang edit lokal. Salin perubahan penting sebelum mencoba; ini bukan tombol undo editor.",
+      "Untuk commit yang sudah dibagikan, revert membuat commit baru yang membalik efek commit terpilih. Riwayat lama tetap terbaca.",
+      "Praktik aman berikut hanya menunjukkan unstage. Untuk revert, buat commit salah yang terpisah di branch latihan lalu jalankan git revert HEAD dan ikuti editor pesan."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "# Edit README.md dan simpan terlebih dahulu.\ngit add README.md\ngit diff --staged\ngit restore --staged README.md\ngit diff\ngit status"
+      }
+    ],
+    "result": "Perubahan README kembali menjadi unstaged dan teks yang kamu edit tetap ada.",
+    "practice": [
+      "Uji unstage dan pastikan teks tetap ada.",
+      "Selesaikan dengan commit perubahan yang memang diinginkan.",
+      "Latih revert di branch khusus memakai commit dummy."
+    ],
+    "warning": "Jangan menjalankan restore tanpa --staged jika masih membutuhkan edit yang belum dicatat.",
+    "check": "Untuk membalik commit yang sudah dibagikan, pilih revert atau reset?",
+    "answer": "Biasanya revert, karena menambah koreksi tanpa menulis ulang riwayat yang dipakai orang lain.",
+    "nodes": [
+      "Pilih perubahan",
+      "Unstage",
+      "Edit tetap ada",
+      "Commit koreksi"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things"
+  },
+  {
+    "slug": "stash",
+    "title": "Stash: menyimpan pekerjaan sementara",
+    "stage": 5,
+    "minutes": 12,
+    "summary": "Pindah tugas tanpa memaksakan commit yang belum siap.",
+    "analogy": "Kamu memasukkan catatan sementara ke laci agar meja bisa dipakai untuk tugas lain.",
+    "explain": [
+      "Stash menyimpan pekerjaan sementara secara lokal. Cocok ketika perlu berhenti sebentar sebelum perubahan siap menjadi commit.",
+      "stash push -u juga memasukkan file untracked, tetapi tidak memasukkan file ignored. Beri pesan agar mudah mengenali simpanan.",
+      "Gunakan list dan show sebelum mengembalikan. apply mengembalikan tanpa menghapus entri; setelah diperiksa, drop menghapus simpanan teratas.",
+      "Pemulihan stash dapat konflik jika dasar file berubah. Stash tidak otomatis terkirim ketika push dan tidak menggantikan backup."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "# Ubah README.md terlebih dahulu.\ngit stash push -u -m \"Draf catatan\"\ngit stash list\ngit stash show -p\ngit stash apply\ngit status\n# Sesudah isi terverifikasi dan aman:\ngit stash drop"
+      }
+    ],
+    "result": "Edit menghilang sementara setelah push stash lalu kembali setelah apply.",
+    "practice": [
+      "Amati status sebelum dan sesudah stash.",
+      "Periksa isi sebelum apply.",
+      "Pastikan perubahan kembali sebelum menghapus stash."
+    ],
+    "warning": "Jangan drop stash sebelum memastikan pekerjaan sudah kembali dengan benar.",
+    "check": "Apakah git push juga mengirim stash?",
+    "answer": "Tidak. Stash lokal perlu dikelola sendiri; buat commit yang tepat jika pekerjaan perlu dibagikan.",
+    "nodes": [
+      "Draf kerja",
+      "Stash",
+      "Meja bersih",
+      "Apply draf"
+    ],
+    "source": "https://git-scm.com/docs/git-stash"
+  },
+  {
+    "slug": "reset-reflog",
+    "title": "Reset, reflog, dan penyelamatan commit",
+    "stage": 5,
+    "minutes": 12,
+    "summary": "Kenali operasi berisiko dan cara menemukan titik riwayat lokal.",
+    "analogy": "Memindahkan penanda halaman tidak sama dengan merobek kertas; beberapa pilihan reset juga mengubah isi meja.",
+    "explain": [
+      "reset --soft memindahkan branch tetapi mempertahankan index dan working tree. --mixed juga mengatur index, sedangkan --hard juga mengganti working tree dan dapat menghilangkan perubahan terlacak.",
+      "Gunakan reset hanya pada riwayat lokal yang memang boleh ditulis ulang. Membatalkan commit yang sudah dibagikan umumnya lebih cocok memakai revert.",
+      "Reflog mencatat pergerakan referensi lokal, misalnya sesudah reset atau switch. Ia membantu menemukan hash commit yang tidak lagi tampak di log branch.",
+      "Untuk menyelamatkan, lihat reflog, pilih hash yang benar lalu buat branch penyelamatan pada hash itu. Reflog lokal dapat kedaluwarsa dan bukan jaminan memulihkan edit yang belum pernah dicatat."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git reflog --date=local\n# Setelah menemukan hash commit yang benar:\n# git branch penyelamatan HASH_COMMIT\ngit log --oneline --all --graph"
+      }
+    ],
+    "result": "Daftar perpindahan HEAD muncul. Perintah membuat branch masih komentar sampai hash dipilih secara sadar.",
+    "practice": [
+      "Baca tiga entri reflog terakhir.",
+      "Cocokkan dengan kegiatan switch dan commit.",
+      "Jelaskan risiko reset --hard sebelum mempertimbangkannya."
+    ],
+    "warning": "Materi ini sengaja tidak meminta menjalankan reset --hard. Reflog tidak menjamin mengembalikan file yang belum pernah dicatat.",
+    "check": "Apakah reflog adalah backup remote?",
+    "answer": "Tidak. Ini catatan lokal pergerakan referensi, dengan masa simpan dan keterbatasan.",
+    "nodes": [
+      "Riwayat lokal",
+      "Penanda bergerak",
+      "Reflog",
+      "Branch penyelamatan"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified"
+  },
+  {
+    "slug": "rebase-cherry-pick",
+    "title": "Rebase dan cherry-pick setelah paham merge",
+    "stage": 6,
+    "minutes": 12,
+    "summary": "Pilih integrasi lanjutan dengan memahami perubahan identitas commit.",
+    "analogy": "Rebase menyusun ulang rangkaian catatan di atas dasar baru; cherry-pick mengambil satu catatan tertentu.",
+    "explain": [
+      "Rebase memutar ulang commit branch pada dasar baru. Commit hasilnya memiliki identitas baru walaupun perubahan teks bisa sama.",
+      "Jangan rebase riwayat bersama tanpa kesepakatan. Untuk jalur pemula, merge tetap memadai dan lebih mudah dilihat percabangannya.",
+      "Cherry-pick menerapkan perubahan dari commit terpilih ke branch aktif dan biasanya membuat commit baru. Berguna untuk satu perbaikan, tetapi dapat menimbulkan duplikasi perubahan.",
+      "Saat konflik rebase, selesaikan lalu add dan rebase --continue; --abort membatalkan proses. Cherry-pick memiliki continue dan abort sendiri."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "# Pemeriksaan saja sebelum operasi lanjutan:\ngit status\ngit log --oneline --graph --all\n# Di branch fitur lokal yang belum dibagikan:\n# git rebase main\n# Untuk satu commit yang sudah diperiksa:\n# git cherry-pick HASH_COMMIT"
+      }
+    ],
+    "result": "Perintah aktif hanya memeriksa. Contoh operasi tetap komentar sampai branch dan hash dipilih.",
+    "practice": [
+      "Bandingkan merge dengan rebase menggunakan gambar.",
+      "Cari satu commit yang hanya berisi satu tujuan.",
+      "Jelaskan kapan cherry-pick lebih tepat daripada mengambil seluruh branch."
+    ],
+    "warning": "Jangan menyalin hash acak dan jangan force push riwayat bersama untuk sekadar merapikan log.",
+    "check": "Mengapa hash commit dapat berubah setelah rebase?",
+    "answer": "Commit mencakup hubungan parent; ketika dasar berubah, commit dibentuk ulang sehingga identitasnya berubah.",
+    "nodes": [
+      "Dasar baru",
+      "Commit lokal",
+      "Putar ulang",
+      "Hash baru"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+  },
+  {
+    "slug": "tag-dan-troubleshooting",
+    "title": "Tag rilis dan pemecahan masalah umum",
+    "stage": 6,
+    "minutes": 12,
+    "summary": "Beri penanda versi dan baca pesan error dengan tenang.",
+    "analogy": "Tag seperti label edisi buku yang menunjuk versi tertentu.",
+    "explain": [
+      "Annotated tag menyimpan penanda rilis dengan keterangan. Tag tidak bergerak mengikuti commit baru seperti branch.",
+      "git push biasa tidak selalu mengirim tag. Kirim tag tertentu secara eksplisit setelah memastikan commitnya benar.",
+      "not a git repository: periksa pwd dan cd ke repo. nothing to commit: cek apakah file disimpan, ignored, atau memang belum berubah.",
+      "non-fast-forward: fetch dan bandingkan riwayat, jangan force. Permission denied atau Authentication failed: periksa akun, URL, izin repo, dan kredensial. unrelated histories: pastikan tidak mencampur dua proyek berbeda."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git switch main\ngit status\ngit tag -a v0.1.0 -m \"Catatan belajar pertama\"\ngit show v0.1.0\n# Jika remote latihanmu sudah siap:\ngit push origin v0.1.0"
+      }
+    ],
+    "result": "Tag menunjuk commit yang dirilis dan terlihat di remote setelah push tag berhasil.",
+    "practice": [
+      "Pastikan main bersih dan sudah diperiksa.",
+      "Buat tag satu kali.",
+      "Pilih satu pesan error lalu tulis urutan diagnosisnya."
+    ],
+    "warning": "Jika tag sudah ada, periksa dulu. Jangan memindahkan tag rilis yang sudah dipakai orang lain secara diam-diam.",
+    "check": "Apakah tag otomatis maju saat main memiliki commit baru?",
+    "answer": "Tidak. Tag tetap menunjuk objek yang sama kecuali sengaja diubah.",
+    "nodes": [
+      "Commit siap",
+      "Tag versi",
+      "Push tag",
+      "Rilis tercatat"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Tagging"
+  },
+  {
+    "slug": "proyek-akhir",
+    "title": "Proyek akhir: dokumentasi lab dengan Git",
+    "stage": 6,
+    "minutes": 12,
+    "summary": "Gabungkan semua keterampilan dalam proyek yang dekat dengan pekerjaan IT.",
+    "analogy": "Buat buku kerja teknisi yang setiap revisinya bisa dijelaskan dan ditinjau.",
+    "explain": [
+      "Gunakan repo latihan untuk dokumentasi lab fiktif: README, topologi.md, dan troubleshooting.md. Pakai IP dokumentasi seperti 192.0.2.0/24, tanpa data pelanggan asli.",
+      "Kerjakan topologi dan troubleshooting pada branch terpisah. Tiap commit harus punya tujuan jelas, misalnya menambah langkah cek gateway.",
+      "Ajukan PR, periksa diff, gabungkan, lalu sinkronkan salinan lokal. Simulasikan konflik satu baris dan selesaikan dengan alasan yang bisa dijelaskan.",
+      "Hasil lulus: repo bisa di-clone, README menjelaskan penggunaan, ada branch dan PR, tidak ada rahasia, log terbaca, serta kamu bisa menunjukkan contoh unstage dan revert di branch latihan."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh praktik",
+        "language": "bash",
+        "code": "git status\ngit log --oneline --graph --all\ngit remote -v\ngit ls-files"
+      }
+    ],
+    "result": "Daftar file terlacak dan riwayat menjadi bukti hasil kerja. Periksa juga PR dan tag di GitHub.",
+    "practice": [
+      "Buat tiga dokumen lab fiktif.",
+      "Selesaikan dua branch fitur melalui PR.",
+      "Clone ulang ke folder baru dan ikuti README.",
+      "Buat tag setelah hasil diperiksa.",
+      "Jelaskan add, commit, push, fetch, merge tanpa menghafal."
+    ],
+    "warning": "Gunakan data fiktif. Jangan memasukkan konfigurasi produksi, private key, token, atau identitas pelanggan.",
+    "check": "Bagaimana membuktikan repo mudah digunakan orang lain?",
+    "answer": "Clone ke folder baru, ikuti README tanpa mengandalkan file lokal yang tidak terlacak, lalu catat dan perbaiki langkah yang kurang.",
+    "nodes": [
+      "Dokumen lab",
+      "Branch kecil",
+      "Review PR",
+      "Clone verifikasi"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Summary"
+  }
+]
