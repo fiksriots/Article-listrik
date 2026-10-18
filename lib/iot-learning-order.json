@@ -1,0 +1,95 @@
+[
+  {
+    "title": "Dasar IoT",
+    "slugs": [
+      "apa-itu-iot",
+      "cara-kerja-iot",
+      "sensor-aktuator"
+    ]
+  },
+  {
+    "title": "Mengenal perangkat dan komponen",
+    "slugs": [
+      "macam-mikrokontroler",
+      "mikrokontroler-sbc-plc",
+      "sensor-suhu-lingkungan",
+      "sensor-gerak-jarak",
+      "sensor-cahaya-tanah-arus",
+      "aktuator-driver-output",
+      "antarmuka-modul-komunikasi",
+      "catu-daya-komponen-pendukung"
+    ]
+  },
+  {
+    "title": "Arduino A · Dasar dan program",
+    "slugs": [
+      "arduino-pengenalan",
+      "listrik-breadboard",
+      "persiapan-arduino-ide",
+      "arduino-pemrograman"
+    ]
+  },
+  {
+    "title": "Arduino B · Input/output dan sensor",
+    "slugs": [
+      "arduino-led",
+      "arduino-tombol-led",
+      "arduino-relay-lampu",
+      "arduino-analog-pwm",
+      "arduino-lcd-paralel",
+      "arduino-pir",
+      "arduino-lm35"
+    ]
+  },
+  {
+    "title": "Arduino C · Motor dan I2C",
+    "slugs": [
+      "arduino-motor-dc",
+      "arduino-servo",
+      "arduino-stepper",
+      "arduino-i2c",
+      "arduino-lcd-i2c",
+      "arduino-rtc-ds1307"
+    ]
+  },
+  {
+    "title": "Arduino D · Koneksi internet",
+    "slugs": [
+      "arduino-esp8266-at",
+      "arduino-platform-iot",
+      "arduino-web-lampu",
+      "arduino-kirim-data-web"
+    ]
+  },
+  {
+    "title": "Berpindah ke ESP32",
+    "slugs": [
+      "mengenal-esp32",
+      "led-pertama",
+      "membaca-sensor"
+    ]
+  },
+  {
+    "title": "Jaringan dan pertukaran data",
+    "slugs": [
+      "wifi-ip",
+      "http-json",
+      "mqtt-topic"
+    ]
+  },
+  {
+    "title": "Dashboard dan sistem yang andal",
+    "slugs": [
+      "dashboard-data",
+      "otomatisasi-histeresis",
+      "keamanan-iot"
+    ]
+  },
+  {
+    "title": "Proyek akhir dan evaluasi",
+    "slugs": [
+      "proyek-monitor-suhu",
+      "troubleshooting-lanjutan"
+    ]
+  }
+]

@@ -4,6 +4,12 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 lessons = json.loads((root / 'lib/iot-lessons.json').read_text())
+order = json.loads((root / 'lib/iot-learning-order.json').read_text())
+ordered = [slug for group in order for slug in group['slugs']]
+assert len(ordered) == len(set(ordered)) == len(lessons)
+assert set(ordered) == {lesson['slug'] for lesson in lessons}
+assert ordered[0] == 'apa-itu-iot' and ordered[-1] == 'troubleshooting-lanjutan'
+assert ordered.index('arduino-led') < ordered.index('arduino-esp8266-at') < ordered.index('proyek-monitor-suhu')
 track = json.loads((root / 'lib/arduino-track.json').read_text())
 by_slug = {lesson['slug']: lesson for lesson in lessons}
 assert len(by_slug) == len(lessons)
@@ -23,7 +29,7 @@ for group in track:
             continue
         lab = lesson['arduino']
         assert lab['section'] == group['id']
-        assert lesson['stage'] == 6 + 'ABCD'.index(group['id'])
+        assert slug in order[2 + 'ABCD'.index(group['id'])]['slugs']
         assert lab['parts'] and lab['wiring'] and lab['result'] and lab['troubleshoot']
         assert all(len(row) == 2 for row in lab['wiring'])
         for block in lab['blocks']:
