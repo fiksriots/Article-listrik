@@ -119,3 +119,5 @@ Urutan: dasar/keselamatan → rangkaian/pengukuran → komponen DC → konversi/
 Setelah build, jalankan `npm run check:path` untuk memeriksa seluruh posisi dan tautan antarartikel. `npm run test:path` memeriksa katalog, perpindahan tahap, progress, dan tampilan pada 390px/1440px menggunakan Chromium Playwright.
 
 Kurikulum listrik kini memiliki 38 materi. Enam modul tambahan membahas NO/NC, sekering DC, terminal kabel, nameplate motor, kontrol start–stop, dan sinyal sensor industri. Artikel pemilihan komponen dan simulasi gangguan diperdalam tanpa mengganti URL atau progres lama. Lab start–stop memodelkan pengunci, STOP, overload, dan putus/pulih suplai; diagram adalah konsep pembelajaran, bukan gambar instalasi.
+
+Materi ke-39 menambahkan star–delta setelah kontrol start–stop pada tahap motor: hubungan belitan, tegangan, syarat nameplate, transisi terbuka, interlock, dan kuis. Diagramnya merupakan konsep; bukan petunjuk pemasangan terminal motor.

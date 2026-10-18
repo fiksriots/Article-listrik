@@ -1,0 +1,92 @@
+---
+title: "Star–Delta Motor: Hubungan Bintang, Segitiga, dan Cara Start"
+summary: "Pahami tegangan belitan, syarat nameplate, urutan kontaktor, dan alasan interlock diperlukan."
+---
+<LearningHook>Mengapa motor mulai dalam hubungan bintang, kemudian berpindah ke segitiga? Apakah semua motor tiga phase boleh begitu?</LearningHook>
+
+## 1. Mulai dari tiga belitan motor
+Bayangkan tiga orang mendorong putaran yang sama dari arah berbeda. Pada motor tiga phase, tiga kelompok belitan membentuk medan magnet berputar. Ujung belitan dapat dihubungkan sebagai **star/bintang (Y)** atau **delta/segitiga (Δ)** bila desain motor mengizinkannya.
+
+Pada **star**, satu ujung setiap belitan bertemu di titik bersama. Pada **delta**, tiga belitan membentuk lingkaran segitiga. Titik bintang belitan bukan perintah untuk menyambungkan netral PLN; motor tiga phase pada pembahasan ini tidak memerlukan netral untuk jalur tenaga belitannya. PE tetap memiliki fungsi perlindungan tersendiri.
+
+<DeviceGuide type="motor" />
+
+<img src="/diagrams/star-delta-belitan.svg" alt="Hubungan konsep: tiga belitan star bertemu di titik bersama, sedangkan tiga belitan delta membentuk segitiga di antara L1, L2, L3" width="800" height="360" />
+
+Diagram menunjukkan hubungan listrik, bukan posisi terminal atau pemasangan jumper. Susunan terminal fisik mengikuti pelat dan manual motor.
+
+## 2. Tegangan saluran berbeda dari tegangan belitan
+**Tegangan saluran** diukur antara dua phase. **Tegangan belitan** berada pada satu kelompok belitan. Untuk sistem tiga phase seimbang:
+
+| Hubungan | Tegangan pada satu belitan | Arus saluran dan arus belitan |
+|---|---|---|
+| Star (Y) | Vsaluran / √3 | Isaluran = Ibelitan |
+| Delta (Δ) | Vsaluran | Isaluran = √3 × Ibelitan |
+
+<Formula label="Contoh sumber tiga phase 400 V" expression="Star: 400 / 1,732 ≈ 231 V · Delta: 400 V">
+1. Sumber contoh memiliki tegangan antarphase 400 V.
+2. Saat star, setiap belitan menerima sekitar 231 V.
+3. Saat delta, setiap belitan menerima 400 V.
+4. Berpindah hubungan mengubah tegangan belitan; karena itu rating motor harus cocok.
+</Formula>
+
+## 3. Hubungan star/delta dan starter star–delta itu berbeda
+Hubungan menjelaskan cara belitan tersambung. **Starter star–delta** adalah metode memulai motor dalam star, lalu menjalankannya dalam delta pada sumber yang sama. Tujuannya mengurangi arus awal dibanding start langsung dalam delta, dengan konsekuensi torsi awal juga berkurang.
+
+Contoh konseptual: pada motor dan tegangan saluran yang sama, arus saluran awal dalam star kira-kira sepertiga arus start langsung delta. Torsi awal kira-kira sepertiga atau lebih rendah dibanding start langsung tersebut. Ini bukan sepertiga arus nominal, dan bukan jaminan setiap mesin dapat berakselerasi. Kondisi motor, beban, dan transisi memengaruhi hasil nyata.
+
+<Note>Analogi mudahnya: mulai dengan dorongan lebih ringan. Arus lebih kecil, tetapi kemampuan memutar beban pada awal juga lebih kecil. Jika beban terlalu berat, motor bisa gagal mencapai kecepatan yang dibutuhkan.</Note>
+
+## 4. Syarat terpenting: boleh berjalan dalam delta pada tegangan sumber
+Pada sumber contoh **400 V**, motor untuk starter ini harus diizinkan berjalan **delta pada 400 V**, umumnya ditandai **400 V Δ / 690 V Y**, dengan ujung belitan yang diperlukan dapat diakses. Enam terminal saja belum membuktikan kecocokan; periksa manual, karakteristik beban, serta metode start yang diizinkan.
+
+| Contoh pelat motor | Sumber 400 V | Penilaian konsep |
+|---|---|---|
+| 400 V Δ / 690 V Y | Berjalan nominal dalam delta | Kandidat star–delta bila persyaratan lain terpenuhi |
+| 230 V Δ / 400 V Y | Berjalan nominal dalam star | Tidak untuk dipindah ke delta pada 400 V; belitan menerima tegangan berlebih |
+
+Ingat materi nameplate sebelumnya: pasangan 230/400 V menjelaskan dua kondisi sumber yang cocok, bukan izin start star lalu delta pada sumber 400 V.
+
+## 5. Urutan starter transisi terbuka
+Starter konvensional menggunakan kontaktor utama, kontaktor star, kontaktor delta, pengendali waktu, dan proteksi yang dikoordinasikan. Penamaan K utama/K star/K delta di bawah hanya untuk memahami fungsi.
+
+| Tahap | K utama | K star | K delta | Apa yang terjadi |
+|---|---|---|---|---|
+| Berhenti | OFF | OFF | OFF | Motor tidak diberi suplai melalui kontaktor |
+| Mulai dalam star | ON | ON | OFF | Motor berakselerasi dengan tegangan belitan lebih rendah |
+| Jeda perpindahan | ON | OFF | OFF | Jalur belitan terbuka sesaat |
+| Berjalan delta | ON | OFF | ON | Belitan menerima tegangan saluran penuh |
+| STOP / proteksi trip | OFF | OFF | OFF | Perintah operasi dihentikan |
+
+**Kontaktor star dan delta tidak boleh aktif bersamaan.** Penguncian listrik dan mekanis mencegah kombinasi berbahaya yang dapat menyebabkan hubung singkat. Timer saja tidak menggantikan interlock. Jeda perpindahan harus mengikuti desain dan petunjuk peralatan; tidak ada satu angka detik yang benar untuk semua motor.
+
+Selama transisi terbuka, arus dan torsi dapat mengalami lonjakan. Jangan menganggap metode ini selalu membuat perpindahan halus. STOP kontaktor juga bukan isolasi aman untuk bekerja; prosedur isolasi dan verifikasi tetap diperlukan.
+
+## Studi kasus: Ingin mengurangi hentakan pompa
+Sebelum memilih star–delta, periksa pelat, torsi awal beban, waktu akselerasi, jumlah start per jam, jaringan suplai, dan kebutuhan proses. Beban dengan torsi awal tinggi mungkin tidak cocok. Soft starter dapat membantu pengaturan start pada aplikasi yang sesuai; VFD juga mengatur frekuensi untuk pengendalian kecepatan. Keduanya tetap memerlukan pemilihan dan proteksi yang benar.
+
+## 6. Kesalahan yang sering terjadi
+- Menganggap semua motor tiga phase dapat memakai starter star–delta.
+- Menyamakan arus start star dengan sepertiga arus nominal motor.
+- Mengatur waktu terlalu singkat sehingga motor belum cukup berakselerasi.
+- Membiarkan star dan delta aktif bersamaan atau melewati interlock.
+- Menggunakan rumus setting overload tanpa memperhatikan letak relay pada rangkaian.
+
+Arus yang melewati overload bergantung apakah dipasang pada jalur saluran atau jalur belitan. Pemilihan kontaktor, pengaman hubung singkat, overload, kabel, dan setting mengikuti gambar starter serta tabel koordinasi produsen; jangan menyalin setting dari panel lain.
+
+## 7. Latihan tanpa merangkai tegangan tinggi
+1. Bandingkan pelat 230 Δ / 400 Y dan 400 Δ / 690 Y pada sumber 400 V. Pilih kandidat yang boleh berjalan delta.
+2. Hitung tegangan belitan dalam star dan delta pada sumber tersebut.
+3. Ikuti tabel urutan. Lingkari keadaan star ON dan delta ON sebagai keadaan terlarang.
+4. Jelaskan mengapa motor dengan beban awal berat belum tentu dapat mulai dalam star.
+
+Jawaban ringkas: kandidatnya 400 Δ / 690 Y bila syarat lain terpenuhi; tegangan belitannya sekitar 231 V saat star dan 400 V saat delta; torsi awal star lebih rendah. Gunakan latihan kertas atau trainer di bawah pengawasan kompeten, bukan percobaan panel PLN mandiri.
+
+<LearningCheck question="Motor 230 Δ / 400 Y boleh menjalankan starter star–delta pada sumber 400 V?" answer="Tidak. Pada 400 V motor contoh itu harus bekerja dalam star. Pindah ke delta memberi 400 V pada belitan yang dirancang untuk sekitar 230 V." />
+
+## Referensi dan langkah berikut
+- [ABB: solusi starter motor dan tabel pemilihan](https://new.abb.com/low-voltage/products/motor-protection/starting-solutions)
+- [Schneider Electric: starter star–delta dan interlock](https://productinfo.se.com/tesysgigainstallationguide/tesys-giga-series-giga-contactors-and-giga-thermal-overload-relays-installation-guide/English/TeSys%E2%84%A2%20Giga%20Series%20Giga%20Contactors%20and%20Giga%20Thermal%20Overload%20Relays%20Installation%20Guide_0000447511.xml/%24/PanGu_3ContactorStar-Delta_0000449442)
+- [Schneider Electric: penjelasan urutan starter dan timer](https://www.se.com/id/en/faqs/FAQ000225694/)
+
+Berikutnya pelajari sinyal sensor industri, kemudian VFD dan PLC untuk membandingkan cara pengendalian motor.

@@ -87,6 +87,7 @@ export const stages = [
       "kontaktor-relay-panel",
       "proteksi-motor",
       "kontrol-start-stop",
+      "star-delta-motor",
       "sensor-industri-sinyal",
       "vfd-plc"
     ]

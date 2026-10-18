@@ -835,5 +835,37 @@ export const quizBank: Record<string, Question[]> = {
       "a": 0,
       "why": "(12−4)/16 × 10 = 5 bar."
     }
+  ],
+  "star-delta-motor": [
+    {
+      "q": "Pada sumber 400 V, pelat mana kandidat starter star–delta?",
+      "o": [
+        "400 V Δ / 690 V Y, bila syarat lain terpenuhi",
+        "230 V Δ / 400 V Y",
+        "Semua motor enam terminal"
+      ],
+      "a": 0,
+      "why": "Motor harus boleh berjalan delta pada tegangan sumber; jumlah terminal saja belum cukup."
+    },
+    {
+      "q": "Mengapa kontaktor star dan delta perlu interlock?",
+      "o": [
+        "Mencegah keduanya aktif bersamaan",
+        "Agar keduanya selalu ON",
+        "Menggantikan semua proteksi"
+      ],
+      "a": 0,
+      "why": "Aktif bersamaan dapat menimbulkan hubung singkat; interlock listrik dan mekanis diperlukan."
+    },
+    {
+      "q": "Arus awal star kira-kira sepertiga dibanding apa?",
+      "o": [
+        "Arus start langsung delta pada motor dan sumber yang sama",
+        "Arus nominal setiap motor",
+        "Arus listrik seluruh gedung"
+      ],
+      "a": 0,
+      "why": "Perbandingan ini terhadap start langsung delta, bukan terhadap arus nominal."
+    }
   ]
 };

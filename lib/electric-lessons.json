@@ -226,5 +226,11 @@
     "title": "Sensor Industri PNP/NPN dan Sinyal 4–20 mA",
     "summary": "Bedakan sinyal ON/OFF dengan pengukuran kontinu sebelum menghubungkannya ke PLC.",
     "minutes": 28
+  },
+  {
+    "slug": "star-delta-motor",
+    "title": "Star–Delta Motor: Hubungan Bintang, Segitiga, dan Cara Start",
+    "summary": "Pahami tegangan belitan, syarat nameplate, urutan kontaktor, dan alasan interlock diperlukan.",
+    "minutes": 30
   }
 ]
