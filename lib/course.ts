@@ -1,1 +1,112 @@
-export const stages=[{name:'Dasar Kelistrikan',modules:['Apa itu listrik?','Volt, Ampere, Ohm, Watt dan kWh','Konduktor, isolator, dan rangkaian','AC, DC, dan sumber listrik']},{name:'Rangkaian & Pengukuran',modules:['Hukum Ohm dan daya','Rangkaian seri dan paralel','Multimeter','Keselamatan dan praktik DC']},{name:'Elektronika',modules:['Komponen pasif dan LED','Dioda, transistor, dan IC','Power supply dan baterai','Sensor, relay, dan IoT']},{name:'Listrik Arus Kuat',modules:['Pembangkit dan transformator','Listrik satu dan tiga phase','Netral, grounding, dan proteksi','Panel dan kabel']},{name:'Motor & Kontrol',modules:['Motor dan elektromagnet','Kontaktor dan relay','VFD dan PLC','UPS, genset, dan ATS']},{name:'Proyek & Troubleshooting',modules:['Membaca skema','Troubleshooting power supply','Daya untuk CCTV dan server','Simulasi gangguan listrik']},{name:'Pendalaman Arus Kuat',modules:["Mengenal Listrik Arus Kuat", "Komponen AC: Fungsi dan Kapan Digunakan", "Proteksi Motor: Kontaktor, Overload, dan Pengaman", "Daya AC dan Faktor Daya: W, VA, dan var"]},{name:'Komponen AC & DC',modules:["Komponen DC: Fungsi dan Kapan Digunakan", "Penyearah, Regulator, Buck, Boost, dan Inverter", "Kapasitor dan Induktor pada AC dan DC", "Memilih Komponen AC/DC dari Label dan Datasheet"]}];export const lessons=[{slug:'apa-itu-listrik',title:'Apa itu listrik?',summary:"Dari atom dan elektron hingga memahami mengapa lampu bisa menyala.",minutes:20},{slug:'volt-ampere-ohm',title:'Volt, Ampere, Ohm, Watt dan kWh',summary:'Mengenal besaran listrik',minutes:25},{slug:'konduktor-isolator-rangkaian',title:'Konduktor, Isolator, dan Rangkaian Dasar',summary:'Kabel, saklar, penghantar, dan beban',minutes:25},{slug:'ac-dc-sumber-listrik',title:'AC, DC, Frekuensi, dan Sumber Listrik',summary:'Gelombang listrik dan distribusi PLN',minutes:30},{slug:'hukum-ohm-daya',title:'Hukum Ohm dan Perhitungan Daya',summary:"Menggunakan Volt, Ampere, dan Ohm untuk menghitung rangkaian DC sederhana.",minutes:30},{slug:'rangkaian-seri-paralel',title:'Rangkaian Seri dan Paralel',summary:"Belajar bagaimana komponen tersambung dan bagaimana arus serta tegangan terbagi.",minutes:30}, {slug:'multimeter',title:stages[1].modules[2],summary:"Memilih mode ukur, memasang probe, dan membaca hasil dengan aman.",minutes:30},{slug:'keselamatan-dc',title:stages[1].modules[3],summary:"Aturan dasar sebelum menyentuh rangkaian dan memilih komponen latihan.",minutes:30},{slug:'komponen-pasif-led',title:stages[2].modules[0],summary:"Mengenal komponen dasar dan cara membaca fungsinya.",minutes:30},{slug:'dioda-transistor-ic',title:stages[2].modules[1],summary:"Dasar komponen aktif sebagai saklar dan pengolah sinyal.",minutes:30},{slug:'power-supply-baterai',title:stages[2].modules[2],summary:"Bagaimana tegangan diubah dan energi disimpan.",minutes:30},{slug:'sensor-relay-iot',title:stages[2].modules[3],summary:"Membangun logika input, proses, dan output.",minutes:30},{slug:'pembangkit-trafo',title:stages[3].modules[0],summary:"Perjalanan energi dari pembangkit hingga pelanggan.",minutes:30},{slug:'satu-tiga-phase',title:stages[3].modules[1],summary:"Memahami phase, netral, hubungan 120 derajat, dan tegangan antarphase.",minutes:30},{slug:'netral-grounding-proteksi',title:stages[3].modules[2],summary:"Membedakan jalur balik kerja dan jalur perlindungan.",minutes:30},{slug:'panel-kabel-beban',title:stages[3].modules[3],summary:"Mengenal panel dan dasar pemilihan penghantar.",minutes:30},{slug:'motor-elektromagnet',title:stages[4].modules[0],summary:"Menghubungkan medan magnet, arus, dan gerak.",minutes:30},{slug:'kontaktor-relay-panel',title:stages[4].modules[1],summary:"Dasar sistem kendali yang memisahkan daya dan sinyal.",minutes:30},{slug:'vfd-plc',title:stages[4].modules[2],summary:"Memahami pengendali motor serta logika otomasi.",minutes:30},{slug:'ups-genset-ats',title:stages[4].modules[3],summary:"Menjaga suplai daya dan memahami perpindahan sumber.",minutes:30},{slug:'membaca-skema',title:stages[5].modules[0],summary:"Memahami simbol dan jalur listrik tanpa menebak sambungan.",minutes:30},{slug:'troubleshooting-power',title:stages[5].modules[1],summary:"Pendekatan sistematis saat perangkat tidak menyala.",minutes:30},{slug:'daya-cctv-server',title:stages[5].modules[2],summary:"Menghitung kebutuhan daya perangkat jaringan dan kamera.",minutes:30},{slug:'simulasi-gangguan',title:stages[5].modules[3],summary:"Menganalisis MCB trip, netral putus, dan tegangan turun.",minutes:30},{slug:'mengenal-arus-kuat',title:"Mengenal Listrik Arus Kuat",summary:"Dari panel rumah sampai mesin industri: jalur tenaga, kontrol, dan jenis beban.",minutes:25},{slug:'komponen-ac-penggunaan',title:"Komponen AC: Fungsi dan Kapan Digunakan",summary:"Mengenal pemutus, kontaktor, proteksi bocor, trafo, dan komponen motor AC.",minutes:25},{slug:'proteksi-motor',title:"Proteksi Motor: Kontaktor, Overload, dan Pengaman",summary:"Membedakan perangkat yang menyalakan motor dengan yang melindunginya.",minutes:25},{slug:'daya-ac-faktor-daya',title:"Daya AC dan Faktor Daya: W, VA, dan var",summary:"Mengapa angka watt saja belum cukup untuk menghitung arus AC.",minutes:25},{slug:'komponen-dc-penggunaan',title:"Komponen DC: Fungsi dan Kapan Digunakan",summary:"Dari resistor LED sampai MOSFET, sekering DC, converter, dan BMS.",minutes:25},{slug:'penyearah-regulator',title:"Penyearah, Regulator, Buck, Boost, dan Inverter",summary:"Kapan perlu mengubah AC ke DC, menurunkan tegangan, atau menaikkannya.",minutes:25},{slug:'kapasitor-induktor-ac-dc',title:"Kapasitor dan Induktor pada AC dan DC",summary:"Mengapa komponen yang sama bereaksi berbeda saat sinyal berubah.",minutes:25},{slug:'memilih-komponen-ac-dc',title:"Memilih Komponen AC/DC dari Label dan Datasheet",summary:"Urutan memilih saklar, relay, adaptor, dan pengaman tanpa menebak dari bentuk.",minutes:25}];
+import data from './electric-lessons.json';
+export type ElectricLesson = {slug:string;title:string;summary:string;minutes:number};
+export const stages = [
+  {
+    "id": "dasar",
+    "name": "Dasar dan keselamatan",
+    "description": "Kenali listrik, satuan, sumber, dan cara belajar dengan aman.",
+    "prerequisite": "Belum perlu pengalaman listrik.",
+    "slugs": [
+      "apa-itu-listrik",
+      "keselamatan-dc",
+      "volt-ampere-ohm",
+      "konduktor-isolator-rangkaian",
+      "ac-dc-sumber-listrik"
+    ]
+  },
+  {
+    "id": "rangkaian",
+    "name": "Rangkaian dan pengukuran",
+    "description": "Hitung rangkaian sederhana, kenali alat ukur, lalu baca skemanya.",
+    "prerequisite": "Pahami tegangan, arus, hambatan, dan sumber AC/DC.",
+    "slugs": [
+      "hukum-ohm-daya",
+      "rangkaian-seri-paralel",
+      "multimeter",
+      "membaca-skema"
+    ]
+  },
+  {
+    "id": "elektronika",
+    "name": "Komponen dan catu daya DC",
+    "description": "Bedakan komponen pasif, aktif, dan kebutuhan suplai perangkat.",
+    "prerequisite": "Pahami rangkaian seri/paralel dan pembacaan skema.",
+    "slugs": [
+      "komponen-pasif-led",
+      "dioda-transistor-ic",
+      "komponen-dc-penggunaan",
+      "power-supply-baterai"
+    ]
+  },
+  {
+    "id": "konversi",
+    "name": "Konversi energi dan kontrol dasar",
+    "description": "Pahami perubahan tegangan, pemilihan komponen, serta input–proses–output.",
+    "prerequisite": "Kenali komponen dasar dan catu daya DC.",
+    "slugs": [
+      "kapasitor-induktor-ac-dc",
+      "penyearah-regulator",
+      "memilih-komponen-ac-dc",
+      "sensor-relay-iot"
+    ]
+  },
+  {
+    "id": "tenaga",
+    "name": "Pengenalan listrik arus kuat",
+    "description": "Ikuti perjalanan energi, satu/tiga phase, daya AC, dan perangkat tenaga.",
+    "prerequisite": "Kuasai dasar AC/DC dan perhitungan daya.",
+    "slugs": [
+      "mengenal-arus-kuat",
+      "pembangkit-trafo",
+      "satu-tiga-phase",
+      "daya-ac-faktor-daya",
+      "komponen-ac-penggunaan"
+    ]
+  },
+  {
+    "id": "proteksi",
+    "name": "Instalasi dan sistem proteksi",
+    "description": "Bedakan netral/PE, pengaman, panel distribusi, dan pertimbangan kabel.",
+    "prerequisite": "Kenali tiga phase, sifat beban, dan perangkat AC.",
+    "slugs": [
+      "netral-grounding-proteksi",
+      "panel-kabel-beban"
+    ]
+  },
+  {
+    "id": "motor",
+    "name": "Motor dan otomasi",
+    "description": "Pahami motor sebelum kontaktor, proteksi motor, VFD, dan PLC.",
+    "prerequisite": "Pahami distribusi dan fungsi pengaman; mulai dari simulasi.",
+    "slugs": [
+      "motor-elektromagnet",
+      "kontaktor-relay-panel",
+      "proteksi-motor",
+      "vfd-plc"
+    ]
+  },
+  {
+    "id": "penerapan",
+    "name": "Penerapan dan troubleshooting",
+    "description": "Gabungkan konsep untuk daya cadangan, perangkat IT, dan analisis gangguan.",
+    "prerequisite": "Selesaikan fondasi; ulangi materi proteksi sebelum menganalisis gangguan.",
+    "slugs": [
+      "ups-genset-ats",
+      "troubleshooting-power",
+      "daya-cctv-server",
+      "simulasi-gangguan"
+    ]
+  }
+];
+const catalog: ElectricLesson[] = data;
+export const lessons: ElectricLesson[] = stages.flatMap(stage => stage.slugs.map(slug => {
+  const lesson = catalog.find(item => item.slug === slug);
+  if (!lesson) throw new Error('Missing electric lesson: ' + slug);
+  return lesson;
+}));
+export function getLessonPosition(slug:string) {
+  const index = lessons.findIndex(lesson => lesson.slug === slug);
+  const stageIndex = stages.findIndex(stage => stage.slugs.includes(slug));
+  const stage = stages[stageIndex];
+  return {index, stageIndex, stage, inStage:stage?.slugs.indexOf(slug)??-1, previous:lessons[index-1], next:lessons[index+1]};
+}

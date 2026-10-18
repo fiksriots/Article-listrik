@@ -3,7 +3,7 @@ const fs=require('node:fs');
 const assert=require('node:assert/strict');
 const base=process.env.BASE_URL||'http://127.0.0.1:3000';
 const {spawn}=require('node:child_process');
-const slugs=[...fs.readFileSync('lib/course.ts','utf8').matchAll(/slug:'([^']+)'/g)].map(x=>x[1]);
+const slugs=JSON.parse(fs.readFileSync('lib/electric-lessons.json','utf8')).map(l=>l.slug);
 const raw=fs.readFileSync('lib/quiz-bank.ts','utf8');
 const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quizBank'))+2).replace(/;\s*$/,''));
 (async()=>{
@@ -21,7 +21,7 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
    const page=await context.newPage();
    const errors=[];
    page.on('pageerror',e=>errors.push(e.message));
-   for(const route of ['/','/modul','/galeri','/simulator',...slugs.map(s=>'/materi/'+s)]){
+   for(const route of ['/','/listrik','/modul','/galeri','/simulator',...slugs.map(s=>'/materi/'+s)]){
     const response=await page.goto(base+route,{waitUntil:'networkidle'});
     assert.equal(response.status(),200,route);
     assert.equal(await page.locator('h1').count(),1,route+' heading');
@@ -69,9 +69,9 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
    await page.getByRole('button',{name:'✓ Materi selesai — batalkan tanda'}).waitFor();
    await page.reload({waitUntil:'networkidle'});
    assert.equal(await page.getByRole('button',{name:'✓ Materi selesai — batalkan tanda'}).getAttribute('aria-pressed'),'true');
-   await page.goto(base,{waitUntil:'networkidle'});
+   await page.goto(base+'/listrik',{waitUntil:'networkidle'});
    assert.equal(await page.getByRole('progressbar').getAttribute('value'),'1');
-   assert.ok(await page.getByRole('link',{name:/Lanjut belajar: Volt/}).count());
+   assert.ok(await page.getByRole('link',{name:/Lanjut belajar: Keselamatan/}).count());
    await page.goto(base+'/simulator',{waitUntil:'networkidle'});
    const ohm=page.locator('.panel').filter({has:page.getByRole('heading',{name:'Simulator Hukum Ohm',exact:true})});
    await ohm.getByRole('slider').nth(0).fill('24');
@@ -102,7 +102,7 @@ const bank=JSON.parse(raw.slice(raw.indexOf('= {',raw.indexOf('export const quiz
    const missing=await page.goto(base+'/materi/tidak-ada',{waitUntil:'networkidle'});
    assert.equal(missing.status(),404);
    assert.deepEqual(errors,[],`browser errors ${viewport.width}`);
-   console.log(`PASS ${viewport.width}px: ${slugs.length+4} pages, ${slugs.length} quizzes, progress persistence, mobile navigation, 5 simulators, 404, zero runtime errors`);
+   console.log(`PASS ${viewport.width}px: ${slugs.length+5} pages, ${slugs.length} quizzes, progress persistence, mobile navigation, 5 simulators, 404, zero runtime errors`);
    await context.close();
   }
   const blocked=await browser.newContext();

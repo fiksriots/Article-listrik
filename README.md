@@ -109,3 +109,11 @@ Empat tahap setelah jalur MTCNA menambah VLSM, alamat IPv6, RA/SLAAC/DHCPv6, DNS
 
 ## Kurikulum MTCRE tambahan
 `/jaringan/mtcre/kurikulum` memetakan 45 butir pengguna ke 20 modul awal, 14 materi pendalaman dan 36 lab. Tambahan mencakup connected/flags, static kasus kedua, recursive standalone, tiga ISP, route type, static vs dynamic, virtual link, PTMP/NBMA, filter OSPF, VLAN dua switch serta PPTP/L2TP-IPsec/SSTP/PPPoE. PPTP legacy dan MME bukan rekomendasi VPN baru; MME berupa konsep/kompatibilitas, bukan klaim lab v7. Seluruh konfigurasi belum dijalankan pada CHR nyata.
+
+## Urutan belajar listrik
+
+Katalog `/modul` dan halaman `/listrik` memakai satu urutan dari `lib/course.ts`. Data judul, ringkasan, dan durasi disimpan di `lib/electric-lessons.json`. Setiap tahap merujuk slug, sehingga jumlah materi per tahap boleh berbeda tanpa mengubah URL atau key progress lama.
+
+Urutan: dasar/keselamatan → rangkaian/pengukuran → komponen DC → konversi/kontrol → arus kuat → instalasi/proteksi → motor/otomasi → penerapan/troubleshooting.
+
+Setelah build, jalankan `npm run check:path` untuk memeriksa seluruh posisi dan tautan antarartikel. `npm run test:path` memeriksa katalog, perpindahan tahap, progress, dan tampilan pada 390px/1440px menggunakan Chromium Playwright.

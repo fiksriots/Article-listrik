@@ -1,0 +1,194 @@
+[
+  {
+    "slug": "apa-itu-listrik",
+    "title": "Apa Itu Listrik?",
+    "summary": "Dari atom dan elektron hingga memahami mengapa lampu bisa menyala.",
+    "minutes": 20
+  },
+  {
+    "slug": "volt-ampere-ohm",
+    "title": "Volt, Ampere, Ohm, Watt dan kWh",
+    "summary": "Pahami lima satuan listrik dengan analogi air, contoh nyata, rumus, dan simulasi.",
+    "minutes": 25
+  },
+  {
+    "slug": "konduktor-isolator-rangkaian",
+    "title": "Konduktor, Isolator, dan Rangkaian Dasar",
+    "summary": "Mengenal kabel, isolasi, jalur arus, saklar, dan beban dengan contoh sehari-hari.",
+    "minutes": 25
+  },
+  {
+    "slug": "ac-dc-sumber-listrik",
+    "title": "AC, DC, Frekuensi, dan Sumber Listrik",
+    "summary": "Memahami baterai, listrik PLN, 50Hz, gelombang sinus, dan perjalanan listrik ke rumah.",
+    "minutes": 30
+  },
+  {
+    "slug": "hukum-ohm-daya",
+    "title": "Hukum Ohm dan Perhitungan Daya",
+    "summary": "Menggunakan Volt, Ampere, dan Ohm untuk menghitung rangkaian DC sederhana.",
+    "minutes": 30
+  },
+  {
+    "slug": "rangkaian-seri-paralel",
+    "title": "Rangkaian Seri dan Paralel",
+    "summary": "Belajar bagaimana komponen tersambung dan bagaimana arus serta tegangan terbagi.",
+    "minutes": 30
+  },
+  {
+    "slug": "multimeter",
+    "title": "Multimeter dan Pengukuran Dasar",
+    "summary": "Memilih mode ukur, memasang probe, dan membaca hasil dengan aman.",
+    "minutes": 30
+  },
+  {
+    "slug": "keselamatan-dc",
+    "title": "Keselamatan dan Praktik DC Tegangan Rendah",
+    "summary": "Aturan dasar sebelum menyentuh rangkaian dan memilih komponen latihan.",
+    "minutes": 30
+  },
+  {
+    "slug": "komponen-pasif-led",
+    "title": "Resistor, Kapasitor, Induktor, Dioda, dan LED",
+    "summary": "Mengenal komponen dasar dan cara membaca fungsinya.",
+    "minutes": 30
+  },
+  {
+    "slug": "dioda-transistor-ic",
+    "title": "Dioda, Transistor, MOSFET, dan IC",
+    "summary": "Dasar komponen aktif sebagai saklar dan pengolah sinyal.",
+    "minutes": 30
+  },
+  {
+    "slug": "power-supply-baterai",
+    "title": "Power Supply, Adaptor, dan Baterai",
+    "summary": "Bagaimana tegangan diubah dan energi disimpan.",
+    "minutes": 30
+  },
+  {
+    "slug": "sensor-relay-iot",
+    "title": "Sensor, Relay, Mikrokontroler, dan IoT",
+    "summary": "Membangun logika input, proses, dan output.",
+    "minutes": 30
+  },
+  {
+    "slug": "pembangkit-trafo",
+    "title": "Pembangkit Listrik, Distribusi PLN, dan Transformator",
+    "summary": "Perjalanan energi dari pembangkit hingga pelanggan.",
+    "minutes": 30
+  },
+  {
+    "slug": "satu-tiga-phase",
+    "title": "Listrik Satu Phase dan Tiga Phase",
+    "summary": "Memahami phase, netral, hubungan 120 derajat, dan tegangan antarphase.",
+    "minutes": 30
+  },
+  {
+    "slug": "netral-grounding-proteksi",
+    "title": "Netral, Grounding, MCB, RCCB, dan SPD",
+    "summary": "Membedakan jalur balik kerja dan jalur perlindungan.",
+    "minutes": 30
+  },
+  {
+    "slug": "panel-kabel-beban",
+    "title": "Panel Distribusi, Kabel, dan Perhitungan Beban",
+    "summary": "Mengenal panel dan dasar pemilihan penghantar.",
+    "minutes": 30
+  },
+  {
+    "slug": "motor-elektromagnet",
+    "title": "Elektromagnet dan Prinsip Kerja Motor",
+    "summary": "Menghubungkan medan magnet, arus, dan gerak.",
+    "minutes": 30
+  },
+  {
+    "slug": "kontaktor-relay-panel",
+    "title": "Kontaktor, Relay, Timer, dan Panel Kontrol",
+    "summary": "Dasar sistem kendali yang memisahkan daya dan sinyal.",
+    "minutes": 30
+  },
+  {
+    "slug": "vfd-plc",
+    "title": "VFD, PLC, dan Kontrol Industri",
+    "summary": "Memahami pengendali motor serta logika otomasi.",
+    "minutes": 30
+  },
+  {
+    "slug": "ups-genset-ats",
+    "title": "UPS, Inverter, Genset, dan ATS",
+    "summary": "Menjaga suplai daya dan memahami perpindahan sumber.",
+    "minutes": 30
+  },
+  {
+    "slug": "membaca-skema",
+    "title": "Membaca Skema Elektronika dan Wiring Diagram",
+    "summary": "Memahami simbol dan jalur listrik tanpa menebak sambungan.",
+    "minutes": 30
+  },
+  {
+    "slug": "troubleshooting-power",
+    "title": "Troubleshooting Power Supply DC",
+    "summary": "Pendekatan sistematis saat perangkat tidak menyala.",
+    "minutes": 30
+  },
+  {
+    "slug": "daya-cctv-server",
+    "title": "Distribusi Daya CCTV, Router, dan Server",
+    "summary": "Menghitung kebutuhan daya perangkat jaringan dan kamera.",
+    "minutes": 30
+  },
+  {
+    "slug": "simulasi-gangguan",
+    "title": "Simulasi Gangguan Listrik dan Sistem Proteksi",
+    "summary": "Menganalisis MCB trip, netral putus, dan tegangan turun.",
+    "minutes": 30
+  },
+  {
+    "slug": "mengenal-arus-kuat",
+    "title": "Mengenal Listrik Arus Kuat",
+    "summary": "Dari panel rumah sampai mesin industri: jalur tenaga, kontrol, dan jenis beban.",
+    "minutes": 25
+  },
+  {
+    "slug": "komponen-ac-penggunaan",
+    "title": "Komponen AC: Fungsi dan Kapan Digunakan",
+    "summary": "Mengenal pemutus, kontaktor, proteksi bocor, trafo, dan komponen motor AC.",
+    "minutes": 25
+  },
+  {
+    "slug": "proteksi-motor",
+    "title": "Proteksi Motor: Kontaktor, Overload, dan Pengaman",
+    "summary": "Membedakan perangkat yang menyalakan motor dengan yang melindunginya.",
+    "minutes": 25
+  },
+  {
+    "slug": "daya-ac-faktor-daya",
+    "title": "Daya AC dan Faktor Daya: W, VA, dan var",
+    "summary": "Mengapa angka watt saja belum cukup untuk menghitung arus AC.",
+    "minutes": 25
+  },
+  {
+    "slug": "komponen-dc-penggunaan",
+    "title": "Komponen DC: Fungsi dan Kapan Digunakan",
+    "summary": "Dari resistor LED sampai MOSFET, sekering DC, converter, dan BMS.",
+    "minutes": 25
+  },
+  {
+    "slug": "penyearah-regulator",
+    "title": "Penyearah, Regulator, Buck, Boost, dan Inverter",
+    "summary": "Kapan perlu mengubah AC ke DC, menurunkan tegangan, atau menaikkannya.",
+    "minutes": 25
+  },
+  {
+    "slug": "kapasitor-induktor-ac-dc",
+    "title": "Kapasitor dan Induktor pada AC dan DC",
+    "summary": "Mengapa komponen yang sama bereaksi berbeda saat sinyal berubah.",
+    "minutes": 25
+  },
+  {
+    "slug": "memilih-komponen-ac-dc",
+    "title": "Memilih Komponen AC/DC dari Label dan Datasheet",
+    "summary": "Urutan memilih saklar, relay, adaptor, dan pengaman tanpa menebak dari bentuk.",
+    "minutes": 25
+  }
+]
