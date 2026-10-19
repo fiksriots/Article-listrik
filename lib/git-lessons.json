@@ -291,6 +291,91 @@
     "source": "https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History"
   },
   {
+    "slug": "git-vscode",
+    "title": "Git lewat VS Code: lihat, pilih, dan commit",
+    "stage": 1,
+    "minutes": 18,
+    "summary": "Praktik perubahan file melalui Source Control, dengan padanan perintah terminalnya.",
+    "analogy": "Terminal dan VS Code seperti dua pintu menuju ruangan yang sama. Keduanya menggunakan repository Git yang sama, bukan dua riwayat terpisah.",
+    "explain": [
+      "Prasyarat: Git sudah terpasang dan repo latihan-git sudah memiliki dua commit dari materi sebelumnya. Buka VS Code desktop, lalu File → Open Folder dan pilih latihan-git. Git bawaan VS Code adalah antarmuka untuk Git di komputer, bukan pengganti instalasinya.",
+      "Buka README.md, tambahkan kalimat Cara belajar: satu langkah setiap hari, lalu Save. Buka Source Control dari ikon percabangan di sisi kiri; pintasan Windows/Linux Ctrl+Shift+G dan macOS Control+Shift+G. Jika repo belum terdeteksi, pastikan folder yang dibuka benar dan lihat Output → Git.",
+      "Di bagian Changes, klik README.md untuk membuka diff. Sisi sebelum dan sesudah memperlihatkan apa yang berubah. Klik tanda + pada file itu untuk Stage Changes. File berpindah ke Staged Changes; ini setara git add README.md, bukan commit.",
+      "Klik tanda − pada Staged Changes bila ingin unstage. Isi edit tetap ada. Stage kembali, tulis pesan Tambah cara belajar bertahap, lalu pilih Commit. Jika pilihan tombol berbeda menurut versi VS Code, buka menu di samping tombol dan pilih operasi commit lokal.",
+      "Buka terminal terintegrasi untuk memeriksa git status dan git log. Hasil UI dan terminal harus sama. Jangan memakai Commit All atau menyetujui stage otomatis sebelum mengerti file mana yang akan ikut.",
+      "Sync Changes dapat melakukan pull dan push. Pada materi ini cukup commit lokal; jangan mengira tombol sinkron hanya menyimpan file. Akun GitHub belum diperlukan untuk latihan ini."
+    ],
+    "blocks": [
+      {
+        "label": "Periksa hasil dari terminal VS Code",
+        "code": "git status\ngit log -1 --oneline\ngit show --stat HEAD",
+        "language": "bash"
+      }
+    ],
+    "result": "Commit terbaru berisi perubahan README yang dipilih. Tidak ada unggahan ke GitHub pada latihan ini.",
+    "practice": [
+      "Buka folder repo, bukan satu file saja.",
+      "Edit README lalu lihat diff sebelum staging.",
+      "Unstage satu kali dan pastikan edit tetap ada.",
+      "Stage dan commit lewat UI, lalu cocokkan log terminal."
+    ],
+    "warning": "Ilustrasi adalah peta antarmuka, bukan screenshot. Nama atau posisi tombol dapat berbeda antarrilis VS Code.",
+    "check": "Kalau file sudah berada di Staged Changes, apakah perubahan sudah menjadi commit?",
+    "answer": "Belum. Staging baru memilih snapshot; commit masih perlu dijalankan dengan pesan yang jelas.",
+    "nodes": [
+      "Buka repository",
+      "Lihat diff",
+      "Stage Changes",
+      "Commit lokal"
+    ],
+    "source": "https://code.visualstudio.com/docs/sourcecontrol/staging-commits"
+  },
+  {
+    "slug": "commit-rapi-add-p",
+    "title": "Commit rapi: pilih sebagian perubahan dengan add -p",
+    "stage": 1,
+    "minutes": 20,
+    "summary": "Pisahkan dua tujuan dalam satu file menjadi commit yang mudah ditinjau.",
+    "analogy": "Satu keranjang bisa berisi barang untuk dua pesanan. Pisahkan isinya agar setiap paket punya tujuan yang jelas.",
+    "explain": [
+      "Prasyarat: memahami diff dan staging. Agar hasil dapat diulang, latihan ini membuat repo baru lab-patch, terpisah dari latihan-git. Jalankan dari folder induk yang bersih dengan nama folder yang belum dipakai.",
+      "git add -p menampilkan hunk, yaitu sekumpulan baris perubahan yang berdekatan. Jawab y untuk memilih hunk, n untuk melewatinya, s untuk mencoba memecah hunk, dan q untuk berhenti. Tekan ? untuk daftar bantuan; tidak semua hunk bisa dipecah otomatis.",
+      "Contoh membuat dua perubahan yang berjauhan: judul pada baris pertama dan jadwal pada baris terakhir. Karena ada banyak baris tidak berubah di antaranya, Git menawarkannya sebagai dua hunk. Pilih perubahan judul saja untuk commit pertama.",
+      "Sesudah memilih, bandingkan git diff --staged dengan git diff. Yang pertama harus hanya berisi judul, yang kedua masih berisi jadwal. Jika salah memilih, git restore --staged catatan.txt mengosongkan pilihan tanpa membuang edit, lalu ulangi add -p.",
+      "Commit yang baik berisi satu tujuan yang dapat dijelaskan dan diuji. Pesan Perjelas judul catatan lebih membantu daripada update. Setelah commit pertama, stage dan commit jadwal secara terpisah.",
+      "Awalan feat:, fix:, atau docs: bisa dipakai jika tim sepakat, tetapi bukan kewajiban Git. Yang penting maksud perubahan jelas. File baru belum tracked biasanya perlu add biasa; latihan patch ini sengaja menggunakan file yang sudah dicatat."
+    ],
+    "blocks": [
+      {
+        "label": "Buat lab patch terpisah",
+        "code": "mkdir lab-patch\ncd lab-patch\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\nprintf 'Judul lama\\n1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n10\\nJadwal lama\\n' > catatan.txt\ngit add catatan.txt\ngit commit -m 'Tambah catatan awal'\nprintf 'Judul jelas\\n1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n10\\nJadwal baru\\n' > catatan.txt\ngit add -p catatan.txt",
+        "language": "bash"
+      },
+      {
+        "label": "Setelah menjawab y untuk hunk judul dan n untuk jadwal",
+        "code": "git diff --staged\ngit diff\ngit commit -m 'Perjelas judul catatan'\ngit add catatan.txt\ngit commit -m 'Perbarui jadwal belajar'\ngit log -2 --oneline\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "Dua commit terakhir terpisah: satu mengganti judul dan satu mengganti jadwal. Periksa git show pada masing-masing commit untuk membuktikannya.",
+    "practice": [
+      "Buat lab sesuai contoh dengan Git Bash atau terminal Unix.",
+      "Pilih hunk pertama y dan hunk kedua n.",
+      "Periksa staged diff sebelum commit.",
+      "Catat dua perubahan sebagai dua commit dan bandingkan hasilnya."
+    ],
+    "warning": "printf di sini untuk Git Bash, Linux, atau macOS. Jangan menempel blok kedua ketika terminal masih menunggu jawaban add -p.",
+    "check": "Mengapa file yang sama bisa menghasilkan dua commit terpisah?",
+    "answer": "Karena staging memilih isi perubahan, bukan sekadar daftar nama file. Sebagian perubahan dapat dicatat lebih dulu.",
+    "nodes": [
+      "Dua tujuan",
+      "Pilih hunk",
+      "Commit judul",
+      "Commit jadwal"
+    ],
+    "source": "https://git-scm.com/docs/git-add"
+  },
+  {
     "slug": "gitignore",
     "title": "Memilih file dengan .gitignore",
     "stage": 1,
@@ -326,6 +411,51 @@
       "Commit terpilih"
     ],
     "source": "https://git-scm.com/docs/gitignore"
+  },
+  {
+    "slug": "readme-dokumentasi",
+    "title": "README: petunjuk agar proyek bisa digunakan",
+    "stage": 1,
+    "minutes": 18,
+    "summary": "Tulis dokumentasi yang membantu orang lain memahami dan mencoba proyek tanpa menebak.",
+    "analogy": "Repo tanpa README seperti alat tanpa label dan petunjuk: bendanya ada, tetapi orang baru tidak tahu mulai dari mana.",
+    "explain": [
+      "README.md adalah pintu masuk proyek. Markdown menggunakan # untuk judul, - untuk daftar, dan pagar kode untuk contoh. Dokumentasi ikut berubah bersama kode dan bisa diperiksa melalui diff.",
+      "Mulai dengan nama proyek dan satu kalimat manfaat. Tambahkan kebutuhan alat, langkah menjalankan, struktur file, contoh hasil, serta cara melaporkan masalah. Jangan mengarang perintah instalasi yang belum pernah diuji.",
+      "Untuk proyek catatan yang tidak punya aplikasi, tulis dengan jujur bahwa cukup membuka README atau dokumen Markdown. Tidak semua repo perlu npm install. README harus menjelaskan cara kerja proyek yang benar-benar ada.",
+      "Contoh berikut untuk website statis yang akan dibuat pada proyek akhir. Simpan sebagai draf website-readme.md di repo latihan; jangan mengganti pengantar repo catatan dengan petunjuk website sebelum file index.html tersedia.",
+      "Gunakan path relatif untuk file di repo agar tetap bekerja pada clone lain. Contoh [Panduan](panduan.md) hanya benar jika panduan.md memang ada. Untuk gambar, beri teks alternatif dan simpan aset yang boleh dibagikan.",
+      "Uji dokumentasi dari folder clone baru. Jika orang masih membutuhkan file di komputermu yang tidak tercatat, dokumentasi atau repo belum lengkap. Catatan keterbatasan lebih berguna daripada janji yang tidak sesuai fitur."
+    ],
+    "blocks": [
+      {
+        "label": "Draf README website statis",
+        "code": "# Website Belajar Git\n\nWebsite satu halaman untuk melatih branch dan pull request.\n\n## Kebutuhan\n- Browser modern\n- Git untuk mengambil dan memperbarui proyek\n\n## Menjalankan lokal\n1. Clone repository ini.\n2. Buka index.html di browser.\n3. Periksa judul dan bagian materi.\n\n## Struktur\n- index.html: isi halaman dan gaya sederhana\n- README.md: panduan proyek\n\n## Pemeriksaan sebelum PR\n- Halaman dapat dibuka.\n- Judul terbaca di layar ponsel.\n- Tidak ada data pribadi atau kredensial.\n\n## Batasan\nBelum memiliki login, database, atau formulir pengiriman.",
+        "language": "markdown"
+      },
+      {
+        "label": "Catat draf dokumentasi di repo latihan",
+        "code": "git add website-readme.md\ngit diff --staged\ngit commit -m \"Tambah draf panduan website latihan\"",
+        "language": "bash"
+      }
+    ],
+    "result": "Draf README tercatat dan tidak mengklaim adanya fitur yang belum dibuat. Pada proyek akhir, sesuaikan draf sebelum menjadikannya README utama.",
+    "practice": [
+      "Buat website-readme.md melalui editor.",
+      "Jelaskan kebutuhan dan langkah penggunaan secara konkret.",
+      "Periksa semua nama file dan tautan yang disebut.",
+      "Minta teman membaca petunjuk tanpa penjelasan tambahan."
+    ],
+    "warning": "Jangan masukkan kata sandi, token, alamat pelanggan, atau file .env ke contoh dokumentasi.",
+    "check": "Apakah setiap README perlu memuat npm install?",
+    "answer": "Tidak. Cantumkan hanya perintah yang diperlukan proyek tersebut dan sudah diuji. Website HTML sederhana cukup dibuka melalui browser.",
+    "nodes": [
+      "Tujuan proyek",
+      "Cara menjalankan",
+      "Struktur file",
+      "Uji petunjuk"
+    ],
+    "source": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"
   },
   {
     "slug": "branch",
@@ -587,6 +717,52 @@
     "source": "https://git-scm.com/docs/git-pull"
   },
   {
+    "slug": "lab-konflik-dua-kontributor",
+    "title": "Lab konflik: dua kontributor, dua folder clone",
+    "stage": 3,
+    "minutes": 30,
+    "summary": "Reproduksi push ditolak, fetch, konflik, dan penyelesaiannya tanpa akun tambahan.",
+    "analogy": "Dua teknisi membawa salinan jadwal yang sama. Keduanya mengubah jam keberangkatan; satu perubahan perlu dipadukan dengan perubahan lainnya.",
+    "explain": [
+      "Prasyarat: sudah memahami branch, merge conflict, clone, fetch, dan push. Lab berdiri sendiri memakai remote bare lokal bernama pusat.git, ditambah folder kontributor-a dan kontributor-b. Tidak menghubungi GitHub dan tidak perlu dua akun.",
+      "Bare repository hanya menjadi tempat pertukaran riwayat, tanpa working tree untuk diedit. Dua folder clone berperan sebagai dua komputer. Nama penulis ditetapkan per repo agar commit menunjukkan peran A dan B; ini simulasi, bukan dua identitas GitHub nyata.",
+      "A membuat jadwal awal dan mengirimnya. B melakukan clone setelah commit awal tersedia. Selanjutnya A dan B mengubah baris sama dari dasar yang sama. Setelah A push, main di remote maju sedangkan main B memiliki commit lain.",
+      "Push B ditolak non-fast-forward. Ini perlindungan agar commit A tidak tertimpa. Di B, fetch lalu periksa log dan merge origin/main. Karena dua sisi mengubah baris sama, konflik yang disengaja akan muncul.",
+      "B membuka jadwal.txt dan memilih hasil yang mempertahankan maksud kedua pihak: Berangkat 08.30, konfirmasi ke tim dahulu. Hapus semua penanda konflik, stage, commit, dan push. A kemudian pull --ff-only untuk mengambil hasil gabungan.",
+      "Keberhasilan dibuktikan dengan kedua folder memiliki isi jadwal dan hash HEAD sama, serta status bersih. Jangan menganggap konflik selesai hanya karena pesan error tidak tampil."
+    ],
+    "blocks": [
+      {
+        "label": "Bagian 1 · folder induk lab baru",
+        "code": "mkdir lab-dua-kontributor\ncd lab-dua-kontributor\ngit init --bare --initial-branch=main pusat.git\ngit clone pusat.git kontributor-a\ncd kontributor-a\ngit config user.name 'Kontributor A'\ngit config user.email 'a@example.com'\nprintf 'Berangkat 08.00\\n' > jadwal.txt\ngit add jadwal.txt\ngit commit -m 'Tambah jadwal awal'\ngit push -u origin main\ncd ..\ngit clone pusat.git kontributor-b\ncd kontributor-b\ngit config user.name 'Kontributor B'\ngit config user.email 'b@example.com'\ncd ../kontributor-a\nprintf 'Berangkat 08.30\\n' > jadwal.txt\ngit add jadwal.txt\ngit commit -m 'Sesuaikan jam keberangkatan'\ngit push\ncd ../kontributor-b\nprintf 'Berangkat 08.00, konfirmasi ke tim dahulu\\n' > jadwal.txt\ngit add jadwal.txt\ngit commit -m 'Tambah konfirmasi tim'\ngit push",
+        "language": "bash"
+      },
+      {
+        "label": "Bagian 2 · lanjut dari folder kontributor-b setelah push ditolak",
+        "code": "git fetch origin\ngit log --oneline --graph --all\ngit merge origin/main\n# Konflik sengaja terjadi. Buka jadwal.txt dan lihat penandanya.\n# Setelah memahami kedua sisi, simpan satu baris hasil berikut:\nprintf 'Berangkat 08.30, konfirmasi ke tim dahulu\\n' > jadwal.txt\ngit add jadwal.txt\ngit commit -m 'Gabungkan jam baru dan konfirmasi tim'\ngit push\ngit rev-parse HEAD\ncd ../kontributor-a\ngit pull --ff-only\ncat jadwal.txt\ngit rev-parse HEAD\ngit status\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "Push pertama B ditolak, merge B konflik, dan setelah penyelesaian kedua clone menunjuk commit yang sama serta berisi jadwal gabungan. Peringatan clone repo kosong pada awal lab adalah wajar.",
+    "practice": [
+      "Jalankan bagian 1 sampai penolakan push B.",
+      "Gambar dua commit yang bercabang dari dasar sama.",
+      "Lanjut bagian 2 satu per satu, berhenti untuk membaca penanda konflik.",
+      "Bandingkan hash akhir A/B dan isi file.",
+      "Ulangi dari folder lab baru jika ingin mengganti keputusan hasil konflik."
+    ],
+    "warning": "Jangan force push untuk melewati penolakan. Gunakan folder lab baru; jangan menjalankan contoh ini di remote produksi.",
+    "check": "Mengapa fetch diperlukan sebelum merge origin/main?",
+    "answer": "Agar origin/main milik B diperbarui ke commit A yang sudah masuk remote; referensi lama belum mengetahui perubahan tersebut.",
+    "nodes": [
+      "Dasar bersama",
+      "A push lebih dulu",
+      "B fetch dan merge",
+      "Kedua clone sama"
+    ],
+    "source": "https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes"
+  },
+  {
     "slug": "pull-request",
     "title": "Workflow tim dan pull request",
     "stage": 4,
@@ -622,6 +798,51 @@
       "Merge main"
     ],
     "source": "https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project"
+  },
+  {
+    "slug": "github-issues",
+    "title": "GitHub Issues: dari laporan ke pull request",
+    "stage": 4,
+    "minutes": 18,
+    "summary": "Buat tugas yang jelas, kerjakan pada branch, lalu hubungkan PR dengan masalahnya.",
+    "analogy": "Issue adalah kartu pekerjaan; branch adalah meja pengerjaan; PR adalah tempat memeriksa hasil sebelum kartu dinyatakan selesai.",
+    "explain": [
+      "Prasyarat: repo GitHub milikmu dan pengalaman membuat PR. Buka tab Issues lalu New issue pada repo latihan. Bila tab tidak ada, fitur Issues mungkin belum diaktifkan oleh pengelola repository.",
+      "Tulis judul yang konkret seperti Judul website sulit dibaca di ponsel. Isi kondisi sekarang, langkah mengulang, hasil yang diharapkan, dan kriteria selesai. Screenshot boleh membantu, tetapi hapus data pribadi.",
+      "Catat nomor issue yang benar. Buat branch fix/judul-mobile dari main yang sudah sinkron. Branch tidak otomatis menautkan issue hanya karena namanya mirip; jelaskan hubungan pekerjaan melalui PR.",
+      "Setelah perubahan siap, buat PR dengan base main. Gunakan Closes #N pada deskripsi dan ganti N dengan nomor issue di repo yang sama. Kata kunci dapat menutup issue ketika PR digabung ke default branch, jika pengaturan auto-close mengizinkan.",
+      "Nomor issue dan PR berbagi satu urutan di GitHub, jadi nomor issue tidak selalu berurutan sendiri. Jangan menyalin #12 sebagai angka tetap tanpa memeriksa issue tujuan.",
+      "Sesudah merge, periksa status issue dan uji hasil. Jika belum memenuhi kriteria, jelaskan kekurangannya dan buka tindak lanjut. Issue adalah catatan koordinasi, bukan jaminan kode sudah benar."
+    ],
+    "blocks": [
+      {
+        "label": "Contoh isi issue",
+        "code": "## Kondisi sekarang\nJudul halaman terlalu lebar pada layar 390 px.\n\n## Cara mengulang\n1. Buka halaman utama pada viewport 390 px.\n2. Perhatikan apakah halaman bergeser ke samping.\n\n## Hasil yang diharapkan\nJudul terbaca tanpa gulir horizontal.\n\n## Selesai jika\n- Tampilan 390 px dan desktop sudah diperiksa.\n- Tidak ada bagian judul yang terpotong.",
+        "language": "markdown"
+      },
+      {
+        "label": "Kerjakan di branch setelah issue dibuat",
+        "code": "git switch main\ngit pull --ff-only\ngit switch -c fix/judul-mobile\n# Edit dan periksa file yang sesuai proyekmu.\n# Stage file yang benar, commit, lalu push branch.\n# Tambahkan Closes #N pada DESKRIPSI PR, bukan perintah terminal.",
+        "language": "bash"
+      }
+    ],
+    "result": "Issue memiliki langkah reproduksi dan kriteria selesai; PR menautkan issue yang benar, lalu penutupan diperiksa setelah merge.",
+    "practice": [
+      "Buat satu issue latihan di repo milik sendiri.",
+      "Ganti N dengan nomor nyata pada deskripsi PR.",
+      "Periksa tab Files changed dan kriteria issue.",
+      "Sesudah merge, cek status issue dan hasil halaman."
+    ],
+    "warning": "Jangan memakai issue proyek orang lain untuk latihan atau mengunggah screenshot berisi token dan data pelanggan.",
+    "check": "Apakah menulis Closes #N pada PR otomatis menutup issue saat PR baru dibuka?",
+    "answer": "Tidak. Penutupan otomatis biasanya terjadi saat PR yang sesuai digabung ke default branch dan fitur auto-close diaktifkan.",
+    "nodes": [
+      "Issue jelas",
+      "Branch tugas",
+      "PR terkait",
+      "Periksa hasil"
+    ],
+    "source": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue"
   },
   {
     "slug": "fork",
@@ -846,41 +1067,195 @@
     "source": "https://git-scm.com/book/en/v2/Git-Basics-Tagging"
   },
   {
-    "slug": "proyek-akhir",
-    "title": "Proyek akhir: dokumentasi lab dengan Git",
+    "slug": "git-bisect",
+    "title": "Git bisect: menemukan commit penyebab bug",
     "stage": 6,
-    "minutes": 12,
-    "summary": "Gabungkan semua keterampilan dalam proyek yang dekat dengan pekerjaan IT.",
-    "analogy": "Buat buku kerja teknisi yang setiap revisinya bisa dijelaskan dan ditinjau.",
+    "minutes": 25,
+    "summary": "Cari perubahan pertama yang merusak perilaku melalui pengujian bertahap.",
+    "analogy": "Mencari halaman salah dalam buku tebal lebih cepat dengan membagi rentang menjadi dua daripada memeriksa dari halaman pertama satu per satu.",
     "explain": [
-      "Gunakan repo latihan untuk dokumentasi lab fiktif: README, topologi.md, dan troubleshooting.md. Pakai IP dokumentasi seperti 192.0.2.0/24, tanpa data pelanggan asli.",
-      "Kerjakan topologi dan troubleshooting pada branch terpisah. Tiap commit harus punya tujuan jelas, misalnya menambah langkah cek gateway.",
-      "Ajukan PR, periksa diff, gabungkan, lalu sinkronkan salinan lokal. Simulasikan konflik satu baris dan selesaikan dengan alasan yang bisa dijelaskan.",
-      "Hasil lulus: repo bisa di-clone, README menjelaskan penggunaan, ada branch dan PR, tidak ada rahasia, log terbaca, serta kamu bisa menunjukkan contoh unstage dan revert di branch latihan."
+      "Prasyarat: memahami log, hash, dan working tree bersih. Bisect memerlukan satu versi yang diketahui baik dan satu versi buruk, ditambah cara menguji yang menghasilkan penilaian konsisten.",
+      "git bisect menempatkan repo pada commit kandidat untuk diuji. Biasanya HEAD menjadi detached selama pencarian; jangan membuat fitur baru di tengah proses. Simpan pekerjaan sebelum mulai dan akhiri dengan git bisect reset.",
+      "Lab berikut membuat empat commit di repo terpisah. Pada v1 dan v2, status.txt berisi OK. Pada v3 berubah menjadi ERROR; v4 menambah catatan tanpa memperbaikinya. Tag lokal memudahkan menyebut batas baik dan buruk.",
+      "Setelah start v4 v1, buka status.txt pada commit yang dipilih. Bila isinya OK, tandai good; bila ERROR, tandai bad. Ulangi membaca isi setiap kali Git berpindah kandidat. Jangan menempel beberapa perintah good/bad tanpa menguji ulang.",
+      "Git akhirnya melaporkan first bad commit. Pada lab ini judulnya Perkenalkan status salah. Tugas sesudah menemukannya adalah memahami diff, menulis perbaikan, dan menguji; bisect sendiri tidak memperbaiki bug.",
+      "Jika commit tidak dapat diuji karena alat atau dependency belum tersedia, gunakan git bisect skip. Terlalu banyak skip dapat membuat hasil ambigu. Untuk bug yang muncul hilang atau berubah karena jaringan, stabilkan reproduksi sebelum bisect."
     ],
     "blocks": [
       {
-        "label": "Contoh praktik",
-        "language": "bash",
-        "code": "git status\ngit log --oneline --graph --all\ngit remote -v\ngit ls-files"
+        "label": "Siapkan lab bisect baru",
+        "code": "mkdir lab-bisect\ncd lab-bisect\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\nprintf 'OK\\n' > status.txt\ngit add status.txt\ngit commit -m 'Status awal benar'\ngit tag v1\nprintf 'Panduan pengujian\\n' > panduan.txt\ngit add panduan.txt\ngit commit -m 'Tambah panduan'\ngit tag v2\nprintf 'ERROR\\n' > status.txt\ngit add status.txt\ngit commit -m 'Perkenalkan status salah'\ngit tag v3\nprintf 'Versi pengujian\\n' > versi.txt\ngit add versi.txt\ngit commit -m 'Tambah catatan versi'\ngit tag v4\ngit bisect start v4 v1\ncat status.txt",
+        "language": "bash"
+      },
+      {
+        "label": "Uji kandidat satu per satu",
+        "code": "# Jika output cat status.txt adalah OK:\n# git bisect good\n# Jika output adalah ERROR:\n# git bisect bad\n# Setelah Git berpindah, ulangi cat status.txt dan nilai lagi.\n# Setelah first bad commit ditemukan:\ngit bisect reset\ngit status\ncd ..",
+        "language": "bash"
       }
     ],
-    "result": "Daftar file terlacak dan riwayat menjadi bukti hasil kerja. Periksa juga PR dan tag di GitHub.",
+    "result": "Hasil first bad commit menunjuk commit berjudul Perkenalkan status salah, yaitu tag v3. Sesudah reset, repo kembali ke posisi sebelum bisect.",
     "practice": [
-      "Buat tiga dokumen lab fiktif.",
-      "Selesaikan dua branch fitur melalui PR.",
-      "Clone ulang ke folder baru dan ikuti README.",
-      "Buat tag setelah hasil diperiksa.",
-      "Jelaskan add, commit, push, fetch, merge tanpa menghafal."
+      "Buat empat commit dan periksa rentang v1–v4.",
+      "Catat setiap kandidat beserta hasil uji.",
+      "Temukan v3 melalui keputusan good/bad.",
+      "Akhiri bisect sebelum mencoba perbaikan pada branch baru."
     ],
-    "warning": "Gunakan data fiktif. Jangan memasukkan konfigurasi produksi, private key, token, atau identitas pelanggan.",
-    "check": "Bagaimana membuktikan repo mudah digunakan orang lain?",
-    "answer": "Clone ke folder baru, ikuti README tanpa mengandalkan file lokal yang tidak terlacak, lalu catat dan perbaiki langkah yang kurang.",
+    "warning": "Jangan menguji program tak dikenal hanya karena checkout ke commit lama. Lab memakai file teks agar hasil mudah diamati.",
+    "check": "Mengapa status good/bad harus berdasarkan tes yang sama?",
+    "answer": "Karena algoritma mengandalkan batas versi baik dan buruk yang konsisten. Tebakan atau tes yang berubah-ubah dapat menunjuk commit yang salah.",
     "nodes": [
-      "Dokumen lab",
-      "Branch kecil",
-      "Review PR",
-      "Clone verifikasi"
+      "Versi baik dan buruk",
+      "Uji kandidat",
+      "Sempitkan rentang",
+      "Commit penyebab"
+    ],
+    "source": "https://git-scm.com/docs/git-bisect"
+  },
+  {
+    "slug": "github-actions",
+    "title": "GitHub Actions: pemeriksaan otomatis pertama",
+    "stage": 6,
+    "minutes": 25,
+    "summary": "Jalankan pemeriksaan sederhana pada push dan pull request sebelum perubahan dianggap siap.",
+    "analogy": "Actions seperti petugas pemeriksa yang mengikuti daftar cek yang sama setiap kali paket perubahan datang.",
+    "explain": [
+      "Prasyarat: repo latihan terpisah di GitHub dan kemampuan membuat PR. Mulailah dengan website HTML minimal pada blok pertama: simpan sebagai index.html di root repo, buka di browser, commit dan push ke main. Dengan begitu, file yang diperiksa sudah tersedia sebelum workflow dibuat.",
+      "Workflow adalah file YAML dalam .github/workflows/. Event menentukan kapan berjalan; job adalah kelompok kerja; runner adalah mesin pelaksana; step adalah satu tindakan. Contoh ini memakai runner Ubuntu yang disediakan GitHub.",
+      "File cek-html.yml berikut berjalan pada push ke main dan PR ke main. Checkout mengambil isi repo ke runner. Perintah test memeriksa index.html ada dan tidak kosong; grep memastikan penanda judul yang kita sepakati tetap ada.",
+      "Pemeriksaan ini sengaja sederhana: keberadaan teks tidak membuktikan tampilan, aksesibilitas, atau seluruh fitur benar. CI adalah Continuous Integration, yaitu kebiasaan mengintegrasikan perubahan dan memeriksanya otomatis. Deployment adalah langkah lain.",
+      "Buat file lewat branch, commit, push, lalu buka tab Actions dan detail job. Jika gagal, baca step merah dan log sebelum mengubah apa pun. Untuk membuktikan pemeriksa bekerja, ubah penanda judul di branch latihan, lihat kegagalan, lalu perbaiki dengan commit berikutnya.",
+      "permissions: contents: read membatasi token workflow untuk membaca repository. Contoh tidak memerlukan secret atau credential deploy. Untuk produksi, pin action ke SHA rilis yang sudah diperiksa dan rawat pembaruannya; tag v6 di contoh adalah rujukan versi mayor, bukan pin immutable.",
+      "Lolos Actions tidak otomatis melarang merge saat tes gagal. Pemilik repo perlu mengatur aturan branch atau required checks jika ingin menjadikannya syarat penggabungan. Ketersediaan runner dan kuota mengikuti pengaturan serta paket akun."
+    ],
+    "blocks": [
+      {
+        "label": "index.html · persiapan sebelum workflow",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Belajar Git Bersama</title>\n  <style>\n    body { margin: 0; padding: 24px; background: #faf5ed; color: #302a26; font-family: system-ui, sans-serif; line-height: 1.7; }\n    main { max-width: 760px; margin: 40px auto; }\n    h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.15; }\n    article { background: white; border: 1px solid #dfd2c2; border-radius: 12px; padding: 20px; margin: 16px 0; }\n    a { color: #8b422d; }\n  </style>\n</head>\n<body>\n  <main>\n    <h1>Belajar Git Bersama</h1>\n    <p>Satu perubahan kecil, satu langkah belajar.</p>\n    <article><h2>Commit</h2><p>Catat snapshot dengan tujuan yang jelas.</p></article>\n    <article><h2>Branch</h2><p>Coba ide sebelum digabung ke jalur utama.</p></article>\n    <p><a href=\"https://git-scm.com/doc\">Baca dokumentasi Git</a></p>\n  </main>\n</body>\n</html>"
+      },
+      {
+        "label": ".github/workflows/cek-html.yml",
+        "code": "name: Periksa website latihan\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\n\npermissions:\n  contents: read\n\njobs:\n  cek-html:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Ambil isi repository\n        uses: actions/checkout@v6\n        with:\n          persist-credentials: false\n      - name: Periksa file dan penanda judul\n        run: |\n          test -s index.html\n          grep -Fq \"Belajar Git Bersama\" index.html\n",
+        "language": "yaml"
+      },
+      {
+        "label": "Catat workflow di branch repo website latihan",
+        "code": "git switch -c ci/cek-html\ngit add .github/workflows/cek-html.yml\ngit diff --staged\ngit commit -m \"Tambah pemeriksaan HTML pada PR\"\ngit push -u origin ci/cek-html",
+        "language": "bash"
+      }
+    ],
+    "result": "Job cek-html berwarna hijau bila file ada dan mengandung penanda yang tepat. Setelah penanda sengaja diubah, step pemeriksaan gagal; setelah diperbaiki, run baru kembali hijau.",
+    "practice": [
+      "Buat repo website latihan, simpan index.html dari contoh, lalu commit dan push ke main sebelum menambah workflow.",
+      "Simpan YAML pada path yang tepat lalu ajukan PR.",
+      "Buka log step dan jelaskan setiap perintah.",
+      "Uji satu kegagalan terkontrol di branch lalu perbaiki.",
+      "Bedakan hasil pemeriksaan GitHub dengan status deployment Vercel."
+    ],
+    "warning": "Ini contoh materi, bukan pemasangan workflow pada situs Learn. Jangan menaruh token deploy di YAML; jangan menjalankan kode PR tak dipercaya dengan secret produksi.",
+    "check": "Apakah Actions hijau menjamin website terlihat benar di ponsel?",
+    "answer": "Tidak. Tes ini hanya memeriksa file dan penanda teks. Tampilan ponsel tetap perlu diuji atau diberi tes tambahan yang sesuai.",
+    "nodes": [
+      "Push atau PR",
+      "Runner mengambil kode",
+      "Jalankan cek",
+      "Baca hasil job"
+    ],
+    "source": "https://docs.github.com/en/actions/get-started/quickstart"
+  },
+  {
+    "slug": "git-vercel",
+    "title": "Git ke Vercel: preview, produksi, dan rollback",
+    "stage": 6,
+    "minutes": 25,
+    "summary": "Ikuti perjalanan commit menjadi halaman web, tanpa menyamakan push dengan deployment berhasil.",
+    "analogy": "Commit seperti naskah, build seperti proses cetak, preview seperti cetak uji, dan produksi seperti edisi yang dibagikan kepada pembaca.",
+    "explain": [
+      "Prasyarat: repo website HTML milikmu sudah berada di GitHub. Buat atau buka akun Vercel, tambahkan proyek dari repository tersebut, dan periksa akun/team serta repo yang dipilih sebelum menghubungkan. Langkah ini memberi layanan hosting akses ke repo; gunakan hak akses yang diperlukan saja.",
+      "Untuk website statis satu index.html di root, pilih preset Other bila ditawarkan. Proyek ini tidak memerlukan npm atau proses build khusus; biarkan build command tanpa perintah dan output mengikuti root proyek sesuai tampilan pengaturan saat ini. Jika Vercel meminta folder output, gunakan . untuk root repo. Pengaturan Next.js berbeda karena membutuhkan build aplikasi.",
+      "Pastikan Production Branch yang dikonfigurasi adalah main pada repo latihan. Dengan integrasi Git aktif, push branch fitur dapat memicu preview; perubahan pada branch produksi memicu production deployment, sesuai pengaturan proyek. Dashboard menunjukkan commit, branch, dan environment yang menjadi sumbernya.",
+      "Buka PR untuk branch fitur, tunggu preview berstatus Ready, lalu kunjungi URL preview. Periksa teks, ponsel, dan tautan. Preview bisa dilindungi login; atur akses untuk peninjau yang berhak, jangan menganggap semua URL preview selalu terbuka.",
+      "Setelah perubahan diperiksa dan PR digabung, tunggu production deployment Ready dan buka domain produksi. Push sukses hanya berarti Git menerima commit; build bisa gagal atau masih antre. Cocokkan SHA deployment agar tidak menguji versi lama tanpa sadar.",
+      "Jika deployment gagal, periksa Build Logs untuk petunjuk root directory, output directory, build command, dependency, atau konfigurasi. Jangan menyalin secret ke log atau kode. Untuk website statis ini tidak diperlukan variabel rahasia.",
+      "Jika rilis bermasalah, rollback memilih deployment produksi lama yang sudah baik bila fitur tersedia pada proyek. Ini mengubah versi yang disajikan hosting, bukan menghapus commit Git. Perbaiki repository juga, misalnya melalui revert pada commit perubahan biasa dan PR, agar rilis berikutnya tidak mengulang masalah.",
+      "Sesudah rollback, periksa kembali domain dan status auto-assignment. Vercel dapat menghentikan auto-assignment produksi setelah rollback sampai diaktifkan kembali melalui alur promote yang sesuai. Rollback hosting juga tidak mengembalikan database atau layanan eksternal."
+    ],
+    "blocks": [
+      {
+        "label": "Periksa branch dan commit yang akan diuji",
+        "code": "git status\ngit branch --show-current\ngit log -1 --format=\"%h %s\"\n# Cocokkan commit ini dengan metadata deployment Vercel.",
+        "language": "bash"
+      },
+      {
+        "label": "Daftar cek sebelum dan sesudah publikasi",
+        "code": "PREVIEW\n[ ] Repo dan branch sumber benar\n[ ] Deployment Ready, commit cocok\n[ ] Halaman 390 px dan desktop diperiksa\n[ ] Tautan dan teks sesuai\n\nPRODUKSI\n[ ] PR yang benar sudah digabung\n[ ] Deployment produksi Ready\n[ ] Domain utama memuat versi baru\n[ ] Deployment baik sebelumnya diketahui",
+        "language": "text"
+      }
+    ],
+    "result": "Ada URL preview untuk perubahan branch dan URL produksi untuk versi yang sudah diterbitkan. Pembaca dapat menunjukkan SHA sumber dan bukti pemeriksaan untuk masing-masing versi.",
+    "practice": [
+      "Import hanya repo website latihan milik sendiri.",
+      "Cek preset, root, output, serta production branch sebelum deploy.",
+      "Buat perubahan pada branch dan bandingkan preview dengan produksi.",
+      "Setelah merge, periksa status Ready dan konten domain produksi.",
+      "Di proyek latihan, pelajari pilihan rollback dan cara melanjutkan publikasi sesudahnya."
+    ],
+    "warning": "Materi ini tidak memerintahkan rollback situs utama. Jangan menyamakan rollback hosting dengan git reset atau pemulihan data database.",
+    "check": "Jika git push berhasil tetapi Vercel masih Building, apakah website produksi pasti sudah berubah?",
+    "answer": "Belum. Tunggu deployment yang benar Ready, pastikan environment produksi, lalu periksa domain dan isi halamannya.",
+    "nodes": [
+      "Commit branch",
+      "Preview diuji",
+      "Merge ke main",
+      "Produksi Ready"
+    ],
+    "source": "https://vercel.com/docs/git/vercel-for-github"
+  },
+  {
+    "slug": "proyek-akhir",
+    "title": "Proyek akhir: dokumentasi lab dan website dengan Git",
+    "stage": 6,
+    "minutes": 45,
+    "summary": "Bangun dokumentasi dan satu halaman web, kerjakan melalui issue, branch, PR, CI, dan preview.",
+    "analogy": "Kerjakan proyek seperti tim kecil: ada kartu tugas, ruang percobaan, pemeriksaan hasil, lalu versi yang siap dibagikan.",
+    "explain": [
+      "Pilih jalur A jika ingin fokus dokumentasi: pertahankan README, topologi.md, dan troubleshooting.md pada repo latihan. Gunakan data lab fiktif seperti 192.0.2.0/24. Jalur B menambahkan website statis agar alur Git sampai deployment dapat dipraktikkan.",
+      "Untuk jalur B, buat repository baru website-belajar-git di GitHub lalu clone ke folder baru. Buat index.html dari contoh berikut dan README yang sesuai materi dokumentasi. Buat commit awal di main dan push sebelum membagi pekerjaan menjadi branch.",
+      "Buat issue untuk menambah kartu materi dan issue untuk memperbaiki tampilan ponsel. Kerjakan satu tujuan per branch, tinjau diff di VS Code atau terminal, lalu buka PR yang menautkan issue terkait. PR boleh ditinjau sendiri untuk latihan; pada kerja tim minta rekan memeriksa.",
+      "Tambahkan workflow dari materi GitHub Actions melalui branch khusus. Penanda Belajar Git Bersama harus tetap ada agar pemeriksaan contoh lulus. Hubungkan repo website latihan ke Vercel sesuai materi sebelumnya, periksa preview sebelum menggabungkan PR.",
+      "Untuk perubahan fitur, tambahkan kartu ketiga atau ubah warna melalui branch. Periksa viewport 390 px dan desktop, status CI, serta URL preview. Setelah merge, tunggu deployment produksi Ready dan cocokkan kontennya.",
+      "Tunjukkan satu unstage tanpa kehilangan edit, satu konflik pada lab dua kontributor, dan satu revert commit perubahan biasa pada branch latihan. Jangan memakai merge commit sebagai contoh revert pertama karena memerlukan pemilihan mainline.",
+      "Kriteria selesai: clone baru dapat digunakan mengikuti README, tiga dokumen lab atau website tersedia sesuai jalur, ada riwayat commit dengan tujuan jelas, satu issue tertaut PR, serta tidak ada kredensial. Untuk jalur website, tambahkan CI hijau, bukti preview/produksi, dan tag rilis setelah diperiksa."
+    ],
+    "blocks": [
+      {
+        "label": "index.html · jalur website statis",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Belajar Git Bersama</title>\n  <style>\n    body { margin: 0; padding: 24px; background: #faf5ed; color: #302a26; font-family: system-ui, sans-serif; line-height: 1.7; }\n    main { max-width: 760px; margin: 40px auto; }\n    h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.15; }\n    article { background: white; border: 1px solid #dfd2c2; border-radius: 12px; padding: 20px; margin: 16px 0; }\n    a { color: #8b422d; }\n  </style>\n</head>\n<body>\n  <main>\n    <h1>Belajar Git Bersama</h1>\n    <p>Satu perubahan kecil, satu langkah belajar.</p>\n    <article><h2>Commit</h2><p>Catat snapshot dengan tujuan yang jelas.</p></article>\n    <article><h2>Branch</h2><p>Coba ide sebelum digabung ke jalur utama.</p></article>\n    <p><a href=\"https://git-scm.com/doc\">Baca dokumentasi Git</a></p>\n  </main>\n</body>\n</html>",
+        "language": "html"
+      },
+      {
+        "label": "Pemeriksaan repo hasil akhir",
+        "code": "git status\ngit log --oneline --graph --all\ngit remote -v\ngit ls-files\n# Jika proyek selesai dan tag ini belum pernah dipakai:\ngit tag -a v0.2.0 -m \"Proyek latihan siap diperiksa\"\ngit push origin v0.2.0",
+        "language": "bash"
+      }
+    ],
+    "result": "Pembaca dapat menunjukkan repo yang dapat di-clone dan dipakai, PR yang mudah ditinjau, serta—untuk jalur website—CI dan deployment yang sesuai commit. Tag rilis dibuat setelah pemeriksaan, bukan sebelum.",
+    "practice": [
+      "Pilih jalur dokumentasi atau website; jalur website memakai repo baru.",
+      "Buat README yang benar-benar dapat diikuti dari clone baru.",
+      "Selesaikan dua issue kecil melalui branch dan PR yang terpisah.",
+      "Untuk website, pasang workflow dari materi Actions dan uji preview Vercel.",
+      "Lakukan latihan pemulihan pada branch khusus, lalu jelaskan perbedaan revert Git dan rollback hosting.",
+      "Catat URL repo, PR, preview/produksi bila tersedia, dan hash/tag hasil yang diperiksa."
+    ],
+    "warning": "Gunakan repo latihan dan data fiktif. Jangan melakukan force push atau rollback pada situs produksi lain untuk menyelesaikan tugas ini.",
+    "check": "PR sudah merged tetapi domain masih menampilkan versi lama. Apa yang perlu diperiksa?",
+    "answer": "Periksa status deployment, commit sumber, branch produksi, dan domain yang dibuka. Merge bukan bukti build berhasil. Cocokkan SHA serta tunggu Ready sebelum memeriksa konten kembali.",
+    "nodes": [
+      "Repo dan README",
+      "Issue serta branch",
+      "PR dan pemeriksaan",
+      "Rilis terverifikasi"
     ],
     "source": "https://git-scm.com/book/en/v2/Git-Basics-Summary"
   }
