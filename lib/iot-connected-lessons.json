@@ -1,0 +1,446 @@
+[
+  {
+    "slug": "mqtt-broker-lokal",
+    "title": "Menyiapkan broker MQTT dan menguji koneksi",
+    "summary": "Pasang Mosquitto, buat akun dan hak topic, lalu buktikan publish–subscribe lewat dua terminal.",
+    "stage": 7,
+    "minutes": 25,
+    "analogy": "Broker seperti petugas pusat berita. Sebelum menambah sensor, kita uji dulu petugasnya memakai dua loket terminal: satu mengirim, satu menerima.",
+    "explain": [
+      "Latihan ini memakai komputer Ubuntu/Debian di LAN pribadi dan Mosquitto 2.x. Komputer broker harus menyala. ESP32 dan komputer berada pada jaringan yang saling dapat berkomunikasi; jaringan tamu dengan client isolation dapat menghalangi koneksi.",
+      "Contoh IP broker 192.168.1.10 adalah alamat komputer yang menjalankan Mosquitto, bukan alamat gateway atau ESP32. Jalankan hostname -I untuk memeriksa alamat LAN. Ganti 192.168.1.10 di konfigurasi dan semua contoh dengan IP komputer Anda; bila memungkinkan, tetapkan DHCP reservation di router.",
+      "Kita memakai akun esp32 untuk kirim telemetry dan baca command, akun bridge untuk membaca telemetry, serta viewer untuk membaca telemetry dan mengirim command. ACL adalah daftar pintu topic yang boleh dibuka masing-masing akun. Jangan memakai opsi -c lagi saat menambah akun karena akan membuat ulang file password.",
+      "Listener hanya diikat ke IP LAN komputer. Port 1883 pada latihan ini tidak terenkripsi; gunakan password khusus latihan dan jaringan yang Anda kendalikan. Jangan membuat port forwarding ke internet. Untuk jaringan bersama atau broker internet, gunakan TLS, verifikasi sertifikat, dan port yang diberikan penyedia.",
+      "Buktikan koneksi terminal terlebih dahulu. Jika terminal penerima belum menampilkan pesan, jangan lanjut ke ESP32 atau Firebase: masalahnya masih ada pada alamat, layanan, login, firewall, atau hak topic.",
+      "Password pada opsi -P dapat terlihat dalam argumen proses; contoh terminal ini hanya untuk kredensial latihan. Pada layanan nyata gunakan mekanisme penyimpanan kredensial yang sesuai dan transport terenkripsi."
+    ],
+    "example": "Pasang Mosquitto, buat akun dan hak topic, lalu buktikan publish–subscribe lewat dua terminal.",
+    "practice": [
+      "Periksa alamat LAN komputer. Ganti IP contoh sebelum menyalin konfigurasi. Pastikan belum ada listener lain yang bertabrakan.",
+      "Pasang paket, lalu buat tiga akun. Setiap perintah mosquitto_passwd meminta password; catat password masing-masing secara pribadi.",
+      "Buka berkas dengan sudo nano /etc/mosquitto/conf.d/iot-lab.conf lalu simpan konfigurasi di bawah. Buka sudo nano /etc/mosquitto/iot-lab.acl untuk ACL. Di nano: Ctrl+O, Enter untuk menyimpan, lalu Ctrl+X untuk keluar. Atur izin file dan restart layanan.",
+      "Buka Terminal A dan jalankan subscriber dengan password viewer. Biarkan tetap terbuka.",
+      "Buka Terminal B dan kirim JSON dengan akun esp32. Terminal A harus menampilkan topic dan payload yang sama.",
+      "Coba password salah: koneksi harus ditolak. Coba viewer mengirim telemetry: pesannya tidak boleh diteruskan. Gunakan subscriber sebagai bukti karena status pengiriman QoS 0 saja tidak membuktikan izin diterima."
+    ],
+    "warning": "Listener 1883 ini untuk lab LAN pribadi. Password tidak mengenkripsi pesan; jangan gunakan sandi akun pribadi atau meneruskan port ini ke internet.",
+    "check": "Terminal A kosong tetapi ping berhasil. Apa yang perlu diperiksa berikutnya?",
+    "answer": "Ping hanya menguji jangkauan IP. Periksa layanan Mosquitto, listener, port dan firewall, username/password, ACL, serta ejaan topic yang harus sama.",
+    "nodes": [
+      "Komputer broker",
+      "Akun dan ACL",
+      "Terminal subscriber",
+      "Terminal publisher",
+      "Pesan diterima"
+    ],
+    "lab": {
+      "title": "PRAKTIK · BROKER LOKAL",
+      "parts": [
+        "Komputer Ubuntu/Debian, akses sudo, dan koneksi internet untuk instalasi",
+        "Dua jendela terminal; ESP32 belum dibutuhkan",
+        "IP LAN komputer yang sudah diketahui; contoh 192.168.1.10"
+      ],
+      "wiring": [
+        [
+          "Host",
+          "192.168.1.10 → ganti dengan IP LAN komputer broker"
+        ],
+        [
+          "Port",
+          "1883 TCP, tanpa TLS; hanya LAN lab"
+        ],
+        [
+          "Topic data",
+          "lab/esp32-01/telemetry"
+        ],
+        [
+          "Topic perintah",
+          "lab/esp32-01/command"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Terminal · instalasi dan akun",
+          "language": "bash",
+          "code": "hostname -I\nsudo apt update\nsudo apt install mosquitto mosquitto-clients\nsudo mosquitto_passwd -c /etc/mosquitto/passwd esp32\nsudo mosquitto_passwd /etc/mosquitto/passwd bridge\nsudo mosquitto_passwd /etc/mosquitto/passwd viewer"
+        },
+        {
+          "label": "Simpan sebagai /etc/mosquitto/conf.d/iot-lab.conf",
+          "language": "conf",
+          "code": "# Ganti IP dengan alamat LAN komputer broker Anda.\nlistener 1883 192.168.1.10\nallow_anonymous false\npassword_file /etc/mosquitto/passwd\nacl_file /etc/mosquitto/iot-lab.acl"
+        },
+        {
+          "label": "Simpan sebagai /etc/mosquitto/iot-lab.acl",
+          "language": "conf",
+          "code": "user esp32\ntopic write lab/esp32-01/telemetry\ntopic read lab/esp32-01/command\n\nuser bridge\ntopic read lab/esp32-01/telemetry\n\nuser viewer\ntopic read lab/esp32-01/telemetry\ntopic write lab/esp32-01/command"
+        },
+        {
+          "label": "Terminal · aktifkan konfigurasi",
+          "language": "bash",
+          "code": "sudo chown root:mosquitto /etc/mosquitto/passwd /etc/mosquitto/iot-lab.acl\nsudo chmod 640 /etc/mosquitto/passwd /etc/mosquitto/iot-lab.acl\nsudo systemctl restart mosquitto\nsudo systemctl status mosquitto --no-pager\n# Jika gagal, baca log lokal:\nsudo journalctl -u mosquitto -n 30 --no-pager\n# Jika UFW aktif, izinkan hanya subnet lab yang benar.\n# Contoh untuk LAN 192.168.1.0/24:\n# sudo ufw allow from 192.168.1.0/24 to any port 1883 proto tcp"
+        },
+        {
+          "label": "Terminal A · dengarkan telemetry",
+          "language": "bash",
+          "code": "mosquitto_sub -h 192.168.1.10 -p 1883 -u viewer -P 'GANTI_PASSWORD_VIEWER' -t 'lab/esp32-01/telemetry' -v"
+        },
+        {
+          "label": "Terminal B · kirim data simulasi",
+          "language": "bash",
+          "code": "mosquitto_pub -h 192.168.1.10 -p 1883 -u esp32 -P 'GANTI_PASSWORD_ESP32' -t 'lab/esp32-01/telemetry' -m '{\"deviceId\":\"esp32-01\",\"temperature\":29.4,\"unit\":\"C\",\"simulated\":true}'"
+        },
+        {
+          "label": "Contoh hasil Terminal A",
+          "language": "text",
+          "code": "lab/esp32-01/telemetry {\"deviceId\":\"esp32-01\",\"temperature\":29.4,\"unit\":\"C\",\"simulated\":true}"
+        }
+      ],
+      "result": "Terminal A menampilkan topic dan JSON setiap Terminal B mengirim. Pengguna tanpa akun ditolak. Akun hanya dapat mengakses topic yang diberi izin.",
+      "troubleshoot": [
+        "Connection refused: pastikan layanan aktif dan listener mengikat IP yang masih dimiliki komputer.",
+        "Not authorized: periksa akun dan file password; periksa izin baca file untuk user mosquitto.",
+        "Timeout: cek subnet, firewall, jaringan tamu, dan alamat broker; jangan langsung mematikan firewall seluruhnya.",
+        "Terhubung tetapi tidak ada pesan: samakan topic persis, periksa ACL, dan kirim ulang setelah subscriber aktif."
+      ]
+    },
+    "sources": [
+      {
+        "title": "Mosquitto · konfigurasi listener dan ACL",
+        "url": "https://mosquitto.org/man/mosquitto-conf-5.html"
+      },
+      {
+        "title": "Mosquitto · autentikasi",
+        "url": "https://mosquitto.org/documentation/authentication-methods/"
+      },
+      {
+        "title": "Mosquitto · subscriber terminal",
+        "url": "https://mosquitto.org/man/mosquitto_sub-1.html"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nomor pada alur. Diagram menunjukkan komunikasi program, bukan sambungan pin."
+  },
+  {
+    "slug": "esp32-mqtt",
+    "title": "Menghubungkan ESP32 ke MQTT",
+    "summary": "ESP32 masuk Wi-Fi, login broker, mengirim JSON, menerima pesan, dan mencoba tersambung kembali.",
+    "stage": 7,
+    "minutes": 30,
+    "analogy": "Wi-Fi seperti jalan menuju kantor pos. MQTT adalah percakapan dengan petugas di kantor itu. Sudah berada di jalan belum berarti petugas sudah menerima login Anda.",
+    "explain": [
+      "Selesaikan uji dua terminal pada materi sebelumnya. Gunakan ESP32 klasik/DevKitC, bukan Arduino UNO R3 atau sketch ESP8266 AT. Pilih board yang sesuai di Arduino IDE dan pasang library PubSubClient karya Nick O’Leary melalui Library Manager.",
+      "Kita sengaja memakai suhu simulasi 26–31 °C agar masalah sensor tidak bercampur dengan masalah jaringan. Sambungan hanya kabel USB untuk daya dan Serial Monitor. Setelah alur berhasil, ganti nilai simulasi dengan pembacaan sensor yang sudah dipahami dan ubah simulated menjadi false.",
+      "Isi SSID 2,4 GHz, password Wi-Fi, IP komputer broker, dan password akun esp32. Password MQTT berbeda dari password Wi-Fi. Setiap perangkat nyata harus memiliki client ID unik dan topic/ACL yang sesuai.",
+      "setServer menentukan tujuan, connect mengirim login, subscribe mendaftarkan topic masuk, publish mengirim payload, dan loop merawat koneksi serta menerima pesan. Callback received dipanggil saat ada pesan yang cocok. Contoh hanya mencetak command di Serial Monitor, tanpa menyalakan lampu atau relay.",
+      "millis() dipakai untuk mengatur interval kirim dan percobaan koneksi tanpa delay panjang. Pemanggilan connect sendiri masih dapat menunggu jaringan; ini latihan dasar, bukan jaminan waktu nyata. Saat putus, kode mencoba kembali dan subscribe ulang setelah berhasil.",
+      "PubSubClient pada contoh menerbitkan QoS 0. Nilai true dari publish bukan tanda data sudah ditulis ke Firebase. Data selama offline tidak disimpan dan tidak dikirim ulang. Untuk proyek penting, tambahkan antrean persisten dan identitas pesan, kemudian uji kegagalan jaringan.",
+      "Jika nanti memakai broker TLS, ganti WiFiClient dengan WiFiClientSecure, pasang CA yang benar, gunakan hostname serta port penyedia, dan sinkronkan waktu untuk verifikasi sertifikat. Mengganti angka port saja tidak membuat koneksi terenkripsi; jangan memakai setInsecure sebagai solusi."
+    ],
+    "example": "ESP32 masuk Wi-Fi, login broker, mengirim JSON, menerima pesan, dan mencoba tersambung kembali.",
+    "practice": [
+      "Pastikan subscriber Terminal A masih berjalan dan broker dapat dijangkau dari jaringan ESP32.",
+      "Pasang PubSubClient, pilih board ESP32, lalu salin sketch dan isi semua nilai GANTI_ serta IP broker.",
+      "Upload, buka Serial Monitor 115200 baud, dan tunggu pesan MQTT terhubung.",
+      "Amati JSON setiap lima detik di Serial Monitor dan Terminal A; simulated harus true.",
+      "Jalankan perintah command di terminal dengan akun viewer. Serial Monitor harus mencetak pesan tersebut.",
+      "Matikan broker, amati percobaan koneksi, nyalakan kembali, lalu uji command lagi. Pastikan data kembali mengalir tanpa reset manual."
+    ],
+    "warning": "Sketch ini memakai TCP 1883 tanpa enkripsi hanya di LAN lab. Jangan menaruh kredensial pribadi pada kode yang dibagikan dan jangan menguji perintah pada beban listrik rumah.",
+    "check": "Mengapa subscribe harus dilakukan lagi setelah reconnect pada contoh ini?",
+    "answer": "Contoh memakai sesi bersih. Langganan lama tidak diandalkan setelah koneksi baru, sehingga kode mendaftarkan kembali topic command. Ini terpisah dari proses menyambung Wi-Fi.",
+    "nodes": [
+      "Wi-Fi ESP32",
+      "Login broker",
+      "Subscribe command",
+      "Publish JSON",
+      "Cek terminal"
+    ],
+    "lab": {
+      "title": "PRAKTIK · ESP32 DAN MQTT",
+      "parts": [
+        "ESP32 DevKitC klasik dan kabel USB data",
+        "Arduino IDE dengan paket ESP32 serta PubSubClient",
+        "Broker lokal dan akun dari materi sebelumnya"
+      ],
+      "wiring": [
+        [
+          "Kabel USB",
+          "ESP32 ↔ komputer untuk upload dan Serial Monitor"
+        ],
+        [
+          "Jaringan",
+          "ESP32 ↔ router/AP yang dapat menjangkau IP broker"
+        ],
+        [
+          "Tidak ada sensor",
+          "Suhu dibuat oleh program untuk menguji komunikasi"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 · MQTT data simulasi",
+          "language": "cpp",
+          "code": "#include <WiFi.h>\n#include <PubSubClient.h>\n\nconst char* WIFI_SSID = \"GANTI_SSID_2_4_GHZ\";\nconst char* WIFI_PASSWORD = \"GANTI_PASSWORD_WIFI\";\nconst char* MQTT_HOST = \"192.168.1.10\";\nconst char* MQTT_USER = \"esp32\";\nconst char* MQTT_PASSWORD = \"GANTI_PASSWORD_ESP32\";\nconst char* DATA_TOPIC = \"lab/esp32-01/telemetry\";\nconst char* COMMAND_TOPIC = \"lab/esp32-01/command\";\nWiFiClient network; // TCP tanpa TLS, khusus LAN lab.\nPubSubClient mqtt(network);\nunsigned long lastWifiTry = 0, lastMqttTry = 0, lastSend = 0;\n\nvoid received(char* topic, byte* payload, unsigned int length) {\n  // Payload bukan string berakhiran nol; baca berdasarkan panjang.\n  Serial.print(\"Perintah pada \"); Serial.print(topic); Serial.print(\": \");\n  for (unsigned int i = 0; i < length; i++) Serial.write(payload[i]);\n  Serial.println(\" (hanya ditampilkan, tidak mengendalikan beban)\");\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  WiFi.mode(WIFI_STA);\n  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);\n  mqtt.setServer(MQTT_HOST, 1883);\n  mqtt.setCallback(received);\n  mqtt.setBufferSize(384);\n  mqtt.setSocketTimeout(3);\n  mqtt.setKeepAlive(30);\n}\n\nvoid loop() {\n  unsigned long now = millis();\n  if (WiFi.status() != WL_CONNECTED) {\n    if (mqtt.connected()) mqtt.disconnect();\n    if (now - lastWifiTry >= 10000UL) {\n      lastWifiTry = now;\n      WiFi.begin(WIFI_SSID, WIFI_PASSWORD);\n      Serial.println(\"Mencoba Wi-Fi kembali...\");\n    }\n    return;\n  }\n  if (!mqtt.connected()) {\n    if (now - lastMqttTry >= 5000UL) {\n      lastMqttTry = now;\n      // Client ID harus unik untuk setiap perangkat.\n      if (mqtt.connect(\"esp32-01\", MQTT_USER, MQTT_PASSWORD)) {\n        Serial.println(\"MQTT terhubung\");\n        Serial.println(mqtt.subscribe(COMMAND_TOPIC) ? \"Subscribe dikirim\" : \"Subscribe gagal\");\n      } else {\n        Serial.print(\"MQTT gagal, state=\"); Serial.println(mqtt.state());\n      }\n    }\n    return;\n  }\n  mqtt.loop(); // Layani pesan masuk dan keepalive sesering mungkin.\n  if (now - lastSend >= 5000UL) {\n    lastSend = now;\n    // Nilai simulasi, BUKAN pembacaan sensor.\n    float temperature = 26.0f + ((now / 5000UL) % 6);\n    char payload[160];\n    snprintf(payload, sizeof(payload),\n      \"{\\\"deviceId\\\":\\\"esp32-01\\\",\\\"temperature\\\":%.1f,\\\"unit\\\":\\\"C\\\",\\\"simulated\\\":true}\",\n      temperature);\n    // PubSubClient publish memakai QoS 0. Tidak ada antrean offline.\n    bool sent = mqtt.publish(DATA_TOPIC, payload, false);\n    Serial.println(sent ? payload : \"Publish gagal\");\n  }\n}"
+        },
+        {
+          "label": "Terminal · kirim command ke ESP32",
+          "language": "bash",
+          "code": "mosquitto_pub -h 192.168.1.10 -p 1883 -u viewer -P 'GANTI_PASSWORD_VIEWER' -t 'lab/esp32-01/command' -m 'HALO_ESP32'"
+        }
+      ],
+      "result": "Terminal pemantau menerima JSON simulasi tiap lima detik. Pesan HALO_ESP32 terlihat di Serial Monitor. Setelah broker hidup kembali, perangkat mencoba tersambung dan mendaftarkan ulang subscription.",
+      "troubleshoot": [
+        "Wi-Fi belum terhubung: pastikan SSID 2,4 GHz, password, dan kekuatan sinyal.",
+        "State -2: cek IP broker, listener, port, dan firewall. State 4/5: cek login serta otorisasi broker.",
+        "Terputus bergantian: pastikan tidak ada dua client dengan ID esp32-01.",
+        "Telemetry ada tetapi command tidak diterima: cek subscribe setelah reconnect serta ACL read command."
+      ]
+    },
+    "sources": [
+      {
+        "title": "PubSubClient · API connect, publish, loop",
+        "url": "https://pubsubclient.knolleary.net/api"
+      },
+      {
+        "title": "PubSubClient · library dan batasan QoS",
+        "url": "https://github.com/knolleary/pubsubclient"
+      },
+      {
+        "title": "Espressif · Wi-Fi Arduino ESP32",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nomor pada alur. Diagram menunjukkan komunikasi program, bukan sambungan pin."
+  },
+  {
+    "slug": "mqtt-firebase",
+    "title": "Menghubungkan MQTT ke Firebase Realtime Database",
+    "summary": "Buat database dengan akses terbatas, lalu jalankan program Python yang memeriksa pesan MQTT dan menyimpan nilai terbaru.",
+    "stage": 7,
+    "minutes": 40,
+    "analogy": "Broker seperti petugas yang membagikan berita. Program penghubung seperti petugas pencatat: memeriksa isi berita, lalu menuliskannya ke buku bersama bernama Firebase.",
+    "explain": [
+      "Firebase adalah kumpulan layanan. Tutorial ini memakai Realtime Database, bukan Cloud Firestore. Realtime Database menyimpan pohon JSON. Pilihan database, rules, URL, dan SDK pada kedua produk berbeda; jangan menyalin aturan tutorial ini ke Firestore.",
+      "Firebase Realtime Database tidak menyediakan alamat broker MQTT untuk langsung dimasukkan ke setServer. Kita menambahkan subscriber Python pada komputer yang menyala. Python menerima MQTT, memvalidasi data, lalu menulis melalui Firebase Admin SDK lewat HTTPS. Jadi ada dua koneksi berbeda: MQTT lokal dan HTTPS ke Firebase.",
+      "Gunakan project Firebase khusus latihan. Di Firebase console, buat project, buka Build → Realtime Database, buat database dalam locked mode, pilih region, dan salin URL instance persis dari console. URL dapat berakhiran firebaseio.com atau firebasedatabase.app. Jangan memakai URL halaman console sebagai databaseURL.",
+      "Untuk pembaca dashboard, aktifkan Authentication → Email/Password, tambahkan satu user latihan pada tab Users, lalu salin UID-nya. UID adalah identitas akun, berbeda dari email. Ganti GANTI_UID_PEMBACA pada rules dengan UID itu. Akun ini hanya akan membaca devices/esp32-01/latest, bukan seluruh database.",
+      "Untuk program server, buka Project settings → Service accounts dan buat kunci privat jika organisasi Anda mengizinkan. Simpan file JSON di luar folder website dan repository. Variabel GOOGLE_APPLICATION_CREDENTIALS menunjuk lokasi file itu. File ini rahasia dan tidak boleh diunggah ke GitHub, browser, ESP32, atau kotak artikel.",
+      "Admin SDK secara bawaan berhak luas. Contoh memakai databaseAuthVariableOverride dengan uid mqtt-bridge agar permintaan database program ini mengikuti rules yang terbatas pada satu lokasi tulis. Ini identitas internal server, bukan akun pembaca dan bukan password MQTT. File kuncinya sendiri tetap sensitif: pencuri kunci dapat membuat program lain tanpa pembatasan ini.",
+      "Program hanya menerima topic lab/esp32-01/telemetry dan deviceId esp32-01. Suhu harus angka terbatas, unit harus C, dan simulated harus boolean. Identitas path tidak diambil sembarangan dari payload sehingga pesan tidak dapat memilih lokasi database lain.",
+      "Data ditulis dengan set pada devices/esp32-01/latest. Pengiriman berikutnya mengganti nilai sebelumnya; tutorial ini belum menyimpan riwayat. receivedAt berasal dari timestamp server Firebase, berarti waktu diterima database, bukan waktu sensor mengukur.",
+      "Pekerja terpisah menulis ke Firebase agar callback MQTT tidak tertahan. Antrean memori hanya menampung nilai terbaru dan tiap tulis dicoba tiga kali. Nilai dapat dilewati ketika koneksi gagal atau program berhenti; ini demo pemantauan terbaru, bukan pencatatan yang tahan kehilangan data. QoS subscription 1 tidak meningkatkan pesan QoS 0 ESP32 menjadi QoS 1 dan bukan konfirmasi penyimpanan Firebase.",
+      "Komputer penghubung harus tetap menyala. Jangka panjang, jalankan sebagai layanan pada gateway, Raspberry Pi, atau server yang sesuai; proses subscriber terus-menerus ini tidak cocok ditempatkan begitu saja pada halaman website atau fungsi singkat. Periksa kuota dan penggunaan database di console sesuai project Anda."
+    ],
+    "example": "ESP32 mengirim 29,4 °C. Python menolak pesan jika temperature berisi “panas”, tetapi menyimpan pesan dengan angka 29.4 beserta timestamp penerimaan server.",
+    "practice": [
+      "Selesaikan broker lokal dan ESP32 MQTT terlebih dahulu; pastikan telemetry terlihat di terminal.",
+      "Buat project latihan, Realtime Database locked mode, dan satu akun Email/Password pembaca. Salin URL database serta UID pembaca.",
+      "Ganti UID pada rules di bawah, tempel pada tab Rules Realtime Database, lalu Publish. Jangan membuka akses publik untuk mengatasi error.",
+      "Gunakan Rules Playground atau Emulator: pembaca yang benar boleh membaca path latest, user lain ditolak, dan pembaca tidak boleh menulis. Konteks uid mqtt-bridge hanya boleh menulis payload valid ke path latest.",
+      "Simpan service-account JSON di luar repo. Buat folder latihan, virtual environment, lalu pasang dependensi sesuai terminal di bawah.",
+      "Simpan bridge.py, isi variabel lingkungan, lalu jalankan. Biarkan ESP32 mengirim atau gunakan contoh mosquitto_pub dari materi broker.",
+      "Periksa Data pada Firebase console: devices → esp32-01 → latest berisi temperature, unit, simulated, dan receivedAt.",
+      "Kirim temperature berupa teks atau deviceId berbeda. Program harus menolak pesan dan nilai database tidak berubah. Matikan internet penghubung, amati error tulis, lalu sambungkan kembali dan tunggu data baru."
+    ],
+    "warning": "Jangan menggunakan rules .read/.write true atau membagikan service-account JSON. Tutorial membuat project latihan milik pembaca; kode artikel ini tidak otomatis mengaktifkan layanan Firebase pada website Learn.",
+    "check": "Mengapa alamat Firebase tidak bisa menggantikan IP broker pada sketch MQTT?",
+    "answer": "Broker menerima protokol MQTT. Realtime Database menerima permintaan SDK/HTTP sesuai API-nya. Program penghubung menerjemahkan pesan MQTT menjadi penulisan database; sekadar mengganti alamat tidak mengubah protokol.",
+    "nodes": [
+      "ESP32 · JSON",
+      "Broker MQTT",
+      "Python · validasi",
+      "Firebase · latest",
+      "Dashboard · baca"
+    ],
+    "diagramCaption": "ESP32 → broker menggunakan MQTT. Python subscribe ke broker lalu menulis ke Firebase lewat HTTPS. Dashboard membaca Firebase memakai SDK web dan akun pembaca.",
+    "lab": {
+      "title": "PRAKTIK · MQTT KE FIREBASE",
+      "parts": [
+        "Broker lokal dan telemetry dari materi sebelumnya",
+        "Python 3.10+ pada komputer yang terus menyala dan dapat mengakses Firebase",
+        "Project Firebase latihan, URL Realtime Database, dan user pembaca",
+        "Service-account JSON di luar repository; akses admin ke project sendiri"
+      ],
+      "wiring": [
+        [
+          "MQTT",
+          "Host LAN broker :1883; akun bridge hanya read telemetry"
+        ],
+        [
+          "Firebase",
+          "URL HTTPS Realtime Database; gunakan SDK Admin pada server"
+        ],
+        [
+          "Path",
+          "devices/esp32-01/latest"
+        ],
+        [
+          "Akun dashboard",
+          "UID user Email/Password; hanya boleh membaca path latest"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Realtime Database · rules akses terbatas",
+          "language": "json",
+          "code": "{\n  \"rules\": {\n    \".read\": false,\n    \".write\": false,\n    \"devices\": {\n      \"esp32-01\": {\n        \"latest\": {\n          \".read\": \"auth != null && auth.uid === 'GANTI_UID_PEMBACA'\",\n          \".write\": \"auth != null && auth.uid === 'mqtt-bridge' && newData.exists()\",\n          \".validate\": \"newData.hasChildren(['deviceId','temperature','unit','simulated','receivedAt'])\",\n          \"deviceId\": {\n            \".validate\": \"newData.val() === 'esp32-01'\"\n          },\n          \"temperature\": {\n            \".validate\": \"newData.isNumber() && newData.val() >= -40 && newData.val() <= 125\"\n          },\n          \"unit\": {\n            \".validate\": \"newData.val() === 'C'\"\n          },\n          \"simulated\": {\n            \".validate\": \"newData.isBoolean()\"\n          },\n          \"receivedAt\": {\n            \".validate\": \"newData.isNumber() && newData.val() <= now\"\n          },\n          \"$other\": {\n            \".validate\": false\n          }\n        }\n      }\n    }\n  }\n}"
+        },
+        {
+          "label": "Terminal · folder dan dependensi Python",
+          "language": "bash",
+          "code": "mkdir mqtt-firebase-lab\ncd mqtt-firebase-lab\npython3 -m venv .venv\nsource .venv/bin/activate\npython -m pip install 'paho-mqtt>=2.1,<3' 'firebase-admin>=6.5,<8'\n# Simpan kode Python berikut sebagai bridge.py di folder ini."
+        },
+        {
+          "label": "bridge.py · subscriber dan penyimpan Firebase",
+          "language": "python",
+          "code": "import json\nimport math\nimport os\nimport queue\nimport threading\nimport time\n\nimport firebase_admin\nfrom firebase_admin import credentials, db\nimport paho.mqtt.client as mqtt\n\nTOPIC = \"lab/esp32-01/telemetry\"\nPATH = \"devices/esp32-01/latest\"\npending = queue.Queue(maxsize=1)  # Hanya nilai terbaru, bukan riwayat.\n\ndef parse_telemetry(payload):\n    if len(payload) > 512:\n        raise ValueError(\"payload terlalu besar\")\n    value = json.loads(payload.decode(\"utf-8\"))\n    if not isinstance(value, dict):\n        raise ValueError(\"payload harus objek\")\n    if value.get(\"deviceId\") != \"esp32-01\" or value.get(\"unit\") != \"C\":\n        raise ValueError(\"identitas atau unit salah\")\n    temp = value.get(\"temperature\")\n    if type(temp) not in (int, float) or not math.isfinite(temp) or not -40 <= temp <= 125:\n        raise ValueError(\"suhu tidak valid\")\n    if type(value.get(\"simulated\")) is not bool:\n        raise ValueError(\"penanda simulasi harus boolean\")\n    return {\"deviceId\": \"esp32-01\", \"temperature\": temp,\n            \"unit\": \"C\", \"simulated\": value[\"simulated\"]}\n\ndef write_latest(reference):\n    while True:\n        data = pending.get()\n        for attempt in range(3):\n            try:\n                reference.set({**data, \"receivedAt\": {\".sv\": \"timestamp\"}})\n                print(\"Tersimpan:\", data[\"temperature\"], \"C\", flush=True)\n                break\n            except Exception as error:\n                # Jangan cetak kredensial atau isi file kunci dalam log.\n                print(\"Tulis Firebase gagal:\", type(error).__name__, flush=True)\n                if attempt < 2:\n                    time.sleep(2 ** attempt)\n        else:\n            print(\"Nilai dilewati setelah 3 percobaan; tunggu nilai baru.\", flush=True)\n        pending.task_done()\n\ndef on_connect(client, userdata, flags, reason_code, properties):\n    if reason_code.is_failure:\n        print(\"Login MQTT ditolak:\", reason_code, flush=True)\n        return\n    client.subscribe(TOPIC, qos=1)  # Subscribe ulang saat reconnect.\n    print(\"MQTT terhubung; subscription diminta.\", flush=True)\n\ndef on_message(client, userdata, message):\n    if message.topic != TOPIC:\n        return\n    try:\n        data = parse_telemetry(message.payload)\n    except (ValueError, UnicodeError, OverflowError, RecursionError):\n        print(\"Pesan ditolak: format/isi tidak valid.\", flush=True)\n        return\n    # Callback MQTT tidak menunggu permintaan Firebase selesai.\n    try:\n        pending.put_nowait(data)\n    except queue.Full:\n        try:\n            pending.get_nowait()\n            pending.task_done()\n        except queue.Empty:\n            pass\n        pending.put_nowait(data)\n\ndef main():\n    url = os.environ[\"FIREBASE_DATABASE_URL\"].rstrip(\"/\")\n    if not url.startswith(\"https://\"):\n        raise ValueError(\"Gunakan URL HTTPS Realtime Database dari console\")\n    cred = credentials.Certificate(os.environ[\"GOOGLE_APPLICATION_CREDENTIALS\"])\n    firebase_admin.initialize_app(cred, {\n        \"databaseURL\": url,\n        \"databaseAuthVariableOverride\": {\"uid\": \"mqtt-bridge\"},\n        \"httpTimeout\": 10,\n    })\n    reference = db.reference(PATH)\n    threading.Thread(target=write_latest, args=(reference,), daemon=True).start()\n    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=\"firebase-bridge-01\")\n    client.username_pw_set(\"bridge\", os.environ[\"MQTT_PASSWORD\"])\n    client.on_connect = on_connect\n    client.on_message = on_message\n    client.reconnect_delay_set(min_delay=1, max_delay=30)\n    client.connect_async(os.environ.get(\"MQTT_HOST\", \"192.168.1.10\"), 1883, 60)\n    try:\n        client.loop_forever(retry_first_connection=True)\n    except KeyboardInterrupt:\n        client.disconnect()\n\nif __name__ == \"__main__\":\n    main()"
+        },
+        {
+          "label": "Terminal · konfigurasi dan jalankan penghubung",
+          "language": "bash",
+          "code": "# Ganti path dengan lokasi file kunci di LUAR folder repo Anda.\nexport GOOGLE_APPLICATION_CREDENTIALS='/LOKASI/PRIBADI/service-account.json'\n# Salin URL instance persis dari Firebase console, tanpa path /devices.\nexport FIREBASE_DATABASE_URL='https://GANTI_URL_INSTANCE_DATABASE'\nexport MQTT_HOST='192.168.1.10'\nread -r -s -p 'Password MQTT akun bridge: ' MQTT_PASSWORD\nprintf '\\n'\nexport MQTT_PASSWORD\npython bridge.py\n# Hentikan dengan Ctrl+C; bila selesai, jalankan: unset MQTT_PASSWORD"
+        },
+        {
+          "label": "Contoh data Firebase · nilai terbaru",
+          "language": "json",
+          "code": "{\n  \"devices\": {\n    \"esp32-01\": {\n      \"latest\": {\n        \"deviceId\": \"esp32-01\",\n        \"temperature\": 29.4,\n        \"unit\": \"C\",\n        \"simulated\": true,\n        \"receivedAt\": 1792422000000\n      }\n    }\n  }\n}"
+        }
+      ],
+      "result": "Log menampilkan MQTT terhubung dan Tersimpan. Firebase console memperlihatkan satu objek latest yang diperbarui. Pesan invalid ditolak. User pembaca tidak memiliki hak tulis.",
+      "troubleshoot": [
+        "ModuleNotFoundError: aktifkan .venv yang sama dengan tempat pip memasang paket.",
+        "File kunci tidak ditemukan: periksa path lokal GOOGLE_APPLICATION_CREDENTIALS tanpa mencetak isi file.",
+        "Permission denied: pastikan UID pembaca pada rules benar dan override uid server tepat mqtt-bridge; jangan menghapus pembatasan.",
+        "Database tidak ditemukan: gunakan URL Realtime Database sesuai region, bukan project ID saja atau URL Firestore.",
+        "MQTT diterima tetapi Firebase tidak berubah: periksa internet komputer bridge, log tulis, rules, dan nilai payload.",
+        "Data berhenti ketika laptop tidur: subscriber tidak berjalan; gunakan perangkat gateway yang tetap menyala untuk kebutuhan berkelanjutan."
+      ]
+    },
+    "sources": [
+      {
+        "title": "Firebase · Admin SDK dan pembatasan hak akses",
+        "url": "https://firebase.google.com/docs/database/admin/start"
+      },
+      {
+        "title": "Firebase · aturan keamanan Realtime Database",
+        "url": "https://firebase.google.com/docs/database/security"
+      },
+      {
+        "title": "Firebase · penyimpanan data Admin SDK",
+        "url": "https://firebase.google.com/docs/database/admin/save-data"
+      },
+      {
+        "title": "Paho Python · API client versi 2",
+        "url": "https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html"
+      }
+    ]
+  },
+  {
+    "slug": "firebase-dashboard",
+    "title": "Menampilkan data Firebase pada dashboard web",
+    "summary": "Login sebagai pembaca, pantau suhu secara langsung, dan bedakan data baru, data lama, serta data simulasi.",
+    "stage": 8,
+    "minutes": 30,
+    "analogy": "Dashboard adalah jendela untuk melihat buku catatan. Jendela bisa tetap terbuka meski petugas pencatat berhenti bekerja; karena itu kita juga perlu melihat kapan catatan terakhir diperbarui.",
+    "explain": [
+      "Pastikan nilai latest sudah muncul di Firebase console dari materi sebelumnya. Dashboard ini membaca Realtime Database menggunakan SDK web, bukan berlangganan MQTT langsung. Browser tidak membutuhkan password broker atau kunci service account.",
+      "Di Project settings → General, daftarkan aplikasi Web dan salin firebaseConfig. Pakai konfigurasi dari project yang sama dengan database, termasuk databaseURL. API key web adalah pengenal konfigurasi; keamanan data tetap ditentukan Authentication dan Rules. Jangan mengganti konfigurasi web dengan file JSON akun layanan.",
+      "Contoh dashboard berdiri sendiri sebagai latihan lokal. Pasang Node.js LTS yang mendukung Vite versi terpasang, buat folder baru, lalu simpan index.html dan main.js. Vite melayani berkas melalui HTTP; jangan membukanya dengan klik file://. Jalankan hanya di localhost selama latihan.",
+      "Login memakai user Email/Password pembaca yang Anda buat pada project Firebase latihan. Ini akun latihan dashboard sendiri, terpisah dari login website Learn. Aplikasi tidak membuat akun secara otomatis dan tidak menaruh password pembaca di source code.",
+      "onValue memasang pendengar pada path devices/esp32-01/latest. Callback dipanggil untuk nilai awal dan perubahan berikutnya. snapshot.val() memberi objek JSON atau null bila belum ada. Saat logout atau ganti akun, pendengar sebelumnya dilepas.",
+      "Angka suhu dapat tetap terlihat setelah sensor atau bridge mati. Karena itu dashboard menghitung umur data dari receivedAt, kemudian menandai data lama bila lebih dari 20 detik. Ambang ini untuk interval kirim latihan lima detik dan bukan bukti pasti perangkat mati. Jam komputer pembaca juga perlu benar.",
+      "Kode hanya mengisi textContent, bukan menempelkan payload ke innerHTML. Penanda simulated ditampilkan agar data buatan tidak dianggap pengukuran nyata. Nilai terbaru yang masih tersimpan juga tidak otomatis berarti koneksi ESP32 sedang online.",
+      "Jalur ini satu arah untuk pemantauan. Mengubah angka di Firebase tidak otomatis menghasilkan perintah MQTT ke ESP32. Kendali dua arah memerlukan program yang memantau path perintah, memeriksa izin, menerbitkan MQTT, serta menunggu status balasan perangkat."
+    ],
+    "example": "Suhu 29,4 °C tetap tampil setelah laptop bridge dimatikan. Beberapa saat kemudian dashboard memberi label Data lama, sehingga pembaca tidak menyangka angka itu pembacaan baru.",
+    "practice": [
+      "Daftarkan aplikasi Web pada project Firebase latihan dan salin konfigurasi. Pastikan Email/Password sudah aktif serta UID pembaca sesuai rules.",
+      "Buat folder dashboard, pasang paket, dan simpan dua file sesuai kotak di bawah. Isi semua GANTI_ pada firebaseConfig.",
+      "Jalankan Vite, buka alamat localhost yang ditampilkan terminal, lalu login dengan akun pembaca. Jika perlu, tambahkan localhost di Authentication → Settings → Authorized domains sesuai kebutuhan project.",
+      "Nyalakan broker, ESP32, dan bridge. Suhu berubah berkala, tertulis Data SIMULASI, dan waktu diterima diperbarui.",
+      "Hentikan bridge; biarkan dashboard terbuka lebih dari 20 detik. Label harus berubah menjadi Data lama meskipun angkanya masih terlihat.",
+      "Logout: data harus dibersihkan dari tampilan. Uji akun latihan lain yang UID-nya tidak diberi izin; pembacaan harus ditolak.",
+      "Periksa berkas dashboard: tidak boleh ada password MQTT, password pembaca, atau service-account private key."
+    ],
+    "warning": "Jangan membuka rules ke publik agar dashboard cepat berjalan. Perbaiki konfigurasi akun dan path yang tepat. Contoh hanya membaca data; tidak mengendalikan beban listrik.",
+    "check": "Mengapa dashboard menampilkan suhu yang sama setelah ESP32 dimatikan?",
+    "answer": "Database menyimpan nilai terakhir, bukan hanya data yang sedang lewat. Dashboard perlu memeriksa timestamp dan umur data. Tampilan yang masih terbuka bukan bukti sensor masih aktif.",
+    "nodes": [
+      "Login pembaca",
+      "UID diperiksa",
+      "Baca path latest",
+      "Tampilkan suhu",
+      "Periksa umur data"
+    ],
+    "diagramCaption": "Login menghasilkan identitas pengguna. Rules memeriksa hak baca, lalu SDK membaca nilai terbaru. Tampilan memeriksa timestamp agar data lama tidak dianggap pembacaan baru.",
+    "lab": {
+      "title": "PRAKTIK · DASHBOARD FIREBASE",
+      "parts": [
+        "Alur MQTT → Python → Realtime Database yang sudah berjalan",
+        "Node.js LTS sesuai persyaratan Vite dan browser modern",
+        "Konfigurasi aplikasi Web serta akun pembaca latihan"
+      ],
+      "wiring": [
+        [
+          "Browser",
+          "http://localhost:5173 atau alamat yang ditampilkan Vite"
+        ],
+        [
+          "Firebase Auth",
+          "User Email/Password pembaca dengan UID sesuai rules"
+        ],
+        [
+          "Database",
+          "Baca hanya devices/esp32-01/latest; tidak ada tombol kendali"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Terminal · siapkan dashboard lokal",
+          "language": "bash",
+          "code": "mkdir firebase-dashboard-lab\ncd firebase-dashboard-lab\nnpm init -y\nnpm install firebase\nnpm install --save-dev vite\n# Simpan index.html dan main.js di folder ini.\n# Setelah mengisi firebaseConfig, jalankan:\nnpx vite --host 127.0.0.1"
+        },
+        {
+          "label": "index.html · tampilan dan form login",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"id\">\n<head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab suhu Firebase</title></head>\n<body>\n  <main>\n    <h1>Monitor suhu · ESP32</h1>\n    <p>Demo pemantauan; tidak mengendalikan perangkat.</p>\n    <form id=\"login\">\n      <label>Email <input id=\"email\" type=\"email\" autocomplete=\"username\" required></label>\n      <label>Password <input id=\"password\" type=\"password\" autocomplete=\"current-password\" required></label>\n      <button id=\"submit\" type=\"submit\">Masuk</button>\n    </form>\n    <button id=\"logout\" type=\"button\" hidden>Keluar</button>\n    <p id=\"status\" role=\"status\">Masuk memakai akun pembaca latihan.</p>\n    <p>Suhu: <strong id=\"temperature\">—</strong></p>\n    <p id=\"kind\">Belum ada data</p>\n    <p id=\"freshness\">—</p>\n    <p id=\"timestamp\">—</p>\n  </main>\n  <script type=\"module\" src=\"/main.js\"></script>\n</body>\n</html>"
+        },
+        {
+          "label": "main.js · login dan pembacaan realtime",
+          "language": "javascript",
+          "code": "import { initializeApp } from \"firebase/app\";\nimport { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from \"firebase/auth\";\nimport { getDatabase, ref, onValue } from \"firebase/database\";\n\n// Salin konfigurasi aplikasi WEB milik project latihan Anda.\n// Konfigurasi web bukan service-account JSON dan bukan password akun.\nconst firebaseConfig = {\n  apiKey: \"GANTI_API_KEY_WEB\",\n  authDomain: \"GANTI_PROJECT.firebaseapp.com\",\n  databaseURL: \"https://GANTI_URL_INSTANCE_DATABASE\",\n  projectId: \"GANTI_PROJECT\",\n  appId: \"GANTI_APP_ID\"\n};\nconst app = initializeApp(firebaseConfig);\nconst auth = getAuth(app);\nconst database = getDatabase(app);\nconst el = id => document.getElementById(id);\nlet stopListening = null;\nlet latest = null;\n\nfunction showData() {\n  if (!latest) {\n    el(\"temperature\").textContent = \"—\";\n    el(\"kind\").textContent = \"Belum ada data yang dapat ditampilkan\";\n    el(\"freshness\").textContent = \"—\";\n    el(\"timestamp\").textContent = \"—\";\n    return;\n  }\n  el(\"temperature\").textContent = `${latest.temperature.toFixed(1)} °C`;\n  el(\"kind\").textContent = latest.simulated ? \"Data SIMULASI, bukan sensor asli\" : \"Data sensor\";\n  const age = Math.max(0, Math.floor((Date.now() - latest.receivedAt) / 1000));\n  el(\"freshness\").textContent = age > 20\n    ? `Data lama: ${age} detik sejak penerimaan; periksa alur koneksi.`\n    : `Data baru: ${age} detik sejak penerimaan.`;\n  el(\"timestamp\").textContent = `Diterima database: ${new Date(latest.receivedAt).toLocaleString(\"id-ID\")}`;\n}\n\nel(\"login\").addEventListener(\"submit\", async event => {\n  event.preventDefault();\n  el(\"submit\").disabled = true;\n  el(\"status\").textContent = \"Memeriksa akun…\";\n  try {\n    await signInWithEmailAndPassword(auth, el(\"email\").value.trim(), el(\"password\").value);\n    el(\"password\").value = \"\";\n  } catch {\n    el(\"status\").textContent = \"Masuk gagal. Periksa akun, provider Email/Password, dan konfigurasi project.\";\n  } finally {\n    el(\"submit\").disabled = false;\n  }\n});\nel(\"logout\").addEventListener(\"click\", () => {\n  signOut(auth).catch(() => { el(\"status\").textContent = \"Keluar gagal; coba kembali.\"; });\n});\nonAuthStateChanged(auth, user => {\n  if (stopListening) stopListening();\n  stopListening = null;\n  latest = null;\n  showData();\n  el(\"login\").hidden = Boolean(user);\n  el(\"logout\").hidden = !user;\n  if (!user) {\n    el(\"status\").textContent = \"Masuk memakai akun pembaca latihan.\";\n    return;\n  }\n  el(\"status\").textContent = \"Login berhasil; menunggu data…\";\n  stopListening = onValue(ref(database, \"devices/esp32-01/latest\"), snapshot => {\n    const value = snapshot.val();\n    if (!value || value.deviceId !== \"esp32-01\" || value.unit !== \"C\" ||\n        typeof value.temperature !== \"number\" || !Number.isFinite(value.temperature) ||\n        typeof value.receivedAt !== \"number\" || !Number.isFinite(value.receivedAt) ||\n        typeof value.simulated !== \"boolean\") {\n      latest = null;\n      el(\"status\").textContent = \"Data belum tersedia atau formatnya tidak sesuai.\";\n    } else {\n      latest = value;\n      el(\"status\").textContent = \"Nilai terakhir berhasil dibaca. Pantau umur data di bawah.\";\n    }\n    showData();\n  }, () => {\n    latest = null;\n    showData();\n    el(\"status\").textContent = \"Baca ditolak/gagal. Periksa UID pembaca, path, rules, dan koneksi.\";\n  });\n});\n// Umur data tetap bertambah meskipun tidak ada event Firebase baru.\nsetInterval(showData, 1000);"
+        }
+      ],
+      "result": "Akun pembaca yang diizinkan melihat suhu, penanda simulasi, dan umur data. Data lama ditandai setelah 20 detik; logout mengosongkan tampilan; akun lain ditolak oleh rules.",
+      "troubleshoot": [
+        "GANTI_ masih muncul: isi konfigurasi Web dari project yang sama, bukan contoh project lain.",
+        "Login gagal: cek provider Email/Password dan akun pada Firebase Authentication, bukan akun Google console.",
+        "Permission denied: pastikan rules mengizinkan UID yang login pada path latest yang tepat; membaca root / tetap ditolak.",
+        "Halaman kosong: buka lewat server Vite dan lihat console browser; jangan menggunakan file://.",
+        "Suhu tidak bergerak: ikuti alur dari Terminal MQTT, log bridge, Data console, lalu dashboard.",
+        "Label umur tidak masuk akal: periksa jam komputer dan receivedAt dalam milidetik, bukan detik."
+      ]
+    },
+    "sources": [
+      {
+        "title": "Firebase · menambahkan SDK web",
+        "url": "https://firebase.google.com/docs/web/setup"
+      },
+      {
+        "title": "Firebase · login Email/Password",
+        "url": "https://firebase.google.com/docs/auth/web/password-auth"
+      },
+      {
+        "title": "Firebase · onValue dan membaca data",
+        "url": "https://firebase.google.com/docs/database/web/read-and-write"
+      },
+      {
+        "title": "Firebase · konfigurasi API key web",
+        "url": "https://firebase.google.com/docs/projects/api-keys"
+      },
+      {
+        "title": "Vite · memulai server lokal",
+        "url": "https://vite.dev/guide/"
+      }
+    ]
+  }
+]

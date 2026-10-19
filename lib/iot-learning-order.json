@@ -74,12 +74,16 @@
     "slugs": [
       "wifi-ip",
       "http-json",
-      "mqtt-topic"
+      "mqtt-topic",
+      "mqtt-broker-lokal",
+      "esp32-mqtt",
+      "mqtt-firebase"
     ]
   },
   {
     "title": "Dashboard dan sistem yang andal",
     "slugs": [
+      "firebase-dashboard",
       "dashboard-data",
       "otomatisasi-histeresis",
       "keamanan-iot"

@@ -1038,30 +1038,59 @@
     "slug": "mqtt-topic",
     "title": "MQTT: publisher, broker, dan subscriber",
     "stage": 3,
-    "summary": "Belajar pengiriman pesan dengan analogi papan pengumuman.",
-    "analogy": "Publisher menitipkan kabar di papan bertema; subscriber menerima kabar dari tema yang diikutinya.",
+    "summary": "Pahami pengirim, broker, penerima, topic, QoS, retained message, dan alasan MQTT berbeda dari database.",
+    "analogy": "Bayangkan pusat pengiriman berita. Sensor menitipkan berita berlabel “suhu ruang 1” ke petugas pusat. Orang yang berlangganan label itu mendapat salinannya. Sensor tidak perlu mengenal alamat setiap pembaca.",
     "explain": [
-      "MQTT memakai broker sebagai perantara. Publisher mengirim pesan ke topic, sedangkan subscriber berlangganan topic. Satu perangkat dapat menjadi keduanya: mengirim suhu sekaligus menerima perintah.",
-      "Gunakan topic yang mudah dibaca, misalnya rumah/ruang1/suhu. Pisahkan topic telemetry, command, dan state agar angka sensor tidak tertukar dengan perintah. MQTT bukan format isi; payload bisa JSON atau teks sesuai kesepakatan.",
-      "QoS 0 dapat kehilangan pesan; QoS 1 dapat mengirim ulang sehingga penerima harus tahan duplikasi. Retained message adalah nilai terakhir pada topic, bukan riwayat lengkap. Jangan memakai retained command untuk tindakan berbahaya yang dapat terulang saat perangkat tersambung lagi."
+      "MQTT adalah protokol berkirim pesan. Publisher mengirim pesan ke broker; subscriber meminta broker mengirim pesan pada topic tertentu. Satu ESP32 bisa menjadi publisher sekaligus subscriber. Broker adalah program server, bukan Wi-Fi, sensor, ataupun Firebase.",
+      "Urutannya: perangkat tersambung ke Wi-Fi, membuka koneksi ke alamat dan port broker, mengirim CONNECT berisi identitas, lalu broker membalas CONNACK. Setelah diterima, client dapat SUBSCRIBE atau PUBLISH. Broker memeriksa hak akses sebelum meneruskan pesan.",
+      "Client ID adalah nama sesi koneksi, misalnya esp32-01. Username dan password dipakai untuk autentikasi. Keduanya berbeda: dua perangkat yang memakai client ID sama dapat saling memutus koneksi. Topic adalah label pesan yang peka huruf besar-kecil; lab/esp32-01/telemetry berbeda dari Lab/esp32-01/telemetry.",
+      "Payload adalah isi pesan. MQTT tidak mewajibkan JSON, tetapi JSON memudahkan menyertakan deviceId, temperature, unit, dan penanda simulasi. Publisher mengirim ke topic yang pasti; wildcard + dan # dipakai pada subscription. + mewakili satu tingkat, sedangkan # mewakili sisa tingkat dan ditempatkan di akhir filter.",
+      "QoS 0 mengirim tanpa konfirmasi MQTT, sehingga pesan dapat hilang. QoS 1 memberi konfirmasi dengan kemungkinan pesan ganda. QoS 2 mengatur pengiriman tepat satu kali pada tautan protokol yang bersangkutan, dengan pertukaran lebih banyak; ini tidak otomatis membuat proses penyimpanan database tepat satu kali.",
+      "Retained message menyimpan pesan terakhir per topic pada broker agar pelanggan baru mendapat nilai awal. Ini bukan riwayat pengukuran. Jangan retain perintah sesaat seperti “nyalakan motor 1 detik”: penerima yang baru terhubung dapat menjalankan perintah lama. MQTT juga memiliki Last Will untuk memberi kabar jika koneksi client terputus secara tidak normal.",
+      "MQTT bisa berjalan di LAN tanpa internet selama broker lokal dapat dijangkau. Mengakses broker cloud memerlukan koneksi internet. Port lazimnya 1883 untuk MQTT TCP tanpa TLS dan 8883 untuk MQTT dengan TLS, tetapi administrator dapat memilih port lain. Browser biasanya memakai MQTT melalui WebSocket, bukan membuka TCP 1883 langsung.",
+      "Firebase Realtime Database menyimpan pohon data dan menyediakan SDK serta REST API; layanan ini bukan alamat broker MQTT. Dalam jalur latihan kita, program Python berlangganan MQTT, memeriksa payload, lalu menulis data ke Firebase melalui SDK. Dashboard membaca Firebase setelah login."
     ],
-    "example": "Sensor menerbitkan suhu ke rumah/ruang1/suhu. Dashboard berlangganan topic itu tanpa meminta data satu per satu.",
+    "example": "Satu sensor suhu mengirim 29,4 °C. Broker menyalin pesan itu ke terminal pemantau dan program pencatat. Keduanya menerima berita yang sama, tetapi hanya program pencatat yang menyimpannya ke Firebase.",
     "practice": [
-      "Rancang tiga topic: suhu, perintah LED, dan status LED.",
-      "Tentukan siapa publisher dan subscriber untuk masing-masing.",
-      "Tuliskan respons aman terhadap perintah ON yang diterima dua kali."
+      "Gambar publisher, broker, dua subscriber, dan arah panahnya.",
+      "Tentukan dua topic berbeda: lab/esp32-01/telemetry untuk data dan lab/esp32-01/command untuk perintah.",
+      "Ucapkan perbedaan client ID, username, topic, dan payload dengan kata sendiri.",
+      "Lanjutkan materi broker lokal, ESP32 MQTT, penghubung Firebase, lalu dashboard Firebase secara berurutan."
     ],
-    "warning": "Broker publik bukan tempat mengirim identitas, sandi, atau data privat. Gunakan autentikasi, izin topic, dan TLS pada implementasi nyata.",
-    "check": "Apakah retained message menyimpan semua pembacaan sebelumnya?",
-    "answer": "Tidak. Retained menyimpan pesan terakhir pada topic tersebut; histori membutuhkan penyimpanan lain.",
+    "warning": "Berhasil terhubung Wi-Fi belum berarti terhubung ke broker. Pesan yang dikirim broker juga belum berarti sudah tersimpan di database. Periksa setiap tahap secara terpisah.",
+    "check": "Jika dashboard baru dibuka setelah suhu dikirim, apakah otomatis menerima semua riwayat suhu?",
+    "answer": "Tidak. Tanpa penyimpanan aplikasi, riwayat tidak tersedia. Retain hanya menyediakan nilai terakhir per topic; database diperlukan untuk menyimpan nilai terbaru atau riwayat sesuai rancangan.",
     "nodes": [
-      "Publisher",
-      "Topic suhu",
-      "Broker",
-      "Subscriber",
-      "Dashboard"
+      "ESP32 publisher",
+      "Broker MQTT",
+      "Terminal subscriber",
+      "Python subscriber",
+      "Firebase"
     ],
-    "minutes": 12
+    "minutes": 16,
+    "diagramCaption": "Publisher mengirim ke broker; broker meneruskan salinan ke subscriber yang cocok. Hanya program Python pada alur ini yang menulis ke Firebase.",
+    "sources": [
+      {
+        "title": "HiveMQ · konsep MQTT",
+        "url": "https://www.hivemq.com/mqtt/"
+      },
+      {
+        "title": "HiveMQ · topic dan wildcard",
+        "url": "https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/"
+      },
+      {
+        "title": "HiveMQ · QoS",
+        "url": "https://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels/"
+      },
+      {
+        "title": "HiveMQ · retained message",
+        "url": "https://www.hivemq.com/blog/mqtt-essentials-part-8-retained-messages/"
+      },
+      {
+        "title": "Firebase · Realtime Database SDK",
+        "url": "https://firebase.google.com/docs/database/admin/start"
+      }
+    ]
   },
   {
     "slug": "dashboard-data",
