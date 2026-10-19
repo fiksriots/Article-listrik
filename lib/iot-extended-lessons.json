@@ -1,0 +1,1759 @@
+[
+  {
+    "slug": "merancang-proyek-iot",
+    "title": "Merancang proyek IoT dari kebutuhan",
+    "summary": "Ubah masalah sehari-hari menjadi daftar pengukuran, aturan, perangkat, dan pengujian.",
+    "stage": 0,
+    "minutes": 18,
+    "analogy": "Seperti merencanakan perjalanan: tentukan tujuan dan bekal sebelum memilih kendaraan. Membeli banyak sensor belum berarti masalahnya terpecahkan.",
+    "explain": [
+      "Tulis masalah yang spesifik: “Saya ingin tahu suhu ruangan setiap 30 detik dan mendapat tanda jika data berhenti lebih dari dua menit.” Kalimat ini lebih mudah diuji daripada “membuat rumah pintar”.",
+      "Pisahkan input, proses, output, dan penyimpanan. Sensor menjadi input, ESP32 membaca dan memutuskan, indikator atau kipas menjadi output, sedangkan database menyimpan hasil. Pilih satu fungsi dahulu.",
+      "Tentukan apa yang terjadi saat internet atau sensor gagal. Contoh: pengukuran lokal tetap dilakukan, dashboard menandai data lama, dan kipas tidak mengikuti perintah kedaluwarsa. Keputusan ini termasuk rancangan awal.",
+      "Buat daftar komponen berdasarkan tegangan kerja, antarmuka, kebutuhan arus, dan kemampuan pengguna. Catat biaya komponen, kabel, konektor, catu, kotak, serta layanan. Harga dan kuota diperiksa saat membeli, bukan ditebak dari tutorial.",
+      "Tentukan bukti keberhasilan: nilai terbaca, pesan sampai, data tersimpan, dan status terlihat. Simpan hasil uji dan versi program agar orang lain dapat mengulang proyek."
+    ],
+    "example": "Ubah masalah sehari-hari menjadi daftar pengukuran, aturan, perangkat, dan pengujian.",
+    "practice": [
+      "Pilih satu masalah di rumah atau tempat kerja.",
+      "Buat tabel input → proses → output → penyimpanan, satu baris tiap fungsi.",
+      "Tulis tiga kondisi gagal dan perilaku yang diharapkan.",
+      "Buat daftar alat serta lima kriteria lulus yang dapat diperiksa."
+    ],
+    "warning": "Jangan memasukkan kendali listrik rumah ke proyek pertama. Gunakan simulasi, LED, dan beban DC tegangan rendah.",
+    "check": "Mengapa “suhu tampil di web” belum cukup sebagai kriteria sukses?",
+    "answer": "Angka bisa salah, lama, atau berasal dari simulasi. Kriteria perlu menyebut satuan, sumber, interval, umur data, serta perilaku saat koneksi atau sensor gagal.",
+    "nodes": [
+      "Masalah nyata",
+      "Target terukur",
+      "Pilih komponen",
+      "Uji kegagalan",
+      "Catat hasil"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · dokumentasi Arduino ESP32",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik."
+  },
+  {
+    "slug": "pemrograman-variabel",
+    "title": "Variabel, tipe data, dan satuan",
+    "summary": "Kenali tempat menyimpan angka, status, dan nama sebelum menulis program sensor.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Variabel seperti kotak berlabel. Kotak suhu berisi angka derajat Celsius; kotak kipas berisi status ON/OFF. Label dan isi harus cocok.",
+    "explain": [
+      "Variabel memiliki nama, tipe, dan nilai. Gunakan nama yang menjelaskan makna seperti suhuC, bukan a. int cocok untuk bilangan bulat kecil; float untuk pecahan; bool untuk benar/salah. Rentang tipe berbeda antarboard: jangan berasumsi int selalu 32 bit.",
+      "const menandai nilai yang tidak akan diubah program, misalnya ambang suhu. Tulis satuan pada nama atau komentar agar angka 5000 jelas berarti milidetik, bukan detik.",
+      "Operator = mengisi nilai; == membandingkan. Penjumlahan tidak mengubah variabel sampai hasilnya ditugaskan. Pembagian dua bilangan bulat membuang bagian pecahan; gunakan 5.0 / 2 jika menginginkan 2.5.",
+      "unsigned long lazim dipakai menyimpan hasil millis pada Arduino. Hindari memasukkan nilai negatif ke tipe tanpa tanda. Program contoh hanya memakai Serial dan bisa dicoba pada UNO maupun ESP32 tanpa rangkaian tambahan."
+    ],
+    "example": "Kenali tempat menyimpan angka, status, dan nama sebelum menulis program sensor.",
+    "practice": [
+      "Pilih UNO atau ESP32 yang sesuai lalu buka Serial Monitor 115200.",
+      "Upload contoh dan cocokkan keluaran 29.40 serta 2.50.",
+      "Ubah suhuC dan aktif; amati dua jenis data tersebut.",
+      "Ganti 5.0 / 2 menjadi 5 / 2; jelaskan mengapa hasilnya berubah."
+    ],
+    "warning": "Satu angka tanpa satuan mudah disalahartikan. Hindari nama password atau token nyata pada program yang dibagikan.",
+    "check": "Apa perbedaan suhuC = 30 dan suhuC == 30?",
+    "answer": "Yang pertama memberi nilai 30; yang kedua menguji apakah nilainya sama dengan 30. Salah memakai = dalam kondisi dapat mengubah logika program.",
+    "nodes": [
+      "Nama variabel",
+      "Pilih tipe",
+      "Isi nilai",
+      "Hitung dengan satuan",
+      "Lihat hasil"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · referensi bahasa",
+        "url": "https://docs.arduino.cc/language-reference/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · variabel dan pembagian",
+          "language": "cpp",
+          "code": "void setup() {\n  Serial.begin(115200);\n  float suhuC = 29.4;\n  bool aktif = true;\n  const unsigned long intervalMs = 5000;\n  Serial.println(suhuC, 2);\n  Serial.println(5.0 / 2, 2);\n  Serial.println(aktif ? \"Aktif\" : \"Tidak aktif\");\n  Serial.println(intervalMs);\n}\nvoid loop() {}"
+        }
+      ],
+      "result": "Serial menampilkan 29.40, 2.50, Aktif, dan 5000. Angka adalah contoh program, bukan sensor.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "pemrograman-kondisi-perulangan",
+    "title": "Kondisi dan perulangan tanpa bingung",
+    "summary": "Gunakan if untuk memilih tindakan dan for untuk memproses beberapa data.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "if seperti penjaga pintu yang memeriksa syarat. for seperti memeriksa lima kursi satu per satu, lalu berhenti setelah kursi terakhir.",
+    "explain": [
+      "if menjalankan blok ketika kondisi benar. else menangani kondisi lain. Susun syarat dari yang paling khusus; if suhu >= 30 dan else if suhu >= 28 memberi kelompok yang berbeda.",
+      "Perulangan for memiliki nilai awal, syarat lanjut, dan perubahan penghitung. Penghitung 0 sampai 4 berarti lima langkah, bukan empat. Gunakan kurung kurawal meskipun blok hanya satu baris.",
+      "loop() Arduino sendiri sudah dipanggil berulang. while yang menunggu Wi-Fi tanpa batas dapat membuat bagian lain tidak terlayani. Beri batas waktu atau gunakan pemeriksaan berkala dengan millis.",
+      "Kode contoh memproses lima nilai simulasi sekali pada setup. Tidak ada kendali fisik. Tujuannya membaca keputusan program sebelum memasukkan sensor dan jaringan."
+    ],
+    "example": "Gunakan if untuk memilih tindakan dan for untuk memproses beberapa data.",
+    "practice": [
+      "Upload contoh dan tandai nilai mana yang dianggap panas.",
+      "Prediksi hasil untuk tepat 30 sebelum mengubah kode.",
+      "Ubah batas panas menjadi 31 dan jalankan ulang.",
+      "Tulis alasan mengapa i < 5 tidak sama dengan i <= 5 untuk array lima elemen."
+    ],
+    "warning": "Mengakses indeks di luar array dapat merusak perilaku program; bukan sekadar menghasilkan nol.",
+    "check": "Apakah suhu tepat 30 lolos syarat suhu > 30?",
+    "answer": "Tidak. Operator > tidak mencakup nilai batas. Gunakan >= jika 30 harus termasuk.",
+    "nodes": [
+      "Baca nilai",
+      "Periksa if",
+      "Pilih hasil",
+      "Lanjut indeks",
+      "Berhenti di batas"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · referensi bahasa",
+        "url": "https://docs.arduino.cc/language-reference/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · if dan for",
+          "language": "cpp",
+          "code": "void setup() {\n  Serial.begin(115200);\n  float suhu[] = {27, 29, 30, 31, 28};\n  for (int i = 0; i < 5; i++) {\n    Serial.print(suhu[i]);\n    Serial.println(suhu[i] >= 30 ? \" : panas\" : \" : normal\");\n  }\n}\nvoid loop() {}"
+        }
+      ],
+      "result": "Hanya 30 dan 31 diberi label panas; lima nilai diproses tanpa membaca indeks di luar batas.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "pemrograman-fungsi-array",
+    "title": "Fungsi dan array untuk merapikan program",
+    "summary": "Pisahkan tugas kecil dan kelola beberapa pembacaan dengan susunan data yang jelas.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Fungsi seperti resep pendek yang bisa dipakai berulang. Array seperti rak bernomor yang menyimpan beberapa barang dengan tipe sama.",
+    "explain": [
+      "Fungsi menerima parameter, mengolahnya, lalu dapat mengembalikan hasil. float rataRata(...) menghasilkan angka; void tampilkan(...) hanya melakukan tugas tanpa nilai balik.",
+      "Array dimulai dari indeks 0. Lima elemen memakai indeks 0–4. Saat array dikirim ke fungsi, panjangnya perlu disertakan karena fungsi tidak otomatis mengetahui ukuran data dari pointer.",
+      "Pisahkan membacaSensor, memeriksaNilai, dan mengirimData agar kesalahan mudah dicari. Fungsi terlalu banyak tugas sulit diuji. Variabel lokal hanya hidup di lingkupnya; variabel global dipakai secukupnya untuk keadaan yang perlu bertahan.",
+      "Contoh rata-rata memeriksa jumlah data agar tidak membagi nol. Untuk proyek nyata, buang data invalid sebelum dirata-ratakan; rata-rata bukan pengganti pemeriksaan sensor."
+    ],
+    "example": "Pisahkan tugas kecil dan kelola beberapa pembacaan dengan susunan data yang jelas.",
+    "practice": [
+      "Upload contoh dan pastikan rata-rata 29.00.",
+      "Ubah isi salah satu elemen lalu hitung hasil secara manual.",
+      "Tambahkan fungsi yang mengubah Celsius menjadi Fahrenheit.",
+      "Jelaskan mengapa jumlah elemen ikut diberikan ke rataRata."
+    ],
+    "warning": "Jangan menyalin ukuran array dari contoh ketika jumlah elemennya sudah berubah.",
+    "check": "Apakah indeks pertama array lima elemen adalah 1?",
+    "answer": "Bukan. Indeksnya 0, 1, 2, 3, dan 4. Elemen kelima memiliki indeks 4.",
+    "nodes": [
+      "Kumpulkan array",
+      "Kirim parameter",
+      "Periksa jumlah",
+      "Hitung hasil",
+      "Tampilkan kembali"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · referensi bahasa",
+        "url": "https://docs.arduino.cc/language-reference/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · fungsi dan array",
+          "language": "cpp",
+          "code": "float rataRata(const float data[], unsigned int jumlah) {\n  if (jumlah == 0) return 0; // Pemanggil tetap harus memastikan ada data.\n  float total = 0;\n  for (unsigned int i = 0; i < jumlah; i++) total += data[i];\n  return total / jumlah;\n}\nvoid setup() {\n  Serial.begin(115200);\n  float sampel[] = {28, 29, 30};\n  unsigned int jumlah = sizeof(sampel) / sizeof(sampel[0]);\n  Serial.println(rataRata(sampel, jumlah), 2);\n}\nvoid loop() {}"
+        }
+      ],
+      "result": "Rata-rata tiga sampel adalah 29.00. Contoh dapat dijalankan di UNO atau ESP32.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "serial-monitor-debugging",
+    "title": "Mencari kesalahan dengan Serial Monitor",
+    "summary": "Telusuri daya, upload, program, sensor, dan jaringan satu tahap setiap kali.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Debugging seperti mencari aliran air yang berhenti: periksa dari sumber, pipa pertama, lalu pipa berikutnya. Mengganti semuanya sekaligus membuat penyebabnya sulit diketahui.",
+    "explain": [
+      "Mulai dari gejala yang bisa diamati: port tidak terdeteksi, upload gagal, tidak ada teks, angka tidak masuk akal, atau MQTT gagal. Kelompok gejala menentukan pemeriksaan berikutnya.",
+      "Baud Serial Monitor harus sama dengan Serial.begin. Pilih board dan port yang benar; kabel USB tertentu hanya membawa daya. Lepaskan rangkaian tambahan bila perlu mengisolasi gangguan, setelah daya diputus.",
+      "Tambahkan log singkat pada batas tugas: mulai, sensor valid, Wi-Fi terhubung, MQTT berhasil, database ditulis. Sertakan millis, nilai, dan kode error. Jangan mencetak password, token, atau seluruh service-account JSON.",
+      "Ubah satu hal setiap percobaan lalu catat hasilnya. Jika angka simulasi sukses sampai Firebase tetapi sensor asli gagal, fokus pada sensor dan wiring, bukan langsung mengganti rules database.",
+      "Log berlebihan juga dapat memperlambat program. Cetak berkala atau saat status berubah; jangan mencetak setiap putaran loop yang sangat cepat."
+    ],
+    "example": "Telusuri daya, upload, program, sensor, dan jaringan satu tahap setiap kali.",
+    "practice": [
+      "Jalankan contoh pada board Anda dan buka baud 115200.",
+      "Ubah baud monitor sengaja agar melihat gejala karakter tidak terbaca, lalu kembalikan.",
+      "Tambahkan log sebelum dan sesudah fungsi pembacaan pada project latihan.",
+      "Buat catatan gejala → dugaan → perubahan → hasil."
+    ],
+    "warning": "Jangan mengukur tegangan pada mode ampere atau memasang probe sembarangan. Ikuti materi multimeter saat memeriksa catu DC.",
+    "check": "Mengapa mengganti kabel, kode, sensor, dan Wi-Fi sekaligus kurang membantu?",
+    "answer": "Jika berhasil, kita tidak tahu perubahan mana yang menyelesaikan masalah. Percobaan satu variabel memberi bukti yang dapat diulang.",
+    "nodes": [
+      "Amati gejala",
+      "Pilih lapisan",
+      "Tambah log",
+      "Uji satu perubahan",
+      "Catat bukti"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · Serial",
+        "url": "https://docs.arduino.cc/language-reference/en/functions/communication/serial/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · log berkala tanpa rahasia",
+          "language": "cpp",
+          "code": "unsigned long sebelumnya = 0;\nvoid setup() { Serial.begin(115200); Serial.println(\"BOOT: program mulai\"); }\nvoid loop() {\n  unsigned long sekarang = millis();\n  if (sekarang - sebelumnya >= 1000UL) {\n    sebelumnya = sekarang;\n    Serial.print(\"uptimeMs=\"); Serial.print(sekarang);\n    Serial.println(\" tahap=SIMULASI_OK\");\n  }\n}"
+        }
+      ],
+      "result": "Log BOOT muncul saat reset dan uptimeMs bertambah tiap sekitar satu detik.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "timer-millis",
+    "title": "Mengatur beberapa tugas dengan millis()",
+    "summary": "Jalankan indikator dan pencatatan tanpa berhenti lama di delay().",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Memasak dua panci tidak perlu menatap satu panci sampai matang. Lihat jam, kerjakan tugas lain, lalu periksa lagi ketika waktunya tiba.",
+    "explain": [
+      "delay(5000) menahan alur sketch selama lima detik. millis memberi waktu sejak program berjalan sehingga kita dapat memutuskan apakah interval sudah berlalu lalu segera melayani tugas lain.",
+      "Simpan waktu sebelumnya dengan unsigned long. Bandingkan sekarang - sebelumnya >= interval. Pengurangan tanpa tanda tetap bekerja melewati rollover untuk interval yang wajar; membandingkan sekarang >= sebelumnya + interval dapat gagal ketika penjumlahan melampaui rentang.",
+      "Gunakan timer terpisah untuk tiap tugas. Mengisi sebelumnya = sekarang cocok untuk tugas berkala sederhana, tetapi jadwal dapat bergeser. Jika memakai sebelumnya += interval untuk jadwal tetap, batasi pekerjaan susulan agar program tidak mengejar keterlambatan tanpa henti.",
+      "millis bukan kalender atau waktu UTC. Ia kembali dari awal setelah restart dan mengalami rollover; untuk timestamp lintas perangkat gunakan RTC atau sinkronisasi waktu yang sesuai."
+    ],
+    "example": "Jalankan indikator dan pencatatan tanpa berhenti lama di delay().",
+    "practice": [
+      "Upload contoh dan amati dua interval berbeda pada Serial Monitor.",
+      "Ubah interval A menjadi 200 ms tanpa mengubah B.",
+      "Cari delay panjang pada project Anda lalu rancang penggantinya.",
+      "Hitung selisih unsigned ketika sebelumnya dekat batas maksimum untuk memahami rollover."
+    ],
+    "warning": "millis tidak membuat semua fungsi otomatis nonblocking. Pembacaan sensor atau koneksi jaringan masih dapat menunggu.",
+    "check": "Mengapa setiap tugas memerlukan waktu sebelumnya sendiri?",
+    "answer": "Agar pembaruan satu timer tidak menunda atau mengulang timer tugas lain secara tidak sengaja.",
+    "nodes": [
+      "Baca millis",
+      "Hitung selisih",
+      "Tugas sudah jatuh tempo",
+      "Perbarui timer",
+      "Layani tugas lain"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · Blink Without Delay",
+        "url": "https://docs.arduino.cc/built-in-examples/digital/BlinkWithoutDelay/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · dua timer independen",
+          "language": "cpp",
+          "code": "unsigned long waktuA = 0, waktuB = 0;\nvoid setup() { Serial.begin(115200); }\nvoid loop() {\n  unsigned long sekarang = millis();\n  if (sekarang - waktuA >= 500UL) {\n    waktuA = sekarang; Serial.println(\"Tugas A\");\n  }\n  if (sekarang - waktuB >= 2000UL) {\n    waktuB = sekarang; Serial.println(\"Tugas B\");\n  }\n}"
+        }
+      ],
+      "result": "Tugas A muncul sekitar tiap 0,5 detik; tugas B tiap 2 detik, tanpa delay panjang.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "debounce-tombol",
+    "title": "Debounce: satu tekan, satu kejadian",
+    "summary": "Saring pantulan mekanis tombol tanpa membuat program menunggu.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Tombol seperti pintu yang bergetar sesaat setelah ditutup. Program perlu menunggu keadaan stabil sebelum menyimpulkan pintu benar-benar tertutup.",
+    "explain": [
+      "Kontak tombol mekanis bisa berpindah HIGH/LOW beberapa kali dalam beberapa milidetik. Tanpa debounce, satu tekanan dapat dihitung berkali-kali.",
+      "INPUT_PULLUP membuat pin HIGH saat tombol terbuka. Tombol dihubungkan ke GND sehingga ditekan berarti LOW. Debounce memeriksa apakah pembacaan terakhir bertahan selama jendela stabil, misalnya 30 ms; nilai ini perlu disesuaikan dengan tombol.",
+      "Hitung hanya transisi keadaan stabil dari HIGH ke LOW, bukan setiap loop ketika LOW. Dengan begitu menahan tombol tidak menambah hitungan berkali-kali.",
+      "Contoh memakai UNO R3 pin D2 dan GND. Jika memakai ESP32, pilih GPIO yang aman untuk board tersebut dan gunakan logika 3,3 V; jangan memasukkan 5 V dari rangkaian UNO."
+    ],
+    "example": "Saring pantulan mekanis tombol tanpa membuat program menunggu.",
+    "practice": [
+      "Putuskan daya, pasang pushbutton D2 ke GND pada UNO lalu nyalakan melalui USB.",
+      "Upload contoh dan tekan tombol sepuluh kali.",
+      "Tahan tombol dua detik; hitungan hanya bertambah sekali.",
+      "Bandingkan jendela 5 ms dan 30 ms lalu catat hasil, jangan menganggap semua tombol sama."
+    ],
+    "warning": "Kaki tombol empat pin dapat sudah terhubung berpasangan; periksa orientasi sebelum memasang.",
+    "check": "Mengapa menahan tombol tidak boleh terus menambah hitungan pada contoh?",
+    "answer": "Contoh menghitung kejadian tekan, yaitu transisi stabil HIGH ke LOW, bukan durasi tombol berada pada LOW.",
+    "nodes": [
+      "Baca pin",
+      "Deteksi perubahan",
+      "Tunggu stabil",
+      "Deteksi tepi tekan",
+      "Tambah hitungan"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · debounce",
+        "url": "https://docs.arduino.cc/built-in-examples/digital/Debounce/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Arduino UNO R3, pushbutton, breadboard, kabel jumper, dan USB"
+      ],
+      "wiring": [
+        [
+          "UNO D2",
+          "Satu sisi kontak tombol"
+        ],
+        [
+          "UNO GND",
+          "Sisi kontak tombol yang lain"
+        ],
+        [
+          "Mode input",
+          "INPUT_PULLUP; tanpa sambungan tombol ke 5 V"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch UNO · debounce nonblocking",
+          "language": "cpp",
+          "code": "const int TOMBOL = 2;\nint bacaanTerakhir = HIGH, stabil = HIGH;\nunsigned long berubahPada = 0, hitungan = 0;\nvoid setup() { Serial.begin(115200); pinMode(TOMBOL, INPUT_PULLUP); }\nvoid loop() {\n  int bacaan = digitalRead(TOMBOL);\n  unsigned long sekarang = millis();\n  if (bacaan != bacaanTerakhir) berubahPada = sekarang;\n  if (sekarang - berubahPada >= 30UL && bacaan != stabil) {\n    stabil = bacaan;\n    if (stabil == LOW) Serial.println(++hitungan);\n  }\n  bacaanTerakhir = bacaan;\n}"
+        }
+      ],
+      "result": "Tekanan stabil menambah hitungan sekali; menahan tombol tidak mengulang hitungan.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "state-machine",
+    "title": "State machine: program punya keadaan",
+    "summary": "Pisahkan keadaan MENUNGGU, AKTIF, dan GAGAL agar aturan mudah dilacak.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Lampu lalu lintas tidak menebak setiap saat. Ia berada dalam satu keadaan, lalu pindah jika syarat transisinya terpenuhi.",
+    "explain": [
+      "State machine menyimpan keadaan saat ini, kejadian atau syarat pindah, dan tindakan saat berpindah. Ini membantu menghindari banyak boolean yang bisa menghasilkan kombinasi tidak masuk akal.",
+      "Contoh pemantau dapat memiliki SIAP, DATA_LAMA, dan SENSOR_GAGAL. Prioritaskan kondisi gagal sebelum tindakan kendali. Tulis tabel keadaan → syarat → keadaan berikut → tindakan sebelum kode.",
+      "Menggunakan enum membuat nama keadaan jelas. Catat waktu masuk keadaan jika ada batas durasi. Hindari menaruh while menunggu di dalam satu keadaan, karena loop tetap perlu melayani tugas lain.",
+      "Contoh berikut berpindah SIAP ke AKTIF selama dua detik lalu kembali. Tidak ada perangkat yang digerakkan; Serial memperlihatkan transisi, sehingga logikanya dapat dipelajari dahulu."
+    ],
+    "example": "Pisahkan keadaan MENUNGGU, AKTIF, dan GAGAL agar aturan mudah dilacak.",
+    "practice": [
+      "Gambar dua lingkaran SIAP dan AKTIF serta panah syarat waktunya.",
+      "Upload kode dan cocokkan log dengan gambar.",
+      "Tambahkan keadaan GAGAL di rancangan, dengan tombol reset manual.",
+      "Tuliskan tindakan aman sebelum menambahkan motor atau aktuator."
+    ],
+    "warning": "State machine tidak otomatis menjamin keselamatan. Kondisi gagal dan keadaan output awal harus dirancang secara sengaja.",
+    "check": "Apa keuntungan satu enum dibanding tiga boolean untuk tiga keadaan yang saling eksklusif?",
+    "answer": "Enum membuat hanya satu keadaan dipilih pada satu saat, sehingga kombinasi seperti SIAP dan GAGAL bersamaan tidak muncul dari tiga flag independen.",
+    "nodes": [
+      "Keadaan saat ini",
+      "Periksa kejadian",
+      "Syarat terpenuhi",
+      "Pindah keadaan",
+      "Catat tindakan"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · referensi bahasa",
+        "url": "https://docs.arduino.cc/language-reference/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch · dua keadaan berbasis waktu",
+          "language": "cpp",
+          "code": "enum Keadaan { SIAP, AKTIF };\nKeadaan keadaan = SIAP;\nunsigned long masukPada = 0;\nvoid setup() { Serial.begin(115200); Serial.println(\"SIAP\"); }\nvoid loop() {\n  unsigned long sekarang = millis();\n  if (keadaan == SIAP && sekarang - masukPada >= 3000UL) {\n    keadaan = AKTIF; masukPada = sekarang; Serial.println(\"AKTIF\");\n  } else if (keadaan == AKTIF && sekarang - masukPada >= 2000UL) {\n    keadaan = SIAP; masukPada = sekarang; Serial.println(\"SIAP\");\n  }\n}"
+        }
+      ],
+      "result": "SIAP berlangsung sekitar tiga detik dan AKTIF dua detik, bergantian tanpa menahan loop.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "datasheet-pinout",
+    "title": "Membaca datasheet dan pinout sebelum merangkai",
+    "summary": "Bedakan nama pin, tegangan, batas maksimum, dan kondisi kerja yang disarankan.",
+    "stage": 0,
+    "minutes": 18,
+    "analogy": "Datasheet seperti buku aturan kendaraan. Batas kecepatan yang membuat mesin rusak bukan kecepatan yang disarankan untuk perjalanan sehari-hari.",
+    "explain": [
+      "Cari nomor komponen dan revisi yang tepat. ESP32 adalah keluarga chip; susunan pin DevKitC, C3, S3, dan papan pihak lain tidak otomatis sama. Label pada board juga tidak selalu sama dengan nomor kaki chip.",
+      "Baca Recommended Operating Conditions sebelum Absolute Maximum Ratings. Batas maksimum adalah batas kerusakan, bukan target kerja. Tegangan catu modul, level sinyal I/O, dan arus beban adalah tiga hal yang perlu diperiksa terpisah.",
+      "Cari fungsi pin khusus: boot/strapping, input-only, flash internal, serta pin yang dipakai USB atau komunikasi. Pilih GPIO aman berdasarkan panduan board, bukan sekadar nomor dari gambar internet.",
+      "Untuk sensor, catat urutan pin sesuai arah pandang gambar: top view dan bottom view berbeda. Periksa apakah breakout sudah mempunyai regulator, resistor pull-up, atau pengubah level. Komponen polos dan modul siap pakai dapat memerlukan sambungan berbeda."
+    ],
+    "example": "Bedakan nama pin, tegangan, batas maksimum, dan kondisi kerja yang disarankan.",
+    "practice": [
+      "Ambil datasheet satu sensor dan panduan board yang benar.",
+      "Buat tabel nama pin, fungsi, tegangan catu, dan level sinyal.",
+      "Tandai kondisi kerja normal dan batas maksimum dengan warna berbeda.",
+      "Periksa ulang orientasi fisik sebelum memasang catu."
+    ],
+    "warning": "Jangan menganggap semua GPIO ESP32 tahan 5 V. Gunakan level yang dinyatakan pada dokumentasi board dan chip.",
+    "check": "Apakah angka Absolute Maximum cocok dijadikan tegangan kerja harian?",
+    "answer": "Tidak. Itu batas yang tidak boleh dilampaui, bukan kondisi kerja yang dianjurkan; gunakan rentang operasi yang direkomendasikan.",
+    "nodes": [
+      "Cocokkan model",
+      "Baca kondisi kerja",
+      "Identifikasi pin",
+      "Periksa modul",
+      "Rencanakan wiring"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · ESP32 datasheet",
+        "url": "https://documentation.espressif.com/esp32_datasheet_en.html"
+      },
+      {
+        "title": "Espressif · panduan DevKitC",
+        "url": "https://documentation.espressif.com/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik."
+  },
+  {
+    "slug": "daya-adaptor-baterai",
+    "title": "Menghitung daya, adaptor, dan perkiraan baterai",
+    "summary": "Pilih catu berdasarkan tegangan dan arus puncak, bukan hanya angka kapasitas baterai.",
+    "stage": 0,
+    "minutes": 18,
+    "analogy": "Tegangan seperti tekanan air dan kemampuan arus seperti kapasitas pompa. Pompa yang sanggup mengalirkan lebih banyak tidak memaksa semua keran mengambil aliran maksimum.",
+    "explain": [
+      "Catu harus memiliki tegangan yang sesuai dan kemampuan arus yang cukup untuk kondisi puncak. Adaptor 5 V 2 A tidak otomatis memaksa perangkat memakai 2 A; beban mengambil sesuai kebutuhannya. Tegangan salah tetap dapat merusak perangkat.",
+      "Hitung daya P = V × I. Contoh ESP32 dan sensor rata-rata 5 V × 0,12 A = 0,6 W. Arus rata-rata belum mencakup lonjakan Wi-Fi atau awal putaran motor; periksa spesifikasi dan ukur pada kondisi nyata.",
+      "Perkiraan energi baterai: Wh = tegangan nominal × Ah. Baterai contoh 3,7 V 2 Ah menyimpan sekitar 7,4 Wh secara nominal. Dengan efisiensi konverter 85% dan beban rata-rata 0,6 W, perkiraan ideal sekitar 10,5 jam; umur, suhu, cutoff, dan pola beban mengurangi hasil nyata.",
+      "Gunakan regulator dan modul pengisian/proteksi sesuai kimia baterai. Jangan menghubungkan baterai lithium langsung ke pin 3V3 atau 5V tanpa rancangan yang tepat. Pilih paket baterai jadi atau power bank untuk latihan awal.",
+      "ESP32 yang restart ketika kipas menyala dapat mengalami penurunan tegangan, gangguan induktif, atau wiring GND buruk. Pisahkan jalur arus motor dari jalur sinyal, gunakan driver dan proteksi yang sesuai, lalu ukur catu. Jangan menutupi masalah daya dengan menghapus deteksi brownout."
+    ],
+    "example": "Pilih catu berdasarkan tegangan dan arus puncak, bukan hanya angka kapasitas baterai.",
+    "practice": [
+      "Buat daftar tegangan, arus normal, dan arus puncak tiap beban.",
+      "Hitung total daya dengan angka contoh lalu bedakan mA dan A.",
+      "Hitung ulang baterai jika beban rata-rata menjadi 1,2 W.",
+      "Bandingkan perkiraan dengan pengukuran waktu nyata pada paket daya aman."
+    ],
+    "warning": "Kapasitas mAh tidak dapat dibandingkan langsung jika tegangan berbeda. Jangan melakukan pengukuran arus dengan menyingkat terminal catu.",
+    "check": "Apakah baterai 2000 mAh selalu bertahan dua jam untuk perangkat 1000 mA?",
+    "answer": "Hanya pendekatan ideal jika sisi tegangan dan kondisi cocok. Konversi tegangan, efisiensi, arus puncak, dan kapasitas terpakai perlu diperhitungkan.",
+    "nodes": [
+      "Daftar beban",
+      "Hitung watt",
+      "Periksa lonjakan",
+      "Hitung energi",
+      "Ukur hasil nyata"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · persyaratan perangkat keras",
+        "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/index.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik."
+  },
+  {
+    "slug": "kalibrasi-sensor",
+    "title": "Kalibrasi: mengapa angka sensor bisa meleset",
+    "summary": "Bandingkan sensor dengan acuan dan bedakan ketepatan, kestabilan, serta resolusi.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Timbangan yang selalu menambah 0,5 kg bisa stabil tetapi belum tepat. Mengambil rata-rata seratus kali tidak menghilangkan tambahan tetap itu.",
+    "explain": [
+      "Kalibrasi membandingkan pembacaan dengan acuan yang lebih dipercaya pada kondisi yang diketahui. Catat sensor, acuan, suhu lingkungan, posisi, waktu tunggu, dan pasangan hasil; jangan menganggap angka dari sensor lain pasti benar.",
+      "Jika selisih hampir tetap, koreksi offset mungkin cukup. Contoh sensor membaca 31 ketika acuan 30, sehingga koreksi sederhana adalah -1. Jika kesalahan berubah mengikuti nilai, dua titik dapat memberi faktor skala dan offset.",
+      "Untuk dua titik, kemiringan a = (acuan2 - acuan1) / (baca2 - baca1), lalu b = acuan1 - a × baca1. Rumus ini pendekatan linear pada rentang yang diuji, bukan jaminan pada semua kondisi. Kedua titik baca harus berbeda.",
+      "Jangan mengkalibrasi sebelum masalah daya, pemasangan, satuan, waktu pemanasan, dan sensor salah model diperbaiki. Simpan data mentah bersama koreksi dan uji pada titik ketiga yang tidak dipakai menghitung."
+    ],
+    "example": "Bandingkan sensor dengan acuan dan bedakan ketepatan, kestabilan, serta resolusi.",
+    "practice": [
+      "Gunakan dua pasangan simulasi baca 20→acuan21 dan baca30→acuan31.",
+      "Hitung a dan b lalu uji baca25.",
+      "Catat pasangan sensor dan acuan nyata hanya pada kondisi yang aman.",
+      "Uji titik ketiga dan tulis batas rentang koreksi."
+    ],
+    "warning": "Kalibrasi DIY ini untuk belajar, bukan sertifikasi alat ukur medis, proteksi keselamatan, atau penagihan energi.",
+    "check": "Apakah lebih banyak angka di belakang koma berarti pengukuran lebih akurat?",
+    "answer": "Tidak. Itu resolusi tampilan. Akurasi bergantung pada sensor, acuan, pemasangan, dan metode pengukuran.",
+    "nodes": [
+      "Siapkan acuan",
+      "Catat pasangan",
+      "Hitung koreksi",
+      "Uji titik lain",
+      "Simpan batas rentang"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · kalibrasi masukan",
+        "url": "https://docs.arduino.cc/built-in-examples/analog/Calibration/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · koreksi dua titik simulasi",
+          "language": "python",
+          "code": "baca1, acuan1 = 20.0, 21.0\nbaca2, acuan2 = 30.0, 31.0\nif baca2 == baca1:\n    raise ValueError(\"Dua titik pembacaan harus berbeda\")\na = (acuan2 - acuan1) / (baca2 - baca1)\nb = acuan1 - a * baca1\nprint(a * 25.0 + b)  # 26.0; hanya contoh data simulasi."
+        }
+      ],
+      "result": "Koreksi simulasi menghasilkan 26.0 untuk pembacaan 25.0; bukan klaim koreksi sensor tertentu.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "filter-validasi-sensor",
+    "title": "Menyaring pembacaan dan mendeteksi sensor gagal",
+    "summary": "Gunakan batas validitas dan rata-rata bergerak tanpa menyembunyikan kerusakan.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Mendengar kabar dari lima orang dapat mengurangi gangguan, tetapi kabar yang jelas salah perlu ditolak lebih dahulu, bukan ikut dirata-ratakan.",
+    "explain": [
+      "Validasi lebih dahulu: cek status library, satuan, nilai NaN, rentang fisik, dan umur sampel. Angka nol dapat merupakan pengukuran sah; jangan menjadikannya penanda gagal untuk semua sensor.",
+      "Rata-rata bergerak menghaluskan noise dengan memakai beberapa sampel terakhir. Jendela besar membuat tampilan lebih stabil tetapi respons lebih lambat. Median dapat membantu mengurangi lonjakan tunggal, namun semua metode perlu diuji pada data yang sesuai.",
+      "Bedakan status OK, INVALID, dan STALE. Ketika pembacaan gagal, simpan waktu sampel valid terakhir dan tampilkan statusnya. Jangan mengirim nilai lama tanpa memberi tahu bahwa pengukuran baru gagal.",
+      "Sensor yang terlepas dapat menghasilkan nilai di luar rentang atau justru nilai tetap yang tampak masuk akal. Gunakan pemeriksaan berdasarkan jenis sensor, termasuk respons ketika lingkungan berubah. Aturan “nilai tidak berubah berarti rusak” tidak selalu benar."
+    ],
+    "example": "Gunakan batas validitas dan rata-rata bergerak tanpa menyembunyikan kerusakan.",
+    "practice": [
+      "Jalankan data simulasi dan amati nilai 999 ditolak.",
+      "Bandingkan jendela satu dan tiga sampel.",
+      "Tambahkan satu NaN pada data lalu pastikan tidak ikut dihitung.",
+      "Rancang tampilan bila tiga pembacaan berturut-turut gagal."
+    ],
+    "warning": "Filter tidak memperbaiki kalibrasi atau wiring yang salah. Jangan menyembunyikan kegagalan dengan terus menampilkan rata-rata lama sebagai data baru.",
+    "check": "Mengapa validasi dilakukan sebelum rata-rata?",
+    "answer": "Satu nilai invalid dapat mencemari seluruh hasil rata-rata dan membuatnya tampak seperti pengukuran sah.",
+    "nodes": [
+      "Baca status",
+      "Tolak invalid",
+      "Perbarui jendela",
+      "Hitung hasil",
+      "Tandai umur data"
+    ],
+    "sources": [
+      {
+        "title": "Arduino · smoothing",
+        "url": "https://docs.arduino.cc/built-in-examples/analog/Smoothing/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · filter data simulasi",
+          "language": "python",
+          "code": "from collections import deque\nimport math\nwindow = deque(maxlen=3)\nfor raw in [28.0, 29.0, 999.0, float(\"nan\"), 30.0, 31.0]:\n    if not math.isfinite(raw) or not -40 <= raw <= 125:\n        print(\"INVALID\", raw)\n        continue\n    window.append(raw)\n    print(\"OK rata-rata:\", round(sum(window) / len(window), 2))"
+        }
+      ],
+      "result": "999 dan NaN ditolak; hasil sah berturut-turut 28.0, 28.5, 29.0, dan 30.0.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "komunikasi-uart",
+    "title": "UART: berbicara lewat TX dan RX",
+    "summary": "Pahami baud, sambungan silang, GND bersama, dan uji loopback.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "UART seperti dua orang memakai dua jalur bicara: mulut pengirim menuju telinga penerima. Keduanya harus sepakat kecepatan dan format percakapan.",
+    "explain": [
+      "TX mengirim dan RX menerima. Pada dua perangkat yang kompatibel, TX A menuju RX B dan TX B menuju RX A, dengan referensi GND yang sesuai. UART tidak memiliki jalur clock bersama, sehingga baud dan format seperti 8N1 harus cocok.",
+      "UART TTL 3,3 V berbeda dari RS232 dan RS485. Bentuk konektor tidak membuktikan level listriknya. Jangan menghubungkan port RS232 langsung ke GPIO ESP32; diperlukan transceiver yang tepat.",
+      "Latihan menggunakan ESP32 klasik dengan UART2 pada GPIO16 RX dan GPIO17 TX. Pin ini tidak bebas pada semua modul, khususnya model yang memakai pin untuk PSRAM; pastikan board cocok. Satu jumper 17 ke16 membuat loopback tanpa perangkat lain.",
+      "Loopback membuktikan pengiriman dan penerimaan pada board sendiri, belum membuktikan konfigurasi perangkat pasangan. Setelah berhasil, baru hubungkan pasangan dengan level tegangan yang kompatibel."
+    ],
+    "example": "Pahami baud, sambungan silang, GND bersama, dan uji loopback.",
+    "practice": [
+      "Cocokkan board dan pastikan GPIO16/17 tersedia.",
+      "Putuskan daya lalu jumper TX17 ke RX16 untuk loopback.",
+      "Upload contoh dan lihat kata PING kembali pada Serial Monitor.",
+      "Lepas jumper setelah daya diputus dan bandingkan hasil."
+    ],
+    "warning": "Jangan menyambungkan TX dua perangkat langsung bersamaan. UART USB pemrograman juga dapat terganggu jika pinnya dipakai perangkat lain.",
+    "check": "Mengapa kedua perangkat harus memakai baud sama?",
+    "answer": "UART menentukan waktu sampling bit berdasarkan baud. Ketidaksesuaian membuat bit dibaca pada waktu yang salah.",
+    "nodes": [
+      "Sepakati baud",
+      "TX mengirim",
+      "Sinyal melintas",
+      "RX menerima",
+      "Cocokkan pesan"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · HardwareSerial",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/serial.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "ESP32 klasik dengan GPIO16/17 bebas, USB, dan jumper"
+      ],
+      "wiring": [
+        [
+          "GPIO17 TX2",
+          "GPIO16 RX2 pada board yang sama"
+        ],
+        [
+          "Perangkat luar",
+          "Tidak dipasang pada uji loopback"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 klasik · UART2 loopback",
+          "language": "cpp",
+          "code": "#include <HardwareSerial.h>\nHardwareSerial portUji(2);\nunsigned long terakhir = 0;\nvoid setup() {\n  Serial.begin(115200);\n  portUji.begin(9600, SERIAL_8N1, 16, 17);\n}\nvoid loop() {\n  if (millis() - terakhir >= 1000UL) {\n    terakhir = millis(); portUji.println(\"PING\");\n  }\n  while (portUji.available()) Serial.write(portUji.read());\n}"
+        }
+      ],
+      "result": "PING muncul sekitar tiap detik jika jumper loopback terpasang dan pin sesuai board.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "komunikasi-spi",
+    "title": "SPI: clock, data, dan pemilihan perangkat",
+    "summary": "Kenali SCK, MOSI, MISO, serta CS sebelum memakai kartu SD atau modul cepat.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "SPI seperti guru memberi ketukan bersama sambil memilih satu murid untuk menjawab. Clock memberi waktu; CS menentukan perangkat yang sedang diajak bicara.",
+    "explain": [
+      "SPI biasanya memakai SCK untuk clock, MOSI untuk data controller ke peripheral, MISO untuk arah balik, dan CS untuk memilih perangkat. Nama COPI/CIPO juga dipakai pada beberapa dokumentasi.",
+      "Beberapa peripheral dapat berbagi clock dan jalur data, tetapi umumnya memiliki CS masing-masing. Perangkat yang tidak dipilih perlu melepaskan jalur MISO sesuai desain. Modul dengan level shifter buruk dapat mengganggu bus bersama.",
+      "Clock polarity dan phase menentukan SPI mode 0–3. Kecepatan maksimum, urutan bit, dan kondisi CS ditentukan datasheet; tidak dapat ditebak hanya dari nama SPI.",
+      "Contoh loopback ESP32 klasik memakai SCK18, MISO19, MOSI23, dan CS5 tanpa peripheral. Jumper MOSI23 ke MISO19 untuk membaca kembali byte yang dikirim. CS5 hanya diset HIGH; ini bukan diagram pemasangan kartu SD."
+    ],
+    "example": "Kenali SCK, MOSI, MISO, serta CS sebelum memakai kartu SD atau modul cepat.",
+    "practice": [
+      "Pastikan GPIO18/19/23/5 tersedia pada board klasik Anda.",
+      "Dengan daya terputus, pasang jumper MOSI23 ke MISO19.",
+      "Upload contoh dan cocokkan hasil heksadesimal 5A.",
+      "Baca datasheet satu modul dan catat mode, clock maksimum, serta level sinyalnya."
+    ],
+    "warning": "Modul yang diberi catu 5 V belum tentu menerima sinyal 3,3 V atau menghasilkan keluaran aman bagi ESP32.",
+    "check": "Apakah dua modul SPI biasanya boleh memakai pin CS yang sama?",
+    "answer": "Tidak untuk pengendalian independen. Keduanya dapat aktif bersamaan dan bertabrakan pada jalur balasan.",
+    "nodes": [
+      "Pilih CS",
+      "Atur clock dan mode",
+      "Kirim MOSI",
+      "Terima MISO",
+      "Akhiri transaksi"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · SPI",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/spi.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 klasik · SPI loopback",
+          "language": "cpp",
+          "code": "#include <SPI.h>\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(5, OUTPUT); digitalWrite(5, HIGH);\n  SPI.begin(18, 19, 23, 5);\n  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));\n  byte balasan = SPI.transfer(0x5A);\n  SPI.endTransaction();\n  Serial.println(balasan, HEX);\n}\nvoid loop() {}"
+        }
+      ],
+      "result": "Serial menampilkan 5A dengan jumper MOSI ke MISO; ini uji loopback, bukan komunikasi sensor.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "penyimpanan-lokal",
+    "title": "Preferences, EEPROM, dan kartu SD",
+    "summary": "Pilih tempat menyimpan pengaturan atau riwayat berdasarkan ukuran dan frekuensi tulis.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "RAM seperti papan tulis yang hilang saat listrik padam. Preferences seperti laci catatan kecil; kartu SD seperti lemari arsip yang lebih besar.",
+    "explain": [
+      "RAM cepat tetapi tidak mempertahankan data setelah kehilangan daya. EEPROM UNO menyediakan penyimpanan kecil; pada ESP32, Preferences memakai NVS flash untuk pasangan key-value seperti ambang suhu atau nama perangkat.",
+      "Jangan menulis pengaturan setiap loop. Media memiliki keterbatasan siklus tulis, dan pengaturan biasanya cukup disimpan ketika berubah. Gunakan nilai default bila kunci belum ada dan periksa keberhasilan membuka penyimpanan.",
+      "Kartu SD cocok untuk catatan berkas lebih besar. Gunakan breakout yang dokumentasinya cocok dengan logika ESP32 3,3 V, pin SPI yang tepat, dan berkas CSV dengan satu baris per sampel. Tutup atau flush berkas secara terencana; padam saat menulis dapat merusak data.",
+      "Contoh Preferences berdiri sendiri pada ESP32. Contoh SD terpisah juga untuk ESP32 klasik dengan CS5, SCK18, MISO19, MOSI23. Jangan langsung menggabungkan kedua sketch. EEPROM UNO dapat dipelajari lewat contoh EEPROM → eeprom_update bawaan IDE; ia bukan API yang sama dengan Preferences."
+    ],
+    "example": "Pilih tempat menyimpan pengaturan atau riwayat berdasarkan ukuran dan frekuensi tulis.",
+    "practice": [
+      "Upload Preferences, reset dua kali, dan amati nilai tetap 30.",
+      "Ubah nilai tersimpan hanya saat pengaturan pengguna berubah pada rancangan Anda.",
+      "Bila memiliki modul SD 3,3 V yang sesuai, pasang sesuai tabel dan jalankan sketch SD terpisah.",
+      "Matikan daya dengan benar dan baca log.csv pada komputer; jangan mencabut kartu saat menulis."
+    ],
+    "warning": "Penyimpanan kredensial dalam flash biasa bukan perlindungan mutlak terhadap akses fisik. Jangan mencatat password pada log CSV.",
+    "check": "Mengapa Preferences kurang cocok untuk menyimpan satu sampel setiap milidetik?",
+    "answer": "Ia ditujukan untuk nilai kecil seperti pengaturan, bukan arus data frekuensi tinggi. Penulisan berlebihan menambah beban dan keausan media.",
+    "nodes": [
+      "Pilih jenis data",
+      "Pilih media",
+      "Buka penyimpanan",
+      "Tulis seperlunya",
+      "Baca setelah reset"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · Preferences",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/preferences.html"
+      },
+      {
+        "title": "Arduino · EEPROM",
+        "url": "https://docs.arduino.cc/learn/built-in-libraries/eeprom/"
+      },
+      {
+        "title": "Espressif · contoh SD",
+        "url": "https://github.com/espressif/arduino-esp32/tree/master/libraries/SD/examples"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "SD SCK/MISO/MOSI/CS",
+          "ESP32 klasik 18/19/23/5; verifikasi board"
+        ],
+        [
+          "Catu dan sinyal SD",
+          "Ikuti datasheet breakout; gunakan yang kompatibel 3,3 V dan GND bersama"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 · simpan pengaturan",
+          "language": "cpp",
+          "code": "#include <Preferences.h>\nPreferences simpan;\nvoid setup() {\n  Serial.begin(115200);\n  if (!simpan.begin(\"iot-lab\", false)) { Serial.println(\"NVS gagal\"); return; }\n  if (!simpan.isKey(\"ambang\")) simpan.putFloat(\"ambang\", 30.0f);\n  Serial.println(simpan.getFloat(\"ambang\", 30.0f));\n  simpan.end();\n}\nvoid loop() {}"
+        },
+        {
+          "label": "Sketch ESP32 terpisah · satu baris CSV di SD",
+          "language": "cpp",
+          "code": "#include <SPI.h>\n#include <SD.h>\nvoid setup() {\n  Serial.begin(115200);\n  SPI.begin(18, 19, 23, 5);\n  if (!SD.begin(5)) { Serial.println(\"SD gagal\"); return; }\n  File f = SD.open(\"/log.csv\", FILE_APPEND);\n  if (!f) { Serial.println(\"Berkas gagal\"); return; }\n  f.println(\"esp32-01,29.4,C,simulasi\");\n  f.close(); Serial.println(\"Satu baris ditulis\");\n}\nvoid loop() {}"
+        }
+      ],
+      "result": "Preferences mempertahankan ambang setelah reset; sketch SD menambah tepat satu baris simulasi setiap board melakukan boot.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "esp32-deep-sleep",
+    "title": "Deep sleep dan penghematan baterai",
+    "summary": "Ukur siklus bangun–baca–kirim–tidur dan pahami batas penghematan pada development board.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Daripada menjaga toko buka sepanjang malam hanya untuk mencatat suhu sesekali, perangkat bangun sebentar, mencatat, lalu tidur kembali.",
+    "explain": [
+      "Deep sleep mematikan banyak bagian chip. Ketika bangun, program pada umumnya mulai kembali dari setup; jangan menganggap RAM dan koneksi MQTT masih tersedia. Data tertentu dapat ditaruh di RTC memory sesuai kemampuan chip.",
+      "Hitung arus rata-rata dari durasi aktif dan tidur, termasuk waktu menyambung Wi-Fi. Mengirim terlalu sering dapat menghabiskan sebagian besar siklus untuk reconnect sehingga penghematan kecil.",
+      "Development board memiliki regulator, LED, dan USB-to-serial yang juga memakai energi. Angka deep-sleep chip pada datasheet tidak otomatis menjadi konsumsi seluruh board.",
+      "Contoh ESP32 memakai timer bangun sepuluh detik dan hanya mencetak jumlah boot. Tidak ada pengiriman sensor. Sebelum tidur dalam proyek nyata, selesaikan penulisan penting dan rancang kapan jaringan diputus. Perangkat yang tidur tidak siap menerima command kapan saja."
+    ],
+    "example": "Ukur siklus bangun–baca–kirim–tidur dan pahami batas penghematan pada development board.",
+    "practice": [
+      "Upload contoh dengan USB dan amati pesan boot setelah bangun.",
+      "Periksa apakah monitor perlu tersambung ulang pada board USB native.",
+      "Hitung siklus aktif 2 detik dan tidur 58 detik dengan arus contoh yang Anda pilih.",
+      "Bandingkan konsumsi seluruh board, bukan hanya angka spesifikasi chip."
+    ],
+    "warning": "Jangan menghubungkan baterai mentah sembarangan. Gunakan sumber daya jadi yang sesuai dan metode ukur arus yang benar.",
+    "check": "Mengapa deep sleep tidak cocok untuk aktuator yang harus menerima perintah mendadak setiap saat?",
+    "answer": "Koneksi jaringan tidak dipertahankan seperti perangkat aktif; perintah harus menunggu jadwal bangun atau arsitektur lain.",
+    "nodes": [
+      "Bangun dari timer",
+      "Mulai setup",
+      "Kerjakan tugas",
+      "Selesaikan data",
+      "Tidur kembali"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · sleep modes",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/sleep_modes.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 · bangun tiap sepuluh detik",
+          "language": "cpp",
+          "code": "#include <esp_sleep.h>\nRTC_DATA_ATTR unsigned int bootKe = 0;\nvoid setup() {\n  Serial.begin(115200); delay(200);\n  Serial.print(\"Boot ke \"); Serial.println(++bootKe);\n  Serial.flush();\n  esp_sleep_enable_timer_wakeup(10ULL * 1000000ULL);\n  esp_deep_sleep_start();\n}\nvoid loop() {}"
+        }
+      ],
+      "result": "Boot counter bertambah setelah timer membangunkan board; memutus daya penuh dapat menghapus RTC memory.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "watchdog-pemulihan",
+    "title": "Watchdog dan pemulihan saat program macet",
+    "summary": "Bedakan deteksi macet, restart, dan perbaikan penyebab gangguan.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Watchdog seperti petugas yang menunggu tanda tugas penting selesai. Jika tanda berhenti terlalu lama, ia menganggap ada gangguan; terus memberi tanda tanpa mengecek tugas membuat pengawasan sia-sia.",
+    "explain": [
+      "Watchdog memantau keterlambatan atau kemacetan pada bagian sistem. ESP32 memiliki mekanisme berbeda untuk interrupt dan task; konfigurasi serta API bergantung versi core dan ESP-IDF yang dipakai.",
+      "Jangan menonaktifkan watchdog hanya karena program restart. Periksa loop sibuk, critical section terlalu lama, callback menunggu jaringan, dan fungsi tanpa timeout. Catat pesan reset serta versi firmware untuk diagnosis.",
+      "Tanda sehat harus diberikan setelah pekerjaan penting berhasil atau setidaknya mencapai titik yang terdefinisi, bukan oleh timer yang tetap berjalan ketika tugas utama macet. Bedakan “tugas selesai” dari “data valid”; data invalid dapat ditangani tanpa membuat sistem terjebak.",
+      "Ketika restart terjadi, output harus kembali ke keadaan aman dan data penting dibaca dengan validasi. Batasi usaha reconnect serta pola restart berulang agar gangguan tidak menyebabkan aktuator menyala-mati tanpa kendali.",
+      "Latihan berikut adalah simulasi Python untuk memahami tenggat, bukan pengganti watchdog hardware ESP32. Untuk mengatur watchdog board, gunakan contoh dan signature API pada versi ESP-IDF yang dipakai; jangan menyalin fungsi dari core versi lain."
+    ],
+    "example": "Bedakan deteksi macet, restart, dan perbaikan penyebab gangguan.",
+    "practice": [
+      "Jalankan simulasi dan lihat kapan kondisi macet terdeteksi.",
+      "Tambahkan batas waktu tiap operasi jaringan pada rancangan proyek.",
+      "Catat alasan reset dari Serial log saat pengujian nyata.",
+      "Buat tabel keadaan output setelah boot, reset, serta kehilangan sensor."
+    ],
+    "warning": "Menghapus watchdog atau memberi tanda sehat dari tugas yang tidak terkait dapat menyembunyikan kegagalan.",
+    "check": "Apakah restart terus-menerus membuktikan sistem sudah andal?",
+    "answer": "Tidak. Restart hanya salah satu pemulihan. Penyebab kegagalan, kondisi output, dan kehilangan data tetap perlu diselesaikan.",
+    "nodes": [
+      "Tugas berjalan",
+      "Selesai pekerjaan penting",
+      "Perbarui tanda sehat",
+      "Periksa tenggat",
+      "Pulihkan dan catat"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · watchdog timers",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/wdts.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · simulasi tenggat tugas",
+          "language": "python",
+          "code": "batas_detik = 5\nsehat_terakhir = 0\nfor detik in range(10):\n    tugas_selesai = detik in (0, 2)\n    if tugas_selesai:\n        sehat_terakhir = detik\n    if detik - sehat_terakhir > batas_detik:\n        print(\"MACET pada detik\", detik, \"-> perlu pemulihan terencana\")\n        break"
+        }
+      ],
+      "result": "Simulasi mendeteksi keterlambatan pada detik 8; tidak melakukan restart komputer atau perangkat.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "ota-pembaruan-firmware",
+    "title": "OTA: memperbarui program melalui jaringan",
+    "summary": "Pahami unggahan pertama, autentikasi, partisi, dan pemulihan ketika pembaruan gagal.",
+    "stage": 0,
+    "minutes": 18,
+    "analogy": "OTA seperti memperbarui aplikasi tanpa menyerahkan ponsel ke teknisi, tetapi perangkat tetap perlu memastikan paketnya benar dan mempunyai jalan pulang bila pembaruan gagal.",
+    "explain": [
+      "OTA mengirim firmware baru melalui jaringan. Unggahan awal biasanya tetap melalui USB untuk memasang program yang memiliki kemampuan menerima pembaruan. Tidak semua pilihan partisi ESP32 menyediakan ruang OTA.",
+      "Catat board, versi core, layout partisi, dan ukuran firmware. Pilih contoh resmi OTAWebUpdater sesuai versi Arduino ESP32 di IDE; isi konfigurasi Wi-Fi dan periksa mekanisme autentikasi yang disediakan contoh sebelum menjalankannya.",
+      "Latihan dilakukan pada LAN pribadi dengan akun khusus dan board tanpa aktuator. Kompilasi firmware versi baru untuk board dan skema partisi yang sama, upload lewat halaman OTA lokal, lalu lihat penanda versi pada Serial. Jangan membuka halaman pembaruan ke internet.",
+      "Autentikasi login tidak otomatis mengenkripsi transfer atau memverifikasi asal firmware. Untuk penerapan nyata, gunakan distribusi HTTPS dengan validasi sertifikat, otorisasi, pemeriksaan firmware, dan strategi rollback yang didukung platform.",
+      "Uji pemulihan secara terencana. Pembaruan perlu menangani kehilangan daya dan firmware yang berhasil dipasang tetapi gagal berjalan. Simpan kabel USB, firmware stabil, dan petunjuk pemulihan. Hindari memperbarui ketika motor atau proses penting sedang aktif."
+    ],
+    "example": "Pahami unggahan pertama, autentikasi, partisi, dan pemulihan ketika pembaruan gagal.",
+    "practice": [
+      "Buka File → Examples dan cari OTAWebUpdater pada paket board ESP32 terpasang; baca kode autentikasinya.",
+      "Pilih board serta partisi yang mendukung OTA, isi Wi-Fi, lalu upload awal lewat USB.",
+      "Gunakan URL lokal yang tercetak pada Serial dan kredensial contoh yang sudah Anda ubah.",
+      "Kompilasi versi dengan penanda berbeda, unggah, lalu periksa versi yang berjalan dan siapkan pemulihan USB."
+    ],
+    "warning": "Jangan meneruskan port OTA ke internet. Password contoh wajib diganti; tutorial resmi yang berfungsi untuk demo belum otomatis siap untuk perangkat publik.",
+    "check": "Mengapa firmware harus cocok dengan partisi dan board?",
+    "answer": "Ukuran dan tata letak memori harus tersedia, serta firmware memakai target hardware yang benar. Koneksi sukses saja tidak menjamin firmware kompatibel.",
+    "nodes": [
+      "Upload awal USB",
+      "Autentikasi pembaruan",
+      "Periksa firmware",
+      "Pasang dan boot",
+      "Verifikasi atau pulihkan"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · OTA Web Update",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/ota_web_update.html"
+      },
+      {
+        "title": "Espressif · OTA dan rollback",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/ota.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik."
+  },
+  {
+    "slug": "reconnect-antrean-offline",
+    "title": "Reconnect dan antrean data saat offline",
+    "summary": "Simpan sebelum mengirim, batasi antrean, lalu kirim ulang dengan identitas pesan yang tetap.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Seperti kurir yang menyimpan paket di gudang saat jalan terputus. Setiap paket perlu nomor tetap agar tidak dianggap paket baru ketika pengiriman diulang.",
+    "explain": [
+      "Reconnect memperbaiki koneksi; ia tidak otomatis mengembalikan data yang belum sempat disimpan. Tentukan data mana yang boleh dilewati dan mana yang wajib dicatat. Pemantauan nilai terbaru dan pencatatan riwayat memiliki kebutuhan berbeda.",
+      "Contoh memakai SQLite pada komputer gateway, bukan memori flash ESP32. Mode enqueue menyimpan sampel simulasi ke disk; mode sync mencoba MQTT QoS 1. Pasang paho-mqtt versi 2 seperti materi bridge. Jalankan satu proses pada satu waktu di folder latihan.",
+      "Nomor messageId dibuat sekali saat enqueue dan dipakai kembali pada retry. measuredAt menunjukkan waktu pencatatan gateway; jam komputer harus benar. Data yang dikirim terlambat tidak boleh ditampilkan sebagai pengukuran baru hanya karena receivedAt baru.",
+      "Koneksi percobaan ini memakai broker LAN dan kredensial khusus latihan. Sync menghapus baris setelah konfirmasi broker, bukan konfirmasi Firebase. Untuk jaminan sampai database, tambahkan topic ACK aplikasi setelah commit database dan tahan baris sampai ACK tersebut.",
+      "Antrean dibatasi 1000 baris dan menolak data baru bila penuh. Strategi lain dapat membuang data terlama atau merangkum, tetapi pilih secara sadar dan tampilkan alarm. Jangan menguras ruang penyimpanan tanpa batas.",
+      "Pada ESP32, konsep serupa dapat diterapkan memakai berkas atau media eksternal dengan perhatian pada keausan dan pemulihan mati daya. Jangan menulis SQLite desktop ini langsung sebagai sketch Arduino."
+    ],
+    "example": "Simpan sebelum mengirim, batasi antrean, lalu kirim ulang dengan identitas pesan yang tetap.",
+    "practice": [
+      "Simpan kode sebagai offline.py, pasang paho-mqtt pada .venv latihan.",
+      "Jalankan python offline.py enqueue tiga kali saat broker mati.",
+      "Pastikan outbox.sqlite tetap ada setelah program ditutup; jangan hapus file antrean.",
+      "Isi MQTT_HOST dan MQTT_PASSWORD akun esp32, nyalakan broker, buka subscriber, lalu jalankan python offline.py sync.",
+      "Putuskan koneksi saat sync dan periksa bahwa baris yang belum dikonfirmasi tetap tersedia."
+    ],
+    "warning": "Latihan mengonfirmasi broker, bukan database. QoS 1 masih dapat menghasilkan pengiriman ganda; pelajari idempotensi pada materi berikutnya.",
+    "check": "Mengapa membuat messageId baru saat retry menyebabkan masalah?",
+    "answer": "Penerima akan melihatnya sebagai kejadian baru sehingga sulit membedakan retry dari pengukuran baru.",
+    "nodes": [
+      "Buat ID sekali",
+      "Simpan ke disk",
+      "Coba sambungkan",
+      "Kirim dan tunggu ACK",
+      "Hapus sesuai jaminan"
+    ],
+    "sources": [
+      {
+        "title": "Paho · publish dan konfirmasi",
+        "url": "https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html"
+      },
+      {
+        "title": "Python · SQLite",
+        "url": "https://docs.python.org/3/library/sqlite3.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "offline.py · antrean gateway LAN",
+          "language": "python",
+          "code": "import argparse\nimport json\nimport os\nimport sqlite3\nimport time\nimport uuid\nimport paho.mqtt.client as mqtt\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"mode\", choices=[\"enqueue\", \"sync\"])\nargs = parser.parse_args()\nconnection = sqlite3.connect(\"outbox.sqlite\")\nconnection.execute(\"CREATE TABLE IF NOT EXISTS outbox (id TEXT PRIMARY KEY, payload TEXT NOT NULL)\")\nconnection.commit()\nif args.mode == \"enqueue\":\n    if connection.execute(\"SELECT COUNT(*) FROM outbox\").fetchone()[0] >= 1000:\n        raise SystemExit(\"Antrean penuh: data baru ditolak; periksa koneksi.\")\n    event_id = uuid.uuid4().hex\n    payload = {\"messageId\": event_id, \"deviceId\": \"esp32-01\", \"temperature\": 29.4,\n               \"unit\": \"C\", \"simulated\": True, \"measuredAt\": int(time.time() * 1000)}\n    connection.execute(\"INSERT INTO outbox VALUES (?, ?)\", (event_id, json.dumps(payload)))\n    connection.commit()\n    print(\"Tersimpan lokal:\", event_id)\nelse:\n    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=\"outbox-lab-01\")\n    client.username_pw_set(\"esp32\", os.environ[\"MQTT_PASSWORD\"])\n    client.connect(os.environ.get(\"MQTT_HOST\", \"192.168.1.10\"), 1883, 30)\n    client.loop_start()\n    try:\n        deadline = time.monotonic() + 5\n        while not client.is_connected() and time.monotonic() < deadline:\n            time.sleep(0.05)\n        if not client.is_connected():\n            raise RuntimeError(\"Login broker belum berhasil\")\n        for event_id, payload in connection.execute(\"SELECT id, payload FROM outbox ORDER BY rowid\").fetchall():\n            sent = client.publish(\"lab/esp32-01/telemetry\", payload, qos=1, retain=False)\n            sent.wait_for_publish(timeout=5)\n            if not sent.is_published():\n                raise RuntimeError(\"Belum menerima konfirmasi broker\")\n            connection.execute(\"DELETE FROM outbox WHERE id = ?\", (event_id,))\n            connection.commit()\n            print(\"Dikonfirmasi broker:\", event_id)\n    finally:\n        client.disconnect()\n        client.loop_stop()\nconnection.close()"
+        },
+        {
+          "label": "Terminal · uji simpan dan kirim",
+          "language": "bash",
+          "code": "python offline.py enqueue\npython offline.py enqueue\nexport MQTT_HOST='192.168.1.10'\nread -r -s -p 'Password MQTT akun esp32: ' MQTT_PASSWORD\nprintf '\n'\nexport MQTT_PASSWORD\npython offline.py sync"
+        }
+      ],
+      "result": "Dua sampel memiliki ID berbeda. Saat jaringan berhasil, subscriber menerima JSON dan baris yang mendapat ACK broker dihapus. Error sync tidak menghapus baris yang belum dikonfirmasi.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "mqtt-idempotensi",
+    "title": "Pesan ganda dan idempotensi",
+    "summary": "Buat hasil akhir tetap benar meskipun sebuah pesan diterima lebih dari sekali.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Seperti nomor resi paket: memindai resi yang sama dua kali tidak boleh menambah dua paket ke inventaris.",
+    "explain": [
+      "QoS 1 dapat mengantar pesan lebih dari sekali. Restart setelah database berhasil tetapi sebelum ACK aplikasi terkirim juga dapat membuat pengirim mengulang. Mengandalkan koneksi stabil saja tidak cukup.",
+      "Gunakan ID aplikasi unik dan tetap per kejadian. Untuk sensor offline, bootId + sequence atau UUID gateway dapat dipakai sesuai rancangan. Counter yang kembali nol setelah restart tanpa identitas boot dapat bertabrakan.",
+      "Untuk riwayat Firebase, tulis pada history/messageId, bukan membuat push ID baru setiap retry. Untuk penghitung atau aksi fisik, gunakan transaksi, pencatatan status, serta pemeriksaan ID yang sesuai; menulis key tetap saja belum menyelesaikan semua efek samping.",
+      "Simpan deduplikasi pada media yang bertahan bila dibutuhkan setelah restart. Contoh SQLite memakai PRIMARY KEY dan INSERT OR IGNORE. Tabel contoh hanya mencatat kejadian; pada sistem nyata pengolahan dan penandaan harus berada dalam transaksi yang dirancang dengan benar."
+    ],
+    "example": "Buat hasil akhir tetap benar meskipun sebuah pesan diterima lebih dari sekali.",
+    "practice": [
+      "Jalankan contoh yang memasukkan ID sama dua kali.",
+      "Periksa jumlah baris tetap satu.",
+      "Ubah ID kedua menjadi berbeda dan bandingkan.",
+      "Tulis urutan terima → validasi → commit → ACK untuk bridge database Anda."
+    ],
+    "warning": "Jangan menandai pesan selesai sebelum pekerjaan penting benar-benar berhasil. Deduplikasi yang terlalu awal justru dapat membuang pekerjaan yang gagal.",
+    "check": "Apakah MQTT QoS 2 otomatis membuat pembayaran atau gerakan motor tepat satu kali?",
+    "answer": "Tidak. Jaminan protokol tidak otomatis mencakup transaksi database dan efek fisik; aplikasi tetap perlu merancang idempotensi serta konfirmasi.",
+    "nodes": [
+      "Terima ID",
+      "Periksa duplikat",
+      "Commit hasil",
+      "Catat selesai",
+      "Kirim ACK aplikasi"
+    ],
+    "sources": [
+      {
+        "title": "HiveMQ · QoS",
+        "url": "https://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels/"
+      },
+      {
+        "title": "Python · SQLite transactions",
+        "url": "https://docs.python.org/3/library/sqlite3.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · satu ID menjadi satu baris",
+          "language": "python",
+          "code": "import sqlite3\nconnection = sqlite3.connect(\":memory:\")\nconnection.execute(\"CREATE TABLE events (id TEXT PRIMARY KEY, temperature REAL NOT NULL)\")\nwith connection:\n    for event_id in [\"event-001\", \"event-001\"]:\n        connection.execute(\"INSERT OR IGNORE INTO events VALUES (?, ?)\", (event_id, 29.4))\nprint(connection.execute(\"SELECT COUNT(*) FROM events\").fetchone()[0])  # 1\nconnection.close()"
+        }
+      ],
+      "result": "Jumlah baris satu meskipun ID dimasukkan dua kali. Contoh in-memory hanya untuk memahami deduplikasi, bukan penyimpanan permanen.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "mqtt-tls-sertifikat",
+    "title": "MQTT dengan TLS dan sertifikat",
+    "summary": "Amankan transport, periksa identitas broker, dan bedakan CA dari password.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Password seperti kartu anggota; TLS seperti jalur komunikasi tertutup sekaligus pemeriksaan bahwa petugas di ujung benar-benar berasal dari kantor yang dituju.",
+    "explain": [
+      "TLS mengenkripsi komunikasi dan memverifikasi sertifikat broker. Username/password tetap menentukan siapa client dan apa hak topic-nya. Keduanya menyelesaikan masalah berbeda.",
+      "Gunakan hostname, port TLS, akun, dan CA dari broker yang Anda kelola atau penyedia yang dipilih. Port 8883 lazim tetapi bukan jaminan TLS aktif. Sertifikat harus cocok dengan hostname dan rantai kepercayaan; memakai IP mentah sering gagal bila tidak tercantum pada sertifikat.",
+      "Contoh Paho Python memakai CA sistem atau file CA khusus dari sumber tepercaya. Password dimasukkan melalui environment. Tidak ada broker atau akun publik yang dibuat otomatis oleh tutorial ini.",
+      "Pada ESP32, gunakan WiFiClientSecure/NetworkClientSecure yang sesuai versi core, pasang root CA dengan setCACert, sinkronkan jam, lalu berikan client aman itu ke PubSubClient. Jangan memanggil setInsecure untuk menutupi kegagalan sertifikat.",
+      "Uji password salah dan CA salah secara terpisah. Password salah ditolak autentikasi; CA atau hostname salah gagal pada lapisan TLS sebelum pesan aplikasi dikirim. Catat masa berlaku sertifikat serta rencana pembaruannya."
+    ],
+    "example": "Amankan transport, periksa identitas broker, dan bedakan CA dari password.",
+    "practice": [
+      "Siapkan broker TLS milik Anda dan baca parameter koneksi resminya.",
+      "Isi MQTT_TLS_HOST, MQTT_USER, dan MQTT_PASSWORD; bila perlu MQTT_CA_FILE menuju file CA PEM yang benar.",
+      "Jalankan subscriber TLS pada .venv dengan Paho 2.",
+      "Kirim telemetry memakai client TLS lain yang berizin, lalu uji CA salah dan hostname tidak cocok."
+    ],
+    "warning": "Contoh ini tidak memakai broker LAN 1883 dari latihan awal. Jangan mematikan verifikasi hostname atau membagikan private key.",
+    "check": "Apakah mengganti port 1883 menjadi 8883 pada WiFiClient biasa sudah cukup?",
+    "answer": "Tidak. Client perlu menjalankan TLS dan memverifikasi sertifikat serta hostname; mengubah nomor port tidak mengubah protokol transport.",
+    "nodes": [
+      "DNS hostname",
+      "Verifikasi sertifikat",
+      "Bangun TLS",
+      "Login MQTT",
+      "Terapkan ACL"
+    ],
+    "sources": [
+      {
+        "title": "Paho · tls_set",
+        "url": "https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html"
+      },
+      {
+        "title": "Espressif · client aman",
+        "url": "https://github.com/espressif/arduino-esp32/tree/master/libraries/NetworkClientSecure"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · subscriber MQTT TLS",
+          "language": "python",
+          "code": "import os\nimport paho.mqtt.client as mqtt\nclient = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=\"tls-reader-lab\")\nclient.username_pw_set(os.environ[\"MQTT_USER\"], os.environ[\"MQTT_PASSWORD\"])\nclient.tls_set(ca_certs=os.environ.get(\"MQTT_CA_FILE\"))\ndef connected(client, userdata, flags, reason_code, properties):\n    if reason_code.is_failure:\n        print(\"Login ditolak:\", reason_code)\n    else:\n        client.subscribe(\"lab/esp32-01/telemetry\", qos=1)\ndef message(client, userdata, msg):\n    print(msg.topic, msg.payload.decode(\"utf-8\", errors=\"replace\"))\nclient.on_connect = connected\nclient.on_message = message\nclient.connect(os.environ[\"MQTT_TLS_HOST\"], int(os.environ.get(\"MQTT_TLS_PORT\", \"8883\")), 30)\ntry:\n    client.loop_forever()\nexcept KeyboardInterrupt:\n    client.disconnect()"
+        }
+      ],
+      "result": "Client hanya berlangganan setelah TLS serta login berhasil. Sertifikat atau hostname salah harus menyebabkan koneksi gagal.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "rs485-modbus",
+    "title": "RS485 dan Modbus untuk pengantar IoT industri",
+    "summary": "Bedakan lapisan listrik RS485, aturan pesan Modbus, dan alamat register perangkat.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "RS485 seperti bentuk jalan yang dapat menempuh jarak lebih jauh; Modbus seperti aturan bahasa yang dipakai kendaraan di jalan itu. Memiliki jalan sama tidak menjamin bahasa pesannya sama.",
+    "explain": [
+      "RS485 adalah antarmuka listrik diferensial. Modbus RTU adalah salah satu protokol yang dapat berjalan di atasnya. Modbus TCP memakai jaringan IP dan framing berbeda; mengganti kabel saja tidak mengubah RTU menjadi TCP.",
+      "Sistem RTU biasanya memakai satu peminta aktif dan beberapa perangkat beralamat unik. Baud, parity, stop bit, alamat perangkat, dan fungsi yang didukung harus cocok. Jangan menambahkan dua peminta tanpa rancangan bus yang sesuai.",
+      "Nama A/B dapat tidak konsisten antarprodusen; cocokkan D+/D− dan panduan kedua perangkat. Gunakan transceiver yang cocok logika 3,3 V, pertimbangkan isolasi, referensi potensial, terminasi di kedua ujung fisik bus bila diperlukan, dan bias sesuai desain. GPIO UART tidak langsung disambungkan ke A/B.",
+      "Register memiliki jenis dan skala. Function 03 umumnya membaca holding registers, 04 input registers. Label 40001 pada manual sering dipetakan ke offset 0 pada library, tetapi periksa konvensi vendor. Angka 2301 dapat berarti 230,1 V bila skala 0,1.",
+      "Mulai dengan simulator atau perangkat DC latihan yang terisolasi dan baca saja. Meter yang tersambung listrik rumah tidak dibongkar untuk latihan ini. Contoh Python hanya mendekode dua byte simulasi setelah pemeriksaan frame dilakukan; ia bukan driver Modbus lengkap dan belum memeriksa CRC."
+    ],
+    "example": "Bedakan lapisan listrik RS485, aturan pesan Modbus, dan alamat register perangkat.",
+    "practice": [
+      "Unduh register map satu perangkat latihan atau simulator.",
+      "Catat alamat, baud, parity, fungsi baca, offset, jumlah register, skala, dan urutan byte/word.",
+      "Gunakan client Modbus simulator untuk membaca satu register; jangan memakai fungsi write dulu.",
+      "Dekode data simulasi dan jelaskan perbedaan nilai mentah, skala, serta satuan."
+    ],
+    "warning": "Jangan menghubungkan USB laptop ke perangkat industri berpotensial berbeda tanpa penilaian isolasi dan panduan perangkat. Latihan ini memakai simulasi atau perangkat DC terisolasi.",
+    "check": "Mengapa jawaban register 2301 tidak boleh langsung ditampilkan 2301 volt?",
+    "answer": "Nilainya mungkin memakai faktor skala atau format gabungan beberapa register. Interpretasi wajib mengikuti register map vendor.",
+    "nodes": [
+      "Baca register map",
+      "Cocokkan serial",
+      "Kirim permintaan baca",
+      "Validasi frame",
+      "Terapkan skala"
+    ],
+    "sources": [
+      {
+        "title": "Modbus Organization · spesifikasi",
+        "url": "https://www.modbus.org/modbus-specifications"
+      },
+      {
+        "title": "Modbus · serial line guide",
+        "url": "https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · dekode register simulasi",
+          "language": "python",
+          "code": "# Dua byte data register saja, bukan seluruh frame RTU.\ndata = bytes.fromhex(\"08 FD\")\nraw = int.from_bytes(data, byteorder=\"big\", signed=False)\nscale = 0.1  # Contoh vendor, bukan aturan universal.\nprint(raw, \"->\", raw * scale, \"V\")  # 2301 -> 230.1 V"
+        }
+      ],
+      "result": "Nilai mentah 2301 ditampilkan sekitar 230.1 V sesuai skala simulasi; tidak terhubung ke meter listrik nyata.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "firebase-riwayat-grafik",
+    "title": "Riwayat Firebase dan grafik pengukuran",
+    "summary": "Pisahkan latest dan history, batasi pembacaan, serta tampilkan tren dengan satuan dan waktu.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "latest seperti angka terakhir pada papan pengumuman; history seperti buku harian. Mengganti pengumuman tidak otomatis menambah halaman buku harian.",
+    "explain": [
+      "Buat data per perangkat: latest untuk ringkasan, history/messageId untuk kejadian. Simpan deviceId, temperature, unit, simulated, measuredAt, dan receivedAt. Gunakan messageId tetap dari materi antrean agar retry tidak menambah dua kejadian.",
+      "Pada worker Python bridge, simpan kejadian dengan transaksi pada history/messageId, lalu perbarui latest hanya bila measuredAt lebih baru. Dua operasi ini tidak atomik bersama, tetapi retry dengan ID sama dapat memperbaiki langkah yang tertunda tanpa menambah kejadian.",
+      "Validasi messageId sebagai 32 digit heksadesimal, identitas perangkat, suhu, unit, penanda simulasi, dan timestamp. measuredAt berasal dari jam pengukuran/gateway yang benar. receivedAt diselesaikan oleh server Firebase saat kejadian pertama disimpan, bukan diganti setiap retry.",
+      "Query 50 sampel terakhir dengan orderByChild(measuredAt) dan limitToLast(50). Tambahkan .indexOn measuredAt pada history. Limit query mengurangi data yang dibaca, tetapi tidak menghapus riwayat lama yang tersimpan.",
+      "Grafik membutuhkan sumbu waktu, sumbu nilai, satuan, serta label simulasi. Jangan menyambung celah offline seolah-olah ada pengukuran. Bedakan perubahan waktu nyata dari data backlog yang baru masuk.",
+      "Contoh HTML memakai SVG sederhana dari data simulasi untuk memahami pemetaan koordinat. Setelah query Firebase berhasil, ganti array contoh dengan hasil query yang sudah diperiksa dan diurutkan. Rancang retensi terpisah, misalnya hapus data lama melalui proses server yang berizin setelah ekspor atau agregasi."
+    ],
+    "example": "Pisahkan latest dan history, batasi pembacaan, serta tampilkan tren dengan satuan dan waktu.",
+    "practice": [
+      "Pelajari idempotensi dan pastikan setiap kejadian mempunyai messageId serta measuredAt.",
+      "Pada project Firebase latihan terpisah, ganti GANTI_UID_PEMBACA pada rules lengkap di bawah. Rules memberi writer mqtt-bridge hak baca/tulis terbatas untuk transaksi dan pembaca hanya hak baca. Uji di Playground/Emulator, termasuk akun salah dan data invalid.",
+      "Tambahkan fungsi save_event ke bridge dan panggil dari worker dengan event yang menyertakan messageId serta measuredAt. Validator bridge awal hanya mengembalikan empat field; integrasi ini harus mempertahankan dua field baru melalui validasi seperti pada fungsi di bawah.",
+      "Kirim ulang ID sama dan pastikan jumlah history tidak bertambah.",
+      "Baca 50 sampel terakhir, urutkan menurut measuredAt, lalu tampilkan grafik berlabel."
+    ],
+    "warning": "Fungsi di bawah dipanggil dari worker bridge yang sudah terhubung Firebase; bukan program pengganti seluruh bridge. Gunakan rules latihan history yang sesuai dan jangan membuka akses publik.",
+    "check": "Apakah limitToLast(50) berarti database hanya menyimpan 50 data?",
+    "answer": "Tidak. Itu membatasi hasil query. Penghapusan atau retensi harus dirancang melalui operasi terpisah yang berizin.",
+    "nodes": [
+      "Validasi ID dan waktu",
+      "Tulis latest + history",
+      "Query terbatas",
+      "Urutkan pengukuran",
+      "Grafik dan retensi"
+    ],
+    "sources": [
+      {
+        "title": "Firebase · menulis data",
+        "url": "https://firebase.google.com/docs/database/admin/save-data"
+      },
+      {
+        "title": "Firebase · daftar dan query",
+        "url": "https://firebase.google.com/docs/database/web/lists-of-data"
+      },
+      {
+        "title": "Firebase · indexing",
+        "url": "https://firebase.google.com/docs/database/security/indexing-data"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Rules lengkap · project latihan history",
+          "language": "json",
+          "code": "{\n  \"rules\": {\n    \".read\": false,\n    \".write\": false,\n    \"devices\": {\n      \"esp32-01\": {\n        \"latest\": {\n          \".read\": \"auth != null && (auth.uid === 'GANTI_UID_PEMBACA' || auth.uid === 'mqtt-bridge')\",\n          \".write\": \"auth != null && auth.uid === 'mqtt-bridge' && newData.exists()\",\n          \".validate\": \"newData.hasChildren(['messageId','deviceId','temperature','unit','simulated','measuredAt','receivedAt'])\",\n          \"messageId\": {\n            \".validate\": \"newData.isString() && newData.val().matches(/^[0-9a-f]{32}$/)\"\n          },\n          \"deviceId\": {\n            \".validate\": \"newData.val() === 'esp32-01'\"\n          },\n          \"temperature\": {\n            \".validate\": \"newData.isNumber() && newData.val() >= -40 && newData.val() <= 125\"\n          },\n          \"unit\": {\n            \".validate\": \"newData.val() === 'C'\"\n          },\n          \"simulated\": {\n            \".validate\": \"newData.isBoolean()\"\n          },\n          \"measuredAt\": {\n            \".validate\": \"newData.isNumber() && newData.val() > 0 && newData.val() <= now + 5000\"\n          },\n          \"receivedAt\": {\n            \".validate\": \"newData.isNumber() && newData.val() <= now\"\n          },\n          \"$other\": {\n            \".validate\": false\n          }\n        },\n        \"history\": {\n          \".read\": \"auth != null && (auth.uid === 'GANTI_UID_PEMBACA' || auth.uid === 'mqtt-bridge')\",\n          \".indexOn\": [\n            \"measuredAt\"\n          ],\n          \"$eventId\": {\n            \".read\": \"auth != null && (auth.uid === 'GANTI_UID_PEMBACA' || auth.uid === 'mqtt-bridge')\",\n            \".write\": \"auth != null && auth.uid === 'mqtt-bridge' && newData.exists()\",\n            \".validate\": \"newData.hasChildren(['messageId','deviceId','temperature','unit','simulated','measuredAt','receivedAt']) && $eventId === newData.child('messageId').val()\",\n            \"messageId\": {\n              \".validate\": \"newData.isString() && newData.val().matches(/^[0-9a-f]{32}$/)\"\n            },\n            \"deviceId\": {\n              \".validate\": \"newData.val() === 'esp32-01'\"\n            },\n            \"temperature\": {\n              \".validate\": \"newData.isNumber() && newData.val() >= -40 && newData.val() <= 125\"\n            },\n            \"unit\": {\n              \".validate\": \"newData.val() === 'C'\"\n            },\n            \"simulated\": {\n              \".validate\": \"newData.isBoolean()\"\n            },\n            \"measuredAt\": {\n              \".validate\": \"newData.isNumber() && newData.val() > 0 && newData.val() <= now + 5000\"\n            },\n            \"receivedAt\": {\n              \".validate\": \"newData.isNumber() && newData.val() <= now\"\n            },\n            \"$other\": {\n              \".validate\": false\n            }\n          }\n        }\n      }\n    }\n  }\n}"
+        },
+        {
+          "label": "Potongan Python · tulis satu kejadian idempoten",
+          "language": "python",
+          "code": "# Tambahkan ke bridge yang sudah menginisialisasi Firebase Admin.\nimport math\nimport re\nimport time\nfrom firebase_admin import db\n\ndef save_event(event):\n    event_id = event.get(\"messageId\")\n    if not isinstance(event_id, str) or not re.fullmatch(r\"[0-9a-f]{32}\", event_id):\n        raise ValueError(\"messageId tidak valid\")\n    if event.get(\"deviceId\") != \"esp32-01\" or event.get(\"unit\") != \"C\":\n        raise ValueError(\"Identitas/unit salah\")\n    temperature = event.get(\"temperature\")\n    if type(temperature) not in (int, float) or not math.isfinite(temperature) or not -40 <= temperature <= 125:\n        raise ValueError(\"Suhu tidak valid\")\n    measured = event.get(\"measuredAt\")\n    if type(measured) is not int or not 0 < measured <= int(time.time() * 1000) + 5000:\n        raise ValueError(\"Waktu tidak valid\")\n    if type(event.get(\"simulated\")) is not bool:\n        raise ValueError(\"Penanda simulasi tidak valid\")\n    value = {\"messageId\": event_id, \"deviceId\": \"esp32-01\", \"temperature\": temperature,\n             \"unit\": \"C\", \"simulated\": event[\"simulated\"], \"measuredAt\": measured}\n    root = db.reference(\"devices/esp32-01\")\n    def first_write(current):\n        if current is not None:\n            if any(current.get(key) != field for key, field in value.items()):\n                raise ValueError(\"ID sama tetapi isi kejadian berbeda\")\n            return current\n        return {**value, \"receivedAt\": {\".sv\": \"timestamp\"}}\n    saved = root.child(\"history\").child(event_id).transaction(first_write)\n    def newest(current):\n        if current is None or current.get(\"measuredAt\", 0) < saved[\"measuredAt\"]:\n            return saved\n        return current\n    root.child(\"latest\").transaction(newest)\n# ACK aplikasi hanya dikirim setelah save_event selesai tanpa error.\n# Jika proses berhenti antara dua transaksi, retry dengan ID sama memperbaiki latest."
+        },
+        {
+          "label": "Potongan JavaScript · query setelah login",
+          "language": "javascript",
+          "code": "// Tambahkan impor ini pada dashboard yang Firebase-nya sudah diinisialisasi.\nimport { ref, query, orderByChild, limitToLast, onValue } from \"firebase/database\";\n// database berasal dari getDatabase(app) pada materi dashboard.\nfunction watchHistory(database, render) {\n  const selected = query(ref(database, \"devices/esp32-01/history\"),\n    orderByChild(\"measuredAt\"), limitToLast(50));\n  return onValue(selected, snapshot => {\n    const samples = [];\n    snapshot.forEach(child => { samples.push(child.val()); });\n    render(samples);\n  }, error => { console.error(\"Riwayat gagal dibaca:\", error.code); });\n}"
+        },
+        {
+          "label": "HTML · grafik contoh data simulasi",
+          "language": "html",
+          "code": "<figure>\n  <svg viewBox=\"0 0 420 180\" role=\"img\" aria-label=\"Grafik simulasi suhu 28, 29, 31, dan 30 derajat Celsius\">\n    <path d=\"M45 20V140H400\" fill=\"none\" stroke=\"currentColor\"/>\n    <polyline points=\"60,100 160,80 260,40 360,60\" fill=\"none\" stroke=\"#4f46e5\" stroke-width=\"3\"/>\n    <text x=\"5\" y=\"25\">°C</text><text x=\"10\" y=\"45\">31</text><text x=\"10\" y=\"105\">28</text>\n    <text x=\"45\" y=\"165\">00:00</text><text x=\"330\" y=\"165\">00:15</text>\n  </svg>\n  <figcaption>Data SIMULASI, sampel tiap 5 detik; bukan data Firebase langsung.</figcaption>\n</figure>"
+        }
+      ],
+      "result": "Kejadian dengan ID sama tersimpan satu kali dan mempertahankan receivedAt pertama. Sampel backlog tidak mengganti latest yang lebih baru. Grafik contoh memakai data simulasi; query Firebase memerlukan rules yang sudah diuji.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "notifikasi-alarm-iot",
+    "title": "Notifikasi suhu tinggi dan perangkat berhenti mengirim",
+    "summary": "Gunakan ambang, histeresis, waktu tunggu, serta pemulihan agar alarm tidak membanjiri pengguna.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Alarm seperti penjaga yang memberi tahu saat ada perubahan penting, bukan berteriak setiap detik selama pintu masih terbuka.",
+    "explain": [
+      "Bedakan alarm nilai, sensor gagal, dan perangkat tidak mengirim data. Suhu tinggi berasal dari pengukuran valid; tidak ada data bukan berarti suhu normal atau nol.",
+      "Gunakan ambang masuk dan keluar berbeda, misalnya alarm panas aktif pada 30 °C dan pulih pada 28 °C. Tambahkan durasi minimum bila fluktuasi singkat tidak penting. Tulis kebijakan ini sebagai tabel yang dapat diuji.",
+      "Kirim notifikasi pada perubahan status, lalu beri cooldown untuk pengingat. Simpan status dan waktu pengiriman pada media persisten bila harus bertahan setelah restart. Alarm di halaman browser saja berhenti ketika tab ditutup.",
+      "Untuk pesan ke ponsel atau email, jalankan pemeriksa di server/gateway yang tetap aktif dan gunakan layanan notifikasi pilihan Anda. Token layanan hanya disimpan di server. Materi ini tidak mengirim pesan ke orang lain atau membuat akun layanan otomatis.",
+      "Cek umur measuredAt untuk pengukuran dan receivedAt untuk jalur penerimaan. Data backlog yang baru tiba tidak boleh menghapus alarm kehilangan pengukuran baru. Sesuaikan batas stale dengan interval kirim dan toleransi jaringan.",
+      "Contoh berikut hanya mesin keputusan simulasi: ia mencetak PANAS/PULIH dan DATA_LAMA. Integrasikan hasilnya ke penyimpanan alarm lalu layanan pengirim setelah autentikasi dan cooldown diuji."
+    ],
+    "example": "Gunakan ambang, histeresis, waktu tunggu, serta pemulihan agar alarm tidak membanjiri pengguna.",
+    "practice": [
+      "Jalankan deret 29,30,31,29,28 dan periksa hanya ada dua perubahan suhu.",
+      "Simulasikan data berhenti dan ukur kapan DATA_LAMA muncul.",
+      "Buat aturan cooldown serta pesan pemulihan yang mudah dipahami.",
+      "Uji restart pemeriksa dan tentukan status mana yang harus disimpan."
+    ],
+    "warning": "Alarm latihan tidak menggantikan proteksi kebakaran, medis, atau sistem keselamatan. Jangan menyimpan token notifikasi dalam JavaScript browser.",
+    "check": "Mengapa pengingat tiap satu detik dapat membuat alarm justru diabaikan?",
+    "answer": "Pesan berulang menutupi perubahan penting. Notifikasi berbasis transisi dan cooldown menjaga informasi tetap berguna.",
+    "nodes": [
+      "Periksa data valid",
+      "Nilai ambang",
+      "Deteksi transisi",
+      "Terapkan cooldown",
+      "Kirim atau tandai pulih"
+    ],
+    "sources": [
+      {
+        "title": "Firebase · database Admin",
+        "url": "https://firebase.google.com/docs/database/admin/retrieve-data"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · keputusan alarm simulasi",
+          "language": "python",
+          "code": "panas = False\nfor suhu in [29, 30, 31, 29, 28]:\n    sebelumnya = panas\n    if suhu >= 30:\n        panas = True\n    elif suhu <= 28:\n        panas = False\n    if panas != sebelumnya:\n        print(\"PANAS\" if panas else \"PULIH\", suhu)\nsekarang_ms, pengukuran_terakhir_ms = 100000, 70000\nif sekarang_ms - pengukuran_terakhir_ms > 20000:\n    print(\"DATA_LAMA: jangan simpulkan suhu normal\")"
+        }
+      ],
+      "result": "Output PANAS pada 30, PULIH pada 28, lalu DATA_LAMA untuk contoh umur 30 detik; tidak mengirim notifikasi eksternal.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "kendali-dua-arah",
+    "title": "Kendali dua arah: perintah bukan keadaan aktual",
+    "summary": "Rancang jalur dashboard → Firebase → broker → ESP32 beserta balasan dan batas waktu perintah.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Memesan makanan tidak sama dengan makanan sudah disajikan. Tombol dashboard membuat permintaan; perangkat perlu membalas bahwa tindakan benar-benar diterapkan.",
+    "explain": [
+      "Pisahkan desired/command dari reported/state. Dashboard menulis permintaan pada commands/requestId. Server berizin memeriksanya lalu publish ke topic command. ESP32 memvalidasi, menerapkan tindakan, dan mengirim laporan yang menunjuk requestId sama.",
+      "Untuk latihan, gunakan perintah SET_ON atau SET_OFF pada indikator, bukan toggle. Perintah idempoten seperti SET_OFF aman terhadap pengulangan logis dibanding toggle yang dapat membalik dua kali.",
+      "Sertakan requestId, target deviceId, action, issuedAt, dan expiresAt. Periksa umur, tujuan, format, izin operator, dan batas durasi. Client perlu jam yang benar untuk menilai kedaluwarsa. Jangan retain perintah sesaat; MQTT replay bukan izin menjalankan perintah lama.",
+      "Akun pembaca dashboard awal tetap read-only. Buat peran operator terpisah dan rules terbatas pada pembuatan request yang valid untuk perangkat yang dikelola. Bridge command hanya membaca permintaan dan menulis status; akun perangkat dibatasi ke command/state miliknya.",
+      "Di dashboard tampilkan DIMINTA, DIKIRIM, DITERAPKAN, GAGAL, atau KEDALUWARSA. Jangan langsung mengganti ikon kipas menjadi menyala hanya karena write Firebase sukses. Status reported juga perlu timestamp dan indikator data lama.",
+      "Mulai dari simulasi validator berikut. Ia tidak membuka Firebase, tidak menerbitkan MQTT, dan tidak menggerakkan beban. Setelah lolos, implementasikan pekerja command terpisah dengan antrean, pencatatan requestId yang bertahan sesuai kebutuhan, ACK aplikasi, serta penanganan restart."
+    ],
+    "example": "Rancang jalur dashboard → Firebase → broker → ESP32 beserta balasan dan batas waktu perintah.",
+    "practice": [
+      "Gambar jalur maju perintah dan jalur balik laporan dengan dua warna.",
+      "Buat tabel siapa boleh menulis commands dan siapa boleh menulis reported.",
+      "Jalankan validator: SET_ON valid diterima, perintah lama ditolak.",
+      "Uji duplikat requestId, deviceId salah, action tak dikenal, dan jam belum tersinkron.",
+      "Pada tahap awal, terapkan tindakan pada indikator simulasi atau LED saja sebelum driver DC."
+    ],
+    "warning": "Potongan payload bukan fitur kendali yang otomatis aktif pada website atau ESP32. Jangan menghubungkan kendali jarak jauh ke beban rumah atau mesin berbahaya.",
+    "check": "Write Firebase sukses tetapi kipas tidak bergerak. Apakah dashboard boleh menampilkan “kipas menyala”?",
+    "answer": "Tidak. Ia baru boleh menampilkan permintaan tercatat; keadaan aktual menunggu balasan perangkat yang valid dan masih baru.",
+    "nodes": [
+      "Operator meminta",
+      "Server memeriksa",
+      "MQTT command",
+      "Perangkat menerapkan",
+      "Reported + requestId"
+    ],
+    "sources": [
+      {
+        "title": "Firebase · rules berbasis autentikasi",
+        "url": "https://firebase.google.com/docs/database/security/rules-conditions"
+      },
+      {
+        "title": "HiveMQ · retained message",
+        "url": "https://www.hivemq.com/blog/mqtt-essentials-part-8-retained-messages/"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · validator perintah simulasi",
+          "language": "python",
+          "code": "def validate_command(command, now_ms):\n    if command.get(\"deviceId\") != \"esp32-01\":\n        raise ValueError(\"Target salah\")\n    if command.get(\"action\") not in (\"SET_ON\", \"SET_OFF\"):\n        raise ValueError(\"Action tidak dikenal\")\n    request_id = command.get(\"requestId\")\n    if not isinstance(request_id, str) or not 1 <= len(request_id) <= 64:\n        raise ValueError(\"ID tidak valid\")\n    issued, expires = command.get(\"issuedAt\"), command.get(\"expiresAt\")\n    if type(issued) is not int or type(expires) is not int:\n        raise ValueError(\"Waktu harus integer milidetik\")\n    if not issued <= now_ms < expires or expires - issued > 30000:\n        raise ValueError(\"Belum berlaku, kedaluwarsa, atau durasi berlebihan\")\n    return command[\"action\"]\n\ncommand = {\"requestId\": \"request-001\", \"deviceId\": \"esp32-01\", \"action\": \"SET_ON\",\n           \"issuedAt\": 100000, \"expiresAt\": 120000}\nprint(validate_command(command, 110000))\ntry:\n    validate_command(command, 130000)\nexcept ValueError:\n    print(\"DITOLAK: perintah kedaluwarsa\")"
+        }
+      ],
+      "result": "SET_ON diterima pada waktu 110000 dan ditolak pada 130000; tidak ada efek fisik. Menyimpan ID yang sudah diterapkan tetap diperlukan pada implementasi nyata.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "mengelola-banyak-perangkat",
+    "title": "Mengelola banyak ESP32 dan hak aksesnya",
+    "summary": "Susun identitas perangkat, topic, inventaris, dan akses pengguna tanpa mencampur data.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Seperti memberi alamat rumah dan kunci masing-masing. Menamai dua rumah sama membuat kurir bingung; memberi satu kunci untuk seluruh kompleks memperbesar dampak jika hilang.",
+    "explain": [
+      "Gunakan deviceId unik dan inventaris yang memetakan perangkat ke lokasi, model board, sensor, versi firmware, dan pemilik. Nama ruangan dapat berubah, sedangkan deviceId sebaiknya stabil.",
+      "Topic contoh lab/esp32-01/telemetry dan lab/esp32-02/telemetry memisahkan data. Client ID juga unik per koneksi. Username berbeda per perangkat memudahkan pencabutan satu kredensial tanpa memutus semua perangkat.",
+      "ACL broker membatasi tiap akun ke topic yang diperlukan. Subscriber admin dapat membaca filter lebih luas jika memang berwenang; perangkat biasa tidak diberi akses lab/#. Validasi kesesuaian topic, identitas akun, dan deviceId payload pada server.",
+      "Firebase menyimpan devices/deviceId/latest dan history per perangkat. Rules harus mengacu pada keanggotaan atau daftar perangkat yang boleh dibaca pengguna, bukan sekadar auth != null. Jangan memperluas rules demo satu perangkat ke semua pengguna tanpa memikirkan kepemilikan.",
+      "Tambahkan status lastSeen, versi firmware, serta catatan commissioning. lastSeen baru hanya membuktikan ada pesan diterima, bukan seluruh sensor dan aktuator sehat. Cabut kredensial saat perangkat hilang atau berpindah pemilik."
+    ],
+    "example": "Susun identitas perangkat, topic, inventaris, dan akses pengguna tanpa mencampur data.",
+    "practice": [
+      "Buat inventaris dua perangkat dengan deviceId berbeda.",
+      "Salin akun kedua di broker dengan hak hanya topic esp32-02.",
+      "Uji perangkat pertama mencoba menulis ke topic perangkat kedua; pesan harus ditolak.",
+      "Rancang user A hanya membaca perangkat A dan uji dengan akun B."
+    ],
+    "warning": "Jangan menaruh satu password admin pada semua perangkat. Wildcard memudahkan subscribe tetapi tetap perlu dibatasi oleh ACL.",
+    "check": "Apakah deviceId berbeda cukup jika client ID MQTT keduanya sama?",
+    "answer": "Tidak. Broker masih melihat identitas sesi yang sama dan koneksi dapat saling memutus. Identitas payload dan identitas koneksi mempunyai peran berbeda.",
+    "nodes": [
+      "Inventaris ID",
+      "Akun per perangkat",
+      "ACL per topic",
+      "Rules per pemilik",
+      "Pantau dan cabut akses"
+    ],
+    "sources": [
+      {
+        "title": "Mosquitto · ACL",
+        "url": "https://mosquitto.org/man/mosquitto-conf-5.html"
+      },
+      {
+        "title": "Firebase · keamanan data",
+        "url": "https://firebase.google.com/docs/database/security"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dan lingkungan yang disebutkan pada contoh; gunakan project latihan terpisah"
+      ],
+      "wiring": [
+        [
+          "Lingkup contoh",
+          "Baca keterangan board, aplikasi, dan prasyarat sebelum menjalankan kode"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Contoh ACL · dua perangkat terpisah",
+          "language": "conf",
+          "code": "user esp32-01\ntopic write lab/esp32-01/telemetry\ntopic read lab/esp32-01/command\n\nuser esp32-02\ntopic write lab/esp32-02/telemetry\ntopic read lab/esp32-02/command\n\nuser monitor-dua-perangkat\ntopic read lab/esp32-01/telemetry\ntopic read lab/esp32-02/telemetry\n# Buat akun password yang cocok sebelum memakai ACL ini.\n# Sesuaikan username pada sketch; ini konfigurasi latihan baru."
+        }
+      ],
+      "result": "Dengan akun dan ACL terpasang, setiap perangkat hanya mengakses topic miliknya. Konfigurasi ini bukan penambahan akun otomatis.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  },
+  {
+    "slug": "perakitan-kotak-perangkat",
+    "title": "Dari breadboard ke perangkat yang lebih rapi",
+    "summary": "Rencanakan konektor, jalur daya, pengikat kabel, ventilasi, dan dokumentasi rakitan.",
+    "stage": 0,
+    "minutes": 18,
+    "analogy": "Breadboard seperti meja percobaan terbuka. Perangkat yang akan dipindah-pindah perlu rumah dan sambungan yang tidak mudah lepas saat meja terguncang.",
+    "explain": [
+      "Selesaikan fungsi di breadboard lebih dahulu, lalu dokumentasikan wiring berdasarkan nama pin. Pindahkan ke papan prototipe atau PCB yang tepat dengan konektor berlabel, bukan mengandalkan warna kabel saja.",
+      "Pisahkan jalur arus motor dari jalur sensor dan antena. Gunakan kabel serta konektor sesuai arus dan lingkungan; breadboard tidak cocok untuk arus motor yang besar. Sediakan strain relief agar tarikan kabel tidak langsung mengenai sambungan.",
+      "Letakkan antena sesuai panduan modul dan jauhi penghalang logam yang mengganggu radio. Sensor suhu jangan menempel dekat regulator panas bila tujuan mengukur suhu ruangan. Lubang ventilasi harus dipertimbangkan bersama debu, air, dan jangkauan jari.",
+      "Kotak plastik biasa tidak otomatis tahan hujan. Rating perlindungan melibatkan kotak, lubang, seal, dan konektor secara keseluruhan. Untuk luar ruangan gunakan komponen yang sesuai kondisi dan ikuti petunjuk pemasangan.",
+      "Uji continuity dan polaritas tanpa daya, lalu uji catu dengan batas arus yang sesuai sebelum seluruh beban dipasang. Catat foto, diagram, versi firmware, label catu, dan prosedur mengganti perangkat. Perbaikan lebih mudah jika orang lain dapat memahami rakitan."
+    ],
+    "example": "Rencanakan konektor, jalur daya, pengikat kabel, ventilasi, dan dokumentasi rakitan.",
+    "practice": [
+      "Foto breadboard dan buat diagram nama pin sebelum memindah.",
+      "Buat sketsa penempatan board, sensor, driver, konektor, dan antena dalam kotak.",
+      "Tulis label tegangan/polaritas serta titik pemeriksaan.",
+      "Uji tarikan kabel ringan, suhu operasi, restart, dan penerimaan Wi-Fi pada kondisi pemakaian nyata."
+    ],
+    "warning": "Latihan hanya rangkaian DC tegangan rendah. Jangan memasukkan sambungan listrik rumah terbuka ke kotak prototipe IoT.",
+    "check": "Mengapa sensor suhu yang ditempel dekat regulator dapat membaca lebih tinggi?",
+    "answer": "Ia mengukur pengaruh panas lokal komponen, bukan hanya udara ruangan yang ingin dipantau.",
+    "nodes": [
+      "Dokumentasi breadboard",
+      "Rancang tata letak",
+      "Konektor dan pengikat",
+      "Pemeriksaan tanpa daya",
+      "Uji di lingkungan nyata"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · panduan tata letak",
+        "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/pcb-layout-design.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik."
+  },
+  {
+    "slug": "proyek-monitor-kipas-dc",
+    "title": "Proyek akhir: monitor suhu dan kipas DC",
+    "summary": "Gabungkan sensor, histeresis, driver, MQTT, dan dashboard; kembangkan riwayat serta alarm secara bertahap.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Seperti petugas ruangan yang tetap membuka ventilasi saat panas meskipun telepon kantor sedang putus. Keputusan lokal dan laporan jarak jauh tidak harus bergantung satu sama lain.",
+    "explain": [
+      "Bangun proyek dalam lapisan: pembacaan DHT22, indikator Serial/LED, kendali driver DC, MQTT, Firebase latest, lalu pengembangan history dan alarm. Setiap lapisan harus lolos uji sebelum lapisan berikut ditambahkan.",
+      "Sketch dasar memakai ESP32 klasik, DHT22 pada GPIO4, dan output GPIO23 menuju driver aktif-HIGH yang jelas mendukung input 3,3 V. Mulai dengan LED eksternal dan resistor 330 ohm pada output, lalu ganti ke driver setelah logika benar. Jangan menyalakan kipas langsung dari GPIO.",
+      "Untuk DHT22 polos, pasang pull-up DATA ke 3V3 sekitar 10 kohm sesuai panduan sensor; breakout mungkin sudah menyediakannya. Sensor dan sinyal memakai 3,3 V. Verifikasi urutan kaki dari datasheet, bukan menebak dari ilustrasi.",
+      "Kipas DC memakai catu tersendiri yang sesuai tegangan dan arus awalnya. Driver low-side mengendalikan jalur kembali beban, dan GND logika direferensikan sesuai modul. Proteksi transien, rating arus, serta kebutuhan diode mengikuti jenis motor dan panduan driver; gunakan modul jadi dengan proteksi yang terdokumentasi.",
+      "Kipas ON saat suhu ≥30 dan OFF saat ≤28; di antaranya status dipertahankan. Jika sensor gagal, contoh latihan mematikan output dan tidak menerbitkan pengukuran valid baru. Ini pilihan untuk demo kenyamanan, bukan strategi universal untuk proses yang membutuhkan pendinginan demi keselamatan.",
+      "Broker LAN dan bridge dari materi sebelumnya meneruskan telemetry ke Firebase latest sehingga dashboard awal dapat dipakai. Sketch dasar tidak menjalankan kendali jarak jauh, penyimpanan offline, atau history otomatis; tambahkan satu per satu memakai materi lanjutan dan uji ulang.",
+      "Untuk capstone lengkap, simpan pengukuran dengan messageId dan measuredAt, tampilkan grafik, jalankan alarm stale pada gateway yang selalu aktif, serta tampilkan reported state sebelum menambahkan command operator. Uji duplikat, backlog, jam salah, sensor terlepas, dan reboot.",
+      "Catat kriteria lulus: suhu valid tampil dengan unit; status simulasi benar; histeresis tidak bergetar; output boot OFF; koneksi kembali setelah broker hidup; dashboard menunjukkan data lama saat sensor gagal; akun lain tidak dapat menulis perintah."
+    ],
+    "example": "Gabungkan sensor, histeresis, driver, MQTT, dan dashboard; kembangkan riwayat serta alarm secara bertahap.",
+    "practice": [
+      "Pasang library DHT sensor library dari Adafruit dan dependensi Adafruit Unified Sensor melalui Library Manager; pilih ESP32 klasik.",
+      "Dengan daya diputus, pasang DHT22 dan LED uji sesuai tabel. Upload sketch, isi Wi-Fi dan akun broker lab, lalu amati Serial.",
+      "Uji suhu melewati dua ambang secara aman; jangan memanaskan sensor dengan api atau benda berbahaya.",
+      "Setelah indikator benar, periksa spesifikasi modul driver 3,3 V dan kipas DC sebelum merangkai beban; mulai dengan sumber terbatas yang sesuai.",
+      "Jalankan broker dan bridge Firebase, lalu buka dashboard pembaca. Lepas sensor setelah daya diputus dan periksa label data lama.",
+      "Tambahkan riwayat, alarm, serta command indikator satu fitur sekali; tulis hasil uji tiap perubahan."
+    ],
+    "warning": "Gunakan beban DC tegangan rendah dan driver yang sesuai, bukan relay lampu rumah. Contoh tidak ditujukan sebagai pengendali pendinginan kritis dan belum diuji pada perangkat fisik di sini.",
+    "check": "Mengapa kipas lokal sebaiknya tidak menunggu Firebase sebelum merespons suhu?",
+    "answer": "Gangguan internet dapat menunda respons. Pemisahan keputusan lokal dan pelaporan membuat fungsi dasar tetap dapat diuji tanpa cloud; kebijakan gagal tetap dirancang sesuai kebutuhan nyata.",
+    "nodes": [
+      "Baca sensor valid",
+      "Histeresis lokal",
+      "Driver DC",
+      "MQTT ke Firebase",
+      "Grafik dan alarm"
+    ],
+    "sources": [
+      {
+        "title": "Adafruit · DHT22 dan wiring",
+        "url": "https://learn.adafruit.com/dht/connecting-to-a-dhtxx-sensor"
+      },
+      {
+        "title": "PubSubClient · API",
+        "url": "https://pubsubclient.knolleary.net/api"
+      },
+      {
+        "title": "Espressif · desain daya",
+        "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/index.html"
+      }
+    ],
+    "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "ESP32 klasik, DHT22, USB, resistor pull-up bila diperlukan",
+        "LED + resistor 330 ohm untuk uji awal",
+        "Untuk tahap beban: kipas DC kecil, catu sesuai spesifikasi, driver aktif-HIGH 3,3 V dengan proteksi sesuai beban"
+      ],
+      "wiring": [
+        [
+          "DHT22 VCC/GND/DATA",
+          "3V3/GND/GPIO4; verifikasi urutan pin fisik"
+        ],
+        [
+          "Pull-up DHT22 polos",
+          "DATA ke 3V3 dengan sekitar 10 kohm sesuai sensor"
+        ],
+        [
+          "Uji indikator GPIO23",
+          "GPIO23 → resistor 330 ohm → anoda LED; katoda → GND"
+        ],
+        [
+          "Tahap driver (setelah uji LED)",
+          "GPIO23 → input aktif-HIGH 3,3 V modul; sambungan daya/output sesuai panduan modul"
+        ],
+        [
+          "Kipas DC",
+          "Melalui output driver dan catu beban yang sesuai; bukan GPIO atau pin 3V3"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch dasar ESP32 · sensor dan kendali lokal",
+          "language": "cpp",
+          "code": "#include <WiFi.h>\n#include <PubSubClient.h>\n#include <DHT.h>\n#include <math.h>\n\n// ESP32 klasik: DHT22 DATA GPIO4; output driver aktif-HIGH GPIO23.\n// Hanya pakai driver DC yang terdokumentasi menerima logika 3,3 V.\nconst int SENSOR_PIN = 4, DRIVER_PIN = 23;\nDHT sensor(SENSOR_PIN, DHT22);\nWiFiClient network; // LAN lab; untuk broker internet gunakan client TLS.\nPubSubClient mqtt(network);\nbool kipas = false;\nunsigned long bacaPada = 0, cobaPada = 0, wifiPada = 0;\n\nvoid setup() {\n  pinMode(DRIVER_PIN, OUTPUT); digitalWrite(DRIVER_PIN, LOW);\n  Serial.begin(115200); sensor.begin();\n  WiFi.mode(WIFI_STA);\n  WiFi.begin(\"GANTI_SSID_2_4_GHZ\", \"GANTI_PASSWORD_WIFI\");\n  mqtt.setServer(\"192.168.1.10\", 1883);\n  mqtt.setSocketTimeout(2); mqtt.setBufferSize(384);\n}\nvoid loop() {\n  unsigned long now = millis();\n  if (WiFi.status() != WL_CONNECTED && now - wifiPada >= 10000UL) {\n    wifiPada = now; WiFi.reconnect();\n  }\n  if (WiFi.status() == WL_CONNECTED && !mqtt.connected() && now - cobaPada >= 10000UL) {\n    cobaPada = now;\n    mqtt.connect(\"esp32-01\", \"esp32\", \"GANTI_PASSWORD_ESP32\");\n  }\n  if (mqtt.connected()) mqtt.loop();\n  if (now - bacaPada < 5000UL) return;\n  bacaPada = now;\n  float suhu = sensor.readTemperature();\n  if (!isfinite(suhu) || suhu < -40 || suhu > 80) {\n    kipas = false; digitalWrite(DRIVER_PIN, LOW);\n    Serial.println(\"SENSOR_GAGAL; output OFF; telemetry valid tidak dikirim\");\n    return;\n  }\n  if (suhu >= 30.0f) kipas = true;\n  else if (suhu <= 28.0f) kipas = false;\n  digitalWrite(DRIVER_PIN, kipas ? HIGH : LOW);\n  char payload[180];\n  snprintf(payload, sizeof(payload),\n    \"{\\\"deviceId\\\":\\\"esp32-01\\\",\\\"temperature\\\":%.1f,\\\"unit\\\":\\\"C\\\",\\\"simulated\\\":false}\", suhu);\n  Serial.print(payload); Serial.println(kipas ? \" kipas=ON\" : \" kipas=OFF\");\n  if (mqtt.connected()) mqtt.publish(\"lab/esp32-01/telemetry\", payload, false);\n  // Kendali lokal tetap dilakukan walau publish gagal. Belum ada outbox/history.\n}"
+        }
+      ],
+      "result": "Sketch dasar mengendalikan indikator/driver lokal dan menerbitkan suhu DHT22 valid ke topic lama. Dashboard latest bekerja melalui bridge sebelumnya. History, alarm server, dan command memerlukan integrasi lanjutan yang dijelaskan terpisah.",
+      "troubleshoot": [
+        "Bandingkan urutan langkah dan nilai masukan dengan contoh hasil.",
+        "Periksa versi library, pilihan board, dan pesan error sebelum mengubah rangkaian."
+      ]
+    }
+  }
+]

@@ -3,7 +3,7 @@ import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 root = Path(__file__).resolve().parents[1]
-lessons = json.loads((root / 'lib/iot-lessons.json').read_text()) + json.loads((root / 'lib/iot-connected-lessons.json').read_text())
+lessons = json.loads((root / 'lib/iot-lessons.json').read_text()) + json.loads((root / 'lib/iot-connected-lessons.json').read_text()) + json.loads((root / 'lib/iot-extended-lessons.json').read_text())
 order = json.loads((root / 'lib/iot-learning-order.json').read_text())
 ordered = [slug for group in order for slug in group['slugs']]
 assert len(ordered) == len(set(ordered)) == len(lessons)
@@ -29,7 +29,7 @@ for group in track:
             continue
         lab = lesson['arduino']
         assert lab['section'] == group['id']
-        assert slug in order[2 + 'ABCD'.index(group['id'])]['slugs']
+        assert any(slug in stage['slugs'] and stage['id'] == 'arduino-' + group['id'].lower() for stage in order)
         assert lab['parts'] and lab['wiring'] and lab['result'] and lab['troubleshoot']
         assert all(len(row) == 2 for row in lab['wiring'])
         for block in lab['blocks']:

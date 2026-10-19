@@ -1,14 +1,23 @@
 [
   {
-    "title": "Dasar IoT",
+    "id": "mulai",
+    "title": "Mulai di sini · konsep dan rancangan",
+    "kind": "Dasar",
+    "before": "Tidak ada; mulai dari materi pertama.",
+    "goal": "Dapat menjelaskan alur sensor → perangkat → jaringan → aplikasi dan memilih satu masalah nyata.",
     "slugs": [
       "apa-itu-iot",
       "cara-kerja-iot",
-      "sensor-aktuator"
+      "sensor-aktuator",
+      "merancang-proyek-iot"
     ]
   },
   {
-    "title": "Mengenal perangkat dan komponen",
+    "id": "perangkat",
+    "title": "Perangkat, pin, dan sumber daya",
+    "kind": "Rujukan",
+    "before": "Pahami konsep IoT pada kelompok 01.",
+    "goal": "Dapat memilih board, sensor, pin, dan catu yang sesuai; buka kembali saat memilih komponen.",
     "slugs": [
       "macam-mikrokontroler",
       "mikrokontroler-sbc-plc",
@@ -17,43 +26,72 @@
       "sensor-cahaya-tanah-arus",
       "aktuator-driver-output",
       "antarmuka-modul-komunikasi",
-      "catu-daya-komponen-pendukung"
+      "catu-daya-komponen-pendukung",
+      "datasheet-pinout",
+      "daya-adaptor-baterai"
     ]
   },
   {
-    "title": "Arduino A · Dasar dan program",
+    "id": "arduino-a",
+    "title": "Arduino A · dasar dan pemrograman",
+    "kind": "Dasar",
+    "before": "Kenali perangkat dan baca datasheet pin sebelum merangkai.",
+    "goal": "Dapat menyiapkan breadboard, mengunggah sketch, dan membaca variabel, kondisi, fungsi, serta array.",
     "slugs": [
       "arduino-pengenalan",
       "listrik-breadboard",
       "persiapan-arduino-ide",
-      "arduino-pemrograman"
+      "arduino-pemrograman",
+      "pemrograman-variabel",
+      "pemrograman-kondisi-perulangan",
+      "pemrograman-fungsi-array"
     ]
   },
   {
-    "title": "Arduino B · Input/output dan sensor",
+    "id": "arduino-b",
+    "title": "Arduino B · input/output dan sensor",
+    "kind": "Dasar",
+    "before": "Selesaikan dasar pemrograman pada kelompok 03.",
+    "goal": "Dapat membaca input, mengatur output, menelusuri error, dan menilai kualitas data sensor.",
     "slugs": [
       "arduino-led",
+      "serial-monitor-debugging",
+      "timer-millis",
       "arduino-tombol-led",
+      "debounce-tombol",
+      "state-machine",
       "arduino-relay-lampu",
       "arduino-analog-pwm",
       "arduino-lcd-paralel",
       "arduino-pir",
-      "arduino-lm35"
+      "arduino-lm35",
+      "kalibrasi-sensor",
+      "filter-validasi-sensor"
     ]
   },
   {
-    "title": "Arduino C · Motor dan I2C",
+    "id": "arduino-c",
+    "title": "Arduino C · motor dan komunikasi perangkat",
+    "kind": "Pengembangan",
+    "before": "Pahami input/output, catu, dan driver pada kelompok 04.",
+    "goal": "Dapat membedakan motor dan memakai I2C, UART, serta SPI sesuai fungsi dan level sinyal.",
     "slugs": [
       "arduino-motor-dc",
       "arduino-servo",
       "arduino-stepper",
       "arduino-i2c",
       "arduino-lcd-i2c",
-      "arduino-rtc-ds1307"
+      "arduino-rtc-ds1307",
+      "komunikasi-uart",
+      "komunikasi-spi"
     ]
   },
   {
-    "title": "Arduino D · Koneksi internet",
+    "id": "arduino-d",
+    "title": "Arduino D · internet lewat ESP8266 AT",
+    "kind": "Pilihan UNO",
+    "before": "Selesaikan dasar Arduino; gunakan UNO R3 dan modul yang sesuai.",
+    "goal": "Memahami jalur UNO + modul Wi-Fi. Jika memakai ESP32 langsung, lanjut ke kelompok 07.",
     "slugs": [
       "arduino-esp8266-at",
       "arduino-platform-iot",
@@ -62,15 +100,24 @@
     ]
   },
   {
-    "title": "Berpindah ke ESP32",
+    "id": "esp32",
+    "title": "ESP32 dan penyimpanan lokal",
+    "kind": "Dasar ESP32",
+    "before": "Pahami rangkaian, pemrograman, timer, dan sensor; ulangi kelompok 03–04 bila perlu.",
+    "goal": "Dapat memakai ESP32 3,3 V serta memilih Preferences atau kartu SD; contoh UNO tidak disalin pin demi pin.",
     "slugs": [
       "mengenal-esp32",
       "led-pertama",
-      "membaca-sensor"
+      "membaca-sensor",
+      "penyimpanan-lokal"
     ]
   },
   {
-    "title": "Jaringan dan pertukaran data",
+    "id": "mqtt",
+    "title": "Jaringan, MQTT, dan penghubung Firebase",
+    "kind": "Koneksi",
+    "before": "Pastikan program ESP32 dan pembacaan lokal sudah berjalan.",
+    "goal": "Dapat menguji setiap sambungan: ESP32 → broker → Python → Firebase.",
     "slugs": [
       "wifi-ip",
       "http-json",
@@ -81,18 +128,84 @@
     ]
   },
   {
-    "title": "Dashboard dan sistem yang andal",
+    "id": "dashboard",
+    "title": "Dashboard Firebase dasar",
+    "kind": "Aplikasi",
+    "before": "Selesaikan penghubung MQTT–Firebase pada kelompok 08.",
+    "goal": "Dapat login sebagai pembaca, menampilkan nilai terbaru, dan mengenali data lama.",
     "slugs": [
       "firebase-dashboard",
-      "dashboard-data",
-      "otomatisasi-histeresis",
-      "keamanan-iot"
+      "dashboard-data"
     ]
   },
   {
+    "id": "andal",
+    "title": "Koneksi yang andal dan aman",
+    "kind": "Pengembangan",
+    "before": "Alur MQTT–Firebase dan dashboard dasar sudah berhasil.",
+    "goal": "Dapat merancang histeresis, antrean offline, idempotensi, TLS, dan pemulihan gangguan.",
+    "slugs": [
+      "otomatisasi-histeresis",
+      "keamanan-iot",
+      "reconnect-antrean-offline",
+      "mqtt-idempotensi",
+      "mqtt-tls-sertifikat",
+      "watchdog-pemulihan"
+    ]
+  },
+  {
+    "id": "data-kendali",
+    "title": "Riwayat, alarm, dan kendali dua arah",
+    "kind": "Lanjutan",
+    "before": "Pahami identitas pesan, data lama, hak akses, serta antrean pada kelompok 10.",
+    "goal": "Dapat merancang grafik, notifikasi, permintaan dan balasan, serta akses banyak perangkat.",
+    "slugs": [
+      "firebase-riwayat-grafik",
+      "notifikasi-alarm-iot",
+      "kendali-dua-arah",
+      "mengelola-banyak-perangkat"
+    ]
+  },
+  {
+    "id": "pemeliharaan",
+    "title": "Pembaruan program dan hemat energi",
+    "kind": "Pengembangan",
+    "before": "Pahami sumber daya, keadaan aman, dan pemulihan gangguan.",
+    "goal": "Dapat menyiapkan proses OTA dan menilai kapan deep sleep sesuai.",
+    "slugs": [
+      "ota-pembaruan-firmware",
+      "esp32-deep-sleep"
+    ]
+  },
+  {
+    "id": "industri",
+    "title": "Pengantar IoT industri",
+    "kind": "Pilihan lanjutan",
+    "before": "Pahami UART, datasheet, level sinyal, dan akses baca saja.",
+    "goal": "Dapat membedakan RS485, Modbus RTU/TCP, register, dan skala data.",
+    "slugs": [
+      "rs485-modbus"
+    ]
+  },
+  {
+    "id": "rakitan",
+    "title": "Merakit perangkat dengan lebih rapi",
+    "kind": "Penerapan",
+    "before": "Prototipe breadboard sudah lulus uji fungsi dan sumber daya.",
+    "goal": "Dapat merencanakan konektor, kotak, penempatan sensor, serta dokumentasi rakitan.",
+    "slugs": [
+      "perakitan-kotak-perangkat"
+    ]
+  },
+  {
+    "id": "proyek",
     "title": "Proyek akhir dan evaluasi",
+    "kind": "Proyek",
+    "before": "Pilih proyek setelah alur sensor, MQTT, dan dashboard berhasil.",
+    "goal": "Gabungkan fungsi bertahap dan buktikan perilaku ketika sensor atau jaringan gagal.",
     "slugs": [
       "proyek-monitor-suhu",
+      "proyek-monitor-kipas-dc",
       "troubleshooting-lanjutan"
     ]
   }
