@@ -1,0 +1,22 @@
+const ZERO=BigInt(0),ONE=BigInt(1),MAX=(ONE<<BigInt(128))-ONE;
+export function prefixNumber(value:string|number){if(!/^\d{1,3}$/.test(String(value)))throw Error('Prefix harus bilangan bulat dari 0 sampai 128.');const p=Number(value);if(p<0||p>128)throw Error('Prefix harus dari 0 sampai 128.');return p;}
+export function parseIPv6(input:string):bigint{
+ const text=input.trim().toLowerCase();
+ if(!text)throw Error('Isi alamat IPv6 terlebih dahulu.');
+ if(text.includes('/')||text.includes('%')||text.includes('.'))throw Error('Gunakan alamat IPv6 heksadesimal tanpa /prefix, zona %, atau bagian IPv4. Prefix diatur terpisah.');
+ if(!/^[0-9a-f:]+$/.test(text))throw Error('Alamat hanya memakai digit 0–9, huruf a–f, dan titik dua.');
+ if(text.split('::').length>2)throw Error('Tanda :: hanya boleh dipakai sekali.');
+ let groups:string[];
+ if(text.includes('::')){const [l,r]=text.split('::');const left=l?l.split(':'):[],right=r?r.split(':'):[];const missing=8-left.length-right.length;if(missing<1)throw Error('Tanda :: harus menggantikan setidaknya satu kelompok nol.');groups=[...left,...Array(missing).fill('0'),...right];}
+ else groups=text.split(':');
+ if(groups.length!==8||groups.some(g=>! /^[0-9a-f]{1,4}$/.test(g)))throw Error('Alamat harus membentuk delapan kelompok, masing-masing 1–4 digit heksadesimal.');
+ return groups.reduce((n,g)=>(n<<BigInt(16))+BigInt('0x'+g),ZERO);
+}
+export function expandedIPv6(value:bigint){if(value<ZERO||value>MAX)throw Error('Nilai di luar 128 bit.');return value.toString(16).padStart(32,'0').match(/.{4}/g)!.join(':');}
+export function compressedIPv6(value:bigint){const groups=expandedIPv6(value).split(':').map(g=>Number.parseInt(g,16).toString(16));let best=-1,length=0;for(let i=0;i<8;){if(groups[i]!=='0'){i++;continue;}let j=i;while(j<8&&groups[j]==='0')j++;if(j-i>length&&j-i>=2){best=i;length=j-i;}i=j;}return best<0?groups.join(':'):groups.slice(0,best).join(':')+'::'+groups.slice(best+length).join(':');}
+export function maskIPv6(prefix:number){const p=prefixNumber(prefix);return p===0?ZERO:(MAX<<BigInt(128-p))&MAX;}
+export function networkIPv6(value:bigint,prefix:number){return value&maskIPv6(prefix);}
+export function addressKind(value:bigint){const within=(base:string,p:number)=>networkIPv6(value,p)===networkIPv6(parseIPv6(base),p);if(value===ZERO)return 'Unspecified (::): bukan alamat tujuan host biasa';if(value===ONE)return 'Loopback (::1): perangkat sendiri';if(within('2001:db8::',32))return 'Dokumentasi (2001:db8::/32): contoh, bukan alokasi internet';if(within('fe80::',10))return 'Link-local: hanya pada link setempat, perlu konteks interface';if(within('fc00::',7))return 'Unique local (ULA): penggunaan lokal';if(within('ff00::',8))return 'Multicast: kelompok penerima';if(within('2000::',3))return 'Dalam ruang global unicast 2000::/3; alokasi dan keterjangkauan belum divalidasi';return 'Ruang khusus/lainnya: periksa registri alamat sebelum digunakan';}
+export function inspectIPv6(address:string,prefix:string|number){const value=parseIPv6(address),p=prefixNumber(prefix),network=networkIPv6(value,p),size=ONE<<BigInt(128-p);return {value,prefix:p,expanded:expandedIPv6(value),compressed:compressedIPv6(value),network:compressedIPv6(network),last:compressedIPv6(network+size-ONE),count:size.toString(),kind:addressKind(value)};}
+export function compareIPv6(a:string,pa:string|number,b:string,pb:string|number){const av=parseIPv6(a),bv=parseIPv6(b),ap=prefixNumber(pa),bp=prefixNumber(pb);return {aSeesLocal:networkIPv6(av,ap)===networkIPv6(bv,ap),bSeesLocal:networkIPv6(av,bp)===networkIPv6(bv,bp),sameAddress:av===bv};}
+export function divideIPv6(address:string,parent:string|number,child:string|number,indexText:string){const value=parseIPv6(address),p=prefixNumber(parent),c=prefixNumber(child);if(c<p)throw Error('Prefix subnet harus lebih besar atau sama dengan prefix blok awal.');if(!/^\d{1,40}$/.test(indexText))throw Error('Nomor subnet harus bilangan bulat desimal, dimulai dari 0.');const count=ONE<<BigInt(c-p),index=BigInt(indexText);if(index>=count)throw Error('Nomor subnet harus dari 0 sampai '+(count-ONE).toString()+'.');const base=networkIPv6(value,p),step=ONE<<BigInt(128-c),selected=base+index*step;return {parent:compressedIPv6(base),normalized:value!==base,count:count.toString(),maxIndex:(count-ONE).toString(),first:compressedIPv6(base),last:compressedIPv6(base+(count-ONE)*step),selected:compressedIPv6(selected),preview:Array.from({length:Number(count<BigInt(8)?count:BigInt(8))},(_,i)=>({index:i,prefix:compressedIPv6(base+BigInt(i)*step)}))};}
