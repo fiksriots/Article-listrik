@@ -1,6 +1,6 @@
 import Link from 'next/link';
 function Table({headers,rows}:{headers:string[];rows:string[][]}){return <div className="net-table-wrap"><table><thead><tr>{headers.map(h=><th key={h} scope="col">{h}</th>)}</tr></thead><tbody>{rows.map((row,i)=><tr key={i}>{row.map((cell,j)=><td key={j}>{cell}</td>)}</tr>)}</tbody></table></div>}
-const refs=[['RFC 4291 · Jenis dan struktur alamat','4291'],['RFC 5952 · Penulisan ringkas','5952'],['RFC 3849 · Prefix dokumentasi','3849'],['RFC 4193 · Alamat lokal ULA','4193'],['RFC 4861 · Neighbor Discovery dan RA','4861'],['RFC 4862 · SLAAC dan DAD','4862'],['RFC 8415 · DHCPv6 dan prefix delegation','8415'],['RFC 8106 · DNS melalui RA','8106'],['RFC 6177 · Alokasi prefix untuk lokasi pelanggan','6177'],['RFC 4890 · Penyaringan ICMPv6','4890'],['RFC 8200 · Protokol IPv6','8200']];
+const refs=[['RFC 6164 · /127 untuk link antarrouter','6164'],['RFC 7421 · Batas /64 pada LAN IPv6','7421'],['RFC 4291 · Jenis dan struktur alamat','4291'],['RFC 5952 · Penulisan ringkas','5952'],['RFC 3849 · Prefix dokumentasi','3849'],['RFC 4193 · Alamat lokal ULA','4193'],['RFC 4861 · Neighbor Discovery dan RA','4861'],['RFC 4862 · SLAAC dan DAD','4862'],['RFC 8415 · DHCPv6 dan prefix delegation','8415'],['RFC 8106 · DNS melalui RA','8106'],['RFC 6177 · Alokasi prefix untuk lokasi pelanggan','6177'],['RFC 4890 · Penyaringan ICMPv6','4890'],['RFC 8200 · Protokol IPv6','8200']];
 export default function IPv6Guide({slug}:{slug:string}){
  if(!['ipv6-alamat-prefix','ipv6-ra-slaac-dhcpv6'].includes(slug))return null;
  return <section aria-label="Panduan IPv6 bertahap"><h2>Ringkasan yang bisa kamu pakai saat belajar</h2><p>Jangan hafalkan semua istilah sekaligus. Mulai dari membaca alamat, lanjut ke cara perangkat mendapat konfigurasi, lalu periksa jalurnya.</p>{slug==='ipv6-alamat-prefix'?<>
@@ -15,6 +15,33 @@ export default function IPv6Guide({slug}:{slug:string}){
  ['Staf','2001:db8:1234:ab10::/64','2001:db8:1234:ab10::25'],['Tamu','2001:db8:1234:ab20::/64','2001:db8:1234:ab20::25'],['Perangkat','2001:db8:1234:ab30::/64','2001:db8:1234:ab30::25']
  ]}/><p>Rumus jumlah subnet: <strong>2 pangkat (prefix baru − prefix awal)</strong>. /56 ke /64 menghasilkan 256 subnet; /60 ke /64 menghasilkan 16. Ini bukan rumus jumlah perangkat aktif. LAN SLAAC umumnya /64; link point-to-point dan loopback memiliki pertimbangan berbeda.</p>
  <details><summary>Latihan: apakah ab10 dan ac10 masih dalam blok /56 tadi?</summary><p>ab10 masih dalam rentang ab00–abff. ac10 sudah di luar blok. Pada /56, dua digit heksadesimal awal kelompok keempat, yaitu ab, tetap menjadi bagian prefix.</p></details>
+
+ <h3>5. Penerapan dan standar pemilihan prefix</h3>
+ <p>Mulai dari blok yang benar-benar diberikan ISP. Tidak ada satu ukuran alokasi pelanggan yang wajib sama untuk semua ISP. /48, /56, dan /60 adalah contoh ukuran blok; LAN biasa yang memakai SLAAC umumnya tetap mendapat satu /64 per LAN atau VLAN.</p>
+ <Table headers={['Kebutuhan','Prefix','Cara memakainya']} rows={[
+ ['LAN atau VLAN dengan SLAAC','/64','Satu prefix berbeda untuk setiap segmen Layer 2'],
+ ['Link point-to-point antarrouter','/127','Untuk link berisi dua router yang mendukungnya; bukan untuk LAN klien SLAAC'],
+ ['Alamat loopback router','/128','Menunjuk satu alamat; keterjangkauannya tetap membutuhkan routing']
+ ]}/>
+ <p>Pilihan ::1 sebagai alamat router hanya kebiasaan agar mudah diingat. Gateway yang dipelajari host melalui RA biasanya berupa link-local router dan terkait interface. Jangan menganggap nomor VLAN harus sama dengan angka subnet: VLAN 10 dapat menggunakan subnet ab01. Nomor VLAN dan subnet adalah dua pengaturan berbeda.</p>
+ <h3>6. Hitung jumlah subnet dan pahami batas blok</h3>
+ <p><strong>Jumlah subnet = 2 pangkat (prefix baru − prefix awal).</strong> Rumus ini berlaku ketika blok dibagi menjadi subnet berukuran sama dan prefix baru lebih besar atau sama dengan prefix awal. Dari /56 ke /64: ada 8 bit untuk nomor subnet, sehingga 2 pangkat 8 = 256 subnet.</p>
+ <Table headers={['Blok awal','Ukuran setiap LAN','Jumlah subnet']} rows={[
+ ['/48','/64','65.536'],['/56','/64','256'],['/60','/64','16'],['/64','/64','1']
+ ]}/>
+ <p>Lebih besar angka prefix berarti lebih kecil bloknya. Satu /64 tidak dapat dibagi menjadi beberapa /64. Untuk LAN SLAAC tambahan, mintalah alokasi prefix yang memadai; jangan sekadar mengganti LAN menjadi /80 untuk mengejar jumlah subnet.</p>
+ <p>Pada blok contoh <code>2001:db8:1234:ab00::/56</code>, prefix /64 pertama adalah <code>2001:db8:1234:ab00::/64</code> dan yang terakhir <code>2001:db8:1234:abff::/64</code>. Dua digit ab pada kelompok keempat tetap; dua digit sesudahnya dapat berubah dari 00 sampai ff.</p>
+ <p>Urutan heksadesimalnya: <code>ab08 → ab09 → ab0a → ab0b → ab0c → ab0d → ab0e → ab0f → ab10</code>. Jadi sesudah ab09 adalah ab0a, bukan langsung ab10. Satu digit heksadesimal mewakili 4 bit; /56 menyisakan 8 bit sebelum batas /64.</p>
+ <p>Contoh batas lain: <code>2001:db8:1234:ab30::/60</code> mencakup subnet /64 dengan kelompok keempat ab30 sampai ab3f. Blok /60 berikutnya dimulai pada ab40. Angka ab31 bukan awal blok /60 yang sejajar; jika ditulis sebagai alamat host dengan /60, jaringan yang menaunginya tetap ab30::/60.</p>
+ <h3>7. Contoh rencana jaringan kantor</h3>
+ <Table headers={['Segmen','Prefix /64 contoh','Alamat router contoh']} rows={[
+ ['VLAN 10 · Staf','2001:db8:1234:ab01::/64','2001:db8:1234:ab01::1'],
+ ['VLAN 20 · Tamu','2001:db8:1234:ab02::/64','2001:db8:1234:ab02::1'],
+ ['VLAN 30 · CCTV','2001:db8:1234:ab03::/64','2001:db8:1234:ab03::1']
+ ]}/>
+ <ol><li>Catat prefix ISP, apakah statis atau dinamis, dan apakah diterima lewat DHCPv6-PD.</li><li>Rencanakan satu /64 berbeda untuk setiap LAN/VLAN. Sisakan subnet untuk pengembangan.</li><li>Atur interface/VLAN dan alamat router; cocokkan prefix yang diumumkan melalui RA dengan LAN yang benar.</li><li>Siapkan route ke hulu dan jalur balik menuju prefix LAN. Pilih SLAAC/DHCPv6 dan distribusi DNS sesuai dukungan klien.</li><li>Terapkan firewall IPv6: misalnya tamu tidak boleh mengakses CCTV. Prefix berbeda sendiri tidak otomatis memblokir komunikasi.</li><li>Uji alamat, gateway, DNS, koneksi luar, jalur balik, dan pembatasan antar-VLAN. Semua 2001:db8 di sini hanya contoh dokumentasi, bukan alokasi internet sungguhan.</li></ol>
+ <details><summary>Latihan: ISP memberi /60, kantor membutuhkan 12 VLAN. Cukup?</summary><p>Ya, jika setiap VLAN memakai satu /64: tersedia 2 pangkat (64 − 60) = 16 subnet /64. Dua belas dipakai dan empat dapat dicadangkan. Ini hanya kapasitas pengalamatan; kapasitas perangkat dan kebijakan ISP tetap perlu diperiksa.</p></details>
+ <details><summary>Latihan: apakah ab40::/64 masuk blok ab30::/60?</summary><p>Tidak. Blok ab30::/60 berakhir pada subnet ab3f::/64. ab40::/64 sudah berada di blok /60 berikutnya.</p></details>
  <p><Link href="/jaringan/ipv6-ra-slaac-dhcpv6">Lanjut: bagaimana perangkat memperoleh alamat dan gateway →</Link></p>
  </>:<>
  <h3>1. Ikuti satu perangkat dari mulai tersambung</h3><ol><li>Interface menyiapkan link-local dan melakukan pemeriksaan duplikasi yang berlaku.</li><li>Host mencari router melalui RS; router dapat menjawab dengan RA.</li><li>RA memberi petunjuk default router dan prefix. Informasi prefix dan masa berlaku perlu diperiksa.</li><li>SLAAC membentuk alamat jika prefix mengizinkan; DHCPv6 dapat memberikan alamat atau informasi sesuai dukungan klien.</li><li>DNS diperoleh melalui mekanisme yang didukung. Uji alamat, route, DNS, dan layanan secara terpisah.</li></ol>
