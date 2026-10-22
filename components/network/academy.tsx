@@ -17,6 +17,7 @@ export default function Academy({items, current}:{items:Item[];current?:string})
  return <div className={current?'net-sidebar-content':'net-catalog'}>
   <div className="net-progress"><div><strong>{done.length} dari {items.length}</strong><span> materi sudah dibaca</span></div><progress value={done.length} max={items.length} aria-label="Progres belajar jaringan"/><ProgressStatus/></div>
   {!current&&<Link className="net-resume" href={'/jaringan/'+next.slug}>{done.length? 'Lanjutkan belajar':'Mulai materi pertama'}: {next.title} →</Link>}
+  {current&&<Link className="net-track-overview" href="/jaringan/winbox">Praktik Winbox · kurikulum dan lab →</Link>}
   <label className="net-search">Cari materi<input type="search" placeholder="IP, VLAN, MikroTik…" value={query} onChange={e=>setQuery(e.target.value)}/></label>
   {!current&&<div className="net-catalog-controls"><div className="net-filters" aria-label="Jalur pembelajaran">{[{id:'semua',name:'Semua materi'},...tracks].map(t=><button key={t.id} aria-pressed={track===t.id} onClick={()=>{setTrack(t.id);setStage(-1)}}>{t.name}</button>)}</div><label className="net-search">Pilih tahap<select value={stage} onChange={e=>setStage(Number(e.target.value))}><option value={-1}>Semua tahap pada jalur ini</option>{networkStages.map((name,i)=>items.some(l=>l.stage===i&&(track==='semua'||trackOf(l)===track))?<option key={name} value={i}>{String(i+1).padStart(2,'0')} · {name}</option>:null)}</select></label></div>}
 

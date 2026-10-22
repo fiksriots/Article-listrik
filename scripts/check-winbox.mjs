@@ -2,11 +2,20 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const lessons = JSON.parse(fs.readFileSync('lib/winbox-lessons.json', 'utf8'));
-const base = '/jaringan/mikrotik-winbox';
+const base = '/jaringan/winbox';
 const parent = fs.readFileSync(`.next/server/app${base}.html`, 'utf8');
 assert.equal(lessons.length, 11);
 assert.equal(new Set(lessons.map(item => item.slug)).size, lessons.length);
 assert.ok(parent.includes('id="submateri-winbox"'));
+const home = fs.readFileSync('.next/server/app/jaringan.html', 'utf8');
+assert.ok(home.includes('href="/jaringan/winbox"'), 'Winbox needs its own learning-path entry');
+assert.ok(parent.includes('PRAKTIK WINBOX / KURIKULUM BELAJAR'));
+const redirects = JSON.parse(fs.readFileSync('.next/routes-manifest.json', 'utf8')).redirects;
+assert.ok(redirects.some(rule => rule.source === '/jaringan/mikrotik-winbox/:topic' && rule.destination === '/jaringan/winbox/:topic' && rule.statusCode === 308), 'Legacy sublesson URLs must redirect');
+const intro = fs.readFileSync('.next/server/app/jaringan/mikrotik-winbox.html', 'utf8');
+assert.ok(intro.includes('Buka Praktik Winbox'));
+assert.ok(!intro.includes('class="winbox-outline"'), 'Intro must link to the standalone path');
+
 const localRoutes = new Set(lessons.map(item => `${base}/${item.slug}`));
 let pictures = 0;
 for (const [index, item] of lessons.entries()) {
@@ -26,7 +35,7 @@ for (const [index, item] of lessons.entries()) {
   for (const [, target] of item.html.matchAll(/href="#([^"]+)"/g)) {
     assert.ok(ids.includes(target), `Broken local anchor #${target} in ${item.slug}`);
   }
-  for (const [, target] of item.html.matchAll(/href="(\/jaringan\/mikrotik-winbox\/[^"#]+)"/g)) {
+  for (const [, target] of item.html.matchAll(/href="(\/jaringan\/winbox\/[^"#]+)"/g)) {
     assert.ok(localRoutes.has(target), `Broken sublesson link ${target}`);
   }
   for (const [, target] of item.html.matchAll(/(?:src|href)="(\/network\/winbox\/[^"#]+)"/g)) {

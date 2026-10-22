@@ -1,6 +1,6 @@
 import data from './winbox-lessons.json';
 
-export const WINBOX_BASE = '/jaringan/mikrotik-winbox';
+export const WINBOX_BASE = '/jaringan/winbox';
 export type WinboxLesson = {
   slug: string;
   title: string;
