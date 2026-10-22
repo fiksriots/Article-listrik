@@ -572,7 +572,7 @@
   {
     "slug": "mikrotik-winbox",
     "title": "Mengenal MikroTik dan Winbox",
-    "summary": "Kenali ruang kontrol router sebelum mengubah konfigurasi.",
+    "summary": "Kenali ruang kontrol router, lalu ikuti 11 submateri Winbox 4: Interfaces, Bridge, praktik internet bergambar, dan troubleshooting.",
     "analogy": "RouterOS adalah ruang kontrol, sedangkan Winbox adalah salah satu panel untuk mengoperasikannya.",
     "explain": "Gunakan router cadangan atau CHR di lab virtual. Catat model, versi RouterOS, port ISP, dan port komputer. Konfigurasi bawaan berbeda antarperangkat; jangan reset router produksi untuk mengikuti pembelajaran.\n\nInterfaces menampilkan antarmuka dan status link. IP Addresses berisi alamat router, Routes menampilkan rute, DHCP Client meminta konfigurasi hulu, dan DHCP Server membagikannya ke LAN. Firewall mengelola filter serta NAT. Bridge menggabungkan port pada domain layer 2.\n\nSimpan export atau backup sesuai kebutuhan dan pahami pemulihannya. Safe Mode dapat membantu membatalkan perubahan jika sesi terputus, tetapi bukan pengganti cadangan. Unduh perangkat lunak resmi dan batasi akses administrasi.",
     "example": "Sebelum menambah rute, lihat IP Addresses dan Routes untuk memahami kondisi awal. Jangan menambah default route kedua tanpa tujuan.",
