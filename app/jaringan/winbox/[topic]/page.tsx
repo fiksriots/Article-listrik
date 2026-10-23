@@ -42,7 +42,7 @@ export default async function WinboxLessonPage({params}: {params: Promise<{topic
       <header className="net-lesson-heading">
         <p className="net-eyebrow">SUBMATERI {index + 1} DARI {winboxLessons.length} · PRAKTIK WINBOX 4</p>
         <h1>{lesson.title}</h1><p>{lesson.summary}</p>
-        <span>{lesson.minutes} menit · RouterOS v7 · Bahasa pemula · Diperbarui 22 Oktober 2026</span>
+        <span>{lesson.minutes} menit · RouterOS v7 · Bahasa pemula · Diperbarui 23 Oktober 2026</span>
       </header>
       <aside className="net-track-note"><p>Bagian dari <Link href={`${WINBOX_BASE}#submateri-winbox`}>Praktik Winbox</Link> di Learn Jaringan. Gambar diberi keterangan screenshot asli atau diagram konsep. Sebagian gambar hanya menunjukkan lokasi menu; dialog yang belum tersedia tetap dijelaskan dalam teks.</p></aside>
       {/* Content is curated repository HTML, never user-submitted markup. */}

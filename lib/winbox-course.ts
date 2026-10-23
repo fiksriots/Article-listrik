@@ -6,6 +6,7 @@ export type WinboxLesson = {
   title: string;
   summary: string;
   minutes: number;
+  phase: number;
   html: string;
 };
 export const winboxLessons: WinboxLesson[] = data;
