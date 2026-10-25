@@ -23,9 +23,9 @@ with tempfile.TemporaryDirectory(prefix='git-course-lab-') as tmp:
  run(l['blocks'][1]['code'],repo);print('PASS partial staging: selected hunk and remaining edit become separate commits')
  html=get('github-actions')['blocks'][0]['code'];pathlib.Path(tmp,'index.html').write_text(html);run('test -s index.html\ngrep -Fq "Belajar Git Bersama" index.html',tmp)
  pathlib.Path(tmp,'index.html').write_text(html.replace('Belajar Git Bersama','Judul diubah'));assert run('grep -Fq "Belajar Git Bersama" index.html',tmp,expect=None).returncode==1;print('PASS example CI: valid HTML passes, changed marker fails')
-assert len(D)==32 and len({l['slug'] for l in D})==32
+assert len(D)==38 and len({l['slug'] for l in D})==38
 assert [l['stage'] for l in D]==sorted(l['stage'] for l in D)
 for l in D:
  assert pathlib.Path('public/git',l['slug']+'.svg').exists(),l['slug']
  for field in ['source','check','answer','warning','result']:assert l[field]
-print('PASS 32 unique ordered lessons, images, sources and exercises')
+print('PASS 38 unique ordered lessons, images, sources and exercises')

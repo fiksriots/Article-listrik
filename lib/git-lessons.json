@@ -458,6 +458,94 @@
     "source": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"
   },
   {
+    "slug": "lf-crlf-gitattributes",
+    "title": "LF, CRLF, dan .gitattributes: Windows bertemu Linux",
+    "stage": 1,
+    "minutes": 22,
+    "summary": "Pahami perubahan akhir baris agar diff tidak tampak berubah semua tanpa alasan.",
+    "analogy": "Kalimat yang sama dapat ditutup dengan satu tanda atau dua tanda. Pembaca melihat kalimat identik, tetapi komputer melihat byte yang berbeda.",
+    "explain": [
+      "Prasyarat: memahami diff dan staging. LF adalah satu karakter akhir baris, umum pada Linux/macOS. CRLF adalah pasangan dua karakter, lazim pada banyak alat Windows. Editor modern sering mendukung keduanya; ekstensi file tidak otomatis menentukan akhir baris.",
+      "Jika satu file berubah dari LF menjadi CRLF, Git dapat menampilkan banyak baris berubah padahal teksnya sama. Ini berbeda dari encoding, indentasi, dan perubahan isi nyata. Sebelum menyalahkan perubahan besar, periksa penanda akhir baris pada editor dan git ls-files --eol.",
+      ".gitattributes adalah aturan yang ikut tersimpan di repository. text=auto membantu mengenali teks dan menormalkan akhir baris di index; eol=lf atau eol=crlf menentukan bentuk yang diinginkan saat checkout untuk path teks yang cocok.",
+      "Contoh aturan di bawah menjadikan Markdown, HTML, dan shell script memakai LF; batch script memakai CRLF. Pola -text pada berkas biner mencegah normalisasi teks. Git LFS juga menggunakan .gitattributes, jadi pertahankan aturan LFS jika proyek memilikinya.",
+      "core.autocrlf adalah konfigurasi Git pengguna atau repo, sedangkan .gitattributes dibagikan melalui commit. Jangan mengubah konfigurasi global semua proyek hanya untuk memperbaiki satu repo. Periksa nilai dan aturan yang benar-benar berlaku.",
+      "Pada proyek lama, git add --renormalize . menyiapkan normalisasi file yang sudah dilacak. Jalankan hanya setelah pekerjaan lain bersih atau tersimpan, periksa seluruh staged diff, lalu buat commit khusus normalisasi. File untracked tidak otomatis dimasukkan oleh renormalize.",
+      "Lab terpisah berikut menghindari perubahan pada proyekmu. Hasil yang diperiksa adalah index i/lf; working tree dapat tetap w/crlf sampai file ditulis ulang atau checkout dilakukan. Jangan mengira semua file fisik langsung dikonversi ketika aturan disimpan."
+    ],
+    "blocks": [
+      {
+        "label": ".gitattributes · contoh aturan proyek",
+        "code": "* text=auto\n*.md text eol=lf\n*.html text eol=lf\n*.sh text eol=lf\n*.bat text eol=crlf\n*.png -text\n*.jpg -text\n*.zip -text",
+        "language": "text"
+      },
+      {
+        "label": "Lab terpisah · jalankan dari folder induk baru",
+        "code": "mkdir lab-akhir-baris\ncd lab-akhir-baris\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\ngit config core.autocrlf false\nprintf 'Satu\\r\\nDua\\r\\n' > catatan.md\ngit add catatan.md\ngit commit -m 'Tambah teks CRLF awal'\nprintf '*.md text eol=lf\\n' > .gitattributes\ngit add .gitattributes\ngit add --renormalize .\ngit ls-files --eol\ngit diff --cached --stat\ngit diff --cached --ignore-space-at-eol -- catatan.md\ngit commit -m 'Seragamkan akhir baris Markdown'\ngit check-attr text eol -- catatan.md\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "Index catatan.md berubah dari i/crlf menjadi i/lf. Diff yang mengabaikan spasi akhir baris kosong untuk catatan.md karena teks Satu dan Dua tidak berubah. Aturan eol=lf terlihat melalui check-attr.",
+    "practice": [
+      "Baca akhir baris file dari editor dan ls-files --eol.",
+      "Jalankan lab pada folder baru dengan Git Bash atau terminal Linux/macOS.",
+      "Bedakan index i/lf dari working tree w/crlf.",
+      "Periksa diff normalisasi terpisah dari perubahan fitur.",
+      "Kembali ke repo latihan utama setelah lab selesai."
+    ],
+    "warning": "Jangan menjalankan renormalize di repo kerja yang masih punya edit penting tanpa menyimpannya terlebih dahulu. Jangan menerapkan aturan teks ke file biner secara membabi buta.",
+    "check": "Mengapa working tree masih bisa w/crlf ketika index sudah i/lf?",
+    "answer": "Git menormalkan isi saat masuk index; perintah add tidak harus menulis ulang file fisik. Aturan checkout diterapkan saat Git menulis file kerja.",
+    "nodes": [
+      "File Windows: CRLF",
+      "Aturan per path",
+      "Index dinormalisasi",
+      "Checkout sesuai aturan"
+    ],
+    "source": "https://git-scm.com/docs/gitattributes"
+  },
+  {
+    "slug": "blame-show-riwayat",
+    "title": "Git blame dan show: memahami asal perubahan",
+    "stage": 1,
+    "minutes": 20,
+    "summary": "Telusuri baris, commit, dan alasan perubahan sebelum mengedit atau memperbaikinya.",
+    "analogy": "Menemukan nama penulis pada catatan hanya awal. Untuk memahami maksudnya, baca revisi dan konteks pembahasannya.",
+    "explain": [
+      "Prasyarat: memahami git log dan diff. git blame menunjukkan commit dan penulis yang terakhir menyentuh tiap baris pada versi yang diperiksa. Namanya bukan ajakan menyalahkan orang; gunakan sebagai pintu masuk memahami riwayat.",
+      "Satu baris dapat terakhir disentuh oleh pemformatan atau pemindahan teks, bukan orang yang pertama merancang perilakunya. Riwayat Git juga tidak menjamin pesan commit menjelaskan semua keputusan. Baca diff, commit induk, serta PR atau issue jika tersedia.",
+      "git blame -L 2,2 -- aturan.txt membatasi penelusuran ke baris kedua. Ambil hash hasilnya, lalu git show HASH -- aturan.txt untuk membaca perubahan pada commit tersebut. Ganti HASH dengan hash nyata, jangan menyalin nama placeholder sebagai argumen.",
+      "git show HEAD:aturan.txt membaca snapshot file pada commit HEAD. git show HEAD~1:aturan.txt membaca versi dari parent pertama satu langkah sebelumnya; perintah ini perlu riwayat yang cukup. Keduanya tidak mengganti isi file kerjamu.",
+      "git log -p -- aturan.txt memperlihatkan patch sepanjang riwayat path. Untuk mengikuti satu file yang pernah diganti nama, gunakan git log --follow -- nama-baru.txt; pendeteksian rename bersifat heuristik, terutama jika isi banyak berubah.",
+      "Lab berikut membuat dua commit agar hasil tidak bergantung riwayat orang lain. Commit kedua hanya mengubah aturan batas; baris nama tetap berasal dari commit awal. Tekan q untuk keluar bila tampilan pager terbuka."
+    ],
+    "blocks": [
+      {
+        "label": "Lab riwayat · repo baru",
+        "code": "mkdir lab-telusur\ncd lab-telusur\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\nprintf 'Nama: Lab\\nBatas: 10\\n' > aturan.txt\ngit add aturan.txt\ngit commit -m 'Tambah aturan awal'\nprintf 'Nama: Lab\\nBatas: 20\\n' > aturan.txt\ngit add aturan.txt\ngit commit -m 'Naikkan batas untuk lab kedua'\ngit blame -L 2,2 -- aturan.txt\ngit show HEAD -- aturan.txt\ngit show HEAD~1:aturan.txt\ngit log -p -- aturan.txt\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "Blame baris kedua menunjuk commit Naikkan batas untuk lab kedua. Show memperlihatkan perubahan 10 menjadi 20, sementara snapshot parent masih berisi Batas: 10. Tidak ada file kerja yang diubah oleh perintah baca tersebut.",
+    "practice": [
+      "Cari hash untuk baris kedua.",
+      "Baca pesan dan diff commit yang sama.",
+      "Bandingkan snapshot HEAD dengan parent.",
+      "Jelaskan konteks perubahan tanpa menilai pribadi penulis.",
+      "Coba git log --follow pada file yang diganti nama di branch latihan."
+    ],
+    "warning": "Perintah HEAD~1 gagal jika tidak ada parent, misalnya repo baru satu commit atau clone dangkal yang tidak memuat parent. Jangan menganggap semua hash di blame adalah pencipta ide awal.",
+    "check": "Apakah blame cukup untuk menentukan siapa yang menyebabkan bug?",
+    "answer": "Tidak. Blame hanya menunjukkan sentuhan terakhir pada baris. Periksa konteks dan uji perilaku; bisect lebih cocok untuk mencari commit pertama yang memperkenalkan gejala tertentu.",
+    "nodes": [
+      "Pilih baris",
+      "Temukan commit",
+      "Baca patch dan parent",
+      "Pahami konteks"
+    ],
+    "source": "https://git-scm.com/docs/git-blame"
+  },
+  {
     "slug": "branch",
     "title": "Branch dan HEAD: jalur percobaan",
     "stage": 2,
@@ -641,6 +729,48 @@
       "Izin repo"
     ],
     "source": "https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols"
+  },
+  {
+    "slug": "keamanan-repository",
+    "title": "Keamanan repository: sebelum dan sesudah rahasia bocor",
+    "stage": 3,
+    "minutes": 25,
+    "summary": "Bedakan pencegahan, penghentian akses, dan pembersihan riwayat dengan latihan data palsu.",
+    "analogy": "Jika kunci rumah sudah difoto orang, menghapus fotonya dari meja tidak mengganti kunci pintu. Hentikan akses dulu, lalu urus salinan yang tersebar.",
+    "explain": [
+      "Prasyarat: memahami .gitignore, remote, dan autentikasi. Jangan commit password, private key, token, konfigurasi produksi lengkap, atau data pelanggan. .env.example hanya boleh berisi nama variabel dan nilai dummy yang tidak memberikan akses.",
+      "Sebelum commit, periksa nama file melalui status dan isi staged melalui diff --cached. Pemeriksaan manual membantu tetapi bukan pemindai rahasia yang lengkap. Bila tersedia, gunakan secret scanning dan push protection sebagai lapisan tambahan, bukan pengganti pemeriksaan sendiri.",
+      "Jika rahasia sungguhan terunggah, langkah pertama adalah mencabut atau mengganti kredensial melalui penyedianya. Perbarui aplikasi yang memakai kredensial, lalu periksa dampak dan aktivitas akses. Jangan menyalin kredensial ke issue atau screenshot sebagai bukti.",
+      "Menghapus file dari commit baru, menambah .gitignore, atau menjadikan repo private tidak menghilangkan salinan lama. GitHub menjelaskan bahwa pembersihan riwayat perlu koordinasi dan memiliki efek samping; urutan penanganan harus mengikuti jenis data dan kebutuhan nyata.",
+      "Untuk data pribadi yang harus dibersihkan, tentukan path atau nilai yang terdampak, koordinasikan clone/fork serta PR/cache, lalu ikuti prosedur resmi seperti git-filter-repo jika memang diperlukan. Rewrite mengubah hash dan dapat memengaruhi tanda tangan commit/tag. Tidak semua salinan milik orang lain dapat kamu hapus.",
+      "Lab di bawah hanya memakai nilai palsu CONTOH_BUKAN_TOKEN_AKTIF dan tidak memiliki remote. Kita menguji bahwa rm --cached menghentikan pelacakan sambil mempertahankan file lokal, tetapi git show pada commit lama tetap dapat membacanya. Ini menjelaskan keterbatasan tindakan, bukan simulasi kredensial nyata.",
+      "Pada penggunaan sehari-hari, tentukan file yang dipilih, pisahkan secret dari kode, dan pertahankan .env.example tanpa nilai asli. Saat bekerja di perangkat bersama, hindari meninggalkan credential atau sesi yang bisa digunakan pengguna berikutnya."
+    ],
+    "blocks": [
+      {
+        "label": "Lab lokal tanpa remote atau kredensial asli",
+        "code": "mkdir lab-rahasia-dummy\ncd lab-rahasia-dummy\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\nprintf 'API_KEY=CONTOH_BUKAN_TOKEN_AKTIF\\n' > .env\ngit add .env\ngit commit -m 'Contoh keliru: catat nilai dummy'\nprintf '.env\\n' > .gitignore\nprintf 'API_KEY=ISI_DI_PERANGKAT_SENDIRI\\n' > .env.example\ngit rm --cached .env\ngit add .gitignore .env.example\ngit diff --cached\ngit commit -m 'Pisahkan konfigurasi lokal dari contoh'\ngit status --ignored --short\ngit show HEAD~1:.env\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "File .env tetap di folder lokal, tetapi diabaikan dan tidak ada pada snapshot terbaru. Nilai dummy masih terbaca pada HEAD~1. Karena tidak ada remote, lab tidak mengunggah apa pun dan tidak mengirim pesan kepada orang lain.",
+    "practice": [
+      "Selesaikan lab dengan nilai palsu saja.",
+      "Buktikan .env masih ada secara lokal dan sudah tidak tracked.",
+      "Baca snapshot lama untuk membuktikan perbedaan penghapusan dan pembersihan riwayat.",
+      "Tuliskan urutan respons insiden: cabut/ganti akses, periksa dampak, lalu nilai kebutuhan pembersihan.",
+      "Gunakan dokumentasi penyedia saat perlu mencabut credential nyata."
+    ],
+    "warning": "Jangan mencoba dengan rahasia sungguhan dan jangan push repo lab ini. Tidak ada perintah rewrite/force push otomatis dalam latihan. Menambah ignore bukan tindakan pencabutan akses.",
+    "check": "Mengapa rotasi token lebih mendesak daripada sekadar menghapus file?",
+    "answer": "Salinan token dapat sudah dimiliki orang lain. Rotasi atau pencabutan menghentikan kemampuan akses token lama; menghapus file hanya memengaruhi salinan yang sedang kamu kendalikan.",
+    "nodes": [
+      "Cegah sebelum commit",
+      "Cabut atau ganti akses",
+      "Periksa dampak",
+      "Nilai pembersihan"
+    ],
+    "source": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository"
   },
   {
     "slug": "push-clone",
@@ -845,6 +975,53 @@
     "source": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue"
   },
   {
+    "slug": "review-pull-request",
+    "title": "Praktik review PR: periksa perubahan dan buktikan hasilnya",
+    "stage": 4,
+    "minutes": 25,
+    "summary": "Baca diff, uji kriteria selesai, dan tulis umpan balik yang membantu penulis.",
+    "analogy": "Review seperti pemeriksaan hasil perbaikan perangkat: baca pekerjaan yang dilakukan, uji gejalanya, lalu jelaskan temuan dan bukti.",
+    "explain": [
+      "Prasyarat: sudah membuat PR dan issue. Mulai dari tujuan perubahan, base/compare branch, dan kriteria selesai. PR kecil dengan satu tujuan lebih mudah diperiksa daripada perubahan campur aduk. Angka hijau pada pemeriksaan tidak menggantikan pembacaan diff.",
+      "Pada tab Files changed, baca perubahan per file. Bedakan perubahan isi, pemformatan, dependency, dan file yang tidak terkait. Periksa apakah file konfigurasi sensitif ikut tercatat. Jangan menyalin rahasia yang ditemukan ke komentar publik; koordinasikan penanganan akses melalui jalur yang sesuai.",
+      "Untuk latihan, gunakan diff HTML di bawah. Permintaan tugasnya: tautan membuka dokumentasi Git dan deskripsi gambar tetap dapat dipahami pengguna pembaca layar. Perubahan ternyata mengarah ke # dan mengganti teks alternatif menjadi gambar. Dua hal ini tidak memenuhi kriteria walaupun halaman masih bisa dibuka.",
+      "Beri komentar pada baris yang relevan: jelaskan gejala, dampak, dan saran yang dapat diuji. Contoh: Tautan sekarang menuju # sehingga tidak membuka dokumentasi. Bisa pertahankan URL dokumentasi dan coba klik kembali? Hindari komentar seperti jelek atau salah semua.",
+      "Jalankan pemeriksaan yang sesuai proyek: coba tautan, viewport ponsel, input kosong bila ada form, serta tes yang memang menguji fitur. Saat perlu menjalankan PR dari pihak lain, periksa kode dan perintah terlebih dahulu; jangan membagikan secret produksi ke kode yang belum dipercaya.",
+      "GitHub menyediakan Comment, Approve, dan Request changes sesuai izin serta konteks review. Penulis tidak dapat menyetujui PR miliknya sendiri. Jika belajar sendirian, gunakan catatan pemeriksaan pribadi atau komentar pada PR sendiri; latihan bukan alasan membuat akun palsu atau meminta orang asing menyetujui PR.",
+      "Setelah penulis mendorong commit baru, baca diff revisi dan uji kembali bagian yang berubah. Menandai percakapan resolved tidak otomatis membuktikan bug sudah diperbaiki. Catat apa yang benar-benar diuji dan bagian yang belum dapat diperiksa."
+    ],
+    "blocks": [
+      {
+        "label": "Diff latihan · baca, jangan jalankan sebagai perintah",
+        "code": "--- a/index.html\n+++ b/index.html\n@@ -1,2 +1,2 @@\n-<a href=\"https://git-scm.com/doc\">Dokumentasi Git</a>\n-<img src=\"alur.svg\" alt=\"Alur edit, staging, lalu commit\">\n+<a href=\"#\">Dokumentasi Git</a>\n+<img src=\"alur.svg\" alt=\"gambar\">",
+        "language": "diff"
+      },
+      {
+        "label": "Catatan review yang bisa dipakai",
+        "code": "## Tujuan\nTautan dokumentasi dapat dibuka dan ilustrasi dipahami.\n\n## Temuan yang menghalangi selesai\n- href=\"#\" tidak membuka dokumentasi Git.\n- alt=\"gambar\" tidak menjelaskan informasi ilustrasi.\n\n## Saran\n- Pertahankan URL dokumentasi yang benar.\n- Gunakan teks alternatif sesuai isi ilustrasi.\n\n## Bukti pemeriksaan\n- [ ] Tautan diklik dan tujuan diperiksa.\n- [ ] Tampilan 390 px dan desktop dilihat.\n- [ ] Isi alt dibaca tanpa mengandalkan gambar.\n\nIsi tanda centang hanya setelah benar-benar diuji.",
+        "language": "markdown"
+      }
+    ],
+    "result": "Pembaca menemukan dua masalah yang relevan, memberi komentar yang dapat ditindaklanjuti, dan membedakan catatan review pribadi dari approval reviewer lain.",
+    "practice": [
+      "Baca tujuan lalu cari dua ketidaksesuaian pada diff.",
+      "Tulis satu komentar per masalah dengan dampak dan saran.",
+      "Perbaiki HTML di branch latihan lalu bandingkan diff ulang.",
+      "Uji tautan dan teks alternatif, jangan hanya melihat halaman tampil.",
+      "Jika ada rekan, minta review pada repo latihan; bila sendiri, catat pemeriksaan tanpa mengklaim approval pihak lain."
+    ],
+    "warning": "Diff contoh sengaja buruk. Jangan menerapkannya ke situs aktif. Approval adalah penilaian perubahan yang diperiksa, bukan jaminan semua bug sudah ditemukan.",
+    "check": "Apakah menandai semua percakapan resolved berarti PR sudah aman untuk digabung?",
+    "answer": "Tidak. Periksa apakah perubahan sudah memenuhi kriteria, hasil tes sesuai, serta revisi terbaru benar-benar ditinjau. Status percakapan hanya bagian proses.",
+    "nodes": [
+      "Baca tujuan",
+      "Periksa diff",
+      "Uji dan beri masukan",
+      "Tinjau revisi"
+    ],
+    "source": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request"
+  },
+  {
     "slug": "fork",
     "title": "Fork, origin, upstream, dan kontribusi",
     "stage": 4,
@@ -1028,6 +1205,96 @@
       "Hash baru"
     ],
     "source": "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+  },
+  {
+    "slug": "git-worktree",
+    "title": "Git worktree: dua pekerjaan, dua folder",
+    "stage": 6,
+    "minutes": 25,
+    "summary": "Kerjakan perbaikan mendesak tanpa memindahkan edit fitur yang belum selesai.",
+    "analogy": "Satu lemari arsip dapat melayani dua meja kerja. Setiap meja punya berkas dan pekerjaan sendiri, sementara riwayatnya tetap berasal dari lemari yang sama.",
+    "explain": [
+      "Prasyarat: memahami branch dan commit, serta sudah mengenal stash. Worktree menambahkan folder kerja untuk repo yang sama. Tiap worktree memiliki checkout, HEAD, index, dan edit lokal sendiri; banyak data riwayat dan referensi tetap dibagikan.",
+      "Clone adalah repository lain dengan data dan remote tersendiri. Worktree mengelola beberapa folder dari satu repository. Ini berguna saat branch fitur sedang memiliki edit belum selesai tetapi kamu perlu menyiapkan hotfix dari main.",
+      "Git biasanya menolak checkout branch yang sama pada dua worktree sekaligus. Buat branch hotfix baru dari main agar jalur perbaikannya jelas. Jangan memakai force untuk melewati perlindungan ini hanya supaya satu branch dibuka dua kali.",
+      "Lab berikut membuat repo fitur, membiarkan edit fitur belum commit, lalu membuat worktree hotfix dari main. Commit pada hotfix tidak mengubah file kerja di folder fitur. Log --all dapat melihat commit hotfix karena riwayat dikelola bersama.",
+      "Ketika hotfix selesai, kembali ke repo utama lalu git worktree remove pada folder hotfix yang bersih. Ini menghapus folder kerja tambahan, bukan menghapus branch hotfix atau commitnya. Pastikan lokasinya benar dan tidak ada file yang masih dibutuhkan.",
+      "Worktree kotor atau memiliki file untracked penting tidak boleh dihapus paksa. Periksa, simpan atau pindahkan pekerjaan, lalu gunakan remove biasa. Jika folder pernah dipindah atau dihapus manual, baca dokumentasi repair/prune sebelum membersihkan metadata.",
+      "Worktree bukan backup independen: merusak atau kehilangan data repository utama dapat memengaruhi folder terkait. Jangan mengedit file .git penghubung secara manual. Untuk penggabungan hotfix ke main, gunakan proses merge/PR yang sudah dipelajari."
+    ],
+    "blocks": [
+      {
+        "label": "Lab dua meja kerja · dari folder induk",
+        "code": "mkdir lab-worktree\ncd lab-worktree\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\nprintf 'Versi dasar\\n' > catatan.txt\ngit add catatan.txt\ngit commit -m 'Tambah versi dasar'\ngit switch -c fitur\nprintf 'Draf fitur belum selesai\\n' >> catatan.txt\ngit worktree add -b hotfix ../lab-worktree-hotfix main\ngit worktree list\ncd ../lab-worktree-hotfix\nprintf 'Perbaikan mendesak\\n' > perbaikan.txt\ngit add perbaikan.txt\ngit commit -m 'Tambah perbaikan mendesak'\ngit status --short\ncd ../lab-worktree\ngit branch --show-current\ngit diff -- catatan.txt\ngit log --oneline --all --graph\ngit worktree remove ../lab-worktree-hotfix\ngit branch --list hotfix\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "Folder utama tetap berada di branch fitur dan drafnya masih unstaged. Hotfix memiliki commit sendiri. Setelah remove biasa, folder hotfix hilang tetapi branch hotfix masih terdaftar.",
+    "practice": [
+      "Buat dua folder sesuai lab, jangan gunakan nama proyek kerja.",
+      "Periksa branch masing-masing dan isi file sebelum/sesudah commit hotfix.",
+      "Buktikan edit fitur tetap ada.",
+      "Hapus worktree tambahan dengan remove biasa setelah bersih.",
+      "Jelaskan perbedaannya dengan clone dan stash."
+    ],
+    "warning": "git worktree remove menghapus folder kerja tambahan. Gunakan hanya folder lab yang sudah diperiksa; jangan gunakan --force untuk menghapus pekerjaan yang belum disimpan.",
+    "check": "Apakah menghapus worktree tambahan otomatis menghapus branch hotfix?",
+    "answer": "Tidak. Branch dan commitnya tetap di repository. Remove membersihkan folder kerja terkait dan metadata worktree.",
+    "nodes": [
+      "Repo bersama",
+      "Meja fitur kotor",
+      "Meja hotfix bersih",
+      "Commit tetap terpisah"
+    ],
+    "source": "https://git-scm.com/docs/git-worktree"
+  },
+  {
+    "slug": "git-lfs-aset-besar",
+    "title": "File besar dan Git LFS: apa yang masuk repository?",
+    "stage": 6,
+    "minutes": 25,
+    "summary": "Pilih tempat menyimpan kode, gambar, video, dan hasil build dengan memahami pointer LFS.",
+    "analogy": "Daftar inventaris menyimpan nomor rak, sementara barang besar berada di gudang. Nomor rak kecil tidak berarti barangnya tidak memerlukan ruang.",
+    "explain": [
+      "Prasyarat: memahami remote dan .gitattributes. Riwayat banyak versi file biner besar dapat membuat repo berat. Jangan memasukkan node_modules, hasil build, backup database, atau video mentah hanya karena semuanya ada di folder proyek.",
+      "Git LFS adalah ekstensi untuk mengelola konten file tertentu di penyimpanan LFS, sementara Git menyimpan pointer teks. Pointer memuat versi format, object ID, dan ukuran; isinya bukan gambar atau video itu sendiri.",
+      "Kolaborator memerlukan dukungan Git LFS dan akses objek agar file asli dapat diambil. Jika yang terlihat hanya pointer, periksa instalasi LFS dan gunakan git lfs pull pada repo yang memang memiliki remote LFS. Jangan langsung menganggap aset terhapus.",
+      "git lfs track menambahkan aturan pada .gitattributes; aturan itu perlu di-commit bersama file. Memanggil track saja tidak memasukkan aset ke staging dan tidak memigrasikan seluruh riwayat file yang sudah pernah dicatat.",
+      "Latihan lokal di bawah memakai file teks dummy sebagai aset uji sehingga tidak perlu membuat video besar. Pasang Git LFS dari panduan resminya terlebih dahulu, cek git lfs version, lalu gunakan lfs install --local agar konfigurasi hanya berlaku pada repo lab.",
+      "Periksa git show HEAD:aset-lab.txt setelah commit: snapshot Git berisi pointer, sedangkan file kerja masih berisi teks dummy. git lfs ls-files menunjukkan aset yang dilacak. Tidak ada push dalam lab, jadi tidak mengunggah objek atau menambah penggunaan remote.",
+      "Git LFS bukan penyimpanan gratis tanpa batas. Sebelum menggunakannya bersama tim, periksa kuota, biaya, izin, serta dukungan hosting/CI yang dipakai. Menghapus file pada commit baru juga tidak otomatis membebaskan seluruh penyimpanan riwayat LFS.",
+      "Aset publik untuk website dapat lebih sesuai di penyimpanan objek/CDN; arsip rilis dapat memakai layanan distribusi yang sesuai. Pilih menurut ukuran, frekuensi perubahan, kebutuhan versioning, dan akses—bukan berdasarkan ekstensi saja."
+    ],
+    "blocks": [
+      {
+        "label": "Periksa alat sebelum membuat lab",
+        "code": "git lfs version\n# Jika perintah tidak tersedia, ikuti panduan instalasi Git LFS\n# pada referensi resmi. Lanjutkan setelah pemeriksaan berhasil.",
+        "language": "bash"
+      },
+      {
+        "label": "Lab LFS lokal tanpa unggahan",
+        "code": "mkdir lab-lfs\ncd lab-lfs\ngit init -b main\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\ngit lfs install --local\ngit lfs track 'aset-lab.txt'\nprintf 'Ini aset dummy kecil untuk memahami pointer LFS.\\n' > aset-lab.txt\ngit add .gitattributes aset-lab.txt\ngit commit -m 'Simpan aset dummy melalui LFS'\ngit lfs ls-files\ngit show HEAD:aset-lab.txt\ncat aset-lab.txt\ncd ..",
+        "language": "bash"
+      }
+    ],
+    "result": "Snapshot Git aset-lab.txt berupa pointer yang dimulai version https://git-lfs.github.com/spec/v1. File kerja tetap teks dummy dan ls-files menampilkan aset tersebut. Lab tidak memakai remote.",
+    "practice": [
+      "Periksa Git LFS terpasang sebelum praktik.",
+      "Jalankan lab dengan aset dummy kecil saja.",
+      "Bandingkan .gitattributes, pointer commit, dan isi file kerja.",
+      "Tulis keputusan penyimpanan untuk video mentah, logo kecil, dependency, dan arsip rilis.",
+      "Jelaskan apa yang dibutuhkan rekan untuk mengambil file asli dari repo LFS."
+    ],
+    "warning": "Jangan menganggap lfs track membersihkan ukuran riwayat lama. Migrasi riwayat LFS merupakan pekerjaan terpisah yang perlu backup dan koordinasi; jangan mencobanya pada repo tim untuk latihan.",
+    "check": "Mengapa file pointer kecil tidak berarti penggunaan storage aset juga kecil?",
+    "answer": "Pointer hanya menunjuk objek. File asli tetap disimpan dalam penyimpanan LFS dan memiliki kebutuhan ruang serta transfer tersendiri.",
+    "nodes": [
+      "File asli",
+      "Aturan LFS",
+      "Pointer dalam Git",
+      "Objek di storage"
+    ],
+    "source": "https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage"
   },
   {
     "slug": "tag-dan-troubleshooting",
