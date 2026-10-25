@@ -37,7 +37,7 @@ with tempfile.TemporaryDirectory(prefix='git-depth-') as path:
  assert 'aset-lab.txt' in run('git lfs ls-files',repo)
  assert run('git remote',repo)==''
  print('PASS real Git LFS: Git pointer and original worktree asset, no upload')
-assert len(D)==38 and len({l['slug'] for l in D})==38
+assert len(D)==48 and len({l['slug'] for l in D})==48
 assert [l['stage'] for l in D]==sorted(l['stage'] for l in D)
 for l in D:ET.parse(pathlib.Path('public/git',l['slug']+'.svg'))
-print('PASS 38 ordered lessons and valid SVG illustrations')
+print('PASS 48 ordered lessons and valid SVG illustrations')
