@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import {readNetworkProgress} from './progress-store';
 
-const phases = ['Kenali menu dan perangkat', 'Bangun koneksi pertama', 'Perdalam konfigurasi', 'Diagnosis dan proyek akhir'];
+import {winboxPhases} from '@/lib/winbox-phases';
 
 type Item = {slug: string; title: string; summary: string; minutes: number; phase: number};
 
@@ -32,7 +32,7 @@ export default function WinboxOutline({items, current, compact = false}: {
     <ol>{items.map((item, index) => {
       const read = done.includes(`winbox-${item.slug}`);
       return <li key={item.slug}>
-        {(index === 0 || items[index - 1].phase !== item.phase) && <p className="winbox-phase">Tahap {item.phase + 1} · {phases[item.phase]}</p>}
+        {(index === 0 || items[index - 1].phase !== item.phase) && <p className="winbox-phase">Tahap {item.phase + 1} · {winboxPhases[item.phase]}</p>}
         <Link href={'/jaringan/winbox/' + item.slug} aria-current={current === item.slug ? 'page' : undefined}>
           <span className="winbox-number">{String(index + 1).padStart(2, '0')}</span>
           <span><strong>{item.title}</strong>{!compact && <span className="winbox-summary">{item.summary}</span>}<small>{read ? '✓ Sudah dibaca' : `${item.minutes} menit`}{current === item.slug ? ' · Sedang dibaca' : ''}</small></span>

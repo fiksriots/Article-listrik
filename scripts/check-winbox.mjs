@@ -4,9 +4,9 @@ import fs from 'node:fs';
 const lessons = JSON.parse(fs.readFileSync('lib/winbox-lessons.json', 'utf8'));
 const base = '/jaringan/winbox';
 const parent = fs.readFileSync(`.next/server/app${base}.html`, 'utf8');
-assert.equal(lessons.length, 15);
-for (const slug of ['persiapan', 'menu-winbox', 'interfaces', 'bridge', 'menu-ip', 'rencana-jaringan', 'praktik-internet', 'wan-static-pppoe', 'simple-queues', 'troubleshooting', 'latihan']) assert.ok(lessons.some(item => item.slug === slug), `Existing progress key must remain: ${slug}`);
-assert.deepEqual([...new Set(lessons.map(item => item.phase))], [0,1,2,3]);
+assert.equal(lessons.length, 23);
+for (const slug of ['persiapan', 'menu-winbox', 'interfaces', 'bridge', 'menu-ip', 'rencana-jaringan', 'praktik-internet', 'wan-static-pppoe', 'dhcp-dns', 'firewall-nat', 'routing-dua-router', 'monitoring-pemulihan', 'simple-queues', 'troubleshooting', 'latihan']) assert.ok(lessons.some(item => item.slug === slug), `Existing progress key must remain: ${slug}`);
+assert.deepEqual([...new Set(lessons.map(item => item.phase))], [0,1,2,3,4,5,6,7]);
 assert.equal(new Set(lessons.map(item => item.slug)).size, lessons.length);
 assert.ok(parent.includes('id="submateri-winbox"'));
 const home = fs.readFileSync('.next/server/app/jaringan.html', 'utf8');
@@ -53,4 +53,10 @@ const practice = lessons.find(item => item.slug === 'praktik-internet').html;
 assert.equal((practice.match(/class="step"/g) || []).length, 14);
 assert.equal((practice.match(/screenshot step-shot/g) || []).length, 15);
 assert.ok(lessons.find(item => item.slug === 'interfaces').html.includes('Praktik C'));
+for (const slug of ['vlan-access-trunk', 'firewall-antar-vlan', 'pcq-bandwidth', 'failover-dua-isp-winbox', 'wireguard-remote-winbox', 'keamanan-akses-router', 'troubleshooting-kasus-nyata', 'proyek-kantor-kecil']) {
+  const chapter = lessons.find(item => item.slug === slug);
+  assert.ok(chapter, `Missing advanced chapter: ${slug}`);
+  assert.ok(chapter.html.includes('Diagram topologi lab'), `Missing topology for ${slug}`);
+  assert.ok(chapter.html.includes('<table>'), `Missing configuration/evidence table for ${slug}`);
+}
 console.log(`PASS: ${lessons.length} Winbox sublessons, parent catalogue, canonical URLs, previous/next links, ${pictures} image references, 14 illustrated practice steps, and local anchors.`);
