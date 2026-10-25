@@ -1525,5 +1525,449 @@
       "Rilis terverifikasi"
     ],
     "source": "https://git-scm.com/book/en/v2/Git-Basics-Summary"
+  },
+  {
+    "slug": "gitlab-mengenal",
+    "title": "Mengenal GitLab: Git tetap sama, ruang kerja berbeda",
+    "stage": 7,
+    "minutes": 12,
+    "summary": "Bedakan Git, GitHub, dan GitLab; kenali istilah project, namespace, merge request, dan pipeline.",
+    "analogy": "Git adalah alat pencatat arsip. GitHub dan GitLab seperti dua kantor kolaborasi dengan ruang serta papan pekerjaan masing-masing.",
+    "explain": [
+      "Bekal minimal jalur ini: sudah memahami add, commit, branch, clone, fetch/pull, dan push pada materi dasar. Kamu tidak harus menuntaskan semua pendalaman Git sebelum mulai GitLab.",
+      "GitLab adalah platform pengelolaan proyek berbasis Git yang juga menyediakan issue, merge request, dan CI/CD. Pindah layanan tidak mengubah makna commit atau branch; git status dan git log tetap bekerja pada repo lokal.",
+      "Di GitLab, project memayungi repository, issue, merge request, serta pengaturan terkait. Namespace menunjukkan pemilik/lokasi project, misalnya akun pribadi atau group. Group dapat mengelompokkan project dan akses tim.",
+      "Pull request di GitHub sepadan secara tujuan dengan merge request atau MR di GitLab: mengusulkan penggabungan branch. Padanan istilah membantu orientasi, tetapi fitur, aturan izin, dan detail antarmukanya tidak selalu identik.",
+      "GitHub Actions memakai workflow, sedangkan GitLab CI/CD memakai konfigurasi pipeline .gitlab-ci.yml. Keduanya memerlukan pelaksana pekerjaan. Di GitLab pelaksananya disebut runner.",
+      "Contoh jalur ini memakai GitLab.com untuk project latihan milik sendiri. GitLab perusahaan dapat memakai domain sendiri dengan kebijakan berbeda. Letak menu, ketersediaan fitur, dan kuota mengikuti versi, paket, serta aturan instance."
+    ],
+    "blocks": [
+      {
+        "label": "Yang tetap sama pada repo lokal",
+        "code": "git --version\ngit status\ngit log -3 --oneline",
+        "language": "bash"
+      }
+    ],
+    "result": "Pembaca dapat membedakan alat Git dari layanan GitLab serta menyebut padanan dasar PR–MR dan workflow–pipeline. Perintah baca di atas tidak memindahkan proyek ke layanan lain.",
+    "practice": [
+      "Tulis perbedaan Git, GitHub, dan GitLab dengan kalimatmu.",
+      "Temukan padanan PR dan MR pada tabel jalur GitLab.",
+      "Pilih akun pribadi/namespace latihan, bukan project kantor."
+    ],
+    "warning": "Contoh tidak mendaftarkan akun atau membuat layanan baru secara otomatis. Jangan memakai repo pelanggan untuk mencoba fitur kolaborasi.",
+    "check": "Apakah perlu belajar ulang git commit ketika pindah ke GitLab?",
+    "answer": "Tidak. Git tetap alat yang sama. Yang dipelajari ulang adalah layanan kolaborasi, akses, dan pengaturan GitLab.",
+    "nodes": [
+      "Git lokal",
+      "Project GitLab",
+      "Merge request",
+      "Pipeline"
+    ],
+    "source": "https://docs.gitlab.com/user/get_started/get_started_projects/"
+  },
+  {
+    "slug": "gitlab-project-clone",
+    "title": "Project, namespace, visibility, dan clone pertama",
+    "stage": 7,
+    "minutes": 18,
+    "summary": "Buat project latihan yang jelas pemiliknya, lalu salin repository ke komputer.",
+    "analogy": "Nama gedung saja tidak cukup untuk menemukan ruang. Namespace adalah alamat gedungnya, project adalah ruang tempat pekerjaan disimpan.",
+    "explain": [
+      "Masuk ke GitLab.com menggunakan akunmu, lalu pilih pembuatan blank project. Nama contoh website-gitlab-lab. Pilih namespace milik sendiri; jika memakai group, pastikan kamu memang diizinkan membuat project di sana.",
+      "Untuk jalur ini, aktifkan inisialisasi README agar remote memiliki satu commit awal. Pilih visibility Private untuk latihan sebelum memutuskan apa yang layak dibagikan. Jika pilihan terbatas, ikuti kebijakan instance.",
+      "Buka project dan salin URL Clone dari antarmuka GitLab. Namespace dapat memiliki beberapa bagian seperti group/subgroup; jangan menebak alamat. Contoh NAMESPACE di bawah harus diganti dengan alamat nyata milikmu.",
+      "Clone membuat folder baru berisi repo dan remote origin. Karena remote sudah diinisialisasi, jangan membuat git init lain lalu mencoba menggabungkan dua riwayat awal yang terpisah. Jalankan clone dari folder induk yang belum memiliki website-gitlab-lab.",
+      "Repo private membutuhkan autentikasi. Materi berikut menjelaskan HTTPS/token dan SSH; bila belum siap, selesaikan persiapan akses itu dahulu lalu kembali ke langkah clone. Jangan menjadikan repo public hanya untuk menghindari pemeriksaan akses.",
+      "Sesudah clone, periksa origin dan nama default branch yang sebenarnya. Jalur ini memakai main sebagai contoh; jika instance memakai nama lain, sesuaikan seluruh perintah dan target MR. Default branch bukan selalu main."
+    ],
+    "blocks": [
+      {
+        "label": "Clone dengan URL yang disalin dari project",
+        "code": "git clone https://gitlab.com/NAMESPACE/website-gitlab-lab.git\ncd website-gitlab-lab\ngit remote -v\ngit status\ngit branch --show-current\ngit log -1 --oneline",
+        "language": "bash"
+      }
+    ],
+    "result": "Folder lokal memiliki README dari GitLab dan origin menunjuk project yang benar. Hash awal pada log sesuai commit remote. Pada project private, clone berhasil setelah akses akun disiapkan.",
+    "practice": [
+      "Buat blank project dengan README pada namespace sendiri.",
+      "Salin URL, jangan menebak namespace.",
+      "Clone setelah autentikasi siap.",
+      "Periksa alamat origin, branch, dan README."
+    ],
+    "warning": "Jangan memasukkan token ke URL clone. Password akun dan identitas penulis commit adalah hal terpisah.",
+    "check": "Mengapa kita tidak menjalankan git init lagi sesudah clone?",
+    "answer": "Clone sudah membuat repository beserta riwayat dan origin. Init ulang tidak diperlukan untuk mulai bekerja.",
+    "nodes": [
+      "Namespace pemilik",
+      "Project dengan README",
+      "Clone folder baru",
+      "Periksa origin"
+    ],
+    "source": "https://docs.gitlab.com/topics/git/clone/"
+  },
+  {
+    "slug": "gitlab-akses-push",
+    "title": "HTTPS, SSH, dan push pertama ke GitLab",
+    "stage": 7,
+    "minutes": 20,
+    "summary": "Siapkan akses yang tepat tanpa menaruh token dalam kode atau alamat remote.",
+    "analogy": "Alamat tujuan memberi tahu ke mana paket pergi. Kredensial dan peran menentukan apakah pintu penerima mengizinkan pengiriman.",
+    "explain": [
+      "Pilih HTTPS atau SSH sesuai perangkat dan kebijakan akun. Pada HTTPS, gunakan credential manager atau metode token yang didukung GitLab. Akun dengan 2FA memerlukan cara akses Git yang sesuai, bukan sekadar password akun.",
+      "Jika menggunakan personal access token, pilih izin minimum dan masa berlaku yang diperlukan. read_repository untuk membaca; write_repository diperlukan untuk push melalui Git over HTTP. Token tidak memberikan hak melebihi akun pemiliknya, sehingga peran project tetap menentukan.",
+      "Simpan token melalui mekanisme credential yang sesuai perangkat, bukan dalam URL remote, README, screenshot, atau .gitlab-ci.yml. Hindari meminta scope api luas jika kebutuhan hanya membaca/menulis repository.",
+      "Pada SSH, pasangan private/public key disiapkan sesuai dokumentasi GitLab. Daftarkan public key, jaga private key di perangkat, dan verifikasi fingerprint host sebelum menerima koneksi pertama. Domain dan port GitLab perusahaan dapat berbeda dari GitLab.com.",
+      "Atur user.name serta user.email per repo jika perlu. Ini metadata commit, bukan login GitLab. Sesudah clone, buat branch fitur agar tidak bergantung izin push langsung ke main yang mungkin dilindungi.",
+      "Contoh menambahkan index.html dari blok berikut. Buka file di browser, lalu stage dan commit. Push -u memasangkan branch lokal dengan origin. Jika ditolak, periksa URL, role, scope/expiry kredensial, dan aturan branch; jangan force push."
+    ],
+    "blocks": [
+      {
+        "label": "index.html · simpan di root repo website-gitlab-lab",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Belajar GitLab Bersama</title>\n  <style>\n    body { font-family: system-ui, sans-serif; line-height: 1.7; background: #faf5ed; color: #302a26; padding: 24px; margin: 0; }\n    main { max-width: 720px; margin: 40px auto; }\n    h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.2; }\n    article { background: white; padding: 20px; border-radius: 12px; }\n  </style>\n</head>\n<body>\n  <main>\n    <h1>Belajar GitLab Bersama</h1>\n    <article><h2>Perubahan kecil, hasil jelas</h2><p>Issue → branch → merge request → pipeline → Pages.</p></article>\n  </main>\n</body>\n</html>",
+        "language": "html"
+      },
+      {
+        "label": "Catat dan kirim branch fitur",
+        "code": "git config user.name \"Nama Kamu\"\ngit config user.email \"email-yang-kamu-izinkan@example.com\"\ngit switch -c fitur/halaman-awal\ngit add index.html\ngit diff --staged\ngit commit -m \"Tambah halaman belajar GitLab\"\ngit push -u origin fitur/halaman-awal",
+        "language": "bash"
+      }
+    ],
+    "result": "Branch fitur/halaman-awal terlihat pada project GitLab. Commit dan file HTML tersedia di branch tersebut; default branch belum berubah sampai MR digabung.",
+    "practice": [
+      "Siapkan salah satu metode akses menurut dokumentasi GitLab.",
+      "Ganti identitas contoh sebelum commit.",
+      "Simpan HTML lalu buka di browser.",
+      "Commit dan push branch fitur, kemudian cocokkan hash di GitLab."
+    ],
+    "warning": "Public key boleh didaftarkan; private key tidak dibagikan. Jangan menonaktifkan proteksi main hanya agar latihan push langsung berhasil.",
+    "check": "Mengapa token dengan write_repository masih dapat ditolak push-nya?",
+    "answer": "Scope hanya salah satu syarat. Hak akun pada project, expiry token, URL tujuan, serta aturan branch juga menentukan izin operasi.",
+    "nodes": [
+      "Metode akses",
+      "Izin project",
+      "Commit branch",
+      "Push ke GitLab"
+    ],
+    "source": "https://docs.gitlab.com/user/profile/personal_access_tokens/"
+  },
+  {
+    "slug": "gitlab-issue-merge-request",
+    "title": "Issue dan merge request: pekerjaan yang bisa ditinjau",
+    "stage": 7,
+    "minutes": 20,
+    "summary": "Hubungkan tujuan pekerjaan, branch fitur, dan MR dengan target yang benar.",
+    "analogy": "Issue seperti tiket pekerjaan; branch adalah tempat memperbaiki; MR adalah meja pemeriksaan hasil sebelum dimasukkan ke versi utama.",
+    "explain": [
+      "Buka project latihan, buat issue berjudul Tambah halaman belajar GitLab. Tulis kebutuhan satu halaman, judul yang diharapkan, dan kriteria tampil di ponsel. Nomor issue dicatat dari GitLab; jangan menebak dari contoh.",
+      "Gunakan branch fitur/halaman-awal yang sudah didorong pada materi sebelumnya. Pilih pembuatan merge request dari branch tersebut. Periksa source branch fitur dan target branch default, misalnya main.",
+      "Isi deskripsi: masalah, perubahan, cara menguji, serta keterbatasan. Referensi issue menggunakan #N dalam project yang sama. Kata Closes #N dapat menutup issue saat MR digabung ke default branch jika pola dan pengaturan instance mendukungnya.",
+      "Draft MR memberi sinyal pekerjaan belum siap. Ubah menjadi ready ketika isi sudah dapat diperiksa. Memiliki pipeline hijau tidak berarti pekerjaan sudah memenuhi kriteria manusia; pipeline baru ditambahkan pada materi CI/CD.",
+      "Pada tab Changes, baca diff HTML dan periksa tidak ada file tidak terkait atau data pribadi. Untuk latihan sendiri, catat pemeriksaan yang kamu lakukan. Jangan mengklaim approval orang lain bila tidak ada reviewer.",
+      "Setelah hasil diperiksa dan izin merge tersedia, gabungkan MR lewat GitLab. Di komputer, switch ke default branch lalu pull --ff-only dengan working tree bersih. Jika branch divergen atau akses ditolak, periksa riwayat dan izin sebelum melanjutkan."
+    ],
+    "blocks": [
+      {
+        "label": "Deskripsi MR contoh · ganti N dengan nomor issue nyata",
+        "code": "## Masalah\nBelum ada halaman latihan GitLab.\n\n## Perubahan\nTambahkan index.html dengan layout sederhana.\n\n## Pemeriksaan\n- [ ] HTML dibuka lokal.\n- [ ] Judul terbaca pada layar 390 px.\n- [ ] Diff tidak berisi kredensial.\n\nCloses #N\n\nCentang hanya hal yang benar-benar diperiksa.",
+        "language": "markdown"
+      },
+      {
+        "label": "Sesudah MR digabung lewat GitLab",
+        "code": "git status\ngit switch main\ngit pull --ff-only\ngit log -3 --oneline",
+        "language": "bash"
+      }
+    ],
+    "result": "MR menunjukkan source/target yang benar dan tujuan yang dapat diuji. Sesudah merge dan pull, index.html berada di default branch lokal.",
+    "practice": [
+      "Buat issue lalu gunakan nomor yang benar pada deskripsi MR.",
+      "Periksa source dan target sebelum mengajukan.",
+      "Baca Changes dan uji HTML lokal.",
+      "Sesudah merge, periksa issue dan sinkronkan branch lokal."
+    ],
+    "warning": "Contoh main harus disesuaikan dengan default branch project. Jangan melakukan merge saat kriteria penting belum terpenuhi.",
+    "check": "Apa padanan pull request GitHub dalam GitLab?",
+    "answer": "Merge request. Tujuannya sama-sama mengusulkan penggabungan perubahan, meski aturan review dan antarmukanya berbeda.",
+    "nodes": [
+      "Issue jelas",
+      "Source branch",
+      "MR ke target",
+      "Merge dan sinkron"
+    ],
+    "source": "https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/"
+  },
+  {
+    "slug": "gitlab-review-konflik",
+    "title": "Review MR, konflik, dan branch yang dilindungi",
+    "stage": 7,
+    "minutes": 22,
+    "summary": "Baca alasan merge terhalang dan selesaikan konflik tanpa melewati aturan tim.",
+    "analogy": "Palang pemeriksaan bisa tertutup karena jadwal bertabrakan, pemeriksaan belum selesai, atau pengemudi tidak punya izin. Penyebabnya berbeda, maka solusinya juga berbeda.",
+    "explain": [
+      "MR dapat belum bisa digabung karena konflik, pipeline gagal, diskusi belum terselesaikan sesuai aturan, atau izin/approval yang belum terpenuhi. Baca status MR sebelum memilih tindakan.",
+      "Reviewer membaca Changes, memberi komentar yang konkret, dan meminta revisi yang sesuai tujuan. Fitur approval dan kewajiban reviewer mengikuti paket serta konfigurasi project; jangan menganggap semua akun mendapat aturan yang sama.",
+      "Protected branch atau branch rules membatasi siapa yang boleh push/merge. Jika main menolak push, gunakan branch dan MR sesuai alur tim. Jangan membuka hak push semua orang hanya untuk menghilangkan error.",
+      "Untuk konflik pada source branch, simpan pekerjaan dahulu, fetch origin, lalu integrasikan target terbaru ke branch fitur. Contoh memakai merge main ke fitur. Ini menambahkan riwayat target tanpa menulis ulang commit fitur yang sudah dibagikan.",
+      "Jika merge konflik, baca penanda kedua sisi, edit hasil yang disepakati, hapus penanda, stage file yang selesai, dan commit. Push source branch yang sama akan memperbarui MR. Periksa diff serta pipeline lagi sesudah resolusi.",
+      "Latihan dua clone sebelumnya dapat dipakai untuk mempraktikkan konflik lokal. GitLab bukan penyelesai otomatis maksud perubahan; opsi resolusi web hanya tersedia untuk kasus yang didukung. Gunakan editor lokal ketika perlu melihat konteks lebih lengkap."
+    ],
+    "blocks": [
+      {
+        "label": "Pemeriksaan dan integrasi target ke source branch",
+        "code": "git status\ngit fetch origin\ngit switch fitur/halaman-awal\ngit merge origin/main\n# Jika konflik: edit file yang disebut status.\n# Setelah index.html diselesaikan, tanpa penanda konflik:\n# git add index.html\n# git commit -m \"Selesaikan konflik halaman\"\n# git push origin fitur/halaman-awal\n# Jika tidak ada konflik dan merge menambah commit,\n# periksa hasil lalu push branch fitur yang sama.",
+        "language": "bash"
+      }
+    ],
+    "result": "Jika target belum berubah, merge dapat menjawab already up to date. Jika bercabang, hasil bergantung perubahan nyata. Setelah source diperbarui, MR menunjukkan status baru; merge tetap mengikuti aturan project.",
+    "practice": [
+      "Catat alasan MR boleh atau belum boleh digabung.",
+      "Uji konflik pada repo lab dua clone bila belum ada kasus nyata.",
+      "Baca dan tanggapi satu komentar review dengan alasan serta bukti.",
+      "Bedakan konflik isi dari penolakan izin branch."
+    ],
+    "warning": "Jangan push ke branch orang lain tanpa wewenang. Jangan menjalankan force push atau melonggarkan proteksi sebagai cara melewati pemeriksaan.",
+    "check": "Apakah pipeline sukses selalu cukup untuk melewati protected branch?",
+    "answer": "Tidak. Izin merge, approval, konflik, dan aturan lain tetap berlaku sesuai konfigurasi project.",
+    "nodes": [
+      "Baca status MR",
+      "Kenali penghalang",
+      "Selesaikan sumbernya",
+      "Uji revisi"
+    ],
+    "source": "https://docs.gitlab.com/user/project/merge_requests/conflicts/"
+  },
+  {
+    "slug": "gitlab-pipeline-runner",
+    "title": "Pipeline dan runner: pemeriksaan otomatis pertama",
+    "stage": 7,
+    "minutes": 25,
+    "summary": "Kenali .gitlab-ci.yml, job, stage, runner, dan cara membaca hasil pemeriksaan.",
+    "analogy": "Pipeline adalah daftar pemeriksaan; runner adalah pekerja yang menjalankannya. Daftar yang rapi tetap tidak berjalan jika belum ada pekerja yang sesuai.",
+    "explain": [
+      "Prasyarat: index.html dari materi akses/push sudah digabung ke default branch. Buat branch ci/pemeriksaan-html dari default branch yang sudah sinkron. Simpan konfigurasi lengkap berikut sebagai .gitlab-ci.yml di root project latihan.",
+      "Pipeline berisi job yang dikelompokkan menurut stage. Job menjalankan script pada runner. Pada contoh, stage verify hanya memeriksa HTML; tidak melakukan deployment dan tidak memerlukan token layanan lain.",
+      "workflow: rules membatasi pipeline pada event merge request dan commit default branch. Karena itu, push branch fitur yang belum memiliki MR dapat belum membuat pipeline. Buka MR ke default branch untuk menjalankan pemeriksaan pada perubahan fitur.",
+      "Runner harus online dan cocok dengan tag/aturan job. GitLab.com menyediakan instance runners sesuai pengaturan, eligibility dan kuota akun. Instance perusahaan bisa memerlukan runner yang disiapkan admin. Jangan memasang runner di perangkat produksi hanya agar job cepat berjalan.",
+      "Contoh image Alpine ditujukan untuk runner Linux dengan executor yang mendukung image, seperti Docker atau Kubernetes. Shell executor tidak otomatis menyediakan container dari image; jangan menganggap semua runner mempunyai alat atau isolasi yang sama.",
+      "Gunakan Pipeline editor/CI Lint untuk memvalidasi YAML, lalu commit dan push melalui MR. Menu Build → Pipelines atau tampilan terkait menunjukkan pipeline, job, log, dan hash sumber. Lokasi menu dapat berbeda menurut versi.",
+      "test -s memeriksa file ada dan tidak kosong. grep memeriksa penanda judul, bukan semua validitas HTML atau tampilan. Ubah penanda di branch latihan untuk melihat job gagal, lalu perbaiki. Pemeriksaan berhasil berarti kriteria script ini lulus saja."
+    ],
+    "blocks": [
+      {
+        "label": ".gitlab-ci.yml · pemeriksaan awal",
+        "code": "default:\n  image: alpine:3.22\n\nworkflow:\n  rules:\n    - if: '$CI_PIPELINE_SOURCE == \"merge_request_event\"'\n    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'\n\nstages: [verify]\n\ncek-html:\n  stage: verify\n  script:\n    - test -s index.html\n    - grep -Fq 'Belajar GitLab Bersama' index.html\n",
+        "language": "yaml"
+      },
+      {
+        "label": "Kirim konfigurasi melalui branch",
+        "code": "git switch main\ngit pull --ff-only\ngit switch -c ci/pemeriksaan-html\n# Simpan YAML pada .gitlab-ci.yml di root repository.\ngit add .gitlab-ci.yml\ngit diff --staged\ngit commit -m \"Tambah pemeriksaan HTML GitLab CI\"\ngit push -u origin ci/pemeriksaan-html\n# Buka MR agar aturan merge_request_event cocok.",
+        "language": "bash"
+      }
+    ],
+    "result": "Pada MR, job cek-html berjalan bila runner tersedia dan cocok. HTML dengan penanda yang tepat lulus; mengganti penanda menyebabkan script gagal. Jika pending/stuck, periksa runner, bukan mengubah HTML tanpa bukti.",
+    "practice": [
+      "Pastikan HTML tersedia pada default branch.",
+      "Buat MR untuk konfigurasi CI.",
+      "Validasi YAML lalu baca log job dan commit sumber.",
+      "Uji kegagalan penanda judul di branch, kemudian pulihkan.",
+      "Catat perbedaan pipeline failed, pending, dan belum dibuat."
+    ],
+    "warning": "Jangan menaruh token dalam YAML. Runner dapat mengeksekusi kode repository; tinjau kode dan sumber MR sebelum memberikan akses sensitif.",
+    "check": "Mengapa push branch fitur belum tentu menghasilkan pipeline pada contoh ini?",
+    "answer": "Aturan hanya mengizinkan event MR atau default branch. Buat MR yang sesuai; jangan mengira setiap push selalu cocok dengan semua aturan pipeline.",
+    "nodes": [
+      "File YAML",
+      "Event cocok",
+      "Runner tersedia",
+      "Hasil job"
+    ],
+    "source": "https://docs.gitlab.com/ci/quick_start/"
+  },
+  {
+    "slug": "gitlab-artifact-variable",
+    "title": "Artifacts, variabel, dan diagnosis pipeline",
+    "stage": 7,
+    "minutes": 25,
+    "summary": "Bedakan hasil pekerjaan, konfigurasi, serta rahasia; pahami penyebab job gagal atau menunggu.",
+    "analogy": "Artifact seperti hasil cetakan yang diserahkan ke meja berikutnya. Variabel adalah label pengaturan; label boleh umum, tetapi kunci akses tidak boleh ikut paket cetakan.",
+    "explain": [
+      "Lanjutkan setelah pipeline pertama berhasil. Konfigurasi lengkap berikut menggantikan YAML sebelumnya dan menambahkan stage package. Job kemas-situs menyalin index.html ke public/ serta menulis identitas commit ke versi.txt.",
+      "Artifacts menyimpan hasil job untuk diunduh atau dipakai job tahap berikutnya. Ini berbeda dari cache yang bertujuan mempercepat pekerjaan. Artifacts bukan tempat menyimpan password, file .env asli, private key, atau hasil cetakan data rahasia.",
+      "Variabel predefined seperti CI_COMMIT_SHORT_SHA disediakan GitLab. LABEL_SITUS pada contoh adalah konfigurasi tidak rahasia yang aman ditulis di YAML. Contoh ini tidak memerlukan variabel secret dan tidak membuatnya secara otomatis.",
+      "Rahasia yang memang diperlukan layanan lain sebaiknya diatur melalui pengelolaan variabel/secret project yang sesuai, dengan cakupan dan hak minimum. Masked membantu menyamarkan nilai tertentu di log; protected membatasi ketersediaan menurut ref dan pengaturan. Keduanya bukan perlindungan dari script jahat yang sengaja mengirim nilainya keluar.",
+      "Jika job pending/stuck, periksa runner online, tag, scope, proteksi, dan kapasitas. Jika failed pada script, periksa perintah pertama yang gagal. Jika YAML invalid, lint dulu. Jika pipeline tidak muncul, baca workflow dan jenis event. Retry hanya masuk akal setelah penyebab dipahami.",
+      "Durasi expire_in pada artifacts adalah kebijakan retensi yang dapat dipengaruhi pengaturan keep latest successful artifacts. Jangan menganggap semua artifact pasti terhapus persis tujuh hari atau merupakan backup permanen.",
+      "Periksa perubahan pipeline sebelum menjalankan MR dari sumber yang tidak dipercaya dengan akses secret project induk. Jangan mencetak seluruh environment untuk debug. Periksa hanya nilai nonrahasia yang diperlukan dan metadata job."
+    ],
+    "blocks": [
+      {
+        "label": ".gitlab-ci.yml · menggantikan contoh pipeline awal",
+        "code": "default:\n  image: alpine:3.22\n\nworkflow:\n  rules:\n    - if: '$CI_PIPELINE_SOURCE == \"merge_request_event\"'\n    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'\n\nstages: [verify, package]\n\nvariables:\n  LABEL_SITUS: \"Lab GitLab\"\n\ncek-html:\n  stage: verify\n  script:\n    - test -s index.html\n    - grep -Fq 'Belajar GitLab Bersama' index.html\n\nkemas-situs:\n  stage: package\n  script:\n    - mkdir -p public\n    - cp index.html public/index.html\n    - printf 'commit=%s\\n' \"$CI_COMMIT_SHORT_SHA\" > public/versi.txt\n  artifacts:\n    paths:\n      - public/\n    expire_in: 7 days\n",
+        "language": "yaml"
+      },
+      {
+        "label": "Peta gejala ke pemeriksaan",
+        "code": "Pipeline tidak ada → workflow, event, dan konfigurasi file\nJob pending/stuck → runner online, tag, proteksi, kapasitas\nJob failed → log perintah pertama yang gagal\nArtifact tidak ada → path relatif, job penghasil, dan masa retensi\nVariabel kosong → nama, cakupan environment, ref, dan izin",
+        "language": "text"
+      }
+    ],
+    "result": "Pipeline memiliki verify lalu package. Artifact public/ berisi HTML dan versi.txt dengan hash pendek commit. LABEL_SITUS adalah contoh konfigurasi nonrahasia; tidak ada token yang dibutuhkan atau dicetak.",
+    "practice": [
+      "Simpan YAML lengkap pada branch CI lalu ajukan MR.",
+      "Unduh artifact dan cocokkan isi versi.txt dengan commit pipeline.",
+      "Cari gejala pending dan failed pada dokumentasi lalu tulis diagnosis berbeda.",
+      "Jelaskan mengapa masked bukan izin menjalankan script tak dipercaya."
+    ],
+    "warning": "Jangan mengunggah .env sebagai artifact atau menganggap masking mencegah semua kebocoran. Jangan mengirim kredensial lewat screenshot log.",
+    "check": "Apa beda artifact dan cache pada pipeline?",
+    "answer": "Artifact adalah hasil job untuk dipakai atau diperiksa; cache terutama untuk mempercepat pekerjaan. Keduanya perlu aturan akses dan tidak cocok untuk menyebarkan secret.",
+    "nodes": [
+      "Verify HTML",
+      "Package public/",
+      "Artifact hasil",
+      "Diagnosis sesuai gejala"
+    ],
+    "source": "https://docs.gitlab.com/ci/jobs/job_artifacts/"
+  },
+  {
+    "slug": "gitlab-pages",
+    "title": "GitLab Pages: dari artifact menjadi website",
+    "stage": 7,
+    "minutes": 25,
+    "summary": "Terbitkan website statis dari pipeline latihan dan periksa versi yang benar-benar tersedia.",
+    "analogy": "Artifact adalah paket halaman jadi. Pages adalah etalase yang menyajikan paket tersebut kepada pembaca melalui URL.",
+    "explain": [
+      "Prasyarat: pipeline verify/package berhasil dan artifact public/index.html tersedia. Contoh lengkap berikut ditujukan GitLab 17.10+ dengan Pages dan runner yang sesuai. Pada instance lebih lama atau yang menonaktifkan Pages, ikuti dokumentasi versi dan administratornya.",
+      "Job terbitkan-pages menjalankan stage deploy setelah package. Secara default, job tahap selanjutnya mengambil artifacts job tahap sebelumnya; kita tidak memakai needs/dependencies khusus. public/index.html harus tetap ada dan tidak kosong.",
+      "pages: publish menentukan folder yang disajikan. Pada versi yang dituju, path publish otomatis ikut artifacts Pages. Nama job boleh terbitkan-pages karena konfigurasi pages menunjukkan fungsinya. Ini bukan deployment Next.js server atau database.",
+      "Rule job deployment hanya mengizinkan default branch. MR memeriksa dan mengemas HTML tanpa menerbitkan Pages. Setelah MR digabung, pipeline default branch melakukan verify, package, lalu deploy. Ini memisahkan pemeriksaan perubahan dari publikasi situs latihan.",
+      "Ambil URL yang benar dari pengaturan Deploy → Pages atau tampilan Pages instance, bukan menebak namespace.gitlab.io. Domain unik dan path project dapat berbeda. Periksa access control: project private tidak otomatis menjelaskan seluruh akses website Pages.",
+      "Buka URL yang ditampilkan setelah deployment selesai dan cocokkan judul serta versi.txt. Untuk aset tambahan, gunakan path relatif yang sesuai base URL project; link absolut /gambar.png dapat menuju lokasi berbeda pada situs ber-prefix project.",
+      "Jika website 404, periksa deploy job, folder publish, index.html, URL, dan hak akses. Jika isi lama, cocokkan commit pipeline dan hash versi.txt sebelum menyalahkan cache. Pipeline hijau saja belum membuktikan domain yang dibuka benar.",
+      "Pages mempublikasikan file statis yang masuk folder publish. Jangan menyalin file konfigurasi sensitif ke public/. Lab ini tidak meminta custom domain atau pembayaran; ketersediaan dan penggunaan runner tetap mengikuti akun serta instance."
+    ],
+    "blocks": [
+      {
+        "label": ".gitlab-ci.yml · lengkap untuk Pages, GitLab 17.10+",
+        "code": "default:\n  image: alpine:3.22\n\nworkflow:\n  rules:\n    - if: '$CI_PIPELINE_SOURCE == \"merge_request_event\"'\n    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'\n\nstages: [verify, package, deploy]\n\ncek-html:\n  stage: verify\n  script:\n    - test -s index.html\n    - grep -Fq 'Belajar GitLab Bersama' index.html\n\nkemas-situs:\n  stage: package\n  script:\n    - mkdir -p public\n    - cp index.html public/index.html\n    - printf 'commit=%s\\n' \"$CI_COMMIT_SHORT_SHA\" > public/versi.txt\n  artifacts:\n    paths:\n      - public/\n    expire_in: 7 days\n\nterbitkan-pages:\n  stage: deploy\n  script:\n    - test -s public/index.html\n  pages:\n    publish: public\n  rules:\n    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'\n",
+        "language": "yaml"
+      },
+      {
+        "label": "Pemeriksaan setelah deployment",
+        "code": "1. Pipeline default branch: verify → package → deploy berhasil.\n2. Catat hash commit pipeline.\n3. Buka URL dari pengaturan Pages.\n4. Periksa judul Belajar GitLab Bersama.\n5. Buka versi.txt pada base URL Pages yang sama.\n6. Cocokkan hash dan periksa tampilan ponsel.",
+        "language": "text"
+      }
+    ],
+    "result": "Website statis tersedia pada URL Pages yang ditampilkan project jika fitur dan aksesnya aktif. MR tidak menerbitkan Pages; default branch yang berhasil menyediakan versi dengan identitas commit yang cocok.",
+    "practice": [
+      "Ganti YAML melalui MR setelah membaca seluruh perubahan.",
+      "Pastikan MR hanya verify/package dan tidak deploy.",
+      "Gabungkan lalu periksa pipeline default branch.",
+      "Buka URL yang diberikan GitLab, judul, dan versi.txt.",
+      "Periksa akses Pages sesuai siapa yang boleh melihat latihan."
+    ],
+    "warning": "Jangan menggunakan repo aktif pelanggan untuk mencoba deploy. Pages tidak menjalankan backend login/database; secret yang masuk folder publik dapat ikut tersaji.",
+    "check": "Mengapa MR contoh tidak mengubah website Pages langsung?",
+    "answer": "Job deploy dibatasi ke default branch. MR hanya diuji dan dikemas; publikasi terjadi setelah perubahan masuk default branch dan pipeline berhasil.",
+    "nodes": [
+      "Artifact public/",
+      "Merge ke default",
+      "Job Pages",
+      "URL terverifikasi"
+    ],
+    "source": "https://docs.gitlab.com/user/project/pages/introduction/"
+  },
+  {
+    "slug": "gitlab-multi-remote",
+    "title": "GitHub dan GitLab: dua remote tanpa salah tujuan",
+    "stage": 7,
+    "minutes": 22,
+    "summary": "Tambahkan tujuan kedua secara sadar dan pahami apa yang ikut atau tidak ikut berpindah.",
+    "analogy": "Satu buku dapat dikirim ke dua alamat, tetapi tiket pekerjaan dan percakapan di tiap kantor tidak otomatis ikut dalam pengiriman halaman buku.",
+    "explain": [
+      "Prasyarat: memahami origin, branch, push/pull, dan izin kedua layanan. Git dapat memiliki lebih dari satu remote. Nama origin bukan berarti GitHub; itu hanya label lokal. Tambahkan nama gitlab bila repo sudah memakai origin ke GitHub, atau nama lain yang jelas.",
+      "Untuk latihan pemindahan riwayat Git, buat project tujuan GitLab kosong tanpa README otomatis. Project kosong berbeda dari alur project pertama tadi: tujuannya menerima riwayat yang sudah ada, bukan membuat commit awal terpisah.",
+      "git remote add gitlab URL hanya menambah alamat. Periksa remote -v dan branch sebelum git push gitlab main. Push branch tertentu lebih mudah ditinjau daripada push semua refs sekaligus. Jangan memakai --mirror untuk perpindahan pertama karena dapat mengubah atau menghapus refs tujuan.",
+      "Dua remote tidak otomatis sinkron. Commit baru di GitHub belum masuk GitLab sampai dipindahkan sesuai kebijakan tim. Tentukan sumber utama dan arah pengiriman; perubahan paralel dapat divergen dan perlu diintegrasikan.",
+      "Push Git memindahkan riwayat/branch yang dipilih, bukan seluruh issue, komentar PR, approval, secret CI, Pages, atau pengaturan akses. Layanan import/migration dapat membantu beberapa metadata, tetapi ketersediaan dan cakupannya perlu diperiksa terpisah.",
+      "Branch protection dan kredensial masing-masing layanan tetap berlaku. Bila GitLab tujuan sudah berisi commit sendiri, fetch dan periksa terlebih dahulu; jangan memaksa overwrite. Untuk Git LFS, objek aslinya juga perlu alur pemindahan LFS yang sesuai, bukan hanya pointer Git.",
+      "Lab lokal di bawah memakai dua bare repo tanpa layanan eksternal. Kita memeriksa hash branch dua tujuan dan memperlihatkan bahwa push ke satu remote tidak mengubah yang lain. Nama github dan gitlab di lab hanyalah peran alamat lokal."
+    ],
+    "blocks": [
+      {
+        "label": "Lab dua remote lokal · folder baru",
+        "code": "mkdir lab-dua-remote\ncd lab-dua-remote\ngit init --bare --initial-branch=main github.git\ngit init --bare --initial-branch=main gitlab.git\ngit init -b main kerja\ncd kerja\ngit config user.name 'Peserta Lab'\ngit config user.email 'lab@example.com'\nprintf 'Versi satu\\n' > catatan.txt\ngit add catatan.txt\ngit commit -m 'Tambah versi satu'\ngit remote add origin ../github.git\ngit remote add gitlab ../gitlab.git\ngit remote -v\ngit push -u origin main\ngit push gitlab main\nprintf 'Versi dua\\n' >> catatan.txt\ngit add catatan.txt\ngit commit -m 'Tambah versi dua'\ngit push origin main\ngit ls-remote origin refs/heads/main\ngit ls-remote gitlab refs/heads/main\n# Hash kini berbeda; kirim perubahan ke tujuan kedua secara sadar.\ngit push gitlab main\ngit ls-remote gitlab refs/heads/main\ncd ../..",
+        "language": "bash"
+      },
+      {
+        "label": "Alamat remote eksternal · contoh, jangan jalankan sebelum tujuan siap",
+        "code": "# Pada repo latihan dengan origin GitHub dan main yang benar:\n# git remote add gitlab https://gitlab.com/NAMESPACE/TUJUAN-KOSONG.git\n# git remote -v\n# git push gitlab main",
+        "language": "bash"
+      }
+    ],
+    "result": "Pada lab, dua tujuan awalnya identik, kemudian berbeda saat hanya origin dipush. Setelah push gitlab main, hash kembali sama. Tidak ada akun, issue, atau pengaturan layanan yang dipindahkan.",
+    "practice": [
+      "Jalankan lab lokal dan catat kedua hash sebelum/sesudah push kedua.",
+      "Jelaskan layanan mana yang menjadi sumber utama pada skenario timmu.",
+      "Daftar metadata yang tidak ikut git push.",
+      "Jika pindah layanan sungguhan, cocokkan izin, refs, objek LFS, dan kebutuhan metadata sebelum mengubah tujuan."
+    ],
+    "warning": "Contoh eksternal tetap komentar. Jangan mengganti origin atau memakai push --mirror pada repo kantor tanpa rencana dan wewenang.",
+    "check": "Apakah push branch ke GitLab otomatis menyalin issue dan secret GitHub Actions?",
+    "answer": "Tidak. Push Git memindahkan objek/refs Git yang dipilih. Metadata layanan, secret, dan pengaturan CI memerlukan penanganan tersendiri.",
+    "nodes": [
+      "Repo lokal",
+      "Remote origin",
+      "Remote gitlab",
+      "Periksa hash tujuan"
+    ],
+    "source": "https://docs.gitlab.com/user/project/repository/"
+  },
+  {
+    "slug": "gitlab-proyek-akhir",
+    "title": "Proyek GitLab: website dengan issue, MR, pipeline, dan Pages",
+    "stage": 7,
+    "minutes": 40,
+    "summary": "Selesaikan satu alur kerja GitLab yang dapat ditunjukkan dan diulang dari clone baru.",
+    "analogy": "Bangun etalase kecil seperti tim: tentukan pekerjaan, kerjakan di meja terpisah, periksa hasil, lalu pajang versi yang sudah lolos.",
+    "explain": [
+      "Gunakan project website-gitlab-lab dari jalur ini. Jika ingin mengulang, buat namespace/project latihan baru lalu ikuti materi project. Jangan menggabungkan latihan dengan repository situs Learn atau proyek pelanggan.",
+      "Sasaran proyek: satu website statis berjudul Belajar GitLab Bersama, README dengan cara membuka lokal, serta .gitlab-ci.yml lengkap dari materi Pages. Pilih visibility dan akses Pages secara sadar.",
+      "Buat dua issue kecil: tambah bagian Tujuan belajar dan perbaiki jarak tampilan ponsel. Kerjakan masing-masing pada branch berbeda dari default branch yang sudah sinkron, lalu ajukan MR yang menautkan issue terkait.",
+      "Untuk tiap MR, baca Changes, uji HTML lokal, dan periksa pipeline pada hash yang benar. Jika belajar sendiri, catat self-review tanpa mengklaim persetujuan reviewer lain. Bila ada rekan, gunakan peran/izin project yang memang diberikan.",
+      "Sesudah merge, periksa pipeline default branch dan job Pages. Ambil URL dari project, lihat tampilan 390 px serta desktop, dan cocokkan versi.txt dengan hash sumber. Jangan menandai sukses hanya karena git push berhasil.",
+      "Uji satu kegagalan terkontrol pada branch: ubah penanda judul yang diperiksa grep, lihat pipeline failed, lalu perbaiki dengan commit baru. Pastikan perubahan buruk tidak digabung ke default branch.",
+      "Clone project ke folder baru dan ikuti README tanpa mengandalkan file lokal yang tidak tercatat. Gunakan checklist berikut sebagai bukti apa yang sudah diperiksa; jika runner/Pages belum tersedia, nyatakan batasannya, jangan mengklaim publikasi sukses.",
+      "Tag rilis boleh dibuat setelah pemeriksaan selesai. Tag tidak otomatis berarti ada release page atau deployment baru; aturan pipeline contoh hanya menangani MR dan default branch. Jalur ini mengajarkan alur GitLab, bukan mewajibkan instalasi server GitLab sendiri."
+    ],
+    "blocks": [
+      {
+        "label": "README singkat untuk proyek latihan",
+        "code": "# Website GitLab Lab\n\nSatu halaman statis untuk melatih issue, branch, MR, CI, dan Pages.\n\n## Menjalankan lokal\n1. Clone project dengan URL dari GitLab.\n2. Buka index.html di browser.\n\n## Pemeriksaan\n- Judul Belajar GitLab Bersama terbaca.\n- Tidak ada gulir horizontal pada layar 390 px.\n- Pipeline MR memeriksa dan mengemas HTML.\n- Pages hanya diterbitkan dari default branch.\n\n## Catatan hasil\nIsi URL MR, hash pipeline, URL Pages, dan keterbatasan setelah diperiksa.",
+        "language": "markdown"
+      },
+      {
+        "label": "Bukti akhir · isi dengan hasil nyata",
+        "code": "[ ] README dapat diikuti dari clone baru.\n[ ] Dua issue memiliki tujuan dan kriteria selesai.\n[ ] Dua branch/MR terpisah sudah diperiksa.\n[ ] Kegagalan pipeline pernah direproduksi dan diperbaiki.\n[ ] MR tidak menjalankan job Pages.\n[ ] Pipeline default branch dan Pages berhasil.\n[ ] Judul, tampilan ponsel, dan versi.txt cocok.\n[ ] Tidak ada secret pada repo, log, atau artifact.",
+        "language": "text"
+      }
+    ],
+    "result": "Pembaca memiliki bukti issue/MR, hasil pipeline pada commit yang tepat, dan URL Pages jika fitur tersedia. Clone baru dapat digunakan dengan petunjuk yang tercatat.",
+    "practice": [
+      "Kerjakan dua issue melalui dua MR.",
+      "Catat hasil uji, bukan hanya tanda centang.",
+      "Buktikan pipeline gagal/lulus pada perubahan judul.",
+      "Clone ulang dan ikuti README.",
+      "Periksa Pages dan identitas versi, lalu tulis batasan yang masih ada."
+    ],
+    "warning": "Jangan mengklaim CI atau Pages sudah diuji jika runner tidak tersedia atau URL belum bisa diakses. Gunakan data fiktif dan project milik sendiri.",
+    "check": "Apa bukti bahwa website yang kamu buka sesuai commit yang diperiksa?",
+    "answer": "Bandingkan hash pipeline/deployment dengan isi versi.txt pada base URL Pages yang sama, lalu periksa konten dan fungsi halamannya.",
+    "nodes": [
+      "Issue terarah",
+      "Branch serta MR",
+      "Pipeline diperiksa",
+      "Pages sesuai versi"
+    ],
+    "source": "https://docs.gitlab.com/ci/quick_start/tutorial/"
   }
 ]
