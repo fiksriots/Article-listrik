@@ -9,11 +9,12 @@ export const useLearningAccount=()=>useContext(Context);
 export function LearningAccountProvider({children}:{children:ReactNode}){
  const [session,setSession]=useState<Session|null>(null);const [loading,setLoading]=useState(true);const [status,setStatus]=useState('Progres tersimpan di browser ini.');const [configured,setConfigured]=useState(false);const [request,setRequest]=useState(0);
  const sync=useCallback(()=>setRequest(n=>n+1),[]);
- useEffect(()=>{try{migrateLegacy();announce();}catch{setStatus('Penyimpanan browser tidak tersedia.');}const sb=getSupabase();setConfigured(!!sb);if(!sb){setLoading(false);return;}let alive=true;let observed=false;
- const apply=(next:Session|null)=>{if(!alive)return;setOwner(next?.user.id||null);setSession(next);setLoading(false);setStatus(next?'Menyiapkan sinkronisasi…':'Tanpa akun · progres tersimpan di browser ini.');};
- const {data}=sb.auth.onAuthStateChange((_event,next)=>{observed=true;apply(next);});
+ useEffect(()=>{try{migrateLegacy();announce();}catch{setStatus('Penyimpanan browser tidak tersedia.');}let sb;try{sb=getSupabase();}catch{setConfigured(false);setLoading(false);setStatus('Layanan akun belum dapat dimuat.');return;}setConfigured(!!sb);if(!sb){setLoading(false);return;}let alive=true;let observed=false;
+ const apply=(next:Session|null)=>{if(!alive)return;setSession(next);setLoading(false);try{setOwner(next?.user.id||null);setStatus(next?'Menyiapkan sinkronisasi…':'Tanpa akun · progres tersimpan di browser ini.');}catch{setStatus('Penyimpanan browser diblokir. Izinkan penyimpanan situs untuk menggunakan progres akun.');}};
+ const sessionTimer=window.setTimeout(()=>{if(alive&&!observed){setLoading(false);setStatus('Pemeriksaan sesi belum selesai. Periksa koneksi atau muat ulang halaman.');}},12000);
+ const {data}=sb.auth.onAuthStateChange((_event,next)=>{observed=true;window.clearTimeout(sessionTimer);apply(next);});
  sb.auth.getSession().then(({data,error})=>{if(!observed)apply(error?null:data.session);}).catch(()=>{if(!observed)apply(null);});
- return()=>{alive=false;data.subscription.unsubscribe();};},[]);
+ return()=>{alive=false;window.clearTimeout(sessionTimer);data.subscription.unsubscribe();};},[]);
  useEffect(()=>{if(!session)return;const sb=getSupabase();if(!sb)return;const id=session.user.id;let canceled=false;let running=false;let rerun=false;
  const run=async()=>{if(canceled||getOwner()!==id)return;if(running){rerun=true;return;}running=true;
  try{if(!navigator.onLine){setStatus('Offline · perubahan disimpan di browser dan dikirim setelah terhubung.');return;}setStatus('Menyinkronkan progres…');const {data,error}=await sb.from('education_learning_progress').select('academy,lesson_slug,completed').eq('user_id',id);if(error)throw error;if(canceled||getOwner()!==id)return;

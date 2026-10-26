@@ -1,0 +1,11 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),ts=require('typescript');
+const source=fs.readFileSync('lib/auth/errors.ts','utf8');const m={exports:{}};
+new Function('module','exports',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText)(m,m.exports);
+const {authErrorMessage,accountFetch}=m.exports;
+assert.match(authErrorMessage({code:'invalid_credentials'},'signin'),/tidak cocok/);
+assert.match(authErrorMessage({code:'email_not_confirmed'},'signin'),/belum dikonfirmasi/);
+assert.match(authErrorMessage({status:429},'signup'),/terlalu sering/);
+assert.match(authErrorMessage({code:'email_address_not_authorized'},'signup'),/Pengelola/);
+assert.match(authErrorMessage({name:'AuthRetryableFetchError'},'signin'),/tidak merespons/);
+(async()=>{const original=global.fetch;let signal;global.fetch=async(_input,init)=>{signal=init.signal;return new Response('{}');};await accountFetch('https://example.invalid');assert.ok(signal instanceof AbortSignal);assert.equal(signal.aborted,false);
+const c=new AbortController();c.abort();global.fetch=async(_input,init)=>{assert.equal(init.signal.aborted,true);throw new DOMException('aborted','AbortError');};await assert.rejects(accountFetch('https://example.invalid',{signal:c.signal}),{name:'AbortError'});global.fetch=original;console.log('PASS: auth errors, bounded requests and upstream cancellation');})().catch(e=>{console.error(e);process.exitCode=1});

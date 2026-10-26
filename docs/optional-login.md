@@ -31,3 +31,11 @@ RLS was tested transactionally with two synthetic users and rollback: owner read
 ## Existing project policy findings
 
 A read-only audit found pre-existing PUBLIC policies with unconditional access on cms_config, contacts, documents, guestbook, and sent_emails. These were not changed by this feature; review their privileges and the portfolio's intended admin identity before enabling public account signup. Merely enabling RLS does not protect a table when the policy allows every row. See https://supabase.com/docs/guides/database/postgres/row-level-security . The new education progress table has separate ownership policies and passed isolation tests.
+
+## Login repair (27 October 2026)
+
+The production readiness flag was absent. Public Auth settings confirmed that email/password is enabled, signup is allowed by the backend, and email confirmation is required. SMTP readiness and the redirect allowlist could not be verified because dashboard authentication was declined. Do not enable the readiness flag until a real confirmation and recovery email have been tested. No confirmation requirement was disabled and no production test user was created.
+
+The account UI now explains the signup dependency when the signup tab is selected. Login distinguishes invalid credentials, unconfirmed email, throttling, and network failures. Requests have a 15-second abort deadline; session initialization has a bounded loading indicator. Mode switching and field edits are disabled during submission. Browser-storage failures no longer leave the account provider loading indefinitely.
+
+Verification: npm run typecheck; node scripts/check-auth-errors.cjs; node scripts/check-account-progress.cjs; npm run build. Successful real-account login and email delivery remain unverified until dashboard access and a test mailbox are available.
