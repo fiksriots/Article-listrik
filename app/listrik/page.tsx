@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import Link from 'next/link';
 import LearningJourney from '@/components/learning-journey';
 import {stages,lessons} from '@/lib/course';
-export const metadata:Metadata={title:'Learn Electric — Belajar Listrik dari Nol',description:'Urutan belajar listrik: dasar dan keselamatan, rangkaian, komponen DC, arus kuat, motor dan troubleshooting.',alternates:{canonical:'https://fikss.id/listrik'}};
+export const metadata:Metadata={title:'Learn Electric — Belajar Listrik dari Nol',description:'Urutan belajar listrik: dasar dan keselamatan, rangkaian, komponen DC, arus kuat, motor dan troubleshooting.',alternates:{canonical:'https://fikss.site/listrik'}};
 export default function Home(){return <main id="konten" className="max-w-6xl mx-auto px-5 py-12 space-y-9">
   <section className="rounded-3xl bg-slate-900 text-white p-7 md:p-14 space-y-5"><p className="text-teal-300 font-bold text-sm">AKADEMI BELAJAR LISTRIK & ELEKTRONIKA</p><h1 className="text-3xl md:text-5xl font-extrabold max-w-3xl leading-tight">Belajar listrik, satu langkah setiap kali.</h1><p className="text-slate-300 max-w-2xl">Belum mengenal listrik? Mulai dari pelajaran 01, lalu ikuti urutannya. {lessons.length} materi disusun dalam {stages.length} tahap agar dasar dipahami sebelum masuk ke panel, motor, dan PLC.</p><div className="flex flex-wrap gap-3"><Link className="btn" href={'/materi/'+lessons[0].slug}>Mulai dari nol →</Link><Link className="course-secondary" href="/modul">Lihat peta belajar</Link></div></section>
   <LearningJourney/>

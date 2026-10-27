@@ -1,7 +1,7 @@
 import {winboxItems,WINBOX_BASE} from '@/lib/winbox-course';
 import {GET as getCatalogue} from '@/app/api/articles/route';
 export const dynamic='force-static';
-const origin='https://fikss.id';
+const origin='https://fikss.site';
 const indexPaths=['/belajar','/listrik','/modul','/galeri','/simulator','/jaringan','/jaringan/winbox','/jaringan/mtcna','/jaringan/mtcre','/jaringan/mtcre/kurikulum','/jaringan/troubleshooting','/jaringan/simulator','/jaringan/simulator/ipv6','/jaringan/simulator/next-hop','/jaringan/simulator/ospf','/jaringan/simulator/failover','/iot','/iot/arduino','/git','/git/dasar','/git/github','/git/gitlab','/git/panduan-cepat'];
 function escape(value:string){return value.replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]!));}
 export async function GET(){

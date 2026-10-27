@@ -48,7 +48,7 @@ const lessonPhotos: Record<string, string> = {
 export const dynamic = 'force-static';
 
 export function GET() {
-  const origin = 'https://fikss.id';
+  const origin = 'https://fikss.site';
   const items = lessons.flatMap((lesson, index) => {
     const doc = getLesson(lesson.slug);
     if (!doc) return [];

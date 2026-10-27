@@ -4,12 +4,12 @@ const nextConfig = {
     return [{
       source: '/',
       has: [{type:'host',value:'article.fikss.site'}],
-      destination: 'https://fikss.id/belajar',
+      destination: 'https://fikss.site/belajar',
       permanent: true,
     }, {
       source: '/',
       has: [{type:'host',value:'listrik.fikss.site'}],
-      destination: 'https://fikss.id/belajar',
+      destination: 'https://fikss.site/belajar',
       permanent: true,
     }, {
       source: '/jaringan/mikrotik-winbox/:topic',
@@ -18,7 +18,7 @@ const nextConfig = {
     }, {
       source: '/:path*',
       has: [{ type: 'host', value: 'listrik.fikss.site' }],
-      destination: 'https://fikss.id/:path*',
+      destination: 'https://fikss.site/:path*',
       permanent: true,
     }];
   },

@@ -6,4 +6,4 @@ export const dynamic='force-dynamic';
 export const {GET,PUT}=progressHandlers(async()=>{
   if(!googleAuthConfigured())return null;
   const session=await auth();return session?.user?.id || null;
-},getProgressStore,['https://fikss.id']);
+},getProgressStore,['https://fikss.site']);

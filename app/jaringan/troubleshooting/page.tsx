@@ -6,7 +6,7 @@ import './troubleshooting.css';
 export const metadata: Metadata = {
   title: 'Troubleshooting Jaringan — Diagnosis, Flapping, dan Pemulihan | Learn Networking',
   description: 'Pusat materi troubleshooting jaringan: flapping, ping, DNS/DHCP, pemeriksaan MikroTik, OSPF, monitoring, dan pemulihan konfigurasi. Mulai dari gejala dan buktikan hasilnya.',
-  alternates: {canonical: 'https://fikss.id/jaringan/troubleshooting'},
+  alternates: {canonical: 'https://fikss.site/jaringan/troubleshooting'},
 };
 
 export default function TroubleshootingHome() {
