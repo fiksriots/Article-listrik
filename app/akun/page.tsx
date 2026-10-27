@@ -1,3 +1,4 @@
+import './account.css';
 import Account from '@/components/auth/account';
 import {googleAuthConfigured} from '@/auth';
 export const dynamic = 'force-dynamic';

@@ -1,0 +1,52 @@
+.account-main{max-width:1000px;margin:0 auto;padding:32px 28px 72px;color:#273449}
+.account-back{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:13px;color:#647184}
+.account-back:hover{color:#413a56}
+.account-heading{max-width:560px;margin:28px 0 32px}
+.account-eyebrow{font-size:10px;font-weight:750;letter-spacing:.16em;color:#777088;margin:0 0 12px}
+.account-heading h1{font:500 clamp(30px,4.3vw,44px)/1.18 Georgia,serif;letter-spacing:-.035em;margin:0 0 14px;text-wrap:balance}
+.account-heading h1 em{font-weight:400;color:#777088}
+.account-heading>p:last-child{font-size:14px;line-height:1.8;color:#687486;margin:0;max-width:410px}
+.account-layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:56px;align-items:start}
+.account-panel{min-width:0;background:#fff;border:1px solid #e0e3e9;border-radius:20px;padding:32px;box-shadow:0 8px 32px #28324705}
+.account-card-symbol{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid #e3dfea;border-radius:13px;font:700 28px Georgia,serif;background:#f7f5fa;color:#443c57;margin-bottom:24px}
+.account-card-symbol span{color:#9286a9}
+.account-panel h2{font-size:21px;line-height:1.4;letter-spacing:-.03em;font-weight:650;margin:0 0 10px;overflow-wrap:anywhere}
+.account-intro{font-size:14px;line-height:1.8;color:#6a7383;margin:0 0 26px}
+.account-actions{display:flex;flex-direction:column;gap:12px;width:100%}
+.account-google,.account-continue,.account-secondary{width:100%;min-height:48px;padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;display:flex;justify-content:center;align-items:center;gap:12px;text-align:center;line-height:1.5}
+.account-google{color:#283247;background:#fff;border:1px solid #bfc5d1;box-shadow:0 2px 3px #17243b04}
+.account-google:hover:enabled{background:#f7f8fb;border-color:#8f98aa}
+.account-google svg{flex-shrink:0}
+.account-continue{background:#49405f;color:white;justify-content:space-between}
+.account-continue:hover{background:#393148}
+.account-guest{display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;border-radius:8px;color:#675c7c;font-size:13px}
+.account-guest:hover{background:#f6f4f8}
+.account-secondary{border:1px solid #dce0e7;background:white;color:#566174}
+.account-secondary:hover:enabled{background:#f8f9fb}
+.account-reassurance{font-size:11px;line-height:1.6;color:#778191;text-align:center;margin:18px 0 0}
+.account-profile{display:flex;align-items:flex-start;gap:14px;margin-bottom:24px}
+.account-profile>div{min-width:0}
+.account-avatar{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:46px;height:46px;border-radius:50%;background:#efecf5;color:#675780;font:24px Georgia,serif}
+.account-badge{display:block;font-size:9px;font-weight:700;letter-spacing:.13em;color:#777088;margin:0 0 6px}
+.account-profile h2{font-size:20px;margin:0 0 4px}
+.account-email{overflow-wrap:anywhere;font-size:12px;line-height:1.7;color:#747c89;margin:0}
+.account-sync{display:flex;align-items:flex-start;gap:10px;border:1px solid #e3e4ec;background:#f7f7fa;padding:13px;border-radius:10px;margin-bottom:24px}
+.account-sync p{margin:0;font-size:12px;line-height:1.8;color:#60667a}
+.account-status-dot{width:6px;height:6px;flex-shrink:0;margin-top:8px;border-radius:50%;background:#8c80a3}
+.account-signout{display:block;min-height:44px;font-size:12px;color:#7c7687;margin:16px auto 0;text-decoration:underline;text-underline-offset:4px}
+.account-message,.account-small{padding:12px;border-radius:8px;font-size:12px;line-height:1.8;margin:18px 0 0;color:#6e5060;background:#fff7f8;border:1px solid #f0dce4}
+.account-panel button:disabled{opacity:.55;cursor:not-allowed}
+.account-about{padding-top:6px;min-width:0}
+.account-about h2{font:500 27px/1.3 Georgia,serif;letter-spacing:-.025em;margin:0 0 25px;color:#42445b}
+.account-benefits{list-style:none;padding:0;margin:0;display:grid;gap:22px}
+.account-benefits li{display:flex;align-items:flex-start;gap:14px}
+.account-benefits li>span{font:12px Georgia,serif;color:#9b91ab;margin-top:4px}
+.account-benefits strong{font-size:13px;font-weight:650;color:#424b5d}
+.account-benefits p{font-size:12px;line-height:1.9;color:#758091;margin:5px 0 0;max-width:290px}
+.account-footnote{font-size:11px;line-height:1.9;color:#828a96;border-top:1px solid #e1e4eb;padding-top:18px;margin-top:24px}
+.account-loading{display:flex;align-items:center;gap:12px;min-height:180px;justify-content:center;font-size:13px;color:#727b8c}
+.account-spinner{width:16px;height:16px;border:2px solid #e3dfea;border-top-color:#777088;border-radius:50%;animation:account-spin 1s linear infinite}
+@keyframes account-spin{to{transform:rotate(360deg)}}
+.account-main a:focus-visible,.account-main button:focus-visible{outline:3px solid #a395ba;outline-offset:4px}
+@media(max-width:760px){.account-main{padding:20px 20px 48px;max-width:520px}.account-heading{margin:20px 0 24px}.account-heading h1{font-size:32px;max-width:330px}.account-heading>p:last-child{font-size:13px;max-width:300px}.account-layout{grid-template-columns:minmax(0,1fr);gap:32px}.account-panel{padding:26px 22px;border-radius:17px}.account-card-symbol{margin-bottom:20px}.account-panel h2{font-size:20px}.account-intro{font-size:13px;margin-bottom:22px}.account-about{padding:0 4px}.account-about h2{font-size:25px;margin-bottom:22px}.account-about h2 br{display:none}.account-benefits{gap:18px}.account-benefits p{max-width:none}.account-footnote{margin-bottom:0}}
+@media(prefers-reduced-motion:reduce){.account-spinner{animation:none}}
