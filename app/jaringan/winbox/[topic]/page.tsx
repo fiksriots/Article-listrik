@@ -19,7 +19,7 @@ export async function generateMetadata({params}: {params: Promise<{topic: string
   if (!lesson) notFound();
   return {
     ...articleMetadata(lesson.title, lesson.summary, `${WINBOX_BASE}/${topic}`),
-    title: `${lesson.title} | Winbox 4 · Learn Jaringan`,
+    title: `${lesson.title} | Winbox 4 · Learn Networking`,
     description: lesson.summary,
     alternates: {canonical: `https://article.fikss.site${WINBOX_BASE}/${topic}`},
   };
@@ -38,13 +38,13 @@ export default async function WinboxLessonPage({params}: {params: Promise<{topic
       <WinboxOutline items={winboxItems} current={topic} compact/>
     </ArticleSidebar>
     <main id="konten" className="net-lesson-main">
-      <nav className="winbox-breadcrumb" aria-label="Jejak halaman"><Link href="/jaringan">Learn Jaringan</Link><span aria-hidden="true"> / </span><Link href={WINBOX_BASE}>Praktik Winbox</Link><span aria-hidden="true"> / </span><span>Submateri {index + 1}</span></nav>
+      <nav className="winbox-breadcrumb" aria-label="Jejak halaman"><Link href="/jaringan">Learn Networking</Link><span aria-hidden="true"> / </span><Link href={WINBOX_BASE}>Praktik Winbox</Link><span aria-hidden="true"> / </span><span>Submateri {index + 1}</span></nav>
       <header className="net-lesson-heading">
         <p className="net-eyebrow">SUBMATERI {index + 1} DARI {winboxLessons.length} · PRAKTIK WINBOX 4</p>
         <h1>{lesson.title}</h1><p>{lesson.summary}</p>
         <span>{lesson.minutes} menit · RouterOS v7 · Bahasa pemula · Diperbarui 25 Oktober 2026</span>
       </header>
-      <aside className="net-track-note"><p>Bagian dari <Link href={`${WINBOX_BASE}#submateri-winbox`}>Praktik Winbox</Link> di Learn Jaringan. Gambar diberi keterangan screenshot asli atau diagram konsep. Sebagian gambar hanya menunjukkan lokasi menu; dialog yang belum tersedia tetap dijelaskan dalam teks.</p></aside>
+      <aside className="net-track-note"><p>Bagian dari <Link href={`${WINBOX_BASE}#submateri-winbox`}>Praktik Winbox</Link> di Learn Networking. Gambar diberi keterangan screenshot asli atau diagram konsep. Sebagian gambar hanya menunjukkan lokasi menu; dialog yang belum tersedia tetap dijelaskan dalam teks.</p></aside>
       {/* Content is curated repository HTML, never user-submitted markup. */}
       <article className="net-article winbox-content" dangerouslySetInnerHTML={{__html: lesson.html}}/>
       <ArticleShare title={lesson.title} summary={lesson.summary} path={`${WINBOX_BASE}/${topic}`}/>

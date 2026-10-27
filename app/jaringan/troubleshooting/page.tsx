@@ -4,14 +4,14 @@ import {flappingArticle, troubleshootingGroups, troubleshootingItems} from '@/li
 import './troubleshooting.css';
 
 export const metadata: Metadata = {
-  title: 'Troubleshooting Jaringan — Diagnosis, Flapping, dan Pemulihan | Learn Jaringan',
+  title: 'Troubleshooting Jaringan — Diagnosis, Flapping, dan Pemulihan | Learn Networking',
   description: 'Pusat materi troubleshooting jaringan: flapping, ping, DNS/DHCP, pemeriksaan MikroTik, OSPF, monitoring, dan pemulihan konfigurasi. Mulai dari gejala dan buktikan hasilnya.',
   alternates: {canonical: 'https://article.fikss.site/jaringan/troubleshooting'},
 };
 
 export default function TroubleshootingHome() {
   return <main id="konten" className="net-container troubleshooting-home">
-    <Link className="net-back" href="/jaringan">← Learn Jaringan</Link>
+    <Link className="net-back" href="/jaringan">← Learn Networking</Link>
     <header className="troubleshooting-hero">
       <p className="net-eyebrow">TROUBLESHOOTING / DIAGNOSIS DAN PENANGANAN GANGGUAN</p>
       <h1>Kenali gejalanya.<br/>Temukan penyebabnya.</h1>
@@ -28,7 +28,7 @@ export default function TroubleshootingHome() {
     {troubleshootingGroups.map(group => <section key={group.id} id={group.id} className="troubleshooting-group">
       <header><h2>{group.title}</h2><p>{group.description}</p></header>
       <div className="troubleshooting-cards">{group.items.map(item => <article key={item.href}>
-        <small>{item.minutes} menit · {item.href.includes('/winbox/') ? 'Praktik Winbox' : item.href.includes('mtcre-') ? 'Pendalaman MTCRE' : item.href.includes('mtcna-') ? 'Panduan MTCNA' : 'Learn Jaringan'}</small>
+        <small>{item.minutes} menit · {item.href.includes('/winbox/') ? 'Praktik Winbox' : item.href.includes('mtcre-') ? 'Pendalaman MTCRE' : item.href.includes('mtcna-') ? 'Panduan MTCNA' : 'Learn Networking'}</small>
         <h3><Link href={item.href}>{item.title}</Link></h3><p>{item.summary}</p><Link className="troubleshooting-open" href={item.href}>Buka pembahasan →</Link>
       </article>)}</div>
     </section>)}

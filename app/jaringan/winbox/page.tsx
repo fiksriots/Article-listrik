@@ -7,14 +7,14 @@ import '../mtcna/mtcna.css';
 import './winbox.css';
 
 export const metadata: Metadata = {
-  title: `Praktik Winbox — ${winboxItems.length} Submateri MikroTik dari Nol | Learn Jaringan`,
+  title: `Praktik Winbox — ${winboxItems.length} Submateri MikroTik dari Nol | Learn Networking`,
   description: `Belajar Winbox 4 melalui ${winboxItems.length} submateri: Interfaces, VLAN, firewall, PCQ, failover dua ISP, WireGuard, keamanan, dan proyek kantor kecil.`,
   alternates: {canonical: 'https://article.fikss.site/jaringan/winbox'},
 };
 
 export default function WinboxHome() {
   return <main id="konten" className="net-container mtcna-curriculum">
-    <Link className="net-back" href="/jaringan">← Learn Jaringan</Link>
+    <Link className="net-back" href="/jaringan">← Learn Networking</Link>
     <header className="mtcna-intro">
       <span className="net-eyebrow">PRAKTIK WINBOX / KURIKULUM BELAJAR</span>
       <h1>Kenali menunya.<br/>Coba konfigurasinya.</h1>
@@ -30,6 +30,6 @@ export default function WinboxHome() {
     </section></section>
     <aside className="net-track-note"><strong>Cara mengikuti jalur ini</strong><p>Delapan tahap belajar dimulai dari pengenalan menu dan satu LAN, kemudian berlanjut ke VLAN, PCQ, failover, VPN, keamanan, serta proyek kantor kecil. Selesaikan fondasi sebelum lab lanjutan; setiap skenario memiliki pemetaan port dan checkpoint sendiri. Setiap submateri memiliki tujuan, penjelasan kolom, latihan, hasil yang diuji, dan cara pemulihan. Gambar berlabel screenshot asli menampilkan Winbox 4; diagram konsep menjelaskan aliran data. Sebagian screenshot masih berupa penunjuk menu.</p></aside>
     <WinboxOutline items={winboxItems}/>
-    <aside className="net-crosslink"><h2>Perdalam konsep setelah mencoba.</h2><p>Praktik Winbox menghubungkan penggunaan menu dengan konfigurasi dan pengujian bertahap. Lanjutkan ke kurikulum MTCNA untuk memperluas penguasaan RouterOS, lalu MTCRE untuk routing lanjutan.</p><Link href="/jaringan/mtcna">Buka MTCNA →</Link><Link href="/jaringan/mtcre">Buka MTCRE →</Link><Link href="/jaringan">Kembali ke Learn Jaringan →</Link></aside>
+    <aside className="net-crosslink"><h2>Perdalam konsep setelah mencoba.</h2><p>Praktik Winbox menghubungkan penggunaan menu dengan konfigurasi dan pengujian bertahap. Lanjutkan ke kurikulum MTCNA untuk memperluas penguasaan RouterOS, lalu MTCRE untuk routing lanjutan.</p><Link href="/jaringan/mtcna">Buka MTCNA →</Link><Link href="/jaringan/mtcre">Buka MTCRE →</Link><Link href="/jaringan">Kembali ke Learn Networking →</Link></aside>
   </main>;
 }

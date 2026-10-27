@@ -11,7 +11,7 @@ import {networkLessons,networkStages} from '@/lib/network-course';
 import Academy,{CompleteLesson} from '@/components/network/academy';
 import ArticleSidebar from '@/components/network/article-sidebar';
 export function generateStaticParams(){return networkLessons.map(l=>({slug:l.slug}))}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const l=networkLessons.find(x=>x.slug===slug);return {...articleMetadata(l?.title??'Materi',l?.summary??'','/jaringan/'+slug),title:l?`${l.title} | Learn Jaringan`:'Materi tidak ditemukan',description:l?.summary,alternates:{canonical:`https://article.fikss.site/jaringan/${slug}`}};}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const l=networkLessons.find(x=>x.slug===slug);return {...articleMetadata(l?.title??'Materi',l?.summary??'','/jaringan/'+slug),title:l?`${l.title} | Learn Networking`:'Materi tidak ditemukan',description:l?.summary,alternates:{canonical:`https://article.fikss.site/jaringan/${slug}`}};}
 const terminalExamples:Record<string,{label:string;language:string;code:string}[]>={
  'monitoring-ping':[{label:'Terminal · Windows',language:'cmd',code:'ping 192.168.1.1\nping -n 10 192.168.1.1\ntracert example.com'},{label:'Terminal · Linux / macOS',language:'sh',code:'ping -c 10 192.168.1.1\ntraceroute example.com'}],
  'ip-mac':[{label:'Terminal · Windows',language:'cmd',code:'ipconfig /all'},{label:'Terminal · Linux',language:'sh',code:'ip address'}],
