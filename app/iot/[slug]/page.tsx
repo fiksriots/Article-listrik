@@ -8,7 +8,7 @@ import {iotLessons,iotStages,iotGroups,iotCatalog} from '@/lib/iot-course';
 import Catalog,{Complete} from '@/components/iot/academy';
 import {DevicePhotograph} from '@/components/device-photo';
 export function generateStaticParams(){return iotLessons.map(l=>({slug:l.slug}))}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const l=iotLessons.find(x=>x.slug===slug);return {...articleMetadata(l?.title??'Materi',l?.summary??'','/iot/'+slug),title:l?l.title+' | Learn IoT':'Materi tidak ditemukan',description:l?.summary,alternates:{canonical:'https://article.fikss.site/iot/'+slug}}}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const l=iotLessons.find(x=>x.slug===slug);return {...articleMetadata(l?.title??'Materi',l?.summary??'','/iot/'+slug),title:l?l.title+' | Learn IoT':'Materi tidak ditemukan',description:l?.summary,alternates:{canonical:'https://fikss.site/iot/'+slug}}}
 const serial=`void setup() {\n  Serial.begin(115200);\n}\nvoid loop() {\n  Serial.println("Halo, IoT!");\n  delay(1000);\n}`;
 const blink=`// ESP32 klasik / DevKitC; LED eksternal dengan resistor 330 ohm\nconst int LED_PIN = 23;\nvoid setup() {\n  pinMode(LED_PIN, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(LED_PIN, HIGH);\n  delay(1000);\n  digitalWrite(LED_PIN, LOW);\n  delay(1000);\n}`;
 const wiringDiagrams:Record<string,string>={'arduino-tombol-led':'arduino-button-wiring','arduino-lm35':'arduino-lm35-wiring','arduino-i2c':'arduino-i2c-wiring','arduino-lcd-i2c':'arduino-i2c-wiring','arduino-rtc-ds1307':'arduino-i2c-wiring','proyek-monitor-ruang-jaringan':'noc-input-wiring'};

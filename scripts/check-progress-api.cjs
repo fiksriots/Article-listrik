@@ -20,5 +20,6 @@ const {progressHandlers}=m.exports;
  assert.equal((await put({rows:[{...row,completed:false}]})).status,200);assert.equal((await (await api.GET()).json()).rows[0].completed,false);
  assert.equal((await progressHandlers(async()=>owner,()=>null).GET()).status,503);
  assert.equal((await progressHandlers(async()=>owner,()=>({read:async()=>{throw Error('private secret')},write:async()=>{}})).GET()).status,503);
+ const proxy=progressHandlers(async()=>owner,()=>store,['https://fikss.site']);assert.equal((await proxy.PUT(new Request('https://article.fikss.site/api/progress',{method:'PUT',headers:{origin:'https://fikss.site','Content-Type':'application/json'},body:JSON.stringify({rows:[row]})}))).status,200);
  console.log('PASS: session ownership, anonymous denial, CSRF origin, input validation, account isolation, persistent undo and unavailable storage');
 })().catch(e=>{console.error(e);process.exitCode=1});

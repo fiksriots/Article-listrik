@@ -3,7 +3,7 @@ import {useState} from 'react';
 type Props={title:string;summary:string;path:string};
 export default function ArticleShare({title,summary,path}:Props){
  const [status,setStatus]=useState('');
- const url='https://article.fikss.site'+path;
+ const url='https://fikss.site'+path;
  const intro=`Sedang belajar ${title.replace(/[?.!]$/, '')}?\n${summary}\n\nBaca selengkapnya di sini 👇`;
  const text=intro+'\n'+url;
  async function copy(value:string,label:string){try{await navigator.clipboard.writeText(value);setStatus(label+' berhasil disalin.')}catch{setStatus('Tidak dapat menyalin otomatis. Coba tombol Bagikan atau WhatsApp.')}}
