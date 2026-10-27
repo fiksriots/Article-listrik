@@ -13,10 +13,11 @@ root = Path(__file__).resolve().parents[1]
 extra = json.loads((root/'lib/iot-extended-lessons.json').read_text())
 base = json.loads((root/'lib/iot-lessons.json').read_text()) + json.loads((root/'lib/iot-connected-lessons.json').read_text())
 groups = json.loads((root/'lib/iot-learning-order.json').read_text())
-all_slugs = [l['slug'] for l in base+extra]
+wireless = json.loads((root/'lib/iot-wireless-lessons.json').read_text())
+all_slugs = [l['slug'] for l in base+extra+wireless]
 ordered = [s for g in groups for s in g['slugs']]
 assert len(extra) == 28 and len(groups) == 15
-assert len(ordered) == len(set(ordered)) == len(all_slugs) == 75
+assert len(ordered) == len(set(ordered)) == len(all_slugs) == 83
 assert set(ordered) == set(all_slugs)
 assert len({g['id'] for g in groups}) == len(groups)
 for g in groups:
@@ -79,4 +80,4 @@ except ValueError: pass
 else: raise AssertionError('Same ID with different content accepted')
 for older,newer in [('pemrograman-variabel','arduino-led'),('timer-millis','esp32-mqtt'),('mqtt-idempotensi','firebase-riwayat-grafik'),('komunikasi-uart','rs485-modbus'),('notifikasi-alarm-iot','proyek-monitor-kipas-dc')]:
     assert ordered.index(older)<ordered.index(newer),(older,newer)
-print('PASS: 28 lessons / 15 groups / 75 canonical slugs; diagrams and syntax; local examples; command validation; history duplicates and backlog. Firebase SDK boundary mocked.')
+print('PASS: 28 expanded lessons / 15 groups / 83 canonical slugs; diagrams and syntax; local examples; command validation; history duplicates and backlog. Firebase SDK boundary mocked.')

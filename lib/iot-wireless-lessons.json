@@ -1,0 +1,922 @@
+[
+  {
+    "slug": "esp-now-dua-esp32",
+    "title": "ESP-NOW: dua ESP32 berbicara langsung",
+    "summary": "Kirim data simulasi antarboard tanpa router, lalu pahami channel, MAC, dan batas konfirmasi pengiriman.",
+    "stage": 0,
+    "minutes": 30,
+    "analogy": "Dua petugas memakai radio langsung: keduanya harus berada pada saluran yang sama dan tahu siapa penerimanya, tanpa menelepon melalui kantor pusat.",
+    "explain": [
+      "ESP-NOW memungkinkan perangkat Espressif yang sesuai bertukar pesan memakai radio Wi-Fi tanpa harus bergabung ke access point. Ini berbeda dari MQTT yang memakai client, koneksi jaringan, dan broker. ESP-NOW sendiri tidak menyimpan riwayat atau mengirim data ke Firebase.",
+      "Latihan memakai dua ESP32 klasik dengan Arduino-ESP32 3.x, channel 6, dan mode station tanpa WiFi.begin. Unggah penerima dahulu, baca MAC STA pada Serial Monitor, lalu isi keenam byte receiverMac pada pengirim. MAC Bluetooth atau alamat SoftAP bukan pengganti otomatis MAC STA.",
+      "Dua board memakai format paket sama: penanda protokol, nomor urut, dan suhu dalam satuan perseratus derajat. Nilai 2940 berarti 29,40 °C dan sengaja merupakan simulasi. Format struct ini untuk dua board yang kompatibel; interoperabilitas lintas platform memerlukan serialisasi byte yang didefinisikan.",
+      "Callback penerima memeriksa panjang serta isi lalu menaruh paket pada antrean. Pencetakan dilakukan di loop agar callback radio singkat. Antrean penuh dapat melewati sampel; ini bukan pencatat yang dijamin tanpa kehilangan data.",
+      "ESP_OK dari esp_now_send hanya berarti permintaan diterima untuk dikirim. Bukti penerimaan aplikasi terlihat pada sequence di Serial penerima. Untuk aplikasi penting tambahkan ACK aplikasi, timeout, serta deduplikasi; keberhasilan radio juga belum membuktikan data tersimpan di cloud.",
+      "Jika satu board juga terhubung router, channel ESP-NOW harus mengikuti channel radio yang sedang dipakai. Jangan menambahkan WiFi.begin ke latihan ini tanpa merencanakan channel. Jarak dipengaruhi antena, penghalang, interferensi, dan orientasi; uji di lokasi sendiri.",
+      "Contoh tanpa enkripsi hanya untuk pesan simulasi di lab. Untuk perangkat nyata, rancang daftar peer tepercaya dan enkripsi unicast dengan PMK/LMK sesuai dokumentasi. Jangan memperlakukan MAC atau penanda magic sebagai autentikasi."
+    ],
+    "example": "Kirim data simulasi antarboard tanpa router, lalu pahami channel, MAC, dan batas konfirmasi pengiriman.",
+    "practice": [
+      "Pasang dua board melalui USB dan samakan paket board Arduino-ESP32 3.x. Jangan campur callback contoh core 2.x.",
+      "Upload sketch penerima, buka Serial 115200, dan catat MAC STA.",
+      "Isi receiverMac pada sketch pengirim, lalu upload ke board kedua. Kedua board memakai channel 6.",
+      "Amati sequence yang meningkat tiap sekitar dua detik dan suhu simulasi 29.40 di penerima.",
+      "Matikan penerima sementara. Pengirim dapat tetap melaporkan berhasil mengantrekan, sehingga periksa bukti di kedua sisi.",
+      "Ganti channel salah satu board untuk melihat kegagalan, lalu samakan kembali."
+    ],
+    "warning": "Pesan latihan tidak terenkripsi dan tidak mengendalikan output. Jangan menganggap ESP_OK sebagai bukti penerima memproses atau menyimpan pesan.",
+    "check": "Mengapa board yang sama-sama menyala belum tentu saling menerima ESP-NOW?",
+    "answer": "MAC tujuan, channel, interface Wi-Fi, format paket, dan kondisi radio harus sesuai. Dua board menyala hanya membuktikan dayanya tersedia.",
+    "nodes": [
+      "ESP32 pengirim",
+      "Channel sama",
+      "ESP-NOW unicast",
+      "Antrean penerima",
+      "Sequence di Serial"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · ESP-NOW Arduino API",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/espnow.html"
+      },
+      {
+        "title": "Espressif · ESP-NOW IDF",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/network/esp_now.html"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "mengenal-esp32",
+      "pemrograman-fungsi-array",
+      "timer-millis"
+    ],
+    "photos": [],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Dua ESP32 klasik/DevKitC yang kompatibel",
+        "Dua kabel USB data dan dua port Serial Monitor",
+        "Arduino IDE dengan paket ESP32 3.x"
+      ],
+      "wiring": [
+        [
+          "Daya",
+          "Masing-masing board melalui USB; tidak perlu kabel sinyal antarboard"
+        ],
+        [
+          "Radio",
+          "Mode STA dan channel 6 pada kedua board"
+        ],
+        [
+          "Tujuan",
+          "MAC STA penerima dimasukkan ke pengirim"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch penerima · ESP32 core 3.x",
+          "language": "cpp",
+          "code": "#include <WiFi.h>\n#include <esp_now.h>\n#include <esp_wifi.h>\n#include <freertos/FreeRTOS.h>\n#include <freertos/queue.h>\n#include <cstring>\n\nstruct Packet { uint32_t magic; uint32_t sequence; int32_t temperatureCenti; };\nstatic_assert(sizeof(Packet) == 12, \"Format paket harus 12 byte\");\nQueueHandle_t inbox;\nbool ready = false;\n// Arduino-ESP32 3.x; jangan gunakan signature callback core 2.x.\nvoid received(const esp_now_recv_info_t* info, const uint8_t* data, int length) {\n  if (length != sizeof(Packet)) return;\n  Packet packet;\n  memcpy(&packet, data, sizeof(packet));\n  if (packet.magic != 0x494F5431 || packet.temperatureCenti < -4000 || packet.temperatureCenti > 12500) return;\n  // Callback Wi-Fi harus singkat. Proses dan cetak di loop.\n  xQueueSend(inbox, &packet, 0); // Jika penuh, sampel demo dilewati.\n}\nvoid setup() {\n  Serial.begin(115200);\n  inbox = xQueueCreate(4, sizeof(Packet));\n  if (!inbox) { Serial.println(\"Antrean gagal\"); return; }\n  WiFi.mode(WIFI_STA);\n  Serial.print(\"MAC penerima: \"); Serial.println(WiFi.macAddress());\n  if (esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE) != ESP_OK ||\n      esp_now_init() != ESP_OK || esp_now_register_recv_cb(received) != ESP_OK) {\n    Serial.println(\"Inisialisasi gagal\"); return;\n  }\n  ready = true;\n}\nvoid loop() {\n  if (!ready) return;\n  Packet packet;\n  if (xQueueReceive(inbox, &packet, 0) == pdTRUE) {\n    Serial.print(\"Sequence=\"); Serial.print(packet.sequence);\n    Serial.print(\" suhu SIMULASI=\"); Serial.println(packet.temperatureCenti / 100.0f);\n  }\n}"
+        },
+        {
+          "label": "Sketch pengirim · isi MAC dahulu",
+          "language": "cpp",
+          "code": "#include <WiFi.h>\n#include <esp_now.h>\n#include <esp_wifi.h>\n\nstruct Packet { uint32_t magic; uint32_t sequence; int32_t temperatureCenti; };\nstatic_assert(sizeof(Packet) == 12, \"Format paket harus 12 byte\");\n// Ganti keenam byte dengan MAC STA penerima, misalnya AA:BB:CC:DD:EE:FF.\nuint8_t receiverMac[6] = {0, 0, 0, 0, 0, 0};\nuint32_t sequence = 0;\nunsigned long lastSend = 0;\nbool ready = false;\nvoid setup() {\n  Serial.begin(115200); WiFi.mode(WIFI_STA);\n  bool empty = true;\n  for (uint8_t value : receiverMac) if (value != 0) empty = false;\n  if (empty) { Serial.println(\"Isi MAC penerima terlebih dahulu\"); return; }\n  if (esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE) != ESP_OK || esp_now_init() != ESP_OK) return;\n  esp_now_peer_info_t peer = {};\n  memcpy(peer.peer_addr, receiverMac, 6);\n  peer.channel = 6; peer.ifidx = WIFI_IF_STA; peer.encrypt = false;\n  ready = esp_now_add_peer(&peer) == ESP_OK;\n}\nvoid loop() {\n  if (!ready || millis() - lastSend < 2000UL) return;\n  lastSend = millis();\n  Packet packet = {0x494F5431, ++sequence, 2940};\n  esp_err_t result = esp_now_send(receiverMac, reinterpret_cast<uint8_t*>(&packet), sizeof(packet));\n  Serial.println(result == ESP_OK ? \"Masuk antrean kirim; periksa penerima\" : \"Gagal mengantrekan kiriman\");\n}"
+        }
+      ],
+      "result": "Penerima menampilkan nomor urut dan suhu SIMULASI 29.40. Pengirim menampilkan status antrean; status itu sengaja tidak disebut konfirmasi penerimaan.",
+      "troubleshoot": [
+        "Tidak ada pesan: pastikan MAC STA benar dan channel sama.",
+        "Callback gagal dikompilasi: cek versi core; kode ini menggunakan esp_now_recv_info_t pada core 3.x.",
+        "Sequence melompat: periksa radio, antrean, dan kecepatan pencetakan.",
+        "Bekerja sebelum Wi-Fi router ditambahkan: periksa perubahan channel akibat asosiasi ke access point."
+      ]
+    }
+  },
+  {
+    "slug": "ble-esp32-ponsel",
+    "title": "BLE: membaca data ESP32 dari ponsel",
+    "summary": "Kenali advertising, service, characteristic, serta perbedaan Read dan Notify melalui latihan tanpa sensor.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Advertising seperti papan nama toko. Service seperti bagian layanan di dalam toko, dan characteristic seperti loket yang menyimpan satu informasi.",
+    "explain": [
+      "Bluetooth Low Energy atau BLE berbeda dari Bluetooth Classic. Ponsel berperan sebagai central/client dan ESP32 sebagai peripheral/server GATT pada latihan ini. Board ESP32-S2 tidak memiliki BLE; periksa dukungan chip sebelum memilih board.",
+      "Advertising membuat perangkat dapat ditemukan tanpa harus mengirim seluruh data aplikasi. Setelah terhubung, ponsel menelusuri service dan characteristic menggunakan UUID. UUID adalah identitas jenis layanan/data; ia bukan password.",
+      "Contoh menargetkan Arduino-ESP32 seri 3.x pada ESP32 klasik, menggunakan library BLE bawaan paket. API paket 4.x dapat berbeda, sehingga jangan mencampurkan tutorial versi berbeda. Tidak perlu memasang library BLE duplikat dari sumber lain.",
+      "Characteristic contoh berisi teks ASCII 29.4 yang dibaca melalui operasi Read. Ini data simulasi dan format UUID khusus latihan, bukan implementasi Bluetooth Temperature Service standar. Pada Notify, server memberi pembaruan setelah client berlangganan; Read saja tidak memberi pembaruan otomatis.",
+      "Gunakan aplikasi scanner BLE yang dapat menjelajah GATT. Beri izin Bluetooth/perangkat sekitar sesuai sistem ponsel. Cari nama FIKS-Lab-BLE, connect, temukan UUID, lalu tekan Read. Jika aplikasi menampilkan hex, 32 39 2E 34 adalah byte ASCII untuk 29.4.",
+      "Advertising dimulai lagi setelah ponsel terputus agar latihan dapat diulang. Contoh menyediakan karakteristik baca tanpa pairing wajib, sehingga jangan mengisinya dengan password, lokasi pribadi, atau informasi rahasia. Kendali output memerlukan autentikasi dan otorisasi tambahan.",
+      "Untuk mengirim ke internet, ponsel atau gateway tetap perlu meneruskan data. BLE tidak otomatis menjadi MQTT atau Firebase. Pilih BLE untuk interaksi lokal yang sesuai kebutuhan, bukan pengganti semua jenis koneksi."
+    ],
+    "example": "Kenali advertising, service, characteristic, serta perbedaan Read dan Notify melalui latihan tanpa sensor.",
+    "practice": [
+      "Pastikan board mendukung BLE dan gunakan paket ESP32 3.x.",
+      "Upload sketch, lalu buka Serial Monitor 115200 untuk petunjuk.",
+      "Pada ponsel, buka scanner BLE, berikan izin yang diperlukan, lalu cari FIKS-Lab-BLE.",
+      "Connect, temukan service 7d930001… lalu characteristic 7d930002… dan jalankan Read.",
+      "Amati 29.4 sebagai teks; ubah nilai pada sketch menjadi 30.1 dan upload ulang.",
+      "Putuskan koneksi lalu scan ulang untuk memeriksa advertising kembali."
+    ],
+    "warning": "Characteristic latihan dapat dibaca tanpa pairing. Jangan memasukkan informasi sensitif atau menganggap UUID menyembunyikan data dari orang lain.",
+    "check": "Mengapa angka tidak berubah otomatis saat characteristic hanya memakai Read?",
+    "answer": "Client perlu meminta pembacaan. Pembaruan otomatis membutuhkan mekanisme seperti Notify dan subscription yang sesuai.",
+    "nodes": [
+      "Advertising",
+      "Ponsel connect",
+      "Temukan service",
+      "Read characteristic",
+      "Data lokal di ponsel"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · library BLE",
+        "url": "https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE"
+      },
+      {
+        "title": "Espressif · dukungan chip",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/bluetooth/index.html"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "mengenal-esp32",
+      "serial-monitor-debugging"
+    ],
+    "photos": [],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "ESP32 klasik yang mendukung BLE dan USB",
+        "Arduino IDE dengan paket ESP32 3.x",
+        "Ponsel dan aplikasi scanner BLE/GATT"
+      ],
+      "wiring": [
+        [
+          "Board",
+          "Daya dan upload melalui USB; tidak memerlukan sensor"
+        ],
+        [
+          "Ponsel",
+          "Bluetooth aktif dan izin aplikasi sesuai OS"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 core 3.x · BLE read-only",
+          "language": "cpp",
+          "code": "#include <BLEDevice.h>\n#include <BLEServer.h>\n#include <BLEUtils.h>\n#include <atomic>\n\nconst char* SERVICE_UUID = \"7d930001-2e91-4d88-8c27-08f3ae99c001\";\nconst char* VALUE_UUID = \"7d930002-2e91-4d88-8c27-08f3ae99c001\";\nstd::atomic<bool> advertiseAgain(false);\nclass Events : public BLEServerCallbacks {\n  void onDisconnect(BLEServer* server) override { advertiseAgain.store(true); }\n};\nEvents events;\nvoid setup() {\n  Serial.begin(115200);\n  BLEDevice::init(\"FIKS-Lab-BLE\");\n  BLEServer* server = BLEDevice::createServer();\n  server->setCallbacks(&events);\n  BLEService* service = server->createService(SERVICE_UUID);\n  BLECharacteristic* value = service->createCharacteristic(VALUE_UUID, BLECharacteristic::PROPERTY_READ);\n  value->setValue(\"29.4\"); // ASCII simulasi; bukan sensor asli dan bukan format standar Bluetooth suhu.\n  service->start();\n  BLEAdvertising* advertising = BLEDevice::getAdvertising();\n  advertising->addServiceUUID(SERVICE_UUID);\n  advertising->setScanResponse(true);\n  BLEDevice::startAdvertising();\n  Serial.println(\"Buka scanner BLE, connect, cari service dan Read characteristic\");\n}\nvoid loop() {\n  if (advertiseAgain.exchange(false)) BLEDevice::startAdvertising();\n  delay(20);\n}"
+        }
+      ],
+      "result": "Scanner GATT membaca teks 29.4 atau byte hex 32 39 2E 34. Tidak ada data sensor nyata, koneksi cloud, atau kendali beban.",
+      "troubleshoot": [
+        "Tidak terdeteksi: pastikan chip mendukung BLE, izin ponsel diberikan, dan tidak sedang tersambung ke client lain.",
+        "Tidak menemukan angka: masuk ke characteristic dan pilih Read, bukan hanya melihat hasil scan.",
+        "Tampil 32 39 2E 34: ubah tampilan scanner ke UTF-8/ASCII.",
+        "Library konflik atau override gagal: gunakan library bawaan core 3.x dan cocokkan versi contoh."
+      ]
+    }
+  },
+  {
+    "slug": "lora-lorawan-sensor",
+    "title": "LoRa dan LoRaWAN: sensor jarak jauh",
+    "summary": "Bedakan radio, jaringan, gateway, aktivasi, dan decoder payload sebelum menyiapkan perangkat.",
+    "stage": 0,
+    "minutes": 30,
+    "analogy": "LoRa seperti cara radio mengucapkan pesan. LoRaWAN seperti aturan pengiriman melalui pos: alamat, keamanan, gateway, dan server yang mengelola perjalanan pesan.",
+    "explain": [
+      "LoRa adalah teknik radio/modulasi; LoRaWAN menambahkan aturan jaringan di atasnya. Dua modul LoRa dapat dibuat berkomunikasi point-to-point dengan protokol sendiri, tetapi itu belum berarti jaringan LoRaWAN.",
+      "Pada LoRaWAN, end device mengirim lewat radio, gateway meneruskan melalui jaringan IP, network server menangani fungsi jaringan, dan aplikasi menerima data. Gateway concentrator bukan sekadar modul LoRa SPI yang dipasang kabel USB. Foto modul pada materi ini membantu mengenali bentuk, bukan rekomendasi gateway.",
+      "LoRa cocok untuk pesan kecil dengan laju rendah. Ia bukan sarana video CCTV, audio kontinu, atau pengganti LAN berkecepatan tinggi. Jarak nyata bergantung lokasi, antena, kondisi radio, dan konfigurasi; tidak ada jarak yang dijamin oleh nama teknologinya.",
+      "Pilih perangkat, antena, serta frequency plan yang sesuai wilayah dan ketentuan penggunaan setempat. Jangan menyalin konfigurasi 868/915 MHz dari tutorial negara lain tanpa memeriksa kesesuaiannya. Latihan decoder berikut tidak memancarkan radio sehingga bisa dicoba sebelum membeli perangkat.",
+      "Untuk praktik LoRaWAN, daftarkan aplikasi dan perangkat pada network server yang Anda gunakan. Cocokkan profil perangkat, versi protokol, parameter regional, serta identitas dan kunci OTAA dari dokumentasi perangkat. Kunci jaringan bukan isi payload dan tidak boleh dipublikasikan.",
+      "OTAA melakukan proses join untuk membentuk sesi. Pastikan gateway yang kompatibel terjangkau, perangkat berhasil join, dan uplink terlihat sebelum memeriksa dashboard. Pada Class A, kesempatan downlink mengikuti uplink; jangan merancang perintah mendadak seolah-olah semua perangkat selalu mendengarkan.",
+      "Decoder contoh mengubah empat byte menjadi suhu serta dua flag. Byte pertama versi, dua byte berikutnya suhu bertanda dalam perseratus Celsius, dan byte terakhir status pintu/air. Decoder hanya tepat untuk format ini; gunakan decoder vendor bila format perangkat berbeda.",
+      "Payload minimal belum memuat sample ID atau waktu ukur. Untuk history dan deduplikasi, tambahkan rancangan identitas serta timestamp yang jelas. Setelah uplink berhasil didekode, aplikasi dapat mengambil hasil melalui integrasi network server, misalnya MQTT; bukan dengan menunjuk modul radio langsung ke Firebase."
+    ],
+    "example": "Bedakan radio, jaringan, gateway, aktivasi, dan decoder payload sebelum menyiapkan perangkat.",
+    "practice": [
+      "Baca tabel peran dan gambar jalur end device → gateway → network server → aplikasi.",
+      "Tanpa radio, uji decoder dengan FPort 2 dan byte 01 0B 7C 01; cocokkan hasil 29.4 C serta pintu terbuka.",
+      "Uji byte suhu negatif dan payload salah panjang; decoder harus menolak format yang tidak dikenal.",
+      "Bila memiliki hardware sesuai wilayah, ikuti contoh OTAA resmi board/vendor dan daftarkan pada project latihan network server.",
+      "Periksa join, uplink, metadata penerimaan, dan hasil decoder satu per satu. Jangan mengunggah kunci OTAA pada log atau repository.",
+      "Rancang pengiriman berkala dan kebutuhan baterai sebelum menambahkan integrasi aplikasi."
+    ],
+    "warning": "Foto modul tidak menentukan frequency plan yang boleh dipakai. Gunakan perangkat dan konfigurasi wilayah yang sesuai; jangan menganggap semua modul LoRa adalah gateway LoRaWAN.",
+    "check": "Apakah modul LoRa SPI otomatis bisa menjadi gateway LoRaWAN penuh?",
+    "answer": "Tidak. Gateway LoRaWAN mempunyai kebutuhan radio/concentrator dan fungsi penerusan khusus. Modul transceiver biasa tidak otomatis menyediakan kemampuan tersebut.",
+    "nodes": [
+      "End device",
+      "Gateway radio/IP",
+      "Network server",
+      "Decoder aplikasi",
+      "Integrasi data"
+    ],
+    "sources": [
+      {
+        "title": "The Things Network · LoRa dan LoRaWAN",
+        "url": "https://www.thethingsnetwork.org/docs/lorawan/what-is-lorawan/"
+      },
+      {
+        "title": "The Things Network · arsitektur",
+        "url": "https://www.thethingsnetwork.org/docs/lorawan/architecture/"
+      },
+      {
+        "title": "The Things Network · aktivasi",
+        "url": "https://www.thethingsnetwork.org/docs/lorawan/end-device-activation/"
+      },
+      {
+        "title": "The Things Stack · decoder uplink",
+        "url": "https://www.thethingsindustries.com/docs/integrations/payload-formatters/javascript/uplink/"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "komunikasi-spi",
+      "daya-adaptor-baterai"
+    ],
+    "photos": [
+      {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/5/5a/LoRa_Module_with_antenna_and_SPI_wires_attached.jpg",
+        "width": 834,
+        "height": 1205,
+        "alt": "Foto asli modul radio LoRa dengan chip SX1278, antena pegas, dan kabel SPI",
+        "caption": "Contoh transceiver LoRa, bukan gateway LoRaWAN. Foto tidak menentukan frequency plan yang boleh digunakan dan bukan diagram wiring.",
+        "source": "https://commons.wikimedia.org/wiki/File:LoRa_Module_with_antenna_and_SPI_wires_attached.jpg",
+        "author": "Cnd (English Wikipedia)",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+      }
+    ],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer untuk pengujian decoder; hardware belum wajib",
+        "Untuk radio: end device, antena, gateway/jaringan LoRaWAN, dan project latihan yang kompatibel"
+      ],
+      "wiring": [
+        [
+          "Lingkup latihan",
+          "Gunakan project terpisah dan parameter yang disebut pada langkah praktik."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "JavaScript · decoder payload latihan",
+          "language": "javascript",
+          "code": "function decodeUplink(input) {\n  const b = input.bytes;\n  if (input.fPort !== 2 || !Array.isArray(b) || b.length !== 4 ||\n      b.some(value => !Number.isInteger(value) || value < 0 || value > 255)) {\n    return {errors: [\"Butuh FPort 2 dan tepat empat byte\"]};\n  }\n  if (b[0] !== 1 || (b[3] & 0xFC) !== 0) return {errors: [\"Versi atau flag tidak dikenal\"]};\n  let raw = (b[1] << 8) | b[2];\n  if (raw & 0x8000) raw -= 65536;\n  const temperature = raw / 100;\n  if (temperature < -40 || temperature > 125) return {errors: [\"Suhu di luar rentang latihan\"]};\n  return {data: {temperature, unit: \"C\", doorOpen: Boolean(b[3] & 1),\n    waterDetected: Boolean(b[3] & 2)}, warnings: []};\n}\n// Uji payload 01 0B 7C 01 pada FPort 2: 29.4 C, pintu terbuka, tidak ada air. DEMO data."
+        }
+      ],
+      "result": "Input FPort 2 dan [1,11,124,1] menghasilkan 29.4 C, doorOpen true, waterDetected false. Pengujian ini tidak mengaktifkan radio atau network server.",
+      "troubleshoot": [
+        "Radio belum join: periksa plan wilayah, profil perangkat, kunci yang sesuai, dan jangkauan gateway.",
+        "Uplink ada tetapi data aneh: samakan FPort, susunan byte, skala, dan decoder vendor.",
+        "Perintah terlambat: periksa kelas perangkat dan jadwal receive window.",
+        "Jangan menaikkan daya pancar sebagai langkah pertama tanpa memeriksa konfigurasi serta batas penggunaan yang berlaku."
+      ]
+    },
+    "table": {
+      "title": "Komponen yang sering tertukar",
+      "intro": "Pisahkan fungsi radio dan jaringan sebelum memilih perangkat.",
+      "headers": [
+        "Bagian",
+        "Peran"
+      ],
+      "rows": [
+        [
+          "Modul LoRa",
+          "Transceiver radio; memerlukan pengendali serta program yang sesuai."
+        ],
+        [
+          "End device LoRaWAN",
+          "Sensor/perangkat yang menjalankan stack LoRaWAN."
+        ],
+        [
+          "Gateway LoRaWAN",
+          "Menerima radio dan meneruskan paket melalui koneksi IP."
+        ],
+        [
+          "Network server",
+          "Mengelola jaringan dan sesi sesuai platform."
+        ],
+        [
+          "Aplikasi",
+          "Menggunakan data hasil dekode untuk tampilan atau pengolahan."
+        ]
+      ]
+    }
+  },
+  {
+    "slug": "konfigurasi-wifi-tanpa-upload",
+    "title": "Mengatur Wi-Fi dan broker tanpa mengubah sketch",
+    "summary": "Buka halaman setup lokal, simpan konfigurasi, dan siapkan cara masuk ulang jika jaringan berubah.",
+    "stage": 0,
+    "minutes": 35,
+    "analogy": "Seperti mengisi alamat tujuan pada GPS: programnya tetap, tetapi alamat Wi-Fi dan broker bisa diganti lewat panel pengaturan.",
+    "explain": [
+      "Provisioning adalah proses memberikan konfigurasi awal ke perangkat. Latihan memakai ESP32 sebagai access point sementara dan halaman HTTP lokal untuk mengisi SSID, password Wi-Fi, serta hostname/IP broker. Ia bukan halaman login website Learn.",
+      "Pada boot pertama tanpa konfigurasi, board membuka mode setup. Setelah konfigurasi tersimpan, mode setup hanya dibuka lagi dengan tombol GPIO27 ke GND saat boot. Jika password Wi-Fi salah, tahan tombol saat restart untuk memperbaikinya; tidak perlu menghapus seluruh program.",
+      "Sebelum upload awal, ubah AP_PASSWORD menjadi sandi unik untuk board latihan. Hubungkan ponsel/laptop hanya ke AP FIKS-Setup-Lab, lalu buka IP yang tercetak pada Serial, biasanya 192.168.4.1. Peringatan “tanpa internet” pada ponsel wajar karena AP ini hanya melayani halaman lokal; popup captive portal otomatis belum disediakan.",
+      "Form memakai POST agar password tidak dimasukkan pada URL. Token acak membatasi pengiriman form yang tidak memiliki token halaman tersebut. Data disimpan sebagai satu blob NVS setelah validasi panjang dan bentuk host. Tampilan tidak mengembalikan password tersimpan, dan password tidak dicetak pada Serial.",
+      "AP memakai password WPA2, tetapi halaman HTTP latihan ini bukan HTTPS. Hanya gunakan lingkungan lab yang Anda kendalikan dan jangan membagikan akses AP. Untuk produk, pertimbangkan provisioning resmi dengan perlindungan sesi, identitas perangkat, dan pengamanan penyimpanan yang sesuai. Token form bukan pengganti semua pengamanan.",
+      "Mode setup ditutup setelah lima menit dan board restart sesudah penyimpanan berhasil. Kode tidak menguji login broker atau menjalankan MQTT; field broker adalah host tanpa port/path dan perlu dipakai oleh sketch MQTT saat integrasi berikutnya. Tetapkan port serta pilihan TLS secara terpisah.",
+      "Konfigurasi tersimpan belum berarti jaringan berhasil. Periksa status Wi-Fi, IP perangkat, DNS/host broker, serta login MQTT satu tahap setiap kali. Untuk menghindari mengunci pengguna di luar perangkat, pertahankan tombol masuk setup dan prosedur pemulihan."
+    ],
+    "example": "Buka halaman setup lokal, simpan konfigurasi, dan siapkan cara masuk ulang jika jaringan berubah.",
+    "practice": [
+      "Siapkan ESP32 klasik dan tombol antara GPIO27 dengan GND; ubah AP_PASSWORD yang unik sebelum upload awal.",
+      "Upload sketch, buka Serial 115200, lalu hubungkan ponsel/laptop ke AP FIKS-Setup-Lab dengan password tersebut.",
+      "Buka http://IP-yang-tercetak, isi SSID 2,4 GHz, password Wi-Fi, dan host broker, misalnya 192.168.1.10. Jangan isi http:// atau :1883 pada field host.",
+      "Simpan dan tunggu restart. Periksa status Wi-Fi di Serial; halaman setup harus tidak terus aktif setelah konfigurasi normal.",
+      "Uji ganti jaringan dengan menahan tombol GPIO27 ke GND saat restart. Uji isian terlalu panjang dan token salah; penyimpanan harus ditolak.",
+      "Integrasikan konfigurasi tersimpan ke sketch MQTT setelah latihan ini berhasil; kode dasar ini belum publish atau subscribe."
+    ],
+    "warning": "Gunakan password AP khusus lab dan lingkungan pribadi. POST serta token tidak membuat HTTP menjadi terenkripsi; jangan menaruh kredensial admin cloud atau service-account pada form.",
+    "check": "Apakah pesan “Tersimpan” berarti password Wi-Fi dan login MQTT sudah benar?",
+    "answer": "Tidak. Itu hanya bukti konfigurasi tersimpan. Koneksi Wi-Fi, jangkauan broker, TLS, dan autentikasi MQTT tetap perlu diuji.",
+    "nodes": [
+      "Masuk mode setup",
+      "Ponsel ke AP lokal",
+      "POST dan validasi",
+      "Simpan NVS",
+      "Restart dan uji koneksi"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · Wi-Fi API",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html"
+      },
+      {
+        "title": "Espressif · Preferences",
+        "url": "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/preferences.html"
+      },
+      {
+        "title": "Espressif · provisioning resmi",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/provisioning/wifi_provisioning.html"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "wifi-ip",
+      "penyimpanan-lokal",
+      "keamanan-iot"
+    ],
+    "photos": [],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "ESP32 klasik, kabel USB data, pushbutton, dan jumper",
+        "Ponsel/laptop serta jaringan Wi-Fi 2,4 GHz pribadi"
+      ],
+      "wiring": [
+        [
+          "Tombol setup",
+          "GPIO27 ↔ tombol ↔ GND; gunakan INPUT_PULLUP"
+        ],
+        [
+          "Upload",
+          "USB untuk pemasangan program pertama"
+        ],
+        [
+          "Halaman lokal",
+          "Ponsel/laptop terhubung ke AP board selama setup"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Sketch ESP32 core 3.x · setup lokal lima menit",
+          "language": "cpp",
+          "code": "#include <WiFi.h>\n#include <WebServer.h>\n#include <Preferences.h>\n#include <esp_system.h>\n#include <cstring>\n\n// Ganti dengan password unik 8-63 karakter untuk AP latihan ini.\nconst char* AP_PASSWORD = \"GANTI_PASSWORD_AP_UNIK\";\nconst int SETUP_BUTTON = 27; // Tombol ke GND, tahan ketika boot.\nstruct Config { uint32_t magic; char ssid[33]; char password[64]; char broker[254]; };\nConfig config = {};\nWebServer server(80);\nPreferences store;\nString token;\nbool setupMode = false, saved = false;\nunsigned long openedAt = 0, savedAt = 0;\n\nbool validHost(const String& host) {\n  if (host.length() == 0 || host.length() > 253) return false;\n  for (unsigned int i = 0; i < host.length(); i++) {\n    char c = host[i];\n    if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||\n          (c >= '0' && c <= '9') || c == '.' || c == '-')) return false;\n  }\n  return true; // Pemeriksaan bentuk dasar, bukan jaminan DNS/host dapat dijangkau.\n}\nvoid setup() {\n  Serial.begin(115200); pinMode(SETUP_BUTTON, INPUT_PULLUP); delay(50);\n  if (!store.begin(\"iot-wifi\", false)) { Serial.println(\"NVS gagal\"); return; }\n  bool stored = store.getBytesLength(\"config\") == sizeof(config);\n  if (stored) store.getBytes(\"config\", &config, sizeof(config));\n  stored = stored && config.magic == 0x494F5432 &&\n    memchr(config.ssid, 0, sizeof(config.ssid)) &&\n    memchr(config.password, 0, sizeof(config.password)) &&\n    memchr(config.broker, 0, sizeof(config.broker));\n  setupMode = !stored || digitalRead(SETUP_BUTTON) == LOW;\n  if (!setupMode) {\n    WiFi.mode(WIFI_STA); WiFi.begin(config.ssid, config.password);\n    Serial.println(\"Mencoba konfigurasi tersimpan. Pantau status Wi-Fi di loop.\");\n    Serial.print(\"Host broker tersimpan: \"); Serial.println(config.broker);\n    store.end(); return;\n  }\n  if (String(AP_PASSWORD).startsWith(\"GANTI_\") || strlen(AP_PASSWORD) < 8 || strlen(AP_PASSWORD) > 63) {\n    Serial.println(\"Ubah AP_PASSWORD unik dahulu lalu upload ulang\"); store.end(); setupMode = false; return;\n  }\n  WiFi.mode(WIFI_AP);\n  if (!WiFi.softAP(\"FIKS-Setup-Lab\", AP_PASSWORD)) { store.end(); setupMode = false; return; }\n  token = String(esp_random(), HEX) + String(esp_random(), HEX);\n  server.on(\"/\", HTTP_GET, []() {\n    String form = \"<!doctype html><html lang='id'><meta name='viewport' content='width=device-width,initial-scale=1'>\"\n      \"<title>Setup lab</title><h1>Konfigurasi Wi-Fi</h1><form method='POST' action='/save'>\"\n      \"<label>SSID <input name='ssid' maxlength='32' required></label><br>\"\n      \"<label>Password Wi-Fi <input name='password' type='password' minlength='8' maxlength='63' required></label><br>\"\n      \"<label>Host broker, tanpa port/path <input name='broker' maxlength='253' required></label>\"\n      \"<input type='hidden' name='token' value='\" + token + \"'><br><button>Simpan dan restart</button></form>\"\n      \"<p>Hanya untuk AP lab pribadi. Halaman menutup setelah lima menit.</p></html>\";\n    server.sendHeader(\"Cache-Control\", \"no-store\");\n    server.send(200, \"text/html; charset=utf-8\", form);\n  });\n  server.on(\"/save\", HTTP_POST, []() {\n    if (saved) { server.send(409, \"text/plain\", \"Sedang restart\"); return; }\n    if (server.arg(\"token\") != token) { server.send(403, \"text/plain\", \"Token tidak cocok\"); return; }\n    String ssid = server.arg(\"ssid\"), password = server.arg(\"password\"), broker = server.arg(\"broker\");\n    if (ssid.length() == 0 || ssid.length() > 32 || password.length() < 8 || password.length() > 63 || !validHost(broker)) {\n      server.send(400, \"text/plain\", \"Periksa panjang isian dan host broker\"); return;\n    }\n    Config next = {}; next.magic = 0x494F5432;\n    ssid.toCharArray(next.ssid, sizeof(next.ssid));\n    password.toCharArray(next.password, sizeof(next.password));\n    broker.toCharArray(next.broker, sizeof(next.broker));\n    if (store.putBytes(\"config\", &next, sizeof(next)) != sizeof(next)) {\n      server.send(500, \"text/plain\", \"Simpan gagal\"); return;\n    }\n    server.sendHeader(\"Cache-Control\", \"no-store\");\n    server.send(200, \"text/plain\", \"Tersimpan, perangkat akan restart. Periksa koneksi pada Serial.\");\n    saved = true; savedAt = millis();\n  });\n  server.begin(); openedAt = millis();\n  Serial.print(\"Hubungkan ke AP lab lalu buka http://\"); Serial.println(WiFi.softAPIP());\n}\nvoid loop() {\n  if (setupMode) {\n    server.handleClient();\n    if (saved && millis() - savedAt >= 700UL) { store.end(); ESP.restart(); }\n    if (millis() - openedAt >= 300000UL) {\n      server.stop(); WiFi.softAPdisconnect(true); store.end(); setupMode = false;\n      Serial.println(\"Setup ditutup. Restart dengan tombol ditekan untuk membuka lagi.\");\n    }\n    return;\n  }\n  static unsigned long last = 0;\n  if (millis() - last >= 5000UL) {\n    last = millis(); Serial.println(WiFi.status() == WL_CONNECTED ? \"Wi-Fi terhubung\" : \"Wi-Fi belum terhubung\");\n  }\n}"
+        }
+      ],
+      "result": "Wi-Fi dapat diubah lewat halaman lokal setelah upload awal. Host broker tersimpan, tetapi koneksi MQTT belum dijalankan. GPIO27 saat boot membuka setup kembali.",
+      "troubleshoot": [
+        "AP tidak muncul: ubah AP_PASSWORD dari placeholder dan restart; periksa apakah konfigurasi sudah ada.",
+        "Ponsel keluar dari AP: pilih tetap terhubung meskipun tidak ada internet.",
+        "Tidak bisa masuk setelah ganti router: tahan tombol setup ke GND saat board boot.",
+        "Host tidak valid: isi hostname/IP saja, tanpa skema, spasi, port, atau path.",
+        "Wi-Fi gagal: verifikasi SSID 2,4 GHz dan password; pesan tersimpan bukan uji koneksi."
+      ]
+    }
+  },
+  {
+    "slug": "home-assistant-mqtt",
+    "title": "Home Assistant: sensor MQTT di dashboard smart home",
+    "summary": "Hubungkan broker yang sudah diuji, kirim konfigurasi discovery, dan tandai data kedaluwarsa.",
+    "stage": 0,
+    "minutes": 30,
+    "analogy": "Broker seperti pusat distribusi berita. Home Assistant menjadi pembaca yang memahami label sensor sehingga dapat menaruhnya pada panel rumah.",
+    "explain": [
+      "Home Assistant adalah platform otomasi. Integrasi MQTT menghubungkannya ke broker; tidak perlu mengganti firmware atau membuat Home Assistant sebagai database Firebase. Pada latihan, Home Assistant dan bridge Firebase dapat menjadi dua subscriber untuk topic telemetry yang sama.",
+      "Gunakan instalasi Home Assistant latihan yang sudah berjalan sesuai panduan resmi, lalu tambahkan integrasi MQTT pada Settings → Devices & services. Isi IP/hostname broker, port, dan akun khusus. Nama menu dapat sedikit berbeda menurut versi.",
+      "Buat akun ha-lab untuk membaca telemetry dan pesan discovery, serta akun discovery-admin khusus menerbitkan konfigurasi sensor. ACL di bawah melengkapi ACL lab sebelumnya; jangan menimpa akun esp32, bridge, dan viewer yang masih digunakan.",
+      "Discovery adalah pesan JSON pada topic konfigurasi tertentu. unique_id membedakan sensor, state_topic menentukan sumber nilai, dan value_template mengambil angka dari JSON. Isi pesan discovery contoh disimpan sebagai discovery.json lalu diterbitkan retained agar pembaca baru dapat mempelajari konfigurasinya.",
+      "expire_after 20 membuat sensor ditandai tidak tersedia bila pembaruan berhenti sekitar 20 detik. Contoh tidak memakai availability_topic karena sketch dasar sebelumnya belum menerbitkan heartbeat/LWT tersebut. Jika kemudian menambah Last Will, bedakan status koneksi dari kesehatan sensor.",
+      "Nama sensor menyebut simulasi karena sketch MQTT awal memakai suhu buatan. Retained discovery bukan retained pengukuran. Untuk pengukuran lab, kirim setiap lima detik tanpa retain sehingga nilai lama tidak diperlakukan sebagai sampel baru setelah restart.",
+      "Setelah sensor muncul, tambahkan entity tersebut ke dashboard melalui editor dashboard. Uji nilai baru, pengiriman berhenti, restart Home Assistant, dan ejaan topic. Home Assistant tidak perlu memiliki hak menulis command jika latihan ini hanya pemantauan."
+    ],
+    "example": "Hubungkan broker yang sudah diuji, kirim konfigurasi discovery, dan tandai data kedaluwarsa.",
+    "practice": [
+      "Siapkan broker LAN yang sudah lolos uji dua terminal dan Home Assistant pada instalasi latihan sendiri.",
+      "Tambahkan dua akun dengan mosquitto_passwd dan baris ACL contoh; sesuaikan lokasi file serta restart/reload broker lab sesuai materi sebelumnya.",
+      "Tambahkan integrasi MQTT di Home Assistant menggunakan ha-lab dan password khususnya.",
+      "Simpan discovery.json dan publish memakai discovery-admin melalui terminal di bawah.",
+      "Kirim telemetry simulasi dari ESP32 atau mosquitto_pub, lalu temukan perangkat/entity sensor dan tambahkan ke dashboard.",
+      "Hentikan telemetry lebih dari 20 detik; sensor harus menjadi unavailable. Setelah data baru masuk, nilai kembali tersedia."
+    ],
+    "warning": "Jangan memberikan akun admin broker ke Home Assistant hanya untuk membaca satu sensor. Discovery retained harus dibedakan dari data pengukuran dan perintah.",
+    "check": "Mengapa sensor dapat muncul tetapi tetap tidak memiliki nilai?",
+    "answer": "Discovery hanya membuat definisi sensor. Nilai datang dari state_topic, sehingga publisher, JSON, template, dan ACL pembacaan tetap harus benar.",
+    "nodes": [
+      "ESP32 telemetry",
+      "Broker MQTT",
+      "Discovery + subscription",
+      "Entity suhu",
+      "Dashboard dan expiry"
+    ],
+    "sources": [
+      {
+        "title": "Home Assistant · integrasi MQTT",
+        "url": "https://www.home-assistant.io/integrations/mqtt/"
+      },
+      {
+        "title": "Home Assistant · sensor MQTT",
+        "url": "https://www.home-assistant.io/integrations/sensor.mqtt/"
+      },
+      {
+        "title": "Home Assistant · instalasi",
+        "url": "https://www.home-assistant.io/installation/"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "mqtt-broker-lokal",
+      "esp32-mqtt",
+      "mqtt-topic"
+    ],
+    "photos": [],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Instalasi Home Assistant latihan",
+        "Broker MQTT dan topic lab/esp32-01/telemetry yang sudah berfungsi",
+        "Akun broker terpisah dengan ACL terbatas"
+      ],
+      "wiring": [
+        [
+          "Lingkup latihan",
+          "Gunakan project terpisah dan parameter yang disebut pada langkah praktik."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Terminal · buat akun baru, jangan gunakan -c",
+          "language": "bash",
+          "code": "sudo mosquitto_passwd /etc/mosquitto/passwd ha-lab\nsudo mosquitto_passwd /etc/mosquitto/passwd discovery-admin\n# Tambahkan blok ACL berikut ke file ACL lab yang sudah digunakan.\n# Muat ulang/restart broker LAB setelah perubahan, bukan broker produksi."
+        },
+        {
+          "label": "Tambahan ACL · pertahankan akun yang lama",
+          "language": "conf",
+          "code": "user ha-lab\ntopic read lab/esp32-01/telemetry\ntopic read homeassistant/sensor/fiks_lab_esp32_01_temperature/config\ntopic write homeassistant/status\n\nuser discovery-admin\ntopic write homeassistant/sensor/fiks_lab_esp32_01_temperature/config"
+        },
+        {
+          "label": "discovery.json · sensor suhu simulasi",
+          "language": "json",
+          "code": "{\n  \"name\": \"Suhu Ruang Lab (simulasi)\",\n  \"unique_id\": \"fiks_lab_esp32_01_temperature\",\n  \"state_topic\": \"lab/esp32-01/telemetry\",\n  \"value_template\": \"{{ value_json.temperature }}\",\n  \"unit_of_measurement\": \"°C\",\n  \"device_class\": \"temperature\",\n  \"state_class\": \"measurement\",\n  \"expire_after\": 20,\n  \"device\": {\n    \"identifiers\": [\n      \"fiks_lab_esp32_01\"\n    ],\n    \"name\": \"ESP32 Lab\",\n    \"manufacturer\": \"Project latihan\",\n    \"model\": \"ESP32\"\n  }\n}"
+        },
+        {
+          "label": "Terminal · kirim discovery retained",
+          "language": "bash",
+          "code": "mosquitto_pub -h 192.168.1.10 -p 1883 -u discovery-admin -P 'GANTI_PASSWORD_DISCOVERY_ADMIN' -t 'homeassistant/sensor/fiks_lab_esp32_01_temperature/config' -r -f discovery.json\n# Password argumen hanya untuk akun LAB. Jangan gunakan password pribadi.\n# Jangan tambahkan -r pada telemetry pengukuran untuk latihan ini."
+        }
+      ],
+      "result": "Satu sensor bernama Suhu Ruang Lab (simulasi) muncul dan mengikuti JSON telemetry. Tanpa pesan baru sekitar 20 detik, entity menjadi unavailable.",
+      "troubleshoot": [
+        "Entity tidak muncul: cek integrasi MQTT, topic discovery persis, payload JSON, dan ACL.",
+        "Entity ada tetapi unknown: kirim telemetry baru dan pastikan value_template sesuai field temperature.",
+        "Unavailable: cek interval kirim, expiry, Wi-Fi, serta broker; jangan langsung menghapus expiry.",
+        "Duplikat: gunakan unique_id stabil dan hindari menerbitkan konfigurasi lain untuk perangkat sama tanpa rencana."
+      ]
+    }
+  },
+  {
+    "slug": "node-red-alur-mqtt",
+    "title": "Node-RED: menyusun alur MQTT secara visual",
+    "summary": "Rangkai node penerima, JSON, validasi, Debug, dan halaman monitor lokal tanpa paket dashboard tambahan.",
+    "stage": 0,
+    "minutes": 35,
+    "analogy": "Node-RED seperti menyusun jalur barang pada meja kerja. Setiap stasiun menerima kotak pesan, memeriksa atau mengubah isinya, lalu meneruskannya ke stasiun berikut.",
+    "explain": [
+      "Node-RED menjalankan alur berbasis pesan. Node adalah langkah kerja, wire adalah jalur pesan, dan msg.payload biasanya berisi data utama. msg.topic dapat memuat label MQTT. Warna serta nama node membantu membaca alur, tetapi yang menentukan perilaku adalah konfigurasi dan kode masing-masing node.",
+      "Latihan memakai node bawaan: MQTT In → JSON → Function → Debug. Alur kedua memakai HTTP In → Function → HTTP Response untuk halaman monitor sederhana. Tidak perlu memasang paket dashboard tambahan yang belum diperiksa pemeliharaannya.",
+      "Pasang Node.js yang didukung Node-RED sesuai panduan resmi, lalu install node-red dalam folder project latihan. Konfigurasi contoh mengikat editor dan HTTP ke 127.0.0.1. Editor Node-RED tanpa pengamanan tambahan tidak boleh dibuka ke internet atau seluruh jaringan hanya agar mudah diakses.",
+      "Import flow JSON di bawah melalui menu Import pada editor. Buka node broker, isi host/IP komputer Mosquitto serta akun viewer yang sudah boleh membaca telemetry, lalu Deploy. Flow export sengaja tidak menyertakan password; isi lewat konfigurasi credentials editor.",
+      "Function validasi memeriksa bentuk payload, deviceId, unit, suhu, dan penanda simulasi. Nilai sah disimpan pada flow context dalam memori. JSON yang tidak valid atau bentuk pesan salah tidak boleh menjadi nilai terbaru.",
+      "Buka http://127.0.0.1:1880/lab/iot-lab untuk melihat suhu dan umur penerimaan. Halaman refresh setiap lima detik dan memberi label data lama bila lebih dari 20 detik. Ini bukan pembacaan waktu ukur sensor; backlog perlu timestamp measuredAt seperti materi history.",
+      "Deploy dengan status “connected” hanya membuktikan node broker terhubung, belum membuktikan payload benar. Lihat sidebar Debug dan periksa nilai pada batas setiap node. Setelah runtime restart, context memori kosong; gunakan penyimpanan persisten terencana untuk data penting.",
+      "Jika nanti membuka akses lintas perangkat, rancang autentikasi editor/admin, perlindungan HTTP endpoint, HTTPS, dan firewall sesuai dokumentasi. Akun editor bukan otomatis akun halaman dashboard. Contoh lokal ini hanya membaca data dan tidak mengendalikan beban."
+    ],
+    "example": "Rangkai node penerima, JSON, validasi, Debug, dan halaman monitor lokal tanpa paket dashboard tambahan.",
+    "practice": [
+      "Siapkan Node.js yang didukung serta broker LAN yang sudah diuji. Buat folder project terpisah dan install node-red lokal.",
+      "Simpan settings.js seperti contoh, buat folder data, lalu jalankan runtime dengan perintah di bawah.",
+      "Buka http://127.0.0.1:1880, Import flow JSON, lalu isi akun viewer pada konfigurasi broker. Jangan menempelkan password pada Function.",
+      "Deploy, kirim telemetry valid dari ESP32/terminal, dan lihat objek yang keluar di Debug.",
+      "Buka /lab/iot-lab; periksa label SIMULASI, suhu, dan umur data.",
+      "Hentikan telemetry lebih dari 20 detik lalu refresh. Kirim temperature berupa teks dan pastikan nilai sah tidak ditimpa.",
+      "Restart runtime dan lihat context memori kembali kosong. Ini membantu membedakan demo nilai terbaru dari penyimpanan riwayat."
+    ],
+    "warning": "Editor Node-RED dapat mengubah alur eksekusi. Latihan dibatasi localhost; jangan mempublikasikan port 1880 tanpa pengamanan editor dan endpoint yang sesuai.",
+    "check": "Mengapa MQTT In connected tetapi halaman tetap “Belum ada data valid”?",
+    "answer": "Client dapat terhubung tanpa menerima topic yang tepat. Payload juga bisa gagal JSON atau validasi, sehingga periksa pesan dan tiap node secara berurutan.",
+    "nodes": [
+      "MQTT In",
+      "JSON menjadi objek",
+      "Validasi Function",
+      "Context latest",
+      "Halaman + Debug"
+    ],
+    "sources": [
+      {
+        "title": "Node-RED · instalasi lokal",
+        "url": "https://nodered.org/docs/getting-started/local"
+      },
+      {
+        "title": "Node-RED · pesan",
+        "url": "https://nodered.org/docs/user-guide/messages"
+      },
+      {
+        "title": "Node-RED · MQTT cookbook",
+        "url": "https://cookbook.nodered.org/mqtt/"
+      },
+      {
+        "title": "Node-RED · pengamanan",
+        "url": "https://nodered.org/docs/user-guide/runtime/securing-node-red"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "mqtt-broker-lokal",
+      "esp32-mqtt",
+      "filter-validasi-sensor"
+    ],
+    "photos": [],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Komputer dengan Node.js yang didukung Node-RED",
+        "Broker MQTT lab, akun viewer, dan telemetry contoh",
+        "Browser lokal pada komputer yang menjalankan runtime"
+      ],
+      "wiring": [
+        [
+          "Lingkup latihan",
+          "Gunakan project terpisah dan parameter yang disebut pada langkah praktik."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Terminal · project Node-RED lokal",
+          "language": "bash",
+          "code": "mkdir node-red-iot-lab\ncd node-red-iot-lab\nnpm init -y\nnpm install node-red\nmkdir data\n# Simpan settings.js pada folder node-red-iot-lab.\nnpx node-red --userDir ./data --settings ./settings.js"
+        },
+        {
+          "label": "settings.js · editor hanya di localhost",
+          "language": "javascript",
+          "code": "module.exports = {\n  uiHost: \"127.0.0.1\",\n  uiPort: 1880,\n  httpNodeRoot: \"/lab\",\n  flowFile: \"flows.json\"\n};"
+        },
+        {
+          "label": "Flow JSON · Import melalui editor Node-RED",
+          "language": "json",
+          "code": "[\n  {\n    \"id\": \"iot-lab-tab\",\n    \"type\": \"tab\",\n    \"label\": \"IoT MQTT Lab\",\n    \"disabled\": false,\n    \"info\": \"Demo lokal, tanpa kredensial dalam ekspor.\"\n  },\n  {\n    \"id\": \"iot-mqtt\",\n    \"type\": \"mqtt in\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"Telemetry lab\",\n    \"topic\": \"lab/esp32-01/telemetry\",\n    \"qos\": \"0\",\n    \"datatype\": \"auto-detect\",\n    \"broker\": \"iot-broker\",\n    \"x\": 130,\n    \"y\": 100,\n    \"wires\": [\n      [\n        \"iot-json\"\n      ]\n    ]\n  },\n  {\n    \"id\": \"iot-json\",\n    \"type\": \"json\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"JSON menjadi objek\",\n    \"property\": \"payload\",\n    \"action\": \"obj\",\n    \"pretty\": false,\n    \"x\": 350,\n    \"y\": 100,\n    \"wires\": [\n      [\n        \"iot-validate\"\n      ]\n    ]\n  },\n  {\n    \"id\": \"iot-validate\",\n    \"type\": \"function\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"Validasi dan simpan latest\",\n    \"func\": \"const value = msg.payload;\\nif (!value || typeof value !== \\\"object\\\" || Array.isArray(value) ||\\n    value.deviceId !== \\\"esp32-01\\\" || value.unit !== \\\"C\\\" ||\\n    typeof value.temperature !== \\\"number\\\" || !Number.isFinite(value.temperature) ||\\n    value.temperature < -40 || value.temperature > 125 || typeof value.simulated !== \\\"boolean\\\") {\\n    node.warn(\\\"Payload telemetry ditolak\\\");\\n    return null;\\n}\\nconst latest = {temperature:value.temperature, simulated:value.simulated, receivedAt:Date.now()};\\nflow.set(\\\"iotLabLatest\\\", latest);\\nmsg.payload = latest;\\nreturn msg;\",\n    \"outputs\": 1,\n    \"timeout\": 0,\n    \"noerr\": 0,\n    \"initialize\": \"\",\n    \"finalize\": \"\",\n    \"libs\": [],\n    \"x\": 620,\n    \"y\": 100,\n    \"wires\": [\n      [\n        \"iot-debug\"\n      ]\n    ]\n  },\n  {\n    \"id\": \"iot-debug\",\n    \"type\": \"debug\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"Nilai sah\",\n    \"active\": true,\n    \"tosidebar\": true,\n    \"console\": false,\n    \"tostatus\": false,\n    \"complete\": \"payload\",\n    \"targetType\": \"msg\",\n    \"x\": 880,\n    \"y\": 100,\n    \"wires\": []\n  },\n  {\n    \"id\": \"iot-http-in\",\n    \"type\": \"http in\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"Dashboard lokal\",\n    \"url\": \"/iot-lab\",\n    \"method\": \"get\",\n    \"upload\": false,\n    \"swaggerDoc\": \"\",\n    \"x\": 160,\n    \"y\": 220,\n    \"wires\": [\n      [\n        \"iot-render\"\n      ]\n    ]\n  },\n  {\n    \"id\": \"iot-render\",\n    \"type\": \"function\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"HTML nilai dan umur data\",\n    \"func\": \"const value = flow.get(\\\"iotLabLatest\\\");\\nlet detail = \\\"Belum ada data valid\\\", state = \\\"MENUNGGU\\\";\\nif (value) {\\n    const age = Math.max(0, Math.floor((Date.now() - value.receivedAt) / 1000));\\n    state = age > 20 ? \\\"DATA LAMA\\\" : \\\"DATA BARU\\\";\\n    detail = `${value.temperature.toFixed(1)} °C · ${value.simulated ? \\\"SIMULASI\\\" : \\\"SENSOR\\\"} · ${age} detik sejak diterima`;\\n}\\nmsg.headers = {\\\"Content-Type\\\":\\\"text/html; charset=utf-8\\\", \\\"Cache-Control\\\":\\\"no-store\\\"};\\n// Hanya angka yang sudah divalidasi dan label tetap yang masuk HTML.\\nmsg.payload = `<!doctype html><html lang=\\\"id\\\"><meta charset=\\\"utf-8\\\"><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\"><meta http-equiv=\\\"refresh\\\" content=\\\"5\\\"><title>Lab Node-RED</title><h1>Monitor suhu</h1><p>${state}</p><p>${detail}</p><p>Demo lokal; refresh setiap 5 detik. Memori hilang saat runtime restart.</p></html>`;\\nreturn msg;\",\n    \"outputs\": 1,\n    \"timeout\": 0,\n    \"noerr\": 0,\n    \"initialize\": \"\",\n    \"finalize\": \"\",\n    \"libs\": [],\n    \"x\": 440,\n    \"y\": 220,\n    \"wires\": [\n      [\n        \"iot-http-out\"\n      ]\n    ]\n  },\n  {\n    \"id\": \"iot-http-out\",\n    \"type\": \"http response\",\n    \"z\": \"iot-lab-tab\",\n    \"name\": \"Balas HTML\",\n    \"statusCode\": \"200\",\n    \"headers\": {},\n    \"x\": 740,\n    \"y\": 220,\n    \"wires\": []\n  },\n  {\n    \"id\": \"iot-broker\",\n    \"type\": \"mqtt-broker\",\n    \"name\": \"Broker LAN lab\",\n    \"broker\": \"192.168.1.10\",\n    \"port\": \"1883\",\n    \"clientid\": \"nodered-lab-01\",\n    \"autoConnect\": true,\n    \"usetls\": false,\n    \"protocolVersion\": \"4\",\n    \"keepalive\": \"30\",\n    \"cleansession\": true,\n    \"autoUnsubscribe\": true,\n    \"birthTopic\": \"\",\n    \"closeTopic\": \"\",\n    \"willTopic\": \"\"\n  }\n]"
+        }
+      ],
+      "result": "Pesan valid muncul di Debug dan halaman /lab/iot-lab. Nilai lama ditandai setelah 20 detik; invalid tidak menimpa latest. Data context hilang setelah restart runtime.",
+      "troubleshoot": [
+        "MQTT disconnected: cek alamat broker, akun, ACL, firewall LAN, dan port.",
+        "Node JSON error: pastikan publisher mengirim JSON valid, bukan teks sembarang.",
+        "Halaman 404: gunakan prefix /lab dan path /iot-lab; pastikan flow sudah di-Deploy.",
+        "Halaman kosong saat restart: context memori memang tidak menyimpan riwayat.",
+        "Port 1880 terpakai: ubah uiPort pada settings dan URL, bukan mematikan layanan lain sembarangan."
+      ]
+    }
+  },
+  {
+    "slug": "uji-ketahanan-perangkat",
+    "title": "Menguji ketahanan: Wi-Fi putus, sensor lepas, dan restart",
+    "summary": "Buat matriks pengujian, ukur waktu deteksi dan pemulihan, lalu buktikan perilaku perangkat.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Menguji payung hanya di dalam rumah belum membuktikan ia berguna saat hujan. Perangkat perlu diuji ketika jalur yang diandalkannya sengaja tidak tersedia, dengan cara yang terkendali.",
+    "explain": [
+      "Mulai dari baseline: catat versi firmware, board, sensor, tegangan catu, interval kirim, topic, dan keadaan normal. Tanpa catatan awal, perubahan perilaku sulit dibandingkan.",
+      "Untuk setiap gangguan, tentukan cara memicu yang aman, hasil yang diharapkan, bukti yang dicatat, dan cara mengembalikan kondisi. Uji satu kegagalan dahulu agar penyebabnya jelas; kombinasi gangguan dilakukan setelah perilaku dasar dipahami.",
+      "Pisahkan waktu deteksi, waktu pemulihan koneksi, dan waktu data baru muncul. Contoh interval kirim lima detik dengan stale threshold 20 detik memerlukan pengukuran nyata; jangan menulis “langsung pulih” tanpa bukti.",
+      "Uji pada prototipe DC tegangan rendah dan jaringan lab, bukan AP, broker, atau router produksi pelanggan. Cabut daya sebelum mengubah kabel sensor. Jangan membuat hubung singkat, membasahi perangkat bertenaga, atau memaksa brownout sebagai cara pengujian pemula.",
+      "Periksa data dan efek aplikasi, bukan hanya lampu board. Restart dapat membuat antrean hilang, ID terulang, atau output berubah. Backlog dapat menambah history tetapi tidak boleh membuat dashboard mengira pengukuran lama adalah baru.",
+      "Uji lebih lama sambil mengukur penggunaan memori, ukuran berkas, jumlah reconnect, serta restart. Tentukan batas log dan antrean. Lulus satu percobaan singkat tidak membuktikan sistem siap berjalan berbulan-bulan.",
+      "Contoh Python menghitung waktu pada log simulasi. Untuk log nyata lintas perangkat, gunakan jam tersinkron atau pencatatan monotonic pada satu pengamat; millis dari dua board tidak memiliki titik awal yang sama."
+    ],
+    "example": "Buat matriks pengujian, ukur waktu deteksi dan pemulihan, lalu buktikan perilaku perangkat.",
+    "practice": [
+      "Isi baseline perangkat dan simpan firmware yang bisa dipulihkan.",
+      "Pilih satu baris matriks, tulis waktu kejadian serta hasil yang diharapkan sebelum mulai.",
+      "Jalankan gangguan hanya pada lab, amati Serial, subscriber MQTT, database, dan tampilan yang terkait.",
+      "Pulihkan kondisi, lalu tunggu satu data pengukuran baru; sambung Wi-Fi saja belum cukup.",
+      "Catat lulus/gagal, bukti, durasi deteksi, durasi pemulihan, serta kemungkinan kehilangan data.",
+      "Ulangi kegagalan yang sudah diperbaiki dan lakukan uji durasi lebih panjang dengan batas penyimpanan yang jelas."
+    ],
+    "warning": "Jangan memutus layanan produksi atau membasahi rangkaian aktif. Simulasi sensor air pada tahap awal menggunakan tombol, bukan menuang air ke perangkat.",
+    "check": "Jika Wi-Fi kembali dalam lima detik tetapi data baru tampil setelah 25 detik, apakah waktu pemulihan aplikasi lima detik?",
+    "answer": "Tidak. Lima detik hanya pemulihan salah satu lapisan. Ukur sampai data yang benar dan baru kembali tersedia pada aplikasi.",
+    "nodes": [
+      "Catat baseline",
+      "Picu gangguan lab",
+      "Ukur deteksi",
+      "Pulihkan jalur",
+      "Buktikan data baru"
+    ],
+    "sources": [
+      {
+        "title": "Espressif · debugging",
+        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/fatal-errors.html"
+      },
+      {
+        "title": "Paho · pengelolaan koneksi",
+        "url": "https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "reconnect-antrean-offline",
+      "mqtt-idempotensi",
+      "watchdog-pemulihan"
+    ],
+    "photos": [],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "Prototipe DC tegangan rendah, jaringan/broker lab, dan cadangan konfigurasi",
+        "Serial Monitor, subscriber MQTT, catatan waktu, serta aplikasi yang akan dinilai"
+      ],
+      "wiring": [
+        [
+          "Lingkup latihan",
+          "Gunakan project terpisah dan parameter yang disebut pada langkah praktik."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Python · hitung durasi dari log simulasi",
+          "language": "python",
+          "code": "events = {\"wifi_putus\": 100, \"data_lama\": 121, \"wifi_kembali\": 140, \"data_baru\": 148}\nprint(\"Deteksi:\", events[\"data_lama\"] - events[\"wifi_putus\"], \"detik\")\nprint(\"Pemulihan aplikasi setelah Wi-Fi kembali:\", events[\"data_baru\"] - events[\"wifi_kembali\"], \"detik\")\nprint(\"Total tanpa data baru:\", events[\"data_baru\"] - events[\"wifi_putus\"], \"detik\")"
+        }
+      ],
+      "result": "Log simulasi menghasilkan deteksi 21 detik, pemulihan aplikasi 8 detik setelah Wi-Fi kembali, dan total 48 detik tanpa data baru.",
+      "troubleshoot": [
+        "Hasil berbeda antarpercobaan: catat sinyal, waktu boot, beban, dan versi firmware yang sama.",
+        "Log terlihat sukses tetapi tampilan lama: ukur umur pengukuran dan proses setelah jaringan pulih.",
+        "Restart berulang: cari akar penyebab dan kondisi catu; jangan menghapus watchdog atau proteksi begitu saja."
+      ]
+    },
+    "table": {
+      "title": "Matriks uji gangguan",
+      "intro": "Sesuaikan batas waktu dan keadaan aman dengan kebutuhan proyek. Seluruh pemicu hanya dijalankan pada lab.",
+      "headers": [
+        "Uji",
+        "Pemicu terkendali",
+        "Bukti yang diharapkan"
+      ],
+      "rows": [
+        [
+          "Baseline",
+          "Semua komponen lab normal",
+          "Nilai bertambah, unit dan sumber benar; catat interval nyata."
+        ],
+        [
+          "Wi-Fi terputus",
+          "Matikan AP lab atau putuskan koneksi perangkat secara aman",
+          "Data ditandai lama; fungsi lokal yang dirancang tetap berjalan."
+        ],
+        [
+          "Broker berhenti",
+          "Hentikan hanya broker LAB yang terisolasi",
+          "Client mencoba reconnect dengan jeda; tidak reset tanpa batas."
+        ],
+        [
+          "Internet gateway putus",
+          "Putuskan jalur cloud gateway lab",
+          "Broker lokal masih dapat bekerja; antrean/kehilangan data sesuai rancangan tercatat."
+        ],
+        [
+          "Sensor lepas",
+          "Matikan daya dahulu sebelum melepas sensor, lalu nyalakan ulang",
+          "Status sensor gagal atau data lama; tidak dianggap angka nol yang normal."
+        ],
+        [
+          "Restart perangkat",
+          "Lepas USB sebentar pada prototipe tegangan rendah",
+          "Output kembali ke keadaan awal aman; identitas konfigurasi sesuai rancangan."
+        ],
+        [
+          "Duplikat/backlog",
+          "Kirim ulang event ID sama dan pengukuran lebih lama",
+          "Riwayat tidak bertambah ganda; latest lebih baru tidak ditimpa."
+        ],
+        [
+          "Akun salah",
+          "Uji kredensial dan tujuan topic yang tidak diberi izin",
+          "Akses ditolak; jangan membuka ACL/rules agar pengujian lolos."
+        ],
+        [
+          "Konfigurasi berubah",
+          "Ganti SSID/broker pada project latihan",
+          "Ada jalur masuk ulang konfigurasi dan instruksi pemulihan."
+        ],
+        [
+          "Jalankan lama",
+          "Biarkan beberapa jam, pantau log/uptime/ruang simpan",
+          "Tidak ada pertumbuhan antrean/log tanpa batas; catat jumlah restart dan data hilang."
+        ]
+      ]
+    }
+  },
+  {
+    "slug": "proyek-monitor-ruang-jaringan",
+    "title": "Proyek: pemantauan ruang perangkat jaringan",
+    "summary": "Pantau suhu, pintu, simulasi kebocoran air, serta jalur data terputus melalui MQTT.",
+    "stage": 0,
+    "minutes": 40,
+    "analogy": "Seperti petugas jaga ruang jaringan yang melaporkan empat hal berbeda: ruangan panas, pintu terbuka, ada air, atau laporannya sendiri berhenti datang.",
+    "explain": [
+      "Proyek ini hanya pemantauan DC tegangan rendah. Tahap pertama memakai DHT22 untuk suhu dan dua pushbutton sebagai simulasi pintu serta sensor air. Tidak ada kendali listrik rumah, UPS, pemadam, atau perangkat jaringan produksi.",
+      "ESP32 klasik memakai GPIO4 untuk DHT22, GPIO27 untuk status pintu, dan GPIO26 untuk simulasi air. INPUT_PULLUP membuat GPIO27 HIGH saat tombol pintu terbuka: tekan/tahan tombol ke GND untuk mensimulasikan pintu tertutup. Tombol air ditekan ke GND berarti ada air.",
+      "Setelah uji tombol, kontak pintu dapat memakai reed switch yang menutup ketika magnet didekatkan. Foto memperlihatkan reed switch polos; produk sensor pintu dapat memiliki kotak dan kabel berbeda. Kawat terputus bisa terbaca seperti pintu terbuka; rancangan ini tidak membedakan semua kerusakan kabel dan bukan sistem kontrol akses tersertifikasi.",
+      "Untuk pengembangan sensor air nyata, pilih modul yang jelas kompatibel logika 3,3 V dan lingkungan pemasangannya. Foto/gambar probe bukan izin menuang air di dekat board aktif atau rak listrik. Uji awal tetap memakai tombol kering.",
+      "Kode menerbitkan telemetry pada topic khusus lab/esp32-noc-01/telemetry dan status online/offline pada topic status. Akun noc-device memiliki hak tulis hanya dua topic itu. Viewer NOC membaca keduanya. Gunakan ACL contoh sebagai tambahan pada broker lab.",
+      "Last Will offline memberi kabar ketika koneksi MQTT putus tidak normal setelah broker mendeteksinya, bukan seketika saat USB dicabut. Status online juga tidak membuktikan sensor sehat; periksa temperatureValid dan umur telemetry. Saat sensor gagal, suhu dikirim null dengan flag false, bukan angka nol yang terlihat normal.",
+      "Payload bertanda simulated true karena pintu/air awal memakai tombol. Temperatur dapat berasal dari DHT22, tetapi dashboard harus tetap menunjukkan bahwa ada input simulasi. Jangan menghapus penanda sebelum seluruh jalur input nyata diverifikasi.",
+      "Topic dan schema proyek ini berbeda dari latihan suhu esp32-01. Bridge Firebase dan flow Node-RED lama tidak otomatis menerima semua field ini. Buat cabang/project lab tersendiri, ubah validator untuk schema NOC, dan simpan suhu, doorOpen, waterDetected, status, serta timestamp penerimaan secara jelas.",
+      "Fungsi assess di bawah menguji keputusan alarm tanpa koneksi jaringan. Pada integrasi, pengamat/gateway mencatat received_at saat menerima pesan baru. Jangan memakai uptimeMs board sebagai UTC. Jika kemudian menyimpan backlog, sertakan measuredAt yang valid dan bedakan umur pengukuran dari umur penerimaan.",
+      "Pembacaan tiap lima detik memotret keadaan saat itu, bukan mencatat semua kejadian pintu singkat. Untuk audit buka/tutup, tambahkan debounce, deteksi perubahan, ID event, antrean, serta retensi. Alarm suhu contoh menggunakan satu ambang; untuk penggunaan berulang terapkan histeresis dan cooldown dari materi alarm."
+    ],
+    "example": "Pantau suhu, pintu, simulasi kebocoran air, serta jalur data terputus melalui MQTT.",
+    "practice": [
+      "Siapkan board, DHT22, dua tombol, serta library DHT sensor library Adafruit dan dependensi Adafruit Unified Sensor.",
+      "Dengan daya diputus, pasang wiring sesuai tabel. Mulai di meja lab, bukan di dalam rak produksi.",
+      "Tambahkan akun noc-device dan noc-viewer pada broker serta ACL contoh; isi SSID, host broker, dan password pada sketch.",
+      "Upload sketch, buka subscriber NOC, lalu cocokkan JSON dengan tombol yang ditekan dan temperatur sensor.",
+      "Uji sensor suhu gagal dengan memutus daya sebelum melepasnya; setelah boot, temperature harus null dan temperatureValid false.",
+      "Jalankan fungsi assess dengan data simulasi, lalu integrasikan pengamat secara bertahap ke Node-RED atau project Firebase lab dengan schema yang tepat.",
+      "Hentikan data lebih dari 20 detik dan periksa DATA_LAMA. Cabut daya board secara aman dan ukur kapan Last Will offline muncul.",
+      "Sesudah fungsi dasar benar, ganti tombol pintu dengan kontak magnet yang kompatibel dan dokumentasikan seluruh perubahan sebelum pemasangan lapangan."
+    ],
+    "warning": "Gunakan simulasi air dengan tombol dan jangan menguji dengan air pada rangkaian aktif. Prototipe ini tidak menggantikan sistem keselamatan, kontrol akses, atau alarm profesional.",
+    "check": "MQTT masih online, tetapi sensor suhu rusak. Apakah ruang jaringan boleh ditampilkan normal?",
+    "answer": "Tidak. Kesehatan koneksi dan sensor berbeda. Periksa flag validitas, umur data, serta status setiap input secara terpisah.",
+    "nodes": [
+      "Suhu + pintu + air",
+      "ESP32 memeriksa input",
+      "MQTT dan Last Will",
+      "Gateway menilai umur",
+      "Dashboard dan alarm"
+    ],
+    "sources": [
+      {
+        "title": "Adafruit · pemasangan DHT",
+        "url": "https://learn.adafruit.com/dht/connecting-to-a-dhtxx-sensor"
+      },
+      {
+        "title": "PubSubClient · connect dengan Last Will",
+        "url": "https://pubsubclient.knolleary.net/api"
+      },
+      {
+        "title": "Home Assistant · binary sensor MQTT",
+        "url": "https://www.home-assistant.io/integrations/binary_sensor.mqtt/"
+      }
+    ],
+    "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
+    "prerequisites": [
+      "proyek-monitor-kipas-dc",
+      "notifikasi-alarm-iot",
+      "node-red-alur-mqtt",
+      "uji-ketahanan-perangkat"
+    ],
+    "photos": [
+      {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/0/04/DHT22-Temperatur-Sensor.jpg",
+        "width": 2706,
+        "height": 2303,
+        "alt": "Foto asli sensor suhu dan kelembapan AM2302/DHT22 dengan empat pin",
+        "caption": "Kenali bentuk DHT22/AM2302. Cocokkan orientasi serta urutan pin pada dokumentasi sensor yang Anda gunakan.",
+        "source": "https://commons.wikimedia.org/wiki/File:DHT22-Temperatur-Sensor.jpg",
+        "author": "Ubahnverleih",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Reed_switch_%28aka%29.jpg",
+        "width": 1500,
+        "height": 349,
+        "alt": "Foto asli kontak reed switch di dalam tabung kaca",
+        "caption": "Kontak reed polos untuk mengenali prinsip sensor magnet. Sensor pintu siap pasang dapat mempunyai kotak berbeda; foto ini bukan pinout atau spesifikasi arus.",
+        "source": "https://commons.wikimedia.org/wiki/File:Reed_switch_(aka).jpg",
+        "author": "André Karwath (Aka)",
+        "license": "CC BY-SA 2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5/"
+      }
+    ],
+    "lab": {
+      "title": "PRAKTIK TERARAH",
+      "parts": [
+        "ESP32 klasik/DevKitC, DHT22, dua pushbutton, USB, jumper, breadboard",
+        "Pull-up DHT DATA sekitar 10 kohm bila diperlukan sesuai sensor/modul",
+        "Broker LAN lab dan komputer pengamat; reed switch untuk tahap berikutnya"
+      ],
+      "wiring": [
+        [
+          "DHT22",
+          "VCC → 3V3; GND → GND; DATA → GPIO4; cek orientasi fisik"
+        ],
+        [
+          "Pull-up sensor polos",
+          "DATA → resistor sekitar 10 kohm → 3V3 sesuai dokumentasi sensor"
+        ],
+        [
+          "Tombol pintu",
+          "GPIO27 ↔ tombol ↔ GND; LOW berarti pintu tertutup pada simulasi"
+        ],
+        [
+          "Tombol air",
+          "GPIO26 ↔ tombol ↔ GND; LOW berarti deteksi air simulasi"
+        ],
+        [
+          "Reed tahap lanjut",
+          "Kontak kering yang menutup dekat magnet dapat menggantikan tombol pintu; jangan masukkan tegangan luar"
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "Tambahan ACL · akun NOC lab",
+          "language": "conf",
+          "code": "user noc-device\ntopic write lab/esp32-noc-01/telemetry\ntopic write lab/esp32-noc-01/status\n\nuser noc-viewer\ntopic read lab/esp32-noc-01/telemetry\ntopic read lab/esp32-noc-01/status\n# Buat kedua akun dengan mosquitto_passwd tanpa -c; muat ulang broker LAB."
+        },
+        {
+          "label": "Sketch ESP32 klasik · pemantauan tanpa aktuator",
+          "language": "cpp",
+          "code": "#include <WiFi.h>\n#include <PubSubClient.h>\n#include <DHT.h>\n#include <math.h>\n\nconst int TEMP_PIN = 4, DOOR_PIN = 27, LEAK_TEST_PIN = 26;\nconst char* TELEMETRY = \"lab/esp32-noc-01/telemetry\";\nconst char* STATUS = \"lab/esp32-noc-01/status\";\nDHT sensor(TEMP_PIN, DHT22);\nWiFiClient network; // Hanya LAN lab. Untuk internet, terapkan TLS.\nPubSubClient mqtt(network);\nunsigned long lastSample = 0, lastWifi = 0, lastMqtt = 0;\nvoid setup() {\n  Serial.begin(115200); sensor.begin();\n  pinMode(DOOR_PIN, INPUT_PULLUP); pinMode(LEAK_TEST_PIN, INPUT_PULLUP);\n  WiFi.mode(WIFI_STA); WiFi.begin(\"GANTI_SSID_2_4_GHZ\", \"GANTI_PASSWORD_WIFI\");\n  mqtt.setServer(\"192.168.1.10\", 1883); mqtt.setBufferSize(512);\n  mqtt.setKeepAlive(30); mqtt.setSocketTimeout(2);\n}\nvoid loop() {\n  unsigned long now = millis();\n  if (WiFi.status() != WL_CONNECTED && now - lastWifi >= 10000UL) {\n    lastWifi = now; WiFi.reconnect();\n  }\n  if (WiFi.status() == WL_CONNECTED && !mqtt.connected() && now - lastMqtt >= 5000UL) {\n    lastMqtt = now;\n    // Last Will offline disetel sebelum connect. Status online setelah login sukses.\n    if (mqtt.connect(\"noc-monitor-01\", \"noc-device\", \"GANTI_PASSWORD_NOC_DEVICE\", STATUS, 1, true, \"offline\")) {\n      mqtt.publish(STATUS, \"online\", true);\n    }\n  }\n  if (mqtt.connected()) mqtt.loop();\n  if (now - lastSample < 5000UL) return;\n  lastSample = now;\n  float temperature = sensor.readTemperature();\n  bool valid = isfinite(temperature) && temperature >= -40 && temperature <= 80;\n  bool doorOpen = digitalRead(DOOR_PIN) == HIGH;\n  bool waterDetected = digitalRead(LEAK_TEST_PIN) == LOW;\n  char temperatureText[20], payload[384];\n  if (valid) snprintf(temperatureText, sizeof(temperatureText), \"%.1f\", temperature);\n  else snprintf(temperatureText, sizeof(temperatureText), \"null\");\n  snprintf(payload, sizeof(payload),\n    \"{\\\"deviceId\\\":\\\"esp32-noc-01\\\",\\\"temperature\\\":%s,\\\"unit\\\":\\\"C\\\",\\\"temperatureValid\\\":%s,\"\n    \"\\\"doorOpen\\\":%s,\\\"waterDetected\\\":%s,\\\"simulated\\\":true,\\\"uptimeMs\\\":%lu}\",\n    temperatureText, valid ? \"true\" : \"false\", doorOpen ? \"true\" : \"false\",\n    waterDetected ? \"true\" : \"false\", now);\n  Serial.println(payload);\n  if (mqtt.connected()) mqtt.publish(TELEMETRY, payload, false);\n  // Belum ada penyimpanan offline. Sampling status pintu bukan pencatat semua kejadian buka/tutup.\n}"
+        },
+        {
+          "label": "Terminal · amati dua topic NOC",
+          "language": "bash",
+          "code": "mosquitto_sub -h 192.168.1.10 -p 1883 -u noc-viewer -P 'GANTI_PASSWORD_NOC_VIEWER' -t 'lab/esp32-noc-01/telemetry' -t 'lab/esp32-noc-01/status' -v"
+        },
+        {
+          "label": "Python · keputusan alarm tanpa cloud",
+          "language": "python",
+          "code": "import math\n\ndef assess(packet, received_at_ms, now_ms):\n    if not isinstance(packet, dict) or packet.get(\"deviceId\") != \"esp32-noc-01\" or packet.get(\"unit\") != \"C\":\n        raise ValueError(\"Identitas/format salah\")\n    for field in (\"temperatureValid\", \"doorOpen\", \"waterDetected\", \"simulated\"):\n        if type(packet.get(field)) is not bool:\n            raise ValueError(\"Flag harus boolean\")\n    temperature = packet.get(\"temperature\")\n    if packet[\"temperatureValid\"]:\n        if type(temperature) not in (int, float) or not math.isfinite(temperature) or not -40 <= temperature <= 80:\n            raise ValueError(\"Suhu valid harus angka pada rentang latihan\")\n    elif temperature is not None:\n        raise ValueError(\"Suhu gagal harus null\")\n    if type(received_at_ms) is not int or type(now_ms) is not int:\n        raise ValueError(\"Waktu pengamat harus integer milidetik\")\n    if received_at_ms > now_ms + 5000:\n        return [\"JAM_PENGAMAT_PERLU_DIPERIKSA\"]\n    if now_ms - received_at_ms > 20000:\n        return [\"DATA_LAMA\"]\n    alarms = []\n    if not packet[\"temperatureValid\"]:\n        alarms.append(\"SENSOR_SUHU_GAGAL\")\n    elif temperature >= 30:\n        alarms.append(\"SUHU_TINGGI\")\n    if packet[\"doorOpen\"]:\n        alarms.append(\"PINTU_TERBUKA\")\n    if packet[\"waterDetected\"]:\n        alarms.append(\"DETEKSI_AIR\")\n    return alarms or [\"NORMAL\"]\n\n# Data SIMULASI untuk menguji logika; received_at berasal dari pengamat/gateway.\nexample = {\"deviceId\":\"esp32-noc-01\", \"temperature\":31.2, \"unit\":\"C\", \"temperatureValid\":True,\n           \"doorOpen\":True, \"waterDetected\":False, \"simulated\":True}\nprint(assess(example, 98000, 100000))\nprint(assess(example, 70000, 100000))"
+        }
+      ],
+      "result": "Subscriber menampilkan JSON status input dan online/offline. Fungsi simulasi memberi SUHU_TINGGI serta PINTU_TERBUKA, lalu DATA_LAMA ketika umur penerimaan melebihi 20 detik. Integrasi dashboard NOC perlu schema baru, bukan flow suhu lama tanpa perubahan.",
+      "troubleshoot": [
+        "Pintu selalu terbuka: HIGH berarti open; periksa tombol/kontak dan common GND.",
+        "Sensor suhu gagal: cocokkan urutan pin DHT, catu 3,3 V, pull-up, library, dan jeda pembacaan.",
+        "Data NOC tidak masuk flow lama: topic, deviceId, dan schema memang berbeda; buat cabang validator khusus.",
+        "Online tetap tampil setelah board mati: tunggu deteksi keepalive/Last Will dan tetap periksa umur telemetry.",
+        "Pintu dibuka cepat tidak tercatat: sampling status bukan event logger; tambahkan deteksi perubahan dan antrean untuk kebutuhan audit."
+      ]
+    },
+    "table": {
+      "title": "Pisahkan empat status pemantauan",
+      "intro": "Satu status sehat tidak menutupi kegagalan status lain.",
+      "headers": [
+        "Status",
+        "Indikator",
+        "Makna"
+      ],
+      "rows": [
+        [
+          "Suhu",
+          "temperature dan temperatureValid",
+          "Angka sah atau sensor gagal; null bukan 0 °C."
+        ],
+        [
+          "Pintu",
+          "doorOpen",
+          "Snapshot terbuka/tertutup; bukan seluruh riwayat akses."
+        ],
+        [
+          "Air",
+          "waterDetected",
+          "Pada tahap awal berasal dari tombol simulasi."
+        ],
+        [
+          "Jalur data",
+          "Umur telemetry dan Last Will",
+          "Data lama atau koneksi putus; bukan bukti suhu normal."
+        ]
+      ]
+    }
+  }
+]

@@ -101,15 +101,18 @@
   },
   {
     "id": "esp32",
-    "title": "ESP32 dan penyimpanan lokal",
+    "title": "ESP32, penyimpanan, dan komunikasi nirkabel",
     "kind": "Dasar ESP32",
     "before": "Pahami rangkaian, pemrograman, timer, dan sensor; ulangi kelompok 03–04 bila perlu.",
-    "goal": "Dapat memakai ESP32 3,3 V serta memilih Preferences atau kartu SD; contoh UNO tidak disalin pin demi pin.",
+    "goal": "Dapat memakai ESP32 3,3 V, memilih penyimpanan, serta membedakan ESP-NOW, BLE, dan LoRa/LoRaWAN.",
     "slugs": [
       "mengenal-esp32",
       "led-pertama",
       "membaca-sensor",
-      "penyimpanan-lokal"
+      "penyimpanan-lokal",
+      "esp-now-dua-esp32",
+      "ble-esp32-ponsel",
+      "lora-lorawan-sensor"
     ]
   },
   {
@@ -129,13 +132,15 @@
   },
   {
     "id": "dashboard",
-    "title": "Dashboard Firebase dasar",
+    "title": "Dashboard Firebase, Home Assistant, dan Node-RED",
     "kind": "Aplikasi",
     "before": "Selesaikan penghubung MQTT–Firebase pada kelompok 08.",
-    "goal": "Dapat login sebagai pembaca, menampilkan nilai terbaru, dan mengenali data lama.",
+    "goal": "Dapat membaca nilai terbaru, menandai data lama, dan memilih jalur aplikasi Firebase, Home Assistant, atau Node-RED.",
     "slugs": [
       "firebase-dashboard",
-      "dashboard-data"
+      "dashboard-data",
+      "home-assistant-mqtt",
+      "node-red-alur-mqtt"
     ]
   },
   {
@@ -143,14 +148,16 @@
     "title": "Koneksi yang andal dan aman",
     "kind": "Pengembangan",
     "before": "Alur MQTT–Firebase dan dashboard dasar sudah berhasil.",
-    "goal": "Dapat merancang histeresis, antrean offline, idempotensi, TLS, dan pemulihan gangguan.",
+    "goal": "Dapat menyiapkan konfigurasi Wi-Fi, antrean offline, TLS, pemulihan, dan matriks uji gangguan.",
     "slugs": [
       "otomatisasi-histeresis",
       "keamanan-iot",
+      "konfigurasi-wifi-tanpa-upload",
       "reconnect-antrean-offline",
       "mqtt-idempotensi",
       "mqtt-tls-sertifikat",
-      "watchdog-pemulihan"
+      "watchdog-pemulihan",
+      "uji-ketahanan-perangkat"
     ]
   },
   {
@@ -202,10 +209,11 @@
     "title": "Proyek akhir dan evaluasi",
     "kind": "Proyek",
     "before": "Pilih proyek setelah alur sensor, MQTT, dan dashboard berhasil.",
-    "goal": "Gabungkan fungsi bertahap dan buktikan perilaku ketika sensor atau jaringan gagal.",
+    "goal": "Gabungkan pemantauan suhu, kipas DC, atau ruang perangkat jaringan secara bertahap, lalu uji saat sensor dan koneksi gagal.",
     "slugs": [
       "proyek-monitor-suhu",
       "proyek-monitor-kipas-dc",
+      "proyek-monitor-ruang-jaringan",
       "troubleshooting-lanjutan"
     ]
   }

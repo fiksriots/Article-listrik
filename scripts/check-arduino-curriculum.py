@@ -3,7 +3,7 @@ import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 root = Path(__file__).resolve().parents[1]
-lessons = json.loads((root / 'lib/iot-lessons.json').read_text()) + json.loads((root / 'lib/iot-connected-lessons.json').read_text()) + json.loads((root / 'lib/iot-extended-lessons.json').read_text())
+lessons = json.loads((root / 'lib/iot-lessons.json').read_text()) + json.loads((root / 'lib/iot-connected-lessons.json').read_text()) + json.loads((root / 'lib/iot-extended-lessons.json').read_text()) + json.loads((root / 'lib/iot-wireless-lessons.json').read_text())
 order = json.loads((root / 'lib/iot-learning-order.json').read_text())
 ordered = [slug for group in order for slug in group['slugs']]
 assert len(ordered) == len(set(ordered)) == len(lessons)
