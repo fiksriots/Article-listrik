@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {stages,lessons} from '@/lib/course';
 import LearningJourney from '@/components/learning-journey';
 export default function Modules(){return <main id="konten" className="max-w-5xl mx-auto px-5 py-12 space-y-8">
-  <header className="space-y-3"><p className="lesson-kicker">LEARN LISTRIK · JALUR BELAJAR</p><h1 className="text-3xl md:text-4xl font-extrabold">Urutan belajar listrik dari nol</h1><p className="muted">Ikuti nomor 01–{lessons.length} dari atas ke bawah. Setiap tahap menjelaskan tujuan dan bekal yang perlu dipahami. Semua materi tetap dapat dibuka kapan saja.</p><Link className="btn" href={'/materi/'+lessons[0].slug}>Mulai dari pelajaran 01 →</Link></header>
+  <header className="space-y-3"><p className="lesson-kicker">LEARN ELECTRIC · JALUR BELAJAR</p><h1 className="text-3xl md:text-4xl font-extrabold">Urutan belajar listrik dari nol</h1><p className="muted">Ikuti nomor 01–{lessons.length} dari atas ke bawah. Setiap tahap menjelaskan tujuan dan bekal yang perlu dipahami. Semua materi tetap dapat dibuka kapan saja.</p><Link className="btn" href={'/materi/'+lessons[0].slug}>Mulai dari pelajaran 01 →</Link></header>
   <LearningJourney/>
   <nav aria-label="Lompat ke tahap belajar" className="flex flex-wrap gap-2">{stages.map((s,i)=><a key={s.id} className="course-stage-chip" href={'#tahap-'+s.id}>{i+1}. {s.name}</a>)}</nav>
   <div className="space-y-6">{stages.map((stage,i)=><section id={'tahap-'+stage.id} className="panel scroll-mt-6" key={stage.id}>
