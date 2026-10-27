@@ -685,6 +685,31 @@
     "minutes": 6
   },
   {
+    "slug": "flapping-jaringan",
+    "title": "Flapping Jaringan: Penyebab Putus-Nyambung dan Cara Mengeceknya di MikroTik",
+    "summary": "Bedakan link, MAC, route, dan OSPF flapping. Pelajari gejala, penyebab, pemeriksaan Winbox, serta cara membuktikan hasil perbaikan.",
+    "analogy": "Bayangkan pintu yang berulang terbuka dan tertutup saat orang melewatinya. Perjalanan terhenti sebentar, lalu berjalan lagi. Dalam jaringan, yang berubah bisa pintu fisiknya, petunjuk jalannya, atau hubungan antarpetugas—karena itu objek yang berubah harus disebutkan.",
+    "explain": "Flapping adalah perubahan status atau jalur yang terjadi berulang dalam waktu pengamatan. Istilah ini bukan nama satu kerusakan tertentu. Pada link flapping, misalnya, interface berulang up–down; pada OSPF flapping, hubungan neighbor berulang turun lalu dibangun lagi.\n\nDampaknya dapat berupa koneksi tersendat, packet loss, sesi aplikasi terputus, atau perubahan jalur. Besarnya dampak mengikuti durasi gangguan, rancangan redundansi, dan waktu pemulihan jaringan.\n\nLangkah awalnya bukan langsung reboot atau mengubah timer. Catat apa yang berubah, kapan berubah, serta bukti dari kedua ujung jalur. Artikel ini dimulai dari dasar dan menandai bagian OSPF sebagai pendalaman.",
+    "example": "Port ether5 menunjukkan dua link-down tambahan dalam lima menit. Itu membuktikan ada perubahan link pada periode tersebut, tetapi belum menentukan kabel sebagai penyebab. Jika uptime radio lawan juga mulai lagi, periksa kemungkinan restart radio dan jalur dayanya.",
+    "practice": [
+      "Pada port lab cadangan yang bukan akses Winbox atau uplink layanan, catat counter dan status awal; sambungkan perangkat uji yang menyala.",
+      "Lepaskan lalu sambungkan kembali satu kabel lab itu satu kali. Amati log dan perubahan counter; tandai kejadian ini sebagai perubahan yang sengaja dilakukan, bukan gangguan misterius.",
+      "Bandingkan dengan kasus packet loss tanpa link-down baru. Tulis bukti apa lagi yang diperlukan sebelum menyebut flapping.",
+      "Kembalikan sambungan lab dan catat hasil akhir. Jangan membuat loop atau membanjiri trafik untuk mereproduksi kasus."
+    ],
+    "warning": "Port running tidak membuktikan seluruh jalur sehat. State OSPF 2-Way dapat normal pada pasangan tertentu; MAC berpindah juga dapat merupakan roaming yang sah. Sebutkan objek dan bukti sebelum menyimpulkan flapping.",
+    "check": "Neighbor OSPF berulang turun, tetapi link-downs port tidak bertambah dan uptime router tidak reset. Apakah kamu sudah dapat memastikan kabel rusak?",
+    "answer": "Belum. Periksa jalur transport/tunnel, loss, CPU, parameter kedua sisi, serta BFD jika digunakan. Counter port satu sisi saja tidak menentukan semua penyebab; cocokkan log dan waktu pada kedua ujung.",
+    "nodes": [
+      "Objek yang berubah",
+      "Bukti dan waktu",
+      "Pemulihan terukur"
+    ],
+    "stage": 6,
+    "minutes": 25,
+    "source": "https://manual.mikrotik.com/docs/wired-connections/ethernet/"
+  },
+  {
     "slug": "vpn-akses-remote",
     "title": "VPN dan akses remote",
     "summary": "Hubungkan lokasi tanpa sembarang membuka panel administrasi.",

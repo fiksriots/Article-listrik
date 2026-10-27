@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+
+const slug = 'flapping-jaringan';
+const lessons = JSON.parse(fs.readFileSync('lib/network-lessons.json', 'utf8'));
+const matches = lessons.filter(item => item.slug === slug);
+assert.equal(matches.length, 1, 'Create exactly one canonical article');
+const index = lessons.findIndex(item => item.slug === slug);
+assert.equal(lessons[index - 1].slug, 'troubleshooting-runtut');
+const html = fs.readFileSync(`.next/server/app/jaringan/${slug}.html`, 'utf8');
+assert.equal((html.match(/<h1\b/g) || []).length, 1);
+assert.ok(html.includes(`https://article.fikss.site/jaringan/${slug}`));
+for (const topic of ['Link/interface flapping', 'MAC flapping', 'Route flapping', 'OSPF neighbor flapping', '2-Way', 'IP protocol 89', 'Contoh simulasi', 'Cek pemahaman']) assert.ok(html.includes(topic), `Missing explanation: ${topic}`);
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(ids.length, new Set(ids).size, 'Duplicate IDs');
+for (const [, target] of html.matchAll(/href="#(flap-[^"]+)"/g)) assert.ok(ids.includes(target), `Broken article anchor: ${target}`);
+assert.ok(html.includes('/network/flapping-jaringan.svg'));
+assert.ok(html.includes('Tandai sudah dibaca'));
+assert.ok(html.includes(`/jaringan/${lessons[index + 1].slug}`));
+const catalogue = JSON.parse(fs.readFileSync('.next/server/app/api/articles.body', 'utf8'));
+assert.equal(catalogue.items.filter(item => item.url === 'https://article.fikss.site/jaringan/flapping-jaringan').length, 1);
+const casePage = fs.readFileSync('.next/server/app/jaringan/winbox/troubleshooting-kasus-nyata.html', 'utf8');
+assert.ok(casePage.includes('href="/jaringan/flapping-jaringan"'));
+console.log('PASS: one flapping article, course placement, four types, OSPF caveats, anchors, read progress, navigation, catalogue entry, and Winbox cross-link.');
