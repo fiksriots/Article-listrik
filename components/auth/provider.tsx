@@ -1,31 +1,58 @@
 'use client';
 import {createContext,useContext,useEffect,useState,useCallback,type ReactNode} from 'react';
-import type {Session} from '@supabase/supabase-js';
-import {getSupabase} from '@/lib/auth/supabase';
+import {SessionProvider,useSession} from 'next-auth/react';
 import {acknowledge,announce,finishGuestImport,getOwner,guestImportDone,mergeRemote,migrateLegacy,readMap,setOwner,writeMap,SYNC_EVENT,type RemoteRow,type ProgressMap} from '@/lib/auth/progress-store';
-type State={session:Session|null;loading:boolean;status:string;sync:()=>void;configured:boolean};
-const Context=createContext<State>({session:null,loading:true,status:'Memuat akun…',sync:()=>{},configured:false});
-export const useLearningAccount=()=>useContext(Context);
-export function LearningAccountProvider({children}:{children:ReactNode}){
- const [session,setSession]=useState<Session|null>(null);const [loading,setLoading]=useState(true);const [status,setStatus]=useState('Progres tersimpan di browser ini.');const [configured,setConfigured]=useState(false);const [request,setRequest]=useState(0);
- const sync=useCallback(()=>setRequest(n=>n+1),[]);
- useEffect(()=>{try{migrateLegacy();announce();}catch{setStatus('Penyimpanan browser tidak tersedia.');}let sb;try{sb=getSupabase();}catch{setConfigured(false);setLoading(false);setStatus('Layanan akun belum dapat dimuat.');return;}setConfigured(!!sb);if(!sb){setLoading(false);return;}let alive=true;let observed=false;
- const apply=(next:Session|null)=>{if(!alive)return;setSession(next);setLoading(false);try{setOwner(next?.user.id||null);setStatus(next?'Menyiapkan sinkronisasi…':'Tanpa akun · progres tersimpan di browser ini.');}catch{setStatus('Penyimpanan browser diblokir. Izinkan penyimpanan situs untuk menggunakan progres akun.');}};
- const sessionTimer=window.setTimeout(()=>{if(alive&&!observed){setLoading(false);setStatus('Pemeriksaan sesi belum selesai. Periksa koneksi atau muat ulang halaman.');}},12000);
- const {data}=sb.auth.onAuthStateChange((_event,next)=>{observed=true;window.clearTimeout(sessionTimer);apply(next);});
- sb.auth.getSession().then(({data,error})=>{if(!observed)apply(error?null:data.session);}).catch(()=>{if(!observed)apply(null);});
- return()=>{alive=false;window.clearTimeout(sessionTimer);data.subscription.unsubscribe();};},[]);
- useEffect(()=>{if(!session)return;const sb=getSupabase();if(!sb)return;const id=session.user.id;let canceled=false;let running=false;let rerun=false;
- const run=async()=>{if(canceled||getOwner()!==id)return;if(running){rerun=true;return;}running=true;
- try{if(!navigator.onLine){setStatus('Offline · perubahan disimpan di browser dan dikirim setelah terhubung.');return;}setStatus('Menyinkronkan progres…');const {data,error}=await sb.from('education_learning_progress').select('academy,lesson_slug,completed').eq('user_id',id);if(error)throw error;if(canceled||getOwner()!==id)return;
- const importing=!guestImportDone(id);const guest=importing?readMap(null):undefined;const merged=mergeRemote(readMap(id),(data||[]) as RemoteRow[],guest);writeMap(id,merged);announce();
- const pending=Object.fromEntries(Object.entries(merged).filter(([,v])=>v.dirty)) as ProgressMap;
- if(Object.keys(pending).length){const rows=Object.entries(pending).map(([key,v])=>{const [academy,lesson_slug]=key.split('/');return {user_id:id,academy,lesson_slug,completed:v.completed};});const {error}=await sb.from('education_learning_progress').upsert(rows,{onConflict:'user_id,academy,lesson_slug'});if(error)throw error;if(canceled||getOwner()!==id)return;writeMap(id,acknowledge(readMap(id),pending));}
- if(importing&&guest)finishGuestImport(id,guest);announce();setStatus('✓ Progres akun sudah tersinkron.');
- }catch{if(!canceled)setStatus('Belum tersinkron · progres tetap di browser. Coba sinkronkan ulang.');}finally{running=false;if(rerun&&!canceled){rerun=false;void run();}}};
- const refresh=()=>void run();const visible=()=>{if(document.visibilityState==='visible')refresh();};
- window.addEventListener(SYNC_EVENT,refresh);window.addEventListener('online',refresh);window.addEventListener('storage',refresh);document.addEventListener('visibilitychange',visible);const timer=window.setInterval(refresh,60000);void run();
- return()=>{canceled=true;window.removeEventListener(SYNC_EVENT,refresh);window.removeEventListener('online',refresh);window.removeEventListener('storage',refresh);document.removeEventListener('visibilitychange',visible);window.clearInterval(timer);};},[session?.user.id,request]);
- return <Context.Provider value={{session,loading,status,sync,configured}}>{children}</Context.Provider>;
+const ProgressContext=createContext({status:'Progres tersimpan di browser ini.',sync:()=>{}});
+export const useProgressSync=()=>useContext(ProgressContext);
+function ProgressSync({children}:{children:ReactNode}) {
+  const {data:session,status:authStatus}=useSession();
+  const id=session?.user?.id || null;
+  const [status,setStatus]=useState('Progres tersimpan di browser ini.');
+  const [request,setRequest]=useState(0);
+  const sync=useCallback(()=>setRequest(n=>n+1),[]);
+  useEffect(()=>{
+    if(authStatus==='loading')return;
+    try{migrateLegacy();setOwner(id);}catch{setStatus('Penyimpanan browser diblokir. Izinkan penyimpanan situs untuk menyimpan progres.');return;}
+    if(!id){setStatus('Tanpa akun · progres tersimpan di browser ini.');return;}
+    let canceled=false,running=false,rerun=false;
+    const controller=new AbortController();
+    const active=()=>!canceled&&getOwner()===id;
+    async function call(init?:RequestInit){
+      const signal=AbortSignal.any([controller.signal,AbortSignal.timeout(15000)]);
+      const response=await fetch('/api/progress',{...init,signal,cache:'no-store'});
+      if(!response.ok){const body=await response.json().catch(()=>({}));throw new Error(body.error||'sync_failed');}
+      return response.json();
+    }
+    const run=async()=>{
+      if(!active())return;if(running){rerun=true;return;}running=true;
+      try{
+        if(!navigator.onLine){setStatus('Offline · progres disimpan sementara di browser.');return;}
+        setStatus('Menyinkronkan progres…');
+        const {rows}=await call();if(!active())return;
+        if(!Array.isArray(rows))throw new Error('invalid_response');
+        const importing=!guestImportDone(id!);const guest=importing?readMap(null):undefined;
+        const merged=mergeRemote(readMap(id),rows as RemoteRow[],guest);writeMap(id,merged);announce();
+        const entries=Object.entries(merged).filter(([,v])=>v.dirty);
+        for(let offset=0;offset<entries.length;offset+=400){
+          if(!active())return;
+          const pending=Object.fromEntries(entries.slice(offset,offset+400)) as ProgressMap;
+          const upload=Object.entries(pending).map(([key,value])=>{const [academy,lesson_slug]=key.split('/');return {academy,lesson_slug,completed:value.completed};});
+          await call({method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({rows:upload})});
+          if(!active())return;writeMap(id,acknowledge(readMap(id),pending));
+        }
+        if(importing&&guest)finishGuestImport(id!,guest);announce();setStatus('✓ Progres akun sudah tersinkron.');
+      }catch(error){if(active())setStatus(error instanceof Error&&error.message==='not_configured'?'Penyimpanan akun sedang disiapkan · progres tetap di browser.':'Belum tersinkron · progres tetap di browser. Coba lagi saat koneksi tersedia.');}
+      finally{running=false;if(rerun&&active()){rerun=false;void run();}}
+    };
+    const refresh=()=>void run();const visible=()=>{if(document.visibilityState==='visible')refresh();};
+    const changed=()=>refresh();
+    window.addEventListener(SYNC_EVENT,changed);window.addEventListener('online',refresh);window.addEventListener('storage',refresh);document.addEventListener('visibilitychange',visible);
+    const timer=window.setInterval(refresh,60000);void run();
+    return()=>{canceled=true;controller.abort();window.clearInterval(timer);window.removeEventListener(SYNC_EVENT,changed);window.removeEventListener('online',refresh);window.removeEventListener('storage',refresh);document.removeEventListener('visibilitychange',visible);};
+  },[id,authStatus,request]);
+  return <ProgressContext.Provider value={{status,sync}}>{children}</ProgressContext.Provider>;
 }
-export function ProgressStatus(){const {session,status}=useLearningAccount();return <p className="learning-sync-note">{session?status:<>Progres tersimpan di browser ini. <a href="/akun">Masuk untuk sinkronisasi antarperangkat →</a></>}</p>}
+export function LearningAccountProvider({children}:{children:ReactNode}) {
+  return <SessionProvider refetchOnWindowFocus><ProgressSync>{children}</ProgressSync></SessionProvider>;
+}
+export function ProgressStatus(){const {status}=useProgressSync();return <p className="learning-sync-note">{status} <a href="/akun">Akun belajar →</a></p>;}

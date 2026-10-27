@@ -1,41 +1,56 @@
-# Optional accounts and learning progress
+# Google-only accounts
 
-Production app: https://article.fikss.site/akun
-Supabase project: personal-branding (cjwwkdglhnegpszliwlc).
+The education app uses Auth.js with Google OAuth and encrypted JWT session cookies. Email/password signup, recovery, the Supabase client, have been removed from this app. Firestore replaces the progress storage (see setup below). The shared Supabase project and its database records have not been deleted or changed.
 
-## Authentication configuration
+## Setup
 
-Email/password is enabled; Google is not configured and is not advertised.
-Keep the existing Site URL for the portfolio. Add `https://article.fikss.site/akun` to Authentication → URL Configuration → Redirect URLs for education confirmation and password recovery. Do not replace the portfolio Site URL.
-After verifying the redirect and email sender, set the Vercel production variable `EDUCATION_EMAIL_AUTH_READY=true` and redeploy to enable signup and password recovery. Until then the account page permits existing verified accounts to sign in and explains that new registration is being prepared.
+Create a Web application OAuth client in Google Cloud. Configure the consent screen and, while in testing, add authorized test users. Register this exact redirect URI:
 
-Check Authentication → Email configuration before opening signups to the public. Supabase's built-in email sender has restricted recipients and quotas; configure a verified SMTP sender for public signup/recovery if one is not already configured. No SMTP credentials are committed to this repository. Enable leaked-password protection when the project's plan supports it.
+https://article.fikss.site/api/auth/callback/google
 
-Required public Vercel variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. A publishable key is intentionally browser-visible; no service_role key is used.
+For local development, also register http://localhost:3000/api/auth/callback/google. Every supported alternate production domain requires its own registered callback and matching AUTH_URL; use article.fikss.site as the canonical login domain.
 
-## Private progress model
+Set these server-only variables in Vercel, never in browser code or git:
 
-`public.education_learning_progress` is keyed by `(user_id, academy, lesson_slug)` with `completed` and a server-maintained `updated_at`. Academies are listrik, jaringan, iot. False rows preserve deliberate completion removal. RLS restricts SELECT, INSERT, and UPDATE to auth.uid() = user_id. Anonymous roles have no access; clients have no DELETE grant. No existing portfolio tables are modified.
+- AUTH_URL=https://article.fikss.site
+- AUTH_GOOGLE_ID (Google OAuth Client ID)
+- AUTH_GOOGLE_SECRET (Google OAuth Client Secret)
+- AUTH_SECRET (generate with openssl rand -base64 32)
 
-Local progress uses fiks-learning-v2:guest or fiks-learning-v2:<user uuid>. Legacy electricity keys and network/IoT lists migrate once. At first account sync, guest completion is imported only when no account record exists (including a false record). After successful sync, imported guest entries are removed from the guest cache. Signing out switches back to the separate guest cache; it never copies account progress into another account.
+Remove the obsolete education app variables NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, and EDUCATION_EMAIL_AUTH_READY from the article-listrik Vercel project after reviewing the migration. Do not remove settings from the separate portfolio project. Redeploy after configuration changes.
 
-Dirty local edits survive remote refresh and are uploaded per lesson. Acknowledgements only clear matching revisions, preserving clicks made during a request. Other devices refresh on foreground, online, explicit Sync, and every 60 seconds while logged in. Conflicting edits to the same lesson use the last successfully uploaded edit. Offline storage is browser-local until syncing succeeds.
+Only openid, email, and profile scopes are requested. Google must confirm email_verified. OAuth tokens and provider secrets are not included in client sessions. Auth.js handles state, CSRF, and session cookies.
 
-## Verification
+Without configuration, the page displays a setup message and disables sign-in. No placeholder credentials are used. Real Google consent, callback, session persistence, and sign-out must be tested after credentials are configured.
 
-npm run build
-node scripts/check-account-progress.cjs
+## Progress preservation and limitations
 
-RLS was tested transactionally with two synthetic users and rollback: owner read/write, false completion updates, blocked other-user read/insert/ownership reassignment. No test accounts or rows were retained. Email delivery and interactive login must be verified using an actual email after sender/redirect configuration. No verification email is sent automatically by deployment.
+Guest browser progress and legacy keys remain unchanged. Old Supabase-account browser caches are retained, and existing remote database records remain untouched. They are not automatically mapped to Google identities. Progress is now isolated by Google identity and synchronizes when Firestore is configured. Old Supabase account migration remains separate.
 
-## Existing project policy findings
+## Firestore progress sync (replacement storage)
 
-A read-only audit found pre-existing PUBLIC policies with unconditional access on cms_config, contacts, documents, guestbook, and sent_emails. These were not changed by this feature; review their privileges and the portfolio's intended admin identity before enabling public account signup. Merely enabling RLS does not protect a table when the policy allows every row. See https://supabase.com/docs/guides/database/postgres/row-level-security . The new education progress table has separate ownership policies and passed isolation tests.
+The app now synchronizes via the server-only `/api/progress` endpoint. The owner comes exclusively from the verified Auth.js session, never from a request body or email address. Each Google identity has a SHA-256 document ID under `education_progress/{ownerHash}/lessons/{academy--slug}`. True and false completion records are both retained so unmarking a lesson does not resurrect old completion. Conflicts on the same lesson follow the last successful upload. The API validates each row, limits batches to 400, checks Origin for writes, and returns private/no-store responses. Service-account credentials never enter browser code or session responses.
 
-## Login repair (27 October 2026)
+Enable a Firestore Native-mode database in the Google Cloud/Firebase project. Create a dedicated service account with only the required Firestore data access (for example roles/datastore.user); do not grant Owner/Editor. Store these server-only Vercel production variables through the dashboard:
 
-The production readiness flag was absent. Public Auth settings confirmed that email/password is enabled, signup is allowed by the backend, and email confirmation is required. SMTP readiness and the redirect allowlist could not be verified because dashboard authentication was declined. Do not enable the readiness flag until a real confirmation and recovery email have been tested. No confirmation requirement was disabled and no production test user was created.
+- FIRESTORE_PROJECT_ID
+- FIRESTORE_CLIENT_EMAIL
+- FIRESTORE_PRIVATE_KEY (actual multiline PEM or escaped newlines)
 
-The account UI now explains the signup dependency when the signup tab is selected. Login distinguishes invalid credentials, unconfirmed email, throttling, and network failures. Requests have a 15-second abort deadline; session initialization has a bounded loading indicator. Mode switching and field edits are disabled during submission. Browser-storage failures no longer leave the account provider loading indefinitely.
+Do not send service-account JSON or private keys in chat or commit them. Prefer workload identity federation/ADC in deployments where it is configured; this implementation currently reads explicit server environment credentials. Keep local credential files outside git.
 
-Verification: npm run typecheck; node scripts/check-auth-errors.cjs; node scripts/check-account-progress.cjs; npm run build. Successful real-account login and email delivery remain unverified until dashboard access and a test mailbox are available.
+Server SDK access uses IAM and bypasses Firestore Security Rules. In addition to the endpoint's session/ownership checks, deny all browser-client access to the `education_progress` collection. Merge the following into your existing rules (do not replace unrelated application rules):
+
+```
+match /education_progress/{document=**} {
+  allow read, write: if false;
+}
+```
+
+Ensure no other overlapping rule grants access, since Firestore combines matching allows. No Firebase web client or public API key is needed for this server integration.
+
+Guest progress is imported once after a successful cloud read; remote records, including false, take precedence over guest completion. The guest snapshot is cleared only after all writes succeed. Pending account changes persist locally, retries occur on connectivity/focus, a manual sync, and every 60 seconds. In-flight acknowledgements cannot clear later edits. Signing out switches to the separate guest cache and never copies private account progress into it. Old Supabase identities and records are not automatically linked to Google identities.
+
+Without Firestore credentials the endpoint returns 503 and the UI explicitly says account storage is being prepared. It never reports a successful cloud sync. Google OAuth setup remains required too. No live cloud resources, database rules, credentials, or production settings have been configured by this code change.
+
+Verify with `node scripts/check-progress-api.cjs`, `node scripts/check-account-progress.cjs`, `npm run build`, then `CHROMIUM_PATH=<chromium> node scripts/check-account-ui.cjs`. Browser tests stub authenticated sessions and the cloud endpoint; API tests use an isolated in-memory store. After deployment, verify a real Google account on two devices, unmark/reload, offline/reconnect, and sign-out/account switching before declaring cross-device synchronization live.

@@ -21,12 +21,14 @@
     "test:path": "node scripts/check-path-browser.cjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.118.0",
+    "@google-cloud/firestore": "9.4.0",
     "gray-matter": "^4.0.3",
     "next": "^15.5.0",
+    "next-auth": "5.0.0-beta.32",
     "next-mdx-remote": "^6.0.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

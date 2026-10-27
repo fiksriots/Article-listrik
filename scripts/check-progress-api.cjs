@@ -1,0 +1,24 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),ts=require('typescript');
+const m={exports:{}};new Function('exports','module',ts.transpileModule(fs.readFileSync('lib/server/progress-handler.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText)(m.exports,m);
+const {progressHandlers}=m.exports;
+(async()=>{
+ let owner=null;const accounts=new Map();let operations=0;
+ const store={read:async id=>{operations++;return [...(accounts.get(id)||new Map()).values()]},write:async(id,rows)=>{operations++;const data=accounts.get(id)||new Map();for(const row of rows)data.set(row.academy+'/'+row.lesson_slug,row);accounts.set(id,data)}};
+ const api=progressHandlers(async()=>owner,()=>store);
+ const row={academy:'listrik',lesson_slug:'apa-itu-listrik',completed:true};
+ const put=(body,origin='https://article.fikss.site')=>api.PUT(new Request('https://article.fikss.site/api/progress',{method:'PUT',headers:{origin,'Content-Type':'application/json'},body:JSON.stringify(body)}));
+ assert.equal((await api.GET()).status,401);assert.equal((await put({rows:[row]})).status,401);assert.equal(operations,0);
+ owner='google:A';assert.equal((await put({rows:[row]},'https://attacker.invalid')).status,403);
+ assert.equal((await put({rows:[{...row,user_id:'google:B'}]})).status,400);
+ assert.equal((await put({rows:[{...row,lesson_slug:'../private'}]})).status,400);
+ assert.equal((await put({rows:[row,row]})).status,400);
+ assert.equal((await put({rows:[row],owner:'google:B'})).status,400);
+ assert.equal((await put({rows:[row]})).status,200);
+ owner='google:B';assert.deepEqual((await (await api.GET()).json()).rows,[]);
+ assert.equal((await put({rows:[{...row,completed:false}]})).status,200);
+ owner='google:A';assert.equal((await (await api.GET()).json()).rows[0].completed,true);
+ assert.equal((await put({rows:[{...row,completed:false}]})).status,200);assert.equal((await (await api.GET()).json()).rows[0].completed,false);
+ assert.equal((await progressHandlers(async()=>owner,()=>null).GET()).status,503);
+ assert.equal((await progressHandlers(async()=>owner,()=>({read:async()=>{throw Error('private secret')},write:async()=>{}})).GET()).status,503);
+ console.log('PASS: session ownership, anonymous denial, CSRF origin, input validation, account isolation, persistent undo and unavailable storage');
+})().catch(e=>{console.error(e);process.exitCode=1});

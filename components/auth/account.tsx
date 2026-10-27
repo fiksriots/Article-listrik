@@ -1,26 +1,42 @@
 'use client';
 import Link from 'next/link';
-import {authErrorMessage} from '@/lib/auth/errors';
-import {useEffect,useState,type FormEvent} from 'react';
-import {getSupabase} from '@/lib/auth/supabase';
-import {completedSlugs,PROGRESS_EVENT} from '@/lib/auth/progress-store';
-import {useLearningAccount} from './provider';
-type Mode='signin'|'signup'|'forgot'|'recovery';
-export default function Account({emailEnabled=false}:{emailEnabled?:boolean}){
- const {session,loading,status,sync,configured}=useLearningAccount();const [mode,setMode]=useState<Mode>('signin');const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [confirm,setConfirm]=useState('');const [busy,setBusy]=useState(false);const [message,setMessage]=useState('');const [counts,setCounts]=useState([0,0,0]);
- useEffect(()=>{const refresh=()=>setCounts(['listrik','jaringan','iot'].map(a=>completedSlugs(a as 'listrik'|'jaringan'|'iot').length));refresh();window.addEventListener(PROGRESS_EVENT,refresh);return()=>window.removeEventListener(PROGRESS_EVENT,refresh);},[]);
- useEffect(()=>{const sb=getSupabase();if(!sb)return;const recovery=window.location.hash.includes('type=recovery');if(recovery)setMode('recovery');const url=new URL(window.location.href);if(url.searchParams.has('error')||url.hash.includes('error=')){setMessage('Tautan tidak valid atau sudah kedaluwarsa. Minta email baru.');window.history.replaceState(null,'','/akun');}const {data}=sb.auth.onAuthStateChange(event=>{if(event==='PASSWORD_RECOVERY')setMode('recovery');});return()=>data.subscription.unsubscribe();},[]);
- function change(next:Mode){if(busy)return;setMode(next);setMessage('');setPassword('');setConfirm('');}
- async function submit(e:FormEvent){e.preventDefault();if(busy)return;if(!emailEnabled&&mode!=='signin'&&mode!=='recovery'){setMessage('Pengiriman email akun belum siap. Kamu tetap dapat belajar tanpa akun.');return;}const sb=getSupabase();if(!sb){setMessage('Layanan akun belum tersedia. Progres tanpa akun tetap bisa digunakan.');return;}
- if((mode==='signup'||mode==='recovery')&&password!==confirm){setMessage('Kedua kata sandi belum sama.');return;}
- setBusy(true);setMessage('');try{
- const redirect='https://article.fikss.site/akun';
- if(mode==='signin'){const {error}=await sb.auth.signInWithPassword({email:email.trim(),password});if(error){setMessage(authErrorMessage(error,'signin'));}else{setPassword('');setMessage('Berhasil masuk. Progres sedang disinkronkan.');}}
- if(mode==='signup'){const {data,error}=await sb.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:redirect}});if(error){setMessage(authErrorMessage(error,'signup'));}else{setPassword('');setConfirm('');setMessage(data.session?'Akun siap. Progres sedang disinkronkan.':'Periksa kotak masuk dan folder spam. Konfirmasikan email, lalu kembali ke halaman ini untuk masuk.');}}
- if(mode==='forgot'){const {error}=await sb.auth.resetPasswordForEmail(email.trim(),{redirectTo:redirect});setMessage(error?authErrorMessage(error,'forgot'):'Jika alamat terdaftar, tautan pemulihan akan dikirim. Periksa kotak masuk dan folder spam.');}
- if(mode==='recovery'){const {error}=await sb.auth.updateUser({password});if(error)setMessage(authErrorMessage(error,'recovery'));else{setPassword('');setConfirm('');setMode('signin');setMessage('Kata sandi berhasil diperbarui.');}}
- }catch{setMessage('Koneksi bermasalah. Periksa internet dan coba lagi.');}finally{setBusy(false);}}
- async function signOut(){const sb=getSupabase();if(!sb)return;setBusy(true);try{const {error}=await sb.auth.signOut({scope:'local'});if(error)setMessage('Belum berhasil keluar. Coba lagi.');else{setPassword('');setMessage('Sudah keluar dari perangkat ini. Progres akun tetap tersimpan.');}}catch{setMessage('Belum berhasil keluar. Coba lagi.');}finally{setBusy(false);}}
- async function resend(){const sb=getSupabase();if(!sb||!email.trim()||busy||!emailEnabled)return;setBusy(true);try{const {error}=await sb.auth.resend({type:'signup',email:email.trim(),options:{emailRedirectTo:'https://article.fikss.site/akun'}});setMessage(error?authErrorMessage(error,'resend'):'Jika pendaftaran menunggu konfirmasi, email baru akan dikirim.');}catch{setMessage('Koneksi bermasalah. Coba lagi.');}finally{setBusy(false);}}
- return <main id="konten" className="account-main"><Link href="/" className="account-back">← Ruang Belajar</Link><header><p className="hub-eyebrow">AKUN BELAJAR / OPSIONAL</p><h1>Lanjutkan dari<br/><em>langkah terakhirmu.</em></h1><p>Masuk untuk menyimpan progres Listrik, Jaringan, dan IoT ke akun, lalu lanjutkan dari perangkat lain. Semua materi tetap bisa dibaca tanpa akun.</p></header><div className="account-layout"><section className="account-panel" aria-label="Akun belajar">{loading?<p role="status">Memeriksa sesi akun…</p>:!configured?<p>Layanan akun belum tersedia. Kamu tetap bisa belajar dan menyimpan progres di browser ini.</p>:session&&mode!=='recovery'?<><span className="account-badge">SUDAH MASUK</span><h2>Akun belajarmu</h2><p className="account-email">{session.user.email}</p><p className="account-sync" role="status">{status}</p><div className="account-buttons"><button type="button" onClick={sync}>Sinkronkan sekarang</button><button type="button" className="account-secondary" disabled={busy} onClick={signOut}>{busy?'Memproses…':'Keluar dari perangkat ini'}</button></div><p className="account-small">Progres akun dipisahkan dari progres tanpa akun. Gunakan Keluar saat memakai perangkat bersama.</p><Link className="account-link" href="/">Pilih akademi dan lanjutkan →</Link></>:<><div className="account-tabs" aria-label="Pilihan akun">{mode!=='recovery'&&<><button type="button" disabled={busy} aria-pressed={mode==='signin'} onClick={()=>change('signin')}>Masuk</button><button type="button" disabled={busy} aria-pressed={mode==='signup'} onClick={()=>change('signup')}>Daftar akun</button></>}</div>{!emailEnabled&&<p className="account-small">Pengiriman email konfirmasi dan pemulihan belum diaktifkan. Akun yang sudah dikonfirmasi tetap dapat masuk. Progres tanpa akun tetap tersimpan di perangkat ini.</p>}<h2>{mode==='signup'?'Buat akun belajar':mode==='forgot'?'Pulihkan kata sandi':mode==='recovery'?'Atur kata sandi baru':'Selamat datang kembali'}</h2>{mode==='signup'&&!emailEnabled?<p role="status">Pendaftaran belum dibuka karena email konfirmasi belum siap. Kamu tidak perlu membuat akun untuk membaca materi atau menandai progres.</p>:<form onSubmit={submit}>{mode!=='recovery'&&<label>Email<input name="email" disabled={busy} required type="email" autoComplete="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} placeholder="nama@email.com"/></label>}{mode!=='forgot'&&<label>{mode==='recovery'?'Kata sandi baru':'Kata sandi'}<input disabled={busy} required type="password" minLength={mode==='signin'?1:10} maxLength={128} autoComplete={mode==='signin'?'current-password':'new-password'} value={password} onChange={e=>setPassword(e.target.value)}/></label>}{(mode==='signup'||mode==='recovery')&&<><label>Ulangi kata sandi<input disabled={busy} required type="password" minLength={10} maxLength={128} autoComplete="new-password" value={confirm} onChange={e=>setConfirm(e.target.value)}/></label><p className="account-small">Gunakan minimal 10 karakter dan kata sandi yang tidak dipakai di layanan lain.</p></>}<button className="account-submit" disabled={busy} type="submit">{busy?'Memproses…':mode==='signup'?'Daftar dengan email':mode==='forgot'?'Kirim tautan pemulihan':mode==='recovery'?'Simpan kata sandi':'Masuk dan sinkronkan'}</button></form>}{emailEnabled&&mode==='signin'&&<button type="button" className="account-text-button" onClick={()=>change('forgot')}>Lupa kata sandi?</button>}{mode==='forgot'&&<button type="button" className="account-text-button" onClick={()=>change('signin')}>← Kembali masuk</button>}{emailEnabled&&(mode==='signup'||mode==='signin')&&<button type="button" className="account-text-button" disabled={busy||!email.trim()} onClick={resend}>Kirim ulang email konfirmasi</button>}</>}<p className="account-message" role="status">{message}</p></section><aside className="account-about"><h2>Satu akun, tiga jalur belajar.</h2><div className="account-counts">{['Listrik','Jaringan','IoT'].map((name,i)=><div key={name}><strong>{counts[i]}</strong><span>materi {name} dibaca</span></div>)}</div><ul><li>Saat pertama masuk, tanda centang tanpa akun dari browser ini digabungkan ke akunmu.</li><li>Setelah tersinkron, progres tersedia saat masuk dengan akun yang sama di perangkat lain.</li><li>Jika koneksi terputus, perubahan disimpan sementara di browser dan dikirim saat tersambung lagi.</li></ul><p>Email digunakan untuk akun dan pemulihan akses. Progres hanya dapat diakses oleh pemilik akun.</p><Link className="account-link" href="/">Tetap belajar tanpa login →</Link></aside></div></main>;
+import {signIn, signOut, useSession} from 'next-auth/react';
+import {useEffect, useState} from 'react';
+import {useProgressSync} from './provider';
+
+export default function Account({configured=false}: {configured?: boolean}) {
+  const {data: session, status} = useSession();
+  const {status:progressStatus,sync}=useProgressSync();
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState('');
+  useEffect(() => {
+    const error = new URL(window.location.href).searchParams.get('error');
+    if (error) setMessage(error === 'AccessDenied' ? 'Akses Google dibatalkan atau email belum terverifikasi. Silakan coba lagi.' : 'Belum berhasil masuk dengan Google. Silakan coba lagi.');
+  }, []);
+  async function login() {
+    setBusy(true); setMessage('');
+    try {await signIn('google', {redirectTo: '/akun'});}
+    catch {setMessage('Tidak dapat menghubungi layanan login. Periksa koneksi lalu coba lagi.'); setBusy(false);}
+  }
+  async function logout() {
+    setBusy(true); setMessage('');
+    try {await signOut({redirect: false});}
+    catch {setMessage('Belum berhasil keluar. Silakan coba lagi.');}
+    finally {setBusy(false);}
+  }
+  return <main id="konten" className="account-main">
+    <Link href="/" className="account-back">← Ruang Belajar</Link>
+    <header><p className="hub-eyebrow">AKUN BELAJAR / OPSIONAL</p><h1>Belajar bersama.<br/><em>Masuk dengan Google.</em></h1><p>Gunakan akun Google untuk masuk. Tidak perlu membuat kata sandi baru. Semua materi tetap terbuka tanpa login.</p></header>
+    <div className="account-layout"><section className="account-panel" aria-label="Akun belajar">
+      {status === 'loading' ? <p role="status">Memeriksa sesi akun…</p> : session ? <>
+        <span className="account-badge">SUDAH MASUK</span><h2>{session.user?.name || 'Akun belajarmu'}</h2><p className="account-email">{session.user?.email}</p>
+        <p className="account-sync" role="status">{progressStatus}</p><button className="account-secondary" onClick={sync}>Sinkronkan progres</button>
+        <button className="account-submit" disabled={busy} onClick={logout}>{busy ? 'Memproses…' : 'Keluar dari perangkat ini'}</button>
+      </> : <><h2>Satu langkah untuk masuk</h2><p>Pilih akun Google yang ingin digunakan untuk belajar.</p>
+        <button className="account-submit" disabled={!configured || busy} onClick={login}>{busy ? 'Menghubungkan ke Google…' : 'Masuk dengan Google'}</button>
+        {!configured && <p role="status" className="account-small">Login Google sedang disiapkan. Kamu tetap dapat membaca materi dan menandai progres tanpa akun.</p>}
+      </>}
+      <p role="status" className="account-message">{message}</p><Link className="account-link" href="/">Lanjut belajar →</Link>
+    </section><aside className="account-about"><h2>Belajar tetap bisa tanpa akun.</h2><p>Saat pertama masuk, tanda sudah dibaca tanpa akun digabungkan ke akun Google setelah sinkronisasi berhasil.</p><p>Masuk dengan akun Google yang sama di perangkat lain untuk memuat progres yang sudah tersinkron. Saat offline, perubahan disimpan sementara di browser. Progres akun dan tanpa akun dipisahkan.</p></aside></div>
+  </main>;
 }
