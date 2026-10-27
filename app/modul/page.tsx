@@ -1,3 +1,4 @@
+export const metadata={title:'Urutan Belajar Listrik dari Nol | Learn Electric',description:'Ikuti materi listrik dan elektronika secara bertahap, dari keselamatan hingga motor dan PLC.',alternates:{canonical:'https://fikss.id/modul'}};
 import Link from 'next/link';
 import {stages,lessons} from '@/lib/course';
 import LearningJourney from '@/components/learning-journey';

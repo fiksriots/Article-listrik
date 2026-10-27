@@ -7,7 +7,7 @@ export function validRow(value: unknown): value is ProgressRow {
     ['listrik','jaringan','iot'].includes(String(row.academy)) && typeof row.lesson_slug==='string' &&
     row.lesson_slug.length<=150 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.lesson_slug) && typeof row.completed==='boolean';
 }
-export function progressHandlers(getOwner: ()=>Promise<string|null>, getStore: ()=>ProgressStore|null) {
+export function progressHandlers(getOwner: ()=>Promise<string|null>, getStore: ()=>ProgressStore|null, trustedOrigins: string[] = []) {
   const json=(body: unknown, status=200)=>Response.json(body,{status,headers:{'Cache-Control':'private, no-store'}});
   return {
     async GET() {
@@ -19,7 +19,7 @@ export function progressHandlers(getOwner: ()=>Promise<string|null>, getStore: (
     },
     async PUT(request: Request) {
       // Cookie authentication requires a same-origin mutation, even when cookies are SameSite=Lax.
-      if (request.headers.get('origin')!==new URL(request.url).origin) return json({error:'invalid_origin'},403);
+      if (request.headers.get('origin')!==new URL(request.url).origin && !trustedOrigins.includes(request.headers.get('origin') || '')) return json({error:'invalid_origin'},403);
       try {
         const owner=await getOwner(); if (!owner) return json({error:'unauthorized'},401);
         if (!request.headers.get('content-type')?.startsWith('application/json')) return json({error:'invalid_content_type'},415);

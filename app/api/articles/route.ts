@@ -48,7 +48,7 @@ const lessonPhotos: Record<string, string> = {
 export const dynamic = 'force-static';
 
 export function GET() {
-  const origin = 'https://article.fikss.site';
+  const origin = 'https://fikss.id';
   const items = lessons.flatMap((lesson, index) => {
     const doc = getLesson(lesson.slug);
     if (!doc) return [];
@@ -90,7 +90,7 @@ export function GET() {
   const topicItems=mtcreTopics.map((t,index)=>({id:`mtcre-topic-${t.slug}`,slug:`mtcre-topic-${t.slug}`,title:t.title,summary:t.summary,url:`${origin}/jaringan/mtcre/materi/${t.slug}`,category:'Belajar Jaringan',tags:['MTCRE','Pendalaman'],minutes:10,order:lessons.length+networkLessons.length+iotLessons.length+mtcreLabs.length+index+1,image:{url:`${origin}/network/lab-${t.labs[0]}.svg`,alt:t.title,author:'Fiks Learn Networking',source:`${origin}/jaringan/mtcre/materi/${t.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Topologi lab skematis asli'}}));
   const mtcnaItems=mtcnaGuides.map((g,index)=>({id:`mtcna-guide-${g.slug}`,slug:`mtcna-guide-${g.slug}`,title:`MTCNA · ${g.title}`,summary:g.summary,url:`${origin}/jaringan/mtcna/panduan/${g.slug}`,category:'Belajar Jaringan',tags:['MTCNA','RouterOS v7',g.kind==='theory'?'Konsep':'Lab'],minutes:g.kind==='theory'?10:30,order:lessons.length+networkLessons.length+iotLessons.length+mtcreLabs.length+mtcreTopics.length+index+1,image:{url:`${origin}/network/mtcna-${g.slug}.svg`,alt:g.title,author:'Fiks Learn Networking',source:`${origin}/jaringan/mtcna/panduan/${g.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Ilustrasi vektor skematis asli'}}));
   const gitItems=gitLessons.map((l,index)=>({id:`git-${l.slug}`,slug:l.slug,title:l.title,summary:l.summary,url:`${origin}/git/${l.slug}`,category:'Belajar Git',tags:getGitLessonTrack(l.slug)?.id==='gitlab'?['Git','GitLab','CI/CD','Pemula']:getGitLessonTrack(l.slug)?.id==='github'?['Git','GitHub','Pemula']:['Git','Dasar Git','Pemula'],minutes:l.minutes,order:lessons.length+networkLessons.length+iotLessons.length+mtcreLabs.length+mtcreTopics.length+mtcnaGuides.length+index+1,image:{url:`${origin}/git/${l.slug}.svg`,alt:l.title,author:'Fiks Learn Git',source:`${origin}/git/${l.slug}`,license:'Ilustrasi edukasi',licenseUrl:'',changes:'Ilustrasi konsep asli'}}));
-  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin, items: [...items, ...networkItems, ...iotItems, ...labItems, ...topicItems, ...mtcnaItems, ...gitItems] }, {
+  return Response.json({ title: 'Akademi Belajar Listrik & Elektronika', url: origin+'/belajar', items: [...items, ...networkItems, ...iotItems, ...labItems, ...topicItems, ...mtcnaItems, ...gitItems] }, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',

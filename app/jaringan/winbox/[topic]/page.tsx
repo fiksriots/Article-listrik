@@ -21,7 +21,7 @@ export async function generateMetadata({params}: {params: Promise<{topic: string
     ...articleMetadata(lesson.title, lesson.summary, `${WINBOX_BASE}/${topic}`),
     title: `${lesson.title} | Winbox 4 · Learn Networking`,
     description: lesson.summary,
-    alternates: {canonical: `https://article.fikss.site${WINBOX_BASE}/${topic}`},
+    alternates: {canonical: `https://fikss.id${WINBOX_BASE}/${topic}`},
   };
 }
 export default async function WinboxLessonPage({params}: {params: Promise<{topic: string}>}) {

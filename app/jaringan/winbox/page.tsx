@@ -9,7 +9,7 @@ import './winbox.css';
 export const metadata: Metadata = {
   title: `Praktik Winbox — ${winboxItems.length} Submateri MikroTik dari Nol | Learn Networking`,
   description: `Belajar Winbox 4 melalui ${winboxItems.length} submateri: Interfaces, VLAN, firewall, PCQ, failover dua ISP, WireGuard, keamanan, dan proyek kantor kecil.`,
-  alternates: {canonical: 'https://article.fikss.site/jaringan/winbox'},
+  alternates: {canonical: 'https://fikss.id/jaringan/winbox'},
 };
 
 export default function WinboxHome() {
