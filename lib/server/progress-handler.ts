@@ -1,10 +1,10 @@
-export type ProgressRow = {academy: 'listrik'|'jaringan'|'iot'; lesson_slug: string; completed: boolean};
+export type ProgressRow = {academy: 'listrik'|'jaringan'|'iot'|'git'; lesson_slug: string; completed: boolean};
 export type ProgressStore = {read: (owner: string)=>Promise<ProgressRow[]>; write: (owner: string, rows: ProgressRow[])=>Promise<void>};
 export function validRow(value: unknown): value is ProgressRow {
   if (!value || typeof value !== 'object') return false;
   const row=value as Record<string,unknown>;
   return Object.keys(row).sort().join(',')==='academy,completed,lesson_slug' &&
-    ['listrik','jaringan','iot'].includes(String(row.academy)) && typeof row.lesson_slug==='string' &&
+    ['listrik','jaringan','iot','git'].includes(String(row.academy)) && typeof row.lesson_slug==='string' &&
     row.lesson_slug.length<=150 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.lesson_slug) && typeof row.completed==='boolean';
 }
 export function progressHandlers(getOwner: ()=>Promise<string|null>, getStore: ()=>ProgressStore|null) {
