@@ -8,7 +8,7 @@ const {spawn}=require('node:child_process');
   assert.equal((await fetch('http://127.0.0.1:3100/api/auth/session')).status,200);
   assert.equal((await fetch('http://127.0.0.1:3100/api/auth/providers')).status,503);
   browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--no-sandbox']});
-  for(const width of [440,1440]){
+  for(const width of [390,1440]){
    const context=await browser.newContext({viewport:{width,height:1000}});const page=await context.newPage();const errors=[];const remote=[];
    page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('supabase'))remote.push(r.url());});
    await page.goto('http://127.0.0.1:3100/akun');const button=page.getByRole('button',{name:'Masuk dengan Google',exact:true});await button.waitFor();assert.equal(await button.isDisabled(),true);const guest=page.getByRole('link',{name:'Belajar tanpa akun',exact:false});const buttonBox=await button.boundingBox();const guestBox=await guest.boundingBox();assert.ok(guestBox.y>=buttonBox.y+buttonBox.height,'Guest action must be below Google button');assert.ok(buttonBox.height>=44);await page.screenshot({path:'/tmp/account-'+width+'.png',fullPage:true});assert.equal(await page.locator('input[type=password]').count(),0);await page.getByText('Login Google sedang disiapkan.',{exact:false}).waitFor();
