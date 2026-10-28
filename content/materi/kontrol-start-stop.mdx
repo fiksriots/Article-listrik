@@ -34,3 +34,26 @@ Tekan START, lepaskan, kemudian STOP. Coba overload dan putuskan suplai. Reset o
 
 ## Referensi
 - [Schneider Electric: starter dan kontak pengunci kontrol tiga kawat](https://productinfo.se.com/8502ct9701fvcs/8502ct9701-fv-contactors-and-starters/8502CT9701%20FV%20Contactors%20and%20Starters/English/8502CT9701%20%28bookmap%29_0000088590.xml/%24/FullVoltageContactorsAndStartersNEM-EEADFFA4)
+
+## Mengenal DOL: pisahkan jalur daya dan jalur kontrol
+DOL berarti **direct-on-line**: motor mendapat suplai langsung melalui perangkat starter yang sesuai, tanpa pengurangan tegangan oleh metode star–delta atau pengaturan VFD pada saat itu. “Langsung” tidak berarti boleh tanpa proteksi.
+
+| Bagian | Tugas | Contoh konsep |
+|---|---|---|
+| Jalur daya | Membawa energi ke motor | Pengaman hubung singkat, kontak utama, proteksi motor sesuai desain |
+| Jalur kontrol | Mengatur kapan kontaktor boleh aktif | STOP, START, kontak bantu, koil dan syarat lainnya |
+
+Tegangan kontrol dapat berbeda dari tegangan motor. Kontak bantu bukan pengganti kontak utama. Kontak overload di kontrol memberi informasi trip; desain proteksi daya tetap harus cocok. Urutan komponen dan koordinasi dipilih sesuai starter, bukan menyalin gambar umum.
+
+### Latihan dengan simulator
+1. Tekan START dan lepaskan. Jelaskan mengapa koil tetap aktif.
+2. Aktifkan gangguan overload pada simulator. Koil harus OFF.
+3. Pulihkan gangguan. Model ini tetap menunggu START baru.
+4. Putuskan dan kembalikan suplai model. Bedakan suplai tersedia dengan perintah menjalankan motor.
+
+Jika sebuah mesin nyata berperilaku berbeda, itu tidak otomatis salah hanya karena berbeda dari simulator; periksa spesifikasi, penilaian risiko, dan rancangan kontrolnya. Simulator ini tidak memodelkan semua keadaan mesin.
+
+Lanjutkan ke [kontrol maju–mundur dan interlock](/materi/kontrol-forward-reverse), lalu [star–delta](/materi/star-delta-motor). Urutan ini membantu membedakan menjaga satu perintah, memilih arah, dan mengatur pengasutan.
+
+### Referensi DOL
+- [ABB: pilihan metode starter motor](https://new.abb.com/low-voltage/products/motor-protection/starting-solutions)

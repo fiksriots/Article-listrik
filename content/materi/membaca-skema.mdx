@@ -40,3 +40,25 @@ Mulai dari simbol sumber, cari jalur melalui pengaman dan saklar menuju beban, l
 <Note>Skema menjelaskan hubungan listrik, sedangkan layout menjelaskan posisi fisik. Jangan menebak nomor terminal dari posisi simbol pada kertas. Gunakan referensi komponen dan gambar pengawatan yang sesuai.</Note>
 
 <LearningCheck question="Persilangan garis pada skema selalu tersambung?" answer="Tidak, periksa titik dan legenda. Konvensi sambungan harus dibaca dari simbol dan legenda." />
+
+## Latihan membaca tiga jenis gambar
+| Jenis gambar | Pertanyaan yang dijawab | Yang belum tentu ditampilkan |
+|---|---|---|
+| Diagram satu garis | Sumber membagi energi ke cabang mana? | Semua penghantar, detail terminal dan lokasi kabel |
+| Skema kontrol/ladder | Syarat apa yang membuat koil atau keluaran aktif? | Posisi fisik komponen dalam panel |
+| Diagram pengawatan | Terminal mana terhubung ke terminal mana? | Seluruh alasan logika kerja dan urutan operasi |
+
+**Analogi:** diagram satu garis seperti peta antarkota; skema kontrol seperti aturan lampu lalu lintas; pengawatan seperti petunjuk alamat pintu. Satu jenis gambar tidak dapat menggantikan semua yang lain.
+
+<CircuitDiagram type="installation" caption="Alur distribusi konseptual untuk berlatih membaca hubungan, bukan detail pengawatan panel." />
+
+### Simbol NO dan NC dibaca pada keadaan normalnya
+NO berarti kontak terbuka dan NC berarti tertutup pada keadaan referensi yang ditentukan, biasanya saat perangkat belum dioperasikan/koil belum aktif. Baca definisi pembuat untuk perangkat khusus. Kontak NC pada tombol tidak berarti tombolnya sedang ditekan. Kontak dengan label K1 dapat menjadi kontak bantu dari koil K1 yang digambar jauh di halaman lain; referensi silang menghubungkannya.
+
+### Telusuri satu rung dari syarat ke keluaran
+Untuk model start–stop: suplai kontrol → STOP NC → overload NC → cabang START NO atau kontak bantu K1 NO → koil K1 → jalur kembali. Saat START dilepas, kontak bantu mempertahankan jalur. Jika STOP membuka, koil lepas. Gunakan [gambar dan simulator start–stop](/materi/kontrol-start-stop) untuk mengikuti perubahan tersebut.
+
+Jangan mengartikan posisi garis di layar sebagai posisi terminal nyata. Label A1/A2, nomor kontak, jenis suplai koil, dan tegangan harus dicocokkan ke datasheet model. Titik pertemuan bertanda dot lazimnya menyatakan sambungan; persilangan tanpa dot mengikuti konvensi gambar yang dipakai. Periksa legenda dan revisinya.
+
+### Latihan berpikir sebelum menyentuh kabel
+Sebuah gambar menunjukkan STOP NC seri dengan koil, tetapi tombol START juga NC tanpa pengunci. Apakah sama dengan kontrol start–stop sesaat yang dibahas? **Tidak.** Urutan kontak dan jenis tombol mengubah perilaku. Jelaskan keadaan koil saat tombol tidak ditekan dan saat ditekan. Lakukan analisis pada kertas atau simulator; jangan memodifikasi rangkaian mesin untuk membuktikannya.

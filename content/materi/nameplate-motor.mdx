@@ -43,3 +43,13 @@ Tulis lima data dari pelat contoh. Cocokkan arus dengan tegangan dan hubungan ma
 - [ABB: panduan manual motor starter dan data pelat motor](https://library.e.abb.com/public/ec6fb130663a4e6ba9c1e9cc56df2035/2CDC131060M0202%20-%20Manual%20motor%20starters%20Guide.pdf)
 
 Pelajari lanjut [hubungan dan starter star–delta](/materi/star-delta-motor) setelah kontrol start–stop, untuk membedakan pasangan tegangan nameplate dengan urutan start.
+
+## Menghubungkan daya poros dengan daya masuk
+<Formula label="Model motor tiga fasa seimbang" expression="Pmasuk ≈ Pporos / η; I ≈ Pmasuk / (√3 × Vsaluran × cos φ)">
+Contoh latihan: poros 1.500 W, efisiensi asumsi 0,8, faktor daya 0,8, tegangan saluran 400 V. Pmasuk ≈ 1.500 / 0,8 = 1.875 W. I ≈ 1.875 / (1,732 × 400 × 0,8) ≈ 3,38 A. Ini pendekatan pada kondisi yang diasumsikan, bukan setelan overload atau pengganti arus nameplate.
+</Formula>
+
+**Analogi:** daya masuk seperti bahan bakar yang dibeli, daya poros seperti hasil kerja yang berguna. Sebagian energi menjadi rugi, sehingga keduanya tidak sama. Efisiensi dan faktor daya juga berbeda: efisiensi membandingkan keluaran berguna dengan masukan; faktor daya menghubungkan daya aktif masukan dengan daya semu.
+
+### Latihan memilih informasi yang relevan
+Untuk menilai kecocokan putaran mesin, baca RPM dan kebutuhan mekanisnya. Untuk memahami hubungan belitan, baca pasangan V dan Δ/Y. Untuk operasi lingkungan, baca enclosure, duty, serta manualnya. Satu angka kW tidak cukup menjawab ketiga pertanyaan tersebut.

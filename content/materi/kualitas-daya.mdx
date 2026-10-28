@@ -1,0 +1,47 @@
+---
+title: "Kualitas Daya: Tegangan Turun, Fasa Tidak Seimbang, dan Harmonisa"
+summary: "Kenali mengapa perangkat bisa bermasalah walaupun listrik masih menyala."
+---
+<LearningHook>Lampu berkedip ketika motor mulai berputar. Apakah artinya daya langganan pasti kurang?</LearningHook>
+
+## 1. Listrik tersedia belum tentu kondisinya sesuai
+Bayangkan pasokan air yang masih mengalir tetapi tekanannya sesekali turun atau berdenyut. Perangkat listrik juga memerlukan pasokan dalam batas tegangan, frekuensi, serta kualitas yang ditentukan pembuatnya. Gangguan dapat berasal dari jaringan, penghantar, sambungan, atau interaksi beban; jangan langsung menyalahkan satu pihak.
+
+<figure><img src="/diagrams/electric-kualitas-daya.svg" alt="Gelombang ideal dibandingkan dengan amplitudo yang turun sesaat dan gelombang terdistorsi; tiga batang terpisah menunjukkan nilai fasa yang tidak sama" width="840" height="480" /><figcaption>Ilustrasi bentuk gejala. Skala disederhanakan; bukan rekaman pengukuran jaringan.</figcaption></figure>
+
+## 2. Empat istilah yang perlu dibedakan
+| Istilah | Maksudnya | Contoh pengamatan |
+|---|---|---|
+| Jatuh tegangan penghantar | Selisih tegangan sepanjang jalur saat ada arus | Beban jauh dari sumber menerima tegangan lebih rendah |
+| Voltage sag/dip | Penurunan tegangan sesaat | Perangkat restart ketika terjadi peristiwa beban atau gangguan |
+| Ketidakseimbangan fasa | Besaran/sudut sistem tiga fasa tidak seimbang | Motor dapat mengalami pemanasan tambahan |
+| Harmonisa | Komponen frekuensi kelipatan frekuensi dasar yang mendistorsi gelombang | Beban elektronik nonlinier dapat menarik arus tidak sinusoidal |
+
+Lampu berkedip hanyalah gejala. Tanpa waktu kejadian dan rekaman yang memadai, kita belum dapat membedakan gangguan sesaat, sambungan buruk, atau masalah di perangkat lampu.
+
+## 3. Contoh jatuh tegangan yang mudah dihitung
+<Formula label="Selisih tegangan: contoh pembacaan" expression="ΔV = Vsumber − Vbeban; ΔV% = ΔV / Vsumber × 100%">
+Data fiktif dalam kondisi beban sama: sumber 230 V, titik beban 221 V. Selisih 9 V; persentase = 9 / 230 × 100% ≈ 3,91%. Nilai ini belum memutuskan boleh/tidaknya instalasi; batas bergantung fungsi sirkuit, standar, dan kebutuhan perangkat.
+</Formula>
+
+Pembacaan pada dua waktu dengan beban berbeda tidak bisa langsung dianggap jatuh tegangan kabel yang sama. Data pembanding perlu memiliki kondisi yang sebanding. Pemula mengerjakan hitungannya dari data latihan; pengukuran pada instalasi dilakukan petugas kompeten.
+
+## 4. Fasa tidak seimbang dan harmonisa bukan hal yang sama
+Ketidakseimbangan membahas hubungan sistem tiga fasa. Harmonisa membahas komponen gelombang selain frekuensi dasar. Pada sistem dasar 50 Hz, harmonisa ketiga berada pada 150 Hz dan kelima 250 Hz. Angka ini menjelaskan frekuensi, bukan menunjukkan bahwa setiap perangkat selalu menghasilkan komponen tersebut.
+
+Arus harmonisa dapat menambah rugi dan pemanasan. Faktor daya total pada gelombang terdistorsi tidak selalu dapat dijelaskan hanya dengan cos φ. Kapasitor koreksi faktor daya bukan obat untuk semua masalah; desain yang keliru dapat menimbulkan resonansi. Analisis memakai alat dan metode yang sesuai.
+
+## 5. Jangan berharap multimeter menjelaskan semuanya
+Multimeter yang sesuai dapat menunjukkan nilai tertentu, tetapi belum tentu menangkap kejadian sangat singkat atau mengukur distorsi. Label true-RMS juga tetap memiliki batas bandwidth dan crest factor. Analisis sag, harmonisa, dan ketidakseimbangan mungkin memerlukan power quality analyzer serta rekaman selama periode yang relevan.
+
+## Studi kasus: perangkat IT restart
+Router restart ketika pompa hidup. Kumpulkan waktu kejadian, apakah perangkat lain ikut terdampak, dan log UPS bila tersedia. Periksa kecocokan adaptor melalui label dari luar. Petugas kemudian memeriksa jalur serta rekaman tegangan. Mengganti adaptor, menaikkan MCB, atau memasang stabilizer tanpa diagnosis tidak otomatis menyelesaikan sumber masalah.
+
+## Latihan
+Hitung selisih ketika data sumber 24 V DC dan beban 22,8 V pada satu kondisi: 1,2 V atau 5%. Sebutkan dua informasi tambahan: misalnya arus beban dan panjang/metode pemasangan penghantar. Contoh DC ini hanya melatih selisih tegangan, bukan analisis harmonisa AC.
+
+<LearningCheck question="Apakah listrik menyala membuktikan kualitas dayanya selalu baik?" answer="Tidak. Tegangan, frekuensi, kejadian sesaat, ketidakseimbangan, dan distorsi perlu dinilai sesuai kebutuhan perangkat dan kemampuan alat ukur." />
+
+## Referensi
+- [Electrical Installation Guide: kualitas daya](https://www.fluke.com/en-us/learn/blog/power-quality/a-fresh-look-at-power-quality-basics)
+- [Electrical Installation Guide: harmonisa](https://www.electrical-installation.org/enwiki/Power_harmonics_management)

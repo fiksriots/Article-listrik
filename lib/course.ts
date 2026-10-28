@@ -4,14 +4,15 @@ export const stages = [
   {
     "id": "dasar",
     "name": "Dasar dan keselamatan",
-    "description": "Kenali listrik, satuan, sumber, dan cara belajar dengan aman.",
+    "description": "Kenali listrik, satuan, sumber, label perangkat, dan cara belajar dengan aman.",
     "prerequisite": "Belum perlu pengalaman listrik.",
     "slugs": [
       "apa-itu-listrik",
       "keselamatan-dc",
       "volt-ampere-ohm",
       "konduktor-isolator-rangkaian",
-      "ac-dc-sumber-listrik"
+      "ac-dc-sumber-listrik",
+      "membaca-label-perangkat"
     ]
   },
   {
@@ -29,10 +30,11 @@ export const stages = [
   {
     "id": "elektronika",
     "name": "Komponen dan catu daya DC",
-    "description": "Bedakan komponen pasif, aktif, dan kebutuhan suplai perangkat.",
+    "description": "Kenali komponen, coba lab LED baterai, lalu pahami suplai DC.",
     "prerequisite": "Pahami rangkaian seri/paralel dan pembacaan skema.",
     "slugs": [
       "komponen-pasif-led",
+      "lab-dc-led-relay",
       "dioda-transistor-ic",
       "komponen-dc-penggunaan",
       "sekering-proteksi-dc",
@@ -55,23 +57,25 @@ export const stages = [
   {
     "id": "tenaga",
     "name": "Pengenalan listrik arus kuat",
-    "description": "Ikuti perjalanan energi, satu/tiga phase, daya AC, dan perangkat tenaga.",
+    "description": "Ikuti perjalanan energi, satu/tiga fasa, faktor daya, dan kualitas pasokan.",
     "prerequisite": "Kuasai dasar AC/DC dan perhitungan daya.",
     "slugs": [
       "mengenal-arus-kuat",
       "pembangkit-trafo",
       "satu-tiga-phase",
       "daya-ac-faktor-daya",
+      "kualitas-daya",
       "komponen-ac-penggunaan"
     ]
   },
   {
     "id": "proteksi",
     "name": "Instalasi dan sistem proteksi",
-    "description": "Bedakan netral/PE, pengaman, panel distribusi, dan pertimbangan kabel.",
+    "description": "Bedakan netral/PE, jenis gangguan, pengaman, sambungan, dan pemilihan kabel.",
     "prerequisite": "Kenali tiga phase, sifat beban, dan perangkat AC.",
     "slugs": [
       "netral-grounding-proteksi",
+      "jenis-gangguan-listrik",
       "terminal-sambungan-kabel",
       "panel-kabel-beban"
     ]
@@ -79,7 +83,7 @@ export const stages = [
   {
     "id": "motor",
     "name": "Motor dan otomasi",
-    "description": "Pahami motor sebelum kontaktor, proteksi motor, VFD, dan PLC.",
+    "description": "Baca nameplate, kenali kontaktor dan proteksi, lalu DOL, maju–mundur, star–delta, VFD, dan PLC.",
     "prerequisite": "Pahami distribusi dan fungsi pengaman; mulai dari simulasi.",
     "slugs": [
       "motor-elektromagnet",
@@ -87,6 +91,7 @@ export const stages = [
       "kontaktor-relay-panel",
       "proteksi-motor",
       "kontrol-start-stop",
+      "kontrol-forward-reverse",
       "star-delta-motor",
       "sensor-industri-sinyal",
       "vfd-plc"

@@ -867,5 +867,115 @@ export const quizBank: Record<string, Question[]> = {
       "a": 0,
       "why": "Perbandingan ini terhadap start langsung delta, bukan terhadap arus nominal."
     }
+  ],
+  "membaca-label-perangkat": [
+    {
+      "q": "OUTPUT 12 V DC 1 A pada adaptor tegangan tetap berarti…",
+      "o": [
+        "Kapasitas keluaran sampai 1 A pada 12 V sesuai spesifikasi",
+        "Selalu memaksa beban menarik 1 A",
+        "Masukan harus 12 V AC"
+      ],
+      "a": 0,
+      "why": "Kapasitas arus sumber bukan arus yang selalu ditarik beban. Periksa juga polaritas dan konektor."
+    },
+    {
+      "q": "IP rating terutama menjelaskan…",
+      "o": [
+        "Perlindungan enclosure sesuai pengujian benda padat/akses dan air",
+        "Jaminan kebal petir",
+        "Energi per bulan"
+      ],
+      "a": 0,
+      "why": "IP tidak menjamin perlindungan terhadap semua kondisi lingkungan atau gangguan listrik."
+    }
+  ],
+  "jenis-gangguan-listrik": [
+    {
+      "q": "Kontak longgar bisa panas ketika MCB belum trip karena…",
+      "o": [
+        "Hambatan lokal menimbulkan panas pada arus di bawah ambang trip",
+        "MCB membaca suhu setiap terminal",
+        "Arus selalu nol"
+      ],
+      "a": 0,
+      "why": "Model P = I²R membantu memahami panas di titik kontak. MCB tidak mendeteksi semua masalah sambungan."
+    },
+    {
+      "q": "RCCB tanpa proteksi arus lebih terintegrasi…",
+      "o": [
+        "Masih memerlukan koordinasi proteksi arus lebih",
+        "Selalu menggantikan MCB",
+        "Membuat sentuhan bertegangan aman"
+      ],
+      "a": 0,
+      "why": "Deteksi residual berbeda dari proteksi beban lebih dan hubung singkat."
+    }
+  ],
+  "kualitas-daya": [
+    {
+      "q": "Selisih antara sumber 230 V dan beban 221 V pada kondisi sebanding adalah…",
+      "o": [
+        "9 V atau sekitar 3,91%",
+        "221 V atau 96%",
+        "0 V"
+      ],
+      "a": 0,
+      "why": "(230 − 221) / 230 × 100% ≈ 3,91%. Ini belum menentukan kelayakan instalasi."
+    },
+    {
+      "q": "Harmonisa ketiga dari frekuensi dasar 50 Hz berada pada…",
+      "o": [
+        "150 Hz",
+        "53 Hz",
+        "16,7 Hz"
+      ],
+      "a": 0,
+      "why": "Harmonisa adalah kelipatan bilangan bulat frekuensi dasar: 3 × 50 = 150 Hz."
+    }
+  ],
+  "kontrol-forward-reverse": [
+    {
+      "q": "Dalam model, jika MAJU aktif lalu MUNDUR diminta…",
+      "o": [
+        "Tolak MUNDUR sampai STOP dan syarat berhenti terpenuhi",
+        "Aktifkan dua kontaktor",
+        "Jumper overload"
+      ],
+      "a": 0,
+      "why": "Dua keadaan arah saling melarang. OFF kontaktor juga belum membuktikan motor sudah berhenti."
+    },
+    {
+      "q": "Interlock berbeda dari pengunci karena…",
+      "o": [
+        "Interlock mencegah keadaan bertentangan; pengunci mempertahankan perintah",
+        "Interlock menentukan watt motor",
+        "Pengunci menggantikan proteksi"
+      ],
+      "a": 0,
+      "why": "Kontrol arah, pengunci dan proteksi mempunyai peran berbeda; mesin nyata memerlukan desain yang sesuai."
+    }
+  ],
+  "lab-dc-led-relay": [
+    {
+      "q": "Sumber 3 V, LED diasumsikan 2 V dan resistor 330 Ω menghasilkan arus kira-kira…",
+      "o": [
+        "3 mA",
+        "3 A",
+        "330 mA"
+      ],
+      "a": 0,
+      "why": "I = (3 − 2) / 330 A ≈ 0,003 A. Ini pendekatan berdasarkan asumsi LED."
+    },
+    {
+      "q": "Sebelum memindahkan kabel breadboard…",
+      "o": [
+        "Lepaskan baterai dan periksa ulang jalur setelah perubahan",
+        "Buat korslet untuk memeriksa",
+        "Hilangkan resistor"
+      ],
+      "a": 0,
+      "why": "Rakit dan ubah jalur tanpa sumber. Lab ini tidak melibatkan PLN."
+    }
   ]
 };
