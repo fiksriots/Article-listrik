@@ -1,0 +1,45 @@
+---
+title: "Grounding: Elektroda, PE, dan Sistem TT/TN/IT"
+summary: "Pahami jalur gangguan, tegangan sentuh, serta mengapa angka ohm saja belum membuktikan aman."
+---
+<LearningHook>Hasil ukur grounding rendah. Apakah otomatis seluruh panel, rak, dan menara aman disentuh?</LearningHook>
+
+## 1. Grounding bukan tempat membuang semua masalah
+Bayangkan sistem proteksi sebagai jalur darurat yang harus tersambung sampai tujuan. Elektroda yang baik tidak membantu bodi perangkat bila penghantar PE-nya putus. Grounding atau earthing menghubungkan bagian yang ditentukan rancangan ke bumi melalui sistem pembumian. **PE, elektroda bumi, bonding, dan pemutus gangguan saling melengkapi, tetapi bukan benda yang sama.**
+
+<figure><img src="/diagrams/earthing-system.svg" alt="Bodi panel dan rak terhubung melalui PE ke terminal pembumian utama, lalu ke sistem elektroda; netral ditunjukkan terpisah tanpa jumper tambahan" width="840" height="420" /><figcaption>Konsep hubungan proteksi, bukan gambar terminal untuk dirakit. Ikatan netral–bumi ditentukan jenis sistem dan lokasi yang diizinkan desain.</figcaption></figure>
+
+## 2. Kenali bagian-bagiannya
+| Bagian | Fungsi | Kekeliruan umum |
+|---|---|---|
+| PE | Menghubungkan bagian konduktif terbuka yang memerlukan proteksi | Menganggapnya jalur balik kerja normal |
+| Terminal pembumian utama/MET | Titik penghubung penghantar proteksi dan pembumian sesuai desain | Menggantinya dengan baut sembarang pada rak |
+| Penghantar pembumian | Menghubungkan terminal utama ke sistem elektroda | Mengabaikan sambungan, korosi, atau kerusakan mekanis |
+| Elektroda | Kontak sistem dengan tanah, dapat berupa rancangan batang, ring, fondasi, dan lainnya | Mengira semua lokasi cukup satu batang dengan kedalaman sama |
+| Perangkat pemutus | Membatasi lama kondisi gangguan melalui pelepasan suplai | Menganggap tanah sendiri selalu membuat MCB trip |
+
+## 3. TT, TN, dan IT menjelaskan hubungan sistem
+**TT:** titik sumber dibumikan, sementara bagian konduktif terbuka instalasi terhubung ke elektroda instalasi. **TN:** bagian tersebut memiliki jalur proteksi menuju titik sumber yang dibumikan; varian TN-S, TN-C, dan TN-C-S mengatur pemisahan PE dan netral/PEN. **IT:** sumber diisolasi dari bumi atau dihubungkan melalui impedansi, dengan aturan pemantauan dan penanganan gangguan khusus.
+
+Huruf IT di sini bukan singkatan teknologi informasi. Tidak ada sistem yang otomatis aman tanpa seluruh aturan desain, pemasangan, dan pemeliharaannya. Jangan mengubah hubungan N–PE atau PEN untuk meniru gambar sistem lain. Penentuan sistem aktual perlu data sumber dan rancangan instalasi.
+
+## 4. Mengapa ohm kecil belum cukup?
+Resistansi elektroda pada suatu pengujian berbeda dari kontinuitas PE, impedansi loop gangguan, dan perilaku saat impuls petir. Tanah juga tidak selalu berada pada potensial yang sama di semua titik. Arus ke bumi dapat menaikkan potensial lokal dan menimbulkan beda tegangan sentuh maupun langkah.
+
+<Formula label="Model pembelajaran sederhana" expression="V = I × R">
+Arus contoh 10 A melalui hambatan model 5 Ω menghasilkan 50 V. Ini hanya contoh hubungan arus dan hambatan: bukan simulasi lengkap tubuh, tanah, petir, atau batas aman untuk disentuh. Untuk impuls cepat, induktansi jalur juga penting.
+</Formula>
+
+Jangan memakai satu target seperti “harus di bawah 5 Ω” sebagai bukti tunggal. Persyaratan bergantung fungsi, sistem, standar yang berlaku, pemutusan otomatis, dan kondisi lokasi. Angka pengukuran harus disertai metode, titik, kondisi tanah, serta kesimpulan teknis yang tepat.
+
+## Studi kasus: rak masih berbahaya meskipun elektroda lolos uji
+Laporan elektroda terlihat baik, tetapi jalur PE rak ternyata tidak kontinu. Menambah batang belum menjawab masalah tersebut. Pemeriksa perlu menilai kontinuitas proteksi, bonding, koordinasi pemutus, dan dokumentasi. Jangan melepas PE atau membuka sambungan elektroda ketika instalasi beroperasi untuk mencoba mengukur sendiri.
+
+## Latihan dan pembahasan
+Kelompokkan: hasil uji elektroda, hasil uji kontinuitas PE, dan pengujian RCD. Ketiganya menilai aspek berbeda. Laporan salah satunya tidak menggantikan dua lainnya. Pengujian dan isolasi energi dilakukan tenaga kompeten dengan metode serta alat yang sesuai.
+
+<LearningCheck question="Apakah PE boleh diganti dengan netral agar praktis?" answer="Tidak. Fungsi dan aturan koneksinya berbeda. Perubahan N–PE/PEN harus mengikuti sistem dan desain resmi, bukan jumper tambahan di perangkat." />
+
+## Referensi
+- [Electrical Installation Guide: pertimbangan sistem TT, TN, IT](https://www.electrical-installation.org/enwiki/Selection_criteria_for_the_TT%2C_TN_and_IT_systems)
+- [DEHN: pembumian sistem proteksi petir](https://blitzplaner.dehn.de/en-EN/earthing-systems-lightning-protection-systems-iec-62305-3)

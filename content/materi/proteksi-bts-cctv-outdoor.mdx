@@ -1,0 +1,43 @@
+---
+title: "Studi Kasus: Grounding dan Surja pada BTS, Radio, dan CCTV"
+summary: "Telusuri daya, Ethernet/PoE, struktur logam, inspeksi, dan batas diagnosis setelah hujan."
+---
+<LearningHook>Radio outdoor sering mati ketika hujan. Apakah pasti tersambar petir dan cukup ditambah grounding?</LearningHook>
+
+## 1. Mulai dari gejala, bukan langsung membeli pengaman
+Gangguan saat hujan dapat berkaitan dengan air masuk, konektor, catu daya, kerusakan kabel, atau kejadian surja. Petir salah satu kemungkinan, bukan kesimpulan otomatis. Catat waktu, cuaca, perangkat yang terdampak, status link, log perangkat, dan pola pulihnya.
+
+<figure><img src="/diagrams/outdoor-protection.svg" alt="Radio outdoor menerima Ethernet dan PoE dari bangunan; jalur daya, data, struktur dan bonding ditinjau sebagai satu sistem" width="840" height="420" /><figcaption>Peta jalur evaluasi, bukan instruksi pemasangan SPD atau penangkap petir pada menara.</figcaption></figure>
+
+## 2. Ikuti semua jalur yang menghubungkan perangkat
+| Jalur | Pertanyaan pemeriksaan | Contoh hal yang harus cocok |
+|---|---|---|
+| Daya AC | Bagaimana proteksi suplai dan kualitas dayanya? | Sistem pembumian, kelas/rating SPD, pemutus dan koordinasi |
+| Ethernet/PoE | Apakah antarmuka data dan suplai sesuai pengaman? | Kecepatan, pasangan yang dilindungi, tegangan serta jenis PoE |
+| Koaksial bila ada | Apakah ada penghantar konduktif tambahan? | Frekuensi, konektor, impedansi dan kebutuhan DC pass |
+| Menara/rak/enclosure | Bagaimana bonding dan rute proteksinya? | Titik koneksi, kontinuitas, korosi, rancangan LPS |
+| Lingkungan | Apakah air bisa masuk atau tertahan? | Enclosure, gland, seal dan petunjuk instalasi produsen |
+
+**PoE pasif tidak otomatis sama dengan IEEE 802.3af/at/bt.** Tegangan, polaritas/pinout dan kapasitas berbeda antarproduk. Konektor RJ45 yang cocok secara mekanis belum membuktikan kecocokan pengaman. Label data-rate juga tidak menjawab kemampuan menangani jenis suplai.
+
+## 3. Jangan membentuk pulau grounding tanpa koordinasi
+Elektroda khusus di dekat tiang bukan jaminan cukup jika perangkat masih terhubung tembaga ke bangunan. Perbedaan potensial antarbagian perlu dinilai bersama bonding dan batas zona proteksi. Di sisi lain, menghubungkan sendiri menara ke konduktor petir tanpa mempertimbangkan jarak pisah dan rancangan juga bisa menambah risiko. Perancang menentukan hubungan yang sesuai.
+
+Serat optik dielektrik dapat menghilangkan jalur konduktif data tertentu, tetapi tidak menghapus jalur daya atau struktur logam. Kabel fiber dengan armor/logam juga perlu penanganan yang sesuai. Konversi ke fiber bukan pengganti seluruh sistem proteksi.
+
+## 4. Pemeriksaan setelah keadaan aman
+Pisahkan **pengamatan operator** dari **pengujian teknis**. Operator dapat mengumpulkan log dan foto dari posisi aman. Pemeriksaan panel, grounding, SPD, kabel outdoor, dan pemanjatan memerlukan prosedur isolasi, kewenangan, cuaca aman, serta tenaga kompeten. Jangan menguji lonjakan dengan membuat hubung singkat atau melepas PE.
+
+Laporan teknis sebaiknya mencakup identitas alat ukur, metode, kondisi pengujian, kontinuitas proteksi, hasil pengujian yang relevan, status indikator SPD dan pengamannya, serta tindak lanjut. Uji resistansi bumi tidak menggantikan semua pengujian lainnya. Clamp tester dan metode bantu tidak selalu cocok untuk setiap topologi elektroda; pembacaan perlu ditafsirkan sesuai metode.
+
+## Studi kasus: hanya port LAN rusak
+Adaptor masih menyala, satu port switch mati, radio tidak terhubung. Pola ini mengarahkan perhatian pada jalur data, tetapi belum membuktikan surja sebagai penyebab. Periksa log, kerusakan fisik, kecocokan injector/pengaman, kondisi kabel dan rancangan proteksi. Jangan menyambungkan port yang dicurigai rusak ke perangkat sehat untuk mencoba-coba sebelum evaluasi.
+
+## Latihan dan pembahasan
+Buat daftar lima data yang perlu dibawa ke teknisi: model radio/injector, jenis PoE, panjang/rute kabel, foto proteksi dari posisi aman, dan waktu/log gangguan. Tambahkan diagram bonding bila tersedia. Daftar ini lebih membantu daripada hanya mengatakan “grounding kurang”.
+
+<LearningCheck question="Apakah SPD daya AC dapat dipakai menggantikan SPD Ethernet?" answer="Tidak. Antarmuka, tegangan, karakteristik sinyal, PoE dan pengujiannya berbeda. Gunakan produk sesuai jalur serta rancangan yang terkoordinasi." />
+
+## Referensi
+- [DEHN: antarmuka dan kemampuan pengaman Ethernet](https://www.dehn-international.com/en/products/yellow-line/dehnpatch)
+- [DEHN: bonding sistem teknologi informasi](https://blitzplaner.dehn.de/en-EN/lightning-equipotential-bonding-it-systems)

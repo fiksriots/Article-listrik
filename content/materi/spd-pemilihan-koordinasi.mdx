@@ -1,0 +1,56 @@
+---
+title: "SPD Type 1/2/3: Rating, Koordinasi, dan Batas Perlindungan"
+summary: "Baca Uc, Up, In, Imax, Iimp dan pahami proteksi AC, DC, serta jalur data."
+---
+<LearningHook>SPD tertulis 40 kA. Apakah angka itu berarti beban boleh menarik arus 40.000 ampere?</LearningHook>
+
+## 1. SPD menghadapi lonjakan singkat, bukan semua tegangan tinggi
+SPD membatasi beda tegangan transien dengan merespons pada kondisi yang ditentukan dan mengalihkan arus melalui jalur proteksi yang dirancang. Ia bukan stabilizer, bukan UPS, dan bukan pengganti MCB atau RCCB. Overvoltage berkepanjangan akibat masalah suplai/netral merupakan persoalan berbeda; kemampuan TOV produk perlu diperiksa.
+
+<DeviceGuide type="spd" />
+
+## 2. Kelas Type harus dibaca dalam konteks standarnya
+| Kelas pada SPD daya tegangan rendah berbasis IEC | Karakterisasi umum | Fungsi rancangan |
+|---|---|---|
+| Type 1 | Uji arus impuls 10/350 µs, memakai Iimp | Untuk lokasi yang harus menangani bagian arus petir sesuai penilaian sistem |
+| Type 2 | Uji arus 8/20 µs, memakai In/Imax | Pembatasan surja pada distribusi sesuai rancangan |
+| Type 3 | Uji gelombang kombinasi tegangan/arus | Perlindungan dekat perangkat sebagai bagian koordinasi |
+
+Type 1+2 merupakan produk gabungan yang memenuhi kelas terkait, bukan dua stiker bebas ditukar. Angka Type pada produk dengan standar berbeda tidak selalu dapat dipetakan langsung. SPD data/telekomunikasi memakai kriteria uji dan antarmuka yang berbeda dari SPD daya AC.
+
+<figure><img src="/diagrams/spd-rating.svg" alt="Label SPD latihan dengan Uc sebagai tegangan kontinu, Up sebagai level proteksi, serta arus impuls dibedakan dari arus beban" width="840" height="420" /><figcaption>Contoh cara membaca istilah, tanpa menetapkan satu rating universal untuk semua panel.</figcaption></figure>
+
+## 3. Kamus rating yang sering tertukar
+| Simbol | Yang dibahas | Jangan tertukar dengan |
+|---|---|---|
+| Uc | Tegangan operasi kontinu maksimum menurut mode sambungan | Tegangan sisa pasti pada perangkat |
+| Up | Level proteksi tegangan yang dinyatakan dari pengujian | Batas tegangan yang selalu persis sama pada setiap kejadian |
+| In | Arus pelepasan nominal dengan bentuk gelombang uji terkait | Arus beban nominal panel |
+| Imax | Arus pelepasan maksimum untuk uji yang terkait | Bukti lebih baik daripada semua SPD dengan angka lebih kecil |
+| Iimp | Arus impuls pada kelas uji terkait, beserta parameter uji | Angka yang setara langsung dengan Imax |
+
+Perbedaan bentuk gelombang dan parameter uji membuat dua angka kA tidak bisa dibandingkan sendirian. Nilai 40 kA pada label pelepasan surja bukan rating beban yang boleh dilewatkan seperti pada MCB.
+
+## 4. Pemilihan harus cocok dengan sistem
+Periksa AC/DC, tegangan, frekuensi bila relevan, TT/TN/IT, mode proteksi, susunan kutub, TOV, kemampuan hubung singkat, serta pemutus/sekering cadangan menurut produsen. Produk bertuliskan 1P+N tidak otomatis cocok untuk setiap sistem. SPD PV DC dan SPD Ethernet tidak diganti SPD AC hanya karena bentuk terminalnya mirip.
+
+Up perlu dikoordinasikan dengan ketahanan impuls perangkat dan pengaruh sambungan. Jalur yang panjang menambah pengaruh induktif saat arus berubah cepat. Karena itu rute pendek dan geometri sesuai manual merupakan bagian kinerja, bukan hanya kerapian. Materi ini tidak memberikan panjang/penampang universal; gunakan dokumentasi produk dan standar instalasi yang berlaku.
+
+## 5. Koordinasi bukan sekadar membeli T1, T2, lalu T3
+Lokasi, jarak, karakteristik perangkat, koordinasi energi, jalur bonding, dan instruksi produsen menentukan kombinasi. Jangan merangkai SPD acak lalu menganggap proteksi berlapis sudah terbukti. Soket dengan tulisan surge protection tidak otomatis menggantikan evaluasi distribusi atau jalur data.
+
+## Studi kasus: panel sudah T2 tetapi radio rusak
+Kemungkinan meliputi jalur Ethernet yang belum diproteksi, bonding tidak sesuai, pemasangan SPD, rating yang tidak cocok, atau kerusakan di luar kemampuan desain. Catat kejadian dan periksa menyeluruh; jangan langsung menyimpulkan SPD palsu atau menambah kapasitas kA tanpa diagnosis.
+
+## 6. Status dan akhir umur
+Sebagian SPD mempunyai indikator atau kontak monitoring. Arti warna dan prosedur penggantian mengikuti model; indikator normal bukan bukti bahwa instalasi lengkap benar atau semua surja tertangani. Jangan melepas cartridge pada panel aktif tanpa prosedur yang diizinkan produk dan pekerjaan tenaga berwenang. Evaluasi juga backup protection dan kondisi setelah gangguan.
+
+<LearningCheck question="Apakah memilih Imax paling besar sudah cukup?" answer="Belum. Kelas uji, sistem, Uc/Up, TOV, koordinasi pengaman, rute sambungan, dan kesesuaian antarmuka ikut menentukan." />
+
+## Latihan dan pembahasan
+Pisahkan empat kebutuhan: menjaga router menyala saat padam, membatasi surja, memutus beban lebih, dan memantau tegangan berkepanjangan. Jawaban: fungsi UPS, SPD, proteksi arus lebih, serta pemantau tegangan/pemutus yang sesuai. Satu perangkat tidak otomatis melaksanakan semuanya.
+
+## Referensi
+- [Electrical Installation Guide: jenis dan karakterisasi SPD](https://www.electrical-installation.org/enwiki/The_Surge_Protection_Device_%28SPD%29)
+- [DEHN: FAQ pemilihan dan sambungan SPD](https://www.dehn-international.com/en/faq-power-supply-systems-redliner)
+- [IET: koordinasi SPD dan instalasi](https://electrical.theiet.org/wiring-matters/years/2023/98-november-2023/surge-protective-devices-spds)
