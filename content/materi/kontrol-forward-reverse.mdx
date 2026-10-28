@@ -1,0 +1,57 @@
+---
+title: "Kontrol Motor Maju–Mundur dan Interlock"
+summary: "Pahami perubahan urutan fasa, pengunci, dan alasan dua kontaktor tidak boleh aktif bersamaan."
+---
+<LearningHook>Bagaimana pintu otomatis dapat membuka dan menutup tanpa menerima dua perintah arah sekaligus?</LearningHook>
+
+## 1. Pahami arah sebagai dua keadaan yang saling melarang
+Pada motor induksi tiga fasa yang sesuai, menukar dua fasa mengubah urutan fasa dan arah medan putar. Rangkaian maju–mundur memakai pengaturan kontaktor yang dirancang untuk fungsi ini. Konsep tersebut **bukan instruksi menukar kabel motor yang sedang hidup**.
+
+Untuk pemula, kita mulai dari kartu keadaan: STOP, MAJU, dan MUNDUR. Seperti jalur sempit dengan dua lampu pengatur, hanya satu arah boleh diizinkan pada satu saat.
+
+<DeviceGuide type="motor" />
+<figure><img src="/diagrams/electric-forward-reverse.svg" alt="Diagram keadaan: STOP dapat menuju MAJU atau MUNDUR; perubahan dari MAJU ke MUNDUR melewati STOP dan menunggu syarat berhenti. Interlock melarang kedua kontaktor aktif bersama" width="840" height="420" /><figcaption>Diagram keadaan konseptual. Bukan diagram pengawatan motor atau rangkaian keselamatan tersertifikasi.</figcaption></figure>
+
+## 2. Dari DOL ke pengaturan dua arah
+Starter **DOL, direct-on-line**, menghubungkan motor ke sumber melalui perangkat switching dan proteksi yang sesuai. Arus awal dan tuntutan mekanis harus dinilai. Materi [start–stop](/materi/kontrol-start-stop) menjelaskan logika koil yang mengingat START melalui kontak bantu.
+
+Pada rancangan maju–mundur, anggap K1 kontaktor maju dan K2 kontaktor mundur. Masing-masing bisa memiliki pengunci sendiri; keduanya tidak boleh membuat jalur daya bertentangan secara bersamaan. Penamaan ini ilustratif dan bukan nomor terminal universal.
+
+## 3. Dua lapis interlock yang berbeda
+| Bentuk | Gagasan | Batasnya |
+|---|---|---|
+| Interlock listrik | Kontak bantu lawan memberi syarat agar koil lain tidak aktif | Tidak menggantikan analisis kegagalan kontak/rangkaian |
+| Interlock mekanis | Mekanisme fisik pasangan kontaktor mencegah penutupan bersamaan sesuai desain | Harus memakai pasangan dan aksesori yang kompatibel |
+| Syarat berhenti | Perubahan arah menunggu keadaan mesin yang diizinkan | Waktu/jeda tidak dapat ditentukan sembarang untuk semua mesin |
+
+Interlock berfungsi berbeda dari overload atau pengaman hubung singkat. Semua fungsi tersebut perlu dipertimbangkan bersama. Kontaktor yang sesuai kategori penggunaan, duty pembalikan, serta koordinasi pengamannya dipilih berdasarkan data produsen.
+
+## 4. Telusuri tabel keadaan sebelum membahas kabel
+| Keadaan | K1 maju | K2 mundur | Perintah yang diizinkan dalam model |
+|---|---|---|---|
+| STOP dan syarat aman terpenuhi | OFF | OFF | Pilih satu arah |
+| MAJU | ON | OFF | STOP; perintah mundur ditolak |
+| MUNDUR | OFF | ON | STOP; perintah maju ditolak |
+| Gangguan atau suplai hilang | OFF | OFF | Periksa dan pulihkan sesuai prosedur; tidak restart otomatis |
+
+Model mengasumsikan semua komponen bekerja normal. Motor masih dapat berputar setelah koil dilepas. Jangan menyamakan OFF kontaktor dengan putaran nol atau kondisi bebas energi.
+
+## 5. Mengapa jangan langsung dibalik?
+Pembalikan saat motor masih berputar dapat menimbulkan arus dan torsi besar, mengganggu mekanik, serta melampaui duty rancangan. Mesin tertentu memakai pengereman, sensor kecepatan, atau kendali khusus. Tidak ada aturan “tunggu dua detik pasti aman” yang berlaku untuk semua motor.
+
+## Studi kasus: dua perintah arah bertentangan
+Operator menekan MAJU, lalu pengguna lain menekan MUNDUR. Dalam model pembelajaran ini, perintah kedua ditolak. Jelaskan mengapa solusi yang benar bukan menghapus interlock. Sistem nyata harus dinilai sesuai risiko mesin dan kondisi kegagalannya.
+
+## Latihan di kertas, bukan panel
+Buat tiga kartu keadaan. Mulai STOP, terima MAJU, lalu terima MUNDUR tanpa STOP. Jawaban model: tetap MAJU dan tolak MUNDUR. Setelah STOP, model baru boleh menerima arah lain jika syarat berhenti/aman terpenuhi. Ulangi dengan skenario suplai hilang: kembali OFF dan butuh perintah mulai baru dalam model ini.
+
+<Note>STOP operasional, interlock, emergency stop, dan isolasi energi mempunyai fungsi berbeda. Perancangan mesin nyata memerlukan penilaian risiko serta tenaga kompeten. Simulasi logika tidak membuktikan mesin aman.</Note>
+
+<LearningCheck question="Mengapa kontak pengunci saja belum cukup untuk kontrol maju–mundur?" answer="Pengunci mempertahankan satu perintah. Interlock diperlukan untuk mencegah perintah bertentangan; proteksi dan syarat penghentian tetap harus dirancang terpisah sesuai mesin." />
+
+## Lanjut belajar
+Bandingkan dengan [star–delta](/materi/star-delta-motor): sama-sama membutuhkan koordinasi kontaktor, tetapi tujuannya berbeda. Star–delta mengatur metode pengasutan, bukan memilih arah putar.
+
+## Referensi
+- [ABB: pilihan starter DOL, reversing, dan star–delta](https://new.abb.com/low-voltage/products/motor-protection/starting-solutions)
+- [ABB: kontaktor dan interlocking](https://new.abb.com/low-voltage/products/motor-protection/3-pole-contactors-and-overload-relays-for-motor-starting/as-contactors)

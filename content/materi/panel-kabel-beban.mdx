@@ -51,3 +51,37 @@ Mulai dengan daftar perangkat, daya masukan, tegangan, faktor daya bila relevan,
 <LearningCheck question="Pemilihan kabel perlu mempertimbangkan..." answer="Panjang, suhu, pemasangan, dan pengaman. Kemampuan hantar arus dan jatuh tegangan bergantung kondisi pemasangan." />
 
 <CircuitDiagram type="installation" caption="Alur instalasi konseptual. Pengaman tiap cabang, netral, PE, dan terminal nyata memerlukan rancangan lengkap." />
+
+## Praktik perancangan di kertas: dari beban ke kabel dan pengaman
+Bayangkan kabel seperti jalur distribusi barang. Jumlah barang penting, tetapi panjang jalan, suhu lingkungan, serta banyaknya jalur yang berhimpitan juga memengaruhi kemampuannya. Memilih MCB hanya karena “biasanya rumah memakai ukuran ini” mengabaikan keadaan sebenarnya.
+
+<figure><img src="/diagrams/electric-pilih-kabel.svg" alt="Urutan evaluasi: data beban, arus desain, kondisi pemasangan kabel, jatuh tegangan, koordinasi pengaman dan verifikasi" width="840" height="430" /><figcaption>Alur evaluasi desain. Bukan tabel ukuran kabel universal atau izin melakukan instalasi.</figcaption></figure>
+
+### 1. Buat daftar beban dan asumsi
+| Beban fiktif | Daya masukan | Faktor daya asumsi | Arus perkiraan pada 230 V |
+|---|---|---|---|
+| Pemanas resistif | 1.000 W | 1 | 4,35 A |
+| Lampu | 60 W | 0,9 | 0,29 A |
+| Perangkat elektronik | 120 W | 0,8 | 0,65 A |
+
+Jika ketiganya bekerja bersamaan pada cabang satu fasa yang sama, penjumlahan besar arus perkiraan memberi sekitar 5,29 A sebagai pendekatan awal konservatif untuk latihan ini. Penjumlahan arus AC sebenarnya melibatkan bentuk gelombang dan sudut fasa; analisis rinci perlu model yang sesuai. Tidak ada ukuran kabel atau MCB yang otomatis diputuskan dari tabel ini.
+
+### 2. Pahami tiga simbol penting
+<Formula label="Hubungan dasar proteksi beban lebih" expression="Ib ≤ In ≤ Iz">
+Ib = arus desain beban; In = arus nominal/setelan pengaman; Iz = kemampuan hantar arus kabel setelah faktor kondisi diterapkan. Hubungan ini baru salah satu syarat; karakteristik trip terhadap kabel juga harus memenuhi persyaratan standar dan produk.
+</Formula>
+
+Misalkan data latihan memberi Ib = 12 A, kandidat In = 16 A, dan Iz terkoreksi = 14 A. Kandidat **tidak memenuhi** hubungan dasar karena 16 lebih besar dari 14. Solusinya bukan sekadar mengganti label kabel: evaluasi ulang beban, penghantar, pemasangan, dan proteksi. Nilai Iz tersebut data contoh, bukan kemampuan kabel berpenampang tertentu.
+
+### 3. Mengapa “berapa mm² untuk sekian watt” belum cukup?
+Tabel kemampuan kabel berlaku untuk bahan, isolasi, metode pemasangan, suhu acuan, dan jumlah penghantar berbeban tertentu. Pengelompokan kabel, suhu tinggi, dan kondisi lain dapat mengubah kemampuan itu. Panjang jalur memengaruhi jatuh tegangan serta kondisi pemutusan gangguan. Kabel PE dan netral juga memiliki syarat tersendiri.
+
+### 4. Jangan berhenti pada angka ampere
+Periksa kemampuan pemutusan terhadap arus hubung singkat yang diperkirakan di lokasi. Kurva kerja, arus awal motor, selektivitas, serta perlindungan gangguan bumi ikut menentukan. Pembesaran MCB untuk mencegah trip dapat menghilangkan perlindungan yang dibutuhkan kabel.
+
+### Latihan desain, bukan pemasangan
+Dari contoh Ib 12 A, In 10 A, Iz 18 A, syarat mana gagal? **Ib ≤ In gagal.** Jika In 16 A dan Iz 18 A, apakah desain otomatis selesai? **Belum:** masih perlu evaluasi jatuh tegangan, karakteristik gangguan, kondisi pemakaian, dan standar yang berlaku. Instalasi nyata mengikuti PUIL/SNI yang berlaku dan tenaga kompeten.
+
+### Referensi desain
+- [Electrical Installation Guide: metode penentuan penghantar](https://www.electrical-installation.org/enwiki/Conductor_sizing%3A_methodology_and_definition)
+- [Electrical Installation Guide: prinsip perlindungan arus lebih](https://www.electrical-installation.org/enwiki/Overcurrent_protection_principles)

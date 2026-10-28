@@ -3,7 +3,7 @@ const code=ts.transpileModule(fs.readFileSync('lib/course.ts','utf8'),{compilerO
 const catalog=JSON.parse(fs.readFileSync('lib/electric-lessons.json','utf8'));
 const target={exports:{}};new Function('require','module','exports',code)(()=>catalog,target,target.exports);
 const {stages,lessons,getLessonPosition}=target.exports;
-assert.equal(lessons.length,39);assert.equal(stages.length,8);
+assert.equal(lessons.length,44);assert.equal(stages.length,8);
 assert.equal(lessons[0].slug,'apa-itu-listrik');assert.equal(lessons[1].slug,'keselamatan-dc');
 for(let i=0;i<lessons.length;i++){
  const l=lessons[i],p=getLessonPosition(l.slug);
@@ -18,4 +18,4 @@ for(let i=0;i<lessons.length;i++){
 assert.equal(getLessonPosition('netral-grounding-proteksi').stageIndex,5);
 assert.equal(getLessonPosition('panel-kabel-beban').stageIndex,5);
 assert.equal(getLessonPosition('motor-elektromagnet').stageIndex,6);
-console.log('PASS: 39 lesson URLs; 8 variable-length stages; positions, previous/next links and final lesson verified against production HTML');
+console.log('PASS: 44 lesson URLs; 8 variable-length stages; positions, previous/next links and final lesson verified against production HTML');

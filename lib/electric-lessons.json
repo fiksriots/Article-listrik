@@ -232,5 +232,35 @@
     "title": "Star–Delta Motor: Hubungan Bintang, Segitiga, dan Cara Start",
     "summary": "Pahami tegangan belitan, syarat nameplate, urutan kontaktor, dan alasan interlock diperlukan.",
     "minutes": 30
+  },
+  {
+    "slug": "membaca-label-perangkat",
+    "title": "Membaca Label dan Nameplate Perangkat",
+    "summary": "Pahami input, output, V, A, W, VA, Hz, polaritas, dan IP rating lewat contoh label.",
+    "minutes": 22
+  },
+  {
+    "slug": "jenis-gangguan-listrik",
+    "title": "Beban Lebih, Korsleting, Kebocoran, dan Sambungan Longgar",
+    "summary": "Bedakan empat gangguan yang sering tertukar dan pahami mengapa pengamannya berbeda.",
+    "minutes": 24
+  },
+  {
+    "slug": "kualitas-daya",
+    "title": "Kualitas Daya: Tegangan Turun, Fasa Tidak Seimbang, dan Harmonisa",
+    "summary": "Kenali mengapa perangkat bisa bermasalah walaupun listrik masih menyala.",
+    "minutes": 25
+  },
+  {
+    "slug": "kontrol-forward-reverse",
+    "title": "Kontrol Motor Maju–Mundur dan Interlock",
+    "summary": "Pahami perubahan urutan fasa, pengunci, dan alasan dua kontaktor tidak boleh aktif bersamaan.",
+    "minutes": 25
+  },
+  {
+    "slug": "lab-dc-led-relay",
+    "title": "Lab DC: LED, Tombol, dan Relay Tegangan Rendah",
+    "summary": "Latihan membaca rangkaian, menghitung resistor, dan memahami relay tanpa menyentuh listrik PLN.",
+    "minutes": 30
   }
 ]

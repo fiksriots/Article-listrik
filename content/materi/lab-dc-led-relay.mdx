@@ -1,0 +1,59 @@
+---
+title: "Lab DC: LED, Tombol, dan Relay Tegangan Rendah"
+summary: "Latihan membaca rangkaian, menghitung resistor, dan memahami relay tanpa menyentuh listrik PLN."
+---
+<LearningHook>Ingin melihat listrik bekerja? Mulai dari LED dan baterai kecil, bukan dari stopkontak.</LearningHook>
+
+## 1. Tujuan dan batas lab
+Kita menghubungkan teori arus, hambatan, saklar, dan relay. Bagian awal menggunakan dudukan **dua baterai AA seri, sekitar 3 V**, LED merah, resistor 330 Ω, tombol sesaat NO, dan kabel latihan. Rangkaian ini tidak terhubung ke PLN. Jangan memakai baterai lithium lepas, aki kendaraan, atau adaptor yang dibongkar.
+
+Meskipun tegangannya rendah, baterai dapat panas jika korslet. Rakit tanpa baterai terpasang, periksa jalur, lalu pasang sumber. Jika komponen panas, berbau, atau rusak, lepaskan sumber jika aman dan hentikan percobaan. Jangan meninggalkan rangkaian menyala tanpa pengawasan.
+
+## 2. Kenali komponen sebelum merakit
+| Komponen | Fungsi | Periksa dahulu |
+|---|---|---|
+| Dua AA dan holder | Menyediakan energi DC | Polaritas dan kondisi baterai; jangan mencampur jenis/kondisi |
+| Resistor 330 Ω | Membatasi arus LED | Nilai resistor, bukan sambungan langsung LED ke baterai |
+| LED merah | Mengubah energi menjadi cahaya | Anoda/katoda sesuai datasheet; kaki panjang hanya petunjuk pada LED baru |
+| Tombol NO | Menutup jalur saat ditekan | Pasangan pin tombol sesuai datasheet/kontinuitas saat lepas sumber |
+| Breadboard | Menghubungkan titik melalui strip internal | Jalur tiap model; rel daya bisa terputus di tengah |
+
+<figure><img src="/diagrams/electric-lab-led.svg" alt="Rangkaian seri latihan: positif baterai 3 volt menuju tombol NO, resistor 330 ohm, anoda LED, katoda LED kembali ke negatif baterai" width="840" height="380" /><figcaption>Skema koneksi logis, bukan posisi lubang breadboard. Sambungkan sesuai jalur internal papan yang dipakai.</figcaption></figure>
+
+## 3. Hitung dulu agar tahu yang diharapkan
+<Formula label="Perkiraan arus LED" expression="I = (Vsumber − VLED) / R">
+Asumsikan sumber 3 V, tegangan maju LED merah 2 V, resistor 330 Ω. I ≈ (3 − 2) / 330 = 0,00303 A ≈ 3 mA. Tegangan maju nyata mengikuti LED dan arusnya, sehingga hasil ini pendekatan. Daya resistor model ≈ I² × R ≈ 0,003 W; resistor 0,25 W memiliki margin untuk contoh ini.
+</Formula>
+
+Pilih resistor berdasarkan sumber dan LED yang benar. LED biru/putih bisa memerlukan tegangan maju lebih tinggi sehingga tidak cocok dengan asumsi contoh. Tidak menyala belum tentu LED rusak.
+
+## 4. Langkah latihan LED dan tombol
+1. Lepaskan baterai dari holder. Identifikasi jalur breadboard dan kedua terminal tombol yang benar-benar saling terhubung ketika ditekan.
+2. Susun satu jalur seri: positif holder → tombol NO → resistor → anoda LED → katoda LED → negatif holder.
+3. Periksa bahwa positif dan negatif tidak tersambung langsung. Resistor wajib berada dalam jalur seri LED.
+4. Pasang baterai. Tekan tombol: LED seharusnya menyala. Lepaskan: LED seharusnya padam.
+5. Lepaskan baterai sebelum mengubah posisi komponen atau mengganti jalur.
+
+## 5. Jika LED tidak menyala, cek runtut
+Mulai dari arah LED, nilai resistor, pasangan kaki tombol, dan jalur breadboard. Periksa baterai melalui latihan tegangan DC pada materi [multimeter](/materi/multimeter). Jangan “mencoba sebentar” menghilangkan resistor. Jangan menghubungkan mode ukur arus langsung melintang ke baterai.
+
+## 6. Mengenal relay tanpa mengendalikan PLN
+Relay mempunyai sisi koil/kendali dan sisi kontak. Kontak NO terbuka dan NC tertutup pada kondisi koil tidak aktif sesuai spesifikasi. **COM kontak relay berbeda dari COM multimeter.** Kesamaan nama tidak berarti fungsi terminalnya sama.
+
+<DeviceGuide type="relay" />
+
+Pada tahap ini latihan relay berupa penelusuran diagram: gambar LED baterai sebagai beban pada COM–NO, kemudian tandai apa yang terjadi ketika koil aktif. Jangan menganggap relay pada foto mempunyai tegangan koil atau pin yang sama dengan relay milikmu.
+
+Untuk eksperimen fisik lanjutan, gunakan modul relay edukasi tegangan rendah dan ikuti manual modelnya: tegangan sumber, logika input, arus koil, driver, serta proteksi induktif harus sesuai. Koil relay polos tidak boleh langsung dibebankan ke pin mikrokontroler tanpa memeriksa kemampuan pin dan driver. Kontak relay juga **tidak otomatis membuat rangkaian breadboard layak untuk listrik PLN**. Lab ini tetap hanya memakai beban baterai rendah energi.
+
+## Studi kasus: tombol ditekan tetapi LED tetap mati
+Setelah sumber dilepas, ternyata dua kaki kabel berada pada strip breadboard yang sama sehingga jalurnya tidak seperti skema. Gambar ulang hubungan strip, perbaiki tanpa baterai, lalu periksa lagi. Jangan menghilangkan resistor untuk mencoba menyalakan LED.
+
+## Catatan hasil latihan
+Buat tabel: kondisi tombol, perkiraan arus, LED menyala/padam, serta penyebab bila berbeda. Nilai keberhasilan bukan hanya “menyala”, tetapi bisa menjelaskan mengapa resistor dibutuhkan dan bagaimana arus kembali ke sumber.
+
+<LearningCheck question="Apa yang harus dilakukan sebelum memindahkan kabel pada lab ini?" answer="Lepaskan sumber baterai, ubah jalur, lalu periksa kembali polaritas dan kemungkinan korslet sebelum memasang sumber." />
+
+## Referensi dan pengembangan
+- [Arduino: prinsip contoh LED dengan resistor pembatas](https://docs.arduino.cc/built-in-examples/basics/Blink/)
+- [Learn IoT: jalur praktik sensor dan mikrokontroler](/iot)

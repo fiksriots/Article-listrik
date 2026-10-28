@@ -1,0 +1,49 @@
+---
+title: "Membaca Label dan Nameplate Perangkat"
+summary: "Pahami input, output, V, A, W, VA, Hz, polaritas, dan IP rating lewat contoh label."
+---
+<LearningHook>Router bertuliskan 12 V 1 A, tetapi adaptor di laci bertuliskan 9 V 2 A. Karena amperenya lebih besar, apakah boleh dipakai?</LearningHook>
+
+## 1. Label itu seperti identitas dan aturan makan perangkat
+Perangkat memerlukan jenis suplai tertentu, seperti seseorang membutuhkan makanan yang sesuai. Angka pada label membantu kita memeriksa kecocokan sumber, bukan sekadar melihat apakah colokannya pas. Bedakan label pada **perangkat yang menerima energi** dan pada **adaptor yang menyediakan energi**.
+
+<figure><img src="/diagrams/electric-label-perangkat.svg" alt="Contoh label fiktif: adaptor menerima 100 hingga 240 volt AC 50 atau 60 hertz dan menghasilkan 12 volt DC maksimum 1 ampere; perangkat membutuhkan 12 volt DC" width="840" height="400" /><figcaption>Label latihan fiktif. Bentuk konektor, polaritas, regulasi, dan spesifikasi asli tetap perlu diperiksa.</figcaption></figure>
+
+## 2. Baca input dan output secara terpisah
+| Tulisan | Cara membacanya | Jangan keliru |
+|---|---|---|
+| INPUT 100–240 V AC, 50/60 Hz | Rentang tegangan dan frekuensi masukan adaptor | Bukan tegangan yang keluar menuju router |
+| OUTPUT 12 V DC, 1 A | Keluaran DC 12 V; kapasitas arus sampai 1 A pada kondisi spesifikasi | Bukan berarti adaptor selalu memaksa arus 1 A |
+| Perangkat: 12 V DC | Perangkat dirancang menerima DC dengan tegangan tersebut | Adaptor AC atau tegangan berbeda tidak otomatis cocok |
+| W | Daya aktif, satuan laju pemakaian energi | Bukan kWh; kWh menyatakan energi selama waktu tertentu |
+| VA | Daya semu pada AC | Jangan dianggap selalu sama dengan watt |
+| Hz | Frekuensi listrik AC | Berbeda dengan frekuensi Wi-Fi dalam GHz |
+
+**Analogi:** tegangan seperti tekanan air yang harus sesuai kebutuhan; kapasitas arus sumber seperti kemampuan maksimal suplai. Adaptor DC tegangan tetap yang sesuai tidak otomatis mengirim seluruh arus maksimumnya. Perangkat dan keadaan rangkaian menentukan arus yang ditarik.
+
+<Formula label="Daya keluaran DC pada contoh" expression="P = V × I = 12 × 1 = 12 W">
+Angka 12 W adalah kemampuan keluaran berdasarkan rating contoh, bukan konsumsi router yang selalu tetap dan bukan daya masukan adaptor. Ada rugi konversi pada adaptor.
+</Formula>
+
+## 3. Polaritas dan konektor sama pentingnya
+Simbol DC biasanya memakai satu garis lurus dengan garis putus-putus di bawahnya. Simbol AC memakai gelombang. Pada konektor barrel, simbol polaritas menunjukkan hubungan pin tengah dan bagian luar. **Jangan menebak polaritas dari warna kabel atau bentuk konektor.** Cocokkan label sumber dan perangkat serta manualnya.
+
+Konektor USB-C dengan negosiasi daya atau adaptor arus konstan memiliki aturan berbeda dari contoh adaptor DC tetap ini. Tidak semua pengisi daya dapat dipertukarkan hanya dengan menghitung watt.
+
+## 4. IP rating membahas enclosure
+IP memiliki dua posisi angka: perlindungan terhadap masuknya benda padat dan air. Arti setiap tingkat mengikuti pengujian yang ditentukan standar. Angka tersebut bukan ukuran ketahanan terhadap semua cuaca, korosi, petir, atau izin menyemprot dari segala arah. Periksa kondisi penggunaan, penutup port, dan manual produk; rating enclosure tidak otomatis berlaku pada sambungan tambahan.
+
+## Studi kasus: memilih pengganti adaptor
+Perangkat memerlukan 12 V DC, kebutuhan maksimum 0,8 A. Kandidat A: 12 V DC 1,5 A; kandidat B: 9 V DC 2 A. Untuk suplai tegangan tetap, A memenuhi **syarat awal** tegangan dan kapasitas arus; masih periksa polaritas, konektor, kualitas/regulasi, serta persetujuan produsen. B tidak sesuai tegangannya meskipun kapasitas arus lebih besar.
+
+## Latihan tanpa membongkar
+Foto label perangkat yang bisa dijangkau tanpa membuka penutup. Catat model, input, output bila ada, jenis AC/DC, dan satuannya. Tandai informasi yang belum jelas; cari manual berdasarkan model, bukan menebak dari perangkat yang mirip. Jangan membuka adaptor atau mendekati panel untuk latihan ini.
+
+<LearningCheck question="Apakah adaptor 12 V DC 2 A selalu memaksa perangkat menarik 2 A?" answer="Tidak pada suplai tegangan tetap yang sesuai. Angka 2 A menunjukkan kapasitas sumber; beban menentukan arus yang ditarik. Tegangan, polaritas, konektor, dan syarat produk tetap harus cocok." />
+
+## Lanjut belajar
+Setelah memahami label umum, pelajari [multimeter](/materi/multimeter). Untuk data khusus motor, lanjutkan [nameplate motor](/materi/nameplate-motor) pada tahap motor.
+
+## Referensi
+- [Schneider Electric: penjelasan IP rating](https://blog.se.com/industry/machine-and-process-management/2018/01/24/speak-robustness-ish-ip-protection-levels/)
+- [Texas Instruments: konsep adaptor dan catu daya AC/DC](https://www.ti.com/power-management/acdc-and-dcdc-controllers/overview.html)

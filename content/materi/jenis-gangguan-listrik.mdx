@@ -1,0 +1,48 @@
+---
+title: "Beban Lebih, Korsleting, Kebocoran, dan Sambungan Longgar"
+summary: "Bedakan empat gangguan yang sering tertukar dan pahami mengapa pengamannya berbeda."
+---
+<LearningHook>MCB turun saat banyak alat menyala. Di kasus lain bodi alat terasa menyetrum, tetapi MCB tidak turun. Mengapa gejalanya berbeda?</LearningHook>
+
+## 1. Jangan menyebut semua gangguan sebagai korsleting
+Bayangkan jalan: terlalu banyak kendaraan berbeda dengan jalan pintas yang tidak semestinya, kendaraan keluar jalur, atau jembatan yang rusak. Begitu pula pada listrik. Nama gangguan membantu menentukan pemeriksaan dan proteksi yang tepat, tetapi satu gejala saja belum membuktikan penyebab.
+
+<figure><img src="/diagrams/electric-jenis-gangguan.svg" alt="Empat konsep: beban lebih adalah arus terlalu besar melalui jalur beban, korsleting adalah jalur tak diinginkan, kebocoran adalah arus keluar dari jalur normal, sambungan longgar menambah hambatan lokal" width="840" height="520" /><figcaption>Ilustrasi penyebab, bukan rangkaian untuk dibuat. Jangan menciptakan gangguan nyata untuk menguji pengaman.</figcaption></figure>
+
+## 2. Bandingkan penyebab dan batas pengamannya
+| Gangguan | Gambaran sederhana | Peran proteksi |
+|---|---|---|
+| Beban lebih | Arus melampaui kemampuan/rating yang diizinkan selama waktu tertentu | Proteksi arus lebih bekerja sesuai kurva dan kondisi desain |
+| Hubung singkat | Terbentuk jalur tak diinginkan dengan impedansi rendah | Pengaman harus mampu memutus arus gangguan yang tersedia |
+| Kebocoran ke bumi/bodi | Sebagian arus keluar dari jalur balik normal | RCD mendeteksi ketidakseimbangan arus; tipe dan pemasangannya harus sesuai |
+| Sambungan longgar | Kontak buruk menyebabkan hambatan dan panas setempat | Pengaman arus lebih belum tentu mendeteksi semua kondisi ini |
+
+## 3. Mengapa MCB, RCCB, dan RCBO berbeda?
+MCB memberi proteksi arus lebih, termasuk beban lebih dan hubung singkat dalam batas spesifikasinya. RCCB mendeteksi arus residual dan **tidak menyediakan proteksi arus lebih sendiri**. RCBO menggabungkan kedua fungsi tersebut. PE, pembumian, isolasi, serta koordinasi proteksi tetap diperlukan. Tidak ada satu perangkat yang menjamin semua bahaya hilang.
+
+RCD bukan jaminan aman menyentuh bagian bertegangan. Misalnya, arus yang keluar dan kembali melalui penghantar yang sama-sama dipantau dapat tetap seimbang. Tombol TEST menguji mekanisme tertentu sesuai desain, bukan membuktikan seluruh instalasi sudah benar.
+
+<DeviceGuide type="mcb" />
+<DeviceGuide type="rccb" />
+
+## 4. Sambungan kecil bisa menghasilkan panas besar
+<Formula label="Panas pada kontak: model sederhana" expression="P = I² × R">
+Contoh fiktif: arus 5 A melewati kontak buruk 0,2 Ω. Panas di titik itu = 5 × 5 × 0,2 = 5 W. Jika hambatan menjadi 0,02 Ω pada arus sama, panas modelnya 0,5 W. Ini ilustrasi pengaruh hambatan, bukan batas aman suhu atau sambungan.
+</Formula>
+
+Sambungan yang menghangat, berubah warna, berbau terbakar, atau berbunyi tidak boleh dianggap normal. Jangan mencoba mengencangkan terminal yang masih bertegangan. Nilai torsi dan cara terminasi mengikuti produk serta pekerjaan tenaga kompeten.
+
+## Studi kasus: dua kejadian yang tampak serupa
+**Kasus A:** pemutus turun setelah beberapa pemanas dipakai bersamaan. Daftar beban dan riwayat waktu menjadi petunjuk beban lebih, tetapi belum diagnosis pasti. **Kasus B:** pemutus turun segera ketika satu alat dihubungkan. Ada beberapa kemungkinan: gangguan isolasi, hubung singkat, arus awal, atau masalah perangkat. Jangan menaikkan rating MCB sebagai jalan pintas.
+
+## 5. Catat gejala, jangan membuat percobaan berbahaya
+Catat waktu kejadian, alat yang digunakan, kondisi lingkungan, dan pengaman yang trip dari posisi aman. Hentikan pemakaian alat yang dicurigai; hindari menyentuh bodi atau area basah. Jika ada asap, percikan, atau bau terbakar, menjauh dan ikuti prosedur darurat setempat. Pemeriksaan panel, pengukuran isolasi, dan pencarian kebocoran dikerjakan tenaga kompeten.
+
+<LearningCheck question="Mengapa sambungan bisa panas walaupun MCB belum trip?" answer="Kontak yang buruk bisa menghasilkan panas setempat pada arus yang masih berada di bawah ambang kerja pengaman. MCB tidak menilai suhu setiap sambungan." />
+
+## Latihan klasifikasi
+Klasifikasikan: banyak beban hidup bersamaan; isolasi terkelupas menyentuh bodi; terminal menjadi kecokelatan. Jawaban awal: kemungkinan beban lebih; gangguan isolasi/kebocoran ke bodi; masalah kontak dan pemanasan. Sebutkan data yang masih perlu diperiksa sebelum memastikan penyebab.
+
+## Referensi
+- [Electrical Installation Guide: arus lebih dan hubung singkat](https://www.electrical-installation.org/enwiki/Conductor_sizing%3A_methodology_and_definition)
+- [Electrical Installation Guide: prinsip RCD](https://www.electrical-installation.org/enwiki/Description_of_RCDs)

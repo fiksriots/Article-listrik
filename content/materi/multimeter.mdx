@@ -47,3 +47,43 @@ Apakah ingin mengetahui tegangan baterai, hambatan resistor, atau arus sebuah be
 <Note>Untuk latihan baterai kecil, mulai dari mengenali port COM, VΩ, dan mode V DC pada manual alat. Jangan meniru posisi knob dari ilustrasi untuk semua merek; penempatan fungsi dan kemampuan proteksinya berbeda.</Note>
 
 <LearningCheck question="Mode arus dipasang langsung antara dua kutub sumber berisiko..." answer="Hubung singkat. Jalur ukur arus berhambatan rendah dan dapat membuat hubung singkat." />
+
+## Praktik bertahap: satu tujuan, satu mode
+Sebelum memegang probe, ucapkan tiga hal: **mau mengukur apa, memakai terminal mana, dan sumber sedang hidup atau mati**. Nama dan batas terminal berbeda antar-model; ikuti manual alat. Jangan menganggap lubang bertuliskan 10 A cocok untuk semua arus atau boleh dipakai tanpa batas waktu.
+
+| Tujuan latihan | Terminal umum | Posisi alat pada rangkaian | Kondisi |
+|---|---|---|---|
+| Tegangan baterai AA | Hitam COM, merah V/Ω | Paralel pada kedua kutub | Baterai utuh, tegangan rendah |
+| Resistor lepas | Hitam COM, merah V/Ω | Melintang pada resistor | Tidak terhubung sumber; jangan pegang kedua ujung logam |
+| Kontinuitas kabel lepas | Hitam COM, merah V/Ω sesuai manual | Antar-ujung kabel | Kabel benar-benar dilepas dari seluruh sumber/perangkat |
+| Arus rangkaian latihan | COM dan terminal arus yang sesuai | Seri, menjadi bagian jalur arus | Sumber dilepas sebelum menyusun/mengubah koneksi |
+
+<figure><img src="/diagrams/electric-multimeter-mode.svg" alt="Ringkasan: voltmeter paralel pada beban, amperemeter seri di jalur beban, ohmmeter hanya pada komponen tanpa sumber" width="840" height="400" /><figcaption>Ilustrasi konsep. Pemilihan range, sekering, serta terminal mengikuti manual multimeter.</figcaption></figure>
+
+### A. Membaca baterai tanpa membongkar
+1. Periksa kondisi fisik probe dan meter. Pilih V DC dengan rentang yang mencakup baterai; pada manual range, mulai dari batas yang sesuai/lebih tinggi bila belum yakin nilainya.
+2. Hitam ke COM, merah ke terminal V. Sentuhkan ke kutub baterai AA sesuai polaritas tanpa mempertemukan ujung probe.
+3. Catat angka dan satuannya. Bandingkan 1,52 V dengan 0,00152 kV: nilai fisiknya sama, tampilannya berbeda.
+4. Lepaskan probe. Jangan menganggap tegangan tanpa beban membuktikan kapasitas atau kesehatan baterai.
+
+### B. Hambatan dan bunyi kontinuitas
+Lepaskan resistor dari sumber. Pada pengukuran dalam rangkaian, komponen lain yang paralel dapat memengaruhi hasil. Resistor 330 Ω dengan toleransi 5% memiliki rentang nominal 313,5–346,5 Ω, sebelum memperhitungkan ketidakpastian alat dan kondisi pengukuran. Bunyi kontinuitas hanya menunjukkan hubungan di bawah ambang alat, bukan membuktikan kabel sanggup membawa arus besar.
+
+### C. Memahami arus sebelum mencoba
+Amperemeter harus menjadi bagian jalur seri. Memasangnya seperti voltmeter dapat membuat jalur berhambatan sangat rendah. Jika belum yakin memilih terminal, sekering, dan range, gunakan perhitungan arus pada [lab LED](/materi/lab-dc-led-relay) dahulu. Jangan mencoba pengukuran arus langsung pada baterai, stopkontak, atau panel. Setelah latihan arus yang benar selesai dan sumber dilepas, pindahkan probe merah kembali ke terminal V agar tidak tertinggal di terminal arus.
+
+### Membaca hasil yang membingungkan
+- **Tanda minus pada V DC:** periksa orientasi probe dan titik referensi, bukan langsung menganggap meter rusak.
+- **OL pada mode hambatan:** bisa berarti rangkaian terbuka atau nilai melewati rentang; baca arti indikator menurut manual.
+- **Angka meloncat:** bisa berasal dari kontak probe, mode, rentang, atau besaran yang berubah. Gejala belum membuktikan penyebab.
+- **0 pada ukur arus:** jangan langsung menjumper sekering; periksa prosedur sesuai manual dengan sumber dilepas.
+
+<Note>Latihan ini memakai baterai dan komponen lepas. Rating CAT dan rating tegangan harus cocok untuk lokasi pengukuran, tetapi tidak menggantikan pelatihan maupun prosedur kerja. Pengukuran instalasi PLN bukan latihan mandiri pemula.</Note>
+
+### Latihan dan pembahasan
+Baterai terbaca 1,48 V. Apakah berarti arusnya 1,48 A? **Tidak:** V dan A besaran berbeda. Apakah bunyi beep membuktikan tidak ada tegangan? **Tidak:** kontinuitas bukan prosedur membuktikan bebas tegangan.
+
+### Referensi praktik
+- [HIOKI: sambungan ukur DC dan fungsi multimeter](https://www.hioki.com/global/learning/usage/testers_2.html)
+- [HIOKI: risiko salah memasang terminal arus](https://www.hioki.com/global/learning/usage/testers_1.html)
+- [HIOKI: kategori pengukuran dan rating alat](https://www.hioki.com/us-en/support/warranty/safe-operation)
