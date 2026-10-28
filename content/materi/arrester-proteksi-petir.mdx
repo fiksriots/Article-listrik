@@ -1,0 +1,42 @@
+---
+title: "Arrester dan Sistem Proteksi Petir"
+summary: "Bedakan air terminal, down conductor, surge arrester, dan SPD tanpa menyamakan semua sebagai penangkal petir."
+---
+<LearningHook>Sudah ada batang penangkal petir di menara. Apakah radio, switch, dan adaptor otomatis terlindungi?</LearningHook>
+
+## 1. Arrester bukan nama untuk satu bentuk perangkat
+Di lapangan istilah **arrester**, arester, penangkal petir, dan SPD sering dipakai bergantian. Karena itu tanyakan dulu: perangkat tersebut dipasang pada atap, saluran listrik, kabel data, atau jaringan tegangan menengah? Fungsi dan kelas produknya berbeda.
+
+| Perangkat/sistem | Fungsi konsep | Bukan berarti |
+|---|---|---|
+| Air terminal | Bagian sistem proteksi petir luar untuk menerima sambaran sesuai rancangan | Menjamin tidak akan ada petir atau semua elektronik aman |
+| Down conductor | Jalur arus petir menuju sistem terminasi bumi | Boleh diganti kabel kecil sembarang |
+| Earth-termination | Membantu mendistribusikan arus ke bumi dalam sistem LPS | Tanah selalu nol volt saat petir |
+| Surge arrester/SPD | Membatasi tegangan transien pada antarmuka yang sesuai | Pengganti seluruh sistem proteksi petir luar |
+
+<figure><img src="/diagrams/lightning-layers.svg" alt="Lapisan proteksi: sistem luar menerima dan menyalurkan petir; di batas bangunan jalur daya serta data dievaluasi untuk SPD dan bonding; peralatan berada di dalam zona terkoordinasi" width="840" height="420" /><figcaption>Konsep lapisan proteksi, bukan desain zona tangkap, jarak pisah atau rute konduktor petir.</figcaption></figure>
+
+## 2. Proteksi luar dan dalam bekerja bersama
+Sistem luar mencakup penangkap, penghantar turun, dan terminasi bumi. Proteksi dalam melibatkan pengendalian beda potensial, SPD yang sesuai, tata letak, serta jarak pisah bila dipersyaratkan. Penilaian risiko menentukan kebutuhan dan rancangan; satu foto menara tidak cukup untuk menetapkan desainnya.
+
+Sambaran juga dapat menimbulkan efek induksi atau merambat lewat layanan yang terhubung. Perangkat bisa memiliki jalur masuk melalui listrik, Ethernet, koaksial, sinyal sensor, atau bagian logam. Memasang satu pengaman pada stopkontak tidak menilai jalur lainnya.
+
+## 3. Bahaya tegangan langkah dan sentuh
+Saat arus besar masuk tanah, potensial dapat berbeda menurut posisi. Seseorang dapat menjembatani dua potensial melalui kedua kaki atau tangan dan kaki. Karena itu nilai uji elektroda saja tidak membuktikan area menara aman saat badai.
+
+Saat petir berlangsung, jangan memanjat, memeriksa down conductor, menyentuh bagian luar menara, atau menghubungkan/melepas kabel outdoor. Pemeriksaan terjadwal mengikuti prosedur lokasi setelah keadaan aman. Pelajaran ini bukan panduan instalasi penangkap atau penggalian elektroda.
+
+## Studi kasus: istilah pada brosur menyesatkan
+Brosur menyebut “surge arrester T2 untuk panel”. Itu tidak sama dengan air terminal dan tidak otomatis menggantikan SPD Type 1 bila rancangan memerlukannya. Cocokkan fungsi, standar uji, jenis jaringan, dan lokasi pemasangan; hindari membeli hanya karena kata “petir” ada di nama produk.
+
+## 4. Apa yang perlu diberikan kepada perancang?
+Siapkan fungsi bangunan/menara, ketinggian dan lingkungan, jalur daya/data yang masuk, peralatan kritis, gambar pembumian, dan catatan kerusakan. Perancang menilai kebutuhan berdasarkan standar yang berlaku, termasuk keluarga IEC 62305 dan ketentuan nasional yang relevan. Bentuk atap atau satu jarak perkiraan bukan dasar untuk menjamin area terlindungi.
+
+<LearningCheck question="Apakah SPD panel sama dengan penangkap petir pada atap?" answer="Tidak. SPD membatasi transien pada rangkaian yang sesuai; air terminal bagian sistem proteksi petir luar. Keduanya perlu dinilai sebagai lapisan yang terkoordinasi." />
+
+## Latihan dan pembahasan
+Daftarkan jalur yang masih terhubung ketika adaptor router dicabut tetapi kabel antena/Ethernet outdoor tetap masuk. Masih ada jalur konduktif lain, sehingga mencabut satu kabel bukan bukti seluruh risiko hilang. Jangan mengujinya saat badai.
+
+## Referensi
+- [DEHN: komponen sistem proteksi petir luar dan dalam](https://www.dehn.us/en-us/lightning-protection-systems)
+- [Electrical Installation Guide: elemen sistem proteksi surja](https://www.electrical-installation.org/enwiki/Elements_of_the_protection_system)

@@ -77,7 +77,12 @@ export const stages = [
       "netral-grounding-proteksi",
       "jenis-gangguan-listrik",
       "terminal-sambungan-kabel",
-      "panel-kabel-beban"
+      "panel-kabel-beban",
+      "grounding-sistem-pembumian",
+      "bonding-ekuipotensial",
+      "arrester-proteksi-petir",
+      "spd-pemilihan-koordinasi",
+      "proteksi-bts-cctv-outdoor"
     ]
   },
   {

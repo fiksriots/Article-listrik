@@ -977,5 +977,115 @@ export const quizBank: Record<string, Question[]> = {
       "a": 0,
       "why": "Rakit dan ubah jalur tanpa sumber. Lab ini tidak melibatkan PLN."
     }
+  ],
+  "grounding-sistem-pembumian": [
+    {
+      "q": "Angka resistansi elektroda kecil membuktikan…",
+      "o": [
+        "Hanya aspek pengujian tersebut, bukan seluruh proteksi",
+        "Seluruh PE pasti tersambung",
+        "Semua bodi selalu nol volt"
+      ],
+      "a": 0,
+      "why": "Kontinuitas PE, pemutusan gangguan, bonding dan kondisi uji perlu dinilai terpisah."
+    },
+    {
+      "q": "Bolehkah netral dijumper ke rak di sembarang lokasi?",
+      "o": [
+        "Tidak, harus mengikuti sistem dan desain",
+        "Boleh untuk menghemat kabel",
+        "Wajib di setiap stopkontak"
+      ],
+      "a": 0,
+      "why": "N, PE dan PEN memiliki aturan koneksi yang berbeda."
+    }
+  ],
+  "bonding-ekuipotensial": [
+    {
+      "q": "Tujuan bonding protektif terutama…",
+      "o": [
+        "Membatasi beda potensial antarbagian yang ditentukan",
+        "Menggantikan semua MCB",
+        "Menaikkan tegangan"
+      ],
+      "a": 0,
+      "why": "Bonding dan pembumian saling melengkapi, bukan fungsi yang sama."
+    },
+    {
+      "q": "Clean earth membenarkan melepas PE?",
+      "o": [
+        "Tidak",
+        "Ya untuk semua perangkat IT",
+        "Ya ketika hujan"
+      ],
+      "a": 0,
+      "why": "Fungsi EMC tidak boleh mengorbankan proteksi keselamatan."
+    }
+  ],
+  "arrester-proteksi-petir": [
+    {
+      "q": "Air terminal dan SPD panel…",
+      "o": [
+        "Memiliki fungsi berbeda dalam lapisan proteksi",
+        "Selalu perangkat yang sama",
+        "Sama-sama UPS"
+      ],
+      "a": 0,
+      "why": "Sistem luar dan pembatasan surja pada rangkaian perlu dikoordinasikan."
+    },
+    {
+      "q": "Saat badai, pemeriksaan menara sebaiknya…",
+      "o": [
+        "Ditunda mengikuti prosedur cuaca aman",
+        "Dilakukan dengan menyentuh konduktor",
+        "Dibarengi melepas grounding"
+      ],
+      "a": 0,
+      "why": "Jangan memanjat atau memanipulasi kabel outdoor saat petir berlangsung."
+    }
+  ],
+  "spd-pemilihan-koordinasi": [
+    {
+      "q": "40 kA pada rating pelepasan SPD berarti…",
+      "o": [
+        "Karakteristik arus surja dengan uji terkait",
+        "Arus beban panel yang boleh kontinu",
+        "Tegangan keluaran selalu 40 kV"
+      ],
+      "a": 0,
+      "why": "Arus impuls tidak sama dengan rating arus beban."
+    },
+    {
+      "q": "Uc dan Up…",
+      "o": [
+        "Menyatakan besaran berbeda dan perlu dibaca bersama sistem",
+        "Selalu sama",
+        "Keduanya menunjukkan kapasitas baterai"
+      ],
+      "a": 0,
+      "why": "Uc membahas tegangan kontinu; Up level proteksi hasil pengujian."
+    }
+  ],
+  "proteksi-bts-cctv-outdoor": [
+    {
+      "q": "Radio mati saat hujan membuktikan…",
+      "o": [
+        "Ada gejala yang perlu diagnosis",
+        "Pasti petir langsung",
+        "Pasti kurang satu rod"
+      ],
+      "a": 0,
+      "why": "Air, konektor, catu daya, kabel dan surja merupakan kemungkinan yang perlu dibedakan."
+    },
+    {
+      "q": "PoE pasif dan 802.3af/at/bt…",
+      "o": [
+        "Tidak otomatis saling cocok",
+        "Selalu sama karena RJ45",
+        "Tidak memerlukan cek tegangan"
+      ],
+      "a": 0,
+      "why": "Periksa tegangan, pinout, jenis PoE, kapasitas dan kecocokan pengaman."
+    }
   ]
 };

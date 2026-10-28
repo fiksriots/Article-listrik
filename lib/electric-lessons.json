@@ -262,5 +262,35 @@
     "title": "Lab DC: LED, Tombol, dan Relay Tegangan Rendah",
     "summary": "Latihan membaca rangkaian, menghitung resistor, dan memahami relay tanpa menyentuh listrik PLN.",
     "minutes": 30
+  },
+  {
+    "slug": "grounding-sistem-pembumian",
+    "title": "Grounding: Elektroda, PE, dan Sistem TT/TN/IT",
+    "summary": "Pahami jalur gangguan, tegangan sentuh, serta mengapa angka ohm saja belum membuktikan aman.",
+    "minutes": 28
+  },
+  {
+    "slug": "bonding-ekuipotensial",
+    "title": "Bonding: Menyamakan Potensial Panel, Rak, dan Struktur",
+    "summary": "Bedakan grounding, bonding protektif, functional bonding, dan lightning bonding.",
+    "minutes": 24
+  },
+  {
+    "slug": "arrester-proteksi-petir",
+    "title": "Arrester dan Sistem Proteksi Petir",
+    "summary": "Bedakan air terminal, down conductor, surge arrester, dan SPD tanpa menyamakan semua sebagai penangkal petir.",
+    "minutes": 25
+  },
+  {
+    "slug": "spd-pemilihan-koordinasi",
+    "title": "SPD Type 1/2/3: Rating, Koordinasi, dan Batas Perlindungan",
+    "summary": "Baca Uc, Up, In, Imax, Iimp dan pahami proteksi AC, DC, serta jalur data.",
+    "minutes": 30
+  },
+  {
+    "slug": "proteksi-bts-cctv-outdoor",
+    "title": "Studi Kasus: Grounding dan Surja pada BTS, Radio, dan CCTV",
+    "summary": "Telusuri daya, Ethernet/PoE, struktur logam, inspeksi, dan batas diagnosis setelah hujan.",
+    "minutes": 28
   }
 ]
