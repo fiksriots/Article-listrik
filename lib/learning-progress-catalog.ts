@@ -13,7 +13,7 @@ const electric=(slug:string)=>({slug,title:lessons.find(l=>l.slug===slug)!.title
 const network=(items:typeof networkLessons)=>items.map(l=>({slug:l.slug,title:l.title,href:'/jaringan/'+l.slug}));
 // Serialize metadata only; article text, illustrations and code stay on the server.
 export const learningTracks:LearningTrack[]=[
- {id:'listrik',title:'Learn Electric',href:'/listrik',groups:stages.map(s=>({id:s.id,title:s.name,href:'/listrik',lessons:s.slugs.map(electric)}))},
+ {id:'listrik',title:'Learn Electric',href:'/listrik',groups:stages.map(s=>({id:s.id,title:s.name,href:'/modul#tahap-'+s.id,lessons:s.slugs.map(electric)}))},
  {id:'jaringan',title:'Learn Networking',href:'/jaringan',groups:[
   {id:'dasar',title:'Dasar Jaringan',href:'/jaringan',lessons:network(networkLessons.filter(l=>!l.mtcna&&!l.mtcre&&l.stage<11))},
   {id:'mtcna',title:'MTCNA',href:'/jaringan/mtcna',lessons:[...network(networkLessons.filter(l=>!!l.mtcna)),...mtcnaGuides.map(l=>({slug:'mtcna-guide-'+l.slug,title:l.title,href:'/jaringan/mtcna/panduan/'+l.slug}))]},
