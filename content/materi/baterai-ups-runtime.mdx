@@ -1,0 +1,39 @@
+---
+title: "Baterai dan Runtime UPS: Ah, Wh, serta Rugi Konversi"
+summary: "Hitung perkiraan energi secara terbatas dan bedakan kapasitas UPS dengan lama cadangannya."
+---
+<LearningHook>UPS 1.000 VA apakah pasti bisa menyalakan beban selama satu jam?</LearningHook>
+
+## 1. Daya dan energi menjawab pertanyaan berbeda
+Rating watt dan VA membatasi kemampuan UPS menyuplai beban. Lama cadangan atau runtime dipengaruhi energi baterai yang dapat digunakan, beban, konversi, kondisi baterai dan aturan cut-off. Analogi: kemampuan pompa mengalirkan air berbeda dari banyak air di tangki.
+
+<figure><img src="/diagrams/electric-runtime.svg" width="840" height="420" alt="Energi baterai nominal dikurangi batas penggunaan dan rugi konversi, kemudian dibagi daya beban untuk perkiraan waktu; runtime nyata mengikuti kurva produsen" /><figcaption>Model perkiraan, bukan jaminan durasi suatu UPS.</figcaption></figure>
+
+## 2. Arti Ah dan Wh
+Ah menyatakan kapasitas muatan pada kondisi pengujian tertentu. Wh menyatakan energi. Untuk pendekatan sederhana, energi nominal ≈ tegangan nominal × Ah. Membandingkan dua angka Ah saja pada tegangan berbeda dapat menyesatkan.
+
+<Formula label="Model energi baterai contoh" expression="12 V × 9 Ah = 108 Wh nominal">
+Dengan asumsi latihan 60% energi nominal dapat digunakan dan efisiensi konversi 80%, energi ke beban ≈ 108 × 0,6 × 0,8 = 51,84 Wh. Untuk beban tetap 30 W, perkiraan = 51,84 / 30 ≈ 1,73 jam. Faktor ini fiktif, bukan spesifikasi UPS atau baterai tertentu.
+</Formula>
+
+Perhitungan sederhana bisa jauh berbeda pada UPS nyata karena arus pelepasan, karakteristik baterai, cut-off, konsumsi internal, suhu dan usia. Gunakan tabel/kurva runtime produsen untuk model dan kondisi yang tepat, lalu rencanakan pengujian operasional yang aman.
+
+## 3. Seri dan paralel hanya untuk memahami data
+Dua unit identik 12 V 9 Ah secara seri memiliki nominal 24 V 9 Ah atau 216 Wh. Secara paralel model idealnya 12 V 18 Ah, juga 216 Wh. Ini **bukan instruksi merangkai paket baterai sendiri**. UPS memakai konfigurasi, proteksi, charger dan baterai yang ditentukan produsen; mencampur usia/jenis atau mengubah konfigurasi dapat berbahaya.
+
+Baterai yang tegangannya terlihat rendah tetap dapat memberikan arus hubung singkat besar. Jangan membuka paket, menjumper terminal, atau melakukan uji dengan kabel improvisasi. Penggantian mengikuti manual, kewenangan dan prosedur produk.
+
+## 4. Sizing UPS memeriksa watt dan VA
+Jangan melebihi salah satu batas UPS. Pertimbangkan arus awal, bentuk gelombang, karakteristik beban, kebutuhan durasi dan pertumbuhan sistem. Beban nonkritis dapat dipisahkan sesuai kebutuhan; soket surge-only tidak otomatis mempunyai battery backup.
+
+## Studi kasus: UPS berbunyi lalu mati lebih cepat
+Dua kemungkinan adalah beban bertambah dan kapasitas baterai menurun. Catat model, umur, log, suhu, beban aktual dan hasil self-test yang relevan. Jangan menyimpulkan cukup menambah Ah atau memasang baterai eksternal yang tidak didukung.
+
+## Latihan dan pembahasan
+Energi yang diasumsikan sampai ke beban 72 Wh dan beban tetap 24 W menghasilkan model 3 jam. Jika beban menjadi 48 W, model menjadi 1,5 jam. Hasil ini latihan matematika; perilaku baterai nyata tidak selalu linier seperti model.
+
+<LearningCheck question="Apakah rating VA menunjukkan lama backup?" answer="Tidak. VA/watt membatasi daya, sedangkan runtime bergantung energi yang dapat digunakan, beban dan karakteristik sistem." />
+
+## Referensi
+- [APC: rating watt/VA dan pemilihan runtime](https://www.apc.com/us/en/support/product-support/ups-buying-guide-for-selecting-a-battery-backup-system.jsp)
+- [Materi pengantar UPS, genset, dan ATS](/materi/ups-genset-ats)

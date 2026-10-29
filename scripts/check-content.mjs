@@ -10,7 +10,7 @@ assert.ok(stages.every(s=>s.id&&s.name&&s.description&&s.prerequisite&&s.slugs.l
 for(const [before,after] of [['keselamatan-dc','multimeter'],['membaca-skema','komponen-dc-penggunaan'],['mengenal-arus-kuat','panel-kabel-beban'],['motor-elektromagnet','proteksi-motor'],['kontaktor-relay-panel','vfd-plc'],['kontrol-start-stop','star-delta-motor'],['star-delta-motor','vfd-plc']])assert.ok(slugs.indexOf(before)<slugs.indexOf(after),before+' should precede '+after);
 const bankSource=fs.readFileSync('lib/quiz-bank.ts','utf8');
 const bank=JSON.parse(bankSource.slice(bankSource.indexOf('= {',bankSource.indexOf('export const quizBank'))+2).replace(/;\s*$/,''));
-assert.equal(slugs.length,49);
+assert.equal(slugs.length,57);
 assert.equal(new Set(slugs).size,slugs.length);
 assert.deepEqual(new Set(fs.readdirSync('content/materi').map(x=>x.replace(/\.mdx$/,''))),new Set(slugs));
 for(const slug of slugs){

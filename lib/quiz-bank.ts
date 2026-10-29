@@ -1087,5 +1087,181 @@ export const quizBank: Record<string, Question[]> = {
       "a": 0,
       "why": "Periksa tegangan, pinout, jenis PoE, kapasitas dan kecocokan pengaman."
     }
+  ],
+  "keselamatan-loto": [
+    {
+      "q": "Lampu mesin padam membuktikan semua energi sudah aman?",
+      "o": [
+        "Tidak",
+        "Ya, selalu",
+        "Ya jika STOP ditekan"
+      ],
+      "a": 0,
+      "why": "Sumber cadangan dan energi tersimpan tetap perlu dikendalikan serta diverifikasi sesuai prosedur."
+    },
+    {
+      "q": "Kunci LOTO orang lain boleh dilepas demi mempercepat pekerjaan?",
+      "o": [
+        "Selalu boleh",
+        "Tidak boleh sembarangan",
+        "Boleh jika mesin sunyi"
+      ],
+      "a": 1,
+      "why": "Penguncian dan pelepasannya mengikuti kewenangan serta prosedur lokasi."
+    }
+  ],
+  "alat-ukur-lanjutan": [
+    {
+      "q": "Clamp mengelilingi arus pergi dan kembali dapat…",
+      "o": [
+        "Membaca efek bersih yang saling meniadakan",
+        "Selalu membaca jumlah arus",
+        "Membuktikan tidak ada arus"
+      ],
+      "a": 0,
+      "why": "Untuk arus beban biasa, posisi dan jenis alat harus sesuai. Pengukuran residual mempunyai tujuan berbeda."
+    },
+    {
+      "q": "Insulation tester sama dengan ohmmeter biasa?",
+      "o": [
+        "Ya dan aman untuk semua elektronik",
+        "Tidak, pengujian dapat memakai tegangan tinggi",
+        "Ya, tidak ada sumber tegangan uji"
+      ],
+      "a": 1,
+      "why": "Objek, isolasi sumber, tegangan uji dan pengendalian muatan harus sesuai prosedur."
+    }
+  ],
+  "membaca-datasheet-derating": [
+    {
+      "q": "Absolute maximum ratings merupakan…",
+      "o": [
+        "Batas stres, bukan target operasi normal",
+        "Rekomendasi operasi terus-menerus",
+        "Jaminan semua batas boleh bersamaan"
+      ],
+      "a": 0,
+      "why": "Gunakan recommended conditions dan seluruh batas terkait pada dokumen."
+    },
+    {
+      "q": "Rating 100 W dengan faktor kondisi fiktif 60% menghasilkan…",
+      "o": [
+        "160 W",
+        "60 W diizinkan pada kondisi contoh",
+        "100 W tanpa syarat"
+      ],
+      "a": 1,
+      "why": "Beban harus mengikuti kurva dan kondisi yang benar, bukan label utama saja."
+    }
+  ],
+  "koordinasi-pengaman": [
+    {
+      "q": "Pengaman hulu 32 A dan cabang 16 A pasti selektif?",
+      "o": [
+        "Belum dapat disimpulkan",
+        "Selalu selektif",
+        "Selalu tidak selektif"
+      ],
+      "a": 0,
+      "why": "Periksa kurva, arus gangguan, tegangan serta data pasangan produsen."
+    },
+    {
+      "q": "Back-up protection sama dengan selektivitas?",
+      "o": [
+        "Ya, selalu",
+        "Tidak otomatis",
+        "Keduanya kapasitas baterai"
+      ],
+      "a": 1,
+      "why": "Kemampuan pemutusan kombinasi dan pemutusan selektif adalah hal berbeda."
+    }
+  ],
+  "catu-daya-poe-jaringan": [
+    {
+      "q": "Delapan port PoE menjamin seluruh port dapat memakai daya maksimum bersamaan?",
+      "o": [
+        "Tidak",
+        "Ya, pasti",
+        "Ya selama kabel RJ45"
+      ],
+      "a": 0,
+      "why": "Batas per port dan total budget harus sama-sama memenuhi kebutuhan."
+    },
+    {
+      "q": "Alokasi latihan 48 W dan 32 W dengan budget 60 W…",
+      "o": [
+        "Memenuhi karena dua kelompok",
+        "Tidak memenuhi karena total 80 W",
+        "Tidak perlu dijumlahkan"
+      ],
+      "a": 1,
+      "why": "Bandingkan nilai pada sisi sistem yang konsisten dan periksa batas per port."
+    }
+  ],
+  "baterai-ups-runtime": [
+    {
+      "q": "Rating 1.000 VA berarti runtime satu jam?",
+      "o": [
+        "Tidak",
+        "Ya",
+        "Ya pada semua baterai"
+      ],
+      "a": 0,
+      "why": "Daya dan energi berbeda; runtime mengikuti beban serta karakteristik sistem."
+    },
+    {
+      "q": "Energi ke beban 72 Wh dengan beban tetap 24 W memiliki waktu model…",
+      "o": [
+        "24 jam",
+        "3 jam",
+        "72 jam"
+      ],
+      "a": 1,
+      "why": "t = E/P. Hasil model bukan jaminan UPS nyata."
+    }
+  ],
+  "monitoring-kelistrikan": [
+    {
+      "q": "Timeout pembacaan tegangan sebaiknya…",
+      "o": [
+        "Ditandai data tidak tersedia",
+        "Diubah menjadi nol valid",
+        "Dianggap listrik pasti padam"
+      ],
+      "a": 0,
+      "why": "Kualitas data perlu dibedakan dari nilai fisik yang sah."
+    },
+    {
+      "q": "Register bernilai 2300 dengan skala 0,1 V berarti…",
+      "o": [
+        "2300 V",
+        "230 V",
+        "23.000 V"
+      ],
+      "a": 1,
+      "why": "Skala dan satuan harus diverifikasi sebelum alarm dibuat."
+    }
+  ],
+  "dokumentasi-inspeksi-listrik": [
+    {
+      "q": "Diagram as-built dan label berbeda. Langkah yang tepat…",
+      "o": [
+        "Minta verifikasi dan pembaruan melalui penanggung jawab",
+        "Langsung melepas kabel",
+        "Menganggap diagram selalu benar"
+      ],
+      "a": 0,
+      "why": "Ketidaksesuaian dokumen perlu ditangani sebelum dipakai sebagai dasar pekerjaan."
+    },
+    {
+      "q": "Foto saja cukup untuk menyatakan hasil uji instalasi lolos?",
+      "o": [
+        "Ya",
+        "Tidak",
+        "Ya jika resolusinya tinggi"
+      ],
+      "a": 1,
+      "why": "Laporan memerlukan objek, metode, alat, kondisi, hasil dan kriteria yang relevan."
+    }
   ]
 };

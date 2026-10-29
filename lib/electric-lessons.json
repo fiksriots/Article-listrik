@@ -292,5 +292,53 @@
     "title": "Studi Kasus: Grounding dan Surja pada BTS, Radio, dan CCTV",
     "summary": "Telusuri daya, Ethernet/PoE, struktur logam, inspeksi, dan batas diagnosis setelah hujan.",
     "minutes": 28
+  },
+  {
+    "slug": "keselamatan-loto",
+    "title": "Keselamatan Kerja dan LOTO: STOP Bukan Isolasi",
+    "summary": "Kenali sumber energi, penguncian, energi tersimpan, verifikasi, dan batas peran pemula.",
+    "minutes": 25
+  },
+  {
+    "slug": "alat-ukur-lanjutan",
+    "title": "Clamp Meter, Earth Tester, dan Insulation Tester",
+    "summary": "Bedakan besaran yang diuji, batas alat, dan cara membaca laporan tanpa menyamakan semua angka ohm.",
+    "minutes": 28
+  },
+  {
+    "slug": "membaca-datasheet-derating",
+    "title": "Membaca Datasheet dan Kurva Derating",
+    "summary": "Pahami kondisi pengujian, batas operasi, suhu, dan mengapa rating brosur tidak selalu tersedia di setiap keadaan.",
+    "minutes": 25
+  },
+  {
+    "slug": "koordinasi-pengaman",
+    "title": "Koordinasi MCB, MCCB, Fuse, dan Overload",
+    "summary": "Pahami selektivitas, kurva trip, kemampuan pemutusan, dan mengapa rating ampere saja belum cukup.",
+    "minutes": 28
+  },
+  {
+    "slug": "catu-daya-poe-jaringan",
+    "title": "Catu Daya Jaringan: Adaptor, SMPS, dan Anggaran PoE",
+    "summary": "Bedakan sumber dan beban, PoE pasif/aktif, kebutuhan per port serta batas total daya switch.",
+    "minutes": 28
+  },
+  {
+    "slug": "baterai-ups-runtime",
+    "title": "Baterai dan Runtime UPS: Ah, Wh, serta Rugi Konversi",
+    "summary": "Hitung perkiraan energi secara terbatas dan bedakan kapasitas UPS dengan lama cadangannya.",
+    "minutes": 28
+  },
+  {
+    "slug": "monitoring-kelistrikan",
+    "title": "Monitoring Kelistrikan: Energi, Tren, dan Alarm",
+    "summary": "Ubah data tegangan, arus, energi dan suhu menjadi pemantauan yang membantu pemeliharaan.",
+    "minutes": 26
+  },
+  {
+    "slug": "dokumentasi-inspeksi-listrik",
+    "title": "Dokumentasi dan Inspeksi Kelistrikan",
+    "summary": "Susun diagram, daftar beban, label, bukti pengukuran dan riwayat gangguan agar pemeriksaan tidak menebak.",
+    "minutes": 25
   }
 ]

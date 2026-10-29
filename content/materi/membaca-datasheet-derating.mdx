@@ -1,0 +1,43 @@
+---
+title: "Membaca Datasheet dan Kurva Derating"
+summary: "Pahami kondisi pengujian, batas operasi, suhu, dan mengapa rating brosur tidak selalu tersedia di setiap keadaan."
+---
+<LearningHook>Catu daya tertulis 100 W. Mengapa di dalam kabinet panas kemampuan yang diizinkan bisa lebih rendah?</LearningHook>
+
+## 1. Datasheet adalah angka beserta syaratnya
+Label membantu mengenali rating utama. Datasheet menjelaskan kondisi yang membuat rating itu berlaku. Seperti kapasitas angkut kendaraan, kemampuan tidak dinilai dari satu angka tanpa kondisi jalan dan pemakaian. Gunakan model, varian, dan revisi dokumen yang benar.
+
+## 2. Baca bagian ini terlebih dahulu
+| Bagian | Pertanyaan utama |
+|---|---|
+| Recommended operating conditions | Dalam kondisi apa operasi normal dirancang berlangsung? |
+| Absolute maximum ratings | Batas stres apa yang tidak boleh dilampaui, bukan target operasi? |
+| Electrical characteristics | Pada kondisi uji apa hasil minimum, typical dan maksimum dinyatakan? |
+| Thermal/derating | Bagaimana suhu, pemasangan atau kondisi lain membatasi kemampuan? |
+| Pinout/mechanical | Bagaimana terminal dan ukuran fisik produk yang tepat? |
+
+Angka typical bukan jaminan bahwa setiap unit pada semua kondisi memiliki nilai persis sama. Angka maksimum dari baris berbeda juga tidak otomatis boleh terjadi serentak. Baca catatan kaki serta hubungan antarbatas.
+
+<figure><img src="/diagrams/electric-derating.svg" width="840" height="420" alt="Contoh fiktif: kemampuan 100 watt pada kondisi A menjadi 60 watt pada kondisi B; nilai bergantung kurva dan syarat produk" /><figcaption>Data latihan fiktif. Bukan kurva produk tertentu atau aturan derating universal.</figcaption></figure>
+
+## 3. Derating berarti menurunkan kemampuan yang diizinkan
+Suhu sekitar, ventilasi, orientasi pemasangan, tegangan input, ketinggian atau pengelompokan dapat berpengaruh, bergantung produk. Jangan memakai batas casing sebagai suhu udara sekitar, atau mencampur derajat Celsius dengan persentase beban.
+
+<Formula label="Membaca contoh fiktif" expression="Daya diizinkan = 100 W × 60% = 60 W">
+Jika dokumen latihan menyatakan faktor 60% pada kondisi tertentu, beban 75 W tidak memenuhi batas itu meskipun label utama 100 W. Ini latihan membaca satu kondisi, bukan cara menetapkan kurva baru sendiri.
+</Formula>
+
+## 4. Contoh seleksi komponen
+Relay yang mencantumkan suatu arus untuk beban resistif tidak otomatis cocok untuk motor dengan arus awal dan duty switching berbeda. Catu daya harus dinilai terhadap arus awal beban, proteksi, kondisi pemasangan dan kebutuhan transien. Persentase cadangan yang dipilih bukan pengganti batas datasheet.
+
+## Studi kasus: dua produk 24 V tampak sama
+Produk A dan B sama-sama 24 V 5 A pada label. Namun kondisi suhu, proteksi, isolasi, ripple atau persyaratan ventilasinya bisa berbeda. Buat tabel perbandingan dengan syarat dan sumber halaman; jangan hanya membandingkan 120 W hasil perkalian label.
+
+## Latihan dan pembahasan
+Pada lembar latihan, operating range maksimum adalah 12 V dan absolute maximum 15 V. Apakah operasi terus-menerus 14 V dibenarkan? **Tidak:** berada di bawah batas stres tidak membuktikan operasi normal dijamin. Ikuti rentang operasi serta seluruh syarat produk.
+
+<LearningCheck question="Apakah absolute maximum adalah target operasi yang disarankan?" answer="Tidak. Itu batas stres, bukan jaminan fungsi normal. Operasi mengikuti recommended conditions dan syarat lain pada dokumen." />
+
+## Referensi
+- [Toshiba: absolute maximum dan operating conditions](https://toshiba.semicon-storage.com/eu/semiconductor/knowledge/faq/motor-driver-ics/what-are-the-differences-between-the-absolute-maximum-ratings-and-the-recommended-operating-conditions.html)
+- [MEAN WELL: pengaruh pemasangan dan kurva derating](https://www.meanwellusa.com/qa.aspx?c=10)

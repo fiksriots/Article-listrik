@@ -1,0 +1,41 @@
+---
+title: "Monitoring Kelistrikan: Energi, Tren, dan Alarm"
+summary: "Ubah data tegangan, arus, energi dan suhu menjadi pemantauan yang membantu pemeliharaan."
+---
+<LearningHook>Dashboard menampilkan banyak angka. Mana yang membantu menemukan masalah sebelum perangkat padam?</LearningHook>
+
+## 1. Tentukan tujuan pemantauan
+Monitoring bukan sekadar mengumpulkan semua register. Tentukan pertanyaan: apakah beban meningkat, UPS sering berpindah ke baterai, suhu kabinet berubah, atau satu cabang menyimpang? Jawabannya menentukan titik ukur, interval, ketelitian dan alarm.
+
+<figure><img src="/diagrams/electric-monitoring.svg" width="840" height="420" alt="Alur monitoring: alat ukur yang terpasang sesuai rancangan, komunikasi, validasi satuan, penyimpanan tren, lalu alarm dan tindak lanjut" /><figcaption>Arsitektur data konseptual; bukan wiring sensor atau CT pada panel.</figcaption></figure>
+
+## 2. Baca besaran dan satuannya
+| Besaran | Kegunaan | Jebakan |
+|---|---|---|
+| V, A, W | Kondisi operasi pada waktu pengambilan | Satu sampel belum merekam semua transien |
+| Wh/kWh | Energi terakumulasi | Berbeda dari watt; counter bisa reset/berganti |
+| Faktor daya | Hubungan daya aktif dan semu | Definisi total/displacement harus diketahui |
+| Suhu | Tren kondisi lokasi sensor | Suhu udara berbeda dari terminal atau junction komponen |
+| Status UPS/SPD | Peristiwa dan kondisi produk | Arti status mengikuti model; normal bukan jaminan sistem sempurna |
+
+## 3. Validasi sebelum membuat alarm
+Komunikasi dapat melalui Modbus, SNMP atau antarmuka lain sesuai perangkat. Cocokkan alamat/register/OID, tipe data, urutan byte, skala, satuan dan rasio pengukuran. Pembacaan 2300 dengan skala 0,1 V berarti 230 V, bukan 2300 V. Catat timestamp dan status kualitas data; jangan mengubah timeout menjadi angka nol yang tampak sah.
+
+Pemasangan meter, sensor dan current transformer dilakukan tenaga kompeten. Pada CT arus konvensional, membuka sekunder ketika arus primer mengalir dapat berbahaya. Jangan mencoba memasang CT atau mengubah kabel panel sebagai latihan dashboard.
+
+## 4. Alarm memerlukan konteks
+Gunakan batas dari kebutuhan perangkat, baseline dan rancangan. Durasi pelanggaran membantu mengurangi alarm dari satu sampel keliru; hysteresis mencegah status bolak-balik dekat ambang. Jangan memakai satu angka suhu atau tegangan sebagai batas universal.
+
+Contoh fiktif nonkeselamatan: sebuah tren operasional memberi peringatan setelah nilai melewati batas latihan selama beberapa sampel dan pulih pada batas berbeda. Aturan monitoring tersebut bukan pengganti pemutus proteksi, alarm keselamatan atau sistem real-time khusus.
+
+## Studi kasus: tegangan terbaca nol tetapi switch hidup
+Kemungkinan mencakup kehilangan komunikasi atau parsing register, bukan hanya listrik padam. Pisahkan status data tidak tersedia dari pembacaan nol yang valid. Cocokkan log komunikasi, waktu, dan indikator sumber lain sebelum eskalasi.
+
+## Latihan dan pembahasan
+Buat empat kolom: timestamp, nilai, satuan, kualitas data. Masukkan satu baris timeout tanpa nilai numerik. Jelaskan mengapa rata-rata tidak boleh diam-diam menganggap timeout sebagai 0 V. Tambahkan daftar tindak lanjut untuk alarm yang benar-benar valid.
+
+<LearningCheck question="Apakah polling tiap menit cukup untuk menganalisis semua surja singkat?" answer="Tidak. Interval dan kemampuan alat menentukan apa yang terlihat. Kejadian cepat memerlukan perekaman dan alat yang sesuai." />
+
+## Referensi
+- [Schneider Electric: keselamatan dan orientasi CT](https://www.se.com/au/en/faqs/FA219147/)
+- [Fluke: dasar analisis kualitas daya](https://www.fluke.com/en-us/learn/blog/power-quality/a-fresh-look-at-power-quality-basics)

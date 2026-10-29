@@ -1,0 +1,50 @@
+---
+title: "Dokumentasi dan Inspeksi Kelistrikan"
+summary: "Susun diagram, daftar beban, label, bukti pengukuran dan riwayat gangguan agar pemeriksaan tidak menebak."
+---
+<LearningHook>Teknisi berganti shift. Bagaimana ia tahu sumber mana yang memasok rak dan perubahan apa yang pernah dilakukan?</LearningHook>
+
+## 1. Dokumen membantu orang berikutnya bekerja dengan benar
+Dokumentasi seperti peta dan riwayat perjalanan. Diagram yang tidak diperbarui dapat memberi kesan aman yang keliru. Bedakan gambar rencana, gambar as-built, catatan perubahan dan hasil pengujian. Tulis tanggal, revisi, penyusun serta status verifikasinya.
+
+<figure><img src="/diagrams/electric-documentation.svg" width="840" height="420" alt="Empat dokumen yang saling melengkapi: diagram sumber, daftar beban, laporan pengukuran, dan catatan perubahan atau tindak lanjut" /><figcaption>Contoh struktur dokumentasi, bukan sertifikat laik atau format wajib semua fasilitas.</figcaption></figure>
+
+## 2. Paket dokumen dasar
+| Dokumen | Isi yang membantu |
+|---|---|
+| Diagram satu garis | Sumber utama/cadangan, distribusi, identitas pengaman dan cabang |
+| Daftar beban | Model, daya masukan, tegangan, pola operasi dan sumber yang digunakan |
+| Label aset/kabel | Identitas yang konsisten dengan gambar; bukan hanya warna |
+| Laporan pengujian | Metode, titik, alat, kondisi, hasil, kriteria dan kesimpulan pemeriksa |
+| Riwayat perubahan | Apa yang diubah, alasan, otorisasi serta dokumen yang terdampak |
+
+Label tidak menggantikan verifikasi; tulisan yang salah tetap mungkin terjadi. Referensi gambar harus menjelaskan konteks N, PE, sistem pembumian dan sumber cadangan sesuai rancangan.
+
+## 3. Pisahkan pengamatan dari diagnosis
+“Terlihat perubahan warna pada konektor dari lokasi aman” merupakan pengamatan. “Pasti korslet karena beban berlebih” adalah diagnosis yang membutuhkan bukti tambahan. Catat gejala, waktu, kondisi dan tindakan tanpa membuat kesimpulan yang belum didukung.
+
+Inspeksi visual dari posisi aman berbeda dari membuka panel, thermography melalui akses tertentu, pengujian isolasi atau pengukuran pembumian. Setiap pekerjaan memiliki kompetensi, alat, izin dan pengendalian energi yang sesuai. Materi ini tidak mengizinkan membuka penutup atau menyentuh sambungan.
+
+## 4. Contoh catatan yang bisa ditindaklanjuti
+| Kolom | Contoh fiktif |
+|---|---|
+| Waktu dan aset | 09.15, UPS-R01 |
+| Gejala | Alarm baterai tercatat dua kali pada log |
+| Kondisi | Beban terlapor 30%, komunikasi normal |
+| Bukti | Ekspor log dan identitas model; tidak membuka perangkat |
+| Tindak lanjut | Dijadwalkan pemeriksaan sesuai manual oleh personel berwenang |
+
+Jangan menyebut “lolos” tanpa menyatakan apa yang diuji dan kriteria mana yang dipakai. Foto tanpa metode tidak menggantikan laporan uji. Data sensitif seperti kredensial atau detail akses internal disimpan melalui prosedur organisasi, bukan ditempel pada dokumentasi publik.
+
+## Studi kasus: cabang baru tidak muncul pada gambar
+Cabang terlihat di lapangan, tetapi diagram menunjukkan konfigurasi lama. Jangan mengandalkan gambar sebagai satu-satunya dasar isolasi. Tandai ketidaksesuaian dan minta verifikasi serta pembaruan as-built melalui penanggung jawab; jangan langsung melepas kabel untuk mencari tahu.
+
+## Latihan dan pembahasan
+Buat diagram latihan PLN → UPS → rak dengan ID sumber dan beban. Tambahkan catatan revisi saat satu perangkat dipindah sumber. Periksa apakah daftar beban, label dan diagram masih konsisten. Ini latihan administrasi teknis, bukan rancangan instalasi siap pasang.
+
+<LearningCheck question="Apakah foto panel saja cukup menggantikan laporan pengujian?" answer="Tidak. Laporan perlu menjelaskan objek, metode, alat, kondisi, hasil dan kriteria yang digunakan. Foto hanya salah satu bentuk bukti." />
+
+## Baca terkait
+- [Membaca skema dan diagram](/materi/membaca-skema)
+- [Keselamatan dan pengendalian energi](/materi/keselamatan-loto)
+- [Studi kasus pemeriksaan outdoor](/materi/proteksi-bts-cctv-outdoor)
