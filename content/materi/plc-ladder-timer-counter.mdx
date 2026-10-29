@@ -1,0 +1,43 @@
+---
+title: "Pendalaman PLC: Ladder, Timer, Counter, dan Interlock"
+summary: "Telusuri logika input–output melalui tabel keadaan dan simulasi kertas sebelum memakai perangkat nyata."
+---
+<LearningHook>Tombol sensor ditahan dua detik. Mengapa counter yang benar tidak menghitung ratusan barang?</LearningHook>
+
+## 1. Program membaca keadaan, bukan memahami maksud operator
+PLC menjalankan tugas dan memperbarui data sesuai arsitektur serta konfigurasi. Untuk latihan, gunakan model siklus: keadaan input tersedia → logika dievaluasi → hasil output diperbarui. Ini penyederhanaan, bukan urutan universal semua PLC. Process image, interrupt dan akses I/O langsung dapat membuat perilaku berbeda.
+
+<DeviceGuide type="plc" />
+<figure><img src="/diagrams/advanced-plc.svg" width="840" height="420" alt="Model pembelajaran PLC: status input, evaluasi logika, timer atau counter, dan hasil output virtual" /><figcaption>Latihan virtual; bukan rangkaian keselamatan atau program mesin siap dipasang.</figcaption></figure>
+
+## 2. Kontak pada ladder tidak selalu kontak fisik
+Instruksi pemeriksa bit menjawab apakah nilai logika bernilai 1 atau 0. Simbol pada ladder tidak membuktikan tombol fisik memakai NO atau NC. Misalnya tag STOP_OK dapat bernilai 1 ketika kondisi normal, walaupun perangkat fisiknya memakai kontak NC. Pemetaan I/O dan penamaan tag harus dijelaskan.
+
+| Tag latihan | Arti nilai 1 |
+|---|---|
+| START_REQ | Ada permintaan mulai |
+| STOP_OK | Kondisi berhenti operasional tidak diminta |
+| PROCESS_OK | Syarat proses virtual terpenuhi |
+| RUN_MEMORY | Memori perintah jalan pada model |
+
+Aturan model: RUN_MEMORY berikutnya = STOP_OK AND PROCESS_OK AND (START_REQ OR RUN_MEMORY). Ini membantu memahami pengunci, bukan membuktikan fungsi keselamatan mesin. Status awal dan perilaku saat listrik kembali harus ditentukan.
+
+## 3. Timer TON dan counter berbasis tepi
+Timer on-delay pada model memberi keluaran setelah input tetap aktif selama waktu yang ditentukan. Jika input hilang sebelum waktu tercapai, timer nonretentif model kembali ke keadaan awal. Instruksi nyata mempunyai aturan reset, retensi dan presisi yang harus dibaca pada manual.
+
+Counter naik umumnya menghitung perubahan 0→1, bukan menambah setiap scan selama input tetap 1. Tombol atau sensor dapat mengalami bounce; penanganan sinyal dan filter mengikuti kebutuhan. Pulsa yang terlalu cepat juga bisa terlewat bila hanya mengandalkan tugas biasa.
+
+## Studi kasus: menghitung tiga barang
+Catatan sensor per sampel: 0, 1, 1, 0, 1, 0, 1. Ada tiga tepi naik, sehingga model counter bertambah tiga. Bila kode menambah setiap sampel bernilai 1, hasilnya empat dan tidak mewakili jumlah barang pada model tersebut.
+
+## 4. Interlock dan pemulihan
+Buat dua tag virtual MAJU dan MUNDUR yang saling melarang. Kehilangan syarat harus menghasilkan keadaan yang dirancang, bukan otomatis melanjutkan semua memori. PLC biasa, memori program dan indikator layar bukan pengganti safety PLC atau rangkaian keselamatan yang dinilai sesuai risiko.
+
+## Latihan dan pembahasan
+Buat tabel setiap perubahan START_REQ, STOP_OK, RUN_MEMORY, nilai timer dan counter. Mulai dari keadaan OFF. Minta timer 3 detik, lalu batalkan input setelah 2 detik: pada TON nonretentif model, keluaran belum aktif dan hitungan waktu kembali awal. Lakukan pada simulator perangkat lunak atau kertas, bukan dengan memaksa output mesin.
+
+<LearningCheck question="Apakah input sensor tetap 1 harus dihitung ulang setiap scan?" answer="Tidak untuk menghitung kejadian tepi naik. Counter tersebut bertambah ketika terjadi perubahan 0 ke 1 sesuai semantik instruksinya." />
+
+## Referensi
+- [Siemens: konsep siklus program](https://docs.tia.siemens.cloud/r/simatic_s7_1200_manual_collection_enus_20/plc-concepts/execution-of-the-user-program/processing-the-scan-cycle-in-run-mode)
+- [Siemens: instruksi CTU](https://docs.tia.siemens.cloud/r/en-us/v20/fbd-s7-1200-s7-1500/counter-operations-s7-1200-s7-1500/ctu-count-up-s7-1200-s7-1500)

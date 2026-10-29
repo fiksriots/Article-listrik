@@ -60,11 +60,12 @@ export const stages = [
   {
     "id": "tenaga",
     "name": "Pengenalan listrik arus kuat",
-    "description": "Ikuti perjalanan energi, satu/tiga fasa, faktor daya, dan kualitas pasokan.",
+    "description": "Ikuti perjalanan energi, dasar PLTS, satu/tiga fasa, faktor daya dan kualitas pasokan.",
     "prerequisite": "Kuasai dasar AC/DC dan perhitungan daya.",
     "slugs": [
       "mengenal-arus-kuat",
       "pembangkit-trafo",
+      "dasar-plts-komponen",
       "satu-tiga-phase",
       "daya-ac-faktor-daya",
       "kualitas-daya",
@@ -107,7 +108,7 @@ export const stages = [
   {
     "id": "motor",
     "name": "Motor dan otomasi",
-    "description": "Baca nameplate, kenali kontaktor dan proteksi, lalu DOL, maju–mundur, star–delta, VFD, dan PLC.",
+    "description": "Pahami motor dan starter, lalu sinyal industri, PLC, VFD, serta perawatan berbasis kondisi.",
     "prerequisite": "Pahami distribusi dan fungsi pengaman; mulai dari simulasi.",
     "slugs": [
       "motor-elektromagnet",
@@ -118,13 +119,17 @@ export const stages = [
       "kontrol-forward-reverse",
       "star-delta-motor",
       "sensor-industri-sinyal",
-      "vfd-plc"
+      "sensor-analog-pnp-npn",
+      "vfd-plc",
+      "plc-ladder-timer-counter",
+      "vfd-parameter-diagnosis",
+      "perawatan-motor-kondisi"
     ]
   },
   {
     "id": "penerapan",
     "name": "Penerapan dan troubleshooting",
-    "description": "Terapkan fondasi pada baterai/UPS, catu daya–PoE, outdoor, monitoring, dokumentasi, dan troubleshooting.",
+    "description": "Terapkan daya dan monitoring, nilai efisiensi, lalu gabungkan semuanya dalam proyek akhir rak jaringan.",
     "prerequisite": "Pahami instalasi, grounding–bonding, serta proteksi petir/SPD sebelum studi kasus outdoor.",
     "slugs": [
       "baterai-ups-runtime",
@@ -133,9 +138,11 @@ export const stages = [
       "catu-daya-poe-jaringan",
       "proteksi-bts-cctv-outdoor",
       "monitoring-kelistrikan",
+      "efisiensi-energi-audit",
       "dokumentasi-inspeksi-listrik",
       "troubleshooting-power",
-      "simulasi-gangguan"
+      "simulasi-gangguan",
+      "proyek-akhir-rak-jaringan"
     ]
   }
 ];
