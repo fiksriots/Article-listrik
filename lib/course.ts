@@ -70,19 +70,34 @@ export const stages = [
   },
   {
     "id": "proteksi",
-    "name": "Instalasi dan sistem proteksi",
-    "description": "Bedakan netral/PE, jenis gangguan, pengaman, sambungan, dan pemilihan kabel.",
+    "name": "Dasar instalasi dan proteksi",
+    "description": "Pahami netral/PE, jenis gangguan, sambungan, lalu kabel, beban, dan panel.",
     "prerequisite": "Kenali tiga phase, sifat beban, dan perangkat AC.",
     "slugs": [
       "netral-grounding-proteksi",
       "jenis-gangguan-listrik",
       "terminal-sambungan-kabel",
-      "panel-kabel-beban",
+      "panel-kabel-beban"
+    ]
+  },
+  {
+    "id": "grounding-bonding",
+    "name": "Grounding dan bonding",
+    "description": "Kenali sistem pembumian, elektroda, pengukuran, dan hubungan ekuipotensial.",
+    "prerequisite": "Pahami PE, jenis gangguan, dan dasar instalasi/proteksi.",
+    "slugs": [
       "grounding-sistem-pembumian",
-      "bonding-ekuipotensial",
+      "bonding-ekuipotensial"
+    ]
+  },
+  {
+    "id": "petir-spd",
+    "name": "Proteksi petir dan SPD",
+    "description": "Bedakan sistem proteksi petir, arrester, rating SPD, dan koordinasi antarlapisan.",
+    "prerequisite": "Pahami grounding dan bonding sebelum membaca rancangan proteksi surja.",
+    "slugs": [
       "arrester-proteksi-petir",
-      "spd-pemilihan-koordinasi",
-      "proteksi-bts-cctv-outdoor"
+      "spd-pemilihan-koordinasi"
     ]
   },
   {
@@ -105,12 +120,13 @@ export const stages = [
   {
     "id": "penerapan",
     "name": "Penerapan dan troubleshooting",
-    "description": "Gabungkan konsep untuk daya cadangan, perangkat IT, dan analisis gangguan.",
-    "prerequisite": "Selesaikan fondasi; ulangi materi proteksi sebelum menganalisis gangguan.",
+    "description": "Terapkan fondasi pada daya cadangan, perangkat IT, BTS/CCTV outdoor, dan analisis gangguan.",
+    "prerequisite": "Pahami instalasi, grounding–bonding, serta proteksi petir/SPD sebelum studi kasus outdoor.",
     "slugs": [
       "ups-genset-ats",
-      "troubleshooting-power",
       "daya-cctv-server",
+      "proteksi-bts-cctv-outdoor",
+      "troubleshooting-power",
       "simulasi-gangguan"
     ]
   }
