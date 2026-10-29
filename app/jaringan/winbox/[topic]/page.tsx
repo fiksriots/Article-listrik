@@ -1,3 +1,4 @@
+import LessonReader from '@/components/lesson-reader';
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
@@ -46,7 +47,7 @@ export default async function WinboxLessonPage({params}: {params: Promise<{topic
       </header>
       <aside className="net-track-note"><p>Bagian dari <Link href={`${WINBOX_BASE}#submateri-winbox`}>Praktik Winbox</Link> di Learn Networking. Gambar diberi keterangan screenshot asli atau diagram konsep. Sebagian gambar hanya menunjukkan lokasi menu; dialog yang belum tersedia tetap dijelaskan dalam teks.</p></aside>
       {/* Content is curated repository HTML, never user-submitted markup. */}
-      <article className="net-article winbox-content" dangerouslySetInnerHTML={{__html: lesson.html}}/>
+      <LessonReader key={topic} catalog={WINBOX_BASE+"#submateri-winbox"} next={next?{href:WINBOX_BASE+"/"+next.slug,title:next.title}:undefined}/><article className="net-article winbox-content" dangerouslySetInnerHTML={{__html: lesson.html}}/>
       <ArticleShare title={lesson.title} summary={lesson.summary} path={`${WINBOX_BASE}/${topic}`}/>
       <CompleteLesson slug={winboxProgressSlug(topic)}/>
       <nav className="net-lesson-nav" aria-label="Urutan submateri Winbox">
