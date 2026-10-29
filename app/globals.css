@@ -39,3 +39,13 @@
 
 /* Allow the network menu to wrap after adding the troubleshooting hub. */
 .academy-header-network .academy-nav-menu{min-width:0}.academy-header-network .academy-nav-links{flex-wrap:wrap;min-width:0}.academy-header-network .academy-nav-actions{flex-shrink:0}
+/* Markdown article tables: semantic markup with scrolling contained to the table. */
+.article-table-block{min-width:0;max-width:100%;margin:24px 0}
+.article-table-scroll{max-width:100%;overflow-x:auto;border:1px solid #cbd5e1;border-radius:10px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.lesson-article .article-table-scroll table{display:table;width:100%;min-width:520px;max-width:none;margin:0;border-collapse:collapse;overflow:visible;font-size:14px;line-height:1.7}
+.lesson-article .article-table-scroll th,.lesson-article .article-table-scroll td{padding:12px 14px;text-align:left;vertical-align:top;border:1px solid #d7e0e7;overflow-wrap:anywhere}
+.lesson-article .article-table-scroll th{font-weight:750;background:#eff7f5;color:#244c44}
+.lesson-article .article-table-scroll tbody tr:nth-child(even){background:#f8fafb}
+.article-table-hint{display:none}
+@media(max-width:640px){.lesson-article .article-table-hint{display:block;margin:8px 0 0;font-size:11px;line-height:1.6;color:#687486}}
+.lesson-article .article-table-scroll th{white-space:nowrap;overflow-wrap:normal}
