@@ -4,11 +4,12 @@ export const stages = [
   {
     "id": "dasar",
     "name": "Dasar dan keselamatan",
-    "description": "Kenali listrik, satuan, sumber, label perangkat, dan cara belajar dengan aman.",
+    "description": "Kenali listrik, pengendalian energi, satuan, sumber, label perangkat, dan cara belajar dengan aman.",
     "prerequisite": "Belum perlu pengalaman listrik.",
     "slugs": [
       "apa-itu-listrik",
       "keselamatan-dc",
+      "keselamatan-loto",
       "volt-ampere-ohm",
       "konduktor-isolator-rangkaian",
       "ac-dc-sumber-listrik",
@@ -18,12 +19,13 @@ export const stages = [
   {
     "id": "rangkaian",
     "name": "Rangkaian dan pengukuran",
-    "description": "Hitung rangkaian sederhana, kenali alat ukur, lalu baca skemanya.",
+    "description": "Hitung rangkaian, pahami fungsi alat ukur, lalu baca skema tanpa menebak.",
     "prerequisite": "Pahami tegangan, arus, hambatan, dan sumber AC/DC.",
     "slugs": [
       "hukum-ohm-daya",
       "rangkaian-seri-paralel",
       "multimeter",
+      "alat-ukur-lanjutan",
       "membaca-skema"
     ]
   },
@@ -44,12 +46,13 @@ export const stages = [
   {
     "id": "konversi",
     "name": "Konversi energi dan kontrol dasar",
-    "description": "Pahami perubahan tegangan, pemilihan komponen, serta input–proses–output.",
+    "description": "Pahami konversi energi, pemilihan komponen, datasheet, dan kontrol dasar.",
     "prerequisite": "Kenali komponen dasar dan catu daya DC.",
     "slugs": [
       "kapasitor-induktor-ac-dc",
       "penyearah-regulator",
       "memilih-komponen-ac-dc",
+      "membaca-datasheet-derating",
       "saklar-no-nc",
       "sensor-relay-iot"
     ]
@@ -71,13 +74,14 @@ export const stages = [
   {
     "id": "proteksi",
     "name": "Dasar instalasi dan proteksi",
-    "description": "Pahami netral/PE, jenis gangguan, sambungan, lalu kabel, beban, dan panel.",
+    "description": "Pahami PE, gangguan, sambungan, kabel, panel, lalu koordinasi pengaman.",
     "prerequisite": "Kenali tiga phase, sifat beban, dan perangkat AC.",
     "slugs": [
       "netral-grounding-proteksi",
       "jenis-gangguan-listrik",
       "terminal-sambungan-kabel",
-      "panel-kabel-beban"
+      "panel-kabel-beban",
+      "koordinasi-pengaman"
     ]
   },
   {
@@ -120,12 +124,16 @@ export const stages = [
   {
     "id": "penerapan",
     "name": "Penerapan dan troubleshooting",
-    "description": "Terapkan fondasi pada daya cadangan, perangkat IT, BTS/CCTV outdoor, dan analisis gangguan.",
+    "description": "Terapkan fondasi pada baterai/UPS, catu daya–PoE, outdoor, monitoring, dokumentasi, dan troubleshooting.",
     "prerequisite": "Pahami instalasi, grounding–bonding, serta proteksi petir/SPD sebelum studi kasus outdoor.",
     "slugs": [
+      "baterai-ups-runtime",
       "ups-genset-ats",
       "daya-cctv-server",
+      "catu-daya-poe-jaringan",
       "proteksi-bts-cctv-outdoor",
+      "monitoring-kelistrikan",
+      "dokumentasi-inspeksi-listrik",
       "troubleshooting-power",
       "simulasi-gangguan"
     ]

@@ -1,0 +1,41 @@
+---
+title: "Catu Daya Jaringan: Adaptor, SMPS, dan Anggaran PoE"
+summary: "Bedakan sumber dan beban, PoE pasif/aktif, kebutuhan per port serta batas total daya switch."
+---
+<LearningHook>Switch mempunyai delapan port PoE. Mengapa belum tentu bisa menyalakan delapan kamera dengan konsumsi maksimum sekaligus?</LearningHook>
+
+## 1. Ikuti perjalanan energi
+Adaptor atau catu daya mengubah dan menyediakan energi. Switch/injector PoE yang menjadi **PSE** menyediakan daya ke **PD**, misalnya kamera atau access point. Data dan daya berbagi kabel dalam sistem yang dirancang untuk itu, tetapi kemampuan dayanya tetap memiliki batas.
+
+<figure><img src="/diagrams/electric-poe-budget.svg" width="840" height="420" alt="Batas per port dan batas total switch harus dipenuhi bersama; contoh kebutuhan 80 watt dibanding anggaran fiktif 60 watt tidak memenuhi" /><figcaption>Contoh anggaran fiktif, bukan spesifikasi switch atau rekomendasi produk.</figcaption></figure>
+
+## 2. Cocokkan jenis suplai sebelum menghitung watt
+Label 12 V DC, 24 V DC dan dukungan PoE tidak saling menggantikan. Periksa tegangan, konektor, polaritas/pinout, jenis PoE dan manual model. **PoE pasif tidak otomatis kompatibel dengan IEEE 802.3af/at/bt.** Sistem berbasis standar menggunakan mekanisme identifikasi/negosiasi sesuai dukungannya; jangan menganggap injeksi tegangan langsung sama dengan mekanisme itu.
+
+SMPS adalah prinsip konversi switching, bukan jaminan kecocokan atau kualitas semua adaptor. Jangan membuka adaptor atau menyambung DC ke pin Ethernet berdasarkan warna kabel. Untuk perangkat outdoor, periksa juga kesesuaian SPD data dan bonding pada [studi kasus BTS](/materi/proteksi-bts-cctv-outdoor).
+
+## 3. Dua anggaran yang harus dipenuhi
+| Batas | Pertanyaan |
+|---|---|
+| Per port | Apakah port memenuhi kebutuhan kelas/tegangan/daya PD sesuai sistem? |
+| Total PoE budget | Apakah semua alokasi port dapat dipenuhi bersamaan? |
+| Catu daya switch | Apakah varian PSU dan kondisi operasi mendukung budget tersebut? |
+| Kebutuhan di PD | Apakah daya yang diterima setelah rugi kabel masih memenuhi kebutuhan? |
+
+Daya pada sisi sumber tidak selalu sama dengan yang tersedia di PD. Kebutuhan maksimum saat IR kamera, pemanas, radio atau fitur tambahan bekerja dapat berbeda dari konsumsi saat siang/idle. Budget dapat memakai alokasi kelas atau kebijakan tertentu, bukan hanya angka konsumsi sesaat.
+
+<Formula label="Latihan alokasi daya fiktif" expression="4 kamera × 12 W + 2 AP × 16 W = 80 W">
+Angka latihan ini dinyatakan sebagai alokasi pada sisi PSE setelah memperhitungkan kebutuhan sistem. Switch dengan budget fiktif 60 W tidak memenuhi 80 W tersebut. Memiliki delapan port tidak mengubah batas total itu. Periksa juga syarat per port dan kondisi serentak.
+</Formula>
+
+## Studi kasus: kamera normal siang, restart malam
+Salah satu kemungkinan adalah kebutuhan IR menaikkan konsumsi sehingga budget atau suplai tidak mencukupi. Namun kabel, tegangan, suhu, dan kerusakan perangkat juga perlu dinilai. Bandingkan log PoE, alokasi port dan kondisi kamera, bukan langsung mengganti PSU dengan tegangan lebih tinggi.
+
+## Latihan dan pembahasan
+Susun inventaris: model, jenis suplai, kebutuhan maksimum, alokasi port dan total budget. Jangan menjumlahkan daya PD lalu menyamakannya langsung dengan budget PSE tanpa menilai rugi serta aturan alokasi. Gunakan data produsen dan margin sesuai kebutuhan desain.
+
+<LearningCheck question="Apakah jumlah port PoE membuktikan semua port bisa menyuplai daya maksimum bersamaan?" answer="Tidak. Batas per port dan total budget harus sama-sama dipenuhi, termasuk konfigurasi serta kondisi operasi." />
+
+## Referensi
+- [Microchip: istilah PSE, PD dan PoE](https://developerhelp.microchip.com/xwiki/bin/view/applications/ethernet/poe/terminology/)
+- [Microchip: jalur daya pada PoE](https://developerhelp.microchip.com/xwiki/bin/view/applications/ethernet/poe/power/)

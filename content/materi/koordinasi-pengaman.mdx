@@ -1,0 +1,40 @@
+---
+title: "Koordinasi MCB, MCCB, Fuse, dan Overload"
+summary: "Pahami selektivitas, kurva trip, kemampuan pemutusan, dan mengapa rating ampere saja belum cukup."
+---
+<LearningHook>Satu cabang bermasalah tetapi seluruh ruangan padam. Apakah cukup mengganti MCB utama dengan rating lebih besar?</LearningHook>
+
+## 1. Tujuan koordinasi
+Bayangkan gangguan pada satu jalan ditangani sedekat mungkin dengan lokasinya, sehingga jalan lain tetap bekerja. Koordinasi menyelaraskan perangkat proteksi dengan sumber, penghantar, beban dan gangguan yang mungkin terjadi. **Selektivitas** bertujuan agar pengaman yang relevan dengan gangguan bekerja tanpa memutus bagian sehat, dalam batas yang dinyatakan desain.
+
+<figure><img src="/diagrams/electric-selectivity.svg" width="840" height="420" alt="Sumber dan pengaman hulu membagi dua cabang; pada model gangguan satu cabang diisolasi sementara cabang lain tetap tersedia jika koordinasi terpenuhi" /><figcaption>Tujuan koordinasi secara konseptual. Gambar tidak membuktikan kombinasi perangkat tertentu selektif.</figcaption></figure>
+
+## 2. Peran pengaman tidak identik
+| Perangkat | Yang perlu dibaca |
+|---|---|
+| MCB | Arus nominal, karakteristik trip, kemampuan pemutusan, serta standar produk |
+| MCCB | Rating dan fungsi/setelan trip yang tersedia pada modelnya |
+| Fuse | Kelas, karakteristik waktu–arus, kemampuan pemutusan dan koordinasi |
+| Overload motor | Respons terhadap beban lebih sesuai aplikasi; bukan pengganti seluruh proteksi hubung singkat |
+
+Jangan menganggap semua MCCB memiliki setelan yang sama atau semua fuse bereaksi identik. RCCB/RCBO dan proteksi residual juga memiliki persoalan koordinasi tersendiri.
+
+## 3. Kurva waktu–arus adalah hubungan, bukan satu angka
+Sumbu arus menunjukkan besar arus; sumbu waktu menunjukkan lama respons dalam rentang yang dinyatakan. Perangkat biasanya mempunyai pita toleransi. Arus sedikit di atas nominal tidak berarti selalu terputus seketika. Arus awal motor perlu dibedakan dari gangguan, tanpa membiarkan kabel atau motor kehilangan proteksi.
+
+Membaca kurva yang tampak tidak tumpang tindih dapat membantu, tetapi belum selalu cukup untuk kondisi hubung singkat besar. Gunakan tabel koordinasi/selektivitas produsen untuk pasangan, tegangan dan kondisi yang tepat. Selektivitas parsial hanya berlaku sampai batas tertentu; jangan menyebutnya total tanpa bukti.
+
+## 4. Back-up protection bukan sinonim selektivitas
+Dalam kombinasi yang diuji, perangkat hulu dapat membantu kemampuan pemutusan perangkat hilir menurut ketentuan produsen. Itu tidak otomatis menjamin hanya perangkat hilir yang trip. Jangan membuat kombinasi lintasmodel secara perkiraan dari ukuran fisik atau rating ampere.
+
+## Studi kasus: hulu 32 A dan cabang 16 A
+Apakah pasti selektif karena angka 32 lebih besar dari 16? **Belum.** Perlu jenis/kurva perangkat, kondisi sumber, arus gangguan, tegangan, serta data kombinasi. Menaikkan hulu tanpa menilai kemampuan kabel dan sistem dapat menimbulkan risiko baru.
+
+## Latihan dan pembahasan
+Buat dua kolom: “cukup diketahui dari label ampere” dan “memerlukan data tambahan”. Masukkan kemampuan pemutusan, selektivitas dan kecocokan kabel ke kolom kedua. Gunakan [pemilihan kabel](/materi/panel-kabel-beban) sebagai bekal; perhitungan pada kertas bukan izin mengubah setelan panel.
+
+<LearningCheck question="Apakah dua rating ampere berbeda menjamin selektivitas?" answer="Tidak. Kurva, kemampuan pemutusan, kondisi gangguan dan data koordinasi pasangan harus diperiksa." />
+
+## Referensi
+- [Electrical Installation Guide: koordinasi circuit breaker](https://www.electrical-installation.org/enwiki/Coordination_between_circuit-breakers)
+- [ABB: teknik selektivitas](https://new.abb.com/low-voltage/solutions/selectivity/basic-concepts/selectivity-techniques)

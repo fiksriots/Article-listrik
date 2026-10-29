@@ -1,0 +1,40 @@
+---
+title: "Keselamatan Kerja dan LOTO: STOP Bukan Isolasi"
+summary: "Kenali sumber energi, penguncian, energi tersimpan, verifikasi, dan batas peran pemula."
+---
+<LearningHook>Mesin sudah berhenti dan layar gelap. Apakah aman membuka penutupnya?</LearningHook>
+
+## 1. Berhenti berbeda dari bebas energi
+Tombol STOP memberi perintah kepada sistem kontrol. Isolasi memisahkan sumber energi melalui perangkat yang sesuai. Bayangkan mematikan aplikasi berbeda dari memutus seluruh sumber yang dapat menyalakannya kembali. Mesin bisa memperoleh energi dari PLN, UPS, baterai, genset, atau bagian mekanis yang masih menyimpan energi.
+
+**LOTO, lockout/tagout**, adalah bagian program pengendalian energi berbahaya: perangkat isolasi dikendalikan menggunakan penguncian/penandaan menurut prosedur kerja. Tag bukan sekadar kertas “jangan dinyalakan”, dan tidak boleh dianggap selalu setara dengan penguncian. Peran, kewenangan, dan aturan lokasi menentukan penerapannya.
+
+<figure><img src="/diagrams/electric-loto.svg" width="840" height="420" alt="Konsep pengendalian energi: identifikasi seluruh sumber, isolasi dan kendalikan, tangani energi tersimpan, verifikasi oleh petugas berwenang" /><figcaption>Peta konsep untuk membaca prosedur. Bukan checklist lengkap yang memberi izin melakukan pekerjaan listrik.</figcaption></figure>
+
+## 2. Cari energi yang tidak terlihat
+| Sumber | Contoh | Mengapa STOP belum cukup |
+|---|---|---|
+| Listrik utama dan cadangan | PLN, UPS, genset, baterai | Sumber lain dapat tetap memasok atau melakukan backfeed |
+| Kapasitor | DC bus pada catu daya atau penggerak motor | Muatan bisa tersimpan setelah sumber diputus |
+| Mekanis | Pegas, beban tergantung, putaran motor | Gerakan atau pelepasan energi bisa tetap terjadi |
+| Tekanan | Pneumatik atau hidraulik | Tekanan tersimpan dapat menggerakkan bagian mesin |
+
+Tidak ada waktu tunggu universal yang membuat semua kapasitor aman. Jangan menjumper atau menyingkat kapasitor untuk mengosongkannya. Ikuti manual dan prosedur yang dikerjakan petugas kompeten.
+
+## 3. Memahami alurnya tanpa melakukan pekerjaan berbahaya
+Pelajari siapa penanggung jawabnya, batas area, sumber mana yang diisolasi, bagaimana energi tersimpan dikendalikan, dan bagaimana isolasi diverifikasi. Kondisi bebas energi tidak dibuktikan hanya dengan lampu indikator padam, beep kontinuitas, atau alat nonkontak. Pengujian listrik memerlukan metode, alat, dan personel yang sesuai; petugas memastikan alat berfungsi sesuai prosedur sebelum dan sesudah pengujian.
+
+Bila energi dapat terkumpul kembali, pengendalian dan verifikasi harus mempertimbangkannya selama pekerjaan. Pergantian shift, beberapa pekerja, serta pemulihan suplai memerlukan aturan khusus. Jangan melepas kunci orang lain atau menjalankan mesin untuk “membantu” tanpa proses yang ditetapkan.
+
+## Studi kasus: rak jaringan mati, tetapi UPS masih aktif
+Operator mematikan MCB ruangan. Output UPS tetap menyuplai sebagian perangkat. Kesimpulan “MCB OFF berarti semua mati” salah. Diagram sumber dan daftar perangkat diperlukan untuk menentukan batas isolasi, bukan mencoba menyentuh konduktor untuk memastikan.
+
+## Latihan dan pembahasan
+Pada kertas, gambarkan PLN → UPS → switch. Tambahkan baterai di UPS dan genset sebagai sumber alternatif. Tandai alasan satu pemutus mungkin belum memisahkan semuanya. Tujuannya mengenali beberapa sumber; penentuan isolasi nyata tetap mengikuti rancangan serta prosedur lokasi.
+
+<LearningCheck question="Apakah tombol emergency stop sama dengan isolasi energi untuk perawatan?" answer="Tidak otomatis. Emergency stop dan perangkat isolasi memiliki tujuan berbeda; pengendalian energi untuk perawatan harus mengikuti prosedur yang sesuai." />
+
+## Referensi
+- [OSHA: pengendalian energi berbahaya](https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147)
+- [OSHA: batas penggunaan rangkaian kontrol sebagai isolasi](https://www.osha.gov/etools/lockout-tagout/hot-topics/energy-control-program/energy-control-circuitry-prohibition)
+Rujukan OSHA digunakan untuk konsep pembelajaran, bukan pernyataan bahwa aturan Amerika menggantikan ketentuan Indonesia atau prosedur tempat kerja.
