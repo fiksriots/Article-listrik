@@ -18,7 +18,9 @@
     "check:mtcre-curriculum": "python scripts/check-mtcre-curriculum.py",
     "check:mtcna": "python scripts/check-mtcna.py",
     "check:path": "node scripts/check-learning-path.cjs",
-    "test:path": "node scripts/check-path-browser.cjs"
+    "test:path": "node scripts/check-path-browser.cjs",
+    "check:tables": "node scripts/check-article-tables.mjs",
+    "test:tables": "node scripts/check-article-tables.mjs && node scripts/check-table-browser.cjs"
   },
   "dependencies": {
     "@google-cloud/firestore": "9.4.0",
@@ -28,6 +30,7 @@
     "next-mdx-remote": "^6.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "remark-gfm": "^4.0.1",
     "server-only": "0.0.1"
   },
   "devDependencies": {
