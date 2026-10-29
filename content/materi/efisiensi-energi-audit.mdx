@@ -1,0 +1,42 @@
+---
+title: "Efisiensi Energi: Dari Watt ke Audit Sederhana"
+summary: "Hitung konsumsi dan bandingkan perbaikan pada kondisi yang adil tanpa mengorbankan fungsi atau proteksi."
+---
+<LearningHook>Perangkat baru dayanya lebih kecil. Apakah tagihan pasti turun sebanyak selisih watt yang tertulis di brosur?</LearningHook>
+
+## 1. Pisahkan daya, energi dan biaya
+Daya adalah laju penggunaan energi, sedangkan energi memperhitungkan durasi. Analogi: kecepatan kendaraan berbeda dari jarak tempuh. Biaya dapat mengandung komponen lain; perkalian kWh dan tarif latihan bukan jaminan tagihan aktual.
+
+<figure><img src="/diagrams/advanced-energy.svg" width="840" height="420" alt="Audit membandingkan energi sebelum dan sesudah dengan kondisi waktu serta layanan yang sebanding" /><figcaption>Contoh perhitungan; tarif dan profil beban bukan data pelanggan tertentu.</figcaption></figure>
+
+<Formula label="Model beban konstan" expression="E(kWh) = P(W) × waktu(jam) / 1.000">
+Rak dengan beban rata-rata 80 W selama 24 jam: 1,92 kWh/hari. Selama 30 hari modelnya 57,6 kWh. Bila beban rata-rata menjadi 65 W pada layanan dan durasi yang sama, hasilnya 46,8 kWh; selisih 10,8 kWh atau 18,75% terhadap kondisi awal.
+</Formula>
+
+Perhitungan memakai daya rata-rata yang dapat dipertanggungjawabkan, bukan otomatis daya maksimum label. Beban yang hidup-mati atau berubah mengikuti pengguna perlu diukur/diestimasi dengan profil yang sesuai.
+
+## 2. Langkah audit yang masuk akal
+| Langkah | Yang dicatat |
+|---|---|
+| Tentukan batas | Beban di sisi AC rak atau di sisi DC, jangan dicampur |
+| Rekam baseline | kWh, periode, jumlah perangkat, kondisi layanan dan kualitas data |
+| Cari beban dominan | Perangkat selalu aktif, pendinginan, rugi konversi atau mode tidak terpakai |
+| Nilai opsi | Dampak layanan, biaya, kebutuhan cadangan serta keselamatan |
+| Verifikasi hasil | Kondisi sebelum/sesudah sebanding dan perubahan terdokumentasi |
+
+## 3. Jangan menghemat dengan menghilangkan perlindungan
+Mematikan sensor, pendingin, PE, SPD atau UPS kritis demi angka watt lebih kecil bukan audit efisiensi yang benar. Pengurangan konsumsi harus mempertahankan kebutuhan operasional dan batas produk. Jadwal tidur perangkat hanya dipakai jika fungsi layanan mengizinkannya.
+
+Koreksi faktor daya tidak otomatis mengurangi energi aktif sebesar perubahan VA. Definisi pengukuran, profil beban dan komponen tagihan perlu dibedakan. Untuk pelajaran ini fokuslah pada energi aktif terukur, kebutuhan layanan, dan perubahan yang bisa dijelaskan.
+
+## Studi kasus: konsumsi turun karena pengguna berkurang
+Setelah mengganti switch, kWh turun. Namun jumlah pengguna aktif juga turun tajam. Belum dapat diklaim seluruh penghematan berasal dari switch. Bandingkan periode serta beban yang representatif atau jelaskan batas kesimpulannya.
+
+## Latihan dan pembahasan
+Jika selisih energi latihan 10,8 kWh dan tarif fiktif Rp1.500/kWh, perkiraan selisih biaya energi = Rp16.200 pada periode contoh. Angka itu tidak mencakup komponen biaya lain dan bukan tarif terbaru yang disarankan untuk semua pelanggan.
+
+<LearningCheck question="Apakah daya nameplate selalu sama dengan daya rata-rata pemakaian?" answer="Tidak. Kondisi, mode kerja, profil beban dan rugi sistem memengaruhi konsumsi. Gunakan pengukuran atau asumsi yang dijelaskan." />
+
+## Referensi
+- [Virginia Tech: perhitungan konsumsi energi](https://www.pubs.ext.vt.edu/2901/2901-9014/2901-9014.html)
+- [Monitoring kelistrikan](/materi/monitoring-kelistrikan)

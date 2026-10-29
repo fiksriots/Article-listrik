@@ -1263,5 +1263,159 @@ export const quizBank: Record<string, Question[]> = {
       "a": 1,
       "why": "Laporan memerlukan objek, metode, alat, kondisi, hasil dan kriteria yang relevan."
     }
+  ],
+  "sensor-analog-pnp-npn": [
+    {
+      "q": "Sensor linear 4–20 mA untuk 0–100 °C pada 12 mA menunjukkan…",
+      "o": [
+        "50 °C",
+        "12 °C",
+        "100 °C"
+      ],
+      "a": 0,
+      "why": "((12 − 4)/16) × 100 = 50 °C pada model yang dinyatakan."
+    },
+    {
+      "q": "PNP/NPN dan 4–20 mA adalah…",
+      "o": [
+        "Nama untuk sinyal yang selalu sama",
+        "Konsep antarmuka berbeda",
+        "Rating daya motor"
+      ],
+      "a": 1,
+      "why": "PNP/NPN menjelaskan output transistor dalam konteks sensor digital; 4–20 mA rentang analog."
+    }
+  ],
+  "plc-ladder-timer-counter": [
+    {
+      "q": "Urutan input 0,1,1,0,1,0,1 mempunyai tepi naik sebanyak…",
+      "o": [
+        "3",
+        "4",
+        "7"
+      ],
+      "a": 0,
+      "why": "Tepi naik terjadi pada perubahan 0 ke 1; nilai 1 yang bertahan tidak menambah kejadian baru."
+    },
+    {
+      "q": "Simbol kontak pada ladder pasti menunjukkan kontak fisik NO/NC?",
+      "o": [
+        "Ya selalu",
+        "Tidak",
+        "Ya jika tag bernama START"
+      ],
+      "a": 1,
+      "why": "Instruksi memeriksa bit; pemetaan perangkat fisik dan arti tag harus dijelaskan."
+    }
+  ],
+  "vfd-parameter-diagnosis": [
+    {
+      "q": "Motor empat kutub pada 50 Hz memiliki putaran sinkron ideal…",
+      "o": [
+        "1.500 rpm",
+        "3.000 rpm",
+        "50 rpm"
+      ],
+      "a": 0,
+      "why": "ns = 120 × 50 / 4. Rotor induksi saat bekerja memiliki slip; ini bukan izin overspeed."
+    },
+    {
+      "q": "Fault saat akselerasi harus diselesaikan dengan…",
+      "o": [
+        "Selalu menonaktifkan proteksi",
+        "Diagnosis data dan manual sebelum perubahan",
+        "Reset terus-menerus"
+      ],
+      "a": 1,
+      "why": "Data motor, beban, ramp dan kondisi listrik perlu dievaluasi sesuai produk."
+    }
+  ],
+  "perawatan-motor-kondisi": [
+    {
+      "q": "Satu nilai suhu meningkat membuktikan bearing rusak?",
+      "o": [
+        "Tidak",
+        "Ya selalu",
+        "Ya jika motornya tua"
+      ],
+      "a": 0,
+      "why": "Perubahan beban, pendinginan, suplai dan kondisi lain juga mungkin berpengaruh."
+    },
+    {
+      "q": "Perbandingan tren sebaiknya memakai…",
+      "o": [
+        "Titik sensor acak",
+        "Kondisi dan metode yang sebanding",
+        "Beban yang selalu berbeda tanpa catatan"
+      ],
+      "a": 1,
+      "why": "Konteks pengukuran diperlukan agar perubahan dapat ditafsirkan."
+    }
+  ],
+  "dasar-plts-komponen": [
+    {
+      "q": "Model 100 Wp × 3 jam × 0,75 menghasilkan…",
+      "o": [
+        "225 Wh",
+        "300 kWh",
+        "100 Wh pasti setiap hari"
+      ],
+      "a": 0,
+      "why": "Ini estimasi dengan asumsi fiktif, bukan jaminan hasil lokasi tertentu."
+    },
+    {
+      "q": "Memutus sisi AC memastikan PV tidak lagi bertegangan?",
+      "o": [
+        "Ya selalu",
+        "Tidak",
+        "Ya jika indikator inverter mati"
+      ],
+      "a": 1,
+      "why": "PV dapat tetap menghasilkan DC saat terkena cahaya; prosedur isolasi harus sesuai."
+    }
+  ],
+  "efisiensi-energi-audit": [
+    {
+      "q": "Beban rata-rata 80 W selama 24 jam memakai energi model…",
+      "o": [
+        "1,92 kWh",
+        "80 kWh",
+        "0,08 Wh"
+      ],
+      "a": 0,
+      "why": "80 × 24 / 1.000 = 1,92 kWh."
+    },
+    {
+      "q": "kWh turun ketika jumlah pengguna juga berkurang. Penghematan perangkat…",
+      "o": [
+        "Pasti sama dengan seluruh selisih",
+        "Belum bisa dipisahkan tanpa evaluasi kondisi",
+        "Tidak perlu diverifikasi"
+      ],
+      "a": 1,
+      "why": "Perbandingan sebelum–sesudah harus mempertimbangkan layanan dan kondisi beban."
+    }
+  ],
+  "proyek-akhir-rak-jaringan": [
+    {
+      "q": "Pada proyek, alokasi PoE 24 + 18 + 20 W adalah…",
+      "o": [
+        "62 W di sisi PSE contoh",
+        "80 W di sisi PD",
+        "94,1 VA pasti"
+      ],
+      "a": 0,
+      "why": "Perhitungan harus konsisten pada batas yang dinyatakan, lalu cek batas per port dan total."
+    },
+    {
+      "q": "Kebutuhan 47,1 Wh di keluaran UPS sama dengan baterai nominal yang pasti cukup?",
+      "o": [
+        "Ya selalu",
+        "Tidak",
+        "Ya tanpa rugi"
+      ],
+      "a": 1,
+      "why": "Efisiensi, batas penggunaan dan karakteristik produk masih perlu diperiksa lewat data runtime."
+    }
   ]
 };

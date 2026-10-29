@@ -340,5 +340,47 @@
     "title": "Dokumentasi dan Inspeksi Kelistrikan",
     "summary": "Susun diagram, daftar beban, label, bukti pengukuran dan riwayat gangguan agar pemeriksaan tidak menebak.",
     "minutes": 25
+  },
+  {
+    "slug": "sensor-analog-pnp-npn",
+    "title": "Pendalaman Sensor: 4–20 mA, 0–10 V, PNP dan NPN",
+    "summary": "Bedakan nilai analog dan status digital, lakukan scaling, serta baca kecocokan input sensor.",
+    "minutes": 28
+  },
+  {
+    "slug": "plc-ladder-timer-counter",
+    "title": "Pendalaman PLC: Ladder, Timer, Counter, dan Interlock",
+    "summary": "Telusuri logika input–output melalui tabel keadaan dan simulasi kertas sebelum memakai perangkat nyata.",
+    "minutes": 30
+  },
+  {
+    "slug": "vfd-parameter-diagnosis",
+    "title": "Pendalaman VFD: Data Motor, Ramp, dan Diagnosis Alarm",
+    "summary": "Baca parameter berdasarkan manual, bedakan sumber perintah dan referensi, serta telusuri fault tanpa menaikkan batas sembarangan.",
+    "minutes": 28
+  },
+  {
+    "slug": "perawatan-motor-kondisi",
+    "title": "Perawatan Motor Berbasis Kondisi",
+    "summary": "Bedakan gejala panas, getaran, suara dan gangguan suplai; susun baseline serta rencana pemeriksaan.",
+    "minutes": 25
+  },
+  {
+    "slug": "dasar-plts-komponen",
+    "title": "Dasar PLTS: Panel, Controller, Inverter dan Baterai",
+    "summary": "Bedakan on-grid, off-grid dan hybrid serta pahami mengapa Wp tidak sama dengan energi harian.",
+    "minutes": 28
+  },
+  {
+    "slug": "efisiensi-energi-audit",
+    "title": "Efisiensi Energi: Dari Watt ke Audit Sederhana",
+    "summary": "Hitung konsumsi dan bandingkan perbaikan pada kondisi yang adil tanpa mengorbankan fungsi atau proteksi.",
+    "minutes": 25
+  },
+  {
+    "slug": "proyek-akhir-rak-jaringan",
+    "title": "Proyek Akhir: Rancang Daya Rak Jaringan Kecil",
+    "summary": "Gabungkan daftar beban, anggaran PoE, estimasi UPS, proteksi, monitoring dan dokumentasi pada satu studi kasus.",
+    "minutes": 40
   }
 ]

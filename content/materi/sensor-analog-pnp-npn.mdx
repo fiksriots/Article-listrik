@@ -1,0 +1,40 @@
+---
+title: "Pendalaman Sensor: 4–20 mA, 0–10 V, PNP dan NPN"
+summary: "Bedakan nilai analog dan status digital, lakukan scaling, serta baca kecocokan input sensor."
+---
+<LearningHook>Sensor suhu mengirim 12 mA. Bagaimana PLC mengubahnya menjadi angka derajat Celsius?</LearningHook>
+
+## 1. Status berbeda dari nilai pengukuran
+Sinyal digital menjawab keadaan seperti objek ada atau tidak. Sinyal analog mewakili besaran yang berubah, misalnya suhu, tekanan atau ketinggian. Bayangkan digital seperti tombol hadir/tidak hadir, analog seperti angka pada termometer. PNP/NPN membahas jenis output transistor, sedangkan 4–20 mA dan 0–10 V membahas rentang sinyal analog. Keduanya jangan dicampur.
+
+<figure><img src="/diagrams/advanced-sensor.svg" width="840" height="420" alt="Sinyal analog dipetakan ke nilai proses; output digital PNP atau NPN dicocokkan dengan input kontroler" /><figcaption>Konsep antarmuka, bukan petunjuk pin atau warna kabel sensor tertentu.</figcaption></figure>
+
+## 2. Scaling mengubah rentang sinyal menjadi rentang proses
+<Formula label="Model sensor linear" expression="Nilai = LRV + ((I − 4) / 16) × (URV − LRV)">
+Contoh fiktif: sensor 4–20 mA mewakili 0–100 °C. Pada 12 mA: 0 + ((12 − 4) / 16) × 100 = 50 °C. LRV adalah batas bawah proses; URV batas atas. Cocokkan rentang yang dikonfigurasi pada transmitter dan PLC.
+</Formula>
+
+Untuk 0–10 V yang mewakili 0–100 °C pada model linear, 5 V setara 50 °C. Hasil nyata dipengaruhi spesifikasi sensor, input, resolusi, kalibrasi dan ketidakpastian. Jangan menyamakan nilai raw ADC dengan mA atau derajat sebelum mengetahui format modul.
+
+## 3. Mengapa 4 mA bukan selalu angka nol listrik?
+Pada rentang contoh, 4 mA mewakili 0% proses, bukan tidak ada arus. Nilai di luar rentang dapat digunakan sistem tertentu untuk memberi informasi kondisi abnormal, tetapi ambang fault mengikuti konfigurasi dan standar produk. Jangan menyatakan semua nilai di bawah 4 mA pasti kabel putus; periksa juga suplai, konfigurasi dan kondisi input.
+
+## 4. PNP dan NPN harus cocok dengan modul input
+| Output sensor DC | Gambaran saat aktif | Yang harus diperiksa |
+|---|---|---|
+| PNP/sourcing | Menyuplai arus ke beban/input melalui output | Jenis input penerima dan common sesuai diagram |
+| NPN/sinking | Memberi jalur arus dari beban/input menuju referensi negatif | Jenis input penerima dan common sesuai diagram |
+
+NO/NC pada fungsi sensor berbeda dari pemilihan PNP/NPN. Sensor PNP dapat memiliki fungsi NO atau NC. Warna kabel lazim bukan pengganti pinout; input yang bisa dikonfigurasi pun memiliki aturan kanal/group common. Sensor dua, tiga dan empat kawat tidak otomatis disambungkan sama.
+
+## Studi kasus: angka suhu berhenti pada nilai maksimum
+Kemungkinan rentang raw keliru, input tersaturasi, mode mA/V salah, atau sinyal memang tinggi. Pisahkan diagnosis konfigurasi dari diagnosis kabel. Jangan mencoba menukar input tegangan dan arus secara langsung tanpa manual dan isolasi yang sesuai.
+
+## Latihan dan pembahasan
+Sensor linear 4–20 mA untuk 0–10 bar mengirim 8 mA. Hasil model: (8 − 4) / 16 × 10 = 2,5 bar. Jika PLC diprogram sebagai 0–20 mA, hasil berbeda meskipun kabel tidak berubah. Jelaskan pentingnya konsistensi rentang.
+
+<LearningCheck question="Apakah PNP sama dengan sinyal analog 0–10 V?" answer="Tidak. PNP/NPN menjelaskan output transistor digital dalam konteks ini; 0–10 V dan 4–20 mA adalah rentang sinyal analog." />
+
+## Referensi
+- [TI: antarmuka 4–20 mA](https://www.ti.com/product-category/amplifiers/special-function/4-20ma-signal-conditioners/overview.html)
+- [Schneider Electric: kecocokan PNP/NPN dan input PLC](https://www.se.com/us/en/faqs/FA142566/)

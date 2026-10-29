@@ -1,0 +1,43 @@
+---
+title: "Dasar PLTS: Panel, Controller, Inverter dan Baterai"
+summary: "Bedakan on-grid, off-grid dan hybrid serta pahami mengapa Wp tidak sama dengan energi harian."
+---
+<LearningHook>Panel 100 Wp apakah selalu menghasilkan 100 watt selama matahari terlihat?</LearningHook>
+
+## 1. Modul hanya satu bagian sistem
+Panel PV mengubah cahaya menjadi listrik DC. Agar berguna untuk beban tertentu, sistem dapat memerlukan pengendali, inverter, penyimpanan, struktur, pengaman dan interkoneksi yang sesuai. Tidak semua sistem memakai komponen dengan urutan yang sama.
+
+<figure><img src="/diagrams/advanced-solar.svg" width="840" height="420" alt="Komponen PLTS dipilih sesuai fungsi sistem: modul PV, pengendalian atau konversi, penyimpanan bila ada, dan beban atau interkoneksi" /><figcaption>Peta fungsi, bukan diagram pengawatan PLTS atau instruksi koneksi ke jaringan.</figcaption></figure>
+
+## 2. Bedakan topologi
+| Sistem | Gambaran | Jangan diasumsikan |
+|---|---|---|
+| On-grid | Berinteraksi dengan jaringan melalui inverter dan proteksi yang sesuai | Selalu memberi daya saat jaringan padam |
+| Off-grid | Memasok beban tanpa bergantung pada jaringan dalam rancangan operasinya | Semua beban pasti dapat ditangani oleh satu panel |
+| Hybrid | Menggabungkan fungsi sumber/penyimpanan tertentu sesuai produk | Semua inverter hybrid mempunyai mode backup yang sama |
+
+Inverter grid-connected biasa tidak otomatis memiliki kemampuan island/backup. Ketentuan interkoneksi serta pemasangan mengikuti persyaratan yang berlaku dan operator jaringan, bukan sekadar memasukkan steker.
+
+## 3. Wp, Wh dan kondisi nyata
+Wp adalah rating daya pada kondisi uji yang ditentukan. Energi harian dipengaruhi penyinaran, suhu modul, orientasi, bayangan, rugi serta kemampuan sistem. Cuaca cerah tidak berarti rating tersedia terus-menerus.
+
+<Formula label="Estimasi energi latihan" expression="100 Wp × 3 jam ekuivalen × 0,75 = 225 Wh/hari">
+Faktor 3 jam dan 0,75 adalah asumsi fiktif, bukan data lokasi tertentu. Jika kebutuhan beban 270 Wh/hari, model tersebut belum mencukupi, bahkan sebelum kebutuhan cadangan cuaca buruk dinilai.
+</Formula>
+
+## 4. Kompatibilitas lebih dari sekadar watt
+Perancang memeriksa rentang tegangan/arus PV, batas open-circuit pada kondisi suhu, input controller/inverter, jenis baterai, BMS, proteksi, pembumian, SPD dan isolasi. MPPT membantu mengelola titik operasi PV dalam batas produk; ia tidak menciptakan energi tambahan dari panel yang kekurangan cahaya.
+
+Rangkaian DC PV dapat tetap bertegangan ketika terkena cahaya. Memutus sisi AC tidak otomatis menghilangkan sumber DC. Jangan membuat string, memasang konektor, membuka inverter atau merangkai baterai sebagai percobaan pemula. Gunakan simulasi atau data rancangan untuk pelajaran ini.
+
+## Studi kasus: kamera mandiri sering mati menjelang pagi
+Kemungkinan energi harian tidak cukup, baterai menurun, beban malam bertambah atau ada masalah sistem. Kumpulkan profil daya 24 jam dan data produksi/penyimpanan. Jangan langsung menambah panel tanpa menilai batas controller dan keseluruhan desain.
+
+## Latihan dan pembahasan
+Beban rata-rata model 10 W selama 24 jam membutuhkan 240 Wh/hari. Bandingkan dengan hasil model 225 Wh/hari: masih defisit 15 Wh sebelum evaluasi cadangan dan kondisi nyata. Ini perkiraan energi, bukan rancangan paket siap dibeli.
+
+<LearningCheck question="Apakah Wp panel sama dengan Wh yang pasti diperoleh setiap hari?" answer="Tidak. Wp menyatakan rating daya pada kondisi uji; energi harian bergantung kondisi dan lama produksi serta rugi sistem." />
+
+## Referensi
+- [US DOE: komponen dan desain sistem PV](https://www.energy.gov/cmei/systems/solar-photovoltaic-system-design-basics)
+- [US DOE: kinerja dan efisiensi PV](https://www.energy.gov/cmei/systems/solar-photovoltaic-performance-and-efficiency-basics)

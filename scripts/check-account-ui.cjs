@@ -19,14 +19,14 @@ const {spawn}=require('node:child_process');
    await page.reload();await page.getByText('✓ Progres akun sudah tersinkron.',{exact:true}).first().waitFor();
    await page.evaluate(()=>localStorage.clear());await page.reload();await page.getByText('✓ Progres akun sudah tersinkron.',{exact:true}).first().waitFor();assert.match(await page.evaluate(()=>localStorage.getItem('fiks-learning-v2:google:test')),/apa-itu-listrik/);
    const card=name=>page.getByRole('article').filter({has:page.getByRole('heading',{name,exact:true})});
-   await card('Learn Electric').getByText('1 dari 57 materi selesai',{exact:true}).waitFor();
+   await card('Learn Electric').getByText('1 dari 64 materi selesai',{exact:true}).waitFor();
    await card('Learn Electric').locator('summary').click();await card('Learn Electric').getByRole('heading',{name:'Dasar dan keselamatan',exact:true}).waitFor();
    await card('Learn Git').getByText('1 dari 48 materi selesai',{exact:true}).waitFor();await card('Learn Git').locator('summary').click();await card('Learn Git').getByRole('heading',{name:'GitHub',exact:true}).waitFor();
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:'/tmp/account-progress-'+width+'.png',fullPage:true});
    await page.goto('http://127.0.0.1:3100/git/apa-itu-git');await page.getByRole('button',{name:'✓ Sudah dibaca · batalkan',exact:true}).waitFor();await page.getByRole('button',{name:'✓ Sudah dibaca · batalkan',exact:true}).click();await page.getByRole('button',{name:'Tandai sudah dibaca',exact:true}).waitFor();
    await page.goto('http://127.0.0.1:3100/akun');await page.getByText('✓ Progres akun sudah tersinkron.',{exact:true}).first().waitFor();await card('Learn Git').getByText('0 dari 48 materi selesai',{exact:true}).waitFor();
    await context.route('**/api/auth/session',r=>r.fulfill({json:{user:{id:'google:other',name:'Akun Kedua'},expires:new Date(Date.now()+3600000).toISOString()}}));await context.route('**/api/progress',r=>r.fulfill({json:r.request().method()==='PUT'?{ok:true}:{rows:[]}}));
-   await page.reload();await page.getByText('Akun Kedua',{exact:true}).waitFor();await page.getByText('✓ Progres akun sudah tersinkron.',{exact:true}).first().waitFor();await card('Learn Electric').getByText('0 dari 57 materi selesai',{exact:true}).waitFor();
+   await page.reload();await page.getByText('Akun Kedua',{exact:true}).waitFor();await page.getByText('✓ Progres akun sudah tersinkron.',{exact:true}).first().waitFor();await card('Learn Electric').getByText('0 dari 64 materi selesai',{exact:true}).waitFor();
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);assert.deepEqual(remote,[]);await context.close();console.log('PASS '+width+'px: Google-only UI, missing configuration, session rendering, remote restore, guest merge, subgroup bars, Git undo, account isolation, no Supabase requests');
   }
  }finally{if(browser)await browser.close();server.kill();}

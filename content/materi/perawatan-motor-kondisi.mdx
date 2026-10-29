@@ -1,0 +1,41 @@
+---
+title: "Perawatan Motor Berbasis Kondisi"
+summary: "Bedakan gejala panas, getaran, suara dan gangguan suplai; susun baseline serta rencana pemeriksaan."
+---
+<LearningHook>Motor terasa lebih panas dari biasanya. Apakah pasti bearing rusak?</LearningHook>
+
+## 1. Gejala adalah petunjuk, bukan diagnosis tunggal
+Motor berhubungan dengan suplai listrik, penggerak, beban mekanis, pendinginan dan lingkungan. Perubahan pada salah satunya dapat terlihat sebagai suhu, arus, getaran atau suara yang berubah. Analogi: demam memberi tahu ada perubahan, tetapi belum menjelaskan penyebabnya.
+
+<DeviceGuide type="motor" />
+<figure><img src="/diagrams/advanced-motor-care.svg" width="840" height="420" alt="Empat bukti perawatan: kondisi beban dan suplai, tren arus, tren suhu serta getaran dengan metode konsisten" /><figcaption>Konsep analisis kondisi. Tidak menetapkan batas suhu atau getaran universal.</figcaption></figure>
+
+## 2. Buat baseline yang dapat dibandingkan
+Catat identitas, duty, kecepatan, beban, suhu lingkungan, titik sensor dan metode. Membandingkan motor ringan di pagi hari dengan motor berbeban penuh pada siang panas dapat menyesatkan. Kondisi operasi dan ketidakpastian pengukuran perlu disertakan.
+
+| Gejala | Beberapa kemungkinan | Data lanjutan |
+|---|---|---|
+| Suhu meningkat | Beban, pendinginan, lingkungan, suplai, masalah mekanis | Tren beban dan suhu pada kondisi sebanding |
+| Getaran berubah | Misalignment, ketidakseimbangan, kelonggaran atau kondisi lain | Arah/titik pengukuran, frekuensi dan riwayat |
+| Arus berubah | Perubahan beban, suplai atau kontrol | Kondisi tiga fasa, setpoint dan mekanik |
+| Suara tidak biasa | Gesekan, ventilasi, bearing atau bagian lain | Kronologi dan pemeriksaan berwenang |
+
+## 3. Gangguan fasa perlu ditangani serius
+Kehilangan atau ketidakseimbangan fasa dapat membebani motor. Jangan terus memaksa operasi untuk melihat apakah gangguan hilang. Bedakan kondisi suplai dari masalah motor dengan pemeriksaan dan alat yang sesuai. Salah satu arus terlihat normal belum membuktikan ketiga fasa baik.
+
+## 4. Inspeksi bukan menyentuh bagian berputar
+Amati dari posisi aman sesuai prosedur, gunakan data sensor bila tersedia, dan eskalasi perubahan yang relevan. Jangan membuka pelindung, menempelkan alat improvisasi ke bagian berputar, atau memberi pelumas tanpa petunjuk produk. Jenis grease, jumlah dan interval tidak ditentukan dari satu aturan untuk semua motor.
+
+Pekerjaan yang membuka bagian atau menguji isolasi memerlukan pengendalian energi termasuk kemungkinan putaran dari beban. Motor yang berhenti secara listrik masih dapat digerakkan proses atau menyimpan energi mekanis.
+
+## Studi kasus: suhu naik setelah perubahan proses
+Setelah kapasitas produksi meningkat, arus dan suhu ikut naik. Ini korelasi yang perlu diuji, bukan bukti satu komponen rusak. Bandingkan data sebelum/sesudah pada kondisi sebanding, nilai beban dan batas pabrikan, lalu rencanakan pemeriksaan. Hindari mengganti bearing hanya dari suhu permukaan.
+
+## Latihan dan pembahasan
+Buat log lima kolom: waktu, kondisi operasi, nilai, metode/titik, dan tindak lanjut. Tulis pengamatan “getaran meningkat pada titik X” terpisah dari dugaan penyebab. Tren membantu memilih pemeriksaan lanjutan, bukan menggantikan diagnosis.
+
+<LearningCheck question="Apakah satu nilai suhu tinggi cukup untuk memastikan penyebab kerusakan?" answer="Tidak. Kondisi beban, lingkungan, titik pengukuran, suplai dan bukti lain perlu dibandingkan dengan kriteria yang sesuai." />
+
+## Referensi
+- [ABB: indikator kondisi motor dan mesin](https://powertrain.abb.com/powertrainonlinehelp/en)
+- [Keselamatan dan energi tersimpan](/materi/keselamatan-loto)

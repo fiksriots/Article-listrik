@@ -1,0 +1,55 @@
+---
+title: "Proyek Akhir: Rancang Daya Rak Jaringan Kecil"
+summary: "Gabungkan daftar beban, anggaran PoE, estimasi UPS, proteksi, monitoring dan dokumentasi pada satu studi kasus."
+---
+<LearningHook>Bisakah kamu menjelaskan seluruh perjalanan energi pada rak jaringan, bukan hanya memilih UPS dari angka VA?</LearningHook>
+
+## 1. Target proyek dan batasnya
+Kamu membuat **dokumen rancangan latihan**, bukan merakit panel atau mengubah instalasi aktif. Sasaran: rak kecil melayani router, switch, dua AP, satu radio dan dua kamera, dengan kebutuhan backup latihan 30 menit. Model serta semua angka berikut fiktif; proyek nyata memerlukan data produk dan evaluasi tenaga kompeten.
+
+<figure><img src="/diagrams/advanced-capstone.svg" width="840" height="420" alt="Proyek rak jaringan menggabungkan inventaris, anggaran PoE, kebutuhan UPS, serta proteksi monitoring dan dokumentasi" /><figcaption>Peta hasil kerja proyek, bukan diagram pengawatan atau daftar belanja siap pasang.</figcaption></figure>
+
+## 2. Inventaris dan batas penghitungan
+| Beban latihan | Jumlah | Alokasi daya per unit | Total |
+|---|---|---|---|
+| Router | 1 | 10 W DC | 10 W |
+| Switch, konsumsi internal | 1 | 8 W DC | 8 W |
+| AP | 2 | 12 W pada sisi PSE | 24 W |
+| Radio | 1 | 18 W pada sisi PSE | 18 W |
+| Kamera | 2 | 10 W pada sisi PSE | 20 W |
+
+Alokasi PD pada contoh ini sudah dinyatakan pada sisi PSE untuk latihan, sehingga tidak langsung disamakan dengan konsumsi di ujung kabel. Jumlah daya DC/keluaran catu daya model = 80 W. Catat bahwa efisiensi konversi menuju sisi AC belum dimasukkan.
+
+## 3. Putuskan kebutuhan PoE
+Total alokasi PoE = 24 + 18 + 20 = **62 W** pada lima port. Kandidat switch dengan budget latihan 90 W lolos pemeriksaan total awal, tetapi belum selesai: periksa standar PoE, tegangan, pinout, kemampuan per port, suhu operasi dan kompatibilitas radio. Jumlah port fisik dan budget total adalah dua syarat berbeda.
+
+## 4. Ubah ke kebutuhan UPS pada batas yang benar
+<Formula label="Model daya keluaran UPS yang diperlukan beban" expression="P_AC ≈ 80 / 0,85 ≈ 94,1 W">
+Efisiensi gabungan konversi AC ke DC diasumsikan 85% pada titik kerja contoh. Untuk 30 menit, energi yang diperlukan pada keluaran UPS model ≈ 94,1 × 0,5 = 47,1 Wh. Ini belum kapasitas nominal baterai; rugi serta batas penggunaan baterai/UPS masih perlu dinilai.
+</Formula>
+
+Pilih kandidat lewat rating watt dan VA, karakteristik beban, margin desain serta kurva runtime produsen pada beban relevan. Jangan memilih kapasitas baterai hanya dengan menganggap 47,1 Wh nominal pasti cukup. Catat data yang belum tersedia sebagai pertanyaan terbuka.
+
+## 5. Buat peta proteksi dan monitoring
+Identifikasi suplai AC, jalur data outdoor, sistem PE/bonding, proteksi arus lebih dan surja yang perlu dievaluasi. Jangan memberi ukuran MCB, kabel atau grounding tanpa kondisi desain. Untuk monitoring, pilih status UPS, konsumsi, data PoE dan kondisi lingkungan yang relevan; bedakan timeout dari nilai nol.
+
+## Studi kasus: malam hari beban berubah
+Kamera mengaktifkan IR, trafik naik dan radio membutuhkan daya lebih besar. Periksa apakah angka alokasi awal sudah maksimum yang relevan. Bila data baru melampaui asumsi, revisi budget serta runtime sebelum menyatakan rancangan memenuhi target. Jangan mengganti tegangan catu daya untuk menutupi kekurangan kapasitas.
+
+## 6. Hasil kerja yang harus dikumpulkan
+- Daftar aset dan sumber data tiap rating.
+- Tabel alokasi per port dan total PoE.
+- Diagram alur energi dengan batas AC/DC yang jelas.
+- Kandidat UPS beserta bukti runtime dan batas yang belum diperiksa.
+- Daftar kebutuhan evaluasi proteksi, monitoring, serta perubahan dokumen.
+
+## Latihan dan pembahasan
+Ubah target menjadi 60 menit tanpa mengubah beban model. Kebutuhan energi keluaran model menjadi sekitar 94,1 Wh, tetapi pemilihan UPS tetap memakai data runtime nyata. Jelaskan mengapa menggandakan waktu tidak otomatis membenarkan menggandakan Ah pada baterai yang sama tanpa evaluasi.
+
+<LearningCheck question="Apakah 47,1 Wh kebutuhan keluaran selama 30 menit sama dengan kapasitas nominal baterai yang pasti cukup?" answer="Tidak. Energi keluaran dan kapasitas nominal baterai berbeda karena efisiensi, batas penggunaan, laju pelepasan serta karakteristik produk." />
+
+## Bekal proyek
+- [Anggaran PoE](/materi/catu-daya-poe-jaringan)
+- [Energi baterai dan runtime](/materi/baterai-ups-runtime)
+- [Proteksi outdoor](/materi/proteksi-bts-cctv-outdoor)
+- [Dokumentasi dan inspeksi](/materi/dokumentasi-inspeksi-listrik)
