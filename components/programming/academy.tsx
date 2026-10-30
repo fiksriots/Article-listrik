@@ -36,16 +36,16 @@ export function Complete({slug}:{slug:string}) {
   </section>;
 }
 
-export default function Catalog({items, stages, current}:{items:Item[]; stages:string[]; current?:string}) {
+export default function Catalog({items, stages, current, label="Learn Programming", homeHref="/programming", placeholder="Variabel, percabangan, fungsi…"}:{items:Item[]; stages:string[]; current?:string; label?:string; homeHref?:string; placeholder?:string}) {
   const done = useCompleted();
   const [query, setQuery] = useState('');
   const count = items.filter(item => done.includes(item.slug)).length;
   const next = items.find(item => !done.includes(item.slug));
   const filtered = items.filter(item => (item.title+' '+item.summary).toLowerCase().includes(query.trim().toLowerCase()));
   return <div className={current ? 'net-sidebar-content' : 'net-catalog'}>
-    <div className="net-progress"><strong>{count} dari {items.length} materi selesai</strong><progress value={count} max={items.length} aria-label="Progres Learn Programming"/><ProgressStatus/></div>
-    {!current && <Link className="net-resume" href={next ? '/programming/'+next.slug : '/programming#kurikulum'}>{next ? 'Lanjutkan: '+next.title : 'Semua materi selesai · ulangi kurikulum'} →</Link>}
-    <label className="net-search">Cari materi Python<input type="search" value={query} placeholder="Variabel, percabangan, fungsi…" onChange={event => setQuery(event.target.value)}/></label>
+    <div className="net-progress"><strong>{count} dari {items.length} materi selesai</strong><progress value={count} max={items.length} aria-label={'Progres '+label}/><ProgressStatus/></div>
+    {!current && <Link className="net-resume" href={next ? '/programming/'+next.slug : homeHref+'#kurikulum'}>{next ? 'Lanjutkan: '+next.title : 'Semua materi selesai · ulangi kurikulum'} →</Link>}
+    <label className="net-search">Cari materi {label}<input type="search" value={query} placeholder={placeholder} onChange={event => setQuery(event.target.value)}/></label>
     {!filtered.length && <p role="status">Materi tidak ditemukan. Coba kata lain.</p>}
     {stages.map((stage, index) => {
       const lessons = filtered.filter(item => item.stage === index);

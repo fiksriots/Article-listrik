@@ -7,7 +7,8 @@ import programmingQuizzes from '@/lib/programming-quizzes.json';
 import LessonReader from '@/components/lesson-reader';
 import ArticleShare from '@/components/article-share';
 import {articleMetadata} from '@/lib/article-sharing';
-import {programmingLessons, programmingCatalog, programmingStages} from '@/lib/programming-course';
+import {programmingLessons} from '@/lib/programming-course';
+import {getProgrammingLessonTrack} from '@/lib/programming-tracks';
 
 export function generateStaticParams() {
   return programmingLessons.map(lesson => ({slug:lesson.slug}));
@@ -16,22 +17,24 @@ export function generateStaticParams() {
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}) {
   const {slug} = await params;
   const lesson = programmingLessons.find(item => item.slug === slug);
-  return articleMetadata(lesson ? lesson.title+' | Learn Programming' : 'Materi tidak ditemukan', lesson?.summary || '', '/programming/'+slug);
+  return articleMetadata(lesson ? lesson.title+' | '+(getProgrammingLessonTrack(slug)?.title || 'Learn Programming') : 'Materi tidak ditemukan', lesson?.summary || '', '/programming/'+slug);
 }
 
 export default async function Page({params}:{params:Promise<{slug:string}>}) {
   const {slug} = await params;
-  const index = programmingLessons.findIndex(item => item.slug === slug);
-  if (index < 0) notFound();
-  const lesson = programmingLessons[index];
-  const previous = programmingLessons[index-1];
-  const next = programmingLessons[index+1];
+  const track = getProgrammingLessonTrack(slug);
+  if (!track) notFound();
+  const index = track.lessons.findIndex(item => item.slug === slug);
+  const lesson = track.lessons[index];
+  const previous = track.lessons[index-1];
+  const next = track.lessons[index+1];
   return <div className="net-lesson-layout">
-    <aside className="net-sidebar"><details key={slug}><summary>Daftar materi Learn Programming</summary><Catalog items={programmingCatalog} stages={programmingStages} current={slug}/></details></aside>
+    <aside className="net-sidebar"><details key={slug}><summary>Daftar materi {track.title}</summary><Catalog items={track.catalog} stages={track.stages} current={slug} label={track.title} homeHref={track.href}/></details></aside>
     <main id="konten" className="net-lesson-main">
-      <Link href="/programming#kurikulum" className="net-back">← Semua materi Learn Programming</Link>
-      <header className="net-lesson-heading"><p className="net-eyebrow">TAHAP {lesson.stage+1} / {programmingStages[lesson.stage]} · MATERI {index+1} DARI {programmingLessons.length}</p><h1>{lesson.title}</h1><p>{lesson.summary}</p><span>±{lesson.minutes} menit · Tambahkan waktu untuk praktik</span></header>
-      <LessonReader key={slug} catalog="/programming#kurikulum" next={next ? {href:'/programming/'+next.slug,title:next.title} : undefined}/>
+      <Link href={track.href+"#kurikulum"} className="net-back">← Semua materi {track.title}</Link>
+      <header className="net-lesson-heading"><p className="net-eyebrow">TAHAP {lesson.stage+1} / {track.stages[lesson.stage]} · MATERI {index+1} DARI {track.lessons.length}</p><h1>{lesson.title}</h1><p>{lesson.summary}</p><span>±{lesson.minutes} menit · Tambahkan waktu untuk praktik</span></header>
+      <aside className="net-track-note"><strong>Jalur {track.title}</strong><p><Link href="/programming">Pilih jalur lain: Pemrograman Terstruktur atau Struktur Data →</Link></p></aside>
+      <LessonReader key={slug} catalog={track.href+"#kurikulum"} next={next ? {href:'/programming/'+next.slug,title:next.title} : undefined}/>
       <article className="net-article programming-article">
         <aside className="net-analogy"><span>BAYANGKAN DULU</span><p>{lesson.analogy}</p></aside>
         <h2>Pelan-pelan, kita pahami</h2>{lesson.explain.map((paragraph, i) => <p key={i}>{paragraph}</p>)}
@@ -47,7 +50,7 @@ export default async function Page({params}:{params:Promise<{slug:string}>}) {
       </article>
       <ArticleShare title={lesson.title} summary={lesson.summary} path={'/programming/'+slug}/>
       <Complete key={slug} slug={slug}/>
-      <nav className="net-lesson-nav" aria-label="Urutan materi Learn Programming"><Link href={previous ? '/programming/'+previous.slug : '/programming'}>← {previous?.title || 'Beranda Learn Programming'}</Link><Link href={next ? '/programming/'+next.slug : '/programming#kurikulum'}>{next?.title || 'Selesai · kembali ke kurikulum'} →</Link></nav>
+      <nav className="net-lesson-nav" aria-label={'Urutan materi '+track.title}><Link href={previous ? '/programming/'+previous.slug : track.href}>← {previous?.title || 'Beranda '+track.title}</Link><Link href={next ? '/programming/'+next.slug : track.href+'#kurikulum'}>{next?.title || 'Selesai jalur '+track.title+' · kembali ke kurikulum'} →</Link></nav>
     </main>
   </div>;
 }

@@ -19,3 +19,14 @@
 .programming-quiz button:disabled{background:#e2e3eb;color:#5e6373;cursor:not-allowed}
 .programming-quiz .programming-quiz-note{font-size:12px;color:#626c7d;margin:18px 0 0}
 @media(max-width:600px){.programming-quiz{padding:18px 14px}.programming-quiz-options label{padding:12px}.programming-quiz button{width:100%}}
+
+.programming-paths{padding-top:56px}.programming-paths-heading{max-width:760px;margin-bottom:40px}
+.programming-paths-heading h1{font-family:Georgia,serif;font-size:clamp(40px,5vw,64px);line-height:1.1;letter-spacing:-.04em;margin:20px 0}
+.programming-paths-heading h1 em{font-weight:400;color:#6366a5}.programming-paths-heading>p:last-child{line-height:1.8;color:#526079}
+.programming-track-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-bottom:36px}
+.programming-track-card{display:flex;flex-direction:column;padding:32px;background:white;border:1px solid #dfe1ed;border-radius:18px;min-width:0;transition:border-color .15s}
+.programming-track-card:hover{border-color:#65508a}.programming-track-card h2{font-family:Georgia,serif;font-size:clamp(26px,3vw,35px);line-height:1.25;margin:18px 0}
+.programming-track-card p,.programming-track-card li{font-size:15px;line-height:1.8;color:#526079}.programming-track-card ul{padding-left:20px;list-style:disc;margin:18px 0 26px}
+.programming-track-card small{display:block;margin-top:auto;color:#64748b;font-size:12px}.programming-track-card strong{display:block;color:#514298;font-size:14px;margin-top:18px}
+.programming-track-struktur-data{background:#f4f1f8}.programming-track-terstruktur{background:#fffdf8}
+@media(max-width:700px){.programming-paths{padding-top:32px}.programming-track-grid{grid-template-columns:1fr;gap:18px}.programming-track-card{padding:24px}}
