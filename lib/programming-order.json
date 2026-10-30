@@ -1,0 +1,70 @@
+[
+  {
+    "title": "Mulai dari nol",
+    "slugs": [
+      "pemrograman-terstruktur",
+      "menjalankan-python",
+      "variabel-tipe-data",
+      "input-output-operator"
+    ]
+  },
+  {
+    "title": "Keputusan dan alur program",
+    "slugs": [
+      "flowchart-program",
+      "percabangan-logika",
+      "algoritma-pseudocode",
+      "percabangan-bertingkat"
+    ]
+  },
+  {
+    "title": "Perulangan dan penelusuran",
+    "slugs": [
+      "perulangan-for",
+      "perulangan-while",
+      "penelusuran-program",
+      "break-continue-menu",
+      "perulangan-bertingkat"
+    ]
+  },
+  {
+    "title": "Teks dan kumpulan data",
+    "slugs": [
+      "pengolahan-teks",
+      "list-kumpulan-data",
+      "list-lanjutan",
+      "tuple-dictionary"
+    ]
+  },
+  {
+    "title": "Algoritma pengolahan data",
+    "slugs": [
+      "algoritma-statistik-dasar",
+      "pencarian-linear"
+    ]
+  },
+  {
+    "title": "Fungsi dan pembagian program",
+    "slugs": [
+      "fungsi-parameter-return",
+      "fungsi-lanjutan",
+      "modul-import"
+    ]
+  },
+  {
+    "title": "Validasi, pengujian, dan penyimpanan",
+    "slugs": [
+      "kesalahan-validasi",
+      "debugging-pengujian",
+      "file-teks-csv-json"
+    ]
+  },
+  {
+    "title": "Proyek dan studi kasus",
+    "slugs": [
+      "proyek-kasir-sederhana",
+      "studi-kasus-nilai-siswa",
+      "studi-kasus-pencatat-pengeluaran"
+    ]
+  }
+]

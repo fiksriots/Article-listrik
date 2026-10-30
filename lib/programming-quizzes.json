@@ -1,74 +1,1190 @@
 {
   "pemrograman-terstruktur": [
-    {"question":"Apa yang dimaksud dengan algoritma?","options":["Urutan langkah untuk menyelesaikan masalah","Aplikasi untuk menggambar","Pesan kesalahan komputer"],"answer":0,"explanation":"Algoritma menjelaskan langkah penyelesaian masalah. Langkah itu dapat ditulis dengan bahasa sehari-hari sebelum diterjemahkan menjadi kode."},
-    {"question":"Manakah tiga struktur utama pemrograman terstruktur?","options":["Gambar, suara, dan video","Urutan, percabangan, dan perulangan","Keyboard, layar, dan mouse"],"answer":1,"explanation":"Urutan mengerjakan langkah satu per satu, percabangan memilih berdasarkan kondisi, dan perulangan mengerjakan instruksi kembali."},
-    {"question":"Instruksi ‘jika hujan, bawa payung’ merupakan contoh apa?","options":["Urutan tanpa kondisi","Perulangan","Percabangan"],"answer":2,"explanation":"Tindakan membawa payung bergantung pada kondisi hujan. Ini merupakan pola percabangan."},
-    {"question":"Teks mana yang muncul lebih dahulu?","code":"print(\"Mulai\")\nprint(\"Selesai\")","options":["Selesai","Mulai","Keduanya selalu muncul bersamaan"],"answer":1,"explanation":"Pada contoh urutan ini, Python menjalankan baris pertama terlebih dahulu. Karena itu Mulai tampil sebelum Selesai."}
+    {
+      "question": "Apa yang dimaksud dengan algoritma?",
+      "options": [
+        "Urutan langkah untuk menyelesaikan masalah",
+        "Aplikasi untuk menggambar",
+        "Pesan kesalahan komputer"
+      ],
+      "answer": 0,
+      "explanation": "Algoritma menjelaskan langkah penyelesaian masalah. Langkah itu dapat ditulis dengan bahasa sehari-hari sebelum diterjemahkan menjadi kode."
+    },
+    {
+      "question": "Manakah tiga struktur utama pemrograman terstruktur?",
+      "options": [
+        "Gambar, suara, dan video",
+        "Urutan, percabangan, dan perulangan",
+        "Keyboard, layar, dan mouse"
+      ],
+      "answer": 1,
+      "explanation": "Urutan mengerjakan langkah satu per satu, percabangan memilih berdasarkan kondisi, dan perulangan mengerjakan instruksi kembali."
+    },
+    {
+      "question": "Instruksi ‘jika hujan, bawa payung’ merupakan contoh apa?",
+      "options": [
+        "Urutan tanpa kondisi",
+        "Perulangan",
+        "Percabangan"
+      ],
+      "answer": 2,
+      "explanation": "Tindakan membawa payung bergantung pada kondisi hujan. Ini merupakan pola percabangan."
+    },
+    {
+      "question": "Teks mana yang muncul lebih dahulu?",
+      "code": "print(\"Mulai\")\nprint(\"Selesai\")",
+      "options": [
+        "Selesai",
+        "Mulai",
+        "Keduanya selalu muncul bersamaan"
+      ],
+      "answer": 1,
+      "explanation": "Pada contoh urutan ini, Python menjalankan baris pertama terlebih dahulu. Karena itu Mulai tampil sebelum Selesai."
+    }
   ],
   "menjalankan-python": [
-    {"question":"Apa fungsi editor?","options":["Menulis dan menyimpan kode","Mengganti perangkat keras","Menentukan nilai ujian otomatis"],"answer":0,"explanation":"Editor adalah tempat menulis dan menyimpan kode. Interpreter bertugas menjalankan kode Python."},
-    {"question":"Nama file mana yang sesuai untuk program Python?","options":["halo.jpg","halo.mp3","halo.py"],"answer":2,"explanation":"Ekstensi .py lazim digunakan untuk file kode Python. Gambar dan audio memiliki ekstensi yang berbeda."},
-    {"question":"Saat menyalin contoh dari Shell ke file .py, apakah tanda >>> perlu ikut ditulis?","options":["Ya, pada semua baris","Tidak, itu penanda Shell","Ya, hanya sebelum print()"],"answer":1,"explanation":">>> adalah prompt Shell, bukan bagian perintah Python. File cukup berisi instruksinya, misalnya print(\"Halo\")."},
-    {"question":"Apa yang ditampilkan oleh program ini?","code":"# Menghitung hasil\nprint(2 + 3)","options":["Menghitung hasil","2 + 3","5"],"answer":2,"explanation":"Baris yang diawali # merupakan komentar. print(2 + 3) menghitung penjumlahan lalu menampilkan 5."}
+    {
+      "question": "Apa fungsi editor?",
+      "options": [
+        "Menulis dan menyimpan kode",
+        "Mengganti perangkat keras",
+        "Menentukan nilai ujian otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Editor adalah tempat menulis dan menyimpan kode. Interpreter bertugas menjalankan kode Python."
+    },
+    {
+      "question": "Nama file mana yang sesuai untuk program Python?",
+      "options": [
+        "halo.jpg",
+        "halo.mp3",
+        "halo.py"
+      ],
+      "answer": 2,
+      "explanation": "Ekstensi .py lazim digunakan untuk file kode Python. Gambar dan audio memiliki ekstensi yang berbeda."
+    },
+    {
+      "question": "Saat menyalin contoh dari Shell ke file .py, apakah tanda >>> perlu ikut ditulis?",
+      "options": [
+        "Ya, pada semua baris",
+        "Tidak, itu penanda Shell",
+        "Ya, hanya sebelum print()"
+      ],
+      "answer": 1,
+      "explanation": ">>> adalah prompt Shell, bukan bagian perintah Python. File cukup berisi instruksinya, misalnya print(\"Halo\")."
+    },
+    {
+      "question": "Apa yang ditampilkan oleh program ini?",
+      "code": "# Menghitung hasil\nprint(2 + 3)",
+      "options": [
+        "Menghitung hasil",
+        "2 + 3",
+        "5"
+      ],
+      "answer": 2,
+      "explanation": "Baris yang diawali # merupakan komentar. print(2 + 3) menghitung penjumlahan lalu menampilkan 5."
+    }
   ],
   "variabel-tipe-data": [
-    {"question":"Apa hasil program berikut?","code":"umur = 20\numur = 21\nprint(umur)","options":["20","21","2021"],"answer":1,"explanation":"Penugasan kedua mengganti nilai yang dirujuk umur. Nilai terbaru saat print() dijalankan adalah 21."},
-    {"question":"Manakah nilai yang bertipe string atau teks?","options":["20","True","\"20\""],"answer":2,"explanation":"Tanda kutip membuat \"20\" menjadi teks. Angka 20 tanpa kutip bertipe int, sedangkan True bertipe bool."},
-    {"question":"Nama variabel mana yang valid dan mudah dibaca?","options":["jumlah_buku","2buku","jumlah buku"],"answer":0,"explanation":"Nama variabel dapat memakai garis bawah. Nama tidak boleh diawali angka atau mengandung spasi."},
-    {"question":"Apa hasil print(\"nama\") jika sebelumnya nama = \"Budi\"?","options":["Budi","nama","Program selalu error"],"answer":1,"explanation":"Tanda kutip berarti menampilkan teks nama secara harfiah. Untuk menampilkan isi variabel, gunakan print(nama)."}
+    {
+      "question": "Apa hasil program berikut?",
+      "code": "umur = 20\numur = 21\nprint(umur)",
+      "options": [
+        "20",
+        "21",
+        "2021"
+      ],
+      "answer": 1,
+      "explanation": "Penugasan kedua mengganti nilai yang dirujuk umur. Nilai terbaru saat print() dijalankan adalah 21."
+    },
+    {
+      "question": "Manakah nilai yang bertipe string atau teks?",
+      "options": [
+        "20",
+        "True",
+        "\"20\""
+      ],
+      "answer": 2,
+      "explanation": "Tanda kutip membuat \"20\" menjadi teks. Angka 20 tanpa kutip bertipe int, sedangkan True bertipe bool."
+    },
+    {
+      "question": "Nama variabel mana yang valid dan mudah dibaca?",
+      "options": [
+        "jumlah_buku",
+        "2buku",
+        "jumlah buku"
+      ],
+      "answer": 0,
+      "explanation": "Nama variabel dapat memakai garis bawah. Nama tidak boleh diawali angka atau mengandung spasi."
+    },
+    {
+      "question": "Apa hasil print(\"nama\") jika sebelumnya nama = \"Budi\"?",
+      "options": [
+        "Budi",
+        "nama",
+        "Program selalu error"
+      ],
+      "answer": 1,
+      "explanation": "Tanda kutip berarti menampilkan teks nama secara harfiah. Untuk menampilkan isi variabel, gunakan print(nama)."
+    }
   ],
   "input-output-operator": [
-    {"question":"Apa tipe hasil input() sebelum dikonversi?","options":["Selalu int","Selalu bool","String atau teks"],"answer":2,"explanation":"input() mengembalikan teks. Walaupun pengguna mengetik 3, hasilnya tetap teks \"3\" sampai dikonversi."},
-    {"question":"Harga buku 10000 dan jumlah buku 3. Berapa hasil harga * jumlah?","options":["30000","10003","13000"],"answer":0,"explanation":"Operator * berarti perkalian. 10000 dikali 3 menghasilkan 30000."},
-    {"question":"Berapa hasil perhitungan berikut?","code":"print((5 + 2) * 3)","options":["11","21","15"],"answer":1,"explanation":"Bagian dalam kurung dikerjakan terlebih dahulu: 5 + 2 menjadi 7, kemudian 7 dikali 3 menjadi 21."},
-    {"question":"Bagaimana mengubah teks \"3\" menjadi bilangan bulat?","options":["print(\"3\")","str(\"3\")","int(\"3\")"],"answer":2,"explanation":"int() mengubah teks bilangan bulat yang valid menjadi angka. print() hanya menampilkan, sedangkan str() menghasilkan teks."}
+    {
+      "question": "Apa tipe hasil input() sebelum dikonversi?",
+      "options": [
+        "Selalu int",
+        "Selalu bool",
+        "String atau teks"
+      ],
+      "answer": 2,
+      "explanation": "input() mengembalikan teks. Walaupun pengguna mengetik 3, hasilnya tetap teks \"3\" sampai dikonversi."
+    },
+    {
+      "question": "Harga buku 10000 dan jumlah buku 3. Berapa hasil harga * jumlah?",
+      "options": [
+        "30000",
+        "10003",
+        "13000"
+      ],
+      "answer": 0,
+      "explanation": "Operator * berarti perkalian. 10000 dikali 3 menghasilkan 30000."
+    },
+    {
+      "question": "Berapa hasil perhitungan berikut?",
+      "code": "print((5 + 2) * 3)",
+      "options": [
+        "11",
+        "21",
+        "15"
+      ],
+      "answer": 1,
+      "explanation": "Bagian dalam kurung dikerjakan terlebih dahulu: 5 + 2 menjadi 7, kemudian 7 dikali 3 menjadi 21."
+    },
+    {
+      "question": "Bagaimana mengubah teks \"3\" menjadi bilangan bulat?",
+      "options": [
+        "print(\"3\")",
+        "str(\"3\")",
+        "int(\"3\")"
+      ],
+      "answer": 2,
+      "explanation": "int() mengubah teks bilangan bulat yang valid menjadi angka. print() hanya menampilkan, sedangkan str() menghasilkan teks."
+    }
   ],
   "percabangan-logika": [
-    {"question":"Apa hasil program ini?","code":"nilai = 75\nif nilai >= 75:\n    print(\"Lulus\")\nelse:\n    print(\"Belum lulus\")","options":["Lulus","Belum lulus","Tidak ada keluaran"],"answer":0,"explanation":"Operator >= menyertakan batas. Nilai 75 memenuhi kondisi minimal 75, sehingga program menampilkan Lulus."},
-    {"question":"Operator mana yang digunakan untuk memeriksa kesamaan nilai?","options":["=","==","!="],"answer":1,"explanation":"== membandingkan kesamaan nilai. = memberikan nilai kepada variabel, sedangkan != memeriksa ketidaksamaan."},
-    {"question":"Jika nilai = 80 dan tugas_selesai = False, apa hasil nilai >= 75 and tugas_selesai?","options":["True","80","False"],"answer":2,"explanation":"and memerlukan kedua syarat benar. Meskipun nilai mencapai 75, tugas_selesai bernilai False sehingga hasil keseluruhannya False."},
-    {"question":"Mengapa batas nilai 90 sebaiknya diperiksa sebelum batas 75 dalam satu rangkaian if–elif?","options":["Karena Python mewajibkan angka selalu berurutan menurun","Agar nilai 95 tidak lebih dahulu masuk kategori minimal 75","Agar semua blok dijalankan sekaligus"],"answer":1,"explanation":"Hanya kondisi benar pertama dalam rangkaian if–elif yang dipilih. Jika batas 75 diperiksa lebih dahulu, nilai 95 sudah masuk kategori tersebut."}
+    {
+      "question": "Apa hasil program ini?",
+      "code": "nilai = 75\nif nilai >= 75:\n    print(\"Lulus\")\nelse:\n    print(\"Belum lulus\")",
+      "options": [
+        "Lulus",
+        "Belum lulus",
+        "Tidak ada keluaran"
+      ],
+      "answer": 0,
+      "explanation": "Operator >= menyertakan batas. Nilai 75 memenuhi kondisi minimal 75, sehingga program menampilkan Lulus."
+    },
+    {
+      "question": "Operator mana yang digunakan untuk memeriksa kesamaan nilai?",
+      "options": [
+        "=",
+        "==",
+        "!="
+      ],
+      "answer": 1,
+      "explanation": "== membandingkan kesamaan nilai. = memberikan nilai kepada variabel, sedangkan != memeriksa ketidaksamaan."
+    },
+    {
+      "question": "Jika nilai = 80 dan tugas_selesai = False, apa hasil nilai >= 75 and tugas_selesai?",
+      "options": [
+        "True",
+        "80",
+        "False"
+      ],
+      "answer": 2,
+      "explanation": "and memerlukan kedua syarat benar. Meskipun nilai mencapai 75, tugas_selesai bernilai False sehingga hasil keseluruhannya False."
+    },
+    {
+      "question": "Mengapa batas nilai 90 sebaiknya diperiksa sebelum batas 75 dalam satu rangkaian if–elif?",
+      "options": [
+        "Karena Python mewajibkan angka selalu berurutan menurun",
+        "Agar nilai 95 tidak lebih dahulu masuk kategori minimal 75",
+        "Agar semua blok dijalankan sekaligus"
+      ],
+      "answer": 1,
+      "explanation": "Hanya kondisi benar pertama dalam rangkaian if–elif yang dipilih. Jika batas 75 diperiksa lebih dahulu, nilai 95 sudah masuk kategori tersebut."
+    }
   ],
   "perulangan-for": [
-    {"question":"Angka apa saja yang dihasilkan range(1, 4)?","options":["1, 2, 3","1, 2, 3, 4","0, 1, 2, 3"],"answer":0,"explanation":"Batas awal 1 disertakan dan batas akhir 4 tidak disertakan. Hasilnya 1, 2, dan 3."},
-    {"question":"Berapa kali teks Halo ditampilkan?","code":"for nomor in range(5):\n    print(\"Halo\")","options":["4 kali","5 kali","6 kali"],"answer":1,"explanation":"range(5) menyediakan lima nilai: 0, 1, 2, 3, dan 4. Blok print() dijalankan sekali untuk setiap nilai."},
-    {"question":"Rentang mana yang menghasilkan 2, 4, 6?","options":["range(2, 6)","range(2, 6, 2)","range(2, 7, 2)"],"answer":2,"explanation":"Argumen ketiga menentukan langkah. range(2, 7, 2) dimulai dari 2, bertambah 2, dan berhenti sebelum 7."},
-    {"question":"Berapa kali teks Selesai ditampilkan?","code":"for angka in range(3):\n    print(angka)\nprint(\"Selesai\")","options":["Satu kali","Tiga kali","Tidak pernah"],"answer":0,"explanation":"print(\"Selesai\") tidak menjorok ke dalam blok for. Baris itu dijalankan sekali setelah perulangan selesai."}
+    {
+      "question": "Angka apa saja yang dihasilkan range(1, 4)?",
+      "options": [
+        "1, 2, 3",
+        "1, 2, 3, 4",
+        "0, 1, 2, 3"
+      ],
+      "answer": 0,
+      "explanation": "Batas awal 1 disertakan dan batas akhir 4 tidak disertakan. Hasilnya 1, 2, dan 3."
+    },
+    {
+      "question": "Berapa kali teks Halo ditampilkan?",
+      "code": "for nomor in range(5):\n    print(\"Halo\")",
+      "options": [
+        "4 kali",
+        "5 kali",
+        "6 kali"
+      ],
+      "answer": 1,
+      "explanation": "range(5) menyediakan lima nilai: 0, 1, 2, 3, dan 4. Blok print() dijalankan sekali untuk setiap nilai."
+    },
+    {
+      "question": "Rentang mana yang menghasilkan 2, 4, 6?",
+      "options": [
+        "range(2, 6)",
+        "range(2, 6, 2)",
+        "range(2, 7, 2)"
+      ],
+      "answer": 2,
+      "explanation": "Argumen ketiga menentukan langkah. range(2, 7, 2) dimulai dari 2, bertambah 2, dan berhenti sebelum 7."
+    },
+    {
+      "question": "Berapa kali teks Selesai ditampilkan?",
+      "code": "for angka in range(3):\n    print(angka)\nprint(\"Selesai\")",
+      "options": [
+        "Satu kali",
+        "Tiga kali",
+        "Tidak pernah"
+      ],
+      "answer": 0,
+      "explanation": "print(\"Selesai\") tidak menjorok ke dalam blok for. Baris itu dijalankan sekali setelah perulangan selesai."
+    }
   ],
   "perulangan-while": [
-    {"question":"Kapan while memeriksa kondisinya?","options":["Hanya setelah program berakhir","Sebelum setiap putaran","Hanya sesudah putaran pertama"],"answer":1,"explanation":"while memeriksa kondisi di awal setiap putaran. Jika kondisi sudah salah sejak awal, isi blok tidak dijalankan."},
-    {"question":"Apa hasil program berikut?","code":"hitungan = 4\nwhile hitungan <= 3:\n    print(\"Putaran\")\n    hitungan += 1\nprint(\"Selesai\")","options":["Putaran lalu Selesai","Putaran sebanyak tiga kali","Hanya Selesai"],"answer":2,"explanation":"Kondisi 4 <= 3 bernilai salah. Program melewati blok while dan langsung menampilkan Selesai."},
-    {"question":"Apa arti hitungan += 1?","options":["Tambahkan 1 ke nilai hitungan","Ganti hitungan menjadi 1 setiap saat","Bandingkan hitungan dengan 1"],"answer":0,"explanation":"hitungan += 1 merupakan bentuk singkat dari hitungan = hitungan + 1."},
-    {"question":"Apa masalah pada kode ini?","code":"hitungan = 1\nwhile hitungan <= 3:\n    print(hitungan)","options":["print() tidak boleh di dalam while","Kondisi tetap benar karena hitungan tidak diperbarui","while hanya boleh dipakai untuk teks"],"answer":1,"explanation":"hitungan selalu 1 sehingga syarat <= 3 selalu benar. Tanpa perubahan kondisi atau jalan keluar, perulangan berjalan terus."}
+    {
+      "question": "Kapan while memeriksa kondisinya?",
+      "options": [
+        "Hanya setelah program berakhir",
+        "Sebelum setiap putaran",
+        "Hanya sesudah putaran pertama"
+      ],
+      "answer": 1,
+      "explanation": "while memeriksa kondisi di awal setiap putaran. Jika kondisi sudah salah sejak awal, isi blok tidak dijalankan."
+    },
+    {
+      "question": "Apa hasil program berikut?",
+      "code": "hitungan = 4\nwhile hitungan <= 3:\n    print(\"Putaran\")\n    hitungan += 1\nprint(\"Selesai\")",
+      "options": [
+        "Putaran lalu Selesai",
+        "Putaran sebanyak tiga kali",
+        "Hanya Selesai"
+      ],
+      "answer": 2,
+      "explanation": "Kondisi 4 <= 3 bernilai salah. Program melewati blok while dan langsung menampilkan Selesai."
+    },
+    {
+      "question": "Apa arti hitungan += 1?",
+      "options": [
+        "Tambahkan 1 ke nilai hitungan",
+        "Ganti hitungan menjadi 1 setiap saat",
+        "Bandingkan hitungan dengan 1"
+      ],
+      "answer": 0,
+      "explanation": "hitungan += 1 merupakan bentuk singkat dari hitungan = hitungan + 1."
+    },
+    {
+      "question": "Apa masalah pada kode ini?",
+      "code": "hitungan = 1\nwhile hitungan <= 3:\n    print(hitungan)",
+      "options": [
+        "print() tidak boleh di dalam while",
+        "Kondisi tetap benar karena hitungan tidak diperbarui",
+        "while hanya boleh dipakai untuk teks"
+      ],
+      "answer": 1,
+      "explanation": "hitungan selalu 1 sehingga syarat <= 3 selalu benar. Tanpa perubahan kondisi atau jalan keluar, perulangan berjalan terus."
+    }
   ],
   "list-kumpulan-data": [
-    {"question":"Apa isi buah[1]?","code":"buah = [\"Apel\", \"Jeruk\", \"Mangga\"]","options":["Apel","Jeruk","Mangga"],"answer":1,"explanation":"Indeks list dimulai dari 0. Apel berada di indeks 0, Jeruk di indeks 1, dan Mangga di indeks 2."},
-    {"question":"Apa fungsi append() pada list?","options":["Menambahkan satu item di akhir list","Menghapus semua item","Mengurutkan list secara otomatis"],"answer":0,"explanation":"append() menambahkan satu item ke akhir list yang sudah ada."},
-    {"question":"Berapa total yang ditampilkan?","code":"total = 0\nfor harga in [10000, 15000, 5000]:\n    total += harga\nprint(total)","options":["5000","25000","30000"],"answer":2,"explanation":"total dimulai dari 0 lalu bertambah menjadi 10000, 25000, dan akhirnya 30000."},
-    {"question":"Mengapa daftar_kosong[0] menimbulkan IndexError?","options":["Karena indeks harus selalu dimulai dari 1","Karena list kosong tidak memiliki item pada indeks 0","Karena list tidak boleh berisi angka"],"answer":1,"explanation":"List kosong tidak memiliki item. Indeks 0 hanya dapat diakses jika setidaknya ada satu item."}
+    {
+      "question": "Apa isi buah[1]?",
+      "code": "buah = [\"Apel\", \"Jeruk\", \"Mangga\"]",
+      "options": [
+        "Apel",
+        "Jeruk",
+        "Mangga"
+      ],
+      "answer": 1,
+      "explanation": "Indeks list dimulai dari 0. Apel berada di indeks 0, Jeruk di indeks 1, dan Mangga di indeks 2."
+    },
+    {
+      "question": "Apa fungsi append() pada list?",
+      "options": [
+        "Menambahkan satu item di akhir list",
+        "Menghapus semua item",
+        "Mengurutkan list secara otomatis"
+      ],
+      "answer": 0,
+      "explanation": "append() menambahkan satu item ke akhir list yang sudah ada."
+    },
+    {
+      "question": "Berapa total yang ditampilkan?",
+      "code": "total = 0\nfor harga in [10000, 15000, 5000]:\n    total += harga\nprint(total)",
+      "options": [
+        "5000",
+        "25000",
+        "30000"
+      ],
+      "answer": 2,
+      "explanation": "total dimulai dari 0 lalu bertambah menjadi 10000, 25000, dan akhirnya 30000."
+    },
+    {
+      "question": "Mengapa daftar_kosong[0] menimbulkan IndexError?",
+      "options": [
+        "Karena indeks harus selalu dimulai dari 1",
+        "Karena list kosong tidak memiliki item pada indeks 0",
+        "Karena list tidak boleh berisi angka"
+      ],
+      "answer": 1,
+      "explanation": "List kosong tidak memiliki item. Indeks 0 hanya dapat diakses jika setidaknya ada satu item."
+    }
   ],
   "fungsi-parameter-return": [
-    {"question":"Kapan isi sebuah fungsi dijalankan?","options":["Ketika file diberi nama","Ketika def selesai ditulis, tanpa pemanggilan","Ketika fungsi dipanggil"],"answer":2,"explanation":"def mendefinisikan fungsi. Isi fungsi baru dijalankan ketika ada pemanggilan seperti sapa()."},
-    {"question":"Apa hasil program berikut?","code":"def hitung_luas(panjang, lebar):\n    return panjang * lebar\n\nprint(hitung_luas(8, 4))","options":["32","12","84"],"answer":0,"explanation":"Argumen 8 mengisi panjang, sedangkan 4 mengisi lebar. Fungsi mengembalikan hasil perkalian 32."},
-    {"question":"Apa perbedaan utama return dan print()?","options":["Keduanya selalu sama","return mengembalikan nilai; print() menampilkan nilai","print() selalu menghentikan fungsi"],"answer":1,"explanation":"Nilai dari return dapat digunakan kembali oleh pemanggil. print() menampilkan keluaran dan tidak otomatis mengembalikan nilai yang ditampilkan itu."},
-    {"question":"Apa hasil pengembalian fungsi yang selesai tanpa return bernilai?","options":["0","False","None"],"answer":2,"explanation":"Jika tidak ada return bernilai yang dijalankan, Python mengembalikan None. Itu berbeda dari angka 0 atau nilai False."}
+    {
+      "question": "Kapan isi sebuah fungsi dijalankan?",
+      "options": [
+        "Ketika file diberi nama",
+        "Ketika def selesai ditulis, tanpa pemanggilan",
+        "Ketika fungsi dipanggil"
+      ],
+      "answer": 2,
+      "explanation": "def mendefinisikan fungsi. Isi fungsi baru dijalankan ketika ada pemanggilan seperti sapa()."
+    },
+    {
+      "question": "Apa hasil program berikut?",
+      "code": "def hitung_luas(panjang, lebar):\n    return panjang * lebar\n\nprint(hitung_luas(8, 4))",
+      "options": [
+        "32",
+        "12",
+        "84"
+      ],
+      "answer": 0,
+      "explanation": "Argumen 8 mengisi panjang, sedangkan 4 mengisi lebar. Fungsi mengembalikan hasil perkalian 32."
+    },
+    {
+      "question": "Apa perbedaan utama return dan print()?",
+      "options": [
+        "Keduanya selalu sama",
+        "return mengembalikan nilai; print() menampilkan nilai",
+        "print() selalu menghentikan fungsi"
+      ],
+      "answer": 1,
+      "explanation": "Nilai dari return dapat digunakan kembali oleh pemanggil. print() menampilkan keluaran dan tidak otomatis mengembalikan nilai yang ditampilkan itu."
+    },
+    {
+      "question": "Apa hasil pengembalian fungsi yang selesai tanpa return bernilai?",
+      "options": [
+        "0",
+        "False",
+        "None"
+      ],
+      "answer": 2,
+      "explanation": "Jika tidak ada return bernilai yang dijalankan, Python mengembalikan None. Itu berbeda dari angka 0 atau nilai False."
+    }
   ],
   "algoritma-pseudocode": [
-    {"question":"Apa tujuan pseudocode?","options":["Menuliskan logika dengan bahasa sederhana sebelum membuat kode","Mengganti semua kode Python agar langsung berjalan","Menyimpan gambar program"],"answer":0,"explanation":"Pseudocode membantu memeriksa langkah dan aturan. Bentuknya tidak harus mengikuti sintaks Python dan tidak langsung dijalankan sebagai kode Python."},
-    {"question":"Aturan diskon berlaku untuk subtotal minimal 100000. Kondisi mana yang tepat?","options":["subtotal > 100000","subtotal >= 100000","subtotal < 100000"],"answer":1,"explanation":"Kata minimal menyertakan nilai batas. Subtotal tepat 100000 juga berhak mendapat diskon, sehingga operatornya >=."},
-    {"question":"Kelompok input mana yang paling membantu menguji batas 100000?","options":["1000, 2000, 3000","200000, 300000, 400000","99999, 100000, 100001"],"answer":2,"explanation":"Ketiga nilai berada tepat di bawah, tepat pada, dan tepat di atas batas. Ini membantu menemukan kesalahan pemilihan > atau >=."},
-    {"question":"Diskon dibulatkan ke bawah ke rupiah penuh. Berapa hasil 100001 * 10 // 100?","options":["10000","10000.1","10001"],"answer":0,"explanation":"100001 × 10 ÷ 100 adalah 10000.1. Operator // membulatkan hasil pembagian ke bawah, menjadi 10000."}
+    {
+      "question": "Apa tujuan pseudocode?",
+      "options": [
+        "Menuliskan logika dengan bahasa sederhana sebelum membuat kode",
+        "Mengganti semua kode Python agar langsung berjalan",
+        "Menyimpan gambar program"
+      ],
+      "answer": 0,
+      "explanation": "Pseudocode membantu memeriksa langkah dan aturan. Bentuknya tidak harus mengikuti sintaks Python dan tidak langsung dijalankan sebagai kode Python."
+    },
+    {
+      "question": "Aturan diskon berlaku untuk subtotal minimal 100000. Kondisi mana yang tepat?",
+      "options": [
+        "subtotal > 100000",
+        "subtotal >= 100000",
+        "subtotal < 100000"
+      ],
+      "answer": 1,
+      "explanation": "Kata minimal menyertakan nilai batas. Subtotal tepat 100000 juga berhak mendapat diskon, sehingga operatornya >=."
+    },
+    {
+      "question": "Kelompok input mana yang paling membantu menguji batas 100000?",
+      "options": [
+        "1000, 2000, 3000",
+        "200000, 300000, 400000",
+        "99999, 100000, 100001"
+      ],
+      "answer": 2,
+      "explanation": "Ketiga nilai berada tepat di bawah, tepat pada, dan tepat di atas batas. Ini membantu menemukan kesalahan pemilihan > atau >=."
+    },
+    {
+      "question": "Diskon dibulatkan ke bawah ke rupiah penuh. Berapa hasil 100001 * 10 // 100?",
+      "options": [
+        "10000",
+        "10000.1",
+        "10001"
+      ],
+      "answer": 0,
+      "explanation": "100001 × 10 ÷ 100 adalah 10000.1. Operator // membulatkan hasil pembagian ke bawah, menjadi 10000."
+    }
   ],
   "kesalahan-validasi": [
-    {"question":"Apa yang terjadi saat menjalankan int(\"abc\")?","options":["Menghasilkan 0","Menimbulkan ValueError","Menghasilkan 3"],"answer":1,"explanation":"Teks abc tidak mewakili bilangan bulat yang valid, sehingga int() menimbulkan ValueError."},
-    {"question":"Apakah int(\"-2\") selalu menimbulkan ValueError?","options":["Ya, semua angka negatif tidak valid di Python","Ya, karena memakai tanda kutip","Tidak; konversinya valid, tetapi aturan aplikasi mungkin menolaknya"],"answer":2,"explanation":"-2 adalah bilangan bulat yang valid. Jika jumlah barang harus positif, program perlu pemeriksaan nilai setelah konversi."},
-    {"question":"Apa yang dimaksud dengan kesalahan logika?","options":["Program berjalan tetapi hasilnya tidak sesuai aturan","Semua pesan error dari terminal","File yang tidak memiliki ekstensi"],"answer":0,"explanation":"Program bisa bebas dari error saat berjalan tetapi tetap salah menghitung atau memilih kondisi. Uji dengan hasil yang sudah diketahui untuk menemukannya."},
-    {"question":"Blok mana yang menangani kegagalan konversi int() karena masukan bukan angka?","options":["else setelah if","except ValueError","for angka in range(3)"],"answer":1,"explanation":"Jika konversi ada di dalam try dan menimbulkan ValueError, except ValueError dapat menangani kesalahan tersebut dengan pesan yang jelas."}
+    {
+      "question": "Apa yang terjadi saat menjalankan int(\"abc\")?",
+      "options": [
+        "Menghasilkan 0",
+        "Menimbulkan ValueError",
+        "Menghasilkan 3"
+      ],
+      "answer": 1,
+      "explanation": "Teks abc tidak mewakili bilangan bulat yang valid, sehingga int() menimbulkan ValueError."
+    },
+    {
+      "question": "Apakah int(\"-2\") selalu menimbulkan ValueError?",
+      "options": [
+        "Ya, semua angka negatif tidak valid di Python",
+        "Ya, karena memakai tanda kutip",
+        "Tidak; konversinya valid, tetapi aturan aplikasi mungkin menolaknya"
+      ],
+      "answer": 2,
+      "explanation": "-2 adalah bilangan bulat yang valid. Jika jumlah barang harus positif, program perlu pemeriksaan nilai setelah konversi."
+    },
+    {
+      "question": "Apa yang dimaksud dengan kesalahan logika?",
+      "options": [
+        "Program berjalan tetapi hasilnya tidak sesuai aturan",
+        "Semua pesan error dari terminal",
+        "File yang tidak memiliki ekstensi"
+      ],
+      "answer": 0,
+      "explanation": "Program bisa bebas dari error saat berjalan tetapi tetap salah menghitung atau memilih kondisi. Uji dengan hasil yang sudah diketahui untuk menemukannya."
+    },
+    {
+      "question": "Blok mana yang menangani kegagalan konversi int() karena masukan bukan angka?",
+      "options": [
+        "else setelah if",
+        "except ValueError",
+        "for angka in range(3)"
+      ],
+      "answer": 1,
+      "explanation": "Jika konversi ada di dalam try dan menimbulkan ValueError, except ValueError dapat menangani kesalahan tersebut dengan pesan yang jelas."
+    }
   ],
   "proyek-kasir-sederhana": [
-    {"question":"Berapa subtotal dari [20000, 35000, 50000]?","options":["95000","100000","105000"],"answer":2,"explanation":"20000 + 35000 = 55000, kemudian ditambah 50000 menghasilkan 105000."},
-    {"question":"Subtotal 105000 mendapat diskon 10%. Berapa total bayarnya?","options":["94500","10500","115500"],"answer":0,"explanation":"Diskon 10% dari 105000 adalah 10500. Total bayar diperoleh dengan mengurangi subtotal: 105000 - 10500 = 94500."},
-    {"question":"Mengapa return subtotal diletakkan setelah blok for?","options":["Karena return tidak boleh ada di fungsi","Agar semua harga dijumlahkan sebelum fungsi berhenti","Agar fungsi otomatis mengulang selamanya"],"answer":1,"explanation":"return menghentikan pemanggilan fungsi. Jika berada di dalam for, fungsi bisa berhenti setelah barang pertama dan belum menjumlahkan sisanya."},
-    {"question":"Jika list harga kosong dan subtotal diawali 0, berapa subtotal akhirnya?","options":["Selalu menimbulkan error","100000","0"],"answer":2,"explanation":"Tidak ada item yang diproses, sehingga blok for tidak dijalankan. Nilai subtotal tetap 0 dan fungsi mengembalikannya."}
+    {
+      "question": "Berapa subtotal dari [20000, 35000, 50000]?",
+      "options": [
+        "95000",
+        "100000",
+        "105000"
+      ],
+      "answer": 2,
+      "explanation": "20000 + 35000 = 55000, kemudian ditambah 50000 menghasilkan 105000."
+    },
+    {
+      "question": "Subtotal 105000 mendapat diskon 10%. Berapa total bayarnya?",
+      "options": [
+        "94500",
+        "10500",
+        "115500"
+      ],
+      "answer": 0,
+      "explanation": "Diskon 10% dari 105000 adalah 10500. Total bayar diperoleh dengan mengurangi subtotal: 105000 - 10500 = 94500."
+    },
+    {
+      "question": "Mengapa return subtotal diletakkan setelah blok for?",
+      "options": [
+        "Karena return tidak boleh ada di fungsi",
+        "Agar semua harga dijumlahkan sebelum fungsi berhenti",
+        "Agar fungsi otomatis mengulang selamanya"
+      ],
+      "answer": 1,
+      "explanation": "return menghentikan pemanggilan fungsi. Jika berada di dalam for, fungsi bisa berhenti setelah barang pertama dan belum menjumlahkan sisanya."
+    },
+    {
+      "question": "Jika list harga kosong dan subtotal diawali 0, berapa subtotal akhirnya?",
+      "options": [
+        "Selalu menimbulkan error",
+        "100000",
+        "0"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada item yang diproses, sehingga blok for tidak dijalankan. Nilai subtotal tetap 0 dan fungsi mengembalikannya."
+    }
+  ],
+  "flowchart-program": [
+    {
+      "question": "Simbol mana yang digunakan untuk keputusan?",
+      "options": [
+        "Persegi panjang",
+        "Belah ketupat",
+        "Oval"
+      ],
+      "answer": 1,
+      "explanation": "Belah ketupat memuat kondisi yang menentukan jalur berikutnya."
+    },
+    {
+      "question": "Apa fungsi panah pada flowchart?",
+      "options": [
+        "Menunjukkan arah langkah",
+        "Menghitung angka",
+        "Menghapus kondisi"
+      ],
+      "answer": 0,
+      "explanation": "Panah menghubungkan simbol dan menunjukkan langkah yang diikuti."
+    },
+    {
+      "question": "Pada kondisi nilai >= 75, jalur mana yang diikuti nilai 75?",
+      "options": [
+        "Tidak",
+        "Tidak ada jalur",
+        "Ya"
+      ],
+      "answer": 2,
+      "explanation": "Operator >= menyertakan batas 75 sehingga kondisi bernilai benar."
+    },
+    {
+      "question": "Apakah flowchart langsung menjalankan program?",
+      "options": [
+        "Selalu",
+        "Tidak, flowchart menggambarkan alur",
+        "Hanya jika memakai oval"
+      ],
+      "answer": 1,
+      "explanation": "Flowchart membantu merancang logika; kode perlu dibuat dan dijalankan terpisah."
+    }
+  ],
+  "penelusuran-program": [
+    {
+      "question": "total dimulai dari 0 lalu ditambah 2 dan 4. Berapa totalnya?",
+      "options": [
+        "6",
+        "4",
+        "2"
+      ],
+      "answer": 0,
+      "explanation": "Nilai lama dipertahankan: 0 + 2 + 4 = 6."
+    },
+    {
+      "question": "Apa yang dicatat pada tabel penelusuran?",
+      "options": [
+        "Hanya warna kode",
+        "Hanya nama file",
+        "Perubahan variabel sesuai urutan eksekusi"
+      ],
+      "answer": 2,
+      "explanation": "Tabel mengikuti kondisi, operasi, dan nilai variabel dari satu langkah ke langkah berikutnya."
+    },
+    {
+      "question": "Apa akibat total = 0 diletakkan pada awal setiap putaran?",
+      "options": [
+        "Total selalu bertambah dengan benar",
+        "Akumulasi sebelumnya hilang",
+        "Perulangan otomatis berhenti"
+      ],
+      "answer": 1,
+      "explanation": "Penugasan itu mereset total sehingga hasil putaran sebelumnya tidak dipertahankan."
+    },
+    {
+      "question": "Apa manfaat memperkirakan hasil sebelum Run?",
+      "options": [
+        "Membandingkan perilaku program dengan logika yang diharapkan",
+        "Menggantikan semua pengujian",
+        "Membuat Python lebih cepat"
+      ],
+      "answer": 0,
+      "explanation": "Dry run menghasilkan perkiraan yang dapat dicocokkan dengan keluaran nyata."
+    }
+  ],
+  "percabangan-bertingkat": [
+    {
+      "question": "Kapan if di dalam if dijalankan?",
+      "options": [
+        "Selalu",
+        "Ketika jalur luar yang memuatnya dipilih",
+        "Hanya setelah semua else"
+      ],
+      "answer": 1,
+      "explanation": "Blok dalam bergantung pada hasil percabangan luar."
+    },
+    {
+      "question": "Aturan contoh: bukan anggota mendapat diskon berapa persen?",
+      "options": [
+        "20",
+        "10",
+        "0"
+      ],
+      "answer": 2,
+      "explanation": "else luar memberikan persen 0 untuk pembeli bukan anggota."
+    },
+    {
+      "question": "Anggota dengan subtotal 200000 mendapat diskon berapa persen?",
+      "options": [
+        "20",
+        "10",
+        "0"
+      ],
+      "answer": 0,
+      "explanation": "Batas minimal 200000 memakai >=, sehingga nilai tepat batas mendapat 20%."
+    },
+    {
+      "question": "Apa yang menentukan pasangan else dalam Python?",
+      "options": [
+        "Warna editor",
+        "Indentasi dan susunan blok",
+        "Nama variabel"
+      ],
+      "answer": 1,
+      "explanation": "else harus sejajar dengan if yang menjadi pasangannya."
+    }
+  ],
+  "break-continue-menu": [
+    {
+      "question": "Apa fungsi break?",
+      "options": [
+        "Mengulang putaran",
+        "Menghapus variabel",
+        "Keluar dari loop terdekat"
+      ],
+      "answer": 2,
+      "explanation": "break menghentikan perulangan terdekat, bukan otomatis semua fungsi atau aplikasi."
+    },
+    {
+      "question": "Apa fungsi continue?",
+      "options": [
+        "Melewati sisa putaran saat ini",
+        "Menutup Python",
+        "Menyimpan file"
+      ],
+      "answer": 0,
+      "explanation": "continue melanjutkan ke putaran berikutnya setelah melewati sisa blok saat ini."
+    },
+    {
+      "question": "Mengapa while True pada menu perlu pilihan keluar?",
+      "options": [
+        "Agar print bekerja",
+        "Agar pengguna bisa mengakhiri perulangan",
+        "Agar input menjadi angka"
+      ],
+      "answer": 1,
+      "explanation": "Kondisi True tidak berubah sendiri; contoh memakai pilihan 0 dan break sebagai jalan keluar."
+    },
+    {
+      "question": "Apa hasil \" 0 \".strip()?",
+      "options": [
+        "\" 0 \"",
+        "0 bertipe int",
+        "\"0\" bertipe string"
+      ],
+      "answer": 2,
+      "explanation": "strip() menghapus whitespace di tepi, tetapi tidak mengonversi teks menjadi angka."
+    }
+  ],
+  "perulangan-bertingkat": [
+    {
+      "question": "Loop luar 2 kali dan loop dalam 3 kali menghasilkan berapa pasangan?",
+      "options": [
+        "6",
+        "5",
+        "3"
+      ],
+      "answer": 0,
+      "explanation": "Tiga putaran dalam diulang untuk setiap dua putaran luar: 2 × 3 = 6."
+    },
+    {
+      "question": "Kapan loop dalam dimulai lagi dari awal?",
+      "options": [
+        "Setelah program ditutup",
+        "Saat loop luar memasuki putaran berikutnya",
+        "Tidak pernah"
+      ],
+      "answer": 1,
+      "explanation": "Blok loop luar menjalankan loop dalam kembali pada setiap putarannya."
+    },
+    {
+      "question": "Mengapa nama baris dan kolom dibuat berbeda?",
+      "options": [
+        "Python mewajibkan nama itu",
+        "Agar hasil selalu positif",
+        "Agar peran dan perubahan variabel tidak tertukar"
+      ],
+      "answer": 2,
+      "explanation": "Nama yang berbeda memperjelas nilai milik loop luar dan loop dalam."
+    },
+    {
+      "question": "Berapa jumlah pasangan dari 1000 putaran luar dan 1000 putaran dalam?",
+      "options": [
+        "1000000",
+        "2000",
+        "1000"
+      ],
+      "answer": 0,
+      "explanation": "Jumlah pekerjaan dikalikan: 1000 × 1000 = 1000000."
+    }
+  ],
+  "pengolahan-teks": [
+    {
+      "question": "Apa hasil \"Python\"[0:3]?",
+      "options": [
+        "Pyth",
+        "Pyt",
+        "yth"
+      ],
+      "answer": 1,
+      "explanation": "Slicing dimulai dari indeks 0 sampai sebelum indeks 3."
+    },
+    {
+      "question": "Apa fungsi lower()?",
+      "options": [
+        "Menghapus semua spasi",
+        "Membagi string",
+        "Menghasilkan teks dengan huruf kecil"
+      ],
+      "answer": 2,
+      "explanation": "lower() mengembalikan string baru dengan huruf kecil."
+    },
+    {
+      "question": "Apa hasil \"Budi Santoso\".split()?",
+      "options": [
+        "List dengan dua kata",
+        "Satu angka",
+        "Dictionary"
+      ],
+      "answer": 0,
+      "explanation": "split() tanpa argumen memisahkan teks berdasarkan whitespace."
+    },
+    {
+      "question": "Mengapa teks kosong perlu diperiksa sebelum membaca hasil split()[0]?",
+      "options": [
+        "Agar huruf besar",
+        "Karena hasil split dapat berupa list kosong",
+        "Karena split selalu menghasilkan None"
+      ],
+      "answer": 1,
+      "explanation": "Tidak ada indeks 0 pada list kosong sehingga akses tersebut dapat memunculkan IndexError."
+    }
+  ],
+  "list-lanjutan": [
+    {
+      "question": "Apa yang dikembalikan data.sort()?",
+      "options": [
+        "List baru",
+        "Salinan data",
+        "None"
+      ],
+      "answer": 2,
+      "explanation": "sort() mengubah list asli dan mengembalikan None."
+    },
+    {
+      "question": "Bagaimana mendapatkan list terurut baru?",
+      "options": [
+        "sorted(data)",
+        "data = data.sort()",
+        "data.remove()"
+      ],
+      "answer": 0,
+      "explanation": "sorted() menghasilkan list baru tanpa mengubah urutan list asli."
+    },
+    {
+      "question": "Apa akibat salinan = data untuk list?",
+      "options": [
+        "Selalu membuat salinan mandiri",
+        "Kedua nama merujuk list yang sama",
+        "Menghapus list asli"
+      ],
+      "answer": 1,
+      "explanation": "Penugasan nama tidak menyalin objek list. Gunakan copy() untuk salinan dangkal."
+    },
+    {
+      "question": "Apa fungsi remove(x)?",
+      "options": [
+        "Menghapus semua x",
+        "Mengurutkan x",
+        "Menghapus kemunculan pertama x"
+      ],
+      "answer": 2,
+      "explanation": "remove() menghapus kemunculan pertama dan memunculkan ValueError jika nilai tidak ada."
+    }
+  ],
+  "tuple-dictionary": [
+    {
+      "question": "Struktur mana yang memakai pasangan key dan value?",
+      "options": [
+        "Dictionary",
+        "Tuple",
+        "String"
+      ],
+      "answer": 0,
+      "explanation": "Dictionary menghubungkan key dengan nilai, misalnya harga dengan 10000."
+    },
+    {
+      "question": "Apa hasil barang.get(\"diskon\", 0) jika key diskon tidak tersedia?",
+      "options": [
+        "KeyError",
+        "0",
+        "None selalu"
+      ],
+      "answer": 1,
+      "explanation": "Argumen kedua adalah nilai bawaan yang dipakai ketika key tidak ditemukan."
+    },
+    {
+      "question": "Apa yang terjadi saat mengisi ulang key harga yang sudah ada?",
+      "options": [
+        "Membuat dua key harga",
+        "Mengubah semua key",
+        "Memperbarui nilai key harga"
+      ],
+      "answer": 2,
+      "explanation": "Key dalam dictionary unik; penugasan pada key yang sama memperbarui nilainya."
+    },
+    {
+      "question": "Bagaimana menulis tuple satu item?",
+      "options": [
+        "(10,)",
+        "(10)",
+        "[10]"
+      ],
+      "answer": 0,
+      "explanation": "Koma membuatnya tuple satu item. (10) hanya pengelompokan ekspresi angka."
+    }
+  ],
+  "algoritma-statistik-dasar": [
+    {
+      "question": "Mengapa rata-rata list kosong perlu ditangani?",
+      "options": [
+        "Agar urutan berubah",
+        "Agar tidak membagi dengan nol",
+        "Agar list menjadi tuple"
+      ],
+      "answer": 1,
+      "explanation": "Jumlah item kosong adalah 0, sehingga total / len(data) tidak valid."
+    },
+    {
+      "question": "Data [-5, -2] mempunyai nilai maksimum berapa?",
+      "options": [
+        "0",
+        "-5",
+        "-2"
+      ],
+      "answer": 2,
+      "explanation": "Nilai terbesar berasal dari data aktual, bukan selalu 0."
+    },
+    {
+      "question": "Apa perbedaan akumulasi nilai dan pencacahan item lulus?",
+      "options": [
+        "Akumulasi menambah nilainya; pencacahan menambah 1 per item yang memenuhi syarat",
+        "Tidak ada perbedaan",
+        "Pencacahan harus memakai string"
+      ],
+      "answer": 0,
+      "explanation": "Keduanya menggunakan penghitung tetapi besaran yang ditambahkan berbeda."
+    },
+    {
+      "question": "Berapa rata-rata [70, 80, 90]?",
+      "options": [
+        "75",
+        "80",
+        "90"
+      ],
+      "answer": 1,
+      "explanation": "Total 240 dibagi tiga item menghasilkan 80."
+    }
+  ],
+  "pencarian-linear": [
+    {
+      "question": "Apakah linear search membutuhkan data terurut?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika berupa teks",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Linear search membandingkan item satu per satu tanpa mensyaratkan urutan."
+    },
+    {
+      "question": "Pada contoh pencarian, apa arti posisi = 0?",
+      "options": [
+        "Ditemukan pada item pertama",
+        "Tidak ditemukan",
+        "Data kosong"
+      ],
+      "answer": 0,
+      "explanation": "Indeks dimulai dari 0; None digunakan sebagai penanda belum ditemukan."
+    },
+    {
+      "question": "Mengapa if posisi tidak tepat untuk menguji keberhasilan?",
+      "options": [
+        "Semua angka bernilai True",
+        "Indeks 0 dianggap false meskipun hasilnya valid",
+        "Python tidak menerima if untuk angka"
+      ],
+      "answer": 1,
+      "explanation": "Gunakan posisi is None atau is not None agar indeks 0 tidak keliru dianggap gagal."
+    },
+    {
+      "question": "Dengan break, data ganda mengembalikan kecocokan yang mana?",
+      "options": [
+        "Terakhir",
+        "Semua sekaligus",
+        "Pertama"
+      ],
+      "answer": 2,
+      "explanation": "Pencarian berhenti ketika kecocokan pertama ditemukan."
+    }
+  ],
+  "fungsi-lanjutan": [
+    {
+      "question": "Apa fungsi parameter bawaan?",
+      "options": [
+        "Memberikan nilai ketika argumen tidak disediakan",
+        "Mengubah variabel global otomatis",
+        "Menghapus return"
+      ],
+      "answer": 0,
+      "explanation": "Nilai bawaan dipakai jika pemanggil tidak memberikan argumen untuk parameter itu."
+    },
+    {
+      "question": "Apakah parameter lokal batas otomatis mengubah batas di luar fungsi?",
+      "options": [
+        "Ya",
+        "Tidak",
+        "Hanya jika angkanya sama"
+      ],
+      "answer": 1,
+      "explanation": "Nama lokal tidak otomatis menugaskan nilai baru ke nama global yang sama."
+    },
+    {
+      "question": "Mengapa list mutable sebagai nilai bawaan perlu dihindari jika akan dimutasi?",
+      "options": [
+        "List tidak boleh menjadi parameter",
+        "List selalu kosong",
+        "Objek bawaan dapat dipakai bersama oleh beberapa pemanggilan"
+      ],
+      "answer": 2,
+      "explanation": "Nilai bawaan dievaluasi saat definisi dijalankan, sehingga mutasi dapat terbawa ke pemanggilan berikutnya."
+    },
+    {
+      "question": "Cara alur data mana yang paling jelas untuk fungsi perhitungan sederhana?",
+      "options": [
+        "Masukan melalui parameter, hasil melalui return",
+        "Semua data harus global",
+        "Semua hasil harus dicetak di dalam fungsi"
+      ],
+      "answer": 0,
+      "explanation": "Parameter dan return memperlihatkan ketergantungan fungsi dan memudahkan pengujian."
+    }
+  ],
+  "modul-import": [
+    {
+      "question": "Pada contoh dua file, file mana yang dijalankan?",
+      "options": [
+        "Keduanya sekaligus",
+        "utama.py",
+        "File JSON"
+      ],
+      "answer": 1,
+      "explanation": "utama.py mengatur alur dan mengimpor fungsi dari perhitungan.py."
+    },
+    {
+      "question": "Bagaimana menulis import file perhitungan.py?",
+      "options": [
+        "import perhitungan.py",
+        "import \"perhitungan.py\"",
+        "import perhitungan"
+      ],
+      "answer": 2,
+      "explanation": "Import memakai nama modul tanpa ekstensi .py."
+    },
+    {
+      "question": "Apa manfaat if __name__ == \"__main__\"?",
+      "options": [
+        "Membatasi demo agar berjalan saat file menjadi program utama",
+        "Menghentikan semua import",
+        "Membuat file terenkripsi"
+      ],
+      "answer": 0,
+      "explanation": "Blok penjaga membantu mencegah demo atau interaksi berjalan ketika file diimpor sebagai modul."
+    },
+    {
+      "question": "Mengapa nama file json.py dapat bermasalah?",
+      "options": [
+        "Karena semua nama pendek dilarang",
+        "Dapat menutup modul standar json saat import",
+        "Karena ekstensi .py salah"
+      ],
+      "answer": 1,
+      "explanation": "File lokal bernama sama dapat dipilih sebagai modul sehingga impor tidak menuju pustaka standar yang diharapkan."
+    }
+  ],
+  "debugging-pengujian": [
+    {
+      "question": "Apa perbedaan debugging dan pengujian?",
+      "options": [
+        "Keduanya hanya menjalankan print",
+        "Debugging menyimpan data",
+        "Debugging mencari penyebab; pengujian memeriksa kesesuaian perilaku"
+      ],
+      "answer": 2,
+      "explanation": "Pengujian menemukan ketidaksesuaian, sedangkan debugging menelusuri penyebabnya."
+    },
+    {
+      "question": "Kasus mana yang menguji batas kelulusan 75?",
+      "options": [
+        "74, 75, 76",
+        "10, 20, 30",
+        "90, 95, 100"
+      ],
+      "answer": 0,
+      "explanation": "Kasus tepat di bawah, pada, dan di atas batas membantu menguji operator kondisi."
+    },
+    {
+      "question": "Apakah assert cocok sebagai satu-satunya validasi penting masukan aplikasi?",
+      "options": [
+        "Ya selalu",
+        "Tidak, assert dapat dinonaktifkan melalui optimasi",
+        "Ya karena selalu menangkap semua error"
+      ],
+      "answer": 1,
+      "explanation": "Validasi input tetap perlu memakai if atau exception; assert terutama membantu memeriksa asumsi/pengujian."
+    },
+    {
+      "question": "Dari mana hasil harapan pengujian ditentukan?",
+      "options": [
+        "Dari keluaran program saja",
+        "Dari jumlah baris kode",
+        "Dari aturan masalah dan perhitungan terpisah"
+      ],
+      "answer": 2,
+      "explanation": "Menyalin hasil program dapat mempertahankan kesalahan yang justru ingin ditemukan."
+    }
+  ],
+  "file-teks-csv-json": [
+    {
+      "question": "Mode mana yang dapat menimpa isi file?",
+      "options": [
+        "w",
+        "r",
+        "Tidak ada"
+      ],
+      "answer": 0,
+      "explanation": "Mode w menulis ulang file yang sudah ada, sehingga gunakan nama file latihan yang jelas."
+    },
+    {
+      "question": "Apa manfaat with open(...)?",
+      "options": [
+        "File tidak pernah berubah",
+        "File ditutup setelah blok selesai",
+        "Semua JSON menjadi valid"
+      ],
+      "answer": 1,
+      "explanation": "Context manager mengatur penutupan file termasuk saat blok berakhir karena exception."
+    },
+    {
+      "question": "Apa tipe umum nilai sel yang dibaca csv.reader?",
+      "options": [
+        "int otomatis",
+        "bool otomatis",
+        "String"
+      ],
+      "answer": 2,
+      "explanation": "CSV reader biasa menghasilkan teks. Konversi angka dilakukan secara eksplisit."
+    },
+    {
+      "question": "Apakah JSON yang berhasil di-load pasti sesuai struktur aplikasi?",
+      "options": [
+        "Tidak; kolom, tipe, dan nilai tetap perlu divalidasi",
+        "Ya selalu",
+        "Hanya jika jumlah data genap"
+      ],
+      "answer": 0,
+      "explanation": "Valid secara sintaks JSON tidak menjamin data memenuhi skema atau aturan aplikasi."
+    }
+  ],
+  "studi-kasus-nilai-siswa": [
+    {
+      "question": "Berapa rata-rata nilai Ana [80, 75, 85]?",
+      "options": [
+        "75",
+        "80",
+        "85"
+      ],
+      "answer": 1,
+      "explanation": "Totalnya 240 lalu dibagi tiga, menghasilkan 80."
+    },
+    {
+      "question": "Mengapa daftar nilai kosong ditolak?",
+      "options": [
+        "Agar siswa selalu lulus",
+        "Agar jumlah soal bertambah",
+        "Agar data lengkap dan tidak membagi nol"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada nilai yang dapat dirata-ratakan jika jumlah itemnya nol."
+    },
+    {
+      "question": "Apakah rata-rata tepat 75 lulus dalam aturan studi kasus?",
+      "options": [
+        "Ya",
+        "Tidak",
+        "Hanya jika nama diawali A"
+      ],
+      "answer": 0,
+      "explanation": "Batas minimal 75 memakai >= sehingga nilai tepat batas termasuk lulus."
+    },
+    {
+      "question": "Apakah format tampilan :.1f seharusnya menentukan status kelulusan?",
+      "options": [
+        "Ya, selalu pakai teks tampilan",
+        "Tidak, contoh memakai rata-rata asli",
+        "Tidak perlu menghitung rata-rata"
+      ],
+      "answer": 1,
+      "explanation": "Pembulatan tampilan tidak boleh mengubah aturan keputusan kecuali memang ditetapkan dalam kebijakan."
+    }
+  ],
+  "studi-kasus-pencatat-pengeluaran": [
+    {
+      "question": "Mengapa JSON rusak tidak langsung dianggap list kosong?",
+      "options": [
+        "Agar program lebih lambat",
+        "Agar jumlah menjadi negatif",
+        "Agar riwayat lama tidak tertimpa tanpa sengaja"
+      ],
+      "answer": 2,
+      "explanation": "Mengganti data rusak dengan kosong lalu menyimpan dapat menghilangkan riwayat yang seharusnya diperiksa atau dipulihkan."
+    },
+    {
+      "question": "Kapan data aktif diperbarui setelah menambah transaksi?",
+      "options": [
+        "Setelah penyimpanan calon data berhasil",
+        "Sebelum validasi",
+        "Hanya setelah program ditutup"
+      ],
+      "answer": 0,
+      "explanation": "Program baru memakai calon sebagai data aktif setelah simpan berhasil sehingga status sesuai keadaan penyimpanan."
+    },
+    {
+      "question": "Makan 15000 dan Transport 10000 menghasilkan total berapa?",
+      "options": [
+        "15000",
+        "25000",
+        "10000"
+      ],
+      "answer": 1,
+      "explanation": "Jumlahnya 15000 + 10000 = 25000 rupiah."
+    },
+    {
+      "question": "Transaksi mana yang ditolak aturan studi kasus?",
+      "options": [
+        "Makan 15000",
+        "Transport 10000",
+        "Keterangan kosong dengan jumlah 0"
+      ],
+      "answer": 2,
+      "explanation": "Keterangan wajib berisi teks dan jumlah harus rupiah bulat positif."
+    }
   ]
 }

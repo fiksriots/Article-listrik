@@ -1,0 +1,1039 @@
+[
+  {
+    "slug": "flowchart-program",
+    "title": "Flowchart: menggambar alur program",
+    "summary": "Kenali simbol dan ubah alur keputusan menjadi kode Python.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Peta perjalanan memakai bentuk dan panah agar rute mudah diikuti. Flowchart memakai simbol untuk memperlihatkan langkah program.",
+    "explain": [
+      "Flowchart adalah diagram alur. Oval atau kotak membulat menandai mulai dan selesai, persegi panjang untuk proses, jajar genjang untuk input-output, dan belah ketupat untuk keputusan. Panah menunjukkan langkah berikutnya.",
+      "Tuliskan kondisi pada simbol keputusan dan beri label Ya/Tidak pada jalurnya. Contoh: nilai >= 75 mempunyai dua hasil. Jalur Ya menampilkan Lulus; jalur Tidak menampilkan Belum lulus. Kedua jalur kemudian selesai.",
+      "Diagram membantu memeriksa logika sebelum menulis sintaks. Ia tidak menjalankan kode dan tidak wajib menggambarkan setiap operasi kecil. Gambarkan bagian yang membantu pembaca mengikuti keputusan dan pengulangan."
+    ],
+    "table": {
+      "headers": [
+        "Simbol",
+        "Makna",
+        "Contoh"
+      ],
+      "rows": [
+        [
+          "Oval / membulat",
+          "Mulai atau selesai",
+          "Mulai pemeriksaan"
+        ],
+        [
+          "Jajar genjang",
+          "Input atau output",
+          "Baca / tampilkan nilai"
+        ],
+        [
+          "Persegi panjang",
+          "Proses",
+          "total = harga * jumlah"
+        ],
+        [
+          "Belah ketupat",
+          "Keputusan",
+          "nilai >= 75?"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Keputusan sederhana",
+        "code": "nilai = 74\nif nilai >= 75:\n    print(\"Lulus\")\nelse:\n    print(\"Belum lulus\")",
+        "output": "Belum lulus",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Gambar flowchart kelulusan di kertas.",
+      "Uji nilai 74, 75, dan 76 dengan mengikuti panah.",
+      "Ubah kondisi menjadi umur >= 17 untuk menentukan kategori tiket."
+    ],
+    "warning": "Setiap jalur keputusan perlu jelas tujuannya. Hindari panah tanpa label yang membuat pembaca menebak kondisi mana yang diikuti.",
+    "check": "Apakah belah ketupat dipakai untuk semua perhitungan?",
+    "answer": "Tidak. Belah ketupat untuk keputusan; perhitungan biasa ditulis dalam simbol proses.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "flowchart",
+    "diagramAlt": "Simbol mulai, input-output, proses, dan keputusan pada flowchart.",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "penelusuran-program",
+    "title": "Menelusuri program dengan tabel",
+    "summary": "Ikuti perubahan variabel tanpa menebak hasil akhir.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Seperti mencatat saldo setelah setiap transaksi, tabel penelusuran mencatat nilai sesudah setiap langkah.",
+    "explain": [
+      "Penelusuran atau dry run berarti menjalankan logika secara manual. Tulis nilai awal, periksa kondisi, lalu catat variabel setelah setiap perubahan. Cara ini membantu memahami kode sebelum menekan Run.",
+      "Pada total += angka, nilai lama total ditambah angka saat ini. Jangan langsung mengganti total dengan angka. Bedakan kolom nilai sebelum operasi dan sesudah operasi agar tidak menghitung satu langkah dua kali.",
+      "Catatan ini juga membantu menemukan indentasi salah. Jika total = 0 berada di dalam perulangan, total direset setiap putaran. Program tetap bisa berjalan, tetapi hasil akhirnya tidak sesuai tujuan."
+    ],
+    "table": {
+      "headers": [
+        "Putaran",
+        "angka",
+        "total sebelum",
+        "total sesudah"
+      ],
+      "rows": [
+        [
+          "Awal",
+          "—",
+          "—",
+          "0"
+        ],
+        [
+          "1",
+          "2",
+          "0",
+          "2"
+        ],
+        [
+          "2",
+          "4",
+          "2",
+          "6"
+        ],
+        [
+          "3",
+          "6",
+          "6",
+          "12"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Akumulasi tiga angka",
+        "code": "total = 0\nfor angka in [2, 4, 6]:\n    total += angka\n    print(angka, total)\nprint(\"Hasil:\", total)",
+        "output": "2 2\n4 6\n6 12\nHasil: 12",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Buat tabel untuk data [3, 5, 2].",
+      "Tebak hasil jika total diawali 10.",
+      "Pindahkan total = 0 ke dalam for, amati perbedaannya, lalu kembalikan."
+    ],
+    "warning": "Tabel penelusuran harus mengikuti urutan dan indentasi kode, bukan urutan hasil yang kamu harapkan.",
+    "check": "Berapa total setelah dua angka pertama, 2 dan 4?",
+    "answer": "6. Total dimulai dari 0, menjadi 2, kemudian 6.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "percabangan-bertingkat",
+    "title": "Percabangan bertingkat",
+    "summary": "Periksa kondisi tambahan hanya ketika kondisi awal terpenuhi.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Petugas memeriksa apakah kamu anggota. Jika anggota, petugas memeriksa lagi jumlah belanja untuk menentukan diskon.",
+    "explain": [
+      "Percabangan bertingkat menempatkan if di dalam blok if atau else lain. Pemeriksaan di dalam hanya dijalankan ketika jalur luarnya dipilih. Gunakan ketika keputusan kedua memang bergantung pada keputusan pertama.",
+      "Contoh menetapkan diskon 20% untuk anggota yang belanja minimal 200000 dan 10% untuk anggota di bawah batas itu. Pembeli bukan anggota tidak mendapat diskon. Aturan tersebut adalah kebijakan latihan, bukan aturan toko yang berlaku umum.",
+      "Indentasi menunjukkan pasangan kondisi. else yang sejajar dengan if anggota menangani bukan anggota. else yang lebih menjorok menangani anggota yang belum mencapai batas belanja. Jika syarat makin panjang, pecah menjadi fungsi setelah memahami bab fungsi."
+    ],
+    "table": {
+      "headers": [
+        "Anggota",
+        "Subtotal",
+        "Persen diskon"
+      ],
+      "rows": [
+        [
+          "True",
+          "200000",
+          "20"
+        ],
+        [
+          "True",
+          "199999",
+          "10"
+        ],
+        [
+          "False",
+          "200000",
+          "0"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Memilih diskon anggota",
+        "code": "anggota = True\nsubtotal = 250000\nif anggota:\n    if subtotal >= 200000:\n        persen = 20\n    else:\n        persen = 10\nelse:\n    persen = 0\nprint(\"Diskon:\", persen, \"%\")",
+        "output": "Diskon: 20 %",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Uji ketiga kombinasi pada tabel.",
+      "Uji anggota True dengan subtotal 200000.",
+      "Tulis ulang aturannya menggunakan if–elif dengan and."
+    ],
+    "warning": "Jangan menambah tingkat if tanpa kebutuhan. Semakin dalam bloknya, semakin teliti kamu harus membaca indentasi.",
+    "check": "Apakah kondisi subtotal diperiksa pada contoh ketika anggota bernilai False?",
+    "answer": "Tidak. Program langsung mengambil else luar dan memberikan persen 0.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "break-continue-menu",
+    "title": "break, continue, dan menu berulang",
+    "summary": "Bangun menu yang dapat dipakai berulang sampai pengguna memilih keluar.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Di loket, memilih batal mengakhiri giliran. Mengisi formulir salah membuatmu mengulang giliran tanpa melanjutkan proses.",
+    "explain": [
+      "break menghentikan perulangan terdekat. continue melewati sisa instruksi pada putaran saat ini dan melanjutkan ke pemeriksaan atau item berikutnya. Keduanya tidak berarti menutup seluruh aplikasi.",
+      "while True membuat loop yang kondisi awalnya selalu benar. Karena itu contoh menyediakan pilihan 0 yang menjalankan break. Pilihan tidak dikenal menjalankan continue agar pengguna kembali memilih.",
+      "strip() membersihkan spasi di awal dan akhir teks. Jadi masukan \" 0 \" dikenali sebagai \"0\". Pada contoh sesi, pengguna mengetik 9, 1, lalu 0. Materi teks nanti menjelaskan pengolahan string lebih rinci."
+    ],
+    "table": {
+      "headers": [
+        "Perintah",
+        "Dampak"
+      ],
+      "rows": [
+        [
+          "break",
+          "Keluar dari loop terdekat"
+        ],
+        [
+          "continue",
+          "Lewati sisa putaran ini"
+        ],
+        [
+          "while True",
+          "Berulang sampai ada jalan keluar"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Menu sederhana",
+        "code": "while True:\n    pilihan = input(\"1=Halo, 0=Keluar: \").strip()\n    if pilihan == \"0\":\n        print(\"Sampai jumpa\")\n        break\n    if pilihan != \"1\":\n        print(\"Pilihan tidak dikenal\")\n        continue\n    print(\"Halo, Python!\")",
+        "output": "1=Halo, 0=Keluar: 9\nPilihan tidak dikenal\n1=Halo, 0=Keluar: 1\nHalo, Python!\n1=Halo, 0=Keluar: 0\nSampai jumpa",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh.",
+        "inputs": [
+          "9",
+          "1",
+          "0"
+        ]
+      }
+    ],
+    "practice": [
+      "Jalankan sesi sesuai contoh.",
+      "Uji pilihan kosong dan spasi di sekitar 0.",
+      "Tambahkan pilihan 2 untuk menampilkan kalimat lain."
+    ],
+    "warning": "Pastikan selalu tersedia jalan keluar. continue pada while dapat melewati pembaruan penghitung jika penempatannya keliru.",
+    "check": "Apakah break di dalam dua loop otomatis menghentikan keduanya?",
+    "answer": "Tidak. break hanya keluar dari loop terdekat yang memuatnya.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "perulangan-bertingkat",
+    "title": "Perulangan bertingkat",
+    "summary": "Pahami hubungan putaran luar dan dalam melalui tabel perkalian.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Untuk setiap baris rak, kamu memeriksa semua kolom. Pemeriksaan kolom diulang dari awal ketika berpindah baris.",
+    "explain": [
+      "Perulangan bertingkat berarti ada loop di dalam loop. Pada setiap putaran luar, loop dalam berjalan dari awal sampai selesai. Contoh mempunyai dua nilai luar dan tiga nilai dalam, sehingga ada enam pasangan.",
+      "Variabel baris dan kolom dipakai dengan nama berbeda agar tidak saling menimpa. range(1, 3) menghasilkan 1 dan 2; range(1, 4) menghasilkan 1, 2, dan 3.",
+      "Jumlah pekerjaan dapat bertambah cepat. Dua loop dengan masing-masing 1000 putaran menghasilkan satu juta pasangan. Mulai dengan rentang kecil agar keluaran mudah diperiksa."
+    ],
+    "table": {
+      "headers": [
+        "baris",
+        "kolom yang diproses",
+        "Jumlah pasangan"
+      ],
+      "rows": [
+        [
+          "1",
+          "1, 2, 3",
+          "3"
+        ],
+        [
+          "2",
+          "1, 2, 3",
+          "3"
+        ],
+        [
+          "Total",
+          "—",
+          "6"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Tabel perkalian kecil",
+        "code": "for baris in range(1, 3):\n    for kolom in range(1, 4):\n        print(baris, \"x\", kolom, \"=\", baris * kolom)",
+        "output": "1 x 1 = 1\n1 x 2 = 2\n1 x 3 = 3\n2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Perluas menjadi tabel perkalian 1 sampai 3.",
+      "Hitung jumlah pasangan sebelum menjalankan.",
+      "Tambahkan print(\"Baris selesai\") setelah loop dalam, tetapi masih di dalam loop luar."
+    ],
+    "warning": "Tiga putaran luar dan empat putaran dalam menghasilkan 12 pekerjaan, bukan 7.",
+    "check": "Berapa kali isi loop dalam berjalan jika loop luar 3 kali dan loop dalam 4 kali?",
+    "answer": "12 kali, karena empat pekerjaan diulang untuk masing-masing dari tiga putaran luar.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "pengolahan-teks",
+    "title": "Mengolah teks dengan Python",
+    "summary": "Bersihkan, pecah, dan susun teks dari masukan pengguna.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Sebelum mengarsipkan nama, petugas merapikan spasi dan menyeragamkan penulisannya. Program dapat melakukan pekerjaan serupa.",
+    "explain": [
+      "String menyimpan urutan karakter. Indeks dimulai dari 0, sedangkan potongan teks atau slicing memakai batas akhir yang tidak disertakan. Pada \"Python\", teks[0] adalah P dan teks[0:3] adalah Pyt.",
+      "strip() menghapus spasi atau whitespace di tepi teks, lower() menghasilkan huruf kecil, dan split() tanpa argumen memecah teks berdasarkan whitespace. String tidak diubah langsung: simpan hasil metode ke variabel.",
+      "f-string diawali huruf f sebelum tanda kutip. Bagian di dalam kurung kurawal diganti dengan nilai ekspresi. Format :.1f menampilkan satu angka di belakang titik desimal; ini hanya tampilan, bukan aturan validasi data."
+    ],
+    "table": {
+      "headers": [
+        "Operasi",
+        "Contoh",
+        "Hasil"
+      ],
+      "rows": [
+        [
+          "strip()",
+          "\"  Budi  \".strip()",
+          "Budi"
+        ],
+        [
+          "lower()",
+          "\"BUDI\".lower()",
+          "budi"
+        ],
+        [
+          "Slicing",
+          "\"Python\"[0:3]",
+          "Pyt"
+        ],
+        [
+          "split()",
+          "\"Budi Santoso\".split()",
+          "Dua item: Budi dan Santoso"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Membersihkan nama",
+        "code": "mentah = \"  Budi Santoso  \"\nnama = mentah.strip()\nkata = nama.split()\nprint(nama.lower())\nprint(\"Kata pertama:\", kata[0])\nprint(f\"Halo, {nama}!\")\nprint(\"Python\"[0:3])",
+        "output": "budi santoso\nKata pertama: Budi\nHalo, Budi Santoso!\nPyt",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Uji nama dengan spasi berulang di tengah.",
+      "Periksa hasil split() saat input hanya berisi spasi sebelum mengakses indeks 0.",
+      "Buat perbandingan pilihan.lower() == \"ya\"."
+    ],
+    "warning": "String kosong setelah strip() perlu ditolak jika nama wajib diisi. Jangan mengakses kata[0] sebelum memastikan list kata tidak kosong.",
+    "check": "Apakah nama.lower() selalu mengubah isi nama secara langsung?",
+    "answer": "Tidak. Metode itu mengembalikan string baru; gunakan nama = nama.lower() jika ingin menyimpan hasilnya.",
+    "source": "https://docs.python.org/3/tutorial/introduction.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "list-lanjutan",
+    "title": "Mengubah, menghapus, dan mengurutkan list",
+    "summary": "Kelola isi list dan pahami perbedaan perubahan langsung dengan salinan.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Daftar antrean bisa ditambah, diperbaiki, dihapus, atau disusun ulang. Kamu perlu tahu apakah yang diubah adalah daftar asli atau salinannya.",
+    "explain": [
+      "Ubah satu item dengan penugasan indeks, misalnya nilai[0] = 75. remove(x) menghapus kemunculan pertama nilai x; pop(i) menghapus sekaligus mengembalikan item pada indeks i. Periksa keberadaan nilai sebelum remove().",
+      "sorted(data) menghasilkan list baru yang terurut. data.sort() mengurutkan list asli dan mengembalikan None. Karena itu jangan menulis data = data.sort() jika masih membutuhkan listnya.",
+      "salinan = data hanya membuat nama lain untuk list yang sama. Gunakan data.copy() untuk salinan dangkal. Pada list berisi angka sederhana, perubahan item pada salinan tidak mengubah list asli. Pada list bertingkat, salinan dangkal masih berbagi objek bersarang."
+    ],
+    "table": {
+      "headers": [
+        "Operasi",
+        "Tujuan"
+      ],
+      "rows": [
+        [
+          "data[0] = 75",
+          "Ubah item pertama"
+        ],
+        [
+          "data.remove(60)",
+          "Hapus kemunculan pertama 60"
+        ],
+        [
+          "data.pop()",
+          "Ambil dan hapus item terakhir"
+        ],
+        [
+          "sorted(data)",
+          "Buat list terurut baru"
+        ],
+        [
+          "data.copy()",
+          "Buat salinan dangkal"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Memperbaiki daftar nilai",
+        "code": "nilai = [80, 60, 90]\nnilai[1] = 75\nurut = sorted(nilai)\nprint(\"Asli:\", nilai)\nprint(\"Urut:\", urut)\nif 75 in nilai:\n    nilai.remove(75)\nprint(\"Sesudah hapus:\", nilai)",
+        "output": "Asli: [80, 75, 90]\nUrut: [75, 80, 90]\nSesudah hapus: [80, 90]",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Tambahkan nilai memakai append(), lalu urutkan.",
+      "Bandingkan sorted(nilai) dengan nilai.sort().",
+      "Buat salinan angka, ubah satu itemnya, dan periksa list asli."
+    ],
+    "warning": "Menghapus item dari list yang sedang diiterasi dapat membuat item terlewati. Buat list hasil baru atau iterasi pada salinan.",
+    "check": "Apa hasil pengembalian nilai.sort()?",
+    "answer": "None. Metode sort() mengubah list asli, bukan mengembalikan list terurut baru.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "tuple-dictionary",
+    "title": "Tuple dan dictionary",
+    "summary": "Pilih cara menyimpan data berdasarkan hubungan antar nilainya.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Tuple seperti pasangan koordinat yang tetap. Dictionary seperti kartu barang dengan kolom bernama: nama, harga, dan stok.",
+    "explain": [
+      "Tuple adalah urutan yang tidak dapat diganti itemnya melalui penugasan indeks. Contoh ukuran = (10, 20). Tuple satu item memerlukan koma: (10,). Untuk pemula, gunakan saat susunan nilainya hendak dipertahankan.",
+      "Dictionary menyimpan pasangan key dan value. Contoh barang[\"harga\"] mengambil nilai dengan key harga. Key harus unik; pemberian nilai pada key yang sama memperbarui nilainya. Key yang tidak ditemukan pada akses kurung siku menimbulkan KeyError.",
+      "get(key, bawaan) membantu membaca key opsional. List berisi dictionary cocok untuk sekumpulan siswa atau transaksi: tiap item mempunyai nama kolom yang sama. Tuple tidak sepenuhnya membekukan objek mutable yang mungkin ada di dalamnya."
+    ],
+    "table": {
+      "headers": [
+        "Struktur",
+        "Cocok untuk",
+        "Cara membaca"
+      ],
+      "rows": [
+        [
+          "List",
+          "Kumpulan item yang dapat diubah",
+          "data[0]"
+        ],
+        [
+          "Tuple",
+          "Urutan tetap",
+          "ukuran[0]"
+        ],
+        [
+          "Dictionary",
+          "Data dengan nama kolom",
+          "barang[\"harga\"]"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Data barang dan ukuran",
+        "code": "ukuran = (10, 20)\nbarang = {\"nama\": \"Buku\", \"harga\": 10000, \"stok\": 3}\nbarang[\"stok\"] = 4\nprint(\"Lebar:\", ukuran[0])\nprint(barang[\"nama\"], barang[\"stok\"])\nprint(\"Diskon:\", barang.get(\"diskon\", 0))",
+        "output": "Lebar: 10\nBuku 4\nDiskon: 0",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Buat dictionary siswa dengan nama dan nilai.",
+      "Simpan dua siswa dalam satu list lalu baca dengan for.",
+      "Gunakan get() untuk key opsional catatan."
+    ],
+    "warning": "Dictionary memakai key, bukan otomatis nomor urut. siswa[0] tidak sama dengan siswa[\"nama\"].",
+    "check": "Apa yang terjadi jika key harga diberi nilai baru?",
+    "answer": "Nilai pada key harga diperbarui. Dictionary tidak membuat dua key harga yang sama.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "algoritma-statistik-dasar",
+    "title": "Algoritma jumlah, rata-rata, minimum, dan maksimum",
+    "summary": "Latih logika pengolahan data sebelum memakai fungsi bawaan.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Guru menghitung total nilai, membagi dengan jumlah siswa, lalu mencari nilai tertinggi dan terendah.",
+    "explain": [
+      "Akumulasi menambah nilai satu per satu ke total. Pencacahan menghitung banyaknya item yang memenuhi syarat. Keduanya mirip tetapi yang ditambahkan berbeda: nilainya atau angka 1.",
+      "Rata-rata adalah total dibagi jumlah data. List kosong memerlukan penanganan khusus agar tidak terjadi pembagian nol. Minimum dan maksimum dapat diawali dengan item pertama, kemudian dibandingkan dengan item berikutnya.",
+      "Jangan selalu mengawali maksimum dengan 0: data mungkin seluruhnya negatif. Setelah memahami alur manual, kenali sum(), min(), dan max() untuk pekerjaan sehari-hari. min() dan max() tanpa nilai bawaan juga tidak menerima iterable kosong."
+    ],
+    "table": {
+      "headers": [
+        "Data uji",
+        "Rata-rata",
+        "Minimum",
+        "Maksimum"
+      ],
+      "rows": [
+        [
+          "[70, 80, 90]",
+          "80.0",
+          "70",
+          "90"
+        ],
+        [
+          "[-5, -2]",
+          "-3.5",
+          "-5",
+          "-2"
+        ],
+        [
+          "[]",
+          "Tidak dihitung",
+          "Tidak dihitung",
+          "Tidak dihitung"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Mengolah daftar nilai",
+        "code": "data = [70, 80, 90]\nif not data:\n    print(\"Belum ada data\")\nelse:\n    total = 0\n    terkecil = data[0]\n    terbesar = data[0]\n    lulus = 0\n    for nilai in data:\n        total += nilai\n        if nilai < terkecil:\n            terkecil = nilai\n        if nilai > terbesar:\n            terbesar = nilai\n        if nilai >= 75:\n            lulus += 1\n    print(\"Rata-rata:\", total / len(data))\n    print(\"Min:\", terkecil, \"Maks:\", terbesar)\n    print(\"Lulus:\", lulus)",
+        "output": "Rata-rata: 80.0\nMin: 70 Maks: 90\nLulus: 2",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Uji semua data pada tabel.",
+      "Bandingkan total manual dengan sum(data).",
+      "Uji nilai [75] untuk memastikan batas kelulusan."
+    ],
+    "warning": "Pastikan data tidak kosong sebelum mengakses data[0] atau menghitung rata-rata.",
+    "check": "Mengapa nilai terbesar sebaiknya diawali dengan data[0]?",
+    "answer": "Agar awal pembanding berasal dari data aktual, termasuk ketika seluruh angkanya negatif.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "pencarian-linear",
+    "title": "Pencarian berurutan atau linear search",
+    "summary": "Cari item satu per satu dan bedakan posisi 0 dari hasil tidak ditemukan.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Mencari nama pada daftar pendek dapat dilakukan dengan membaca dari baris pertama sampai ketemu.",
+    "explain": [
+      "Linear search memeriksa item secara berurutan. Jika cocok, simpan posisinya dan hentikan pencarian. Jika semua item sudah diperiksa tanpa cocok, laporkan bahwa data tidak ditemukan.",
+      "Contoh memakai None sebagai penanda belum ditemukan. Indeks 0 adalah hasil valid. Karena itu jangan memakai if posisi untuk menentukan keberhasilan: angka 0 dianggap false dalam kondisi Python.",
+      "Pada data ganda, contoh mengembalikan kecocokan pertama karena memakai break. Pencarian ini tidak memerlukan data terurut. Jika ada n item dan tidak ada kecocokan, hingga n perbandingan diperlukan."
+    ],
+    "table": {
+      "headers": [
+        "Target pada [Ana, Budi, Citra]",
+        "Posisi hasil"
+      ],
+      "rows": [
+        [
+          "Ana",
+          "0"
+        ],
+        [
+          "Budi",
+          "1"
+        ],
+        [
+          "Dina",
+          "Tidak ditemukan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Mencari nama",
+        "code": "nama = [\"Ana\", \"Budi\", \"Citra\"]\ntarget = \"Budi\"\nposisi = None\nfor indeks in range(len(nama)):\n    if nama[indeks] == target:\n        posisi = indeks\n        break\nif posisi is None:\n    print(\"Tidak ditemukan\")\nelse:\n    print(\"Ditemukan pada indeks\", posisi)",
+        "output": "Ditemukan pada indeks 1",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Cari Ana untuk memeriksa hasil pada indeks 0.",
+      "Cari Dina dan uji list kosong.",
+      "Tambahkan Budi kedua; periksa mengapa hasil tetap indeks pertama yang cocok."
+    ],
+    "warning": "Jangan menggunakan if posisi untuk menguji apakah data ditemukan. Gunakan posisi is None atau is not None.",
+    "check": "Apakah indeks 0 berarti pencarian gagal?",
+    "answer": "Tidak. Indeks 0 adalah item pertama; None dipakai sebagai penanda gagal pada contoh ini.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "pencarian",
+    "diagramAlt": "Pencarian membaca data dari kiri ke kanan sampai nama ditemukan atau semua data habis.",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "fungsi-lanjutan",
+    "title": "Fungsi lanjutan: scope dan parameter bawaan",
+    "summary": "Kelola masukan serta hasil fungsi tanpa bergantung pada variabel global.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Setiap petugas mempunyai catatan kerja sendiri. Catatan lokal itu tidak otomatis mengubah catatan di meja lain.",
+    "explain": [
+      "Scope adalah wilayah tempat suatu nama bisa digunakan. Nama yang diberikan nilai di dalam fungsi biasanya lokal untuk pemanggilan itu. Nama di tingkat modul berada pada scope global modul tersebut.",
+      "Utamakan parameter dan return untuk alur data yang jelas. Kata global memungkinkan penugasan pada nama global, tetapi tidak diperlukan untuk contoh perhitungan sederhana. Ketergantungan global membuat fungsi lebih sulit diuji.",
+      "Parameter bawaan dipakai jika argumen tidak diberikan. Contoh batas=75 dapat diganti saat pemanggilan. Hindari list sebagai nilai bawaan yang langsung dimutasi; gunakan None lalu buat list baru di dalam fungsi. Nilai bawaan dievaluasi saat definisi fungsi dijalankan, bukan setiap pemanggilan."
+    ],
+    "table": {
+      "headers": [
+        "Pemanggilan",
+        "Batas yang dipakai"
+      ],
+      "rows": [
+        [
+          "status(75)",
+          "75 (bawaan)"
+        ],
+        [
+          "status(75, batas=80)",
+          "80 (argumen)"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Scope dan batas kelulusan",
+        "code": "batas = 90\n\ndef status(nilai, batas=75):\n    if nilai >= batas:\n        return \"Lulus\"\n    return \"Belum lulus\"\n\nprint(status(75))\nprint(status(75, batas=80))\nprint(\"Batas luar:\", batas)",
+        "output": "Lulus\nBelum lulus\nBatas luar: 90",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Panggil status(80, batas=80).",
+      "Ubah nama parameter batas menjadi ambang secara konsisten.",
+      "Pisahkan fungsi menghitung diskon dari fungsi menampilkan hasil."
+    ],
+    "warning": "Nilai parameter lokal bernama batas tidak otomatis mengubah variabel batas di luar fungsi.",
+    "check": "Apakah status(75) memakai variabel batas luar yang bernilai 90?",
+    "answer": "Tidak. Parameter batas pada fungsi mempunyai nilai bawaan 75, sehingga pemanggilan itu memakai 75.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "modul-import",
+    "title": "Modul: membagi program menjadi beberapa file",
+    "summary": "Pisahkan fungsi perhitungan dari program utama dengan import.",
+    "stage": 0,
+    "minutes": 30,
+    "analogy": "Buku resep dipisahkan per bagian, tetapi dapat dirujuk saat memasak. Modul memungkinkan fungsi dari file lain dipakai kembali.",
+    "explain": [
+      "Satu file .py dapat berperan sebagai modul. Simpan kedua file contoh pada folder yang sama. perhitungan.py berisi fungsi, sedangkan utama.py mengimpor dan menggunakannya. Jalankan utama.py, bukan kedua file sekaligus.",
+      "import perhitungan memungkinkan akses perhitungan.hitung_total(...). Bentuk from perhitungan import hitung_total mengambil nama fungsi tersebut secara langsung. Untuk awal, pilih bentuk yang membuat asal fungsi jelas.",
+      "Blok if __name__ == \"__main__\" hanya dijalankan ketika file menjadi program utama. Ini membantu agar demo atau input tidak otomatis berjalan ketika file diimpor. Modul tetap menjalankan instruksi tingkat atas saat import pertama, jadi tempatkan interaksi di dalam fungsi atau blok penjaga."
+    ],
+    "table": {
+      "headers": [
+        "File",
+        "Tanggung jawab"
+      ],
+      "rows": [
+        [
+          "perhitungan.py",
+          "Menyediakan fungsi"
+        ],
+        [
+          "utama.py",
+          "Menyiapkan data dan menampilkan hasil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Simpan sebagai perhitungan.py",
+        "code": "def hitung_total(harga, jumlah):\n    return harga * jumlah",
+        "output": "",
+        "explanation": "File ini hanya mendefinisikan fungsi, sehingga tidak menampilkan output saat dijalankan.",
+        "filename": "perhitungan.py"
+      },
+      {
+        "label": "Simpan sebagai utama.py",
+        "code": "import perhitungan\n\nif __name__ == \"__main__\":\n    total = perhitungan.hitung_total(10000, 3)\n    print(\"Total:\", total)",
+        "output": "Total: 30000",
+        "explanation": "Simpan satu folder dengan perhitungan.py, lalu jalankan utama.py. Import memakai nama modul tanpa ekstensi .py.",
+        "filename": "utama.py"
+      }
+    ],
+    "practice": [
+      "Simpan kedua file dan jalankan utama.py.",
+      "Tambahkan fungsi diskon di perhitungan.py.",
+      "Panggil fungsi baru dari utama.py menggunakan nama modul."
+    ],
+    "warning": "Jangan memberi nama file latihan json.py atau math.py jika ingin mengimpor modul standar bernama sama; nama lokal dapat menutup modul yang dimaksud.",
+    "check": "File mana yang dijalankan pada contoh ini?",
+    "answer": "utama.py. File itu mengimpor fungsi dari perhitungan.py dan mengatur alur utama.",
+    "source": "https://docs.python.org/3/tutorial/modules.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Buat folder latihan baru.",
+      "Simpan setiap blok sesuai nama file yang tertulis, dalam folder yang sama.",
+      "Buka utama.py di IDLE lalu Run Module, atau jalankan python utama.py dari folder tersebut."
+    ]
+  },
+  {
+    "slug": "debugging-pengujian",
+    "title": "Debugging dan pengujian program",
+    "summary": "Periksa hasil dengan kasus normal, kondisi batas, input kosong, dan input salah.",
+    "stage": 0,
+    "minutes": 25,
+    "analogy": "Memeriksa timbangan memerlukan beban yang beratnya sudah diketahui. Menguji program memerlukan hasil harapan yang dihitung secara terpisah.",
+    "explain": [
+      "Debugging mencari penyebab kesalahan, sedangkan pengujian memeriksa apakah perilaku sesuai aturan. Mulai dengan input kecil, baca traceback, lalu telusuri nilai di titik penting. Ubah satu hal setiap kali agar penyebabnya jelas.",
+      "Untuk batas kelulusan 75, uji 74, 75, dan 76. Untuk rata-rata, uji data kosong dan satu item. Untuk masukan pengguna, uji teks bukan angka. Berhasil pada satu input belum membuktikan seluruh aturan benar.",
+      "assert dapat membantu latihan pengujian: kondisi salah memunculkan AssertionError. Jangan memakainya untuk validasi penting input aplikasi karena assert dapat dinonaktifkan saat Python dijalankan dengan optimasi. Validasi pengguna tetap memakai if dan exception yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Jenis uji",
+        "Contoh",
+        "Yang diperiksa"
+      ],
+      "rows": [
+        [
+          "Normal",
+          "nilai 80",
+          "Lulus"
+        ],
+        [
+          "Batas",
+          "74, 75, 76",
+          "Ketepatan >="
+        ],
+        [
+          "Kosong",
+          "list []",
+          "Tidak membagi nol"
+        ],
+        [
+          "Tidak valid",
+          "teks abc",
+          "Pesan kesalahan jelas"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Menguji kondisi batas",
+        "code": "def lulus(nilai):\n    return nilai >= 75\n\nassert lulus(74) is False\nassert lulus(75) is True\nassert lulus(76) is True\nprint(\"Tiga pengujian berhasil\")",
+        "output": "Tiga pengujian berhasil",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Ubah >= menjadi > dan jalankan pengujian; amati assertion yang gagal, lalu perbaiki.",
+      "Tulis hasil harapan sebelum mengubah fungsi.",
+      "Gunakan print() sementara untuk melihat nilai yang keliru."
+    ],
+    "warning": "Jangan hanya menyalin hasil program sebagai hasil harapan. Hitung atau tentukan hasil berdasarkan aturan masalah.",
+    "check": "Mengapa nilai 75 harus masuk pengujian?",
+    "answer": "Karena tepat pada batas, sehingga dapat membedakan >= dari >.",
+    "source": "https://docs.python.org/3/tutorial/errors.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "file-teks-csv-json",
+    "title": "Menyimpan data: teks, CSV, dan JSON",
+    "summary": "Baca serta tulis file dengan format yang sesuai dan jalur yang jelas.",
+    "stage": 0,
+    "minutes": 35,
+    "analogy": "Variabel seperti catatan di papan tulis yang hilang ketika program ditutup. File seperti catatan tersimpan yang bisa dibaca saat program dibuka lagi.",
+    "explain": [
+      "Teks cocok untuk catatan bebas, CSV untuk tabel baris-kolom, dan JSON untuk struktur seperti list serta dictionary. Modul csv dan json tersedia dalam pustaka standar Python. Pada materi ini kita mencoba ketiganya di folder latihan.",
+      "Gunakan with open(...) agar file ditutup setelah selesai. Mode w membuat atau menimpa file, a menambah di akhir, dan r membaca. encoding=\"utf-8\" membuat penanganan teks eksplisit. Jalur relatif mengacu pada direktori kerja saat program dijalankan.",
+      "Untuk CSV gunakan newline=\"\" agar modul csv mengatur akhir baris dengan tepat. Untuk JSON gunakan json.dump() dan json.load(). JSON yang berhasil dibaca belum tentu sesuai struktur aplikasi: validasi field dan tipe tetap dibutuhkan.",
+      "Jalankan pada folder latihan baru karena contoh menulis catatan-latihan.txt, nilai-latihan.csv, dan data-latihan.json. Simpan file penting dengan nama berbeda. Contoh berikut membuat data terlebih dahulu lalu membacanya kembali."
+    ],
+    "table": {
+      "headers": [
+        "Format",
+        "Cocok untuk",
+        "Pembaca/penulis"
+      ],
+      "rows": [
+        [
+          "Teks",
+          "Catatan sederhana",
+          "read / write"
+        ],
+        [
+          "CSV",
+          "Tabel",
+          "csv.reader / csv.writer"
+        ],
+        [
+          "JSON",
+          "List dan dictionary",
+          "json.load / json.dump"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Mencoba tiga format",
+        "code": "import csv\nimport json\n\nwith open(\"catatan-latihan.txt\", \"w\", encoding=\"utf-8\") as file:\n    file.write(\"Belajar Python\")\nwith open(\"catatan-latihan.txt\", encoding=\"utf-8\") as file:\n    print(file.read())\n\nwith open(\"nilai-latihan.csv\", \"w\", encoding=\"utf-8\", newline=\"\") as file:\n    penulis = csv.writer(file)\n    penulis.writerow([\"nama\", \"nilai\"])\n    penulis.writerow([\"Ana\", 80])\nwith open(\"nilai-latihan.csv\", encoding=\"utf-8\", newline=\"\") as file:\n    print(list(csv.reader(file)))\n\ndata = {\"nama\": \"Ana\", \"nilai\": 80}\nwith open(\"data-latihan.json\", \"w\", encoding=\"utf-8\") as file:\n    json.dump(data, file)\nwith open(\"data-latihan.json\", encoding=\"utf-8\") as file:\n    print(json.load(file)[\"nilai\"])",
+        "output": "Belajar Python\n[['nama', 'nilai'], ['Ana', '80']]\n80",
+        "explanation": "Ikuti perubahan nilai dari atas ke bawah, lalu cocokkan hasilnya sebelum mengubah contoh."
+      }
+    ],
+    "practice": [
+      "Jalankan di folder latihan baru dan periksa tiga file hasilnya.",
+      "Amati bahwa csv.reader mengembalikan nilai 80 sebagai teks.",
+      "Ubah nama dan angka pada JSON, lalu baca kembali."
+    ],
+    "warning": "Mode w menimpa isi file yang sudah ada. File tidak ditemukan dan JSON rusak perlu ditangani secara berbeda; jangan langsung menganggap keduanya data kosong.",
+    "check": "Apakah nilai 80 dari csv.reader otomatis bertipe int?",
+    "answer": "Tidak. Pembaca CSV biasa menghasilkan teks; konversi dan validasi angka dilakukan oleh program.",
+    "source": "https://docs.python.org/3/tutorial/inputoutput.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "steps": [
+      "Baca aturan dan perkirakan hasil sebelum menjalankan kode.",
+      "Simpan contoh sebagai file .py dan jalankan dengan Python 3.",
+      "Cocokkan hasil dengan contoh, lalu ubah satu masukan setiap kali."
+    ]
+  },
+  {
+    "slug": "studi-kasus-nilai-siswa",
+    "title": "Studi kasus: pengolah nilai siswa",
+    "summary": "Dari aturan kelulusan hingga program lengkap, validasi, dan pengujian batas.",
+    "stage": 0,
+    "minutes": 50,
+    "analogy": "Guru mempunyai beberapa nilai untuk setiap siswa. Program membantu mengolahnya dengan aturan yang sama tanpa menghitung ulang secara manual.",
+    "explain": [
+      "Masalah: setiap siswa mempunyai nama dan satu atau lebih nilai. Hitung rata-rata lalu tentukan status. Aturan latihan: nilai harus bilangan bulat 0–100, nama tidak kosong, dan rata-rata minimal 75 berarti Lulus. Ini aturan latihan yang dapat diubah sesuai kebutuhan.",
+      "Input disimpan sebagai list dictionary. Setiap dictionary memuat key nama dan nilai. Kita menganggap kedua key tersebut tersedia pada data contoh; fungsi olah_siswa memvalidasi isi keduanya. Data dari file atau pengguna perlu pemeriksaan keberadaan key juga.",
+      "Pisahkan perhitungan dari tampilan. olah_siswa menerima data dan mengembalikan dictionary hasil. main membaca tiap siswa, menangani ValueError, lalu menampilkan hasil. raise ValueError membuat fungsi dapat menolak data tanpa harus memutuskan sendiri cara menampilkan pesan.",
+      "type(angka) is int sengaja membatasi nilai ke bilangan bulat dan menolak bool. Percabangan singkat A if kondisi else B memilih satu dari dua nilai. Ia setara dengan if–else biasa untuk tujuan ini. Format :.1f hanya mengatur tampilan satu desimal; keputusan kelulusan memakai rata-rata asli.",
+      "Telusuri Ana: 80 + 75 + 85 = 240, lalu 240 / 3 = 80.0 sehingga Lulus. Budi mendapat 65.0 sehingga Belum lulus. Citra tepat 75.0 dan tetap Lulus. Coba masukan tidak valid agar pemeriksaan tidak hanya mencakup data yang bagus."
+    ],
+    "table": {
+      "headers": [
+        "Skenario",
+        "Masukan nilai",
+        "Hasil harapan"
+      ],
+      "rows": [
+        [
+          "Normal",
+          "[80, 75, 85]",
+          "80.0, Lulus"
+        ],
+        [
+          "Di bawah batas",
+          "[74]",
+          "74.0, Belum lulus"
+        ],
+        [
+          "Tepat batas",
+          "[75]",
+          "75.0, Lulus"
+        ],
+        [
+          "Kosong",
+          "[]",
+          "ValueError"
+        ],
+        [
+          "Di luar rentang",
+          "[101]",
+          "ValueError"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Simpan sebagai nilai_siswa.py",
+        "code": "def olah_siswa(nama, nilai):\n    if not isinstance(nama, str) or not nama.strip():\n        raise ValueError(\"Nama wajib diisi\")\n    if not isinstance(nilai, list) or not nilai:\n        raise ValueError(\"Daftar nilai tidak boleh kosong\")\n    total = 0\n    for angka in nilai:\n        if type(angka) is not int or not 0 <= angka <= 100:\n            raise ValueError(\"Nilai harus bilangan bulat 0 sampai 100\")\n        total += angka\n    rata_rata = total / len(nilai)\n    status = \"Lulus\" if rata_rata >= 75 else \"Belum lulus\"\n    return {\"nama\": nama.strip(), \"rata_rata\": rata_rata, \"status\": status}\n\n\ndef main():\n    data = [\n        {\"nama\": \"Ana\", \"nilai\": [80, 75, 85]},\n        {\"nama\": \"Budi\", \"nilai\": [60, 70, 65]},\n        {\"nama\": \"Citra\", \"nilai\": [75, 75, 75]},\n    ]\n    jumlah_lulus = 0\n    for siswa in data:\n        try:\n            hasil = olah_siswa(siswa[\"nama\"], siswa[\"nilai\"])\n        except ValueError as error:\n            print(\"Data ditolak:\", error)\n            continue\n        print(f\"{hasil['nama']}: {hasil['rata_rata']:.1f} - {hasil['status']}\")\n        if hasil[\"status\"] == \"Lulus\":\n            jumlah_lulus += 1\n    print(\"Jumlah lulus:\", jumlah_lulus)\n\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "Ana: 80.0 - Lulus\nBudi: 65.0 - Belum lulus\nCitra: 75.0 - Lulus\nJumlah lulus: 2",
+        "explanation": "Fungsi memvalidasi lalu menghitung, sedangkan main menampilkan hasil. Dua siswa memenuhi rata-rata minimal 75. Data yang gagal validasi dilewati memakai continue.",
+        "filename": "nilai_siswa.py"
+      }
+    ],
+    "practice": [
+      "Tambahkan siswa keempat dengan nilai [74].",
+      "Ubah salah satu daftar nilai menjadi [] dan pastikan pesan penolakan muncul tanpa menghentikan siswa lain.",
+      "Uji [75], [0], [100], [101], dan [True].",
+      "Tantangan: tambahkan jumlah siswa yang datanya valid dan pisahkan dari jumlah seluruh baris."
+    ],
+    "warning": "Jangan membulatkan rata-rata sebelum menentukan status kecuali aturan soal memang mewajibkannya. Tampilan 75.0 akibat pembulatan belum tentu berarti nilai asli mencapai 75.",
+    "check": "Mengapa fungsi menolak list kosong sebelum menghitung rata-rata?",
+    "answer": "Agar tidak membagi total dengan jumlah data 0. Penolakan juga memberi pesan jelas bahwa data siswa belum lengkap.",
+    "source": "https://docs.python.org/3/tutorial/errors.html",
+    "diagram": "studi-nilai",
+    "diagramAlt": "Data siswa divalidasi, nilai dijumlahkan, rata-rata dihitung, lalu status ditentukan.",
+    "steps": [
+      "Tulis aturan dan hitung hasil Ana secara manual.",
+      "Gambar alur input → validasi → total → rata-rata → status → output.",
+      "Simpan program lengkap sebagai nilai_siswa.py dan jalankan.",
+      "Bandingkan keluaran dengan contoh.",
+      "Ubah data menggunakan setiap baris tabel pengujian dan catat hasilnya."
+    ]
+  },
+  {
+    "slug": "studi-kasus-pencatat-pengeluaran",
+    "title": "Studi kasus: pencatat pengeluaran dengan JSON",
+    "summary": "Bangun menu, validasi transaksi, simpan data, lalu buktikan data tetap ada setelah program ditutup.",
+    "stage": 0,
+    "minutes": 65,
+    "analogy": "Buku pengeluaran mencatat keterangan dan jumlah setiap transaksi. Menutup buku tidak menghapus isinya; program juga membutuhkan penyimpanan file.",
+    "explain": [
+      "Masalah: catat pengeluaran harian melalui menu. Pilihan 1 menambah transaksi, 2 menampilkan daftar dan total, 0 keluar. Setiap transaksi wajib mempunyai keterangan tidak kosong dan jumlah rupiah bulat lebih dari 0. Angka diketik tanpa titik pemisah ribuan, misalnya 15000.",
+      "Data berupa list dictionary dengan kolom keterangan dan jumlah. File pengeluaran-latihan.json berada di folder yang sama dengan program. __file__ menunjuk file program; Path(...).with_name(...) memilih nama file data di folder tersebut. Simpan kode sebagai .py sebelum menjalankan, jangan tempel seluruhnya langsung ke Shell.",
+      "Fungsi muat menganggap file belum ada sebagai daftar kosong. JSON rusak, struktur tidak sesuai, atau izin baca bermasalah menghentikan program dengan pesan. File rusak tidak diubah menjadi list kosong karena langkah itu dapat menghilangkan riwayat saat disimpan lagi. JSONDecodeError termasuk turunan ValueError.",
+      "validasi_data memeriksa bentuk list, kolom, teks, dan jumlah transaksi. Fungsi tambah menghasilkan list calon baru. main baru mengganti data aktif setelah simpan berhasil. Jadi pesan sukses tidak muncul sebelum data benar-benar berhasil ditulis.",
+      "simpan menulis ke file sementara berekstensi .tmp, kemudian mengganti file tujuan setelah penulisan selesai. Ini mengurangi risiko file tujuan menjadi setengah tertulis. Program latihan ini hanya untuk satu proses; belum menangani dua program menulis bersamaan atau kebutuhan backup produksi.",
+      "Sesi contoh mengasumsikan folder latihan baru tanpa file data. Tambahkan Makan 15000, lalu Transport 10000, lihat ringkasan, dan keluar. Saat program dibuka lagi, pilih 2: data dan total 25000 harus masih ada. Untuk mengulang contoh dari nol, gunakan folder latihan baru agar riwayat sebelumnya tetap tersedia."
+    ],
+    "table": {
+      "headers": [
+        "Skenario",
+        "Hasil harapan"
+      ],
+      "rows": [
+        [
+          "Nama kosong",
+          "Ditolak, file tidak berubah"
+        ],
+        [
+          "Jumlah 0 / negatif / teks",
+          "Ditolak, file tidak berubah"
+        ],
+        [
+          "Dua transaksi 15000 dan 10000",
+          "Total 25000"
+        ],
+        [
+          "Tutup lalu buka lagi",
+          "Dua transaksi tetap terbaca"
+        ],
+        [
+          "JSON rusak / kolom salah",
+          "Berhenti, file lama tidak ditimpa"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Simpan sebagai pengeluaran.py",
+        "code": "import json\nfrom pathlib import Path\n\nLOKASI = Path(__file__).with_name(\"pengeluaran-latihan.json\")\n\n\ndef validasi_data(data):\n    if not isinstance(data, list):\n        raise ValueError(\"Isi file harus berupa list\")\n    for item in data:\n        if not isinstance(item, dict):\n            raise ValueError(\"Setiap transaksi harus berupa dictionary\")\n        if set(item) != {\"keterangan\", \"jumlah\"}:\n            raise ValueError(\"Kolom transaksi tidak sesuai\")\n        if not isinstance(item[\"keterangan\"], str) or not item[\"keterangan\"].strip():\n            raise ValueError(\"Keterangan wajib diisi\")\n        if type(item[\"jumlah\"]) is not int or item[\"jumlah\"] <= 0:\n            raise ValueError(\"Jumlah harus rupiah bulat positif\")\n    return data\n\n\ndef muat(lokasi):\n    try:\n        with lokasi.open(encoding=\"utf-8\") as file:\n            data = json.load(file)\n    except FileNotFoundError:\n        return []\n    return validasi_data(data)\n\n\ndef simpan(lokasi, data):\n    validasi_data(data)\n    sementara = lokasi.with_suffix(\".tmp\")\n    with sementara.open(\"w\", encoding=\"utf-8\") as file:\n        json.dump(data, file, ensure_ascii=False, indent=2)\n    sementara.replace(lokasi)\n\n\ndef tambah(data, keterangan, jumlah):\n    calon = data + [{\"keterangan\": keterangan.strip(), \"jumlah\": jumlah}]\n    return validasi_data(calon)\n\n\ndef ringkasan(data):\n    if not data:\n        print(\"Belum ada transaksi\")\n        return\n    total = 0\n    for item in data:\n        print(item[\"keterangan\"], \"-\", item[\"jumlah\"])\n        total += item[\"jumlah\"]\n    print(\"Total pengeluaran:\", total)\n\n\ndef main():\n    try:\n        data = muat(LOKASI)\n    except (OSError, UnicodeError, ValueError) as error:\n        print(\"File tidak dapat dibaca:\", error)\n        print(\"Program berhenti. File lama tidak ditimpa.\")\n        return\n    while True:\n        pilihan = input(\"1=Tambah, 2=Ringkasan, 0=Keluar: \").strip()\n        if pilihan == \"0\":\n            print(\"Selesai\")\n            break\n        if pilihan == \"2\":\n            ringkasan(data)\n        elif pilihan == \"1\":\n            keterangan = input(\"Keterangan: \")\n            try:\n                jumlah = int(input(\"Jumlah rupiah: \"))\n                calon = tambah(data, keterangan, jumlah)\n            except ValueError as error:\n                print(\"Input ditolak:\", error)\n                continue\n            try:\n                simpan(LOKASI, calon)\n            except OSError as error:\n                print(\"Belum tersimpan:\", error)\n                continue\n            data = calon\n            print(\"Transaksi tersimpan\")\n        else:\n            print(\"Pilihan tidak dikenal\")\n\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "1=Tambah, 2=Ringkasan, 0=Keluar: 1\nKeterangan: Makan\nJumlah rupiah: 15000\nTransaksi tersimpan\n1=Tambah, 2=Ringkasan, 0=Keluar: 1\nKeterangan: Transport\nJumlah rupiah: 10000\nTransaksi tersimpan\n1=Tambah, 2=Ringkasan, 0=Keluar: 2\nMakan - 15000\nTransport - 10000\nTotal pengeluaran: 25000\n1=Tambah, 2=Ringkasan, 0=Keluar: 0\nSelesai",
+        "explanation": "Jalankan di folder latihan baru. Angka setelah pertanyaan diketik pengguna. Setiap penambahan disimpan lebih dahulu; keluar tidak menghapus data.",
+        "filename": "pengeluaran.py",
+        "inputs": [
+          "1",
+          "Makan",
+          "15000",
+          "1",
+          "Transport",
+          "10000",
+          "2",
+          "0"
+        ]
+      }
+    ],
+    "practice": [
+      "Ikuti sesi contoh pada folder latihan baru.",
+      "Jalankan ulang dan pilih 2 untuk membuktikan data dipulihkan.",
+      "Uji keterangan kosong, jumlah 0, -1, dan abc; pastikan riwayat tidak bertambah.",
+      "Pada salinan folder latihan, ubah JSON menjadi teks tidak valid. Jalankan program dan pastikan file tidak ditimpa.",
+      "Tantangan: tambahkan kategori transaksi, lalu perbarui validasi, data lama, dan ringkasan secara konsisten."
+    ],
+    "warning": "Contoh memakai file lokal untuk satu pengguna. Gunakan folder latihan, jangan menaruh data pribadi penting selama bereksperimen. File JSON valid tetap harus lolos validasi struktur dan nilainya.",
+    "check": "Mengapa file rusak tidak langsung dianggap daftar transaksi kosong?",
+    "answer": "Karena jika daftar kosong disimpan kembali, riwayat lama dapat tertimpa. Program berhenti agar pengguna dapat memeriksa atau memulihkan file terlebih dahulu.",
+    "source": "https://docs.python.org/3/tutorial/inputoutput.html",
+    "diagram": "studi-pengeluaran",
+    "diagramAlt": "Menu membaca data JSON, menambah atau merangkum pengeluaran, lalu menyimpan sebelum keluar.",
+    "steps": [
+      "Tulis aturan transaksi dan susun alur menu.",
+      "Buat folder latihan baru dan simpan program sebagai pengeluaran.py.",
+      "Jalankan sesi contoh, kemudian buka file JSON hasilnya.",
+      "Tutup program dan jalankan lagi; periksa ringkasan.",
+      "Uji input tidak valid dan file rusak pada salinan folder, lalu bandingkan dengan tabel."
+    ]
+  }
+]
