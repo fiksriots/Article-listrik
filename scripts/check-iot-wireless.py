@@ -10,10 +10,10 @@ from PIL import Image
 root=Path(__file__).resolve().parents[1]
 new=json.loads((root/'lib/iot-wireless-lessons.json').read_text())
 all_lessons=[]
-for filename in ['iot-lessons.json','iot-connected-lessons.json','iot-extended-lessons.json','iot-wireless-lessons.json']:
+for filename in ['iot-lessons.json','iot-connected-lessons.json','iot-extended-lessons.json','iot-wireless-lessons.json','iot-platformio-lessons.json']:
     all_lessons+=json.loads((root/'lib'/filename).read_text())
 order=[slug for group in json.loads((root/'lib/iot-learning-order.json').read_text()) for slug in group['slugs']]
-assert len(order)==len(set(order))==len(all_lessons)==83
+assert len(order)==len(set(order))==len(all_lessons)==84
 assert set(order)=={l['slug'] for l in all_lessons}
 assert len(new)==8
 photos=set()
@@ -55,4 +55,4 @@ for invalid in [{**sample,'temperature':float('nan')},{**sample,'doorOpen':'fals
     try:assess(invalid,98000,100000)
     except ValueError:pass
     else:raise AssertionError('Invalid telemetry accepted')
-print('PASS: eight complete lessons, 83 canonical slugs, ordered prerequisites, nine SVGs, three credited original photos, NOC normal/stale/invalid/multiple alarm states.')
+print('PASS: eight complete lessons, 84 canonical slugs, ordered prerequisites, nine SVGs, three credited original photos, NOC normal/stale/invalid/multiple alarm states.')

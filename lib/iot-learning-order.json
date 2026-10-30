@@ -36,7 +36,7 @@
     "title": "Arduino A · dasar dan pemrograman",
     "kind": "Dasar",
     "before": "Kenali perangkat dan baca datasheet pin sebelum merangkai.",
-    "goal": "Dapat menyiapkan breadboard, mengunggah sketch, dan membaca variabel, kondisi, fungsi, serta array.",
+    "goal": "Dapat menyiapkan breadboard, mengunggah sketch, dan membaca variabel, kondisi, fungsi, serta array. Kenali PlatformIO sebagai pilihan alat pengembangan.",
     "slugs": [
       "arduino-pengenalan",
       "listrik-breadboard",
@@ -44,7 +44,8 @@
       "arduino-pemrograman",
       "pemrograman-variabel",
       "pemrograman-kondisi-perulangan",
-      "pemrograman-fungsi-array"
+      "pemrograman-fungsi-array",
+      "platformio-vscode"
     ]
   },
   {

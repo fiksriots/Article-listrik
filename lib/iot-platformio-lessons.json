@@ -1,0 +1,147 @@
+[
+  {
+    "slug": "platformio-vscode",
+    "title": "PlatformIO di VS Code: proyek Arduino dan ESP32",
+    "summary": "Belajar menyiapkan PlatformIO, memahami platformio.ini, mengelola library, build, upload, dan membaca Serial Monitor dengan urutan yang jelas.",
+    "stage": 2,
+    "minutes": 35,
+    "analogy": "Bayangkan bengkel elektronik. VS Code adalah meja kerja, PlatformIO adalah pengelola perkakas, board adalah benda yang dikerjakan, framework Arduino adalah cara memberi instruksi, dan platformio.ini adalah kartu pekerjaan yang mencatat alat serta bahan.",
+    "prerequisites": [
+      "arduino-pemrograman",
+      "pemrograman-fungsi-array"
+    ],
+    "explain": [
+      "Namanya PlatformIO (situs platformio.org), sering ditulis platform.io. Ini lingkungan pengembangan untuk menulis dan membangun firmware mikrokontroler. PlatformIO bukan broker MQTT, database Firebase, atau layanan dashboard; program hasilnya tetap perlu koneksi dan aplikasi jika ingin menjadi sistem IoT.",
+      "VS Code adalah editor, sedangkan ekstensi PlatformIO IDE menambahkan pengelolaan proyek, toolchain, library, upload, dan monitor. PlatformIO Core sudah disertakan oleh ekstensi; pemula tidak perlu memasangnya lagi secara terpisah. Instalasi awal membutuhkan internet untuk mengunduh paket.",
+      "Gunakan Arduino IDE jika ingin latihan sketch sederhana dengan pengaturan singkat. PlatformIO berguna ketika proyek mulai memiliki banyak berkas, library, dan target board. Keduanya dapat memakai framework Arduino, sehingga setup() dan loop() tetap dikenal. Pelajaran ini pilihan alat, bukan syarat untuk seluruh kurikulum.",
+      "Di platformio.ini, platform memilih keluarga paket/toolchain, board memilih profil papan, framework memilih lingkungan pemrograman, dan env memberi nama satu konfigurasi. Nama env bebas, tetapi nilai board harus benar. UNO R3 ATmega328P menggunakan uno; contoh ESP32 memakai esp32dev untuk ESP32 klasik yang sesuai. Jangan memakai profil ini untuk UNO R4, ESP32-C3, atau ESP32-S3 tanpa memeriksa katalog board.",
+      "Struktur proyek memisahkan src untuk source utama, include untuk header proyek, lib untuk library lokal, test untuk pengujian, dan .pio untuk hasil build serta paket kerja. Buka folder yang memiliki platformio.ini sebagai akar proyek; jangan hanya membuka main.cpp sendirian.",
+      "Untuk memindahkan sketch .ino menjadi src/main.cpp, tambahkan #include <Arduino.h>. Fungsi buatan sendiri harus sudah dideklarasikan sebelum dipanggil; contoh di bawah memakai prototipe cetakPesan(). Jangan menyisakan salinan sketch dengan setup() dan loop() lain di src karena dapat menimbulkan definisi ganda.",
+      "Build berarti menerjemahkan source menjadi firmware; board tidak harus terhubung untuk tahap ini. Upload mengirim firmware ke board lewat port yang sesuai. Monitor hanya membaca komunikasi serial, bukan mengunggah program. Baud monitor_speed harus sama dengan Serial.begin() agar tulisan terbaca.",
+      "Library proyek dicatat lewat lib_deps, bukan diasumsikan tersedia karena pernah dipasang di Arduino IDE. Pencatatan versi membantu proyek dibuka di komputer lain. Contoh library di bawah bersifat latihan konfigurasi dan belum dipanggil program Serial; hapus jika tidak digunakan.",
+      "Versi Arduino core yang dibawa paket platform PlatformIO bisa berbeda dari Board Manager Arduino IDE. Beberapa materi ESP-NOW dan BLE di kurikulum ini menargetkan core 3.x. Jangan langsung memindahkannya ke konfigurasi PlatformIO berikut tanpa mengecek versi framework dan API. Catat versi paket dari log build, lalu gunakan versi platform yang sudah diuji proyek Anda untuk hasil yang lebih dapat diulang.",
+      "Serial print merupakan cara mengamati program, sedangkan debug breakpoint adalah fasilitas berbeda. Tidak semua board memiliki debug probe bawaan. Belajar build, upload, dan Serial terlebih dahulu; jangan menganggap tombol debug pasti bekerja hanya dengan kabel USB."
+    ],
+    "example": "Satu folder proyek dibuka oleh dua orang. Mereka membaca platformio.ini untuk mengetahui board dan library, lalu menjalankan build yang sama tanpa menebak pengaturan komputer pembuatnya.",
+    "practice": [
+      "Pasang Visual Studio Code dari situs resmi. Buka Extensions, cari PlatformIO IDE yang diterbitkan PlatformIO, lalu pasang. Tunggu instalasi Core selesai dan muat ulang jendela bila diminta.",
+      "Buka PlatformIO Home → New Project. Beri nama belajar-serial, pilih board yang benar-benar dimiliki dan framework Arduino. Tunggu pembuatan proyek serta unduhan selesai. Untuk latihan pertama pilih satu board saja.",
+      "Buka folder proyek dan periksa platformio.ini. Gunakan salah satu konfigurasi di bawah sesuai papan. Contoh ESP32 hanya untuk ESP32 klasik dengan profil esp32dev yang cocok; periksa tulisan model pada board.",
+      "Ganti isi src/main.cpp dengan program lengkap di bawah. Jangan menambahkan salinan setup()/loop() lain. Simpan semua berkas, lalu pilih Build pada Project Tasks atau Command Palette PlatformIO.",
+      "Periksa log build: nama environment, platform, framework dan hasil SUCCESS. Build pertama dapat lebih lama karena mengunduh paket. Catat versi yang berhasil untuk proyek tersebut.",
+      "Hubungkan board lewat kabel USB data. Pilih Upload untuk environment yang benar. Tutup Serial Monitor dari Arduino IDE atau aplikasi lain jika port sedang dipakai. Bila ada beberapa perangkat, identifikasi port dengan membandingkan daftar sebelum/sesudah board dipasang.",
+      "Buka Monitor dengan baud 115200. Amati nomor pesan bertambah tiap detik, lalu ubah teks, build dan upload lagi. Build saja tidak mengubah program yang sudah ada di board.",
+      "Buka PlatformIO Core CLI dari Command Palette untuk mencoba perintah terminal berikut di akar proyek. Ganti esp32-lab dengan uno-lab bila memakai UNO. Hentikan monitor dengan Ctrl+C sebelum upload ulang.",
+      "Latihan library: tambahkan bagian lib_deps ke environment ESP32 yang sudah ada, jangan menggandakan seluruh section env. Jalankan build dan periksa Dependency Graph. Program Serial tetap tidak membutuhkan library ini.",
+      "Simpan src, include, platformio.ini dan catatan versi dalam Git. Jangan unggah .pio atau kata sandi Wi-Fi/token. Setelah latihan berhasil, lanjut ke materi LED dan sensor; sesuaikan pin serta level tegangan dengan board."
+    ],
+    "warning": "Contoh ini tidak mengendalikan pin atau memakai Wi-Fi. Konfigurasi UNO R3 dan ESP32 berbeda; memilih environment tidak mengubah perangkat fisik. Jangan menyalin port COM3 atau /dev/ttyUSB0 sebagai nilai universal. Kode ESP32 dengan API khusus versi core perlu penyesuaian sebelum dipindahkan dari Arduino IDE.",
+    "check": "Build berhasil, tetapi board masih mencetak teks lama. Mengapa? Lalu mengapa pio tidak dikenali di terminal sistem biasa?",
+    "answer": "Build hanya menghasilkan firmware di komputer. Pilih Upload pada environment dan port yang benar, kemudian buka Monitor. Perintah pio tersedia melalui PlatformIO Core CLI milik ekstensi; terminal sistem biasa belum tentu memiliki PATH yang sama. Tidak perlu langsung memasang Core kedua.",
+    "nodes": [
+      "Editor VS Code",
+      "Konfigurasi proyek",
+      "Build firmware",
+      "Upload ke board",
+      "Serial Monitor"
+    ],
+    "diagramCaption": "Peta berkas dan alur kerja PlatformIO. Ilustrasi konsep, bukan tangkapan layar aplikasi atau diagram pengawatan.",
+    "sources": [
+      {
+        "title": "PlatformIO IDE untuk VS Code — instalasi dan quick start",
+        "url": "https://docs.platformio.org/en/latest/integration/ide/vscode.html"
+      },
+      {
+        "title": "Konfigurasi proyek platformio.ini",
+        "url": "https://docs.platformio.org/en/latest/projectconf/index.html"
+      },
+      {
+        "title": "Library proyek dengan lib_deps",
+        "url": "https://docs.platformio.org/en/latest/projectconf/sections/env/options/library/lib_deps.html"
+      },
+      {
+        "title": "Memindahkan .ino menjadi C++",
+        "url": "https://docs.platformio.org/en/latest/faq/ino-to-cpp.html"
+      },
+      {
+        "title": "Profil ESP32 Dev Module",
+        "url": "https://docs.platformio.org/en/latest/boards/espressif32/esp32dev.html"
+      },
+      {
+        "title": "Profil Arduino Uno",
+        "url": "https://docs.platformio.org/en/latest/boards/atmelavr/uno.html"
+      }
+    ],
+    "lab": {
+      "title": "PRAKTIK PLATFORMIO · SERIAL TANPA RANGKAIAN TAMBAHAN",
+      "parts": [
+        "Komputer dengan VS Code dan ekstensi PlatformIO IDE",
+        "Internet untuk instalasi paket awal",
+        "Satu Arduino UNO R3 atau ESP32 klasik yang sesuai profil",
+        "Kabel USB data; tidak perlu LED atau sensor tambahan"
+      ],
+      "wiring": [
+        [
+          "UNO R3",
+          "Profil board uno, platform atmelavr; hubungkan USB data."
+        ],
+        [
+          "ESP32 klasik",
+          "Profil board esp32dev hanya jika cocok dengan papan; platform espressif32."
+        ],
+        [
+          "Monitor",
+          "Serial.begin(115200) dan monitor_speed = 115200."
+        ],
+        [
+          "Folder",
+          "platformio.ini di akar, kode utama di src/main.cpp."
+        ]
+      ],
+      "blocks": [
+        {
+          "label": "platformio.ini · pilih ini untuk ESP32 klasik",
+          "language": "ini",
+          "code": "[env:esp32-lab]\nplatform = espressif32\nboard = esp32dev\nframework = arduino\nmonitor_speed = 115200"
+        },
+        {
+          "label": "platformio.ini · alternatif untuk UNO R3",
+          "language": "ini",
+          "code": "[env:uno-lab]\nplatform = atmelavr\nboard = uno\nframework = arduino\nmonitor_speed = 115200"
+        },
+        {
+          "label": "src/main.cpp · program lengkap untuk salah satu target",
+          "language": "cpp",
+          "code": "#include <Arduino.h>\n\nvoid cetakPesan(unsigned long nomor);\n\nunsigned long terakhir = 0;\nunsigned long nomorPesan = 0;\n\nvoid setup() {\n  Serial.begin(115200);\n}\n\nvoid loop() {\n  const unsigned long sekarang = millis();\n  if (sekarang - terakhir >= 1000UL) {\n    terakhir = sekarang;\n    cetakPesan(++nomorPesan);\n  }\n}\n\nvoid cetakPesan(unsigned long nomor) {\n  Serial.print(\"Halo PlatformIO, pesan \");\n  Serial.println(nomor);\n}"
+        },
+        {
+          "label": "Terminal PlatformIO Core CLI · jalankan satu per satu",
+          "language": "bash",
+          "code": "pio run -e esp32-lab\npio device list\npio run -e esp32-lab --target upload\npio device monitor --baud 115200"
+        },
+        {
+          "label": "Tambahan opsional di section ESP32 · bukan konfigurasi pengganti",
+          "language": "ini",
+          "code": "; Tambahkan ke [env:esp32-lab] yang sudah ada\nlib_deps =\n  knolleary/PubSubClient @ 2.8"
+        },
+        {
+          "label": "Contoh keluaran Serial · nomor terus bertambah",
+          "language": "text",
+          "code": "Halo PlatformIO, pesan 1\nHalo PlatformIO, pesan 2\nHalo PlatformIO, pesan 3"
+        }
+      ],
+      "result": "Build berakhir SUCCESS, upload berhasil, dan monitor menampilkan pesan bernomor kira-kira setiap detik. Mengganti teks baru terlihat setelah upload ulang. Contoh ini tidak mengirim data MQTT dan tidak memerlukan akun PlatformIO atau Firebase.",
+      "troubleshoot": [
+        "pio tidak dikenali: buka PlatformIO Core CLI milik ekstensi, bukan terminal sistem yang belum dikonfigurasi.",
+        "Unknown board: cocokkan board ID pada dokumentasi, bukan hanya nama pemasaran.",
+        "Port tidak muncul: ganti kabel data, periksa konektor serta driver USB-serial sesuai chip dan sistem operasi.",
+        "Permission denied di Linux: ikuti panduan udev/izin serial PlatformIO; jangan menjalankan seluruh editor sebagai root.",
+        "Upload gagal: tutup monitor aplikasi lain dan periksa port; beberapa ESP32 memerlukan langkah BOOT sesuai panduan board.",
+        "Huruf acak: samakan baud 115200.",
+        "Arduino.h atau library tidak ditemukan: pastikan framework arduino dan proyek dibuka dari folder platformio.ini; tunggu paket lalu build.",
+        "Multiple definition setup/loop: periksa semua source dalam src, hapus salinan program lama.",
+        "Contoh ESP-NOW/BLE gagal: cocokkan versi core dan API, jangan menganggap paket PlatformIO sama dengan Board Manager."
+      ]
+    }
+  }
+]
