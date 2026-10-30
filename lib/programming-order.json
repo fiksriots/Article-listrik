@@ -52,6 +52,23 @@
     ]
   },
   {
+    "title": "Struktur Data",
+    "slugs": [
+      "struktur-data-dasar",
+      "struktur-kompleksitas",
+      "struktur-set",
+      "struktur-dictionary",
+      "struktur-stack",
+      "struktur-queue",
+      "struktur-linked-list",
+      "struktur-tree",
+      "struktur-graph",
+      "struktur-binary-search",
+      "struktur-insertion-sort",
+      "struktur-pemilihan"
+    ]
+  },
+  {
     "title": "Validasi, pengujian, dan penyimpanan",
     "slugs": [
       "kesalahan-validasi",

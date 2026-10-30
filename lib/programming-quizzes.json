@@ -1186,5 +1186,509 @@
       "answer": 2,
       "explanation": "Keterangan wajib berisi teks dan jumlah harus rupiah bulat positif."
     }
+  ],
+  "struktur-data-dasar": [
+    {
+      "question": "Apa tujuan memilih struktur data?",
+      "options": [
+        "Mengatur data agar operasi yang dibutuhkan sesuai",
+        "Membuat semua program memakai list",
+        "Menghilangkan kebutuhan algoritma"
+      ],
+      "answer": 0,
+      "explanation": "Struktur data mengatur penyimpanan dan hubungan data; algoritma tetap diperlukan untuk memprosesnya."
+    },
+    {
+      "question": "Struktur mana yang paling langsung menyatakan kumpulan nilai unik?",
+      "options": [
+        "List",
+        "Set",
+        "String"
+      ],
+      "answer": 1,
+      "explanation": "Set menyimpan elemen unik tanpa duplikat berdasarkan aturan kesamaan nilainya."
+    },
+    {
+      "question": "Apakah Python list sama dengan array bertipe seragam dalam semua hal?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika panjangnya dua",
+        "Tidak; list Python menyimpan referensi dan dapat memuat tipe berbeda"
+      ],
+      "answer": 2,
+      "explanation": "List Python adalah urutan dinamis berisi referensi objek. Array bertipe seragam mempunyai batasan tipe elemen."
+    },
+    {
+      "question": "Apa yang sebaiknya ditentukan sebelum memilih struktur?",
+      "options": [
+        "Operasi utama, kebutuhan urutan, dan aturan duplikat",
+        "Warna editor",
+        "Jumlah huruf nama file"
+      ],
+      "answer": 0,
+      "explanation": "Pemilihan mengikuti kebutuhan akses, perubahan, hubungan, dan keunikan data."
+    }
+  ],
+  "struktur-kompleksitas": [
+    {
+      "question": "Apa yang dijelaskan Big O?",
+      "options": [
+        "Waktu pasti dalam detik",
+        "Pertumbuhan pekerjaan atau memori terhadap ukuran input",
+        "Merek komputer"
+      ],
+      "answer": 1,
+      "explanation": "Big O menggambarkan pola pertumbuhan, bukan durasi pasti pada perangkat tertentu."
+    },
+    {
+      "question": "Dua loop masing-masing n putaran memeriksa semua pasangan. Pertumbuhannya apa?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n²)"
+      ],
+      "answer": 2,
+      "explanation": "Ada n × n pasangan, sehingga pekerjaan bertumbuh kuadratik."
+    },
+    {
+      "question": "Jika target linear search tidak ditemukan dalam n item, berapa item yang dapat diperiksa?",
+      "options": [
+        "n item",
+        "Selalu satu",
+        "Selalu nol"
+      ],
+      "answer": 0,
+      "explanation": "Kasus tidak ditemukan perlu memeriksa seluruh item pada pencarian berurutan."
+    },
+    {
+      "question": "Apakah satu kasus cepat membuktikan semua pencarian linear O(1)?",
+      "options": [
+        "Ya",
+        "Tidak, perlu menjelaskan kasus dan pola pertumbuhan",
+        "Ya jika data berupa angka"
+      ],
+      "answer": 1,
+      "explanation": "Target pertama memang cepat, tetapi kasus terburuk tetap dapat memeriksa semua n item."
+    }
+  ],
+  "struktur-set": [
+    {
+      "question": "Bagaimana membuat set kosong?",
+      "options": [
+        "{}",
+        "[]",
+        "set()"
+      ],
+      "answer": 2,
+      "explanation": "{} membuat dictionary kosong; set kosong memakai set()."
+    },
+    {
+      "question": "Apa arti a & b untuk dua set?",
+      "options": [
+        "Irisan",
+        "Gabungan",
+        "Selisih"
+      ],
+      "answer": 0,
+      "explanation": "Irisan berisi elemen yang terdapat pada kedua set."
+    },
+    {
+      "question": "Apa arti a - b?",
+      "options": [
+        "Semua anggota b",
+        "Anggota a yang tidak ada di b",
+        "Gabungan a dan b"
+      ],
+      "answer": 1,
+      "explanation": "Selisih memperhatikan arah: a - b berbeda dari b - a secara umum."
+    },
+    {
+      "question": "Apakah set cocok untuk membaca item melalui indeks 0?",
+      "options": [
+        "Ya selalu",
+        "Hanya setelah add()",
+        "Tidak, set bukan urutan berindeks"
+      ],
+      "answer": 2,
+      "explanation": "Gunakan list untuk akses posisi. Set digunakan untuk keunikan dan operasi himpunan."
+    }
+  ],
+  "struktur-dictionary": [
+    {
+      "question": "Apa hubungan key dan value pada dictionary?",
+      "options": [
+        "Key mengarahkan ke nilai terkait",
+        "Semua value harus sama",
+        "Key harus berupa nomor urut"
+      ],
+      "answer": 0,
+      "explanation": "Dictionary memetakan key unik ke nilai yang dapat diambil atau diperbarui."
+    },
+    {
+      "question": "Apa hasil frekuensi.get(\"baru\", 0) jika key belum ada?",
+      "options": [
+        "KeyError",
+        "0",
+        "1"
+      ],
+      "answer": 1,
+      "explanation": "Argumen kedua adalah nilai bawaan jika key tidak tersedia."
+    },
+    {
+      "question": "Apakah hash yang sama otomatis berarti dua key sama?",
+      "options": [
+        "Ya",
+        "Hanya pada string",
+        "Tidak, kecocokan key tetap diperiksa"
+      ],
+      "answer": 2,
+      "explanation": "Hash dapat bertabrakan. Dictionary perlu membedakan key yang mempunyai nilai hash sama."
+    },
+    {
+      "question": "Dapatkah list dipakai langsung sebagai key dictionary?",
+      "options": [
+        "Tidak, list tidak hashable",
+        "Ya selalu",
+        "Ya jika berisi dua item"
+      ],
+      "answer": 0,
+      "explanation": "Key dictionary harus hashable. List dapat berubah dan tidak hashable."
+    }
+  ],
+  "struktur-stack": [
+    {
+      "question": "Stack mengikuti aturan apa?",
+      "options": [
+        "FIFO",
+        "LIFO",
+        "Acak"
+      ],
+      "answer": 1,
+      "explanation": "Last In, First Out berarti item terakhir masuk menjadi yang pertama keluar."
+    },
+    {
+      "question": "Untuk list sebagai stack, operasi push memakai apa?",
+      "options": [
+        "popleft()",
+        "remove(0)",
+        "append()"
+      ],
+      "answer": 2,
+      "explanation": "append() menambahkan item ke ujung atas stack yang diwakili akhir list."
+    },
+    {
+      "question": "A lalu B dimasukkan ke stack. Pop pertama menghasilkan apa?",
+      "options": [
+        "B",
+        "A",
+        "Keduanya"
+      ],
+      "answer": 0,
+      "explanation": "B berada di ujung atas karena masuk paling akhir."
+    },
+    {
+      "question": "Apa yang perlu diperiksa sebelum pop() pada stack?",
+      "options": [
+        "Panjang nama variabel",
+        "Apakah stack tidak kosong",
+        "Apakah semua item angka"
+      ],
+      "answer": 1,
+      "explanation": "pop() pada list kosong menyebabkan IndexError."
+    }
+  ],
+  "struktur-queue": [
+    {
+      "question": "Queue biasa mengikuti aturan apa?",
+      "options": [
+        "LIFO",
+        "Acak",
+        "FIFO"
+      ],
+      "answer": 2,
+      "explanation": "First In, First Out melayani item yang lebih dahulu masuk."
+    },
+    {
+      "question": "Operasi deque mana yang mengambil item depan?",
+      "options": [
+        "popleft()",
+        "append()",
+        "get()"
+      ],
+      "answer": 0,
+      "explanation": "popleft() mengambil sekaligus menghapus item dari ujung kiri."
+    },
+    {
+      "question": "Mengapa list.pop(0) dapat mahal untuk antrean besar?",
+      "options": [
+        "Selalu menyortir list",
+        "Elemen lain perlu digeser",
+        "Mengubah semua elemen menjadi string"
+      ],
+      "answer": 1,
+      "explanation": "Menghapus dari depan list menggeser elemen yang tersisa, sehingga biayanya bertumbuh dengan panjang list."
+    },
+    {
+      "question": "Apakah pop() dan popleft() pada deque selalu menghasilkan item yang sama?",
+      "options": [
+        "Ya",
+        "Ya jika ada banyak item",
+        "Tidak, keduanya mengambil ujung berbeda"
+      ],
+      "answer": 2,
+      "explanation": "pop() mengambil ujung kanan, sedangkan popleft() mengambil ujung kiri."
+    }
+  ],
+  "struktur-linked-list": [
+    {
+      "question": "Apa isi node pada contoh singly linked list?",
+      "options": [
+        "Nilai dan referensi node berikutnya",
+        "Semua indeks list Python",
+        "Hanya jumlah node"
+      ],
+      "answer": 0,
+      "explanation": "Node menghubungkan nilai dengan petunjuk ke node berikutnya."
+    },
+    {
+      "question": "Apa arti head?",
+      "options": [
+        "Node terakhir selalu",
+        "Referensi node pertama",
+        "Jumlah seluruh node"
+      ],
+      "answer": 1,
+      "explanation": "Traversal dimulai dari head yang menunjuk node pertama atau None jika kosong."
+    },
+    {
+      "question": "Apa arti None pada referensi berikut node terakhir?",
+      "options": [
+        "Data rusak selalu",
+        "Node pertama",
+        "Akhir rangkaian"
+      ],
+      "answer": 2,
+      "explanation": "None menandai tidak adanya node berikut dalam contoh tanpa siklus."
+    },
+    {
+      "question": "Apakah akses node ke-k dari head selalu O(1)?",
+      "options": [
+        "Tidak, perlu mengikuti hubungan node",
+        "Ya seperti indeks list",
+        "Ya jika nilai berupa huruf"
+      ],
+      "answer": 0,
+      "explanation": "Linked list tidak mempunyai akses acak indeks konstan seperti list Python."
+    }
+  ],
+  "struktur-tree": [
+    {
+      "question": "Apa istilah node tanpa anak?",
+      "options": [
+        "Root selalu",
+        "Leaf",
+        "Parent"
+      ],
+      "answer": 1,
+      "explanation": "Leaf adalah node yang tidak mempunyai anak."
+    },
+    {
+      "question": "Berapa anak maksimum pada binary tree?",
+      "options": [
+        "Satu",
+        "Tidak terbatas",
+        "Dua"
+      ],
+      "answer": 2,
+      "explanation": "Binary tree membatasi setiap node mempunyai paling banyak dua anak."
+    },
+    {
+      "question": "Mengapa anak dimasukkan terbalik ke stack pada contoh?",
+      "options": [
+        "Agar anak kiri diambil lebih dahulu oleh aturan LIFO",
+        "Agar semua node menjadi leaf",
+        "Agar tree menjadi dictionary kosong"
+      ],
+      "answer": 0,
+      "explanation": "Stack mengambil item terakhir, sehingga urutan masukan dibalik untuk mempertahankan urutan kunjungan kiri dahulu."
+    },
+    {
+      "question": "Apakah semua tree otomatis memiliki aturan pengurutan key?",
+      "options": [
+        "Ya",
+        "Tidak, binary search tree mempunyai aturan tambahan",
+        "Hanya jika root berupa teks"
+      ],
+      "answer": 1,
+      "explanation": "Tree adalah hierarki umum. Aturan pencarian menurut key berlaku pada struktur tertentu seperti binary search tree."
+    }
+  ],
+  "struktur-graph": [
+    {
+      "question": "Graph terdiri dari apa?",
+      "options": [
+        "Hanya file",
+        "Hanya angka",
+        "Node dan hubungan"
+      ],
+      "answer": 2,
+      "explanation": "Vertex mewakili node, sedangkan edge mewakili hubungan antar node."
+    },
+    {
+      "question": "Apa yang disimpan adjacency list?",
+      "options": [
+        "Daftar tetangga setiap node",
+        "Hanya hasil akhir BFS",
+        "Urutan semua file"
+      ],
+      "answer": 0,
+      "explanation": "Adjacency list mencatat node apa saja yang terhubung dari masing-masing node."
+    },
+    {
+      "question": "Mengapa visited ditandai saat node dimasukkan antrean?",
+      "options": [
+        "Agar semua node dihapus",
+        "Agar node yang sama tidak masuk berulang dari tetangga berbeda",
+        "Agar graph selalu terurut"
+      ],
+      "answer": 1,
+      "explanation": "Penandaan saat ditemukan mencegah duplikasi antrean dan pengulangan pada siklus."
+    },
+    {
+      "question": "Apakah BFS dari A otomatis mengunjungi node terpisah yang tidak terjangkau?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika namanya E",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Traversal dari satu titik hanya menjangkau bagian graph yang terhubung melalui hubungan yang dapat dilalui."
+    }
+  ],
+  "struktur-binary-search": [
+    {
+      "question": "Apa syarat utama binary search contoh?",
+      "options": [
+        "Data terurut sesuai aturan perbandingan",
+        "Data harus string",
+        "Panjang data harus genap"
+      ],
+      "answer": 0,
+      "explanation": "Pemilihan sisi kiri atau kanan hanya benar jika urutan datanya sesuai."
+    },
+    {
+      "question": "Jika target lebih besar dari nilai tengah, batas kiri menjadi apa?",
+      "options": [
+        "tengah",
+        "tengah + 1",
+        "tengah - 1"
+      ],
+      "answer": 1,
+      "explanation": "Nilai tengah sudah diperiksa sehingga dapat dikeluarkan dari ruang pencarian."
+    },
+    {
+      "question": "Apa hasil fungsi contoh ketika target tidak ditemukan?",
+      "options": [
+        "0",
+        "-100",
+        "None"
+      ],
+      "answer": 2,
+      "explanation": "None dipakai sebagai penanda tidak ditemukan, sedangkan indeks 0 tetap hasil valid."
+    },
+    {
+      "question": "Apakah implementasi contoh menjamin indeks pertama pada data ganda?",
+      "options": [
+        "Tidak, dapat mengembalikan salah satu kecocokan",
+        "Ya selalu",
+        "Tidak pernah menemukan duplikat"
+      ],
+      "answer": 0,
+      "explanation": "Fungsi langsung mengembalikan tengah ketika cocok tanpa melanjutkan pencarian ke kiri."
+    }
+  ],
+  "struktur-insertion-sort": [
+    {
+      "question": "Apa gagasan insertion sort?",
+      "options": [
+        "Menghapus semua item",
+        "Menyisipkan item ke bagian yang sudah terurut",
+        "Mengambil item acak saja"
+      ],
+      "answer": 1,
+      "explanation": "Bagian awal dipertahankan terurut, lalu item berikutnya ditempatkan pada posisi yang sesuai."
+    },
+    {
+      "question": "Apakah insertion_sort contoh mengubah list angka asli?",
+      "options": [
+        "Ya",
+        "Selalu mengosongkannya",
+        "Tidak, bekerja pada salinan"
+      ],
+      "answer": 2,
+      "explanation": "data.copy() membuat list hasil yang diurutkan tanpa mengganti urutan list angka asli."
+    },
+    {
+      "question": "Apa yang dikembalikan list.sort()?",
+      "options": [
+        "None",
+        "List baru selalu",
+        "Jumlah item"
+      ],
+      "answer": 0,
+      "explanation": "sort() mengubah list asli dan mengembalikan None."
+    },
+    {
+      "question": "Apa arti pengurutan stabil?",
+      "options": [
+        "Selalu O(1)",
+        "Item dengan key sama mempertahankan urutan relatif",
+        "Hasil tidak pernah dapat diubah"
+      ],
+      "answer": 1,
+      "explanation": "Stabilitas berkaitan dengan urutan relatif elemen yang memiliki key pengurutan sama."
+    }
+  ],
+  "struktur-pemilihan": [
+    {
+      "question": "Mengapa contoh memakai deque?",
+      "options": [
+        "Untuk memaksa ID unik",
+        "Untuk menyimpan jumlah layanan",
+        "Untuk urutan layanan FIFO"
+      ],
+      "answer": 2,
+      "explanation": "Deque melayani dari depan sambil menerima item baru di belakang."
+    },
+    {
+      "question": "Apa peran set menunggu?",
+      "options": [
+        "Mencegah ID yang sedang menunggu masuk dua kali",
+        "Menyimpan seluruh keluaran teks",
+        "Mengurutkan hasil berdasarkan nama"
+      ],
+      "answer": 0,
+      "explanation": "Set berisi ID yang saat ini masih ada dalam antrean."
+    },
+    {
+      "question": "Kapan ID dihapus dari menunggu?",
+      "options": [
+        "Setelah program ditutup",
+        "Ketika tugas dikeluarkan dari antrean untuk dilayani",
+        "Tidak pernah"
+      ],
+      "answer": 1,
+      "explanation": "Penghapusan menjaga set konsisten dengan item yang masih menunggu."
+    },
+    {
+      "question": "Apakah aturan contoh melarang ID yang sama dijadwalkan lagi setelah dilayani?",
+      "options": [
+        "Ya selamanya",
+        "Hanya pada hari yang sama",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Keunikan hanya berlaku selama menunggu. Setelah dilayani, ID dapat dijadwalkan kembali."
+    }
   ]
 }

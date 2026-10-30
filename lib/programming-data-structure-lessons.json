@@ -1,0 +1,748 @@
+[
+  {
+    "slug": "struktur-data-dasar",
+    "title": "Struktur data: mengatur data sesuai kebutuhan",
+    "summary": "Bedakan data, struktur data, dan algoritma melalui contoh sederhana.",
+    "analogy": "Lemari arsip, tumpukan piring, dan antrean loket sama-sama menyimpan sesuatu, tetapi cara menyimpan serta mengambilnya berbeda.",
+    "explain": [
+      "Struktur data adalah cara mengatur data agar operasi yang dibutuhkan mudah dilakukan. Algoritma adalah langkah untuk memproses data tersebut. Memilih struktur yang sesuai dapat membuat program lebih jelas dan mengurangi pekerjaan yang tidak perlu.",
+      "List cocok untuk urutan item yang bisa berubah, tuple untuk urutan yang itemnya tidak diganti langsung, set untuk kumpulan unik, dan dictionary untuk pasangan key–value. Stack, queue, linked list, tree, dan graph memperkenalkan pola hubungan atau aturan akses yang lebih khusus.",
+      "Array dan list tidak selalu sama. Array bertipe seragam menyimpan elemen dengan tipe tertentu; Python list merupakan urutan dinamis berisi referensi ke objek dan dapat memuat tipe berbeda. Pada jalur ini kita memakai list bawaan Python; modul array menjadi bacaan tambahan, bukan prasyarat.",
+      "Mulailah dari pertanyaan: apakah urutan penting, apakah duplikat boleh, dan bagaimana data paling sering dicari atau dihapus? Tidak ada satu struktur yang paling baik untuk semua pekerjaan. Materi list, tuple, fungsi, dan modul sebelumnya menjadi bekal untuk kelompok ini."
+    ],
+    "table": {
+      "headers": [
+        "Kebutuhan",
+        "Struktur awal",
+        "Contoh"
+      ],
+      "rows": [
+        [
+          "Urutan dapat berubah",
+          "list",
+          "Daftar tugas"
+        ],
+        [
+          "Nilai unik",
+          "set",
+          "Nama peserta tanpa duplikat"
+        ],
+        [
+          "Cari memakai key",
+          "dict",
+          "Harga berdasarkan kode barang"
+        ],
+        [
+          "Urutan masuk–layanan",
+          "queue / deque",
+          "Antrean pelanggan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Struktur data: mengatur data sesuai kebutuhan",
+        "code": "tugas = [\"Baca\", \"Latihan\", \"Baca\"]\npeserta = {\"Ana\", \"Budi\", \"Ana\"}\nharga = {\"B01\": 10000, \"B02\": 15000}\nprint(\"Jumlah tugas:\", len(tugas))\nprint(\"Peserta unik:\", len(peserta))\nprint(\"Harga B01:\", harga[\"B01\"])",
+        "output": "Jumlah tugas: 3\nPeserta unik: 2\nHarga B01: 10000",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Pilih struktur untuk daftar belanja, nama unik, dan harga berdasarkan kode.",
+      "Tuliskan operasi utama dari masing-masing masalah.",
+      "Bandingkan list dengan tuple pada materi sebelumnya."
+    ],
+    "warning": "Set tidak menjamin urutan penyisipan untuk kebutuhan program. Jika urutan hasil penting, tentukan aturan pengurutan secara eksplisit.",
+    "check": "Apakah semua data sebaiknya disimpan sebagai list?",
+    "answer": "Tidak. List berguna untuk urutan, tetapi set lebih sesuai untuk keunikan dan dictionary untuk pencarian berdasarkan key.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-pilihan",
+    "diagramAlt": "Pemilihan berdasarkan kebutuhan: urutan dengan list, data unik dengan set, key-value dengan dictionary, antrean dengan deque.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "struktur-kompleksitas",
+    "title": "Big O: memahami pertumbuhan pekerjaan",
+    "summary": "Bandingkan akses langsung, pencarian, dan perulangan bertingkat tanpa rumus yang rumit.",
+    "analogy": "Mengambil buku dari nomor rak yang sudah diketahui berbeda dengan mencari satu judul di seluruh rak.",
+    "explain": [
+      "Big O menggambarkan bagaimana kebutuhan pekerjaan atau memori bertumbuh ketika ukuran input n membesar. Ini bukan waktu dalam detik dan bukan jaminan kecepatan suatu komputer. Kita memakainya untuk membandingkan pola pertumbuhan.",
+      "O(1) berarti pekerjaan tidak bertambah sebanding dengan n, misalnya akses indeks list yang valid. O(n) berarti pekerjaan dapat bertambah sebanding jumlah item, seperti pencarian berurutan ketika target tidak ditemukan. O(n²) sering muncul ketika semua n item dipasangkan dengan semua n item.",
+      "Binary search pada data terurut mengurangi ruang pencarian sekitar setengah setiap langkah, sehingga jumlah perbandingan bertumbuh O(log n). Mengurutkan data lebih dahulu tetap mempunyai biaya sendiri. Jangan mengabaikan biaya persiapan ketika membandingkan solusi.",
+      "Tentukan operasi yang sedang dihitung dan kasus yang dianalisis. Mencari item pertama bisa cepat, tetapi kasus terburuk pencarian linear memeriksa semua item. Contoh menghitung perbandingan, bukan melakukan pengukuran waktu."
+    ],
+    "table": {
+      "headers": [
+        "Pola",
+        "Jika n digandakan",
+        "Contoh"
+      ],
+      "rows": [
+        [
+          "O(1)",
+          "Tetap secara pertumbuhan",
+          "Akses indeks"
+        ],
+        [
+          "O(log n)",
+          "Naik perlahan",
+          "Binary search"
+        ],
+        [
+          "O(n)",
+          "Sekitar dua kali pekerjaan",
+          "Pencarian linear terburuk"
+        ],
+        [
+          "O(n²)",
+          "Sekitar empat kali pekerjaan",
+          "Memeriksa semua pasangan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Big O: memahami pertumbuhan pekerjaan",
+        "code": "def hitung_perbandingan(data, target):\n    hitungan = 0\n    for item in data:\n        hitungan += 1\n        if item == target:\n            break\n    return hitungan\n\nprint(hitung_perbandingan([1, 2, 3], 9))\nprint(hitung_perbandingan([1, 2, 3, 4, 5, 6], 9))\nprint(hitung_perbandingan([1, 2, 3, 4, 5, 6], 1))",
+        "output": "3\n6\n1",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Uji target yang ada di tengah, pertama, terakhir, dan tidak ada.",
+      "Hitung jumlah pasangan untuk n=3 dan n=6.",
+      "Jelaskan mengapa hasil 1 perbandingan tidak membuat semua pencarian linear O(1)."
+    ],
+    "warning": "Big O merangkum pertumbuhan, bukan angka durasi. Dua algoritma dengan Big O sama masih bisa berbeda waktu nyata dan penggunaan memori.",
+    "check": "Apakah O(n) berarti program selalu memerlukan n detik?",
+    "answer": "Tidak. n adalah ukuran input, dan notasi tersebut menjelaskan pertumbuhan pekerjaan.",
+    "source": "https://docs.python.org/3/library/bisect.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "struktur-set",
+    "title": "Set: kumpulan unik dan operasi himpunan",
+    "summary": "Hilangkan duplikat dan cari persamaan atau perbedaan dua kumpulan.",
+    "analogy": "Daftar kehadiran bisa mencatat kunjungan berulang. Set seperti daftar nama unik: orang yang sama tetap dihitung sekali.",
+    "explain": [
+      "Set menyimpan elemen unik. Buat set kosong memakai set(), karena {} adalah dictionary kosong. Gunakan add() untuk menambahkan satu elemen dan discard() untuk menghapus elemen jika tersedia tanpa error ketika tidak ada.",
+      "Operator | menghasilkan gabungan, & menghasilkan irisan, dan - menghasilkan selisih. a - b berarti anggota a yang tidak berada di b. Selisih tidak simetris: b - a dapat berbeda.",
+      "Elemen set harus hashable, misalnya angka, string, atau tuple yang semua elemennya hashable. List dan dictionary tidak dapat menjadi elemen set langsung. Set bukan tempat mengambil item berdasarkan posisi seperti data[0].",
+      "Untuk menampilkan hasil secara konsisten, contoh memakai sorted() pada set string. Operasi set menghasilkan kumpulan; pengurutan merupakan langkah tambahan. Nilai 1 dan True dianggap sama untuk keanggotaan set Python, jadi pilih tipe data sesuai kebutuhan."
+    ],
+    "table": {
+      "headers": [
+        "Operasi",
+        "Arti"
+      ],
+      "rows": [
+        [
+          "a | b",
+          "Gabungan"
+        ],
+        [
+          "a & b",
+          "Irisan"
+        ],
+        [
+          "a - b",
+          "Anggota a yang tidak ada di b"
+        ],
+        [
+          "x in a",
+          "Periksa keanggotaan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Set: kumpulan unik dan operasi himpunan",
+        "code": "pagi = {\"Ana\", \"Budi\"}\nsore = {\"Budi\", \"Citra\"}\nprint(\"Semua:\", sorted(pagi | sore))\nprint(\"Keduanya:\", sorted(pagi & sore))\nprint(\"Hanya pagi:\", sorted(pagi - sore))\npagi.discard(\"Dina\")\nprint(\"Jumlah pagi:\", len(pagi))",
+        "output": "Semua: ['Ana', 'Budi', 'Citra']\nKeduanya: ['Budi']\nHanya pagi: ['Ana']\nJumlah pagi: 2",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Ubah dua nama menjadi sama dan amati len().",
+      "Cari peserta yang hanya hadir sore.",
+      "Buat set kosong dan tambahkan nama dengan add()."
+    ],
+    "warning": "Jangan mengandalkan urutan tampilan set. sorted() memerlukan elemen yang dapat dibandingkan satu sama lain.",
+    "check": "Apakah {} membuat set kosong?",
+    "answer": "Tidak. {} membuat dictionary; set kosong dibuat memakai set().",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "struktur-dictionary",
+    "title": "Dictionary dan konsep hash map",
+    "summary": "Cari data berdasarkan key dan pahami mengapa pencarian berbeda dari pemindaian list.",
+    "analogy": "Kode barang pada katalog mengarahkanmu ke catatan tertentu, sehingga tidak perlu membaca semua nama barang dari awal.",
+    "explain": [
+      "Dictionary Python adalah struktur key–value berbasis hashing. Key harus hashable. Fungsi hash membantu memilih lokasi pencarian internal; ketika beberapa key berbagi lokasi hash, implementasi tetap memeriksa kecocokan key. Hash sama tidak otomatis berarti key sama.",
+      "Pencarian, penambahan, dan penghapusan dictionary umumnya berbiaya O(1) rata-rata dengan asumsi hashing yang baik. Ini bukan jaminan setiap operasi selalu konstan; tabrakan hash dan perubahan kapasitas dapat menambah pekerjaan.",
+      "Gunakan get() untuk key opsional. Dalam pencacahan kata, frekuensi.get(kata, 0) membaca hitungan lama atau 0 lalu menambah 1. Menugaskan nilai baru pada key yang sama memperbarui entri, bukan membuat key ganda.",
+      "Dictionary mempertahankan urutan penyisipan, tetapi itu berbeda dari urutan alfabet atau urutan menurut harga. Contoh mengurutkan key saat menampilkan frekuensi agar tujuan pengurutannya jelas. Jangan memakai hash() sebagai identitas permanen yang disimpan lintas proses."
+    ],
+    "table": {
+      "headers": [
+        "Operasi",
+        "Tujuan"
+      ],
+      "rows": [
+        [
+          "data[key]",
+          "Ambil key wajib; dapat KeyError"
+        ],
+        [
+          "data.get(key, 0)",
+          "Ambil dengan nilai bawaan"
+        ],
+        [
+          "data[key] = nilai",
+          "Tambah atau perbarui"
+        ],
+        [
+          "for key in sorted(data)",
+          "Tampilkan berdasarkan key terurut"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Dictionary dan konsep hash map",
+        "code": "frekuensi = {}\nfor kata in [\"buku\", \"pena\", \"buku\"]:\n    frekuensi[kata] = frekuensi.get(kata, 0) + 1\nfor kata in sorted(frekuensi):\n    print(kata, frekuensi[kata])\nprint(\"Penghapus:\", frekuensi.get(\"penghapus\", 0))",
+        "output": "buku 2\npena 1\nPenghapus: 0",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Hitung frekuensi kata dari teks.lower().split().",
+      "Jelaskan kapan key perlu dibersihkan dengan strip() atau lower().",
+      "Bandingkan satu dictionary frekuensi dengan pencarian ulang seluruh list untuk setiap kata."
+    ],
+    "warning": "List tidak dapat dipakai langsung sebagai key dictionary. Tuple pun harus berisi elemen yang hashable untuk menjadi key.",
+    "check": "Jika key buku diberi nilai baru, apakah dictionary mempunyai dua key buku?",
+    "answer": "Tidak. Nilai pada key yang sama diperbarui.",
+    "source": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "struktur-stack",
+    "title": "Stack: pola terakhir masuk, pertama keluar",
+    "summary": "Gunakan list untuk memahami LIFO, push, pop, dan riwayat tindakan.",
+    "analogy": "Piring ditumpuk dari atas dan diambil dari atas. Piring yang terakhir diletakkan menjadi yang pertama diambil.",
+    "explain": [
+      "Stack mengikuti LIFO: Last In, First Out. Push menambahkan item ke ujung atas, pop mengambil sekaligus menghapus item teratas, dan peek melihat item teratas tanpa menghapus.",
+      "List Python dapat dipakai sebagai stack dengan append() dan pop() pada ujung akhir. Peek memakai stack[-1]. Periksa apakah stack tidak kosong sebelum pop() atau membaca indeks terakhir.",
+      "Contoh menyimpan label tindakan. Mengambil label terakhir membantu memahami urutan undo, tetapi belum membatalkan perubahan dokumen secara nyata. Sistem undo sungguhan perlu menyimpan informasi untuk memulihkan keadaan.",
+      "Penambahan di ujung list bersifat O(1) amortized: sebagian penambahan bisa memerlukan perubahan kapasitas, tetapi rata-rata biaya pada rangkaian operasi tetap konstan. Stack tidak dimaksudkan untuk melayani item paling lama lebih dahulu."
+    ],
+    "table": {
+      "headers": [
+        "Operasi stack",
+        "Kode Python"
+      ],
+      "rows": [
+        [
+          "Push",
+          "stack.append(item)"
+        ],
+        [
+          "Pop",
+          "stack.pop()"
+        ],
+        [
+          "Peek",
+          "stack[-1] jika tidak kosong"
+        ],
+        [
+          "Periksa kosong",
+          "if not stack"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Stack: pola terakhir masuk, pertama keluar",
+        "code": "riwayat = []\nriwayat.append(\"Tulis judul\")\nriwayat.append(\"Tambah paragraf\")\nprint(\"Teratas:\", riwayat[-1])\nif riwayat:\n    terakhir = riwayat.pop()\n    print(\"Label undo:\", terakhir)\nprint(\"Sisa:\", riwayat)",
+        "output": "Teratas: Tambah paragraf\nLabel undo: Tambah paragraf\nSisa: ['Tulis judul']",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Tambahkan tiga label tindakan lalu pop satu per satu.",
+      "Uji list kosong dengan penjagaan if.",
+      "Buat fungsi peek yang mengembalikan None ketika kosong."
+    ],
+    "warning": "pop() pada stack kosong menyebabkan IndexError. Menghapus label riwayat tidak otomatis membalikkan pekerjaan di aplikasi.",
+    "check": "A lalu B dimasukkan ke stack. Item mana yang dikeluarkan lebih dahulu?",
+    "answer": "B, karena B adalah item terakhir yang masuk.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-stack",
+    "diagramAlt": "Stack menambah dan mengambil data dari ujung atas; item terakhir masuk keluar lebih dahulu.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "struktur-queue",
+    "title": "Queue dan deque: melayani antrean",
+    "summary": "Gunakan collections.deque untuk memasukkan dari belakang dan mengambil dari depan.",
+    "analogy": "Di loket, pelanggan yang datang lebih dahulu dilayani lebih dahulu. Pelanggan baru masuk di bagian belakang antrean.",
+    "explain": [
+      "Queue mengikuti FIFO: First In, First Out. Enqueue menambah item di belakang, dequeue mengambil item dari depan. Contoh Python memakai deque dari modul collections.",
+      "deque.append() menambahkan item di kanan, sementara popleft() mengambil item di kiri. Operasi pada kedua ujung deque dirancang efisien, dengan pertumbuhan O(1). Akses indeks tengah bukan keunggulannya.",
+      "List.pop(0) dapat dipakai pada contoh kecil, tetapi menggeser elemen lain sehingga biayanya O(n). Untuk antrean yang sering mengambil dari depan, deque lebih cocok. Jangan mengganti popleft() menjadi pop() jika tetap menginginkan FIFO.",
+      "Contoh berjalan dalam satu proses sederhana. Untuk koordinasi banyak thread atau proses, tersedia struktur antrean dengan mekanisme sinkronisasi tersendiri; deque saja bukan rancangan lengkap sistem antrean yang melibatkan banyak pekerja."
+    ],
+    "table": {
+      "headers": [
+        "Tujuan",
+        "Operasi"
+      ],
+      "rows": [
+        [
+          "Masuk belakang",
+          "append()"
+        ],
+        [
+          "Keluar depan",
+          "popleft()"
+        ],
+        [
+          "Keluar belakang",
+          "pop(); berbeda dari FIFO biasa"
+        ],
+        [
+          "Kosong",
+          "if not antrean"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Queue dan deque: melayani antrean",
+        "code": "from collections import deque\n\nantrean = deque()\nantrean.append(\"Ana\")\nantrean.append(\"Budi\")\nwhile antrean:\n    print(\"Melayani:\", antrean.popleft())\nprint(\"Sisa:\", len(antrean))",
+        "output": "Melayani: Ana\nMelayani: Budi\nSisa: 0",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Tambahkan Citra setelah Budi dan tebak urutannya.",
+      "Bandingkan pop() dengan popleft().",
+      "Buat fungsi layani yang menangani antrean kosong."
+    ],
+    "warning": "popleft() pada deque kosong menyebabkan IndexError. Pastikan ada item sebelum mengambilnya.",
+    "check": "Mengapa list.pop(0) kurang cocok untuk antrean besar?",
+    "answer": "Elemen lain perlu digeser ketika item depan dihapus, sedangkan deque mendukung pengambilan dari ujung dengan efisien.",
+    "source": "https://docs.python.org/3/library/collections.html#collections.deque",
+    "diagram": "struktur-queue",
+    "diagramAlt": "Queue memasukkan data di belakang dan melayani data dari depan.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "struktur-linked-list",
+    "title": "Linked list: node yang saling terhubung",
+    "summary": "Pahami node, referensi, head, dan penelusuran tanpa memerlukan kelas terlebih dahulu.",
+    "analogy": "Setiap kartu menyimpan sebuah nilai dan petunjuk ke kartu selanjutnya. Kamu mulai dari kartu pertama lalu mengikuti petunjuknya.",
+    "explain": [
+      "Singly linked list terdiri dari node yang menyimpan nilai serta referensi ke node berikutnya. Head menunjuk node pertama. Referensi None pada node terakhir menandai akhir rangkaian.",
+      "Agar tetap cocok untuk pemula, contoh mewakili node dengan dictionary berisi nilai dan berikut. Kata referensi berarti hubungan ke objek node lain; kita tidak sedang menghitung alamat memori atau membuat tipe pointer seperti pada C.",
+      "Menambahkan node di depan dapat dilakukan dengan membuat node baru yang berikutnya menunjuk head lama, lalu mengganti head. Menemukan node ke-k tetap harus menelusuri hubungan dari awal. Linked list tidak menyediakan akses indeks O(1) seperti list Python.",
+      "Linked list berguna untuk mempelajari hubungan antarobjek, tetapi bukan pengganti otomatis list Python. Setiap node mempunyai biaya penyimpanan tambahan dan penelusuran dapat lebih rumit. Contoh hanya membahas rangkaian tanpa siklus."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti"
+      ],
+      "rows": [
+        [
+          "Node",
+          "Nilai dan referensi berikutnya"
+        ],
+        [
+          "Head",
+          "Referensi node pertama"
+        ],
+        [
+          "None",
+          "Akhir rangkaian"
+        ],
+        [
+          "Traversal",
+          "Mengikuti node satu per satu"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Linked list: node yang saling terhubung",
+        "code": "def tambah_depan(head, nilai):\n    return {\"nilai\": nilai, \"berikut\": head}\n\nhead = None\nhead = tambah_depan(head, \"B\")\nhead = tambah_depan(head, \"A\")\nsaat_ini = head\nwhile saat_ini is not None:\n    print(saat_ini[\"nilai\"])\n    saat_ini = saat_ini[\"berikut\"]",
+        "output": "A\nB",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Tambahkan C di depan dan gambar hubungan node.",
+      "Uji head = None.",
+      "Hitung jumlah node dengan menambah penghitung saat traversal."
+    ],
+    "warning": "Jika referensi membentuk siklus, traversal sederhana dapat tidak berhenti. Jangan menyamakan nama berikut dengan salinan seluruh node.",
+    "check": "Apakah mencari node terakhir selalu O(1) jika hanya mempunyai head?",
+    "answer": "Tidak. Pada singly linked list tanpa referensi ekor, perlu mengikuti node satu per satu.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-linked-list",
+    "diagramAlt": "Setiap node menyimpan nilai dan referensi ke node berikutnya; node terakhir menunjuk None.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-tree",
+    "title": "Tree: data dengan hubungan hierarki",
+    "summary": "Kenali root, parent, child, leaf, dan traversal memakai stack.",
+    "analogy": "Folder utama mempunyai subfolder dan file. Hubungannya membentuk hierarki dari satu akar ke beberapa cabang.",
+    "explain": [
+      "Tree menggambarkan hubungan hierarki. Root adalah akar, parent adalah induk, child adalah anak, dan leaf adalah node tanpa anak. Pada rooted tree sederhana, setiap node selain root mempunyai satu parent dan tidak terdapat siklus.",
+      "Contoh menyimpan nama dan list anak pada dictionary. Kita membaca node memakai stack, sehingga tidak harus mempelajari rekursi terlebih dahulu. Setelah sebuah node dibaca, anak-anaknya dimasukkan untuk dikunjungi.",
+      "Anak dimasukkan dalam urutan terbalik agar pengambilan LIFO tetap menampilkan anak kiri lebih dahulu. Urutan pada contoh adalah penelusuran depth-first preorder: baca node, lalu telusuri cabangnya.",
+      "Tree umum berbeda dari binary tree, yang memiliki paling banyak dua anak per node. Binary search tree menambahkan aturan pengurutan key, sehingga tidak semua tree otomatis dapat dipakai untuk pencarian logaritmik."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Contoh"
+      ],
+      "rows": [
+        [
+          "Root",
+          "Proyek"
+        ],
+        [
+          "Child dari Proyek",
+          "Dokumen dan Kode"
+        ],
+        [
+          "Parent dari utama.py",
+          "Kode"
+        ],
+        [
+          "Leaf",
+          "Dokumen dan utama.py"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Tree: data dengan hubungan hierarki",
+        "code": "tree = {\"nama\": \"Proyek\", \"anak\": [\n    {\"nama\": \"Dokumen\", \"anak\": []},\n    {\"nama\": \"Kode\", \"anak\": [\n        {\"nama\": \"utama.py\", \"anak\": []}\n    ]}\n]}\nstack = [tree]\nwhile stack:\n    node = stack.pop()\n    print(node[\"nama\"])\n    for anak in reversed(node[\"anak\"]):\n        stack.append(anak)",
+        "output": "Proyek\nDokumen\nKode\nutama.py",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Tambahkan file baca.txt sebagai anak Dokumen.",
+      "Gambar root, parent, child, dan leaf.",
+      "Hapus reversed() dan bandingkan urutan kunjungan."
+    ],
+    "warning": "Data contoh merupakan tree tanpa node bersama atau siklus. Struktur umum yang mempunyai siklus membutuhkan pengamanan seperti visited pada materi graph.",
+    "check": "Apakah semua tree hanya boleh mempunyai dua anak?",
+    "answer": "Tidak. Batas paling banyak dua anak berlaku pada binary tree, bukan semua tree.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-tree",
+    "diagramAlt": "Root Proyek mempunyai dua anak: Dokumen dan Kode; Kode mempunyai anak utama.py.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-graph",
+    "title": "Graph dan adjacency list",
+    "summary": "Modelkan hubungan banyak arah dan telusuri dengan BFS.",
+    "analogy": "Peta kota menghubungkan beberapa lokasi. Satu lokasi dapat terhubung ke beberapa lokasi lain tanpa harus mempunyai satu induk.",
+    "explain": [
+      "Graph terdiri dari vertex atau node dan edge atau hubungan. Graph dapat berarah atau tak berarah. Pada graph tak berarah, hubungan A–B berarti A mencantumkan B dan B mencantumkan A.",
+      "Adjacency list menyimpan daftar tetangga setiap node. Contoh memakai dictionary dengan key node dan value list tetangga. BFS memakai queue untuk memeriksa node per lapisan, serta set visited untuk mencegah kunjungan berulang.",
+      "Node ditandai visited ketika dimasukkan antrean, bukan menunggu ketika dikeluarkan. Cara ini mencegah node yang sama masuk antrean berkali-kali dari tetangga berbeda. Traversal dari satu node hanya mencakup bagian graph yang dapat dijangkaunya.",
+      "Dengan adjacency list, BFS berbiaya O(V + E) untuk bagian yang ditelusuri, dengan V jumlah node dan E jumlah hubungan. BFS dapat membantu pencarian jalur dengan jumlah edge paling sedikit pada graph tak berbobot, tetapi contoh ini baru menampilkan urutan kunjungan, belum merekonstruksi jalur."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Makna"
+      ],
+      "rows": [
+        [
+          "Vertex",
+          "Node / lokasi"
+        ],
+        [
+          "Edge",
+          "Hubungan"
+        ],
+        [
+          "Adjacency list",
+          "Daftar tetangga"
+        ],
+        [
+          "Visited",
+          "Node yang sudah ditemukan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Graph dan adjacency list",
+        "code": "from collections import deque\n\ngraph = {\"A\": [\"B\", \"C\"], \"B\": [\"A\", \"D\"],\n         \"C\": [\"A\"], \"D\": [\"B\"]}\nantrean = deque([\"A\"])\nvisited = {\"A\"}\nwhile antrean:\n    node = antrean.popleft()\n    print(node)\n    for tetangga in graph.get(node, []):\n        if tetangga not in visited:\n            visited.add(tetangga)\n            antrean.append(tetangga)",
+        "output": "A\nB\nC\nD",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Tambahkan hubungan C–D pada kedua daftar tetangga.",
+      "Tambahkan node E yang tidak terhubung dan periksa apakah muncul.",
+      "Jelaskan peran visited ketika graph mempunyai siklus."
+    ],
+    "warning": "Urutan BFS bergantung pada urutan tetangga. BFS biasa bukan pencari jalur biaya termurah untuk semua graph berbobot.",
+    "check": "Mengapa BFS memerlukan visited?",
+    "answer": "Agar node yang telah ditemukan tidak dimasukkan dan diproses berulang, terutama pada hubungan yang membentuk siklus.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-graph",
+    "diagramAlt": "Graph tak berarah: A terhubung B dan C; B terhubung D.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "struktur-binary-search",
+    "title": "Binary search: mencari pada data terurut",
+    "summary": "Perkecil ruang pencarian menjadi setengah dengan batas kiri, kanan, dan tengah.",
+    "analogy": "Saat menebak angka, jawaban terlalu kecil atau terlalu besar membantumu membuang separuh kemungkinan.",
+    "explain": [
+      "Binary search memerlukan data terurut sesuai aturan perbandingan yang dipakai. Bandingkan target dengan nilai tengah. Jika target lebih besar, cari di kanan; jika lebih kecil, cari di kiri. Jangan menerapkannya langsung pada list acak.",
+      "Contoh memakai batas kiri dan kanan yang inklusif. Tengah dihitung dengan (kiri + kanan) // 2. Ketika tidak cocok, perbarui batas menjadi tengah + 1 atau tengah - 1 agar pencarian benar-benar menyusut.",
+      "Jika kiri melewati kanan, target tidak ditemukan. Fungsi mengembalikan None; indeks 0 tetap merupakan hasil yang valid. Jika ada nilai ganda, implementasi ini mengembalikan salah satu kecocokan, tidak menjamin kecocokan pertama.",
+      "Pencarian pada list terurut memerlukan O(log n) perbandingan, tetapi mengurutkan input atau menyalin list punya biaya tambahan. Indeks yang dikembalikan merujuk list terurut yang diberikan, bukan otomatis posisi pada daftar asli sebelum pengurutan."
+    ],
+    "table": {
+      "headers": [
+        "Langkah untuk target 9 pada [1,3,5,7,9]",
+        "Hasil"
+      ],
+      "rows": [
+        [
+          "Tengah indeks 2 bernilai 5",
+          "Cari kanan"
+        ],
+        [
+          "Tengah indeks 3 bernilai 7",
+          "Cari kanan"
+        ],
+        [
+          "Tengah indeks 4 bernilai 9",
+          "Ditemukan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Binary search: mencari pada data terurut",
+        "code": "def cari_biner(data, target):\n    kiri = 0\n    kanan = len(data) - 1\n    while kiri <= kanan:\n        tengah = (kiri + kanan) // 2\n        if data[tengah] == target:\n            return tengah\n        if data[tengah] < target:\n            kiri = tengah + 1\n        else:\n            kanan = tengah - 1\n    return None\n\nangka = [1, 3, 5, 7, 9]\nprint(cari_biner(angka, 9))\nprint(cari_biner(angka, 1))\nprint(cari_biner(angka, 8))",
+        "output": "4\n0\nNone",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Uji list kosong, satu item, dan target pada kedua ujung.",
+      "Buat tabel perubahan kiri, kanan, dan tengah.",
+      "Uji duplikat lalu jelaskan mengapa hasil belum tentu indeks pertama."
+    ],
+    "warning": "Syarat data terurut adalah bagian dari kontrak fungsi. Kode contoh tidak mengurutkan atau memvalidasi urutan setiap kali dipanggil.",
+    "check": "Apakah binary search dapat langsung digunakan pada [7, 1, 9, 3]?",
+    "answer": "Tidak untuk implementasi ini. Data perlu terurut lebih dahulu agar arah pencariannya benar.",
+    "source": "https://docs.python.org/3/library/bisect.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-insertion-sort",
+    "title": "Insertion sort dan pengurutan bawaan Python",
+    "summary": "Pelajari cara menyisipkan item ke bagian yang sudah terurut.",
+    "analogy": "Saat menyusun kartu, ambil satu kartu lalu sisipkan ke posisi yang benar di antara kartu yang sudah rapi.",
+    "explain": [
+      "Insertion sort mempertahankan bagian awal list yang terurut. Ambil item berikutnya, geser item yang lebih besar satu posisi ke kanan, lalu sisipkan item pada tempatnya. Proses diulang sampai seluruh data terurut.",
+      "Contoh bekerja pada salinan dangkal agar list angka asli tidak diubah. Pada kondisi terburuk, misalnya urutan menurun, banyak item harus digeser sehingga biayanya O(n²). Pada data yang sudah terurut, contoh hanya memerlukan pemeriksaan linear.",
+      "Untuk pekerjaan biasa, gunakan sorted() atau list.sort() alih-alih selalu menulis algoritma sendiri. sorted() membuat list baru, sedangkan sort() mengubah list asli dan mengembalikan None. Keduanya mendukung key untuk aturan pengurutan.",
+      "Contoh bawaan mengurutkan data siswa menurut nilai. Pengurutan Python stabil: item dengan key sama mempertahankan urutan relatifnya. Insertion sort di bawah juga stabil karena hanya menggeser item yang lebih besar, bukan item yang sama."
+    ],
+    "table": {
+      "headers": [
+        "Tahap pada [4,2,3]",
+        "Keadaan"
+      ],
+      "rows": [
+        [
+          "Awal",
+          "[4,2,3]"
+        ],
+        [
+          "Sisipkan 2",
+          "[2,4,3]"
+        ],
+        [
+          "Sisipkan 3",
+          "[2,3,4]"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Insertion sort dan pengurutan bawaan Python",
+        "code": "def insertion_sort(data):\n    hasil = data.copy()\n    for indeks in range(1, len(hasil)):\n        nilai = hasil[indeks]\n        posisi = indeks - 1\n        while posisi >= 0 and hasil[posisi] > nilai:\n            hasil[posisi + 1] = hasil[posisi]\n            posisi -= 1\n        hasil[posisi + 1] = nilai\n    return hasil\n\ndef ambil_nilai(siswa):\n    return siswa[\"nilai\"]\n\nasli = [4, 2, 3]\nprint(\"Urut:\", insertion_sort(asli))\nprint(\"Asli:\", asli)\nsiswa = [{\"nama\": \"Ana\", \"nilai\": 80}, {\"nama\": \"Budi\", \"nilai\": 70}]\nfor item in sorted(siswa, key=ambil_nilai):\n    print(item[\"nama\"], item[\"nilai\"])",
+        "output": "Urut: [2, 3, 4]\nAsli: [4, 2, 3]\nBudi 70\nAna 80",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Uji [], [1], [3,2,1], dan [2,2,1].",
+      "Catat item yang bergeser pada setiap tahap.",
+      "Gunakan reverse=True untuk mengurutkan nilai dari besar ke kecil."
+    ],
+    "warning": "Jangan menganggap list.sort() mengembalikan list. Pada data besar, gunakan algoritma bawaan yang sudah dioptimalkan.",
+    "check": "Apakah fungsi insertion_sort contoh mengubah list angka asli?",
+    "answer": "Tidak. Ia membuat salinan list lalu mengurutkan salinan tersebut.",
+    "source": "https://docs.python.org/3/howto/sorting.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "struktur-pemilihan",
+    "title": "Memilih struktur data: antrean tugas tanpa duplikat",
+    "summary": "Gabungkan queue, set, dan dictionary dalam satu contoh yang tetap mudah diikuti.",
+    "analogy": "Loket menyimpan antrean layanan, daftar nomor yang sedang menunggu, dan catatan hasil layanan. Ketiganya mempunyai kebutuhan berbeda.",
+    "explain": [
+      "Kasus: tugas dengan ID sama tidak boleh masuk dua kali selama masih menunggu. Setelah dilayani, ID boleh dijadwalkan lagi. Gunakan deque untuk urutan FIFO, set untuk ID yang sedang menunggu, dan dictionary untuk jumlah layanan per ID.",
+      "Konsistensi penting. Saat menambah tugas, perbarui antrean dan set bersama. Saat melayani, keluarkan dari antrean lalu hapus ID dari set. Dictionary hasil diperbarui dengan get(id, 0) + 1.",
+      "Contoh memakai ID string yang sudah valid dan satu alur eksekusi. Ini simulasi lokal, belum menyediakan penyimpanan, retry, atau sinkronisasi banyak pekerja. Pembaca dapat memperluasnya setelah memahami aturan dasarnya.",
+      "Pilih struktur berdasarkan operasi utama, lalu tulis aturan yang selalu harus benar. Dalam contoh, isi set menunggu harus sama dengan ID unik yang ada di antrean. Struktur tambahan memberi manfaat hanya jika pembaruannya dijaga konsisten."
+    ],
+    "table": {
+      "headers": [
+        "Kebutuhan",
+        "Struktur",
+        "Alasan"
+      ],
+      "rows": [
+        [
+          "Layanan FIFO",
+          "deque",
+          "Ambil dari depan"
+        ],
+        [
+          "Cegah ID menunggu ganda",
+          "set",
+          "Keanggotaan unik"
+        ],
+        [
+          "Hitung layanan per ID",
+          "dict",
+          "Hitungan berdasarkan key"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Contoh Python · Memilih struktur data: antrean tugas tanpa duplikat",
+        "code": "from collections import deque\n\nantrean = deque()\nmenunggu = set()\nselesai = {}\n\ndef jadwalkan(id_tugas):\n    if id_tugas in menunggu:\n        return False\n    antrean.append(id_tugas)\n    menunggu.add(id_tugas)\n    return True\n\nfor id_tugas in [\"T1\", \"T2\", \"T1\"]:\n    print(\"Diterima:\", id_tugas, jadwalkan(id_tugas))\nwhile antrean:\n    id_tugas = antrean.popleft()\n    menunggu.remove(id_tugas)\n    selesai[id_tugas] = selesai.get(id_tugas, 0) + 1\n    print(\"Dilayani:\", id_tugas)\nprint(\"Menunggu:\", len(menunggu))\nprint(\"Selesai T1:\", selesai.get(\"T1\", 0))",
+        "output": "Diterima: T1 True\nDiterima: T2 True\nDiterima: T1 False\nDilayani: T1\nDilayani: T2\nMenunggu: 0\nSelesai T1: 1",
+        "explanation": "Jalankan kode sebagai satu file .py. Cocokkan hasilnya, lalu kerjakan variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Baca tujuan contoh dan perkirakan hasilnya.",
+      "Simpan kode sebagai file .py lalu jalankan dengan Python 3.",
+      "Ikuti perubahan data dan bandingkan hasil dengan contoh."
+    ],
+    "practice": [
+      "Jadwalkan T1 kembali setelah semua tugas dilayani.",
+      "Uji bahwa set menunggu kosong ketika antrean kosong.",
+      "Tantangan: ubah fungsi jadwalkan agar menerima antrean dan set sebagai parameter, bukan memakai variabel luar."
+    ],
+    "warning": "Aturan ini hanya mencegah duplikat selama tugas menunggu. Jika ID harus unik selamanya, diperlukan aturan dan struktur penyimpanan berbeda.",
+    "check": "Mengapa satu list saja tidak dipilih untuk semua kebutuhan contoh?",
+    "answer": "Deque memperjelas FIFO, set memperjelas keunikan ID, dan dictionary memperjelas hitungan per ID. Masing-masing melayani operasi yang berbeda.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-pilihan",
+    "diagramAlt": "Pemilihan berdasarkan kebutuhan: urutan dengan list, data unik dengan set, key-value dengan dictionary, antrean dengan deque.",
+    "stage": 0,
+    "minutes": 35
+  }
+]

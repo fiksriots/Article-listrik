@@ -13,13 +13,14 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 base = json.loads((ROOT / 'lib/programming-lessons.json').read_text())
 extra = json.loads((ROOT / 'lib/programming-extended-lessons.json').read_text())
+structures = json.loads((ROOT / 'lib/programming-data-structure-lessons.json').read_text())
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
-slugs = [item['slug'] for item in base + extra]
+slugs = [item['slug'] for item in base + extra + structures]
 ordered = [slug for group in order for slug in group['slugs']]
-assert len(slugs) == len(set(slugs)) == len(ordered) == 28
+assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures)
 assert set(slugs) == set(ordered) == set(quizzes)
-for lesson in base + extra:
+for lesson in base + extra + structures:
     assert len(lesson['explain']) >= 3
     assert all(len(row) == len(lesson['table']['headers']) for row in lesson['table']['rows'])
     if lesson['diagram']:
@@ -33,7 +34,7 @@ for lesson in base + extra:
             ast.parse(question['code'])
 
 previous_cwd = Path.cwd()
-for lesson in extra:
+for lesson in extra + structures:
     with tempfile.TemporaryDirectory() as temp:
         folder = Path(temp)
         # Multi-file module examples share this folder; each other lesson is isolated.
@@ -103,4 +104,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 28 ordered lessons, 112 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 40 ordered lessons, 160 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
