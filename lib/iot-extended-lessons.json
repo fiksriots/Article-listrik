@@ -1306,7 +1306,7 @@
       },
       {
         "title": "Modbus · serial line guide",
-        "url": "https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf"
+        "url": "https://www.modbus.org/file/secure/modbusoverserial.pdf"
       }
     ],
     "diagramCaption": "Diagram konsep: ikuti panah untuk memahami urutan kerja. Bukan gambar pengawatan fisik.",

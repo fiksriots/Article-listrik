@@ -353,7 +353,7 @@
       },
       {
         "title": "Espressif · provisioning resmi",
-        "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/provisioning/wifi_provisioning.html"
+        "url": "https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/provisioning/index.html"
       }
     ],
     "diagramCaption": "Ikuti panah dan nama hubungan. Diagram menjelaskan komunikasi, bukan posisi pin fisik.",
