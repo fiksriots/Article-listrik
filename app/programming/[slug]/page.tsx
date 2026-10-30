@@ -2,6 +2,8 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import Catalog, {Complete} from '@/components/programming/academy';
 import CodeBlock from '@/components/code-block';
+import ProgrammingQuiz from '@/components/programming/quiz';
+import programmingQuizzes from '@/lib/programming-quizzes.json';
 import LessonReader from '@/components/lesson-reader';
 import ArticleShare from '@/components/article-share';
 import {articleMetadata} from '@/lib/article-sharing';
@@ -40,6 +42,7 @@ export default async function Page({params}:{params:Promise<{slug:string}>}) {
         <section><h2>Coba sendiri</h2><ol>{lesson.practice.map(task => <li key={task}>{task}</li>)}</ol></section>
         <aside className="net-warning"><strong>Perhatikan bagian ini</strong><p>{lesson.warning}</p></aside>
         <section className="net-check"><h2>Cek pemahaman</h2><p>{lesson.check}</p><details><summary>Lihat pembahasan</summary><p>{lesson.answer}</p></details></section>
+        <ProgrammingQuiz key={slug} slug={slug} questions={programmingQuizzes[slug as keyof typeof programmingQuizzes]}/>
         <section className="net-sources"><h2>Baca sumber resminya</h2><ul><li><a href={lesson.source}>Dokumentasi resmi Python terkait materi ↗</a></li>{slug === 'menjalankan-python' && <li><a href="https://www.python.org/downloads/">Unduh Python dari situs resmi ↗</a></li>}</ul></section>
       </article>
       <ArticleShare title={lesson.title} summary={lesson.summary} path={'/programming/'+slug}/>

@@ -1,0 +1,21 @@
+.programming-quiz{margin:32px 0;padding:24px;border:1px solid #d9d6e8;border-radius:14px;background:#faf9fd;min-width:0}
+.programming-quiz .programming-quiz-question{min-width:0;margin:28px 0;padding:0;border:0}
+.programming-quiz legend{font-weight:750;font-size:16px;line-height:1.65;max-width:100%;padding:0}
+.programming-quiz-options{display:grid;gap:10px;margin-top:12px}
+.programming-quiz-options label{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border:1px solid #cbd0dd;border-radius:10px;background:white;cursor:pointer;line-height:1.6;overflow-wrap:anywhere}
+.programming-quiz-options input[type=radio]{flex-shrink:0;margin-top:4px;accent-color:#65508a}
+.programming-quiz-options label:has(input:checked){border-color:#65508a;background:#f0edf7}
+.programming-quiz-options label:focus-within{outline:3px solid #65508a;outline-offset:2px}
+.programming-quiz-options label.is-correct{background:#edf8f0;border-color:#367c4a;color:#235c33}
+.programming-quiz-options label.is-wrong{background:#fff1f0;border-color:#b7554e;color:#81332e}
+.programming-quiz-options strong{font-size:12px}
+.programming-quiz fieldset:disabled label{cursor:default}
+.programming-quiz pre{margin:14px 0;padding:16px;border-radius:10px;background:#202438;color:#f1f5f9;overflow-x:auto;white-space:pre;font-size:14px;line-height:1.7}
+.programming-quiz-explanation{margin-top:14px;padding:14px;border-left:3px solid #65508a;background:#f0edf7;border-radius:6px}
+.programming-quiz .programming-quiz-explanation p{margin:5px 0 0}
+.programming-quiz-result{padding:16px 0;scroll-margin:24px}
+.programming-quiz-result:focus{outline:2px solid #65508a;outline-offset:4px}
+.programming-quiz button{padding:12px 18px;border-radius:8px;background:#5542b2;color:white;font-weight:700;min-height:44px}
+.programming-quiz button:disabled{background:#e2e3eb;color:#5e6373;cursor:not-allowed}
+.programming-quiz .programming-quiz-note{font-size:12px;color:#626c7d;margin:18px 0 0}
+@media(max-width:600px){.programming-quiz{padding:18px 14px}.programming-quiz-options label{padding:12px}.programming-quiz button{width:100%}}
