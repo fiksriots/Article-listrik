@@ -1690,5 +1690,509 @@
       "answer": 2,
       "explanation": "Keunikan hanya berlaku selama menunggu. Setelah dilayani, ID dapat dijadwalkan kembali."
     }
+  ],
+  "struktur-rekursi": [
+    {
+      "question": "Apa fungsi base case?",
+      "options": [
+        "Menghentikan rangkaian pemanggilan pada kondisi tertentu",
+        "Membuat fungsi selalu memanggil dirinya",
+        "Menghapus semua parameter"
+      ],
+      "answer": 0,
+      "explanation": "Base case memberikan hasil tanpa pemanggilan rekursif lanjutan."
+    },
+    {
+      "question": "Berapa faktorial 0 pada contoh?",
+      "options": [
+        "0",
+        "1",
+        "Tidak terdefinisi"
+      ],
+      "answer": 1,
+      "explanation": "Faktorial 0 didefinisikan bernilai 1 dan menjadi kondisi berhenti."
+    },
+    {
+      "question": "Mengapa setiap langkah memakai n - 1?",
+      "options": [
+        "Agar angka selalu negatif",
+        "Agar memori langsung kosong",
+        "Agar masukan mendekati kondisi berhenti"
+      ],
+      "answer": 2,
+      "explanation": "Untuk integer tidak negatif, pengurangan satu mendekatkan nilai menuju 0."
+    },
+    {
+      "question": "Apakah rekursi yang logikanya benar selalu aman untuk kedalaman sangat besar?",
+      "options": [
+        "Tidak, dapat mencapai batas rekursi Python",
+        "Ya selalu",
+        "Ya jika ada print"
+      ],
+      "answer": 0,
+      "explanation": "Call stack mempunyai batas. Pilih perulangan atau strategi lain untuk kedalaman besar."
+    }
+  ],
+  "struktur-array-list-lanjutan": [
+    {
+      "question": "Apa yang dibuat alias = data untuk sebuah list?",
+      "options": [
+        "Salinan semua tingkat",
+        "Nama lain untuk objek yang sama",
+        "Array bertipe integer"
+      ],
+      "answer": 1,
+      "explanation": "Penugasan nama tidak menyalin objek list."
+    },
+    {
+      "question": "Apakah data.copy() memisahkan setiap list bersarang?",
+      "options": [
+        "Ya",
+        "Hanya jika ada dua item",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "copy() menyalin list luar, sementara referensi item di dalamnya masih dapat berbagi objek."
+    },
+    {
+      "question": "Bagaimana membuat baris matriks yang mandiri?",
+      "options": [
+        "Buat list baris baru untuk setiap putaran",
+        "Ulangi satu list baris yang sama",
+        "Gunakan alias baru pada baris lama"
+      ],
+      "answer": 0,
+      "explanation": "Ekspresi list baru pada setiap putaran menghasilkan objek baris terpisah."
+    },
+    {
+      "question": "Apa peran deepcopy pada contoh list bersarang?",
+      "options": [
+        "Mengurutkan matriks",
+        "Menyalin struktur bersarang agar perubahan terpisah",
+        "Mengubah semua angka menjadi string"
+      ],
+      "answer": 1,
+      "explanation": "Pada contoh, salinan dalam mempunyai list anak mandiri sehingga perubahan pada asli tidak ikut terlihat."
+    }
+  ],
+  "struktur-deque-circular": [
+    {
+      "question": "Apa fungsi modulo pada indeks circular queue?",
+      "options": [
+        "Mengurutkan item",
+        "Menambah kapasitas otomatis",
+        "Mengembalikan indeks ke awal setelah akhir"
+      ],
+      "answer": 2,
+      "explanation": "Modulo menjaga indeks tetap berada dalam rentang slot yang tersedia."
+    },
+    {
+      "question": "Apa kebijakan circular queue contoh saat penuh?",
+      "options": [
+        "Menolak item baru dengan False",
+        "Membuang item lama",
+        "Menerima tanpa batas"
+      ],
+      "answer": 0,
+      "explanation": "Kapasitas tetap; penambahan ditolak tanpa menghilangkan item yang sudah menunggu."
+    },
+    {
+      "question": "Apakah deque(maxlen=2).append pada keadaan penuh mempunyai kebijakan sama dengan contoh circular queue?",
+      "options": [
+        "Ya",
+        "Tidak, append membuang item dari ujung berlawanan",
+        "Keduanya selalu error"
+      ],
+      "answer": 1,
+      "explanation": "Kebijakan kapasitas harus dibedakan: deque ber-maxlen dapat membuang item lama ketika ditambah."
+    },
+    {
+      "question": "Mengapa status kosong diperiksa melalui jumlah item?",
+      "options": [
+        "Agar semua nilai harus angka",
+        "Karena head tidak dipakai",
+        "Agar None tetap boleh menjadi nilai data"
+      ],
+      "answer": 2,
+      "explanation": "Slot None tidak cukup membedakan data None dari slot kosong; penghitung menyatakan jumlah item aktif."
+    }
+  ],
+  "struktur-priority-heap": [
+    {
+      "question": "Apa item yang berada pada akar min-heap?",
+      "options": [
+        "Item terkecil menurut aturan perbandingan",
+        "Item terakhir masuk selalu",
+        "Item terbesar selalu"
+      ],
+      "answer": 0,
+      "explanation": "Min-heap mempertahankan item minimum pada akar."
+    },
+    {
+      "question": "Apa peran nomor urut pada tuple (prioritas, nomor, tugas)?",
+      "options": [
+        "Mengubah prioritas semua tugas",
+        "Memecah prioritas sama menurut kedatangan",
+        "Menghapus payload"
+      ],
+      "answer": 1,
+      "explanation": "Nomor yang unik menjaga urutan kedatangan saat prioritas sama."
+    },
+    {
+      "question": "Apakah list fisik heap selalu terurut naik seluruhnya?",
+      "options": [
+        "Ya",
+        "Hanya jika jumlah item genap",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Syarat heap mengatur hubungan induk–anak, bukan urutan total seluruh list."
+    },
+    {
+      "question": "Dalam aturan contoh, prioritas 1 dan 2 dilayani yang mana dahulu?",
+      "options": [
+        "1",
+        "2",
+        "Selalu yang namanya paling kecil"
+      ],
+      "answer": 0,
+      "explanation": "Contoh menetapkan angka lebih kecil berarti lebih mendesak."
+    }
+  ],
+  "struktur-bst": [
+    {
+      "question": "Pada BST contoh, nilai lebih kecil dari induk diarahkan ke mana?",
+      "options": [
+        "Kanan",
+        "Kiri",
+        "Selalu root"
+      ],
+      "answer": 1,
+      "explanation": "Subtree kiri menyimpan key lebih kecil sesuai aturan BST contoh."
+    },
+    {
+      "question": "Apa kebijakan duplikat saat penambahan pada contoh?",
+      "options": [
+        "Membuat node kiri baru",
+        "Membuat node kanan baru",
+        "Diabaikan"
+      ],
+      "answer": 2,
+      "explanation": "Fungsi mengembalikan root tanpa menambah node jika nilai sudah tersedia."
+    },
+    {
+      "question": "Mengapa root = tambah(root, nilai) diperlukan saat tree kosong?",
+      "options": [
+        "Karena fungsi mengembalikan referensi root baru",
+        "Karena tree selalu disalin penuh",
+        "Karena fungsi tidak boleh return"
+      ],
+      "answer": 0,
+      "explanation": "Tree kosong memerlukan root baru yang harus disimpan pemanggil."
+    },
+    {
+      "question": "Apakah BST biasa menjamin pencarian O(log n)?",
+      "options": [
+        "Ya selalu",
+        "Tidak, tree dapat memanjang seperti rantai",
+        "Hanya jika nilai positif"
+      ],
+      "answer": 1,
+      "explanation": "Tanpa penyeimbangan, tinggi tree dapat mencapai O(n)."
+    }
+  ],
+  "struktur-traversal-tree": [
+    {
+      "question": "Urutan kiri, induk, kanan disebut apa?",
+      "options": [
+        "Preorder",
+        "Postorder",
+        "Inorder"
+      ],
+      "answer": 2,
+      "explanation": "Inorder membaca subtree kiri, node saat ini, lalu subtree kanan."
+    },
+    {
+      "question": "Struktur apa yang dipakai level-order?",
+      "options": [
+        "Queue",
+        "Stack saja selalu",
+        "Set terurut"
+      ],
+      "answer": 0,
+      "explanation": "Queue membantu memproses node per tingkat."
+    },
+    {
+      "question": "Kapan inorder menghasilkan key terurut?",
+      "options": [
+        "Pada semua binary tree",
+        "Ketika tree memenuhi aturan BST",
+        "Hanya ketika ada satu jenis angka"
+      ],
+      "answer": 1,
+      "explanation": "Bentuk binary tree saja tidak menjamin urutan key."
+    },
+    {
+      "question": "Pada postorder, kapan induk dikunjungi?",
+      "options": [
+        "Sebelum semua anak",
+        "Sebelum kiri tetapi sesudah kanan",
+        "Setelah kiri dan kanan"
+      ],
+      "answer": 2,
+      "explanation": "Postorder menempatkan node induk setelah kedua subtree."
+    }
+  ],
+  "struktur-graph-lanjutan": [
+    {
+      "question": "Apa yang disimpan parent pada pencarian jalur BFS?",
+      "options": [
+        "Node pendahulu pada jalur penemuan",
+        "Jumlah seluruh komponen",
+        "Bobot semua edge otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Parent memungkinkan jalur ditelusuri mundur dari tujuan ke awal."
+    },
+    {
+      "question": "Graph contoh untuk komponen terhubung bersifat apa?",
+      "options": [
+        "Selalu berbobot negatif",
+        "Tak berarah",
+        "Harus berupa tree"
+      ],
+      "answer": 1,
+      "explanation": "Definisi dan algoritma komponen pada contoh memakai graph tak berarah."
+    },
+    {
+      "question": "Apa hasil jalur dari A ke A jika A tersedia?",
+      "options": [
+        "None",
+        "List kosong",
+        "[A]"
+      ],
+      "answer": 2,
+      "explanation": "Awal sudah sama dengan tujuan, sehingga jalur berisi satu node."
+    },
+    {
+      "question": "Apakah BFS biasa menjamin biaya minimum jika bobot edge berbeda?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Ya jika ada visited"
+      ],
+      "answer": 0,
+      "explanation": "BFS mencari jumlah edge paling sedikit pada graph tak berbobot, bukan semua kasus biaya berbobot."
+    }
+  ],
+  "struktur-sort-lanjutan": [
+    {
+      "question": "Apa gagasan selection sort?",
+      "options": [
+        "Membagi list terus tanpa membandingkan",
+        "Memilih minimum dari bagian belum terurut",
+        "Mengambil item acak"
+      ],
+      "answer": 1,
+      "explanation": "Setiap tahap mencari minimum dan menempatkannya ke bagian depan."
+    },
+    {
+      "question": "Mengapa merge sort contoh memilih kiri ketika item sama?",
+      "options": [
+        "Agar hasil menurun",
+        "Agar list asli diubah",
+        "Untuk menjaga stabilitas"
+      ],
+      "answer": 2,
+      "explanation": "Item sama dari bagian kiri dipertahankan lebih dahulu."
+    },
+    {
+      "question": "Bagaimana pertumbuhan merge sort standar?",
+      "options": [
+        "O(n log n)",
+        "O(1) selalu",
+        "O(n³) selalu"
+      ],
+      "answer": 0,
+      "explanation": "Pembagian bertingkat dan penggabungan memberi pertumbuhan O(n log n)."
+    },
+    {
+      "question": "Apakah fungsi selection_sort contoh mengubah input aslinya?",
+      "options": [
+        "Ya",
+        "Tidak, bekerja pada salinan",
+        "Selalu menghapus input"
+      ],
+      "answer": 1,
+      "explanation": "Fungsi membuat salinan list sebelum menukar elemen."
+    }
+  ],
+  "struktur-hash-lanjutan": [
+    {
+      "question": "Apa arti collision?",
+      "options": [
+        "Key sama mempunyai dua nilai sekaligus",
+        "Semua data hilang",
+        "Key berbeda dipetakan ke bucket sama"
+      ],
+      "answer": 2,
+      "explanation": "Collision perlu ditangani dengan tetap membedakan key."
+    },
+    {
+      "question": "Dua entri dalam empat bucket mempunyai load factor berapa?",
+      "options": [
+        "0.5",
+        "2",
+        "4"
+      ],
+      "answer": 0,
+      "explanation": "Load factor = jumlah entri / jumlah bucket = 2/4."
+    },
+    {
+      "question": "Apakah memperbarui key yang sudah ada menambah jumlah entri?",
+      "options": [
+        "Ya",
+        "Tidak",
+        "Hanya jika nilai baru lebih besar"
+      ],
+      "answer": 1,
+      "explanation": "Pembaruan mengganti value pada key yang sama tanpa membuat entri baru."
+    },
+    {
+      "question": "Apakah fungsi hash penjumlahan karakter contoh merupakan implementasi dict Python?",
+      "options": [
+        "Ya",
+        "Ya jika kapasitas 4",
+        "Tidak, itu simulasi sederhana"
+      ],
+      "answer": 2,
+      "explanation": "Contoh sengaja memakai hash lemah untuk menunjukkan collision, bukan mereplikasi dict bawaan."
+    }
+  ],
+  "struktur-pengujian": [
+    {
+      "question": "Apa yang dimaksud invariant?",
+      "options": [
+        "Aturan yang harus selalu terjaga",
+        "Warna hasil pengujian",
+        "Nama lain exception"
+      ],
+      "answer": 0,
+      "explanation": "Invariant menyatakan konsistensi keadaan struktur setelah operasi."
+    },
+    {
+      "question": "Mengapa urutan push–pop perlu diuji?",
+      "options": [
+        "Agar jumlah file bertambah",
+        "Kesalahan bisa muncul setelah beberapa perubahan keadaan",
+        "Karena satu operasi tidak bisa dijalankan"
+      ],
+      "answer": 1,
+      "explanation": "Pengujian rangkaian memeriksa perubahan state yang tidak terlihat pada satu operasi saja."
+    },
+    {
+      "question": "Apa yang perlu diperiksa ketika operasi ditolak?",
+      "options": [
+        "Hanya pesan sukses",
+        "Semua data harus dihapus",
+        "Keadaan lama tetap sesuai aturan"
+      ],
+      "answer": 2,
+      "explanation": "Penolakan tidak seharusnya merusak atau mengubah data secara tidak disengaja."
+    },
+    {
+      "question": "Apakah assert menggantikan validasi penting masukan pengguna?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Ya jika program pendek"
+      ],
+      "answer": 0,
+      "explanation": "assert dapat dinonaktifkan; validasi aplikasi tetap perlu pemeriksaan yang sesuai."
+    }
+  ],
+  "struktur-kasus-kurung": [
+    {
+      "question": "Struktur apa yang cocok memeriksa kurung bertingkat?",
+      "options": [
+        "Queue FIFO",
+        "Stack LIFO",
+        "Dictionary saja tanpa urutan"
+      ],
+      "answer": 1,
+      "explanation": "Pembuka paling baru harus dipasangkan dengan penutup berikutnya."
+    },
+    {
+      "question": "Apa hasil pemeriksaan ([)]?",
+      "options": [
+        "Seimbang",
+        "Selalu diabaikan",
+        "Tidak seimbang: penutup ) bertemu pembuka ["
+      ],
+      "answer": 2,
+      "explanation": "Urutan penutupan salah meskipun jumlah tiap jenis kurung sama."
+    },
+    {
+      "question": "Apa hasil pemeriksaan teks kosong pada aturan contoh?",
+      "options": [
+        "Seimbang",
+        "Selalu error",
+        "Ada satu pembuka tersisa"
+      ],
+      "answer": 0,
+      "explanation": "Tidak ada pembuka maupun penutup yang tidak berpasangan."
+    },
+    {
+      "question": "Apakah contoh dapat memvalidasi seluruh tata bahasa Python?",
+      "options": [
+        "Ya",
+        "Tidak, aturan string dan komentar tidak ditangani",
+        "Ya jika teks pendek"
+      ],
+      "answer": 1,
+      "explanation": "Contoh hanya memeriksa karakter kurung dan bukan parser bahasa."
+    }
+  ],
+  "struktur-kasus-prioritas": [
+    {
+      "question": "Mengapa nomor urut dibandingkan sebelum ID?",
+      "options": [
+        "Agar ID selalu menurun",
+        "Agar semua tugas mendapat prioritas 0",
+        "Agar prioritas sama mengikuti kedatangan"
+      ],
+      "answer": 2,
+      "explanation": "Jika ID dibandingkan lebih dulu, urutan alfabet dapat mengalahkan urutan kedatangan."
+    },
+    {
+      "question": "Apa hasil layani saat heap kosong?",
+      "options": [
+        "None",
+        "IndexError selalu",
+        "Tugas terakhir"
+      ],
+      "answer": 0,
+      "explanation": "Fungsi memeriksa keadaan kosong sebelum memanggil heappop."
+    },
+    {
+      "question": "Apakah ID yang masih menunggu dapat ditambah lagi?",
+      "options": [
+        "Ya selalu",
+        "Tidak, contoh mengembalikan False",
+        "Hanya jika ada spasi di akhir"
+      ],
+      "answer": 1,
+      "explanation": "ID dibersihkan dengan strip dan diperiksa dalam set menunggu."
+    },
+    {
+      "question": "Apa keterbatasan prioritas ketat?",
+      "options": [
+        "Selalu melayani berdasarkan alfabet",
+        "Tidak memerlukan validasi",
+        "Tugas prioritas rendah dapat tertunda lama"
+      ],
+      "answer": 2,
+      "explanation": "Jika tugas lebih penting terus datang, diperlukan kebijakan keadilan untuk mencegah penundaan berlebihan."
+    }
   ]
 }

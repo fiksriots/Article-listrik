@@ -56,16 +56,28 @@
     "slugs": [
       "struktur-data-dasar",
       "struktur-kompleksitas",
+      "struktur-array-list-lanjutan",
       "struktur-set",
       "struktur-dictionary",
+      "struktur-hash-lanjutan",
       "struktur-stack",
       "struktur-queue",
+      "struktur-deque-circular",
       "struktur-linked-list",
+      "struktur-rekursi",
       "struktur-tree",
+      "struktur-bst",
+      "struktur-traversal-tree",
       "struktur-graph",
+      "struktur-graph-lanjutan",
       "struktur-binary-search",
       "struktur-insertion-sort",
-      "struktur-pemilihan"
+      "struktur-sort-lanjutan",
+      "struktur-priority-heap",
+      "struktur-pemilihan",
+      "struktur-pengujian",
+      "struktur-kasus-kurung",
+      "struktur-kasus-prioritas"
     ]
   },
   {

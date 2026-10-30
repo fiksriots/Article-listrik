@@ -744,5 +744,754 @@
     "diagramAlt": "Pemilihan berdasarkan kebutuhan: urutan dengan list, data unik dengan set, key-value dengan dictionary, antrean dengan deque.",
     "stage": 0,
     "minutes": 35
+  },
+  {
+    "slug": "struktur-rekursi",
+    "title": "Rekursi dan call stack",
+    "summary": "Pahami fungsi yang memanggil dirinya sendiri dan kondisi berhentinya.",
+    "analogy": "Seperti membuka kotak di dalam kotak, setiap langkah menunggu isi kotak berikutnya sampai ditemukan kotak paling dalam.",
+    "explain": [
+      "Rekursi adalah pemanggilan fungsi dari dalam fungsi itu sendiri. Setiap pemanggilan mempunyai nilai parameter dan pekerjaan yang menunggu. Call stack menyimpan rangkaian pemanggilan aktif; pemanggilan terakhir selesai lebih dahulu.",
+      "Dua hal wajib jelas: base case atau kondisi berhenti, serta langkah yang mendekatkan masukan ke kondisi tersebut. Faktorial n untuk bilangan bulat tidak negatif adalah n dikali faktorial n-1; faktorial 0 bernilai 1.",
+      "Untuk faktorial(3), fungsi menunggu faktorial(2), lalu faktorial(1), lalu faktorial(0). Hasil 1 dikembalikan ke atas dan dikalikan bertahap hingga menjadi 6. Satu pemanggilan belum selesai hanya karena memanggil fungsi berikutnya.",
+      "Contoh cocok untuk n kecil. Python membatasi kedalaman pemanggilan; masukan besar dapat menyebabkan RecursionError meskipun logikanya benar. Jangan menaikkan batas rekursi sebagai solusi awal. Perulangan sering lebih sesuai untuk perhitungan linear yang panjang."
+    ],
+    "table": {
+      "headers": [
+        "Pemanggilan",
+        "Pekerjaan yang menunggu"
+      ],
+      "rows": [
+        [
+          "faktorial(3)",
+          "3 × hasil faktorial(2)"
+        ],
+        [
+          "faktorial(2)",
+          "2 × hasil faktorial(1)"
+        ],
+        [
+          "faktorial(1)",
+          "1 × hasil faktorial(0)"
+        ],
+        [
+          "faktorial(0)",
+          "Kembalikan 1"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Rekursi dan call stack",
+        "code": "def faktorial(n):\n    if type(n) is not int or n < 0:\n        raise ValueError(\"n harus bilangan bulat tidak negatif\")\n    if n == 0:\n        return 1\n    return n * faktorial(n - 1)\n\nprint(faktorial(0))\nprint(faktorial(3))\nprint(faktorial(5))",
+        "output": "1\n6\n120",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Telusuri faktorial(4) dengan tabel pemanggilan.",
+      "Uji -1 dan 2.5; pastikan ValueError muncul.",
+      "Buat versi perulangan dan bandingkan hasil untuk n 0 sampai 6."
+    ],
+    "warning": "Base case saja belum cukup; langkah rekursi harus benar-benar mendekatinya. Rekursi tidak otomatis lebih cepat atau lebih hemat memori.",
+    "check": "Mengapa n - 1 diperlukan dalam contoh?",
+    "answer": "Agar masukan semakin dekat ke 0 dan akhirnya mencapai kondisi berhenti.",
+    "source": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+    "diagram": "struktur-call-stack",
+    "diagramAlt": "Pemanggilan faktorial 3 menunggu faktorial 2, lalu faktorial 1; hasil dikembalikan dari bawah ke atas.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-array-list-lanjutan",
+    "title": "Array, referensi, dan list dua dimensi",
+    "summary": "Bedakan alias, salinan dangkal, salinan dalam, dan baris matriks yang mandiri.",
+    "analogy": "Dua label pada kotak yang sama berbeda dari dua kotak terpisah. Menyalin label tidak otomatis menyalin semua isi kotak bersarang.",
+    "explain": [
+      "Python list menyimpan referensi objek dan dapat bertambah panjang. Modul array menyediakan urutan elemen bertipe dasar seragam; contoh array(\"i\", ...) menyimpan integer dengan jangkauan bergantung pada tipe C yang dipakai. Array bukan selalu pilihan terbaik untuk semua masalah.",
+      "alias = data memberi nama lain untuk objek yang sama. data.copy() membuat list luar baru, tetapi objek di dalamnya masih dirujuk bersama. copy.deepcopy() dapat membuat salinan rekursif untuk struktur seperti list bersarang pada contoh.",
+      "Pada matriks, [[0, 0]] * 2 mengulangi referensi baris yang sama. Mengubah satu sel dapat terlihat pada dua baris. Buat setiap baris dengan ekspresi list baru di dalam loop agar baris-barisnya mandiri.",
+      "Deep copy mempunyai biaya tambahan dan tidak selalu diperlukan. Tentukan bagian yang perlu mandiri. Materi ini membahas identitas serta perilaku data; tidak mengasumsikan ukuran memori yang sama pada semua versi atau perangkat Python."
+    ],
+    "table": {
+      "headers": [
+        "Cara",
+        "List luar",
+        "List di dalam"
+      ],
+      "rows": [
+        [
+          "alias = data",
+          "Objek sama",
+          "Objek sama"
+        ],
+        [
+          "data.copy()",
+          "Objek baru",
+          "Masih berbagi"
+        ],
+        [
+          "copy.deepcopy(data)",
+          "Objek baru",
+          "Disalin pada contoh"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Array, referensi, dan list dua dimensi",
+        "code": "from array import array\nfrom copy import deepcopy\n\nangka = array(\"i\", [10, 20, 30])\nprint(\"Array:\", list(angka))\nasli = [[1, 2], [3, 4]]\ndangkal = asli.copy()\ndalam = deepcopy(asli)\ndangkal[0][0] = 99\nprint(\"Asli:\", asli)\nprint(\"Dalam:\", dalam)\n\nmatriks = []\nfor baris in range(2):\n    matriks.append([0, 0])\nmatriks[0][0] = 7\nprint(\"Matriks:\", matriks)",
+        "output": "Array: [10, 20, 30]\nAsli: [[99, 2], [3, 4]]\nDalam: [[1, 2], [3, 4]]\nMatriks: [[7, 0], [0, 0]]",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Bandingkan matriks dengan contoh [[0, 0]] * 2.",
+      "Uji dangkal[0] is asli[0].",
+      "Ubah satu sel pada salinan dalam dan periksa list asli."
+    ],
+    "warning": "Salinan dangkal bukan salinan mandiri untuk semua tingkat data. Jangan mengandalkan pengulangan satu baris untuk membuat matriks yang dapat diedit secara terpisah.",
+    "check": "Apakah data.copy() otomatis menyalin setiap list bersarang?",
+    "answer": "Tidak. Ia menyalin list luar; referensi item bersarang masih dapat berbagi objek.",
+    "source": "https://docs.python.org/3/library/copy.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-deque-circular",
+    "title": "Deque dan circular queue",
+    "summary": "Kelola kedua ujung antrean dan pahami buffer berkapasitas tetap.",
+    "analogy": "Nomor kursi mengelilingi meja. Setelah kursi terakhir, hitungan kembali ke awal tanpa memindahkan semua kursi.",
+    "explain": [
+      "Deque mendukung penambahan serta pengambilan pada dua ujung melalui append, appendleft, pop, dan popleft. Circular queue adalah cara menggunakan penyimpanan tetap dengan indeks yang kembali ke awal.",
+      "Contoh menyimpan array slot dalam list, head sebagai posisi depan, dan jumlah item aktif. Posisi penambahan dihitung dengan (head + jumlah) % kapasitas. Saat mengambil, head bergerak satu langkah dengan modulo.",
+      "Aturan saat penuh harus ditentukan. Circular queue contoh menolak item baru dan mengembalikan False. Sebaliknya, deque(maxlen=...) saat ditambah melalui append membuang item dari ujung berlawanan jika penuh. Jangan menganggap kedua kebijakan ini sama.",
+      "Slot kosong menggunakan None, tetapi status kosong ditentukan oleh jumlah, bukan isi slot. Dengan demikian None tetap bisa menjadi nilai data. Menampilkan isi list fisik tidak selalu sama dengan urutan logis antrean setelah indeks melingkar."
+    ],
+    "table": {
+      "headers": [
+        "Keadaan",
+        "Aturan contoh"
+      ],
+      "rows": [
+        [
+          "jumlah = 0",
+          "Kosong; pengambilan ditolak"
+        ],
+        [
+          "jumlah = kapasitas",
+          "Penuh; penambahan mengembalikan False"
+        ],
+        [
+          "Indeks melewati akhir",
+          "Kembali ke awal memakai modulo"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Deque dan circular queue",
+        "code": "from collections import deque\n\ndef buat_queue(kapasitas):\n    if type(kapasitas) is not int or kapasitas <= 0:\n        raise ValueError(\"Kapasitas harus integer positif\")\n    return {\"data\": [None] * kapasitas, \"head\": 0, \"jumlah\": 0}\n\ndef masukkan(q, nilai):\n    if q[\"jumlah\"] == len(q[\"data\"]):\n        return False\n    tail = (q[\"head\"] + q[\"jumlah\"]) % len(q[\"data\"])\n    q[\"data\"][tail] = nilai\n    q[\"jumlah\"] += 1\n    return True\n\ndef keluarkan(q):\n    if q[\"jumlah\"] == 0:\n        raise IndexError(\"Antrean kosong\")\n    nilai = q[\"data\"][q[\"head\"]]\n    q[\"data\"][q[\"head\"]] = None\n    q[\"head\"] = (q[\"head\"] + 1) % len(q[\"data\"])\n    q[\"jumlah\"] -= 1\n    return nilai\n\nq = buat_queue(2)\nprint(masukkan(q, \"A\"), masukkan(q, \"B\"))\nprint(\"Penuh:\", masukkan(q, \"C\"))\nprint(\"Keluar:\", keluarkan(q))\nprint(\"Masuk C:\", masukkan(q, \"C\"))\nprint(keluarkan(q), keluarkan(q))\nriwayat = deque(maxlen=2)\nfor angka in [1, 2, 3]:\n    riwayat.append(angka)\nprint(\"Riwayat terakhir:\", list(riwayat))",
+        "output": "True True\nPenuh: False\nKeluar: A\nMasuk C: True\nB C\nRiwayat terakhir: [2, 3]",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Uji kapasitas 1 dan pola masuk–keluar berulang.",
+      "Masukkan None, lalu keluarkan.",
+      "Bandingkan kebijakan menolak saat penuh dengan riwayat deque(maxlen=2)."
+    ],
+    "warning": "Bedakan kapasitas, jumlah item, dan indeks. Kapasitas 0 harus ditolak agar operasi modulo tidak membagi nol.",
+    "check": "Apakah contoh circular queue membuang item lama ketika penuh?",
+    "answer": "Tidak. Ia menolak penambahan baru dengan False; kebijakannya berbeda dari deque ber-maxlen.",
+    "source": "https://docs.python.org/3/library/collections.html#collections.deque",
+    "diagram": "struktur-ring",
+    "diagramAlt": "Circular queue berkapasitas dua melayani B lebih dahulu, lalu C, walaupun C menempati indeks fisik 0 setelah perputaran.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-priority-heap",
+    "title": "Priority queue dan min-heap",
+    "summary": "Ambil tugas dengan prioritas tertinggi tanpa mengurutkan seluruh antrean setiap kali.",
+    "analogy": "Loket prioritas memilih tingkat urgensi dahulu. Jika urgensinya sama, aturan kedatangan menentukan siapa dilayani lebih awal.",
+    "explain": [
+      "Priority queue mengambil item berdasarkan prioritas, bukan selalu waktu masuk. Min-heap menyimpan item terkecil pada akar. Dalam contoh, angka prioritas lebih kecil berarti lebih mendesak; aturan ini harus dinyatakan jelas.",
+      "Modul heapq memakai list sebagai heap. heappush menambah item, heappop mengambil item terkecil, dan heap[0] melihat item terkecil jika heap tidak kosong. Heap bukan list yang seluruhnya terurut.",
+      "Tuple (prioritas, nomor_urut, tugas) dibandingkan dari kiri ke kanan. Nomor urut yang unik memberi urutan kedatangan pada prioritas sama dan mencegah perbandingan payload tugas ketika prioritas sama.",
+      "Push dan pop heap memerlukan O(log n), sedangkan melihat akar O(1). Mengubah prioritas item yang sudah berada dalam heap memerlukan strategi tambahan; jangan sekadar mengedit salah satu tuple dan menganggap aturan heap tetap terjaga."
+    ],
+    "table": {
+      "headers": [
+        "Operasi",
+        "Makna"
+      ],
+      "rows": [
+        [
+          "heappush",
+          "Masukkan item dan jaga heap"
+        ],
+        [
+          "heappop",
+          "Ambil item terkecil"
+        ],
+        [
+          "heap[0]",
+          "Lihat item terkecil"
+        ],
+        [
+          "Nomor urut",
+          "Pemecah prioritas sama"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Priority queue dan min-heap",
+        "code": "import heapq\nfrom itertools import count\n\nheap = []\nurutan = count()\nfor prioritas, tugas in [(2, \"Biasa\"), (1, \"Mendesak A\"), (1, \"Mendesak B\")]:\n    heapq.heappush(heap, (prioritas, next(urutan), tugas))\nwhile heap:\n    prioritas, nomor, tugas = heapq.heappop(heap)\n    print(prioritas, tugas)",
+        "output": "1 Mendesak A\n1 Mendesak B\n2 Biasa",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Ubah urutan kedatangan dua tugas prioritas 1.",
+      "Tambahkan prioritas 3 dan perkirakan urutan keluarnya.",
+      "Bandingkan heap dengan queue FIFO pada data yang sama."
+    ],
+    "warning": "Angka prioritas kecil tidak secara universal berarti penting; itu aturan yang kita pilih pada contoh. Periksa heap tidak kosong sebelum heappop.",
+    "check": "Apakah semua elemen heap selalu tersusun naik dalam list fisiknya?",
+    "answer": "Tidak. Heap menjamin hubungan induk–anak dan item minimum pada akar, bukan seluruh list terurut.",
+    "source": "https://docs.python.org/3/library/heapq.html",
+    "diagram": "struktur-heap",
+    "diagramAlt": "Min-heap: akar prioritas 1, anak berprioritas 1 dan 2. Setiap induk tidak lebih besar dari anaknya.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-bst",
+    "title": "Binary search tree: tambah dan cari",
+    "summary": "Gunakan aturan kiri lebih kecil dan kanan lebih besar untuk mencari key.",
+    "analogy": "Pada setiap persimpangan, bandingkan angka yang dicari dengan angka penunjuk untuk memilih cabang kiri atau kanan.",
+    "explain": [
+      "Binary search tree atau BST adalah binary tree dengan aturan key. Pada contoh, nilai di subtree kiri lebih kecil dan nilai di subtree kanan lebih besar dari induknya. Duplikat diabaikan agar kebijakannya sederhana.",
+      "Node memakai dictionary nilai, kiri, dan kanan. Fungsi tambah mengembalikan root yang harus disimpan kembali, terutama ketika tree awalnya kosong. Pencarian mengikuti satu cabang pada setiap perbandingan.",
+      "Biaya operasi bergantung pada tinggi tree. Tree yang seimbang bisa mempunyai tinggi sekitar log n, tetapi BST biasa dapat memanjang seperti rantai jika datanya dimasukkan dalam urutan tertentu. Karena itu BST biasa tidak menjamin pencarian O(log n).",
+      "Contoh berfokus pada penambahan dan pencarian, bukan penghapusan atau penyeimbangan otomatis. Jangan menukar aturan BST dengan binary search pada list: keduanya memakai perbandingan, tetapi bentuk penyimpanan datanya berbeda."
+    ],
+    "table": {
+      "headers": [
+        "Nilai dibanding induk",
+        "Langkah"
+      ],
+      "rows": [
+        [
+          "Lebih kecil",
+          "Ikuti kiri"
+        ],
+        [
+          "Lebih besar",
+          "Ikuti kanan"
+        ],
+        [
+          "Sama",
+          "Ditemukan / abaikan duplikat saat tambah"
+        ],
+        [
+          "Cabang None",
+          "Tidak ditemukan / tempat node baru"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Binary search tree: tambah dan cari",
+        "code": "def tambah(root, nilai):\n    node_baru = {\"nilai\": nilai, \"kiri\": None, \"kanan\": None}\n    if root is None:\n        return node_baru\n    saat_ini = root\n    while True:\n        if nilai == saat_ini[\"nilai\"]:\n            return root\n        sisi = \"kiri\" if nilai < saat_ini[\"nilai\"] else \"kanan\"\n        if saat_ini[sisi] is None:\n            saat_ini[sisi] = node_baru\n            return root\n        saat_ini = saat_ini[sisi]\n\ndef cari(root, target):\n    while root is not None:\n        if target == root[\"nilai\"]:\n            return True\n        sisi = \"kiri\" if target < root[\"nilai\"] else \"kanan\"\n        root = root[sisi]\n    return False\n\nroot = None\nfor nilai in [4, 2, 6, 1]:\n    root = tambah(root, nilai)\nprint(cari(root, 1))\nprint(cari(root, 5))\nprint(cari(None, 1))",
+        "output": "True\nFalse\nFalse",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Gambar tree setelah memasukkan 4, 2, 6, 1.",
+      "Bandingkan bentuk tree untuk input [1,2,3,4].",
+      "Tambahkan 2 kembali dan periksa bahwa tidak ada node baru."
+    ],
+    "warning": "Contoh mengasumsikan key berupa angka yang dapat dibandingkan. Jangan mencampur string dan angka tanpa aturan perbandingan yang jelas.",
+    "check": "Mengapa tree dari input terurut dapat membuat pencarian lambat?",
+    "answer": "BST tanpa penyeimbangan dapat memanjang menjadi rantai sehingga tinggi dan pencarian menjadi O(n).",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-bst",
+    "diagramAlt": "Binary search tree: akar 4, kiri 2 dengan anak 1, kanan 6. Nilai kiri lebih kecil dari induknya.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-traversal-tree",
+    "title": "Traversal tree: empat urutan kunjungan",
+    "summary": "Bandingkan preorder, inorder, postorder, dan level-order pada tree yang sama.",
+    "analogy": "Bangunan yang sama bisa diperiksa dari pintu utama dahulu, bagian kiri dahulu, atau per lantai. Urutan kunjungannya berbeda walaupun objeknya tetap sama.",
+    "explain": [
+      "Preorder membaca induk sebelum kiri dan kanan. Inorder membaca kiri, induk, lalu kanan. Postorder membaca kiri dan kanan sebelum induk. Ketiganya dapat ditulis dengan rekursi dan base case node None.",
+      "Level-order membaca node per tingkat memakai queue. Contoh menggunakan deque dan memasukkan kiri sebelum kanan. Fungsi pembantu kunjungi di dalam traversal mengisi satu list hasil yang sama, sehingga tidak menyalin hasil dari setiap subtree.",
+      "Pada BST dengan aturan yang benar, inorder menghasilkan key terurut. Pada binary tree umum yang tidak mengikuti aturan BST, inorder tidak otomatis mengurutkan nilainya.",
+      "Seluruh traversal mengunjungi setiap node sekali. Kebutuhan penyimpanan tambahannya berbeda: rekursi mengikuti tinggi tree, sedangkan queue level-order dapat menyimpan banyak node pada tingkat yang lebar. Contoh list hasil juga memakai memori untuk seluruh output."
+    ],
+    "table": {
+      "headers": [
+        "Urutan",
+        "Hasil pada contoh"
+      ],
+      "rows": [
+        [
+          "Preorder",
+          "4, 2, 1, 6"
+        ],
+        [
+          "Inorder",
+          "1, 2, 4, 6"
+        ],
+        [
+          "Postorder",
+          "1, 2, 6, 4"
+        ],
+        [
+          "Level-order",
+          "4, 2, 6, 1"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Traversal tree: empat urutan kunjungan",
+        "code": "from collections import deque\n\ndef traversal(node, mode):\n    if mode not in (\"pre\", \"in\", \"post\"):\n        raise ValueError(\"Mode tidak dikenal\")\n    hasil = []\n    def kunjungi(saat_ini):\n        if saat_ini is None:\n            return\n        if mode == \"pre\":\n            hasil.append(saat_ini[\"nilai\"])\n        kunjungi(saat_ini[\"kiri\"])\n        if mode == \"in\":\n            hasil.append(saat_ini[\"nilai\"])\n        kunjungi(saat_ini[\"kanan\"])\n        if mode == \"post\":\n            hasil.append(saat_ini[\"nilai\"])\n    kunjungi(node)\n    return hasil\n\ndef level_order(root):\n    hasil = []\n    antrean = deque([root]) if root is not None else deque()\n    while antrean:\n        node = antrean.popleft()\n        hasil.append(node[\"nilai\"])\n        for sisi in (\"kiri\", \"kanan\"):\n            if node[sisi] is not None:\n                antrean.append(node[sisi])\n    return hasil\n\ndef node(nilai, kiri=None, kanan=None):\n    return {\"nilai\": nilai, \"kiri\": kiri, \"kanan\": kanan}\n\nroot = node(4, node(2, node(1)), node(6))\nfor mode in (\"pre\", \"in\", \"post\"):\n    print(mode, traversal(root, mode))\nprint(\"level\", level_order(root))",
+        "output": "pre [4, 2, 1, 6]\nin [1, 2, 4, 6]\npost [1, 2, 6, 4]\nlevel [4, 2, 6, 1]",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Telusuri empat urutan secara manual pada gambar.",
+      "Uji root None dan satu node.",
+      "Ubah posisi nilai sehingga tree bukan BST lalu amati inorder."
+    ],
+    "warning": "Contoh rekursif cocok untuk tree kecil tanpa siklus. Tree yang sangat dalam dapat melampaui batas rekursi Python.",
+    "check": "Apakah inorder selalu menghasilkan nilai terurut pada semua binary tree?",
+    "answer": "Tidak. Hasil terurut memerlukan aturan BST, bukan sekadar bentuk binary tree.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-bst",
+    "diagramAlt": "Binary search tree: akar 4, kiri 2 dengan anak 1, kanan 6. Nilai kiri lebih kecil dari induknya.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-graph-lanjutan",
+    "title": "Graph lanjutan: DFS, komponen, dan jalur BFS",
+    "summary": "Telusuri lebih dalam, temukan kelompok terpisah, dan kembalikan jalur antar node.",
+    "analogy": "Peta dapat mempunyai beberapa pulau jalur. Kamu perlu membedakan urutan menjelajah, kelompok yang saling terhubung, dan rute menuju tujuan.",
+    "explain": [
+      "DFS menelusuri cabang lebih dalam sebelum berpindah. Contoh menggunakan stack dan visited. Tetangga dimasukkan terbalik agar urutan kunjungan mengikuti daftar kiri dahulu.",
+      "Pada graph tak berarah, komponen terhubung adalah kelompok node yang saling dapat dijangkau. Jalankan DFS dari setiap node yang belum terlihat agar kelompok terpisah juga ditemukan. Kode mengasumsikan semua tetangga mempunyai key dan hubungan dua arah ditulis konsisten.",
+      "BFS dapat menemukan jalur dengan jumlah edge paling sedikit pada graph tak berbobot. Simpan parent ketika suatu node ditemukan, lalu telusuri parent dari tujuan ke awal dan balik hasilnya. Ini berbeda dari sekadar menampilkan urutan BFS.",
+      "Jika node tidak tersedia atau tidak ada jalur, fungsi mengembalikan None. Jika awal sama dengan tujuan dan node tersedia, jalurnya satu node. Contoh bukan algoritma biaya minimum untuk graph dengan bobot berbeda; graph berarah juga memerlukan definisi komponen yang berbeda."
+    ],
+    "table": {
+      "headers": [
+        "Pertanyaan",
+        "Metode"
+      ],
+      "rows": [
+        [
+          "Urutan menjelajah cabang",
+          "DFS"
+        ],
+        [
+          "Kelompok graph tak berarah",
+          "DFS/BFS dari tiap node belum terlihat"
+        ],
+        [
+          "Jalur dengan edge paling sedikit",
+          "BFS dan parent"
+        ],
+        [
+          "Biaya edge berbeda",
+          "Perlu algoritma sesuai bobot"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Graph lanjutan: DFS, komponen, dan jalur BFS",
+        "code": "from collections import deque\n\ndef dfs(graph, awal):\n    if awal not in graph:\n        return []\n    stack, visited, hasil = [awal], set(), []\n    while stack:\n        node = stack.pop()\n        if node in visited:\n            continue\n        visited.add(node)\n        hasil.append(node)\n        for tetangga in reversed(graph[node]):\n            if tetangga not in visited:\n                stack.append(tetangga)\n    return hasil\n\ndef komponen(graph):\n    terlihat, hasil = set(), []\n    for node in graph:\n        if node not in terlihat:\n            kelompok = dfs(graph, node)\n            terlihat.update(kelompok)\n            hasil.append(kelompok)\n    return hasil\n\ndef jalur_bfs(graph, awal, tujuan):\n    if awal not in graph or tujuan not in graph:\n        return None\n    antrean, parent = deque([awal]), {awal: None}\n    while antrean:\n        node = antrean.popleft()\n        if node == tujuan:\n            jalur = []\n            while node is not None:\n                jalur.append(node)\n                node = parent[node]\n            jalur.reverse()\n            return jalur\n        for tetangga in graph[node]:\n            if tetangga not in parent:\n                parent[tetangga] = node\n                antrean.append(tetangga)\n    return None\n\ngraph = {\"A\": [\"B\", \"C\"], \"B\": [\"A\", \"D\"],\n         \"C\": [\"A\"], \"D\": [\"B\"], \"E\": []}\nprint(\"DFS:\", dfs(graph, \"A\"))\nprint(\"Komponen:\", komponen(graph))\nprint(\"A ke D:\", jalur_bfs(graph, \"A\", \"D\"))\nprint(\"A ke E:\", jalur_bfs(graph, \"A\", \"E\"))",
+        "output": "DFS: ['A', 'B', 'D', 'C']\nKomponen: [['A', 'B', 'D', 'C'], ['E']]\nA ke D: ['A', 'B', 'D']\nA ke E: None",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Uji jalur A ke A serta node yang tidak tersedia.",
+      "Hubungkan E dengan C pada kedua arah lalu periksa komponen.",
+      "Tambahkan siklus dan pastikan penelusuran berhenti."
+    ],
+    "warning": "Komponen contoh didefinisikan untuk graph tak berarah. BFS biasa tidak menjamin biaya termurah bila edge mempunyai bobot berbeda.",
+    "check": "Mengapa parent dicatat saat node ditemukan?",
+    "answer": "Agar satu jalur penemuan dapat ditelusuri kembali dan node tidak dijadwalkan berulang.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "struktur-sort-lanjutan",
+    "title": "Selection sort dan merge sort",
+    "summary": "Bandingkan cara memilih minimum dengan membagi lalu menggabungkan data.",
+    "analogy": "Menyusun kartu dapat dilakukan dengan memilih yang terkecil berulang, atau merapikan dua tumpukan kecil lalu menggabungkannya.",
+    "explain": [
+      "Selection sort mencari item terkecil pada bagian yang belum terurut lalu menukarnya ke depan. Jumlah perbandingan tetap bertumbuh O(n²), termasuk ketika input sudah terurut. Implementasi tukar sederhana tidak menjamin stabilitas.",
+      "Merge sort membagi list menjadi dua sampai kecil, mengurutkan tiap bagian, lalu menggabungkannya. Pada contoh, item kiri dipilih dahulu ketika nilainya sama memakai <=, sehingga urutan relatif nilai sama dipertahankan.",
+      "Merge sort standar bertumbuh O(n log n), tetapi menggunakan memori tambahan untuk pembagian dan penggabungan. Kedua fungsi contoh mengembalikan list baru sehingga input awal tidak diubah.",
+      "Insertion sort yang dipelajari sebelumnya dapat bekerja linear pada input terurut untuk implementasi yang sesuai. Jangan membandingkan algoritma hanya melalui satu pengukuran waktu kecil. Untuk pekerjaan sehari-hari, sorted() atau list.sort() biasanya merupakan pilihan praktis."
+    ],
+    "table": {
+      "headers": [
+        "Algoritma",
+        "Pertumbuhan umum/terburuk",
+        "Catatan"
+      ],
+      "rows": [
+        [
+          "Insertion sort",
+          "O(n²) terburuk",
+          "Bisa O(n) pada input terurut"
+        ],
+        [
+          "Selection sort",
+          "O(n²)",
+          "Tukar sederhana tidak stabil"
+        ],
+        [
+          "Merge sort",
+          "O(n log n)",
+          "Memori tambahan; contoh stabil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Selection sort dan merge sort",
+        "code": "def selection_sort(data):\n    hasil = data.copy()\n    for i in range(len(hasil)):\n        terkecil = i\n        for j in range(i + 1, len(hasil)):\n            if hasil[j] < hasil[terkecil]:\n                terkecil = j\n        hasil[i], hasil[terkecil] = hasil[terkecil], hasil[i]\n    return hasil\n\ndef merge_sort(data):\n    if len(data) <= 1:\n        return data.copy()\n    tengah = len(data) // 2\n    kiri = merge_sort(data[:tengah])\n    kanan = merge_sort(data[tengah:])\n    hasil, i, j = [], 0, 0\n    while i < len(kiri) and j < len(kanan):\n        if kiri[i] <= kanan[j]:\n            hasil.append(kiri[i])\n            i += 1\n        else:\n            hasil.append(kanan[j])\n            j += 1\n    hasil.extend(kiri[i:])\n    hasil.extend(kanan[j:])\n    return hasil\n\nangka = [4, 1, 3, 1]\nprint(\"Selection:\", selection_sort(angka))\nprint(\"Merge:\", merge_sort(angka))\nprint(\"Asli:\", angka)",
+        "output": "Selection: [1, 1, 3, 4]\nMerge: [1, 1, 3, 4]\nAsli: [4, 1, 3, 1]",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Uji list kosong, satu item, urutan menurun, dan duplikat.",
+      "Gambar pemisahan [4,1,3,1] menjadi bagian kecil.",
+      "Hitung perbandingan selection sort pada input panjang 3 dan 6."
+    ],
+    "warning": "Kompleksitas bukan waktu pasti dalam detik. Contoh merge sort memakai slicing dan list hasil tambahan, sehingga bukan pengurutan in-place.",
+    "check": "Mengapa contoh merge memilih kiri saat dua item sama?",
+    "answer": "Untuk mempertahankan urutan relatif item yang sama dan menjaga stabilitas penggabungan.",
+    "source": "https://docs.python.org/3/howto/sorting.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-hash-lanjutan",
+    "title": "Collision, load factor, dan simulasi hash table",
+    "summary": "Lihat dua key berbeda berbagi bucket tanpa kehilangan nilai masing-masing.",
+    "analogy": "Beberapa surat dapat masuk laci yang sama. Label lengkap tetap diperiksa agar surat milik orang berbeda tidak tertukar.",
+    "explain": [
+      "Collision terjadi ketika key berbeda dipetakan ke bucket yang sama. Salah satu cara menanganinya adalah chaining: setiap bucket berisi kumpulan pasangan key–value yang diperiksa lebih lanjut.",
+      "Fungsi hash latihan menjumlahkan kode karakter lalu mengambil sisa pembagian dengan kapasitas. Key ab dan ba sengaja bertabrakan. Fungsi ini lemah dan hanya untuk ilustrasi; bukan implementasi internal dict Python dan tidak cocok untuk kebutuhan keamanan. Fungsi ord() memberikan nomor kode Unicode satu karakter; contoh menjumlahkannya melalui perulangan.",
+      "Load factor adalah jumlah entri dibagi jumlah bucket. Mengganti nilai pada key yang sama tidak menambah jumlah entri. Semakin banyak isi bucket, semakin banyak pemeriksaan yang dapat diperlukan; angka ambang resize bergantung implementasi, bukan satu nilai universal.",
+      "Contoh membatasi key ke string dan kapasitas tetap. Pada implementasi yang melakukan resize, entri perlu dipetakan ulang sesuai kapasitas baru. Untuk aplikasi biasa, gunakan dict bawaan daripada simulasi ini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Contoh"
+      ],
+      "rows": [
+        [
+          "Hash latihan ab",
+          "(97 + 98) % 4 = 3"
+        ],
+        [
+          "Hash latihan ba",
+          "(98 + 97) % 4 = 3"
+        ],
+        [
+          "Collision",
+          "Dua key berbeda, satu bucket"
+        ],
+        [
+          "Load factor",
+          "2 entri / 4 bucket = 0.5"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Collision, load factor, dan simulasi hash table",
+        "code": "def buat_tabel(kapasitas):\n    if type(kapasitas) is not int or kapasitas <= 0:\n        raise ValueError(\"Kapasitas harus integer positif\")\n    bucket = []\n    for nomor in range(kapasitas):\n        bucket.append([])\n    return {\"bucket\": bucket, \"jumlah\": 0}\n\ndef indeks(tabel, key):\n    if not isinstance(key, str):\n        raise TypeError(\"Key latihan harus string\")\n    total = 0\n    for karakter in key:\n        total += ord(karakter)\n    return total % len(tabel[\"bucket\"])\n\ndef simpan(tabel, key, nilai):\n    bucket = tabel[\"bucket\"][indeks(tabel, key)]\n    for pasangan in bucket:\n        if pasangan[0] == key:\n            pasangan[1] = nilai\n            return\n    bucket.append([key, nilai])\n    tabel[\"jumlah\"] += 1\n\ndef ambil(tabel, key, bawaan=None):\n    for pasangan in tabel[\"bucket\"][indeks(tabel, key)]:\n        if pasangan[0] == key:\n            return pasangan[1]\n    return bawaan\n\ntabel = buat_tabel(4)\nsimpan(tabel, \"ab\", 10)\nsimpan(tabel, \"ba\", 20)\nsimpan(tabel, \"ab\", 30)\nprint(\"Bucket:\", indeks(tabel, \"ab\"), indeks(tabel, \"ba\"))\nprint(\"Nilai:\", ambil(tabel, \"ab\"), ambil(tabel, \"ba\"))\nprint(\"Load factor:\", tabel[\"jumlah\"] / len(tabel[\"bucket\"]))\nprint(\"Tidak ada:\", ambil(tabel, \"zz\", \"Tidak ditemukan\"))",
+        "output": "Bucket: 3 3\nNilai: 30 20\nLoad factor: 0.5\nTidak ada: Tidak ditemukan",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan key lain lalu hitung load factor.",
+      "Ubah nilai ab dan pastikan jumlah entri tetap.",
+      "Bandingkan hasil jika kapasitas awalnya 2 dan 8."
+    ],
+    "warning": "Hash sama tidak berarti key sama. Simulasi ini tidak menyediakan penghapusan, resize, atau hashing yang tangguh.",
+    "check": "Apakah memperbarui ab dari 10 menjadi 30 membuat load factor bertambah?",
+    "answer": "Tidak. Key yang sama diperbarui tanpa menambah entri.",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-hash",
+    "diagramAlt": "Key ab dan ba menghasilkan bucket 3 pada fungsi hash contoh, lalu disimpan sebagai dua pasangan berbeda dalam satu rantai.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-pengujian",
+    "title": "Menguji struktur data dan menjaga invariant",
+    "summary": "Periksa urutan, duplikat, kondisi kosong, dan perubahan keadaan setelah operasi.",
+    "analogy": "Menguji antrean bukan hanya memastikan satu orang dapat masuk, tetapi juga memastikan urutan layanan tetap benar setelah berkali-kali masuk dan keluar.",
+    "explain": [
+      "Invariant adalah aturan yang harus selalu benar. Pada stack, item terakhir masuk keluar lebih dahulu. Pada circular queue, jumlah item selalu di antara 0 dan kapasitas. Pada antrean dengan set ID, isi set harus sama dengan ID yang masih menunggu.",
+      "Uji rangkaian operasi, bukan hanya operasi tunggal. Masukkan A, masukkan B, ambil B, ambil A, lalu ambil saat kosong. Duplikat juga perlu diuji karena stack biasa boleh berisi nilai sama.",
+      "Untuk operasi yang ditolak, periksa bahwa data tidak berubah. Misalnya pop dari stack kosong harus memberi error yang jelas, sementara isi stack tetap kosong. Pada queue penuh dengan kebijakan menolak, item lama tidak boleh hilang.",
+      "assert berguna untuk latihan pengujian, tetapi tidak menggantikan validasi penting masukan aplikasi karena dapat dinonaktifkan melalui optimasi. Pengujian otomatis membantu menemukan kesalahan; ia tidak membuktikan semua kemungkinan sudah benar."
+    ],
+    "table": {
+      "headers": [
+        "Kasus",
+        "Harapan"
+      ],
+      "rows": [
+        [
+          "Stack kosong",
+          "Pop menimbulkan IndexError"
+        ],
+        [
+          "Push A lalu B",
+          "Pop B lalu A"
+        ],
+        [
+          "Duplikat",
+          "Dua nilai sama tetap dua item"
+        ],
+        [
+          "Operasi gagal",
+          "Keadaan sebelumnya tetap terjaga"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Menguji struktur data dan menjaga invariant",
+        "code": "def ambil_atas(stack):\n    if not stack:\n        raise IndexError(\"Stack kosong\")\n    return stack.pop()\n\nstack = []\nstack.append(\"A\")\nstack.append(\"B\")\nassert ambil_atas(stack) == \"B\"\nassert ambil_atas(stack) == \"A\"\nassert stack == []\ntry:\n    ambil_atas(stack)\nexcept IndexError:\n    assert stack == []\nelse:\n    raise AssertionError(\"Stack kosong seharusnya ditolak\")\nstack.extend([\"A\", \"A\"])\nassert len(stack) == 2\nassert ambil_atas(stack) == \"A\"\nassert len(stack) == 1\nprint(\"Pengujian stack berhasil\")",
+        "output": "Pengujian stack berhasil",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Tulis uji peek untuk stack kosong.",
+      "Uji urutan masuk–keluar circular queue sampai indeks melingkar.",
+      "Buat salinan keadaan sebelum operasi yang ditolak dan bandingkan setelahnya."
+    ],
+    "warning": "Jangan menentukan hasil harapan hanya dengan menyalin hasil program yang sedang diuji. Turunkan harapan dari aturan struktur datanya.",
+    "check": "Mengapa urutan operasi perlu diuji?",
+    "answer": "Kesalahan dapat muncul dari perubahan keadaan setelah beberapa operasi meskipun setiap operasi tampak benar saat diuji sendiri.",
+    "source": "https://docs.python.org/3/tutorial/errors.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "struktur-kasus-kurung",
+    "title": "Studi kasus: pemeriksa pasangan tanda kurung",
+    "summary": "Gunakan stack untuk mendeteksi penutup salah, pembuka tersisa, dan urutan yang keliru.",
+    "analogy": "Kurung yang paling baru dibuka harus menjadi yang pertama ditutup, seperti kotak yang berada di dalam kotak lain.",
+    "explain": [
+      "Masalah: periksa pasangan (), [], dan {} pada suatu teks. Pembuka masuk stack bersama posisinya. Saat penutup ditemukan, pembuka paling atas harus sesuai. Jika stack kosong atau pasangannya salah, laporkan lokasi masalah pertama.",
+      "enumerate(teks, start=1) memberikan posisi mulai 1 dan karakter pada setiap putaran. Dictionary pasangan menghubungkan penutup dengan pembuka yang diharapkan. Setelah seluruh teks dibaca, stack tidak boleh menyisakan pembuka.",
+      "Fungsi mengembalikan tuple berisi status boolean dan pesan. Teks kosong dianggap seimbang. Waktu pemeriksaan O(n) untuk n karakter dan ruang tambahan terburuk O(n) untuk pembuka yang belum ditutup.",
+      "Ini pemeriksa karakter kurung, bukan parser Python. Karakter selain kurung dilewati, tetapi kurung di dalam string atau komentar tetap dihitung. Jika ingin memvalidasi kode Python sesungguhnya, diperlukan pemrosesan token dan tata bahasa yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Input",
+        "Harapan"
+      ],
+      "rows": [
+        [
+          "(a + b) * [c]",
+          "Seimbang"
+        ],
+        [
+          "([)]",
+          "Pasangan salah pada posisi 3"
+        ],
+        [
+          "(()",
+          "Pembuka pada posisi 1 belum ditutup"
+        ],
+        [
+          ")",
+          "Penutup tanpa pembuka"
+        ],
+        [
+          "Teks kosong",
+          "Seimbang"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Studi kasus: pemeriksa pasangan tanda kurung",
+        "code": "def periksa_kurung(teks):\n    pasangan = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\n    stack = []\n    for posisi, karakter in enumerate(teks, start=1):\n        if karakter in \"([{\":\n            stack.append((karakter, posisi))\n        elif karakter in pasangan:\n            if not stack:\n                return False, f\"Penutup {karakter} tanpa pembuka pada posisi {posisi}\"\n            pembuka, awal = stack.pop()\n            if pembuka != pasangan[karakter]:\n                return False, f\"Penutup {karakter} tidak cocok pada posisi {posisi}\"\n    if stack:\n        pembuka, posisi = stack[-1]\n        return False, f\"Pembuka {pembuka} belum ditutup pada posisi {posisi}\"\n    return True, \"Seimbang\"\n\nfor teks in [\"(a + b) * [c]\", \"([)]\", \"(()\", \")\"]:\n    valid, pesan = periksa_kurung(teks)\n    print(valid, pesan)",
+        "output": "True Seimbang\nFalse Penutup ) tidak cocok pada posisi 3\nFalse Pembuka ( belum ditutup pada posisi 1\nFalse Penutup ) tanpa pembuka pada posisi 1",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Uji teks kosong, {}, {[]}, dan ][.",
+      "Telusuri isi stack pada setiap karakter ([)].",
+      "Tambahkan keluaran karakter yang diharapkan pada pesan kesalahan."
+    ],
+    "warning": "Jangan menggunakan contoh ini untuk menyatakan bahwa sebuah file Python valid. Aturan string, escape, dan komentar tidak ditangani.",
+    "check": "Mengapa penutup harus cocok dengan pembuka paling atas?",
+    "answer": "Karena pasangan bertingkat mengikuti LIFO. Mengambil pembuka yang lebih lama dapat menerima susunan salah seperti ([)].",
+    "source": "https://docs.python.org/3/tutorial/datastructures.html",
+    "diagram": "struktur-kurung",
+    "diagramAlt": "Pada teks ([)], penutup ) bertemu pembuka [ di atas stack sehingga pasangan tidak cocok.",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "struktur-kasus-prioritas",
+    "title": "Studi kasus: penjadwal tugas berdasarkan prioritas",
+    "summary": "Gabungkan heap, urutan kedatangan, validasi, dan pencegahan ID menunggu ganda.",
+    "analogy": "Petugas mengerjakan tugas paling mendesak. Tugas yang sama tidak boleh terdaftar dua kali ketika masih menunggu.",
+    "explain": [
+      "Aturan latihan: prioritas harus integer positif, angka lebih kecil dilayani dahulu, dan prioritas sama mengikuti urutan kedatangan. ID berupa teks yang tidak kosong dan tidak boleh ganda selama menunggu. Setelah dilayani, ID boleh dijadwalkan lagi.",
+      "State menyimpan heap, nomor urut berikutnya, dan set menunggu. Validasi dilakukan sebelum menambah data. Tuple (prioritas, nomor, ID) membuat perbandingan jelas. State dikirim sebagai parameter agar contoh tidak bergantung pada variabel global.",
+      "Saat melayani, heappop mengambil tugas terpilih dan ID dihapus dari set menunggu. Fungsi mengembalikan dictionary hasil atau None jika kosong. Aturan konsistensinya: set menunggu harus sama dengan ID yang masih ada dalam heap.",
+      "Program ini simulasi satu proses tanpa penyimpanan, pembatalan, atau perubahan prioritas saat menunggu. Jika tugas penting datang terus, tugas prioritas rendah bisa tertunda lama. Sistem nyata perlu kebijakan keadilan, penanganan kegagalan, dan sinkronisasi sesuai kebutuhannya."
+    ],
+    "table": {
+      "headers": [
+        "Skenario",
+        "Harapan"
+      ],
+      "rows": [
+        [
+          "T1 prioritas 2; T2 dan T3 prioritas 1",
+          "T2, T3, lalu T1"
+        ],
+        [
+          "T2 ditambah lagi saat menunggu",
+          "Ditolak tanpa perubahan"
+        ],
+        [
+          "ID kosong / prioritas 0 / True",
+          "ValueError"
+        ],
+        [
+          "Layanan saat kosong",
+          "None"
+        ],
+        [
+          "T1 dijadwalkan setelah selesai",
+          "Diperbolehkan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Studi kasus: penjadwal tugas berdasarkan prioritas",
+        "code": "import heapq\n\ndef buat_penjadwal():\n    return {\"heap\": [], \"urutan\": 0, \"menunggu\": set()}\n\ndef tambah_tugas(state, id_tugas, prioritas):\n    if not isinstance(id_tugas, str) or not id_tugas.strip():\n        raise ValueError(\"ID wajib berupa teks tidak kosong\")\n    if type(prioritas) is not int or prioritas <= 0:\n        raise ValueError(\"Prioritas harus integer positif\")\n    id_tugas = id_tugas.strip()\n    if id_tugas in state[\"menunggu\"]:\n        return False\n    heapq.heappush(state[\"heap\"], (prioritas, state[\"urutan\"], id_tugas))\n    state[\"urutan\"] += 1\n    state[\"menunggu\"].add(id_tugas)\n    return True\n\ndef layani(state):\n    if not state[\"heap\"]:\n        return None\n    prioritas, nomor, id_tugas = heapq.heappop(state[\"heap\"])\n    state[\"menunggu\"].remove(id_tugas)\n    return {\"id\": id_tugas, \"prioritas\": prioritas}\n\nstate = buat_penjadwal()\nfor id_tugas, prioritas in [(\"T1\", 2), (\"T2\", 1), (\"T3\", 1), (\"T2\", 1)]:\n    print(\"Diterima:\", id_tugas, tambah_tugas(state, id_tugas, prioritas))\nwhile state[\"heap\"]:\n    hasil = layani(state)\n    print(\"Layanan:\", hasil[\"id\"], hasil[\"prioritas\"])\nprint(\"Kosong:\", layani(state))",
+        "output": "Diterima: T1 True\nDiterima: T2 True\nDiterima: T3 True\nDiterima: T2 False\nLayanan: T2 1\nLayanan: T3 1\nLayanan: T1 2\nKosong: None",
+        "explanation": "Simpan seluruh blok sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, lalu kerjakan latihan dan uji kondisi batas."
+    ],
+    "practice": [
+      "Uji tiga tugas dengan prioritas sama dan ID tidak berurutan alfabet.",
+      "Uji input invalid dan pastikan heap, urutan, serta set tidak berubah.",
+      "Jadwalkan T1 lagi setelah selesai.",
+      "Bandingkan urutan layanan dengan queue FIFO biasa."
+    ],
+    "warning": "Aturan prioritas dan duplikat harus dinyatakan jelas. Contoh tidak menyimpan data setelah program ditutup dan tidak menjamin keadilan untuk tugas prioritas rendah.",
+    "check": "Mengapa nomor urut ditempatkan sebelum ID dalam tuple heap?",
+    "answer": "Agar prioritas sama mengikuti kedatangan, bukan urutan alfabet ID.",
+    "source": "https://docs.python.org/3/library/heapq.html",
+    "diagram": "struktur-heap",
+    "diagramAlt": "Min-heap: akar prioritas 1, anak berprioritas 1 dan 2. Setiap induk tidak lebih besar dari anaknya.",
+    "stage": 0,
+    "minutes": 50
   }
 ]
