@@ -63,3 +63,11 @@
 @media(max-width:600px){.home-progress{padding:18px}.home-progress>header{align-items:start;flex-direction:column;gap:0}.home-progress h2{font-size:26px}.home-progress-grid{grid-template-columns:1fr}.home-progress-grid article{padding:16px}.home-progress>header>a{min-height:44px;display:flex;align-items:center}}
 .home-progress-total,.home-progress-prompt{font-size:13px;line-height:1.7;color:#687080;margin:8px 0}.home-progress-total strong{color:#40384f}.home-resume{display:inline-block;min-height:44px;padding:10px 0;color:#514b65;font-size:14px;font-weight:700;line-height:1.7;overflow-wrap:anywhere}.home-progress-details{margin-top:12px;border-top:1px solid #e4e0ea}.home-progress-details>summary{cursor:pointer;min-height:44px;padding:13px 0;font-size:13px;font-weight:700;color:#514b65}.home-progress-details .home-progress-grid{margin-top:6px}.home-progress .home-sync{margin-bottom:8px}
 @media(max-width:600px){.home-progress{margin-bottom:24px}.home-progress>header{flex-direction:row;align-items:center;gap:10px}.home-progress h2{font-size:23px}.home-progress>header>a{font-size:12px;white-space:nowrap}.home-progress .hub-eyebrow{font-size:9px}.reader-tools{max-width:100%}.reader-navigation a{padding:10px 6px}.reader-dialog-header{gap:10px}.reader-dialog-header p{font-size:12px;overflow-wrap:anywhere}.reader-dialog-header button{padding:9px 11px}}
+
+/* Learn Programming: preserve the academy layout and make lesson tables scroll. */
+.hub-programming{background:#f0edf7}.hub-programming .hub-card-icon{color:#65508a;font-family:monospace;font-weight:700}
+.programming-article .article-table-scroll{margin:24px 0}
+.programming-article .article-table-scroll table{display:table;width:100%;min-width:480px;margin:0;border-collapse:collapse;font-size:14px;line-height:1.7}
+.programming-article .article-table-scroll th,.programming-article .article-table-scroll td{padding:12px 14px;text-align:left;vertical-align:top;border:1px solid #d7d8e3;overflow-wrap:anywhere}
+.programming-article .article-table-scroll th{background:#f0edf7;color:#403453;font-weight:700}
+.programming-article .article-table-scroll tbody tr:nth-child(even){background:#faf9fc}

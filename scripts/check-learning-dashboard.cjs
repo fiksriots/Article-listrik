@@ -6,7 +6,7 @@ const {learningTracks}=require('../lib/learning-progress-catalog.ts');
 const {progressSummary,trackLessons}=require('../lib/learning-progress-types.ts');
 const {networkLessons}=require('../lib/network-course.ts');
 const {gitLessons}=require('../lib/git-course.ts');
-assert.deepEqual(learningTracks.map(t=>t.id),['listrik','jaringan','iot','git']);
+assert.deepEqual(learningTracks.map(t=>t.id),['listrik','jaringan','iot','git','programming']);
 const routes=fs.readdirSync('app',{recursive:true}).filter(p=>p.endsWith('page.tsx')).map(p=>'/'+p.replace(/\/page.tsx$/,'').replace(/^page.tsx$/,'').replace(/\[[^/]+\]/g,'[^/]+'));
 for(const track of learningTracks){
  const lessons=trackLessons(track);assert.ok(lessons.length>0);

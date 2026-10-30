@@ -1,5 +1,5 @@
 // Browser-only data, isolated by account. Legacy guest data is migrated once.
-export type Academy = 'listrik' | 'jaringan' | 'iot' | 'git';
+export type Academy = 'listrik' | 'jaringan' | 'iot' | 'git' | 'programming';
 export type Entry = {completed:boolean; dirty:boolean; revision:string};
 export type ProgressMap = Record<string,Entry>;
 const PREFIX='fiks-learning-v2:';
@@ -11,7 +11,7 @@ export function announce(){for(const name of events)window.dispatchEvent(new Eve
 export function getOwner(){return owner;}
 export function setOwner(id:string|null){owner=id;announce();}
 export function progressKey(academy:Academy,slug:string){return `${academy}/${slug}`;}
-export function readMap(id:string|null=owner):ProgressMap{try{const raw=JSON.parse(localStorage.getItem(PREFIX+(id||'guest'))||'{}');if(!raw||Array.isArray(raw)||typeof raw!=='object')return {};return Object.fromEntries(Object.entries(raw).filter((entry):entry is [string,Entry]=>{const [k,v]=entry;return /^(listrik|jaringan|iot|git)\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(k)&&v!==null&&typeof v==='object'&&typeof (v as Entry).completed==='boolean'&&typeof (v as Entry).revision==='string'&&typeof (v as Entry).dirty==='boolean';}));}catch{return {};}}
+export function readMap(id:string|null=owner):ProgressMap{try{const raw=JSON.parse(localStorage.getItem(PREFIX+(id||'guest'))||'{}');if(!raw||Array.isArray(raw)||typeof raw!=='object')return {};return Object.fromEntries(Object.entries(raw).filter((entry):entry is [string,Entry]=>{const [k,v]=entry;return /^(listrik|jaringan|iot|git|programming)\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(k)&&v!==null&&typeof v==='object'&&typeof (v as Entry).completed==='boolean'&&typeof (v as Entry).revision==='string'&&typeof (v as Entry).dirty==='boolean';}));}catch{return {};}}
 export function writeMap(id:string|null,map:ProgressMap){localStorage.setItem(PREFIX+(id||'guest'),JSON.stringify(map));}
 function revision(){return `${Date.now()}-${Math.random().toString(36).slice(2)}`;}
 function migrateGitLegacy(){if(localStorage.getItem(PREFIX+'git-migrated'))return;const map=readMap(null);try{const values=JSON.parse(localStorage.getItem('fiks-git-read-v1')||'[]');if(Array.isArray(values))for(const slug of values)if(typeof slug==='string'&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)&&!map[progressKey('git',slug)])map[progressKey('git',slug)]={completed:true,dirty:true,revision:revision()};}catch{}writeMap(null,map);localStorage.setItem(PREFIX+'git-migrated','1');}

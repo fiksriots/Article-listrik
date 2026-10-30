@@ -1,4 +1,5 @@
 import 'server-only';
+import {programmingLessons,programmingStages} from './programming-course';
 import {lessons,stages} from './course';
 import {networkLessons} from './network-course';
 import {iotGroups,iotLessons} from './iot-course';
@@ -24,4 +25,5 @@ export const learningTracks:LearningTrack[]=[
  ]},
  {id:'iot',title:'Learn IoT',href:'/iot',groups:iotGroups.map(g=>({id:g.id,title:g.title,href:'/iot',lessons:g.slugs.map(slug=>({slug,title:iotLessons.find(l=>l.slug===slug)!.title,href:'/iot/'+slug}))}))},
  {id:'git',title:'Learn Git',href:'/git',groups:gitTracks.map(t=>({id:t.id,title:t.title,href:t.href,lessons:t.lessons.map(l=>({slug:l.slug,title:l.title,href:'/git/'+l.slug}))}))},
+ {id:'programming',title:'Learn Programming',href:'/programming',groups:programmingStages.map((title,index)=>({id:'python-'+index,title,href:'/programming#kurikulum',lessons:programmingLessons.filter(l=>l.stage===index).map(l=>({slug:l.slug,title:l.title,href:'/programming/'+l.slug}))}))},
 ];

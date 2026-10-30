@@ -21,5 +21,6 @@ const {progressHandlers}=m.exports;
  assert.equal((await progressHandlers(async()=>owner,()=>null).GET()).status,503);
  assert.equal((await progressHandlers(async()=>owner,()=>({read:async()=>{throw Error('private secret')},write:async()=>{}})).GET()).status,503);
  assert.equal((await put({rows:[{academy:'git',lesson_slug:'apa-itu-git',completed:true}]})).status,200);
+ assert.equal((await put({rows:[{academy:'programming',lesson_slug:'pemrograman-terstruktur',completed:true}]})).status,200);
  console.log('PASS: session ownership, anonymous denial, CSRF origin, input validation, account isolation, persistent undo and unavailable storage');
 })().catch(e=>{console.error(e);process.exitCode=1});

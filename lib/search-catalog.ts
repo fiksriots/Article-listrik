@@ -1,4 +1,5 @@
 import 'server-only';
+import {programmingLessons} from './programming-course';
 import {learningTracks} from './learning-progress-catalog';
 import {trackLessons} from './learning-progress-types';
 import {lessons} from './course';
@@ -12,6 +13,7 @@ import {mtcreLabs} from './mtcre-labs';
 import type {SearchLesson} from './search-types';
 // Metadata only: article bodies and lab code are never sent to the search client.
 const descriptions=new Map<string,{summary:string;minutes?:number}>([
+ ...programmingLessons.map(l=>['/programming/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
  ...lessons.map(l=>['/materi/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
  ...networkLessons.map(l=>['/jaringan/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
  ...iotLessons.map(l=>['/iot/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
