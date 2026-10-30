@@ -1,5 +1,5 @@
 export type ProgressRow = {academy: 'listrik'|'jaringan'|'iot'|'git'|'programming'; lesson_slug: string; completed: boolean};
-export type ProgressStore = {read: (owner: string)=>Promise<ProgressRow[]>; write: (owner: string, rows: ProgressRow[])=>Promise<void>};
+export type ProgressStore = {migrate?: (owner:string,legacyOwners:string[])=>Promise<void>; read: (owner: string)=>Promise<ProgressRow[]>; write: (owner: string, rows: ProgressRow[])=>Promise<void>};
 export function validRow(value: unknown): value is ProgressRow {
   if (!value || typeof value !== 'object') return false;
   const row=value as Record<string,unknown>;

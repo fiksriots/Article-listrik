@@ -34,6 +34,7 @@ export default function Account({configured=false,tracks}: {configured?: boolean
       {status === 'loading' ? <div className="account-loading" role="status"><span className="account-spinner" aria-hidden="true"/>Memeriksa sesi akun…</div> : session ? <>
         <div className="account-profile"><span className="account-avatar" aria-hidden="true">{initial}</span><div><span className="account-badge">AKUN TERHUBUNG</span><h2>{session.user?.name || 'Akun belajarmu'}</h2><p className="account-email">{session.user?.email}</p></div></div>
         <div className="account-sync" role="status"><span className="account-status-dot" aria-hidden="true"/><p>{progressStatus}</p></div>
+        {session.progressNeedsRelogin&&<button type="button" className="account-google" disabled={busy} onClick={login}>{busy?'Menghubungkan…':'Masuk ulang untuk sinkronisasi'}</button>}
         <div className="account-actions"><Link className="account-continue" href="/">Lanjut belajar <span aria-hidden="true">→</span></Link><button type="button" className="account-secondary" disabled={busy} onClick={sync}>Sinkronkan progres</button></div>
         <button type="button" className="account-signout" disabled={busy} onClick={logout}>{busy ? 'Memproses…' : 'Keluar dari perangkat ini'}</button>
       </> : <><span className="account-card-symbol" aria-hidden="true">F<span>.</span></span><h2>Selamat datang di Fiks.</h2><p className="account-intro">Satu akun untuk menyimpan progres Listrik, Jaringan, IoT, dan Git.</p>

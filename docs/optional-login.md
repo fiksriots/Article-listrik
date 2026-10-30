@@ -54,3 +54,16 @@ Guest progress is imported once after a successful cloud read; remote records, i
 Without Firestore credentials the endpoint returns 503 and the UI explicitly says account storage is being prepared. It never reports a successful cloud sync. Google OAuth setup remains required too. No live cloud resources, database rules, credentials, or production settings have been configured by this code change.
 
 Verify with `node scripts/check-progress-api.cjs`, `node scripts/check-account-progress.cjs`, `npm run build`, then `CHROMIUM_PATH=<chromium> node scripts/check-account-ui.cjs`. Browser tests stub authenticated sessions and the cloud endpoint; API tests use an isolated in-memory store. After deployment, verify a real Google account on two devices, unmark/reload, offline/reconnect, and sign-out/account switching before declaring cross-device synchronization live.
+
+
+## Stable Google identity and legacy session recovery
+
+Progress owners use the signed Google `providerAccountId`, stored in the JWT as `googleSubject`. Auth.js without an adapter generates a random `user.id` on each OAuth sign-in; `token.sub` is therefore not a stable Google identifier. Never use that value as the owner for new logins.
+
+Sessions created before this fix retain their legacy owner and show **Masuk ulang untuk sinkronisasi**. Use that button directly while still signed in on the original browser. The OAuth callback decrypts the previous session cookie and authorizes migration only when the verified Google email matches; a previously established Google subject must also match. Browser-provided owner IDs and session updates cannot authorize migration. Old sessions pause cloud writes until reauthentication while keeping local changes.
+
+The next progress read copies missing legacy Firestore records transactionally to the stable owner, preserving canonical records including explicit unchecks. Source documents remain intact. Migration markers avoid rescanning completed sources. Pending local edits in authorized legacy caches also transfer and are acknowledged only after successful upload. Other devices use the same stable owner after signing in again with the same Google account.
+
+If a user already signed out or cleared the original cookie, the server cannot safely discover which random legacy bucket was theirs. The migration does not guess ownership from a name or a client-provided ID. Keep the original browser session available for recovery.
+
+Run `node scripts/check-google-identity.cjs` to verify separate OAuth logins, real encrypted previous cookies, tamper rejection, account isolation, migration, and uncheck preservation.
