@@ -1493,5 +1493,642 @@
     "diagramAlt": "Min-heap: akar prioritas 1, anak berprioritas 1 dan 2. Setiap induk tidak lebih besar dari anaknya.",
     "stage": 0,
     "minutes": 50
+  },
+  {
+    "slug": "struktur-doubly-linked",
+    "title": "Doubly linked list: navigasi dua arah",
+    "summary": "Kelola hubungan sebelum dan berikut, serta perbarui head dan tail dengan benar.",
+    "analogy": "Gerbong kereta terhubung ke depan dan belakang. Melepas gerbong depan juga harus memperbaiki hubungan gerbong yang sekarang menjadi paling depan.",
+    "explain": [
+      "Doubly linked list menyimpan nilai, referensi prev, dan referensi next pada setiap node. State menyimpan head, tail, serta jumlah item. Head.prev dan tail.next harus None ketika daftar tidak kosong.",
+      "Menambah di belakang memakai tail sehingga tidak perlu menelusuri seluruh daftar. Hubungan dua arah diperbarui: tail lama.next menunjuk node baru, node baru.prev menunjuk tail lama, lalu tail diganti.",
+      "Saat mengambil dari depan, head dipindah ke node berikutnya dan prev pada head baru dihapus. Jika item terakhir diambil, head dan tail sama-sama menjadi None. Pembaruan yang tidak lengkap bisa membuat penelusuran mundur salah.",
+      "Navigasi dua arah menambah fleksibilitas sekaligus biaya referensi dan kerumitan. Akses item berdasarkan indeks tetap memerlukan penelusuran. Contoh menggunakan dictionary untuk node, bukan kelas; penelusuran hanya mengikuti satu arah agar tidak berputar melalui hubungan prev–next."
+    ],
+    "table": {
+      "headers": [
+        "Keadaan",
+        "Invariant"
+      ],
+      "rows": [
+        [
+          "Kosong",
+          "head dan tail None; jumlah 0"
+        ],
+        [
+          "Tidak kosong",
+          "head.prev None; tail.next None"
+        ],
+        [
+          "Dua node bertetangga",
+          "next dan prev saling sesuai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Doubly linked list: navigasi dua arah",
+        "code": "def buat_daftar():\n    return {\"head\": None, \"tail\": None, \"jumlah\": 0}\n\ndef tambah_belakang(state, nilai):\n    node = {\"nilai\": nilai, \"prev\": state[\"tail\"], \"next\": None}\n    if state[\"tail\"] is None:\n        state[\"head\"] = node\n    else:\n        state[\"tail\"][\"next\"] = node\n    state[\"tail\"] = node\n    state[\"jumlah\"] += 1\n\ndef ambil_depan(state):\n    if state[\"head\"] is None:\n        raise IndexError(\"Daftar kosong\")\n    lama = state[\"head\"]\n    state[\"head\"] = lama[\"next\"]\n    if state[\"head\"] is None:\n        state[\"tail\"] = None\n    else:\n        state[\"head\"][\"prev\"] = None\n    lama[\"next\"] = None\n    state[\"jumlah\"] -= 1\n    return lama[\"nilai\"]\n\ndef baca(state, mundur=False):\n    hasil = []\n    node = state[\"tail\"] if mundur else state[\"head\"]\n    arah = \"prev\" if mundur else \"next\"\n    while node is not None:\n        hasil.append(node[\"nilai\"])\n        node = node[arah]\n    return hasil\n\nstate = buat_daftar()\nfor nilai in [\"A\", \"B\", \"C\"]:\n    tambah_belakang(state, nilai)\nprint(\"Maju:\", baca(state))\nprint(\"Mundur:\", baca(state, True))\nprint(\"Diambil:\", ambil_depan(state))\nprint(\"Sisa:\", baca(state))",
+        "output": "Maju: ['A', 'B', 'C']\nMundur: ['C', 'B', 'A']\nDiambil: A\nSisa: ['B', 'C']",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Ambil seluruh item dan periksa head serta tail menjadi None.",
+      "Uji satu item dan operasi pada daftar kosong.",
+      "Pastikan hasil baca mundur sama dengan kebalikan baca maju."
+    ],
+    "warning": "Jangan hanya memindahkan head tanpa menghapus prev pada head baru. Contoh belum menyediakan penghapusan node tengah atau akses indeks langsung.",
+    "check": "Apa yang harus terjadi pada tail ketika satu-satunya item diambil?",
+    "answer": "Tail harus menjadi None bersama head agar keadaan kosong konsisten.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-doubly",
+    "diagramAlt": "Setiap node A dan B terhubung maju serta mundur. Head A tidak memiliki node sebelumnya; tail B tidak memiliki node berikutnya.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-bst-hapus",
+    "title": "Menghapus node pada binary search tree",
+    "summary": "Tangani node tanpa anak, satu anak, dan dua anak tanpa merusak aturan BST.",
+    "analogy": "Menghapus satu persimpangan perlu menyambungkan kembali cabang yang tersisa. Jika ada dua cabang, pilih pengganti yang mempertahankan urutan.",
+    "explain": [
+      "Cari node berdasarkan perbandingan key seperti pada materi BST. Jika target tidak ada, kembalikan subtree semula. Karena penghapusan bisa mengganti root, simpan hasilnya kembali dengan root = hapus(root, target).",
+      "Node tanpa anak diganti None. Node dengan satu anak diganti oleh anaknya. Untuk dua anak, contoh mengambil successor, yaitu nilai terkecil pada subtree kanan, menyalinnya ke node target, kemudian menghapus successor dari cabang kanan.",
+      "Kebijakan duplikat mengikuti contoh BST sebelumnya: nilai yang sama tidak ditambah lagi. Fungsi rekursif mengembalikan root subtree terbaru agar hubungan induk dengan anak tetap benar.",
+      "Biaya penghapusan bergantung pada tinggi tree. BST yang memanjang masih dapat membutuhkan O(n) dan contoh rekursif berisiko mencapai batas rekursi pada tree sangat dalam. Penghapusan ini tidak melakukan penyeimbangan otomatis."
+    ],
+    "table": {
+      "headers": [
+        "Kasus",
+        "Pengganti"
+      ],
+      "rows": [
+        [
+          "Tanpa anak",
+          "None"
+        ],
+        [
+          "Satu anak",
+          "Anak yang tersedia"
+        ],
+        [
+          "Dua anak",
+          "Successor dari subtree kanan"
+        ],
+        [
+          "Target tidak ada",
+          "Subtree tetap"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Menghapus node pada binary search tree",
+        "code": "def tambah(root, nilai):\n    if root is None:\n        return {\"nilai\": nilai, \"kiri\": None, \"kanan\": None}\n    if nilai < root[\"nilai\"]:\n        root[\"kiri\"] = tambah(root[\"kiri\"], nilai)\n    elif nilai > root[\"nilai\"]:\n        root[\"kanan\"] = tambah(root[\"kanan\"], nilai)\n    return root\n\ndef hapus(root, target):\n    if root is None:\n        return None\n    if target < root[\"nilai\"]:\n        root[\"kiri\"] = hapus(root[\"kiri\"], target)\n    elif target > root[\"nilai\"]:\n        root[\"kanan\"] = hapus(root[\"kanan\"], target)\n    else:\n        if root[\"kiri\"] is None:\n            return root[\"kanan\"]\n        if root[\"kanan\"] is None:\n            return root[\"kiri\"]\n        successor = root[\"kanan\"]\n        while successor[\"kiri\"] is not None:\n            successor = successor[\"kiri\"]\n        root[\"nilai\"] = successor[\"nilai\"]\n        root[\"kanan\"] = hapus(root[\"kanan\"], successor[\"nilai\"])\n    return root\n\ndef inorder(root):\n    if root is None:\n        return []\n    return inorder(root[\"kiri\"]) + [root[\"nilai\"]] + inorder(root[\"kanan\"])\n\nroot = None\nfor nilai in [4, 2, 6, 1, 3, 5, 7, 8]:\n    root = tambah(root, nilai)\nfor target in [1, 7, 4]:\n    root = hapus(root, target)\n    print(\"Hapus\", target, inorder(root))",
+        "output": "Hapus 1 [2, 3, 4, 5, 6, 7, 8]\nHapus 7 [2, 3, 4, 5, 6, 8]\nHapus 4 [2, 3, 5, 6, 8]",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Gambar tree setelah setiap penghapusan.",
+      "Uji target yang tidak ada dan penghapusan satu-satunya node.",
+      "Periksa inorder tetap terurut dan semua nilai lain tetap tersedia."
+    ],
+    "warning": "Jangan hanya menyalin successor tanpa menghapus node successor asal, karena bisa meninggalkan nilai ganda.",
+    "check": "Mengapa hasil hapus harus disimpan kembali sebagai root?",
+    "answer": "Node yang dihapus dapat merupakan root dan penggantinya bisa menjadi anak atau None.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "struktur-avl",
+    "title": "AVL tree: menjaga keseimbangan dengan rotasi",
+    "summary": "Pahami tinggi, balance factor, dan empat pola rotasi saat menambah data.",
+    "analogy": "Rak yang terlalu berat di satu sisi perlu ditata ulang. Rotasi mengubah bentuk hubungan tanpa mengubah urutan key yang dibaca inorder.",
+    "explain": [
+      "AVL adalah BST yang menjaga selisih tinggi subtree kiri dan kanan setiap node tidak lebih dari satu. Contoh memakai tinggi None = 0 dan tinggi leaf = 1. Balance factor dihitung sebagai tinggi kiri dikurangi tinggi kanan.",
+      "Setelah penambahan, tinggi diperbarui dari bawah ke atas. Ketika terlalu berat ke kiri atau kanan, rotasi memperbaiki keseimbangan. Pola LL memakai rotasi kanan; RR rotasi kiri; LR dan RL memerlukan dua rotasi.",
+      "Rotasi harus menghubungkan kembali subtree perantara dan memperbarui tinggi pada urutan yang benar. Fungsi mengembalikan root baru, sehingga pemanggil perlu menyimpan hasilnya. Contoh mengabaikan key duplikat.",
+      "Dengan invariant AVL terjaga, tinggi tree bertumbuh O(log n). Contoh ini hanya mengimplementasikan penambahan dan rotasi, bukan penghapusan AVL. Jangan memakai fungsi hapus BST biasa lalu menganggap tinggi dan keseimbangan AVL masih benar."
+    ],
+    "table": {
+      "headers": [
+        "Pola penambahan",
+        "Perbaikan"
+      ],
+      "rows": [
+        [
+          "LL: 30,20,10",
+          "Rotasi kanan"
+        ],
+        [
+          "RR: 10,20,30",
+          "Rotasi kiri"
+        ],
+        [
+          "LR: 30,10,20",
+          "Kiri pada anak, lalu kanan"
+        ],
+        [
+          "RL: 10,30,20",
+          "Kanan pada anak, lalu kiri"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · AVL tree: menjaga keseimbangan dengan rotasi",
+        "code": "def tinggi(node):\n    return 0 if node is None else node[\"tinggi\"]\n\ndef perbarui(node):\n    node[\"tinggi\"] = 1 + max(tinggi(node[\"kiri\"]), tinggi(node[\"kanan\"]))\n\ndef rotasi_kanan(y):\n    x = y[\"kiri\"]\n    tengah = x[\"kanan\"]\n    x[\"kanan\"] = y\n    y[\"kiri\"] = tengah\n    perbarui(y)\n    perbarui(x)\n    return x\n\ndef rotasi_kiri(x):\n    y = x[\"kanan\"]\n    tengah = y[\"kiri\"]\n    y[\"kiri\"] = x\n    x[\"kanan\"] = tengah\n    perbarui(x)\n    perbarui(y)\n    return y\n\ndef tambah(root, nilai):\n    if root is None:\n        return {\"nilai\": nilai, \"kiri\": None, \"kanan\": None, \"tinggi\": 1}\n    if nilai < root[\"nilai\"]:\n        root[\"kiri\"] = tambah(root[\"kiri\"], nilai)\n    elif nilai > root[\"nilai\"]:\n        root[\"kanan\"] = tambah(root[\"kanan\"], nilai)\n    else:\n        return root\n    perbarui(root)\n    balance = tinggi(root[\"kiri\"]) - tinggi(root[\"kanan\"])\n    if balance > 1:\n        if nilai > root[\"kiri\"][\"nilai\"]:\n            root[\"kiri\"] = rotasi_kiri(root[\"kiri\"])\n        return rotasi_kanan(root)\n    if balance < -1:\n        if nilai < root[\"kanan\"][\"nilai\"]:\n            root[\"kanan\"] = rotasi_kanan(root[\"kanan\"])\n        return rotasi_kiri(root)\n    return root\n\nroot = None\nfor nilai in [30, 20, 10]:\n    root = tambah(root, nilai)\nprint(\"Root:\", root[\"nilai\"])\nprint(\"Kiri:\", root[\"kiri\"][\"nilai\"])\nprint(\"Kanan:\", root[\"kanan\"][\"nilai\"])\nprint(\"Tinggi:\", root[\"tinggi\"])",
+        "output": "Root: 20\nKiri: 10\nKanan: 30\nTinggi: 2",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Uji empat pola pada tabel dan pastikan root akhirnya 20.",
+      "Tambahkan nilai terurut 1 sampai 10 dan periksa balance tiap node.",
+      "Baca inorder sebelum dan setelah rotasi untuk memastikan urutannya tetap."
+    ],
+    "warning": "Rotasi tidak boleh membuang subtree perantara. Tinggi yang tidak diperbarui dapat membuat keputusan rotasi berikutnya salah.",
+    "check": "Apakah rotasi mengubah urutan key ketika dibaca inorder?",
+    "answer": "Tidak. Rotasi mengubah bentuk tree sambil mempertahankan aturan urutan BST.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-avl",
+    "diagramAlt": "Rotasi kanan pada rantai 30–20–10 menghasilkan akar 20 dengan anak kiri 10 dan kanan 30.",
+    "stage": 0,
+    "minutes": 50
+  },
+  {
+    "slug": "struktur-dijkstra",
+    "title": "Graph berbobot dan Dijkstra",
+    "summary": "Cari biaya terkecil dari satu sumber pada graph dengan bobot nonnegatif.",
+    "analogy": "Dua rute dapat mempunyai jumlah ruas berbeda. Rute dengan sedikit ruas belum tentu paling murah jika biaya tiap ruas berbeda.",
+    "explain": [
+      "Graph berbobot memberi nilai biaya pada edge. Dijkstra memilih perkiraan jarak terkecil untuk diproses, kemudian melakukan relaxation: memperbarui jarak tetangga jika ditemukan jalur yang lebih murah.",
+      "Algoritma memerlukan bobot nonnegatif. Contoh sengaja membatasi bobot ke integer nonnegatif dan menolak bool serta angka negatif. Bobot 0 diperbolehkan. Setiap tetangga harus didaftarkan sebagai node, termasuk node tanpa edge keluar.",
+      "Heap dapat memuat perkiraan lama yang sudah tidak terbaik. Baris biaya != jarak[node] melewati entri usang. Parent menyimpan pendahulu untuk merekonstruksi jalur pada studi kasus selanjutnya. Node tak terjangkau tetap berjarak inf.",
+      "Graph contoh berarah: A ke C tidak otomatis berarti C ke A. Versi ini menghitung jarak ke seluruh node, bukan berhenti pada satu tujuan. Heap dengan entri usang dapat memakai ruang tambahan mengikuti jumlah pembaruan; implementasi ini bukan heap dengan operasi decrease-key."
+    ],
+    "table": {
+      "headers": [
+        "Node",
+        "Jarak dari A"
+      ],
+      "rows": [
+        [
+          "A",
+          "0"
+        ],
+        [
+          "C",
+          "1"
+        ],
+        [
+          "B",
+          "3 melalui C"
+        ],
+        [
+          "D",
+          "4 melalui C dan B"
+        ],
+        [
+          "E",
+          "inf: tidak terjangkau"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Graph berbobot dan Dijkstra",
+        "code": "import heapq\nfrom itertools import count\nfrom math import inf\n\ndef validasi_graph(graph):\n    if not isinstance(graph, dict):\n        raise ValueError(\"Graph harus dictionary\")\n    for node, tetangga in graph.items():\n        if not isinstance(node, str) or not node or not isinstance(tetangga, dict):\n            raise ValueError(\"Node harus teks dan tetangga harus dictionary\")\n        for tujuan, bobot in tetangga.items():\n            if tujuan not in graph:\n                raise ValueError(\"Tetangga belum didaftarkan sebagai node\")\n            if type(bobot) is not int or bobot < 0:\n                raise ValueError(\"Bobot latihan harus integer nonnegatif\")\n\ndef dijkstra(graph, awal):\n    validasi_graph(graph)\n    if not isinstance(awal, str) or awal not in graph:\n        raise ValueError(\"Node awal tidak ada\")\n    jarak, parent = {}, {}\n    for node in graph:\n        jarak[node] = inf\n        parent[node] = None\n    jarak[awal] = 0\n    urutan = count()\n    heap = [(0, next(urutan), awal)]\n    while heap:\n        biaya, nomor, node = heapq.heappop(heap)\n        if biaya != jarak[node]:\n            continue\n        for tujuan, bobot in graph[node].items():\n            calon = biaya + bobot\n            if calon < jarak[tujuan]:\n                jarak[tujuan] = calon\n                parent[tujuan] = node\n                heapq.heappush(heap, (calon, next(urutan), tujuan))\n    return jarak, parent\n\ngraph = {\"A\": {\"B\": 4, \"C\": 1}, \"B\": {\"D\": 1},\n         \"C\": {\"B\": 2, \"D\": 5}, \"D\": {}, \"E\": {}}\nprint(\"D:\", dijkstra(graph, \"A\")[0][\"D\"])\nprint(\"E:\", dijkstra(graph, \"A\")[0][\"E\"])",
+        "output": "D: 4\nE: inf",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Bandingkan rute A–B–D dan A–C–B–D.",
+      "Uji bobot 0 dan tujuan yang terpisah.",
+      "Ubah satu bobot menjadi -1 dan pastikan validasi menolak."
+    ],
+    "warning": "Jangan memakai Dijkstra biasa untuk graph berbobot negatif. Angka pada contoh adalah satuan biaya latihan, bukan data rute nyata.",
+    "check": "Mengapa BFS biasa belum cukup untuk contoh ini?",
+    "answer": "BFS meminimalkan jumlah edge pada graph tak berbobot; di sini biaya tiap edge berbeda.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-rute",
+    "diagramAlt": "Graph berarah dengan biaya A ke B 4, A ke C 1, C ke B 2, B ke D 1, dan C ke D 5. Rute A–C–B–D berbiaya 4. E terpisah.",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "struktur-trie",
+    "title": "Trie: menyimpan kata berdasarkan awalan",
+    "summary": "Bagikan jalur karakter yang sama untuk pencarian kata dan prefix.",
+    "analogy": "Pada kamus awalan, kata Ana dan Ani berbagi bagian an sebelum bercabang pada karakter terakhirnya.",
+    "explain": [
+      "Trie menyimpan jalur karakter dari root. Node mempunyai dictionary anak dan tanda akhir kata. Tanda akhir diperlukan agar awalan yang belum merupakan kata tidak keliru dianggap kata lengkap.",
+      "Pada contoh, key dinormalisasi dengan strip dan casefold. Fungsi casefold membantu perbandingan teks tanpa membedakan kapitalisasi. Satu kata yang sama setelah normalisasi tidak membuat jalur baru. Kita memakai karakter Unicode Python, bukan aturan pelafalan atau urutan bahasa tertentu.",
+      "Pencarian kata memerlukan semua karakter tersedia dan tanda akhir aktif. Pencarian awalan hanya memerlukan jalur karakter tersedia. Awalan kosong dianggap cocok dengan root; menambahkan kata kosong ditolak.",
+      "Dengan pencarian dictionary rata-rata konstan, menelusuri kata sepanjang m memerlukan O(m) langkah karakter. Mengambil seluruh saran tetap memerlukan pekerjaan tambahan sesuai subtree dan jumlah hasil. Trie dapat memakai banyak node, sehingga tidak selalu lebih hemat memori daripada list atau dictionary."
+    ],
+    "table": {
+      "headers": [
+        "Pencarian setelah menyimpan Ana dan Ani",
+        "Hasil"
+      ],
+      "rows": [
+        [
+          "Kata an",
+          "False"
+        ],
+        [
+          "Awalan an",
+          "True"
+        ],
+        [
+          "Kata ANA",
+          "True setelah normalisasi"
+        ],
+        [
+          "Kata Budi",
+          "False"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Trie: menyimpan kata berdasarkan awalan",
+        "code": "def buat_node():\n    return {\"anak\": {}, \"akhir\": False}\n\ndef normalisasi(teks):\n    if not isinstance(teks, str) or not teks.strip():\n        raise ValueError(\"Kata harus teks tidak kosong\")\n    return teks.strip().casefold()\n\ndef tambah(root, kata):\n    node = root\n    for karakter in normalisasi(kata):\n        if karakter not in node[\"anak\"]:\n            node[\"anak\"][karakter] = buat_node()\n        node = node[\"anak\"][karakter]\n    node[\"akhir\"] = True\n\ndef cari_node(root, teks):\n    node = root\n    for karakter in teks:\n        if karakter not in node[\"anak\"]:\n            return None\n        node = node[\"anak\"][karakter]\n    return node\n\ndef ada_kata(root, kata):\n    node = cari_node(root, normalisasi(kata))\n    return node is not None and node[\"akhir\"]\n\ndef ada_awalan(root, awalan):\n    if not isinstance(awalan, str):\n        raise ValueError(\"Awalan harus teks\")\n    return cari_node(root, awalan.strip().casefold()) is not None\n\nroot = buat_node()\nfor kata in [\"Ana\", \"Ani\"]:\n    tambah(root, kata)\nprint(\"Kata an:\", ada_kata(root, \"an\"))\nprint(\"Awalan an:\", ada_awalan(root, \"an\"))\nprint(\"Kata ANA:\", ada_kata(root, \"ANA\"))",
+        "output": "Kata an: False\nAwalan an: True\nKata ANA: True",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan kata an dan bandingkan pencarian kata dengan awalan.",
+      "Uji kapitalisasi dan spasi di tepi.",
+      "Gambar jalur untuk Ana, Ani, dan Andi."
+    ],
+    "warning": "Jangan menganggap setiap node adalah akhir kata. Normalisasi juga merupakan kebijakan aplikasi yang perlu konsisten.",
+    "check": "Mengapa tanda akhir kata diperlukan?",
+    "answer": "Jalur an bisa tersedia karena kata Ana, tetapi an belum tentu disimpan sebagai kata lengkap.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-trie",
+    "diagramAlt": "Trie menyimpan Ana dan Ani dengan awalan a–n yang dipakai bersama, kemudian bercabang ke a dan i.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-topological-sort",
+    "title": "Topological sort: urutan berdasarkan ketergantungan",
+    "summary": "Susun pekerjaan yang prasyaratnya harus diselesaikan lebih dahulu.",
+    "analogy": "Belajar fungsi membutuhkan dasar lebih dahulu. Proyek baru dikerjakan setelah fungsi dan pengolahan list dipahami.",
+    "explain": [
+      "Topological sort menghasilkan urutan node sehingga setiap edge prasyarat → pekerjaan menempatkan prasyarat lebih dahulu. Metode ini berlaku pada directed acyclic graph atau DAG: graph berarah tanpa siklus.",
+      "Algoritma Kahn menghitung indegree, yaitu jumlah edge masuk setiap node. Node dengan indegree 0 siap diproses. Setelah node diambil, kurangi indegree pekerjaan yang bergantung padanya dan masukkan yang menjadi 0 ke queue.",
+      "Jika jumlah node yang diproses kurang dari seluruh node, ada siklus sehingga tidak tersedia urutan topologis lengkap. Contoh menolak keadaan tersebut dengan ValueError. Graph kosong menghasilkan list kosong.",
+      "Satu DAG dapat mempunyai beberapa urutan yang benar. Contoh mengikuti urutan penyisipan key dan daftar tetangga; itu bukan satu-satunya jawaban sah. Untuk aplikasi yang perlu urutan alfabet, kebijakan pemilihan node siap perlu diubah secara eksplisit."
+    ],
+    "table": {
+      "headers": [
+        "Aturan",
+        "Makna"
+      ],
+      "rows": [
+        [
+          "Dasar → Fungsi",
+          "Dasar sebelum Fungsi"
+        ],
+        [
+          "Fungsi → Proyek",
+          "Fungsi sebelum Proyek"
+        ],
+        [
+          "List → Proyek",
+          "List sebelum Proyek"
+        ],
+        [
+          "Siklus A → B → A",
+          "Tidak ada urutan lengkap"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Topological sort: urutan berdasarkan ketergantungan",
+        "code": "from collections import deque\n\ndef urutan_tugas(graph):\n    indegree = {node: 0 for node in graph}\n    for node in graph:\n        for tujuan in graph[node]:\n            if tujuan not in graph:\n                raise ValueError(\"Tetangga belum didaftarkan\")\n            indegree[tujuan] += 1\n    siap = deque(node for node in graph if indegree[node] == 0)\n    hasil = []\n    while siap:\n        node = siap.popleft()\n        hasil.append(node)\n        for tujuan in graph[node]:\n            indegree[tujuan] -= 1\n            if indegree[tujuan] == 0:\n                siap.append(tujuan)\n    if len(hasil) != len(graph):\n        raise ValueError(\"Graph mengandung siklus\")\n    return hasil\n\ngraph = {\"Dasar\": [\"Fungsi\", \"List\"], \"Fungsi\": [\"Proyek\"],\n         \"List\": [\"Proyek\"], \"Proyek\": []}\nprint(urutan_tugas(graph))",
+        "output": "['Dasar', 'Fungsi', 'List', 'Proyek']",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Uji graph kosong serta dua node tanpa ketergantungan.",
+      "Tambahkan Proyek → Dasar dan pastikan siklus ditolak.",
+      "Periksa setiap edge: posisi sumber harus sebelum posisi tujuan."
+    ],
+    "warning": "Jangan memakai topological sort untuk graph tak berarah secara langsung. Urutan yang berbeda belum tentu salah jika semua prasyarat tetap dipenuhi.",
+    "check": "Mengapa node indegree 0 boleh diproses?",
+    "answer": "Tidak ada prasyarat masuk yang masih menunggunya pada tahap tersebut.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-dependensi",
+    "diagramAlt": "Dasar mendahului Fungsi dan List; keduanya mendahului Proyek.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-union-find",
+    "title": "Union-Find: gabungkan kelompok dan periksa keterhubungan",
+    "summary": "Gunakan parent, ukuran kelompok, dan path compression untuk mengelola himpunan terpisah.",
+    "analogy": "Ketika dua kelompok bergabung, cukup catat wakil kelompoknya. Anggota lain dapat menemukan wakil melalui hubungan parent.",
+    "explain": [
+      "Disjoint Set Union atau Union-Find mengelola elemen dalam kelompok terpisah. find mencari wakil kelompok dan union menggabungkan dua kelompok. Jika wakil sama, keduanya sudah terhubung.",
+      "Contoh memakai union by size: kelompok lebih kecil digantungkan pada wakil kelompok lebih besar. Path compression versi path halving memperpendek hubungan parent selama pencarian. Nilai ukuran hanya dibaca pada wakil yang masih menjadi root.",
+      "Dengan kedua teknik tersebut, biaya amortized rangkaian operasi sangat kecil; jangan menyebut setiap find pasti O(1). Struktur ini cocok untuk konektivitas melalui penambahan hubungan, tetapi tidak menyimpan rute antar node.",
+      "Contoh menerima ID yang hashable, misalnya string, dan menolak ID yang belum didaftarkan saat find. Menghapus hubungan bukan operasi yang didukung Union-Find dasar. Pada graph berarah, makna keterhubungan juga tidak otomatis sama dengan bisa mencapai tujuan mengikuti arah edge."
+    ],
+    "table": {
+      "headers": [
+        "Operasi",
+        "Tujuan"
+      ],
+      "rows": [
+        [
+          "find(x)",
+          "Wakil kelompok x"
+        ],
+        [
+          "union(a,b)",
+          "Gabungkan jika berbeda"
+        ],
+        [
+          "find(a) == find(b)",
+          "Periksa satu kelompok"
+        ],
+        [
+          "Union berulang",
+          "Tidak membuat kelompok ganda"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Union-Find: gabungkan kelompok dan periksa keterhubungan",
+        "code": "def buat_kelompok(items):\n    parent, ukuran = {}, {}\n    for item in items:\n        parent[item] = item\n        ukuran[item] = 1\n    return {\"parent\": parent, \"ukuran\": ukuran}\n\ndef find(state, item):\n    if item not in state[\"parent\"]:\n        raise KeyError(\"ID belum didaftarkan\")\n    while state[\"parent\"][item] != item:\n        state[\"parent\"][item] = state[\"parent\"][state[\"parent\"][item]]\n        item = state[\"parent\"][item]\n    return item\n\ndef union(state, a, b):\n    ra, rb = find(state, a), find(state, b)\n    if ra == rb:\n        return False\n    if state[\"ukuran\"][ra] < state[\"ukuran\"][rb]:\n        ra, rb = rb, ra\n    state[\"parent\"][rb] = ra\n    state[\"ukuran\"][ra] += state[\"ukuran\"][rb]\n    return True\n\nstate = buat_kelompok([\"A\", \"B\", \"C\", \"D\"])\nprint(union(state, \"A\", \"B\"))\nprint(union(state, \"B\", \"C\"))\nprint(union(state, \"A\", \"C\"))\nprint(\"A dan C:\", find(state, \"A\") == find(state, \"C\"))\nprint(\"A dan D:\", find(state, \"A\") == find(state, \"D\"))",
+        "output": "True\nTrue\nFalse\nA dan C: True\nA dan D: False",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Gabungkan C dan D lalu periksa semua wakil sama.",
+      "Uji union(A,A) dan ID yang belum didaftarkan.",
+      "Bandingkan kelompok hasil dengan komponen graph kecil yang sama."
+    ],
+    "warning": "Union-Find memberi informasi satu kelompok, bukan urutan rute. Jangan menggunakannya untuk menyimpulkan jalur berarah atau menghapus edge secara langsung.",
+    "check": "Apakah union berulang pada anggota yang sudah satu kelompok menambah ukuran lagi?",
+    "answer": "Tidak. Fungsi mengembalikan False sebelum memperbarui ukuran.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "struktur-benchmark",
+    "title": "Mengukur waktu dan memori struktur data",
+    "summary": "Rancang percobaan kecil tanpa menyamakan satu hasil pengukuran dengan hukum umum.",
+    "analogy": "Membandingkan dua cara mencari barang perlu memakai daftar, target, dan kondisi percobaan yang sama.",
+    "explain": [
+      "Big O memperkirakan pertumbuhan, sedangkan benchmark mengukur implementasi pada lingkungan tertentu. Catat ukuran data, operasi, versi Python, perangkat, dan berapa kali percobaan diulang. Jangan menyimpulkan hanya dari satu angka.",
+      "timeit.repeat menjalankan fungsi beberapa kali dalam beberapa ulangan. Contoh membagi waktu terbaik dengan jumlah operasi untuk mendapatkan detik per operasi. Pembuatan list dan set dilakukan sebelum bagian pencarian diukur, sehingga hasil ini khusus pencarian, bukan seluruh alur persiapan dan pencarian.",
+      "tracemalloc melacak alokasi yang dipantau Python setelah tracing dimulai; hasilnya bukan total RAM proses. Contoh memulai dan menghentikan sesi terpisah untuk membuat list dan set dari range yang sama. Peak adalah puncak memori terpantau selama sesi.",
+      "Angka keluaran akan berbeda setiap kali dan tidak dijadikan nilai kelulusan. Set dapat memberi pencarian rata-rata lebih cepat tetapi membutuhkan persiapan serta memori yang berbeda. Memilih struktur tetap harus mempertimbangkan urutan, duplikat, perubahan data, dan jumlah pencarian."
+    ],
+    "table": {
+      "headers": [
+        "Hal yang dikontrol",
+        "Aturan contoh"
+      ],
+      "rows": [
+        [
+          "Input",
+          "range dengan ukuran sama"
+        ],
+        [
+          "Target",
+          "Item terakhir, n - 1"
+        ],
+        [
+          "Persiapan pencarian",
+          "Di luar bagian yang diukur"
+        ],
+        [
+          "Ulangan",
+          "3 × 200 operasi"
+        ],
+        [
+          "Memori",
+          "Sesi tracemalloc terpisah"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Mengukur waktu dan memori struktur data",
+        "code": "from timeit import repeat\nimport tracemalloc\n\ndef peak_memori(n, jenis):\n    tracemalloc.start()\n    try:\n        data = list(range(n)) if jenis == \"list\" else set(range(n))\n        saat_ini, peak = tracemalloc.get_traced_memory()\n        return peak\n    finally:\n        tracemalloc.stop()\n\ndef ukur(n):\n    daftar = list(range(n))\n    himpunan = set(daftar)\n    target = n - 1\n    def cari_list():\n        return target in daftar\n    def cari_set():\n        return target in himpunan\n    jumlah = 200\n    waktu_list = min(repeat(cari_list, number=jumlah, repeat=3)) / jumlah\n    waktu_set = min(repeat(cari_set, number=jumlah, repeat=3)) / jumlah\n    return waktu_list, waktu_set, peak_memori(n, \"list\"), peak_memori(n, \"set\")\n\nfor n in [1000, 10000]:\n    wl, ws, ml, ms = ukur(n)\n    print(f\"n={n} | list={wl:.9f} | set={ws:.9f} | peak_list={ml} | peak_set={ms}\")",
+        "output": "n=1000 | list=<detik per operasi> | set=<detik per operasi> | peak_list=<byte> | peak_set=<byte>\nn=10000 | list=<detik per operasi> | set=<detik per operasi> | peak_list=<byte> | peak_set=<byte>",
+        "explanation": "Angka pengukuran berbeda menurut perangkat, versi Python, dan keadaan sistem. Teks dalam tanda <...> pada contoh keluaran adalah penanda nilai yang akan dihasilkan, bukan angka acuan.",
+        "measurement": true
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Catat hasil untuk tiga ukuran data.",
+      "Uji target pertama, terakhir, dan tidak ada.",
+      "Buat percobaan terpisah yang memasukkan biaya persiapan set.",
+      "Jangan menjalankan pengukuran memori ini di dalam sesi tracemalloc lain yang ingin dipertahankan."
+    ],
+    "warning": "Tidak ada ambang detik universal untuk latihan ini. Tracing memori menambah overhead, sehingga contoh memisahkan pengukuran waktu dari tracing.",
+    "check": "Mengapa pembuatan set di luar pengukuran pencarian perlu disebutkan?",
+    "answer": "Karena biaya persiapan belum masuk hasil tersebut dan bisa penting jika hanya ada sedikit pencarian.",
+    "source": "https://docs.python.org/3/library/timeit.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "struktur-kasus-kontak",
+    "title": "Studi kasus: pencarian kontak berdasarkan awalan",
+    "summary": "Bangun trie untuk saran nama, aturan duplikat, dan batas jumlah hasil.",
+    "analogy": "Buku kontak memberi saran setelah beberapa huruf diketik. Nama dengan awalan sama dapat ditemukan dari cabang trie yang sama.",
+    "explain": [
+      "Aturan latihan: nama berupa teks tidak kosong. Pencarian tidak membedakan kapitalisasi dan spasi tepi dibersihkan. Nama dengan bentuk normalisasi sama dianggap duplikat; nama tampilan pertama dipertahankan.",
+      "Setiap node mempunyai anak dan nama terminal. Nama hanya disimpan pada node yang mewakili nama lengkap. Menemukan prefix belum cukup untuk mengembalikan nama; fungsi harus menelusuri semua akhir nama yang cocok sampai batas hasil.",
+      "Contoh memakai DFS iteratif agar tidak bergantung pada kedalaman rekursi. Anak dimasukkan terbalik menurut key terurut supaya pop menghasilkan urutan leksikografis karakter. Ini bukan pengurutan nama menurut seluruh aturan bahasa atau budaya.",
+      "Prefix kosong menampilkan nama dari seluruh trie, tetap dibatasi limit. Limit harus integer tidak negatif; limit 0 menghasilkan list kosong. Program memakai data latihan di memori dan belum menyediakan penyimpanan, penghapusan kontak, atau indeks nomor telepon."
+    ],
+    "table": {
+      "headers": [
+        "Skenario",
+        "Harapan"
+      ],
+      "rows": [
+        [
+          "Prefix an",
+          "Ana, Ananda, Andi"
+        ],
+        [
+          "Prefix bu",
+          "Budi"
+        ],
+        [
+          "Prefix zz",
+          "List kosong"
+        ],
+        [
+          "Tambah nama \" ana \" setelah Ana",
+          "Ditolak sebagai duplikat"
+        ],
+        [
+          "Limit 0",
+          "List kosong"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Studi kasus: pencarian kontak berdasarkan awalan",
+        "code": "def buat_node():\n    return {\"anak\": {}, \"nama\": None}\n\ndef tambah_kontak(root, nama):\n    if not isinstance(nama, str) or not nama.strip():\n        raise ValueError(\"Nama wajib berupa teks tidak kosong\")\n    tampilan = nama.strip()\n    node = root\n    for karakter in tampilan.casefold():\n        if karakter not in node[\"anak\"]:\n            node[\"anak\"][karakter] = buat_node()\n        node = node[\"anak\"][karakter]\n    if node[\"nama\"] is not None:\n        return False\n    node[\"nama\"] = tampilan\n    return True\n\ndef saran(root, prefix, limit=5):\n    if not isinstance(prefix, str):\n        raise ValueError(\"Prefix harus teks\")\n    if type(limit) is not int or limit < 0:\n        raise ValueError(\"Limit harus integer tidak negatif\")\n    node = root\n    for karakter in prefix.strip().casefold():\n        if karakter not in node[\"anak\"]:\n            return []\n        node = node[\"anak\"][karakter]\n    hasil, stack = [], [node]\n    while stack and len(hasil) < limit:\n        saat_ini = stack.pop()\n        if saat_ini[\"nama\"] is not None:\n            hasil.append(saat_ini[\"nama\"])\n        for karakter in reversed(sorted(saat_ini[\"anak\"])):\n            stack.append(saat_ini[\"anak\"][karakter])\n    return hasil\n\nroot = buat_node()\nfor nama in [\"Ana\", \"Ananda\", \"Andi\", \"Budi\"]:\n    tambah_kontak(root, nama)\nprint(\"Duplikat diterima:\", tambah_kontak(root, \" ana \"))\nprint(\"an:\", saran(root, \"an\"))\nprint(\"bu:\", saran(root, \"BU\"))\nprint(\"zz:\", saran(root, \"zz\"))\nprint(\"Limit 2:\", saran(root, \"an\", 2))",
+        "output": "Duplikat diterima: False\nan: ['Ana', 'Ananda', 'Andi']\nbu: ['Budi']\nzz: []\nLimit 2: ['Ana', 'Ananda']",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Uji nama kosong, prefix kosong, dan limit 0.",
+      "Tambahkan nama an agar akhir prefix juga menjadi nama lengkap.",
+      "Periksa nama tampilan pertama tetap dipertahankan setelah duplikat kapitalisasi.",
+      "Bandingkan hasil dengan penyaringan list memakai startswith() pada data yang sama."
+    ],
+    "warning": "Trie tidak otomatis lebih hemat atau lebih cepat untuk setiap daftar kecil. Normalisasi menentukan apa yang dianggap duplikat; jelaskan aturannya kepada pengguna.",
+    "check": "Mengapa nama terminal perlu dipisahkan dari jalur prefix?",
+    "answer": "Karena cabang dapat ada hanya sebagai awalan nama yang lebih panjang dan belum tentu merupakan satu kontak lengkap.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-trie",
+    "diagramAlt": "Trie menyimpan Ana dan Ani dengan awalan a–n yang dipakai bersama, kemudian bercabang ke a dan i.",
+    "stage": 0,
+    "minutes": 50
+  },
+  {
+    "slug": "struktur-kasus-rute",
+    "title": "Studi kasus: pencarian rute termurah",
+    "summary": "Terapkan validasi graph, Dijkstra, parent, dan penanganan tujuan yang tidak terjangkau.",
+    "analogy": "Peta rute bukan hanya daftar kota yang pernah dikunjungi; hasil yang dibutuhkan adalah urutan lokasi dari awal ke tujuan beserta biaya totalnya.",
+    "explain": [
+      "Aturan latihan: graph berarah, node berupa nama teks, dan bobot integer nonnegatif. Seluruh tetangga harus didaftarkan sebagai node. Awal atau tujuan yang tidak tersedia ditolak; tujuan yang tersedia tetapi tidak terjangkau menghasilkan None.",
+      "Dijkstra menghitung jarak terbaik dan parent. Setelah itu rute_terpendek menelusuri parent dari tujuan ke awal lalu membalik list. Awal sama dengan tujuan menghasilkan satu node dengan biaya 0. Bobot 0 diperbolehkan dan tidak berarti edge tidak ada.",
+      "Pada contoh, A–B–D berbiaya 5, A–C–D berbiaya 6, sedangkan A–C–B–D berbiaya 4. Rute dengan lebih banyak ruas justru lebih murah karena biaya per ruas berbeda. E tetap terpisah.",
+      "Jika beberapa rute mempunyai biaya minimum yang sama, contoh mengembalikan satu rute yang ditemukan melalui aturan iterasi dan heap. Jangan menguji bahwa semua implementasi harus memilih rute identik; uji validitas edge dan biaya minimumnya.",
+      "Kode lengkap mengulang fungsi dari materi Dijkstra agar artikel ini dapat dijalankan sendiri. Pengembangan berikutnya dapat memisahkan validasi, algoritma, dan tampilan ke modul. Tidak ada akses peta atau data perjalanan nyata pada program latihan ini."
+    ],
+    "table": {
+      "headers": [
+        "Skenario",
+        "Harapan"
+      ],
+      "rows": [
+        [
+          "A ke D",
+          "A–C–B–D; biaya 4"
+        ],
+        [
+          "A ke E",
+          "None"
+        ],
+        [
+          "A ke A",
+          "[A]; biaya 0"
+        ],
+        [
+          "Node tidak tersedia",
+          "ValueError"
+        ],
+        [
+          "Bobot negatif",
+          "ValueError"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program lengkap · Studi kasus: pencarian rute termurah",
+        "code": "import heapq\nfrom itertools import count\nfrom math import inf\n\ndef validasi_graph(graph):\n    if not isinstance(graph, dict):\n        raise ValueError(\"Graph harus dictionary\")\n    for node, tetangga in graph.items():\n        if not isinstance(node, str) or not node or not isinstance(tetangga, dict):\n            raise ValueError(\"Node harus teks dan tetangga harus dictionary\")\n        for tujuan, bobot in tetangga.items():\n            if tujuan not in graph:\n                raise ValueError(\"Tetangga belum didaftarkan sebagai node\")\n            if type(bobot) is not int or bobot < 0:\n                raise ValueError(\"Bobot latihan harus integer nonnegatif\")\n\ndef dijkstra(graph, awal):\n    validasi_graph(graph)\n    if not isinstance(awal, str) or awal not in graph:\n        raise ValueError(\"Node awal tidak ada\")\n    jarak, parent = {}, {}\n    for node in graph:\n        jarak[node] = inf\n        parent[node] = None\n    jarak[awal] = 0\n    urutan = count()\n    heap = [(0, next(urutan), awal)]\n    while heap:\n        biaya, nomor, node = heapq.heappop(heap)\n        if biaya != jarak[node]:\n            continue\n        for tujuan, bobot in graph[node].items():\n            calon = biaya + bobot\n            if calon < jarak[tujuan]:\n                jarak[tujuan] = calon\n                parent[tujuan] = node\n                heapq.heappush(heap, (calon, next(urutan), tujuan))\n    return jarak, parent\n\ndef rute_terpendek(graph, awal, tujuan):\n    jarak, parent = dijkstra(graph, awal)\n    if not isinstance(tujuan, str) or tujuan not in graph:\n        raise ValueError(\"Node tujuan tidak ada\")\n    if jarak[tujuan] == inf:\n        return None\n    jalur, node = [], tujuan\n    while node is not None:\n        jalur.append(node)\n        node = parent[node]\n    jalur.reverse()\n    return {\"jalur\": jalur, \"biaya\": jarak[tujuan]}\n\ngraph = {\"A\": {\"B\": 4, \"C\": 1}, \"B\": {\"D\": 1},\n         \"C\": {\"B\": 2, \"D\": 5}, \"D\": {}, \"E\": {}}\nhasil = rute_terpendek(graph, \"A\", \"D\")\nprint(\"Jalur:\", \" -> \".join(hasil[\"jalur\"]))\nprint(\"Biaya:\", hasil[\"biaya\"])\nprint(\"A ke E:\", rute_terpendek(graph, \"A\", \"E\"))\nprint(\"A ke A:\", rute_terpendek(graph, \"A\", \"A\"))",
+        "output": "Jalur: A -> C -> B -> D\nBiaya: 4\nA ke E: None\nA ke A: {'jalur': ['A'], 'biaya': 0}",
+        "explanation": "Simpan seluruh kode sebagai satu file .py. Jalankan, cocokkan keluaran, lalu uji variasi pada latihan."
+      }
+    ],
+    "steps": [
+      "Tulis aturan dan telusuri contoh kecil sebelum menjalankan kode.",
+      "Simpan program lengkap sebagai satu file .py dan jalankan dengan Python 3.",
+      "Cocokkan keluaran, kemudian kerjakan latihan dan periksa kondisi batas."
+    ],
+    "practice": [
+      "Jalankan semua skenario pada tabel.",
+      "Tambahkan edge berbobot 0 dan periksa ulang biaya.",
+      "Buat dua rute minimum dengan biaya sama lalu periksa salah satunya tetap valid.",
+      "Uji graph kosong, node hilang, dan bobot negatif."
+    ],
+    "warning": "None berarti tujuan yang terdaftar tidak terjangkau, bukan biaya 0. Graph tak berarah memerlukan edge balik yang ditambahkan secara konsisten.",
+    "check": "Mengapa urutan keluaran kunjungan Dijkstra tidak langsung menjadi jalur tujuan?",
+    "answer": "Urutan pemrosesan dapat mencakup cabang lain. Jalur harus dibentuk dari hubungan parent yang dipilih.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/readings/",
+    "diagram": "struktur-rute",
+    "diagramAlt": "Graph berarah dengan biaya A ke B 4, A ke C 1, C ke B 2, B ke D 1, dan C ke D 5. Rute A–C–B–D berbiaya 4. E terpisah.",
+    "stage": 0,
+    "minutes": 55
   }
 ]

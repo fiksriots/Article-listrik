@@ -2194,5 +2194,425 @@
       "answer": 2,
       "explanation": "Jika tugas lebih penting terus datang, diperlukan kebijakan keadilan untuk mencegah penundaan berlebihan."
     }
+  ],
+  "struktur-doubly-linked": [
+    {
+      "question": "Apa tambahan utama doubly linked list dibanding singly linked list?",
+      "options": [
+        "Referensi ke node sebelumnya",
+        "Indeks acak O(1)",
+        "Semua node otomatis terurut"
+      ],
+      "answer": 0,
+      "explanation": "Node mempunyai prev dan next sehingga dapat ditelusuri dua arah."
+    },
+    {
+      "question": "Apa nilai head.prev yang benar ketika daftar tidak kosong?",
+      "options": [
+        "Head sendiri",
+        "None",
+        "Tail selalu"
+      ],
+      "answer": 1,
+      "explanation": "Node pertama tidak mempunyai node sebelumnya."
+    },
+    {
+      "question": "Setelah item terakhir diambil, bagaimana head dan tail?",
+      "options": [
+        "Head tetap menunjuk node lama",
+        "Tail menunjuk head lama",
+        "Keduanya None"
+      ],
+      "answer": 2,
+      "explanation": "Keadaan kosong harus konsisten pada kedua ujung."
+    },
+    {
+      "question": "Apakah akses indeks sembarang otomatis O(1)?",
+      "options": [
+        "Tidak, masih perlu penelusuran",
+        "Ya selalu",
+        "Ya jika ada tail"
+      ],
+      "answer": 0,
+      "explanation": "Hubungan dua arah tidak mengubahnya menjadi array dengan akses indeks langsung."
+    }
+  ],
+  "struktur-bst-hapus": [
+    {
+      "question": "Node BST tanpa anak diganti dengan apa?",
+      "options": [
+        "Root selalu",
+        "None",
+        "Successor wajib"
+      ],
+      "answer": 1,
+      "explanation": "Leaf dapat dilepas dengan mengembalikan None kepada induknya."
+    },
+    {
+      "question": "Apa successor yang dipakai contoh untuk node dua anak?",
+      "options": [
+        "Nilai terbesar di kanan",
+        "Node sembarang",
+        "Nilai terkecil di subtree kanan"
+      ],
+      "answer": 2,
+      "explanation": "Nilai itu mempertahankan aturan urutan ketika menggantikan target."
+    },
+    {
+      "question": "Mengapa successor asal perlu dihapus setelah nilainya disalin?",
+      "options": [
+        "Agar tidak meninggalkan nilai ganda",
+        "Agar tree menjadi kosong",
+        "Agar seluruh kanan dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Menyalin saja masih menyisakan node successor lama."
+    },
+    {
+      "question": "Mengapa hasil hapus disimpan kembali sebagai root?",
+      "options": [
+        "Karena semua node selalu disalin",
+        "Penghapusan dapat mengganti root",
+        "Karena return tidak dapat memakai None"
+      ],
+      "answer": 1,
+      "explanation": "Root baru dapat berupa anak atau None, terutama saat target adalah root."
+    }
+  ],
+  "struktur-avl": [
+    {
+      "question": "Apa invariant keseimbangan AVL?",
+      "options": [
+        "Semua node memiliki dua anak",
+        "Semua leaf pada tingkat sama",
+        "Selisih tinggi kiri dan kanan maksimal satu"
+      ],
+      "answer": 2,
+      "explanation": "AVL menjaga perbedaan tinggi subtree pada setiap node tidak lebih dari satu."
+    },
+    {
+      "question": "Pola LL diperbaiki dengan apa?",
+      "options": [
+        "Rotasi kanan",
+        "Rotasi kiri saja",
+        "Menghapus root"
+      ],
+      "answer": 0,
+      "explanation": "Beban kiri-kiri dapat diperbaiki dengan rotasi kanan pada node yang tidak seimbang."
+    },
+    {
+      "question": "Apa yang dipertahankan rotasi?",
+      "options": [
+        "Bentuk tree persis sama",
+        "Urutan key saat dibaca inorder",
+        "Semua tinggi tetap sama"
+      ],
+      "answer": 1,
+      "explanation": "Rotasi mengubah bentuk sambil mempertahankan aturan urutan BST."
+    },
+    {
+      "question": "Apakah fungsi hapus BST biasa otomatis menjaga invariant AVL?",
+      "options": [
+        "Ya",
+        "Hanya pada angka positif",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Penghapusan AVL memerlukan pembaruan tinggi dan penyeimbangan tambahan."
+    }
+  ],
+  "struktur-dijkstra": [
+    {
+      "question": "Apa syarat bobot untuk Dijkstra biasa?",
+      "options": [
+        "Nonnegatif",
+        "Harus negatif",
+        "Harus semuanya sama"
+      ],
+      "answer": 0,
+      "explanation": "Dijkstra memerlukan bobot nonnegatif agar pemilihan perkiraan jarak terkecil sah."
+    },
+    {
+      "question": "Apa yang dilakukan relaxation?",
+      "options": [
+        "Menghapus seluruh edge",
+        "Memperbarui jarak jika jalur baru lebih murah",
+        "Mengurutkan nama node"
+      ],
+      "answer": 1,
+      "explanation": "Jarak tetangga diperbarui ketika biaya calon lebih kecil dari jarak yang diketahui."
+    },
+    {
+      "question": "Apa arti jarak inf pada tujuan terdaftar?",
+      "options": [
+        "Biaya 0",
+        "Tujuan sudah dilayani",
+        "Tidak terjangkau dari sumber"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada jalur dari sumber yang memberi biaya hingga tujuan tersebut."
+    },
+    {
+      "question": "Mengapa entri heap dengan biaya berbeda dari jarak terbaik dilewati?",
+      "options": [
+        "Entri itu sudah usang",
+        "Semua node harus diproses dua kali",
+        "Agar node awal dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Heap dapat menyimpan perkiraan lama yang sudah digantikan jalur lebih murah."
+    }
+  ],
+  "struktur-trie": [
+    {
+      "question": "Mengapa trie memerlukan tanda akhir kata?",
+      "options": [
+        "Agar semua prefix menjadi kata",
+        "Untuk membedakan kata lengkap dari awalan",
+        "Untuk menyimpan bobot graph"
+      ],
+      "answer": 1,
+      "explanation": "Jalur karakter dapat tersedia hanya karena bagian dari kata yang lebih panjang."
+    },
+    {
+      "question": "Setelah menyimpan Ana, apakah kata an otomatis tersedia?",
+      "options": [
+        "Ya",
+        "Hanya jika semua huruf kecil",
+        "Tidak, tetapi prefix an tersedia"
+      ],
+      "answer": 2,
+      "explanation": "Node an ada pada jalur Ana, namun tanda akhir an belum aktif."
+    },
+    {
+      "question": "Apa yang dilakukan casefold pada kebijakan contoh?",
+      "options": [
+        "Membantu pencarian tanpa membedakan kapitalisasi",
+        "Mengurutkan semua kontak berdasarkan budaya",
+        "Menghapus seluruh karakter"
+      ],
+      "answer": 0,
+      "explanation": "Normalisasi memakai casefold dan strip; itu berbeda dari aturan pengurutan bahasa."
+    },
+    {
+      "question": "Apakah menemukan node prefix otomatis menghasilkan seluruh saran?",
+      "options": [
+        "Ya",
+        "Tidak, subtree masih perlu ditelusuri",
+        "Ya jika prefix pendek"
+      ],
+      "answer": 1,
+      "explanation": "Nama lengkap harus dikumpulkan dari node terminal yang cocok."
+    }
+  ],
+  "struktur-topological-sort": [
+    {
+      "question": "Topological sort lengkap berlaku untuk graph apa?",
+      "options": [
+        "Semua graph tak berarah",
+        "Semua graph dengan siklus",
+        "DAG"
+      ],
+      "answer": 2,
+      "explanation": "Directed acyclic graph berarah tanpa siklus memungkinkan urutan seluruh prasyarat."
+    },
+    {
+      "question": "Apa arti indegree 0 pada tahap algoritma Kahn?",
+      "options": [
+        "Tidak ada prasyarat masuk yang masih tersisa",
+        "Node pasti tidak mempunyai anak",
+        "Node sudah dihapus dari hasil"
+      ],
+      "answer": 0,
+      "explanation": "Node tersebut dapat dimasukkan antrean siap."
+    },
+    {
+      "question": "Apa tanda adanya siklus pada contoh?",
+      "options": [
+        "Hasil tidak alfabetis",
+        "Jumlah node terproses kurang dari seluruh node",
+        "Ada lebih dari satu node siap"
+      ],
+      "answer": 1,
+      "explanation": "Siklus menyisakan node yang indegree-nya tidak pernah menjadi nol."
+    },
+    {
+      "question": "Apakah satu DAG hanya mempunyai satu urutan benar?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika memakai deque",
+        "Tidak selalu"
+      ],
+      "answer": 2,
+      "explanation": "Beberapa pekerjaan independen dapat ditempatkan dalam urutan berbeda tanpa melanggar edge."
+    }
+  ],
+  "struktur-union-find": [
+    {
+      "question": "Apa hasil utama find?",
+      "options": [
+        "Wakil kelompok",
+        "Rute lengkap antar node",
+        "Bobot edge"
+      ],
+      "answer": 0,
+      "explanation": "Find mengikuti hubungan parent untuk menemukan wakil himpunan."
+    },
+    {
+      "question": "Apa yang dilakukan union by size?",
+      "options": [
+        "Menggabungkan key berdasarkan alfabet",
+        "Menggantungkan kelompok kecil pada wakil kelompok besar",
+        "Menghapus semua ukuran"
+      ],
+      "answer": 1,
+      "explanation": "Aturan ini membantu mencegah tree parent menjadi terlalu tinggi."
+    },
+    {
+      "question": "Apakah union berulang pada dua anggota satu kelompok menambah ukuran lagi?",
+      "options": [
+        "Ya",
+        "Hanya jika namanya sama",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Fungsi memeriksa wakil yang sama sebelum mengubah parent atau ukuran."
+    },
+    {
+      "question": "Apakah Union-Find dasar menyediakan penghapusan edge?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Ya melalui find"
+      ],
+      "answer": 0,
+      "explanation": "Struktur dasar ini mendukung penggabungan, bukan pemisahan kelompok setelah edge dihapus."
+    }
+  ],
+  "struktur-benchmark": [
+    {
+      "question": "Apa perbedaan Big O dan benchmark?",
+      "options": [
+        "Keduanya memberi detik pasti",
+        "Big O menjelaskan pertumbuhan; benchmark mengukur lingkungan tertentu",
+        "Benchmark mengganti semua analisis"
+      ],
+      "answer": 1,
+      "explanation": "Angka percobaan dipengaruhi implementasi serta kondisi sistem."
+    },
+    {
+      "question": "Apa yang belum termasuk waktu pencarian pada contoh?",
+      "options": [
+        "Pemanggilan operator in",
+        "Pengulangan pencarian",
+        "Pembuatan list dan set"
+      ],
+      "answer": 2,
+      "explanation": "Kedua struktur disiapkan sebelum bagian pencarian diukur."
+    },
+    {
+      "question": "Apakah tracemalloc peak sama dengan seluruh RAM proses?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya jika datanya list"
+      ],
+      "answer": 0,
+      "explanation": "Tracemalloc memantau alokasi Python yang ditelusuri, bukan total seluruh memori proses."
+    },
+    {
+      "question": "Apakah hasil angka benchmark harus sama pada setiap perangkat?",
+      "options": [
+        "Ya",
+        "Tidak",
+        "Ya jika ukuran input sama"
+      ],
+      "answer": 1,
+      "explanation": "Versi Python, perangkat, dan beban sistem dapat mengubah hasil pengukuran."
+    }
+  ],
+  "struktur-kasus-kontak": [
+    {
+      "question": "Apa hasil menambah nama ana setelah Ana pada aturan contoh?",
+      "options": [
+        "Selalu membuat dua kontak",
+        "Menghapus Ana",
+        "Ditolak sebagai duplikat"
+      ],
+      "answer": 2,
+      "explanation": "Key memakai strip dan casefold, sehingga kedua nama mempunyai bentuk normalisasi sama."
+    },
+    {
+      "question": "Apa hasil saran untuk prefix yang tidak tersedia?",
+      "options": [
+        "List kosong",
+        "Seluruh kontak",
+        "Error selalu"
+      ],
+      "answer": 0,
+      "explanation": "Tidak ada cabang yang cocok untuk menghasilkan nama."
+    },
+    {
+      "question": "Apa hasil ketika limit 0?",
+      "options": [
+        "Satu kontak pertama",
+        "List kosong",
+        "Seluruh kontak"
+      ],
+      "answer": 1,
+      "explanation": "Batas nol berarti tidak ada hasil yang dikumpulkan."
+    },
+    {
+      "question": "Apakah urutan leksikografis karakter sama dengan semua aturan pengurutan nama manusia?",
+      "options": [
+        "Ya",
+        "Hanya untuk semua Unicode",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Aturan bahasa dan budaya dapat berbeda; contoh tidak menerapkan pengurutan locale khusus."
+    }
+  ],
+  "struktur-kasus-rute": [
+    {
+      "question": "Berapa biaya A–C–B–D pada contoh?",
+      "options": [
+        "4",
+        "5",
+        "6"
+      ],
+      "answer": 0,
+      "explanation": "Biayanya 1 + 2 + 1 = 4."
+    },
+    {
+      "question": "Apa hasil awal sama dengan tujuan yang tersedia?",
+      "options": [
+        "None",
+        "Jalur satu node dengan biaya 0",
+        "Seluruh graph"
+      ],
+      "answer": 1,
+      "explanation": "Tidak perlu melewati edge untuk mencapai titik awal itu sendiri."
+    },
+    {
+      "question": "Mengapa urutan node diproses bukan otomatis jalur tujuan?",
+      "options": [
+        "Karena graph tidak boleh memakai heap",
+        "Karena setiap node harus terurut alfabet",
+        "Urutan itu dapat mencakup cabang lain"
+      ],
+      "answer": 2,
+      "explanation": "Jalur harus direkonstruksi melalui parent dari tujuan ke sumber."
+    },
+    {
+      "question": "Jika dua rute mempunyai biaya minimum sama, apa yang sebaiknya diuji?",
+      "options": [
+        "Validitas edge dan biaya minimum",
+        "Nama rute harus selalu identik pada semua implementasi",
+        "Jumlah huruf node"
+      ],
+      "answer": 0,
+      "explanation": "Algoritma dapat memilih salah satu rute minimum tergantung aturan iterasi."
+    }
   ]
 }

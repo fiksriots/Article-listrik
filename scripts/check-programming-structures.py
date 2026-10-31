@@ -9,7 +9,7 @@ import tempfile
 
 root = Path(__file__).resolve().parents[1]
 lessons = json.loads((root / 'lib/programming-data-structure-lessons.json').read_text())
-assert len(lessons) == 24
+assert len(lessons) == 34
 namespaces = {}
 with tempfile.TemporaryDirectory() as folder:
     for lesson in lessons:
@@ -160,4 +160,4 @@ for task, priority in [('', 1), ('A', 0), ('A', -1), ('A', True), (None, 1)]:
     else:
         raise AssertionError('Invalid task accepted')
     assert state == before
-print('PASS: 24 structure lessons; algorithm boundaries, circular wraparound, BST duplicates, graph cycles, hash collisions, brackets, and stable priority ties')
+print('PASS: 34 structure lessons; algorithm boundaries, circular wraparound, BST duplicates, graph cycles, hash collisions, brackets, and stable priority ties')

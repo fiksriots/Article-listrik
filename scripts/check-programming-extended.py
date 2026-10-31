@@ -4,6 +4,7 @@ import contextlib
 import io
 import json
 import os
+import re
 from pathlib import Path
 import runpy
 import sys
@@ -58,7 +59,12 @@ for lesson in extra + structures:
                     return value
                 with contextlib.redirect_stdout(output), patch('builtins.input', input_example):
                     runpy.run_path(str(target), run_name='__main__')
-                assert output.getvalue().strip() == block['output'].strip(), (lesson['slug'], output.getvalue(), block['output'])
+                if block.get('measurement'):
+                    pattern = r'n=(1000|10000) \| list=\d+\.\d{9} \| set=\d+\.\d{9} \| peak_list=\d+ \| peak_set=\d+'
+                    assert len(output.getvalue().strip().splitlines()) == 2
+                    assert all(re.fullmatch(pattern, line) for line in output.getvalue().strip().splitlines())
+                else:
+                    assert output.getvalue().strip() == block['output'].strip(), (lesson['slug'], output.getvalue(), block['output'])
         finally:
             sys.path.pop(0)
             os.chdir(previous_cwd)
@@ -104,4 +110,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 52 ordered lessons, 208 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 62 ordered lessons, 248 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

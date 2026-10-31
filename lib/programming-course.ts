@@ -4,7 +4,7 @@ import structures from './programming-data-structure-lessons.json';
 import order from './programming-order.json';
 
 export const programmingStages = order.map(group => group.title);
-type ProgrammingBlock = {label:string; code:string; output:string; explanation:string; language?:string; filename?:string; inputs?:string[]};
+type ProgrammingBlock = {label:string; code:string; output:string; explanation:string; language?:string; filename?:string; inputs?:string[]; measurement?:boolean};
 type ProgrammingLesson = Omit<(typeof data)[number], 'blocks'> & {blocks:ProgrammingBlock[]};
 const allLessons:ProgrammingLesson[] = [...data, ...extended, ...structures];
 // One order drives the catalogue, previous/next links, search and progress.
