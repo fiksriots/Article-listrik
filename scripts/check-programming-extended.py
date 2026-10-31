@@ -16,13 +16,15 @@ base = json.loads((ROOT / 'lib/programming-lessons.json').read_text())
 extra = json.loads((ROOT / 'lib/programming-extended-lessons.json').read_text())
 structures = json.loads((ROOT / 'lib/programming-data-structure-lessons.json').read_text())
 oop = json.loads((ROOT / 'lib/programming-oop-lessons.json').read_text())
+databases = json.loads((ROOT / 'lib/programming-database-lessons.json').read_text())
+from programming_sql_runner import run_sql
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
-slugs = [item['slug'] for item in base + extra + structures + oop]
+slugs = [item['slug'] for item in base + extra + structures + oop + databases]
 ordered = [slug for group in order for slug in group['slugs']]
-assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop)
+assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases)
 assert set(slugs) == set(ordered) == set(quizzes)
-for lesson in base + extra + structures + oop:
+for lesson in base + extra + structures + oop + databases:
     assert len(lesson['explain']) >= 3
     assert all(len(row) == len(lesson['table']['headers']) for row in lesson['table']['rows'])
     if lesson['diagram']:
@@ -36,7 +38,7 @@ for lesson in base + extra + structures + oop:
             ast.parse(question['code'])
 
 previous_cwd = Path.cwd()
-for lesson in extra + structures + oop:
+for lesson in extra + structures + oop + databases:
     with tempfile.TemporaryDirectory() as temp:
         folder = Path(temp)
         # Multi-file module examples share this folder; each other lesson is isolated.
@@ -50,6 +52,9 @@ for lesson in extra + structures + oop:
         try:
             for index, block in enumerate(lesson['blocks']):
                 if block.get('language') == 'text':
+                    continue
+                if block.get('language') == 'sql':
+                    assert run_sql(block['code']).strip() == block['output'].strip(), lesson['slug']
                     continue
                 ast.parse(block['code'])
                 target = folder / block.get('filename', f'example_{index}.py')
@@ -114,4 +119,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 95 ordered lessons, 380 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 113 ordered lessons, 452 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

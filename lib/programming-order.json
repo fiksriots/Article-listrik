@@ -168,5 +168,48 @@
       "oop-kasus-monitoring",
       "oop-proyek-tiket"
     ]
+  },
+  {
+    "title": "Basis Data · Konsep dan rancangan",
+    "slugs": [
+      "db-pengantar",
+      "db-tabel-kunci",
+      "db-relasi-erd",
+      "db-normalisasi"
+    ]
+  },
+  {
+    "title": "Basis Data · Praktik SQL",
+    "slugs": [
+      "db-sqlite-latihan",
+      "db-create-tipe",
+      "db-crud",
+      "db-select-filter",
+      "db-join",
+      "db-agregasi"
+    ]
+  },
+  {
+    "title": "Basis Data · Integritas dan kinerja",
+    "slugs": [
+      "db-integritas",
+      "db-transaksi",
+      "db-indeks"
+    ]
+  },
+  {
+    "title": "Basis Data · Python dan pemeliharaan",
+    "slugs": [
+      "db-python-sqlite",
+      "db-parameter",
+      "db-migrasi-backup"
+    ]
+  },
+  {
+    "title": "Basis Data · Studi kasus",
+    "slugs": [
+      "db-kasus-perpustakaan",
+      "db-kasus-tiket"
+    ]
   }
 ]

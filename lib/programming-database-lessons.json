@@ -1,0 +1,1230 @@
+[
+  {
+    "slug": "db-pengantar",
+    "title": "Basis data, DBMS, dan SQL: mulai dari kebutuhan",
+    "summary": "Bedakan data, database, pengelola database, dan bahasa kueri.",
+    "analogy": "Lemari arsip berisi kartu pelanggan; petugas mempunyai aturan untuk menambah, mencari, dan memperbarui kartu.",
+    "explain": [
+      "Basis data adalah kumpulan data yang diatur untuk digunakan kembali. DBMS adalah perangkat lunak yang mengelola data tersebut, termasuk struktur, pencarian, perubahan, dan transaksi. SQL adalah bahasa untuk menyatakan operasi pada banyak DBMS relasional.",
+      "Data dalam berkas JSON tetap bermanfaat, tetapi kebutuhan pencarian lintas entitas, aturan hubungan, serta perubahan bersama dapat mendorong pemakaian DBMS. Database tidak menggantikan perancangan dan validasi aplikasi; ia memberi tempat tambahan untuk menegakkan aturan.",
+      "Jalur ini memakai SQLite supaya latihan tidak memerlukan server database terpisah. SQLite adalah engine tertanam; database di disk umumnya disimpan dalam satu berkas utama dengan kemungkinan berkas pendamping saat digunakan. PostgreSQL dan MySQL memakai arsitektur server yang berbeda, meskipun banyak konsep SQL sama.",
+      "Mulai dari konsep tanpa harus menuntaskan OOP. Untuk bab integrasi Python, pahami fungsi, exception, import, dan pengolahan file dari Pemrograman Terstruktur. Contoh SQL mengikuti dialek SQLite; jangan menganggap semua sintaks dapat disalin ke DBMS lain tanpa penyesuaian."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Database",
+          "Data yang terorganisasi",
+          "Data pelanggan dan tiket"
+        ],
+        [
+          "DBMS",
+          "Perangkat lunak pengelola",
+          "SQLite, PostgreSQL, MySQL"
+        ],
+        [
+          "SQL",
+          "Bahasa kueri",
+          "SELECT, INSERT"
+        ],
+        [
+          "Aplikasi",
+          "Pemakai database",
+          "Program helpdesk Python"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Basis data, DBMS, dan SQL: mulai dari kebutuhan",
+        "code": "CREATE TABLE pelanggan (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\nINSERT INTO pelanggan (id, nama) VALUES (1, 'Ana'), (2, 'Budi');\nSELECT id, nama FROM pelanggan ORDER BY id;",
+        "output": "1 | Ana\n2 | Budi",
+        "explanation": "CREATE mendefinisikan tabel; INSERT menambah baris; SELECT membaca hasil. Pemisah | pada contoh keluaran hanya penyajian kolom, bukan karakter yang disimpan di nama.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Sebutkan contoh data di pekerjaanmu yang perlu dicari kembali.",
+      "Bandingkan tujuan file JSON dengan DBMS untuk data yang berhubungan.",
+      "Jelaskan perbedaan SQLite dan SQL dalam satu kalimat."
+    ],
+    "warning": "Jalankan contoh pada database latihan kosong. Setiap artikel SQL menyediakan tabelnya sendiri; nama tabel dapat sama dengan artikel lain sehingga jangan menumpuk semuanya pada satu database tanpa sengaja.",
+    "check": "Apakah SQL sama dengan SQLite?",
+    "answer": "Tidak. SQL adalah bahasa, sedangkan SQLite adalah engine database yang memahami dialek SQL tertentu.",
+    "source": "https://www.sqlite.org/whentouse.html",
+    "diagram": "db-gambaran",
+    "diagramAlt": "Program mengirim SQL ke engine SQLite yang mengelola tabel pelanggan dan tiket dalam database latihan.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-tabel-kunci",
+    "title": "Tabel, baris, kolom, dan kunci",
+    "summary": "Pilih identitas yang stabil dan bedakan nilai kosong dengan nilai yang belum diketahui.",
+    "analogy": "Satu kartu mewakili satu pelanggan; nomor pelanggan membedakannya meskipun dua orang mempunyai nama sama.",
+    "explain": [
+      "Tabel menyimpan baris dengan kolom yang disepakati. Satu baris pelanggan sebaiknya mewakili satu pelanggan, bukan daftar banyak pelanggan sekaligus. Kolom memiliki makna jelas seperti id, nama, dan email.",
+      "Primary key mengidentifikasi baris secara unik. Nama orang biasanya tidak cocok menjadi identitas karena dapat sama atau berubah. SQLite INTEGER PRIMARY KEY mempunyai perilaku khusus sebagai alias rowid pada tabel biasa; contoh mengisi id secara eksplisit agar alurnya terlihat.",
+      "UNIQUE menyatakan nilai yang tidak boleh sama, sedangkan NOT NULL menyatakan nilai wajib tersedia. Pada SQLite, UNIQUE tetap memungkinkan beberapa NULL; itu berbeda dari melarang data email kosong. Teks kosong juga berbeda dari NULL.",
+      "NULL menyatakan tidak ada nilai yang diketahui atau berlaku. Periksa dengan IS NULL atau IS NOT NULL, bukan = NULL. Tentukan sendiri arti NULL pada tiap kolom; jangan menggunakannya sebagai pengganti semua kesalahan input."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Primary key",
+          "Identitas unik baris",
+          "id pelanggan"
+        ],
+        [
+          "UNIQUE",
+          "Nilai tidak berulang menurut aturan DBMS",
+          "Email yang terisi"
+        ],
+        [
+          "NOT NULL",
+          "Nilai wajib tersedia",
+          "nama"
+        ],
+        [
+          "NULL",
+          "Tidak ada nilai yang diketahui / berlaku",
+          "Email belum dicatat"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Tabel, baris, kolom, dan kunci",
+        "code": "CREATE TABLE pelanggan (\n id INTEGER PRIMARY KEY,\n nama TEXT NOT NULL,\n email TEXT UNIQUE\n);\nINSERT INTO pelanggan VALUES (1, 'Ana', NULL), (2, 'Ana', 'ana@example.test');\nSELECT id, nama FROM pelanggan WHERE email IS NULL ORDER BY id;",
+        "output": "1 | Ana",
+        "explanation": "Dua pelanggan boleh bernama sama. Identitasnya tetap berbeda karena primary key berbeda; satu email belum dicatat.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Tambahkan dua pelanggan dengan nama sama dan id berbeda.",
+      "Bandingkan email NULL dengan string kosong.",
+      "Coba id duplikat pada database latihan dan baca error constraint."
+    ],
+    "warning": "Primary key tidak otomatis menyatakan urutan bisnis. Gunakan ORDER BY saat hasil harus mempunyai urutan tertentu.",
+    "check": "Apakah nama pelanggan yang sama berarti barisnya pasti duplikat?",
+    "answer": "Tidak. Nama dapat sama; aturan identitas ditentukan oleh kunci dan kebutuhan bisnis.",
+    "source": "https://www.sqlite.org/lang_createtable.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-relasi-erd",
+    "title": "Relasi dan ERD: menghubungkan entitas",
+    "summary": "Rancang hubungan satu-ke-banyak dan banyak-ke-banyak dengan foreign key.",
+    "analogy": "Satu teknisi dapat menangani banyak tiket. Untuk mencatat banyak peserta dalam banyak kelas, diperlukan kartu penghubung keikutsertaan.",
+    "explain": [
+      "Entity adalah hal yang datanya ingin dikelola, misalnya Teknisi dan Tiket. ERD menggambarkan entitas, atribut penting, serta banyaknya hubungan. Satu teknisi dapat mempunyai nol atau banyak tiket; satu tiket pada contoh mempunyai tepat satu teknisi.",
+      "Foreign key pada tiket menunjuk primary key teknisi. Kolom teknisi_id NOT NULL mewajibkan penugasan. Jika penugasan belum wajib, kolom boleh NULL dan hubungan menjadi opsional. Pilihan ini mengikuti kebutuhan, bukan sekadar cara menggambar.",
+      "Hubungan banyak-ke-banyak membutuhkan tabel penghubung. Misalnya peserta_kelas mempunyai peserta_id dan kelas_id, dengan primary key gabungan agar pasangan yang sama tidak dicatat dua kali. Satu kolom berisi teks \"1,2,3\" menyulitkan integritas dan pencarian.",
+      "Pada SQLite aktifkan PRAGMA foreign_keys = ON pada setiap koneksi sebelum memulai transaksi. Mendefinisikan REFERENCES saja tidak cukup jika pemeriksaannya tidak aktif. Gambar memakai label jumlah agar hubungan mudah dibaca."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Satu-ke-banyak",
+          "Satu induk dirujuk banyak anak",
+          "Teknisi → tiket"
+        ],
+        [
+          "Banyak-ke-banyak",
+          "Gunakan tabel penghubung",
+          "Peserta ↔ kelas"
+        ],
+        [
+          "Foreign key",
+          "Referensi ke kunci induk",
+          "tiket.teknisi_id"
+        ],
+        [
+          "Opsional",
+          "Boleh belum punya pasangan",
+          "Kolom foreign key dapat NULL"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Relasi dan ERD: menghubungkan entitas",
+        "code": "PRAGMA foreign_keys = ON;\nCREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\nCREATE TABLE tiket (\n id INTEGER PRIMARY KEY,\n judul TEXT NOT NULL,\n teknisi_id INTEGER NOT NULL REFERENCES teknisi(id)\n);\nINSERT INTO teknisi VALUES (1, 'Ana');\nINSERT INTO tiket VALUES (101, 'Link putus', 1), (102, 'Kabel rusak', 1);\nSELECT teknisi_id, COUNT(*) FROM tiket GROUP BY teknisi_id ORDER BY teknisi_id;",
+        "output": "1 | 2",
+        "explanation": "Hasil menghitung dua tiket yang menunjuk teknisi 1. Agregasi akan dipelajari lebih jauh setelah SELECT dan JOIN.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Gambar pelanggan dan tiket beserta jumlah hubungannya.",
+      "Tentukan apakah tiket boleh belum ditugaskan.",
+      "Rancang tabel penghubung untuk peserta dan kelas tanpa daftar id dalam satu sel."
+    ],
+    "warning": "ERD tidak otomatis menegakkan aturan. Terjemahkan hubungan ke kunci, constraint, dan transaksi yang sesuai, lalu uji data yang tidak valid.",
+    "check": "Apakah foreign key yang nullable mewajibkan semua baris mempunyai induk?",
+    "answer": "Tidak. NULL dapat menyatakan belum ada pasangan; nilai non-NULL tetap harus menunjuk induk yang tersedia saat pemeriksaan aktif.",
+    "source": "https://www.sqlite.org/foreignkeys.html",
+    "diagram": "db-relasi",
+    "diagramAlt": "Teknisi satu ke banyak Tiket. Peserta dan Kelas dihubungkan tabel PesertaKelas untuk relasi banyak-ke-banyak.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-normalisasi",
+    "title": "Normalisasi dasar: mengurangi duplikasi dan anomali",
+    "summary": "Pisahkan fakta menurut ketergantungannya tanpa memecah tabel secara sembarang.",
+    "analogy": "Alamat pelanggan cukup dikelola pada kartu pelanggan, bukan disalin ke setiap kartu tiket sampai pembaruannya terlewat di beberapa tempat.",
+    "explain": [
+      "Normalisasi membantu mengatur fakta supaya pengubahan data tidak menimbulkan ketidakkonsistenan. Tabel tiket yang berulang kali menyalin nama teknisi dapat menimbulkan anomali pembaruan: satu nama berubah di sebagian tiket tetapi tidak di tiket lain.",
+      "Pada 1NF, nilai tiap kolom diperlakukan sebagai satu nilai dalam model dan tidak ada kelompok kolom berulang untuk daftar item. Jangan menaruh beberapa nomor teknisi sebagai teks daftar jika tiap hubungan perlu dikelola sendiri.",
+      "Pada 2NF, fakta nonkunci tidak hanya bergantung pada sebagian kunci kandidat gabungan. Misalnya pada detail_pesanan dengan kunci (pesanan_id, produk_id), nama produk yang bergantung hanya pada produk_id lebih sesuai berada di produk. Pada 3NF, hindari ketergantungan transitif nonkunci, seperti nama teknisi yang bergantung pada teknisi_id dalam tabel tiket.",
+      "Contoh memisahkan teknisi dan tiket, kemudian menggabungkan tampilannya dengan JOIN. Ini tidak berarti seluruh duplikasi selalu salah: harga transaksi historis dapat sengaja disimpan sebagai snapshot. Dokumentasikan fakta yang memang historis dan ukur kebutuhan sebelum melakukan denormalisasi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Anomali pembaruan",
+          "Fakta sama berubah tidak seragam",
+          "Nama teknisi berulang di tiket"
+        ],
+        [
+          "1NF",
+          "Hindari kelompok berulang yang perlu dikelola terpisah",
+          "Satu baris per hubungan"
+        ],
+        [
+          "2NF",
+          "Hindari ketergantungan parsial pada kunci gabungan",
+          "Nama produk berada di produk"
+        ],
+        [
+          "3NF",
+          "Hindari ketergantungan transitif nonkunci",
+          "Nama teknisi berada di teknisi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Normalisasi dasar: mengurangi duplikasi dan anomali",
+        "code": "PRAGMA foreign_keys = ON;\nCREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, judul TEXT NOT NULL,\n teknisi_id INTEGER NOT NULL REFERENCES teknisi(id));\nINSERT INTO teknisi VALUES (1, 'Ana');\nINSERT INTO tiket VALUES (1, 'Link A', 1), (2, 'Link B', 1);\nUPDATE teknisi SET nama = 'Ana Putri' WHERE id = 1;\nSELECT t.id, n.nama FROM tiket AS t JOIN teknisi AS n ON n.id = t.teknisi_id ORDER BY t.id;",
+        "output": "1 | Ana Putri\n2 | Ana Putri",
+        "explanation": "Nama diperbarui pada satu baris teknisi dan dibaca melalui relasi. Sintaks JOIN dibahas setelah dasar SELECT.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Temukan fakta berulang pada tabel tiket yang juga menyimpan nama teknisi.",
+      "Pisahkan fakta milik teknisi dari fakta milik tiket.",
+      "Jelaskan perbedaan nama produk terkini dengan harga yang disepakati pada transaksi lama."
+    ],
+    "warning": "Ringkasan 1NF–3NF adalah pengantar. Untuk rancangan kompleks, analisis kunci kandidat dan ketergantungan fungsional secara lengkap; jangan mengklaim suatu tabel normal hanya berdasarkan banyaknya kolom.",
+    "check": "Apakah memecah satu tabel menjadi sebanyak mungkin tabel pasti lebih baik?",
+    "answer": "Tidak. Pemisahan mengikuti fakta dan ketergantungan; terlalu banyak pemecahan tanpa kebutuhan juga menyulitkan.",
+    "source": "https://www.sqlite.org/lang.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-sqlite-latihan",
+    "title": "Menyiapkan SQLite dan menjalankan SQL pertama",
+    "summary": "Pahami database file, database memori, dan cara mengulangi latihan.",
+    "analogy": "Buku latihan baru mencegah catatan percobaan bercampur dengan arsip kerja yang sebenarnya.",
+    "explain": [
+      "Untuk SQL murni, gunakan shell resmi sqlite3 bila sudah terpasang. Dari terminal, perintah sqlite3 latihan.db membuka atau membuat database latihan. Jika perintah tidak ditemukan, ikuti petunjuk distribusi OS atau unduhan shell resmi SQLite; engine SQLite dalam Python tidak otomatis memasang shell terminal.",
+      "Di shell SQLite, tempelkan SQL berakhir titik koma. Perintah khusus shell seperti .tables, .schema, .mode list, dan .quit bukan SQL biasa sehingga tidak dijalankan lewat con.execute pada Python. Setiap blok di jalur ini lengkap dan sebaiknya dicoba pada database kosong yang berbeda.",
+      "Contoh keluaran di situs menampilkan hanya baris kueri dengan pemisah | dan NULL untuk nilai yang kosong. Shell atau alat lain mungkin menampilkan header, garis tabel, pesan status, atau NULL berbeda; bandingkan nilai barisnya. SQL tanpa ORDER BY tidak menjanjikan urutan hasil.",
+      "Jika memakai Python, sqlite3.connect(\":memory:\") membuat database sementara khusus koneksi. sqlite3.connect(\"latihan.db\") memakai file yang dapat bertahan setelah koneksi ditutup asalkan transaksi perubahan diselesaikan. Integrasinya dipelajari setelah SQL dasar."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Terminal",
+          "Membuka database file",
+          "sqlite3 latihan.db"
+        ],
+        [
+          "Shell SQLite",
+          "Perintah bantu khusus shell",
+          ".tables, .schema, .quit"
+        ],
+        [
+          "SQL",
+          "Pernyataan database",
+          "CREATE TABLE ...;"
+        ],
+        [
+          "Database memori",
+          "Sementara pada koneksi",
+          ":memory: pada Python"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Menyiapkan SQLite dan menjalankan SQL pertama",
+        "code": "CREATE TABLE latihan (id INTEGER PRIMARY KEY, pesan TEXT NOT NULL);\nINSERT INTO latihan VALUES (1, 'SQLite siap');\nSELECT pesan FROM latihan ORDER BY id;",
+        "output": "SQLite siap",
+        "explanation": "Blok ini SQL, bukan program Python. Buka database latihan kosong lalu jalankan semua pernyataan; ulangi dengan database baru jika tabel sudah ada.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Buka shell pada file latihan baru dan jalankan contoh.",
+      "Periksa tabel dengan .tables dan skema dengan .schema latihan.",
+      "Tutup shell lalu buka kembali file yang sama dan baca datanya."
+    ],
+    "warning": "Jangan memakai database kerja untuk mencoba UPDATE, DELETE, DROP, atau percobaan skema. Pelajaran menggunakan database latihan yang boleh dibuat ulang.",
+    "check": "Apakah .tables merupakan SQL yang dapat dipanggil lewat con.execute?",
+    "answer": "Tidak. Itu perintah khusus shell SQLite; API Python menggunakan SQL untuk operasi database.",
+    "source": "https://www.sqlite.org/cli.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-create-tipe",
+    "title": "CREATE TABLE, tipe data, dan skema",
+    "summary": "Bentuk tabel dengan aturan nilai yang sesuai SQLite.",
+    "analogy": "Formulir yang baik menentukan kolom wajib dan arti setiap isian sebelum petugas mulai mengisinya.",
+    "explain": [
+      "CREATE TABLE mendefinisikan nama kolom dan constraint. Contoh barang memiliki id, nama wajib tidak kosong setelah trim, harga rupiah bulat, dan stok bulat tidak negatif. Nama kolom sebaiknya jelas dan konsisten.",
+      "SQLite menggunakan type affinity pada tabel biasa: nama tipe mengarahkan perlakuan nilai, tetapi INTEGER saja tidak seketat deklarasi tipe pada sebagian DBMS lain. Contoh memakai CHECK(typeof(stok) = 'integer' AND stok >= 0) agar nilai yang tersimpan benar-benar integer tidak negatif.",
+      "NOT NULL dan CHECK mempunyai peran berbeda. CHECK yang bernilai NULL tidak dianggap gagal oleh SQLite, sehingga kombinasikan NOT NULL jika nilai wajib ada. Untuk nama, NOT NULL saja belum melarang string kosong; tambahkan pemeriksaan panjang setelah trim.",
+      "Harga pada contoh memakai integer rupiah agar perhitungan tidak bergantung pembulatan floating-point. Untuk tanggal, contoh berikutnya memakai teks ISO yang konsisten; SQLite tidak mempunyai tipe tanggal terpisah seperti beberapa DBMS lain. Ketahui aturan engine yang digunakan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "INTEGER PRIMARY KEY",
+          "Identitas tabel biasa",
+          "id"
+        ],
+        [
+          "TEXT NOT NULL",
+          "Teks wajib tersedia",
+          "nama"
+        ],
+        [
+          "CHECK",
+          "Syarat nilai",
+          "stok >= 0 dan typeof integer"
+        ],
+        [
+          "Type affinity",
+          "Aturan tipe SQLite biasa",
+          "Bukan validasi kaku otomatis"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · CREATE TABLE, tipe data, dan skema",
+        "code": "CREATE TABLE barang (\n id INTEGER PRIMARY KEY,\n nama TEXT NOT NULL CHECK(length(trim(nama)) > 0),\n harga INTEGER NOT NULL CHECK(typeof(harga) = 'integer' AND harga >= 0),\n stok INTEGER NOT NULL DEFAULT 0 CHECK(typeof(stok) = 'integer' AND stok >= 0)\n);\nINSERT INTO barang (id, nama, harga) VALUES (1, 'Kabel', 5000);\nSELECT nama, harga, stok, typeof(stok) FROM barang ORDER BY id;",
+        "output": "Kabel | 5000 | 0 | integer",
+        "explanation": "DEFAULT stok dipakai saat kolom tersebut tidak diberi nilai. CHECK memeriksa nilai setelah aturan affinity diterapkan, bukan bentuk teks input awal.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Uji nama kosong, stok negatif, dan NULL pada database latihan.",
+      "Coba nilai 2.5 lalu periksa apakah constraint menolaknya.",
+      "Jelaskan kapan nilai default digunakan."
+    ],
+    "warning": "Validasi database memeriksa nilai tersimpan. Aplikasi tetap perlu aturan input, misalnya menolak bool dari Python yang dapat dipetakan menjadi angka 0 atau 1.",
+    "check": "Apakah INTEGER pada tabel SQLite biasa sendiri cukup untuk melarang semua nilai bertipe lain?",
+    "answer": "Tidak. Pahami affinity dan tambahkan constraint atau pilih fitur tipe yang sesuai kebutuhan; contoh memakai CHECK typeof.",
+    "source": "https://www.sqlite.org/datatype3.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-crud",
+    "title": "INSERT, UPDATE, dan DELETE dengan sasaran jelas",
+    "summary": "Ubah data sambil memeriksa baris yang akan terdampak.",
+    "analogy": "Petugas memperbarui kartu dengan nomor tertentu, bukan menimpa semua kartu karena lupa menentukan sasarannya.",
+    "explain": [
+      "CRUD merangkum Create, Read, Update, Delete pada data. Dalam SQL, penambahan baris memakai INSERT, pembacaan memakai SELECT, perubahan memakai UPDATE, dan penghapusan memakai DELETE. CREATE TABLE sendiri membuat struktur, bukan menambah satu pelanggan.",
+      "Tuliskan daftar kolom pada INSERT agar hubungan nilai dengan kolom jelas. UPDATE memakai SET untuk nilai baru dan WHERE untuk memilih baris. DELETE FROM ... WHERE ... menghapus baris yang memenuhi kondisi.",
+      "Sebelum perubahan, jalankan SELECT dengan kondisi yang sama untuk memeriksa sasaran. UPDATE atau DELETE tanpa WHERE dapat memengaruhi seluruh baris. Untuk latihan yang berisiko salah, gunakan transaksi agar dapat diperiksa sebelum COMMIT.",
+      "Contoh menambah dua barang, menambah stok hanya id 1, lalu menghapus id 2. DELETE berbeda dengan DROP TABLE: DELETE menghapus baris, sedangkan DROP menghapus objek tabel beserta datanya. Bab transaksi membahas pembatalan perubahan lebih jauh."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "INSERT",
+          "Menambah baris",
+          "INSERT INTO ... (kolom) VALUES ..."
+        ],
+        [
+          "UPDATE",
+          "Mengubah baris terpilih",
+          "SET ... WHERE id = ..."
+        ],
+        [
+          "DELETE",
+          "Menghapus baris terpilih",
+          "DELETE FROM ... WHERE ..."
+        ],
+        [
+          "WHERE",
+          "Sasaran perubahan",
+          "Periksa dahulu dengan SELECT"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · INSERT, UPDATE, dan DELETE dengan sasaran jelas",
+        "code": "CREATE TABLE barang (id INTEGER PRIMARY KEY, nama TEXT NOT NULL, stok INTEGER NOT NULL CHECK(stok >= 0));\nINSERT INTO barang (id, nama, stok) VALUES (1, 'Kabel', 3), (2, 'Adaptor', 1);\nUPDATE barang SET stok = stok + 2 WHERE id = 1;\nDELETE FROM barang WHERE id = 2;\nSELECT id, nama, stok FROM barang ORDER BY id;",
+        "output": "1 | Kabel | 5",
+        "explanation": "UPDATE memodifikasi stok dari 3 menjadi 5, bukan mengganti seluruh tabel. Baris adaptor dihapus tetapi tabel tetap ada.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Tuliskan SELECT pemeriksaan untuk setiap WHERE sebelum menjalankan perubahan.",
+      "Tambahkan barang ketiga lalu ubah hanya barang itu.",
+      "Bandingkan DELETE satu baris dengan DROP pada database latihan terpisah."
+    ],
+    "warning": "Jangan mencoba perubahan tanpa WHERE pada database penting. Pembatasan akses dan cadangan juga diperlukan pada sistem nyata; latihan tidak memberi izin mengubah data produksi.",
+    "check": "Apa akibat UPDATE barang SET stok = 0 tanpa WHERE?",
+    "answer": "Seluruh baris yang ada di barang diperbarui menjadi stok 0.",
+    "source": "https://www.sqlite.org/lang_update.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-select-filter",
+    "title": "SELECT, WHERE, ORDER BY, dan LIMIT",
+    "summary": "Ambil kolom yang diperlukan dan tentukan urutan hasil.",
+    "analogy": "Daripada membuka semua arsip, minta kartu yang memenuhi kriteria lalu susun berdasarkan urutan yang dibutuhkan.",
+    "explain": [
+      "SELECT memilih kolom; FROM menetapkan sumber; WHERE menyaring baris. Gunakan kolom yang dibutuhkan agar hasil lebih jelas daripada selalu SELECT *. Alias AS dapat memberi judul hasil yang lebih bermakna.",
+      "Gabungkan kondisi dengan AND, OR, serta tanda kurung agar maksudnya jelas. Operator seperti >=, IN, BETWEEN, dan LIKE membantu penyaringan. Perilaku pencocokan huruf SQLite perlu dipahami bila kebutuhan melibatkan Unicode atau pencarian bahasa tertentu.",
+      "ORDER BY menetapkan urutan. Jika nilai pengurutan sama, tambahkan kolom pembeda seperti primary key agar urutan stabil. LIMIT membatasi banyaknya baris, tetapi tanpa ORDER BY tidak mendefinisikan “terbesar”, “terbaru”, atau pilihan yang stabil.",
+      "NULL harus diperiksa dengan IS NULL atau IS NOT NULL. Kondisi kolom = NULL tidak bekerja seperti menyamakan dua nilai biasa. Jika perlu pengganti saat ditampilkan, COALESCE dapat memilih nilai non-NULL pertama."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "SELECT",
+          "Kolom hasil",
+          "nama, stok"
+        ],
+        [
+          "WHERE",
+          "Filter baris",
+          "stok >= 2"
+        ],
+        [
+          "ORDER BY",
+          "Urutan hasil",
+          "stok DESC, id ASC"
+        ],
+        [
+          "LIMIT",
+          "Batas jumlah hasil",
+          "LIMIT 2"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · SELECT, WHERE, ORDER BY, dan LIMIT",
+        "code": "CREATE TABLE barang (id INTEGER PRIMARY KEY, nama TEXT, stok INTEGER);\nINSERT INTO barang VALUES (1, 'Kabel', 5), (2, 'Adaptor', 2), (3, 'Switch', 5), (4, 'Rak', 0);\nSELECT nama, stok FROM barang WHERE stok >= 2 ORDER BY stok DESC, id ASC LIMIT 2;",
+        "output": "Kabel | 5\nSwitch | 5",
+        "explanation": "Kabel dan Switch mempunyai stok sama; id ASC memecahkan nilai yang seri agar hasil terurut jelas.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Ubah filter stok >= 2 menjadi BETWEEN 1 AND 4.",
+      "Tambahkan nama dengan stok sama dan tentukan urutan kedua.",
+      "Coba LIMIT tanpa ORDER BY dan jelaskan mengapa hasil tidak boleh dianggap barang terbaik."
+    ],
+    "warning": "LIMIT bukan pengganti filter yang benar. SQL juga tidak menjamin urutan hanya karena data dimasukkan pada urutan tertentu.",
+    "check": "Mengapa ORDER BY stok DESC saja belum cukup untuk urutan pasti pada stok sama?",
+    "answer": "Baris dengan nilai seri perlu pemecah urutan, misalnya id ASC.",
+    "source": "https://www.sqlite.org/lang_select.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-join",
+    "title": "INNER JOIN dan LEFT JOIN",
+    "summary": "Gabungkan data yang berhubungan tanpa kehilangan baris yang seharusnya dipertahankan.",
+    "analogy": "Daftar teknisi ditempelkan dengan kartu tiketnya; teknisi yang belum punya tiket tetap perlu terlihat pada laporan beban kerja.",
+    "explain": [
+      "JOIN menggabungkan baris sesuai kondisi hubungan. INNER JOIN hanya memberi pasangan yang cocok. LEFT JOIN mempertahankan seluruh baris kiri dan mengisi kolom kanan dengan NULL bila tidak ada pasangan.",
+      "Gunakan alias untuk membedakan tabel dan tulis kondisi ON secara eksplisit. Pada contoh, teknisi adalah sisi kiri dan tiket sisi kanan. Teknisi Budi tetap terlihat walaupun belum mempunyai tiket.",
+      "Satu teknisi yang mempunyai beberapa tiket menghasilkan beberapa baris. Itu konsekuensi relasi satu-ke-banyak, bukan otomatis data duplikat yang harus dihapus dengan DISTINCT. Jika ingin satu baris per teknisi, tentukan agregasi yang sesuai.",
+      "Filter kolom sisi kanan pada WHERE dapat menghilangkan baris NULL sehingga hasil LEFT JOIN tidak lagi mempertahankan seluruh sisi kiri. Jika filter tersebut bagian pemilihan pasangan, pertimbangkan meletakkannya pada ON dan uji makna hasilnya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "INNER JOIN",
+          "Pasangan yang cocok",
+          "Teknisi yang mempunyai tiket"
+        ],
+        [
+          "LEFT JOIN",
+          "Pertahankan seluruh sisi kiri",
+          "Termasuk teknisi tanpa tiket"
+        ],
+        [
+          "ON",
+          "Aturan pasangan",
+          "t.teknisi_id = n.id"
+        ],
+        [
+          "COALESCE",
+          "Pengganti nilai NULL untuk tampilan",
+          "Belum ada"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · INNER JOIN dan LEFT JOIN",
+        "code": "CREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, judul TEXT, teknisi_id INTEGER);\nINSERT INTO teknisi VALUES (1, 'Ana'), (2, 'Budi');\nINSERT INTO tiket VALUES (101, 'Link putus', 1);\nSELECT n.nama, COALESCE(t.judul, 'Belum ada')\nFROM teknisi AS n LEFT JOIN tiket AS t ON t.teknisi_id = n.id\nORDER BY n.id, t.id;",
+        "output": "Ana | Link putus\nBudi | Belum ada",
+        "explanation": "COALESCE hanya mengubah tampilan hasil; tidak mengisi data tiket baru untuk Budi.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Ganti LEFT JOIN menjadi INNER JOIN dan bandingkan hasil.",
+      "Tambah tiket kedua untuk Ana dan perhatikan banyaknya baris.",
+      "Uji filter tiket di WHERE dibanding ON dan jelaskan perbedaannya."
+    ],
+    "warning": "JOIN tanpa kondisi yang benar dapat menghasilkan pasangan sangat banyak. Periksa kunci dan jumlah baris yang diharapkan sebelum menyimpulkan hasilnya benar.",
+    "check": "Mengapa Ana bisa muncul dua kali setelah mendapat dua tiket?",
+    "answer": "Setiap pasangan teknisi–tiket menghasilkan satu baris; relasinya satu-ke-banyak.",
+    "source": "https://www.sqlite.org/lang_select.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-agregasi",
+    "title": "COUNT, SUM, AVG, GROUP BY, dan HAVING",
+    "summary": "Ubah kumpulan baris menjadi ringkasan yang tetap bermakna.",
+    "analogy": "Laporan harian tidak selalu membutuhkan setiap kartu; petugas dapat meminta jumlah tiket untuk tiap status.",
+    "explain": [
+      "Fungsi agregat menghitung ringkasan seperti COUNT, SUM, AVG, MIN, dan MAX. GROUP BY membentuk kelompok, misalnya status. Hasil mempunyai satu baris per kelompok yang lolos.",
+      "WHERE menyaring baris sebelum pengelompokan, sedangkan HAVING menyaring kelompok setelah agregasi. Contoh menampilkan status yang mempunyai setidaknya dua tiket.",
+      "COUNT(*) menghitung baris, sedangkan COUNT(kolom) mengabaikan nilai NULL pada kolom itu. Ini penting pada LEFT JOIN: COUNT(*) dapat menghitung baris teknisi tanpa tiket, sementara COUNT(tiket.id) menghitung tiket yang benar-benar cocok.",
+      "Jangan memilih kolom nonagregat yang tidak menjadi bagian GROUP BY lalu menganggap nilainya mewakili seluruh kelompok. SQLite mengizinkan sebagian bentuk tersebut, tetapi hasilnya dapat tidak sesuai maksud dan tidak portabel. Nyatakan ringkasan secara eksplisit."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "COUNT(*)",
+          "Jumlah baris",
+          "Semua baris kelompok"
+        ],
+        [
+          "COUNT(kolom)",
+          "Jumlah nilai non-NULL",
+          "Hitung tiket.id pada LEFT JOIN"
+        ],
+        [
+          "GROUP BY",
+          "Kelompok ringkasan",
+          "Per status"
+        ],
+        [
+          "HAVING",
+          "Filter hasil kelompok",
+          "COUNT(*) >= 2"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · COUNT, SUM, AVG, GROUP BY, dan HAVING",
+        "code": "CREATE TABLE tiket (id INTEGER PRIMARY KEY, status TEXT NOT NULL);\nINSERT INTO tiket VALUES (1, 'BARU'), (2, 'BARU'), (3, 'SELESAI');\nSELECT status, COUNT(*) AS jumlah FROM tiket\nGROUP BY status HAVING COUNT(*) >= 2 ORDER BY status;",
+        "output": "BARU | 2",
+        "explanation": "Status SELESAI hanya berisi satu tiket sehingga kelompoknya tidak lolos HAVING.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Hapus HAVING untuk melihat semua kelompok.",
+      "Buat contoh COUNT(*) dan COUNT(email) dengan email NULL.",
+      "Buat laporan jumlah tiket per teknisi termasuk teknisi tanpa tiket."
+    ],
+    "warning": "Ringkasan dapat menyesatkan jika JOIN menggandakan pasangan sebelum COUNT atau SUM. Periksa tingkat detail data sumber dan kelompok yang diinginkan.",
+    "check": "Apa perbedaan WHERE dan HAVING?",
+    "answer": "WHERE menyaring baris masukan, HAVING menyaring kelompok hasil agregasi.",
+    "source": "https://www.sqlite.org/lang_aggfunc.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-integritas",
+    "title": "Constraint dan integritas referensial",
+    "summary": "Tegakkan aturan pada database dan pilih dampak penghapusan induk.",
+    "analogy": "Kartu tiket tidak boleh menunjuk petugas yang tidak ada, meskipun ada kesalahan pada formulir aplikasi.",
+    "explain": [
+      "Constraint adalah aturan yang diperiksa engine: primary key, UNIQUE, NOT NULL, CHECK, dan foreign key. Validasi aplikasi membantu pengalaman pengguna; constraint tetap berguna jika data ditulis oleh jalur lain.",
+      "Foreign key memerlukan kunci induk yang sesuai. Pada SQLite aktifkan pemeriksaan per koneksi sebelum transaksi. ON DELETE RESTRICT menolak penghapusan induk yang masih dirujuk; CASCADE dapat menghapus anak ikutannya; SET NULL memerlukan kolom anak yang boleh NULL.",
+      "Pilih aksi berdasarkan makna data. Riwayat tiket sering perlu dipertahankan, sehingga menghapus teknisi beserta seluruh tiketnya mungkin tidak sesuai. Menonaktifkan teknisi dapat menjadi kebutuhan yang lebih tepat daripada menghapus identitas historis.",
+      "PRAGMA foreign_key_check memeriksa pelanggaran relasi pada database. PRAGMA integrity_check memeriksa bentuk konsistensi internal lebih luas tetapi bukan pengganti pemeriksaan aturan bisnis maupun tes pemulihan. Tidak semua aturan antarbaris dapat ditulis sebagai CHECK sederhana."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "RESTRICT",
+          "Tolak penghapusan induk yang dirujuk",
+          "Jaga tiket historis"
+        ],
+        [
+          "CASCADE",
+          "Propagasikan penghapusan",
+          "Gunakan hanya jika sesuai kebutuhan"
+        ],
+        [
+          "SET NULL",
+          "Lepas relasi menjadi NULL",
+          "Kolom harus nullable"
+        ],
+        [
+          "Aplikasi + DB",
+          "Lapisan aturan saling melengkapi",
+          "Pesan jelas dan penjagaan data"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Constraint dan integritas referensial",
+        "code": "PRAGMA foreign_keys = ON;\nCREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY,\n teknisi_id INTEGER NOT NULL REFERENCES teknisi(id) ON DELETE RESTRICT,\n status TEXT NOT NULL CHECK(status IN ('BARU', 'SELESAI')));\nINSERT INTO teknisi VALUES (1, 'Ana');\nINSERT INTO tiket VALUES (1, 1, 'BARU');\nSELECT id, status FROM tiket ORDER BY id;\nPRAGMA foreign_key_check;",
+        "output": "1 | BARU",
+        "explanation": "foreign_key_check tidak menghasilkan baris ketika tidak ada pelanggaran. Untuk percobaan invalid, jalankan terpisah dan amati constraint yang menolak.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Coba memasukkan tiket dengan teknisi 99 yang tidak ada.",
+      "Coba menghapus teknisi 1 saat tiket masih merujuknya.",
+      "Bandingkan kebutuhan RESTRICT dengan CASCADE menggunakan database latihan lain."
+    ],
+    "warning": "Mengaktifkan foreign_keys di dalam transaksi yang sudah berjalan tidak mengubah pemeriksaan seperti yang mungkin diharapkan. Atur sebelum transaksi dan verifikasi konfigurasi koneksi.",
+    "check": "Apakah CASCADE selalu pilihan terbaik agar DELETE tidak error?",
+    "answer": "Tidak. Pilih sesuai aturan kepemilikan dan retensi; menghilangkan error dengan menghapus data terkait dapat merusak kebutuhan historis.",
+    "source": "https://www.sqlite.org/foreignkeys.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-transaksi",
+    "title": "Transaksi, COMMIT, ROLLBACK, dan ACID",
+    "summary": "Kelompokkan perubahan yang harus berhasil bersama atau dibatalkan bersama.",
+    "analogy": "Memindahkan stok antarlemari memerlukan pengurangan dan penambahan sebagai satu pekerjaan, bukan berhenti setelah hanya satu sisi berubah.",
+    "explain": [
+      "Transaksi mengelompokkan perubahan. BEGIN memulai, COMMIT mengesahkan, dan ROLLBACK membatalkan perubahan yang belum disahkan pada transaksi tersebut. Contoh memindahkan dua unit dari gudang A ke B.",
+      "ACID merangkum Atomicity (satu kesatuan), Consistency (aturan yang ditegakkan tetap terpenuhi), Isolation (interaksi transaksi terkontrol), dan Durability (hasil commit bertahan sesuai jaminan engine serta konfigurasi penyimpanan). ACID tidak membuktikan seluruh aturan bisnis yang belum ditulis otomatis benar.",
+      "Pada percobaan pertama, dua UPDATE sengaja diakhiri ROLLBACK sehingga stok kembali semula. Pada percobaan kedua, COMMIT mengesahkan kedua perubahan. Membaca data setelahnya menunjukkan perbedaan yang nyata.",
+      "Jangan menganggap semua error otomatis membatalkan seluruh transaksi. Banyak error SQLite hanya membatalkan satu statement; aplikasi perlu kebijakan rollback pada kegagalan pekerjaan. SQLite mendukung banyak pembaca tetapi hanya satu penulis pada satu waktu; transaksi sebaiknya singkat dan tidak menunggu input pengguna."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "BEGIN",
+          "Mulai unit pekerjaan",
+          "Dua UPDATE pemindahan"
+        ],
+        [
+          "COMMIT",
+          "Sahkan perubahan",
+          "Stok baru berlaku"
+        ],
+        [
+          "ROLLBACK",
+          "Batalkan transaksi berjalan",
+          "Stok kembali sebelum transaksi"
+        ],
+        [
+          "Atomicity",
+          "Berhasil atau batal bersama",
+          "Kedua gudang konsisten"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Transaksi, COMMIT, ROLLBACK, dan ACID",
+        "code": "CREATE TABLE stok (gudang TEXT PRIMARY KEY, jumlah INTEGER NOT NULL CHECK(jumlah >= 0));\nINSERT INTO stok VALUES ('A', 5), ('B', 1);\nBEGIN;\nUPDATE stok SET jumlah = jumlah - 2 WHERE gudang = 'A';\nUPDATE stok SET jumlah = jumlah + 2 WHERE gudang = 'B';\nROLLBACK;\nSELECT gudang, jumlah FROM stok ORDER BY gudang;\nBEGIN;\nUPDATE stok SET jumlah = jumlah - 2 WHERE gudang = 'A';\nUPDATE stok SET jumlah = jumlah + 2 WHERE gudang = 'B';\nCOMMIT;\nSELECT gudang, jumlah FROM stok ORDER BY gudang;",
+        "output": "A | 5\nB | 1\nA | 3\nB | 3",
+        "explanation": "Dua baris pertama berasal dari SELECT setelah ROLLBACK; dua baris berikutnya setelah COMMIT. Jumlah total stok tetap enam.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Telusuri stok sebelum dan sesudah dua transaksi.",
+      "Simulasikan kegagalan sebelum perubahan kedua dan lakukan ROLLBACK secara eksplisit.",
+      "Jelaskan mengapa operasi jaringan lama sebaiknya tidak ditunggu di dalam transaksi tulis."
+    ],
+    "warning": "COMMIT yang sudah selesai tidak dibatalkan oleh ROLLBACK berikutnya. Pemulihan data yang sudah disahkan memerlukan operasi koreksi atau cadangan sesuai kebutuhan.",
+    "check": "Apakah semua error satu INSERT otomatis membatalkan seluruh pekerjaan transaksi?",
+    "answer": "Tidak. Perilaku bergantung jenis error dan aturan konflik; aplikasi perlu memastikan rollback unit pekerjaan saat diperlukan.",
+    "source": "https://www.sqlite.org/lang_transaction.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-indeks",
+    "title": "Indeks dan EXPLAIN QUERY PLAN",
+    "summary": "Percepat pola pencarian yang sesuai sambil memperhitungkan biaya tulis serta penyimpanan.",
+    "analogy": "Indeks buku membantu menemukan halaman tanpa membaca seluruh buku, tetapi indeks juga perlu diperbarui ketika isinya berubah.",
+    "explain": [
+      "Indeks adalah struktur tambahan yang membantu engine menemukan baris untuk sebagian pola kueri. Contoh membuat indeks gabungan (status, id) untuk pencarian status dan urutan id. Engine memilih rencana berdasarkan skema, statistik, serta kueri.",
+      "EXPLAIN QUERY PLAN membantu melihat rencana pencarian SQLite. Keluaran detail dapat berubah menurut versi dan data, sehingga jangan menghafal satu kalimat plan sebagai jaminan. Tanyakan apakah rencana dan waktu eksekusi pada data representatif memenuhi kebutuhan.",
+      "Indeks bukan gratis: membutuhkan ruang serta pekerjaan tambahan saat INSERT, UPDATE, dan DELETE. Membuat indeks untuk semua kolom dapat justru menambah biaya tanpa manfaat. Indeks UNIQUE juga mempunyai peran menjaga keunikan, bukan hanya kinerja.",
+      "Urutan kolom indeks gabungan penting. Indeks (status, id) terutama mendukung pola yang memanfaatkan awalan status; ia tidak sama dengan indeks id untuk semua kueri. Contoh sengaja kecil untuk memahami bentuk, bukan membuktikan peningkatan waktu pada data nyata."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "CREATE INDEX",
+          "Buat struktur bantu",
+          "(status, id)"
+        ],
+        [
+          "EXPLAIN QUERY PLAN",
+          "Lihat pilihan rencana",
+          "Dapat berubah menurut engine"
+        ],
+        [
+          "Biaya tulis",
+          "Indeks ikut dipelihara",
+          "Tambah / ubah / hapus"
+        ],
+        [
+          "Pengukuran",
+          "Uji data representatif",
+          "Bukan menebak dari tabel kecil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Indeks dan EXPLAIN QUERY PLAN",
+        "code": "CREATE TABLE tiket (id INTEGER PRIMARY KEY, status TEXT NOT NULL);\nINSERT INTO tiket VALUES (1, 'BARU'), (2, 'SELESAI'), (3, 'BARU');\nCREATE INDEX idx_tiket_status_id ON tiket(status, id);\nSELECT id, status FROM tiket WHERE status = 'BARU' ORDER BY id;",
+        "output": "1 | BARU\n3 | BARU",
+        "explanation": "Setelah menjalankan contoh, coba EXPLAIN QUERY PLAN SELECT id, status FROM tiket WHERE status = 'BARU' ORDER BY id; secara terpisah. Plan tidak dicetak sebagai keluaran tetap karena dapat bervariasi.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca tabel kebutuhan dan tentukan aturan data.",
+      "Buka database latihan kosong; jalankan seluruh blok SQL berurutan dalam satu koneksi SQLite.",
+      "Cocokkan baris hasil SELECT, lalu kerjakan variasi latihan pada database latihan baru."
+    ],
+    "practice": [
+      "Jalankan SELECT dan lihat plan memakai EXPLAIN QUERY PLAN.",
+      "Bandingkan plan sebelum serta sesudah indeks pada database latihan.",
+      "Ukur beberapa kueri pada data representatif dan catat biaya pembentukan indeks."
+    ],
+    "warning": "Jangan memaksa indeks atau menyimpulkan kinerja produksi dari tiga baris contoh. Hasil ukur bergantung ukuran data, distribusi, cache, dan lingkungan.",
+    "check": "Apakah indeks selalu membuat seluruh operasi lebih cepat?",
+    "answer": "Tidak. Pencarian tertentu dapat terbantu, tetapi pemeliharaan indeks menambah biaya tulis dan penyimpanan.",
+    "source": "https://www.sqlite.org/queryplanner.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-python-sqlite",
+    "title": "Menghubungkan Python dengan SQLite",
+    "summary": "Buka koneksi, jalankan kueri, ambil hasil, commit, dan tutup koneksi.",
+    "analogy": "Program menjadi petugas yang membuka arsip, menulis perubahan, memastikan tersimpan, lalu menutup arsip dengan benar.",
+    "explain": [
+      "Modul sqlite3 termasuk library standar pada instalasi Python yang menyediakan dukungan SQLite. Import sqlite3 membuka akses API; sqlite3.connect(path) membuat koneksi database. Path relatif mengikuti working directory, bukan selalu folder file program.",
+      "execute menjalankan satu statement dengan parameter, sedangkan fetchone atau fetchall mengambil baris hasil. Secara bawaan hasil baris berupa tuple. executemany dapat menjalankan operasi berparameter untuk banyak set nilai.",
+      "Pada contoh kita memakai mode transaksi bawaan Python 3.11 dan commit secara eksplisit sesudah INSERT. Perilaku kontrol transaksi perlu dipahami jika berpindah versi atau konfigurasi; jangan menebak bahwa semua perubahan otomatis tersimpan.",
+      "close menutup koneksi. Context manager with con mengelola commit atau rollback transaksi, tetapi tidak otomatis menutup koneksi. Contoh memakai try/finally untuk penutupan. Direktori sementara hanya untuk demo; ganti dengan path latihan persisten jika ingin data bertahan setelah program selesai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "connect",
+          "Buka / buat database",
+          "sqlite3.connect(path)"
+        ],
+        [
+          "execute",
+          "Satu pernyataan",
+          "SQL + tuple parameter"
+        ],
+        [
+          "fetchall",
+          "Ambil hasil baris",
+          "List tuple"
+        ],
+        [
+          "commit / close",
+          "Sahkan lalu tutup",
+          "Tugas yang berbeda"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Menghubungkan Python dengan SQLite",
+        "code": "import sqlite3\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\n\nwith TemporaryDirectory() as folder:\n    path = Path(folder) / \"latihan.db\"\n    con = sqlite3.connect(path)\n    try:\n        con.execute(\"CREATE TABLE barang (id INTEGER PRIMARY KEY, nama TEXT NOT NULL)\")\n        con.execute(\"INSERT INTO barang (id, nama) VALUES (?, ?)\", (1, \"Kabel\"))\n        con.commit()\n    finally:\n        con.close()\n    pulih = sqlite3.connect(path)\n    try:\n        print(pulih.execute(\"SELECT id, nama FROM barang ORDER BY id\").fetchall())\n    finally:\n        pulih.close()",
+        "output": "[(1, 'Kabel')]",
+        "explanation": "Koneksi kedua membaca file yang sama setelah koneksi pertama ditutup. Data demo hilang ketika TemporaryDirectory selesai, bukan karena close menghapus tabel.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca aturan dan telusuri data contoh.",
+      "Simpan seluruh program ke file db_python_sqlite.py dan jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran lalu uji kondisi batas pada latihan."
+    ],
+    "practice": [
+      "Jalankan demo dan perhatikan koneksi kedua.",
+      "Simpan database pada folder latihan milikmu untuk mencoba pembacaan antarproses.",
+      "Bandingkan commit dengan close serta with con."
+    ],
+    "warning": "Jangan bergantung pada penutupan koneksi untuk menyimpan transaksi yang belum commit. Tangani kegagalan dan lakukan commit/rollback sesuai unit pekerjaan.",
+    "check": "Apakah with con otomatis menutup koneksi SQLite Python?",
+    "answer": "Tidak. Ia mengelola penyelesaian transaksi; koneksi perlu ditutup melalui close atau pengelola sumber daya lain.",
+    "source": "https://docs.python.org/3.11/library/sqlite3.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-parameter",
+    "title": "Kueri berparameter dan validasi input",
+    "summary": "Pisahkan nilai masukan dari struktur SQL.",
+    "analogy": "Kolom formulir adalah tempat mengisi nilai; pengguna tidak seharusnya menulis ulang aturan formulir lewat isi namanya.",
+    "explain": [
+      "Jangan menyusun nilai pengguna ke SQL melalui f-string atau penggabungan string. Placeholder ? dan tuple parameter membuat driver mengikat nilai sebagai data. Contoh nama yang mempunyai tanda petik tetap tersimpan tanpa merusak struktur kueri.",
+      "Parameter bukan sekadar mengganti tanda petik sendiri. Driver menangani representasi nilai sesuai API. Untuk satu nilai, tulis tuple (nama,), termasuk koma; (nama) hanya string biasa di dalam tanda kurung.",
+      "Placeholder umumnya dipakai untuk nilai, bukan nama tabel, nama kolom, atau kata kunci ASC/DESC. Jika pemakai memilih pengurutan, petakan pilihan ke allowlist identifier yang ditulis pengembang; jangan memasukkan identifier bebas dari pengguna.",
+      "Kueri berparameter menjaga pemisahan struktur dan nilai, tetapi bukan pengganti seluruh validasi atau pengendalian akses. Tetap periksa rentang, panjang, hak operasi, dan aturan bisnis. executescript hanya untuk skrip yang sepenuhnya dipercaya, bukan gabungan masukan pengguna."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Placeholder ?",
+          "Tempat nilai",
+          "WHERE nama = ?"
+        ],
+        [
+          "Tuple satu elemen",
+          "Perlu koma",
+          "(nama,)"
+        ],
+        [
+          "Identifier",
+          "Pilih dari allowlist",
+          "nama atau id yang disetujui"
+        ],
+        [
+          "Validasi",
+          "Aturan semantik tetap perlu",
+          "Nama wajib dan panjang wajar"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Kueri berparameter dan validasi input",
+        "code": "import sqlite3\n\ncon = sqlite3.connect(\":memory:\")\ntry:\n    con.execute(\"CREATE TABLE anggota (id INTEGER PRIMARY KEY, nama TEXT NOT NULL)\")\n    con.execute(\"INSERT INTO anggota VALUES (?, ?)\", (1, \"O'Neil\"))\n    def cari_nama(nama):\n        return con.execute(\"SELECT id, nama FROM anggota WHERE nama = ? ORDER BY id\", (nama,)).fetchall()\n    print(cari_nama(\"O'Neil\"))\n    print(cari_nama(\"' OR 1=1 --\"))\n    print(con.execute(\"SELECT COUNT(*) FROM anggota\").fetchone()[0])\nfinally:\n    con.close()",
+        "output": "[(1, \"O'Neil\")]\n[]\n1",
+        "explanation": "Masukan yang menyerupai potongan SQL diperlakukan sebagai nilai nama, sehingga tidak mengubah kondisi kueri. Seluruh demo memakai database memori lokal.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca aturan dan telusuri data contoh.",
+      "Simpan seluruh program ke file db_parameter.py dan jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran lalu uji kondisi batas pada latihan."
+    ],
+    "practice": [
+      "Jalankan contoh nama bertanda petik dan masukan yang menyerupai SQL.",
+      "Tambahkan validasi nama kosong sebelum operasi INSERT.",
+      "Buat allowlist pilihan urut nama atau id tanpa menerima nama kolom bebas."
+    ],
+    "warning": "Parameterisasi tidak membuat operasi UPDATE atau DELETE tanpa WHERE menjadi aman secara bisnis. Sasaran, izin, dan transaksi tetap harus benar.",
+    "check": "Apakah SELECT ... ORDER BY ? akan menjadikan parameter sebagai nama kolom?",
+    "answer": "Tidak. Placeholder menyatakan nilai, bukan identifier; pilih identifier dari allowlist statis bila perlu.",
+    "source": "https://docs.python.org/3.11/library/sqlite3.html#how-to-use-placeholders-to-bind-values-in-sql-queries",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-migrasi-backup",
+    "title": "Migrasi skema, backup, dan uji pemulihan",
+    "summary": "Ubah struktur secara terencana dan buktikan cadangan dapat dibaca.",
+    "analogy": "Mengganti format arsip perlu rencana pemindahan; memiliki kotak cadangan belum cukup jika isinya belum pernah diperiksa.",
+    "explain": [
+      "Migrasi adalah perubahan skema yang dilacak, misalnya menambah kolom prioritas. Contoh memakai PRAGMA user_version sebagai nomor versi yang dikelola aplikasi; SQLite tidak otomatis menaikkannya atau menjalankan migrasi untuk kita.",
+      "Migrasi contoh hanya mendukung versi 0 menuju 1. Transaksi eksplisit menggabungkan ALTER TABLE dan perubahan versi. Jika sudah versi 1, fungsi tidak mengulangnya; versi lain ditolak agar program tidak menebak struktur yang tidak dikenal.",
+      "Backup koneksi sqlite3 menyediakan cara menyalin snapshot database dengan dukungan engine. Jangan hanya menyalin file utama database aktif tanpa memahami jurnal atau WAL dan konsistensinya. Pilih prosedur backup yang sesuai mode serta beban kerja.",
+      "Uji pemulihan berarti membuka hasil cadangan, memeriksa skema dan data yang diharapkan, serta mencoba pembacaan aplikasi. integrity_check membantu pemeriksaan internal; foreign_key_check dan assertion aturan bisnis melengkapi pemeriksaan. Demo menggunakan folder sementara dan snapshot sebelum perubahan berikutnya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Migrasi",
+          "Perubahan skema terurut",
+          "Tambah prioritas"
+        ],
+        [
+          "user_version",
+          "Penanda versi milik aplikasi",
+          "0 → 1"
+        ],
+        [
+          "Backup API",
+          "Snapshot melalui engine",
+          "asal.backup(tujuan)"
+        ],
+        [
+          "Restore test",
+          "Baca dan verifikasi cadangan",
+          "Versi, kolom, data, integritas"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Migrasi skema, backup, dan uji pemulihan",
+        "code": "import sqlite3\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\n\ndef migrasi(con):\n    versi = con.execute(\"PRAGMA user_version\").fetchone()[0]\n    if versi == 1:\n        return False\n    if versi != 0:\n        raise ValueError(\"Versi tidak didukung\")\n    con.execute(\"BEGIN IMMEDIATE\")\n    try:\n        con.execute(\"ALTER TABLE tiket ADD COLUMN prioritas TEXT NOT NULL DEFAULT 'NORMAL'\")\n        con.execute(\"PRAGMA user_version = 1\")\n        con.execute(\"COMMIT\")\n    except Exception:\n        con.execute(\"ROLLBACK\")\n        raise\n    return True\n\nwith TemporaryDirectory() as folder:\n    asal = sqlite3.connect(Path(folder) / \"asal.db\", isolation_level=None)\n    tujuan = sqlite3.connect(Path(folder) / \"cadangan.db\", isolation_level=None)\n    try:\n        asal.execute(\"CREATE TABLE tiket (id INTEGER PRIMARY KEY, judul TEXT NOT NULL)\")\n        asal.execute(\"INSERT INTO tiket VALUES (?, ?)\", (1, \"Link putus\"))\n        print(\"Migrasi:\", migrasi(asal), migrasi(asal))\n        asal.backup(tujuan)\n        asal.execute(\"INSERT INTO tiket (id, judul) VALUES (?, ?)\", (2, \"Kabel rusak\"))\n        print(tujuan.execute(\"SELECT id, prioritas FROM tiket ORDER BY id\").fetchall())\n        print(\"Versi:\", tujuan.execute(\"PRAGMA user_version\").fetchone()[0])\n        print(\"Integritas:\", tujuan.execute(\"PRAGMA integrity_check\").fetchone()[0])\n        print(\"Jumlah asal/cadangan:\", asal.execute(\"SELECT COUNT(*) FROM tiket\").fetchone()[0],\n              tujuan.execute(\"SELECT COUNT(*) FROM tiket\").fetchone()[0])\n    finally:\n        asal.close()\n        tujuan.close()",
+        "output": "Migrasi: True False\n[(1, 'NORMAL')]\nVersi: 1\nIntegritas: ok\nJumlah asal/cadangan: 2 1",
+        "explanation": "isolation_level=None dipilih agar transaksi migrasi dikendalikan lewat BEGIN/COMMIT eksplisit. Cadangan tidak ikut menerima INSERT yang terjadi setelah backup.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca aturan dan telusuri data contoh.",
+      "Simpan seluruh program ke file db_migrasi_backup.py dan jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran lalu uji kondisi batas pada latihan."
+    ],
+    "practice": [
+      "Jalankan migrasi dua kali dan jelaskan hasil True lalu False.",
+      "Periksa tabel dan nomor versi pada cadangan.",
+      "Buka ulang cadangan pada koneksi baru dan jalankan kueri aplikasi.",
+      "Simulasikan versi tidak dikenal dan kegagalan ALTER pada database latihan."
+    ],
+    "warning": "Versi 0 pada contoh diasumsikan sudah memiliki tabel awal yang benar; pada sistem nyata, validasi skema dan riwayat migrasi diperlukan. Jangan menganggap backup berhasil hanya karena file tujuan ada.",
+    "check": "Apakah user_version otomatis membuktikan skema sudah benar?",
+    "answer": "Tidak. Itu angka yang dikelola aplikasi; validasi skema, migrasi yang benar, dan tes pemulihan tetap diperlukan.",
+    "source": "https://docs.python.org/3.11/library/sqlite3.html#sqlite3.Connection.backup",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-kasus-perpustakaan",
+    "title": "Studi kasus: peminjaman buku dengan SQLite",
+    "summary": "Gabungkan relasi, indeks unik parsial, transaksi, dan kueri berparameter.",
+    "analogy": "Satu eksemplar buku hanya boleh berada pada satu peminjaman aktif, tetapi riwayat pinjamnya perlu tetap disimpan.",
+    "explain": [
+      "Aturan latihan: setiap baris buku mewakili satu eksemplar fisik, bukan seluruh stok satu judul. Anggota dan buku harus terdaftar. Satu buku hanya boleh mempunyai satu pinjaman aktif; setelah dikembalikan, buku boleh dipinjam lagi dengan baris riwayat baru.",
+      "Kolom kembali NULL berarti pinjaman masih aktif. Indeks unik parsial pada buku_id WHERE kembali IS NULL menjaga agar dua pinjaman aktif untuk buku sama tidak dapat tersimpan. Riwayat yang sudah kembali tidak masuk pembatas tersebut.",
+      "pinjam memakai transaksi eksplisit. Jika INSERT gagal karena foreign key atau keunikan, fungsi melakukan rollback lalu meneruskan error. kembalikan memakai satu UPDATE bersyarat dan rowcount untuk mendeteksi id hilang atau pengembalian berulang.",
+      "Tanggal pengembalian diperiksa dalam bentuk ISO kalender yang valid oleh Python. Contoh belum mencatat tanggal pinjam, tenggat, denda, reservasi, ataupun audit pelaku. Data hidup pada database memori agar demo mudah diulang; ganti koneksi ke file latihan untuk persistensi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Anggota dan buku",
+          "Entitas induk",
+          "Foreign key wajib"
+        ],
+        [
+          "kembali IS NULL",
+          "Pinjaman aktif",
+          "Tidak sama dengan teks kosong"
+        ],
+        [
+          "Indeks unik parsial",
+          "Satu aktif per buku",
+          "Riwayat lama tetap ada"
+        ],
+        [
+          "UPDATE bersyarat",
+          "Pengembalian sekali",
+          "rowcount harus satu"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Studi kasus: peminjaman buku dengan SQLite",
+        "code": "import sqlite3\n\ndef siapkan(con):\n    con.execute(\"PRAGMA foreign_keys = ON\")\n    con.executescript(\"\"\"\n    CREATE TABLE anggota (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\n    CREATE TABLE buku (id INTEGER PRIMARY KEY, judul TEXT NOT NULL);\n    CREATE TABLE pinjaman (\n      id INTEGER PRIMARY KEY,\n      anggota_id INTEGER NOT NULL REFERENCES anggota(id) ON DELETE RESTRICT,\n      buku_id INTEGER NOT NULL REFERENCES buku(id) ON DELETE RESTRICT,\n      kembali TEXT\n    );\n    CREATE UNIQUE INDEX satu_pinjaman_aktif ON pinjaman(buku_id) WHERE kembali IS NULL;\n    \"\"\")\n\ndef pinjam(con, anggota_id, buku_id):\n    con.execute(\"BEGIN IMMEDIATE\")\n    try:\n        cur = con.execute(\"INSERT INTO pinjaman (anggota_id, buku_id) VALUES (?, ?)\",\n                          (anggota_id, buku_id))\n        nomor = cur.lastrowid\n        con.execute(\"COMMIT\")\n        return nomor\n    except Exception:\n        con.execute(\"ROLLBACK\")\n        raise\n\ndef kembalikan(con, nomor, tanggal):\n    from datetime import date\n    if not isinstance(tanggal, str) or date.fromisoformat(tanggal).isoformat() != tanggal:\n        raise ValueError(\"Gunakan tanggal ISO YYYY-MM-DD\")\n    cur = con.execute(\"UPDATE pinjaman SET kembali = ? WHERE id = ? AND kembali IS NULL\",\n                      (tanggal, nomor))\n    if cur.rowcount != 1:\n        raise ValueError(\"Pinjaman tidak ditemukan atau sudah kembali\")\n\ndef main():\n    con = sqlite3.connect(\":memory:\", isolation_level=None)\n    try:\n        siapkan(con)\n        con.execute(\"INSERT INTO anggota VALUES (?, ?)\", (1, \"Ana\"))\n        con.execute(\"INSERT INTO buku VALUES (?, ?)\", (1, \"Python\"))\n        nomor = pinjam(con, 1, 1)\n        try:\n            pinjam(con, 1, 1)\n        except sqlite3.IntegrityError:\n            print(\"Ditolak: buku masih dipinjam\")\n        print(\"Aktif:\", con.execute(\"SELECT COUNT(*) FROM pinjaman WHERE kembali IS NULL\").fetchone()[0])\n        kembalikan(con, nomor, \"2026-01-02\")\n        print(\"Aktif setelah kembali:\", con.execute(\"SELECT COUNT(*) FROM pinjaman WHERE kembali IS NULL\").fetchone()[0])\n        print(\"Pinjaman baru:\", pinjam(con, 1, 1))\n    finally:\n        con.close()\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "Ditolak: buku masih dipinjam\nAktif: 1\nAktif setelah kembali: 0\nPinjaman baru: 2",
+        "explanation": "Gunakan koneksi isolation_level=None karena fungsi mengendalikan transaksi sendiri. Hindari memanggil pinjam di dalam transaksi lain yang sudah aktif.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca aturan dan telusuri data contoh.",
+      "Simpan seluruh program ke file db_kasus_perpustakaan.py dan jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran lalu uji kondisi batas pada latihan."
+    ],
+    "practice": [
+      "Tambahkan anggota dan buku kedua.",
+      "Uji anggota/buku tidak terdaftar dan pastikan jumlah pinjaman tidak bertambah.",
+      "Uji pengembalian dua kali serta peminjaman kembali setelah pengembalian.",
+      "Buat laporan JOIN anggota, buku, dan pinjaman aktif."
+    ],
+    "warning": "Fungsi pinjam pada latihan menerima id yang sudah dipilih aplikasi; validasi bentuk input dan izin pengguna belum menjadi bagian demo. Jangan menganggap pesan error database sebagai antarmuka pengguna final.",
+    "check": "Mengapa riwayat pinjaman tidak dihapus setelah buku kembali?",
+    "answer": "Baris lama menyimpan riwayat. Mengisi kembali membuatnya tidak aktif sehingga buku boleh mempunyai pinjaman baru.",
+    "source": "https://www.sqlite.org/partialindex.html",
+    "diagram": "db-perpustakaan",
+    "diagramAlt": "Anggota dan Buku masing-masing dihubungkan ke Pinjaman. Indeks unik hanya membatasi peminjaman aktif per eksemplar buku.",
+    "stage": 0,
+    "minutes": 50
+  },
+  {
+    "slug": "db-kasus-tiket",
+    "title": "Studi kasus: tiket gangguan dan riwayat dalam database",
+    "summary": "Jaga status tiket dan catatan riwayat agar berubah sebagai satu transaksi.",
+    "analogy": "Perubahan pada kartu tiket dan buku riwayat harus tercatat bersama agar laporan tidak saling bertentangan.",
+    "explain": [
+      "Studi kasus melanjutkan ide proyek tiket OOP dengan penyimpanan relasional. Versi ini sengaja memakai alur lebih ringkas: BARU → DIPROSES → SELESAI. Penugasan teknisi terjadi ketika mulai diproses; belum ada status DITUGASKAN terpisah seperti proyek OOP.",
+      "Tabel teknisi menjadi induk, tiket menyimpan status terkini serta petugas, dan riwayat menyimpan setiap status yang dicatat fungsi aplikasi. Foreign key menjaga referensi, CHECK menjaga nilai status, dan fungsi ubah menjaga urutan transisi.",
+      "Satu transaksi menggabungkan UPDATE tiket dan INSERT riwayat. BEGIN IMMEDIATE meminta transaksi tulis sejak awal; jika teknisi tidak ada atau penulisan riwayat gagal, rollback membatalkan keseluruhan perubahan. Aplikasi nyata tetap perlu kebijakan ketika database sibuk, bukan retry tanpa batas.",
+      "Constraint daftar status tidak otomatis membuktikan urutan perubahan valid. Urutan diperiksa oleh API fungsi ini; penulis lain yang melewati fungsi dapat melanggar aturan urutan atau tidak menulis riwayat. Jika semua jalur perlu dijaga di database, rancang trigger atau lapisan akses yang sesuai dan uji tersendiri.",
+      "Riwayat contoh mempunyai id urutan tetapi belum mencatat timestamp, pelaku, alasan, serta aturan audit yang lebih lengkap. Database memori hanya untuk demo; koneksi file dapat dipakai pada latihan berikutnya. Tidak ada koneksi router atau notifikasi sungguhan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "teknisi",
+          "Referensi petugas",
+          "Foreign key"
+        ],
+        [
+          "tiket",
+          "Status terkini",
+          "CHECK nilai + validasi transisi aplikasi"
+        ],
+        [
+          "riwayat",
+          "Urutan perubahan",
+          "Dibaca ORDER BY id"
+        ],
+        [
+          "Transaksi",
+          "Status dan riwayat satu unit",
+          "Rollback bila salah satu gagal"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Studi kasus: tiket gangguan dan riwayat dalam database",
+        "code": "import sqlite3\n\ndef siapkan(con):\n    con.execute(\"PRAGMA foreign_keys = ON\")\n    con.executescript(\"\"\"\n    CREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\n    CREATE TABLE tiket (\n      id INTEGER PRIMARY KEY, judul TEXT NOT NULL,\n      teknisi_id INTEGER REFERENCES teknisi(id) ON DELETE RESTRICT,\n      status TEXT NOT NULL DEFAULT 'BARU'\n        CHECK(status IN ('BARU', 'DIPROSES', 'SELESAI')),\n      CHECK(status = 'BARU' OR teknisi_id IS NOT NULL)\n    );\n    CREATE TABLE riwayat (\n      id INTEGER PRIMARY KEY,\n      tiket_id INTEGER NOT NULL REFERENCES tiket(id) ON DELETE RESTRICT,\n      status TEXT NOT NULL CHECK(status IN ('BARU', 'DIPROSES', 'SELESAI'))\n    );\n    \"\"\")\n\ndef buat(con, nomor, judul):\n    if not isinstance(judul, str) or not judul.strip():\n        raise ValueError(\"Judul wajib diisi\")\n    con.execute(\"BEGIN IMMEDIATE\")\n    try:\n        con.execute(\"INSERT INTO tiket (id, judul) VALUES (?, ?)\", (nomor, judul.strip()))\n        con.execute(\"INSERT INTO riwayat (tiket_id, status) VALUES (?, 'BARU')\", (nomor,))\n        con.execute(\"COMMIT\")\n    except Exception:\n        con.execute(\"ROLLBACK\")\n        raise\n\ndef ubah(con, nomor, status_baru, teknisi_id=None):\n    con.execute(\"BEGIN IMMEDIATE\")\n    try:\n        row = con.execute(\"SELECT status, teknisi_id FROM tiket WHERE id = ?\", (nomor,)).fetchone()\n        if row is None:\n            raise ValueError(\"Tiket tidak ditemukan\")\n        status, petugas = row\n        if status == 'BARU' and status_baru == 'DIPROSES' and teknisi_id is not None:\n            petugas = teknisi_id\n        elif status == 'DIPROSES' and status_baru == 'SELESAI' and teknisi_id is None:\n            pass\n        else:\n            raise ValueError(\"Transisi tidak diizinkan\")\n        con.execute(\"UPDATE tiket SET status = ?, teknisi_id = ? WHERE id = ?\",\n                    (status_baru, petugas, nomor))\n        con.execute(\"INSERT INTO riwayat (tiket_id, status) VALUES (?, ?)\", (nomor, status_baru))\n        con.execute(\"COMMIT\")\n    except Exception:\n        con.execute(\"ROLLBACK\")\n        raise\n\ndef main():\n    con = sqlite3.connect(\":memory:\", isolation_level=None)\n    try:\n        siapkan(con)\n        con.execute(\"INSERT INTO teknisi VALUES (?, ?)\", (1, \"Ana\"))\n        buat(con, 101, \"Link putus\")\n        try:\n            ubah(con, 101, \"SELESAI\")\n        except ValueError as error:\n            print(\"Ditolak:\", error)\n        ubah(con, 101, \"DIPROSES\", 1)\n        ubah(con, 101, \"SELESAI\")\n        print(con.execute(\"SELECT t.id, n.nama, t.status FROM tiket t JOIN teknisi n ON n.id = t.teknisi_id ORDER BY t.id\").fetchall())\n        print([row[0] for row in con.execute(\"SELECT status FROM riwayat WHERE tiket_id = ? ORDER BY id\", (101,))])\n    finally:\n        con.close()\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "Ditolak: Transisi tidak diizinkan\n[(101, 'Ana', 'SELESAI')]\n['BARU', 'DIPROSES', 'SELESAI']",
+        "explanation": "Tidak ada baris riwayat dari transisi yang ditolak. Error sengaja diteruskan setelah rollback supaya pemakai dapat menentukan respons.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca aturan dan telusuri data contoh.",
+      "Simpan seluruh program ke file db_kasus_tiket.py dan jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran lalu uji kondisi batas pada latihan."
+    ],
+    "practice": [
+      "Bandingkan alur tiga status di sini dengan empat status proyek OOP.",
+      "Uji teknisi yang tidak terdaftar dan pastikan status serta riwayat tidak berubah.",
+      "Uji nomor tiket duplikat, tiket hilang, serta penyelesaian berulang.",
+      "Buat laporan jumlah tiket per teknisi memakai LEFT JOIN dan COUNT(tiket.id)."
+    ],
+    "warning": "Gunakan koneksi isolation_level=None dan jangan panggil fungsi transaksi di dalam transaksi lain. Data demo bukan sistem helpdesk produksi; autentikasi, audit lengkap, penguncian operasional, dan migrasi belum disediakan.",
+    "check": "Mengapa UPDATE tiket dan INSERT riwayat harus berada pada transaksi yang sama?",
+    "answer": "Agar keduanya berhasil atau dibatalkan bersama; status tidak boleh berubah tanpa riwayat yang diwajibkan aplikasi.",
+    "source": "https://www.sqlite.org/lang_transaction.html",
+    "diagram": "db-tiket",
+    "diagramAlt": "Teknisi dirujuk oleh Tiket; satu Tiket mempunyai banyak Riwayat. Pembaruan status dan penambahan riwayat dilakukan dalam satu transaksi.",
+    "stage": 0,
+    "minutes": 50
+  }
+]

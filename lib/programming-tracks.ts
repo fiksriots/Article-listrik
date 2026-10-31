@@ -2,9 +2,10 @@ import {programmingLessons} from './programming-course';
 import order from './programming-order.json';
 
 const definitions = [
-  {id:'terstruktur', title:'Pemrograman Terstruktur', href:'/programming/terstruktur', summary:'Belajar Python dari nol: alur, percabangan, perulangan, fungsi, pengolahan data dasar, file, dan proyek.', groups:order.filter(group => group.title !== 'Struktur Data' && !group.title.startsWith('OOP ·'))},
+  {id:'terstruktur', title:'Pemrograman Terstruktur', href:'/programming/terstruktur', summary:'Belajar Python dari nol: alur, percabangan, perulangan, fungsi, pengolahan data dasar, file, dan proyek.', groups:order.filter(group => group.title !== 'Struktur Data' && !group.title.startsWith('OOP ·') && !group.title.startsWith('Basis Data ·'))},
   {id:'struktur-data', title:'Struktur Data', href:'/programming/struktur-data', summary:'Pelajari cara mengatur data: stack, queue, linked list, tree, graph, heap, pencarian, dan pengurutan.', groups:order.filter(group => group.title === 'Struktur Data')},
   {id:'oop', title:'Pemrograman Berorientasi Objek', href:'/programming/oop', summary:'Belajar OOP dengan Python: class, object, enkapsulasi, inheritance, polymorphism, komposisi, serta studi kasus.', groups:order.filter(group => group.title.startsWith('OOP ·'))},
+  {id:'basis-data', title:'Basis Data', href:'/programming/basis-data', summary:'Pahami tabel, relasi, SQL, transaksi, indeks, serta SQLite dengan Python melalui latihan dan studi kasus.', groups:order.filter(group => group.title.startsWith('Basis Data ·'))},
 ];
 
 // Keep article URLs and programming/<slug> progress keys stable.

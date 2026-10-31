@@ -4000,5 +4000,761 @@
       "answer": 0,
       "explanation": "Riwayat latihan hanya urutan status; audit dan konkurensi perlu rancangan tambahan."
     }
+  ],
+  "db-pengantar": [
+    {
+      "question": "Apa DBMS itu?",
+      "options": [
+        "Perangkat lunak pengelola database",
+        "Satu baris pelanggan",
+        "Nama lain untuk Python"
+      ],
+      "answer": 0,
+      "explanation": "DBMS mengelola penyimpanan dan operasi data."
+    },
+    {
+      "question": "Apa SQL?",
+      "options": [
+        "Server fisik wajib",
+        "Bahasa untuk menyatakan operasi database",
+        "Nama file JSON"
+      ],
+      "answer": 1,
+      "explanation": "SQL digunakan untuk kueri dan perubahan data."
+    },
+    {
+      "question": "Apakah OOP wajib sebelum mulai konsep database?",
+      "options": [
+        "Ya seluruh OOP harus selesai",
+        "Hanya jika memakai SELECT",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Konsep database dapat dipelajari terpisah; bab Python memerlukan dasar Python."
+    },
+    {
+      "question": "Apakah semua dialek SQL identik?",
+      "options": [
+        "Tidak",
+        "Ya seluruh sintaks pasti sama",
+        "Hanya nama tabel berbeda"
+      ],
+      "answer": 0,
+      "explanation": "DBMS memiliki dukungan dan aturan sintaks yang dapat berbeda."
+    }
+  ],
+  "db-tabel-kunci": [
+    {
+      "question": "Apa fungsi primary key?",
+      "options": [
+        "Mengidentifikasi baris secara unik",
+        "Mengurutkan semua SELECT otomatis",
+        "Menyimpan seluruh tabel lain"
+      ],
+      "answer": 0,
+      "explanation": "Kunci membedakan identitas baris."
+    },
+    {
+      "question": "Bagaimana memeriksa nilai NULL?",
+      "options": [
+        "= NULL",
+        "IS NULL",
+        "== kosong selalu"
+      ],
+      "answer": 1,
+      "explanation": "NULL memakai logika nilai tak diketahui; gunakan IS NULL."
+    },
+    {
+      "question": "Apakah NULL sama dengan string kosong?",
+      "options": [
+        "Ya selalu",
+        "Hanya pada kolom nama",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "String kosong adalah nilai teks, sedangkan NULL tidak mempunyai nilai tersebut."
+    },
+    {
+      "question": "Apakah UNIQUE email SQLite otomatis melarang beberapa NULL?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya jika id genap"
+      ],
+      "answer": 0,
+      "explanation": "SQLite mengizinkan beberapa NULL pada constraint UNIQUE."
+    }
+  ],
+  "db-relasi-erd": [
+    {
+      "question": "Apa fungsi foreign key?",
+      "options": [
+        "Menjaga referensi antarbaris tabel",
+        "Membuat semua kolom unik",
+        "Menyalin tabel induk"
+      ],
+      "answer": 0,
+      "explanation": "Foreign key menjaga hubungan dengan kunci yang dirujuk."
+    },
+    {
+      "question": "Cara umum memodelkan banyak-ke-banyak?",
+      "options": [
+        "Satu string berisi semua id",
+        "Tabel penghubung",
+        "Menghapus seluruh primary key"
+      ],
+      "answer": 1,
+      "explanation": "Tabel penghubung mewakili setiap pasangan relasi."
+    },
+    {
+      "question": "Apa pengaruh NOT NULL pada teknisi_id contoh?",
+      "options": [
+        "Nama teknisi tidak boleh sama",
+        "Tiket boleh tanpa teknisi",
+        "Setiap tiket harus mempunyai referensi teknisi"
+      ],
+      "answer": 2,
+      "explanation": "NULL tidak diterima pada kolom itu."
+    },
+    {
+      "question": "Apa yang perlu diaktifkan per koneksi SQLite?",
+      "options": [
+        "PRAGMA foreign_keys = ON",
+        "SELECT semua tabel",
+        "ORDER BY id"
+      ],
+      "answer": 0,
+      "explanation": "Pemeriksaan relasi harus diaktifkan sebelum transaksi."
+    }
+  ],
+  "db-normalisasi": [
+    {
+      "question": "Apa contoh anomali pembaruan?",
+      "options": [
+        "Nama teknisi berubah hanya pada sebagian salinan",
+        "SELECT memakai ORDER BY",
+        "Kolom mempunyai nama pendek"
+      ],
+      "answer": 0,
+      "explanation": "Duplikasi fakta membuat pembaruan tidak konsisten."
+    },
+    {
+      "question": "Apa fokus 2NF pada kunci gabungan?",
+      "options": [
+        "Menghapus seluruh relasi",
+        "Menghindari ketergantungan hanya pada sebagian kunci",
+        "Memaksa dua tabel saja"
+      ],
+      "answer": 1,
+      "explanation": "Fakta nonkunci harus bergantung pada kunci secara utuh dalam pengertian 2NF."
+    },
+    {
+      "question": "Mengapa nama teknisi dipisahkan dari tiket?",
+      "options": [
+        "Agar tidak bisa JOIN",
+        "Agar semua data menjadi NULL",
+        "Fakta nama melekat pada teknisi"
+      ],
+      "answer": 2,
+      "explanation": "Relasi menghindari penyalinan fakta yang sama pada banyak tiket."
+    },
+    {
+      "question": "Apakah harga transaksi historis boleh berbeda dari harga produk terkini?",
+      "options": [
+        "Boleh jika itu fakta transaksi yang sengaja disimpan",
+        "Tidak pernah",
+        "Hanya jika tabel tidak punya kunci"
+      ],
+      "answer": 0,
+      "explanation": "Snapshot transaksi dan fakta harga terkini dapat mempunyai makna berbeda."
+    }
+  ],
+  "db-sqlite-latihan": [
+    {
+      "question": "Apa perintah terminal pembuka file contoh?",
+      "options": [
+        "sqlite3 latihan.db",
+        "SELECT latihan.db",
+        "python CREATE TABLE"
+      ],
+      "answer": 0,
+      "explanation": "Shell sqlite3 membuka atau membuat file database."
+    },
+    {
+      "question": "Mengapa contoh memakai database kosong?",
+      "options": [
+        "Agar tidak perlu titik koma",
+        "Agar skema dan data contoh tidak bertabrakan",
+        "Agar seluruh data menjadi permanen"
+      ],
+      "answer": 1,
+      "explanation": "Nama tabel dapat diulang antarartikel."
+    },
+    {
+      "question": "Apakah :memory: otomatis bertahan setelah koneksi ditutup?",
+      "options": [
+        "Ya seperti file",
+        "Hanya jika memakai SELECT",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Database memori biasa hidup selama koneksinya."
+    },
+    {
+      "question": "Apakah urutan baris dijamin tanpa ORDER BY?",
+      "options": [
+        "Tidak",
+        "Ya menurut id",
+        "Ya menurut urutan INSERT selalu"
+      ],
+      "answer": 0,
+      "explanation": "Nyatakan ORDER BY jika urutan merupakan bagian hasil."
+    }
+  ],
+  "db-create-tipe": [
+    {
+      "question": "Apa tugas CREATE TABLE?",
+      "options": [
+        "Mendefinisikan struktur dan aturan tabel",
+        "Membaca seluruh tabel",
+        "Mencadangkan database otomatis"
+      ],
+      "answer": 0,
+      "explanation": "DDL menyatakan struktur database."
+    },
+    {
+      "question": "Apakah NOT NULL melarang string kosong?",
+      "options": [
+        "Ya selalu",
+        "Tidak",
+        "Hanya pada id"
+      ],
+      "answer": 1,
+      "explanation": "String kosong tetap nilai teks non-NULL."
+    },
+    {
+      "question": "Mengapa CHECK stok digabung NOT NULL?",
+      "options": [
+        "Agar stok menjadi string",
+        "Agar primary key hilang",
+        "CHECK saja dapat lolos bila hasilnya NULL"
+      ],
+      "answer": 2,
+      "explanation": "Nilai wajib dan syarat rentang perlu dinyatakan masing-masing."
+    },
+    {
+      "question": "Apa yang DEFAULT 0 lakukan?",
+      "options": [
+        "Memberi stok 0 jika kolom dihilangkan saat INSERT",
+        "Mengubah semua NULL menjadi 0 selalu",
+        "Menghapus stok lama"
+      ],
+      "answer": 0,
+      "explanation": "Default bukan pengganti seluruh validasi."
+    }
+  ],
+  "db-crud": [
+    {
+      "question": "Apa fungsi INSERT?",
+      "options": [
+        "Menambah baris",
+        "Membuat koneksi Python",
+        "Membaca saja"
+      ],
+      "answer": 0,
+      "explanation": "INSERT mengisi data baru ke tabel."
+    },
+    {
+      "question": "Apa risiko UPDATE tanpa WHERE?",
+      "options": [
+        "Tidak ada baris pernah terubah",
+        "Semua baris dapat terubah",
+        "Tabel otomatis dicadangkan"
+      ],
+      "answer": 1,
+      "explanation": "Tanpa pembatas, targetnya seluruh tabel."
+    },
+    {
+      "question": "Apa beda DELETE dan DROP TABLE?",
+      "options": [
+        "Keduanya selalu sama",
+        "DROP hanya membaca tabel",
+        "DELETE menghapus baris; DROP menghapus tabel"
+      ],
+      "answer": 2,
+      "explanation": "Struktur tabel masih ada setelah DELETE."
+    },
+    {
+      "question": "Apa pemeriksaan sebelum perubahan?",
+      "options": [
+        "SELECT memakai kondisi sasaran yang sama",
+        "Menghapus constraint",
+        "Mengganti nama semua kolom"
+      ],
+      "answer": 0,
+      "explanation": "Pemeriksaan sasaran membantu menemukan WHERE yang salah."
+    }
+  ],
+  "db-select-filter": [
+    {
+      "question": "Apa WHERE lakukan?",
+      "options": [
+        "Menyaring baris",
+        "Mengganti nama tabel",
+        "Menghapus hasil selalu"
+      ],
+      "answer": 0,
+      "explanation": "WHERE memilih baris sesuai kondisi."
+    },
+    {
+      "question": "Apa DESC berarti?",
+      "options": [
+        "Tidak ada urutan",
+        "Urutan menurun",
+        "Hanya nilai NULL"
+      ],
+      "answer": 1,
+      "explanation": "DESC mengurutkan dari nilai lebih besar menurut aturan tipe/kolasi."
+    },
+    {
+      "question": "Apakah LIMIT 2 berarti dua stok terbesar tanpa ORDER BY?",
+      "options": [
+        "Ya selalu",
+        "Hanya bila ada id",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Makna terbesar perlu ORDER BY yang sesuai."
+    },
+    {
+      "question": "Bagaimana membuat urutan seri lebih jelas?",
+      "options": [
+        "Tambahkan kolom pembeda pada ORDER BY",
+        "Hilangkan primary key",
+        "Gunakan SELECT * saja"
+      ],
+      "answer": 0,
+      "explanation": "Kolom pembeda seperti id memberi urutan yang terdefinisi."
+    }
+  ],
+  "db-join": [
+    {
+      "question": "JOIN mana mempertahankan seluruh sisi kiri?",
+      "options": [
+        "LEFT JOIN",
+        "INNER JOIN selalu",
+        "CROSS JOIN dengan semua data"
+      ],
+      "answer": 0,
+      "explanation": "LEFT JOIN mempertahankan baris tanpa pasangan kanan."
+    },
+    {
+      "question": "Apa ON tentukan?",
+      "options": [
+        "Urutan file database",
+        "Kondisi pasangan baris",
+        "Warna tabel"
+      ],
+      "answer": 1,
+      "explanation": "ON menyatakan hubungan yang digunakan JOIN."
+    },
+    {
+      "question": "Apakah dua baris Ana untuk dua tiket pasti salah?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika nama panjang",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Jumlah pasangan mengikuti kardinalitas relasi."
+    },
+    {
+      "question": "Apakah COALESCE pada SELECT menambah tiket ke tabel?",
+      "options": [
+        "Tidak",
+        "Ya otomatis",
+        "Hanya untuk nilai kosong"
+      ],
+      "answer": 0,
+      "explanation": "Ekspresi itu membentuk hasil kueri tanpa INSERT."
+    }
+  ],
+  "db-agregasi": [
+    {
+      "question": "Apa GROUP BY lakukan?",
+      "options": [
+        "Membentuk kelompok untuk ringkasan",
+        "Menghapus seluruh baris",
+        "Membuat primary key"
+      ],
+      "answer": 0,
+      "explanation": "Agregat dihitung per kelompok."
+    },
+    {
+      "question": "Apa COUNT(kolom) abaikan?",
+      "options": [
+        "Semua angka nol",
+        "Nilai NULL",
+        "Semua string"
+      ],
+      "answer": 1,
+      "explanation": "COUNT(kolom) menghitung nilai non-NULL."
+    },
+    {
+      "question": "Di mana kondisi COUNT(*) >= 2 untuk kelompok?",
+      "options": [
+        "VALUES",
+        "CREATE INDEX",
+        "HAVING"
+      ],
+      "answer": 2,
+      "explanation": "HAVING memfilter hasil agregasi kelompok."
+    },
+    {
+      "question": "Apa yang perlu dicek sebelum menghitung setelah JOIN?",
+      "options": [
+        "Apakah pasangan menggandakan baris yang dihitung",
+        "Hanya nama alias",
+        "Jumlah titik koma saja"
+      ],
+      "answer": 0,
+      "explanation": "Tingkat detail hasil JOIN memengaruhi ringkasan."
+    }
+  ],
+  "db-integritas": [
+    {
+      "question": "Apa manfaat constraint selain validasi aplikasi?",
+      "options": [
+        "Menjaga data dari semua jalur penulisan yang tunduk engine",
+        "Menggantikan seluruh rancangan aplikasi",
+        "Membuat semua data benar secara semantik"
+      ],
+      "answer": 0,
+      "explanation": "Aturan engine membantu mencegah nilai dan relasi yang tidak sah."
+    },
+    {
+      "question": "Apa ON DELETE RESTRICT lakukan?",
+      "options": [
+        "Selalu menghapus semua anak",
+        "Menolak induk yang masih dirujuk",
+        "Mengganti seluruh id"
+      ],
+      "answer": 1,
+      "explanation": "Relasi yang masih dipakai menghalangi penghapusan induk."
+    },
+    {
+      "question": "Apa syarat kolom untuk SET NULL?",
+      "options": [
+        "Harus selalu primary key",
+        "Tidak boleh punya tipe",
+        "Boleh NULL"
+      ],
+      "answer": 2,
+      "explanation": "Aksi tersebut harus dapat menulis NULL."
+    },
+    {
+      "question": "Kapan mengaktifkan foreign_keys?",
+      "options": [
+        "Pada koneksi sebelum transaksi",
+        "Hanya setelah COMMIT terakhir selamanya",
+        "Cukup pada satu koneksi lain"
+      ],
+      "answer": 0,
+      "explanation": "Pengaturan berlaku per koneksi."
+    }
+  ],
+  "db-transaksi": [
+    {
+      "question": "Apa fungsi COMMIT?",
+      "options": [
+        "Mengesahkan transaksi",
+        "Menghapus database",
+        "Membaca satu kolom"
+      ],
+      "answer": 0,
+      "explanation": "Commit menyelesaikan transaksi dengan mempertahankan perubahannya."
+    },
+    {
+      "question": "Apa ROLLBACK batalkan?",
+      "options": [
+        "Semua commit sejak database dibuat",
+        "Perubahan transaksi berjalan yang belum disahkan",
+        "Hanya tabel terbaru"
+      ],
+      "answer": 1,
+      "explanation": "Rollback biasa mengembalikan unit transaksi yang sedang aktif."
+    },
+    {
+      "question": "Apa contoh Atomicity?",
+      "options": [
+        "Setiap tabel punya warna",
+        "Semua data harus string",
+        "Pengurangan dan penambahan stok berhasil atau batal bersama"
+      ],
+      "answer": 2,
+      "explanation": "Unit pekerjaan diperlakukan sebagai satu kesatuan."
+    },
+    {
+      "question": "Berapa penulis simultan pada SQLite?",
+      "options": [
+        "Satu pada satu waktu",
+        "Tidak terbatas tanpa konflik",
+        "Selalu nol"
+      ],
+      "answer": 0,
+      "explanation": "Penulisan perlu koordinasi; transaksi singkat membantu mengurangi konflik."
+    }
+  ],
+  "db-indeks": [
+    {
+      "question": "Apa manfaat utama indeks?",
+      "options": [
+        "Membantu pola pencarian tertentu",
+        "Menghapus kebutuhan WHERE",
+        "Mencadangkan database"
+      ],
+      "answer": 0,
+      "explanation": "Indeks menyediakan jalur akses tambahan untuk engine."
+    },
+    {
+      "question": "Apa biaya indeks?",
+      "options": [
+        "Tidak ada biaya apa pun",
+        "Ruang dan pemeliharaan saat menulis",
+        "Hanya warna tampilan"
+      ],
+      "answer": 1,
+      "explanation": "Setiap perubahan data terkait dapat membutuhkan perubahan indeks."
+    },
+    {
+      "question": "Apa EXPLAIN QUERY PLAN tunjukkan?",
+      "options": [
+        "Jaminan waktu selalu sama",
+        "Isi seluruh cadangan",
+        "Rencana akses yang dipilih engine"
+      ],
+      "answer": 2,
+      "explanation": "Plan membantu memahami pelaksanaan kueri."
+    },
+    {
+      "question": "Apakah urutan kolom indeks gabungan penting?",
+      "options": [
+        "Ya",
+        "Tidak pernah",
+        "Hanya nama indeks yang penting"
+      ],
+      "answer": 0,
+      "explanation": "Awalan kolom memengaruhi pola pencarian yang dapat dimanfaatkan."
+    }
+  ],
+  "db-python-sqlite": [
+    {
+      "question": "Apa fungsi fetchall?",
+      "options": [
+        "Mengambil seluruh baris hasil tersisa",
+        "Menyimpan file otomatis",
+        "Membuat indeks"
+      ],
+      "answer": 0,
+      "explanation": "fetchall membaca hasil cursor ke memori."
+    },
+    {
+      "question": "Path relatif database mengikuti apa?",
+      "options": [
+        "Selalu folder instalasi Python",
+        "Working directory proses",
+        "Selalu folder unduhan"
+      ],
+      "answer": 1,
+      "explanation": "Gunakan path yang jelas agar tidak membuka file yang salah."
+    },
+    {
+      "question": "Apakah commit sama dengan close?",
+      "options": [
+        "Ya selalu",
+        "Hanya untuk tabel kosong",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Commit menyelesaikan transaksi, close melepaskan koneksi."
+    },
+    {
+      "question": "Mengapa memakai koneksi kedua pada demo?",
+      "options": [
+        "Membuktikan data sudah dapat dibaca kembali dari file",
+        "Menggandakan seluruh database otomatis",
+        "Menghapus koneksi pertama"
+      ],
+      "answer": 0,
+      "explanation": "File yang disahkan dibaca melalui koneksi baru."
+    }
+  ],
+  "db-parameter": [
+    {
+      "question": "Apa cara mengisi nilai masukan pada kueri?",
+      "options": [
+        "Placeholder dan parameter terpisah",
+        "F-string berisi masukan bebas",
+        "Menghapus tanda petik dari semua nama"
+      ],
+      "answer": 0,
+      "explanation": "Driver mengikat nilai sebagai data."
+    },
+    {
+      "question": "Bagaimana tuple satu parameter ditulis?",
+      "options": [
+        "(nama)",
+        "(nama,)",
+        "{nama}"
+      ],
+      "answer": 1,
+      "explanation": "Koma membuat tuple satu elemen."
+    },
+    {
+      "question": "Apakah placeholder menggantikan nama tabel?",
+      "options": [
+        "Ya untuk semua identifier",
+        "Hanya bila huruf besar",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Struktur identifier dipilih melalui rancangan atau allowlist."
+    },
+    {
+      "question": "Apa yang tetap perlu selain parameterisasi?",
+      "options": [
+        "Validasi, izin, sasaran, dan transaksi",
+        "Tidak ada aturan lagi",
+        "Menghapus seluruh constraint"
+      ],
+      "answer": 0,
+      "explanation": "Keamanan struktur kueri hanya satu bagian dari kebenaran aplikasi."
+    }
+  ],
+  "db-migrasi-backup": [
+    {
+      "question": "Apa migrasi skema?",
+      "options": [
+        "Perubahan struktur yang dikelola terurut",
+        "Hanya SELECT harian",
+        "Penghapusan semua data wajib"
+      ],
+      "answer": 0,
+      "explanation": "Migrasi mengelola perubahan struktur aplikasi."
+    },
+    {
+      "question": "Siapa mengelola user_version?",
+      "options": [
+        "SQLite otomatis untuk setiap ALTER",
+        "Aplikasi",
+        "Nama file database"
+      ],
+      "answer": 1,
+      "explanation": "Nomor versi tidak mempunyai automasi migrasi bawaan."
+    },
+    {
+      "question": "Apakah cadangan ikut menerima data setelah snapshot?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika id bertambah",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Snapshot mencerminkan keadaan saat dicadangkan."
+    },
+    {
+      "question": "Apa bukti backup lebih berguna daripada sekadar file ada?",
+      "options": [
+        "Dapat dibuka dan lolos pemeriksaan data serta skema",
+        "Nama file panjang",
+        "Ukuran file tidak nol saja"
+      ],
+      "answer": 0,
+      "explanation": "Uji pemulihan membuktikan cadangan dapat digunakan."
+    }
+  ],
+  "db-kasus-perpustakaan": [
+    {
+      "question": "Apa satu baris buku wakili?",
+      "options": [
+        "Satu eksemplar fisik",
+        "Semua judul di perpustakaan",
+        "Satu anggota"
+      ],
+      "answer": 0,
+      "explanation": "Aturan keunikan aktif berlaku per eksemplar."
+    },
+    {
+      "question": "Apa yang menjaga satu pinjaman aktif per buku?",
+      "options": [
+        "Nama buku harus berbeda",
+        "Indeks unik parsial saat kembali IS NULL",
+        "SELECT tanpa constraint"
+      ],
+      "answer": 1,
+      "explanation": "Indeks menegakkan aturan pada database."
+    },
+    {
+      "question": "Apa akibat pinjam gagal karena constraint?",
+      "options": [
+        "Transaksi dibiarkan terbuka sengaja",
+        "Semua riwayat dihapus",
+        "Rollback lalu error diteruskan"
+      ],
+      "answer": 2,
+      "explanation": "Unit pekerjaan diselesaikan sebagai kegagalan yang jelas."
+    },
+    {
+      "question": "Mengapa UPDATE pengembalian memakai kembali IS NULL?",
+      "options": [
+        "Agar pengembalian berulang tidak dianggap berhasil",
+        "Agar seluruh pinjaman berubah",
+        "Agar tanggal dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Sasaran hanya pinjaman yang masih aktif."
+    }
+  ],
+  "db-kasus-tiket": [
+    {
+      "question": "Kapan teknisi ditetapkan pada alur contoh?",
+      "options": [
+        "Saat BARU menjadi DIPROSES",
+        "Sesudah SELESAI saja",
+        "Tidak pernah"
+      ],
+      "answer": 0,
+      "explanation": "Versi ini menyatukan penugasan dengan mulai proses."
+    },
+    {
+      "question": "Apa yang menjamin UPDATE dan INSERT riwayat satu unit?",
+      "options": [
+        "ORDER BY saja",
+        "Transaksi",
+        "Nama tabel sama"
+      ],
+      "answer": 1,
+      "explanation": "Commit/rollback mengelompokkan kedua perubahan."
+    },
+    {
+      "question": "Apakah CHECK daftar status otomatis menjaga urutan transisi?",
+      "options": [
+        "Ya seluruh urutan selalu dijaga",
+        "Hanya jika id besar",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "CHECK pada contoh memeriksa nilai baris, bukan seluruh alur historis."
+    },
+    {
+      "question": "Apa terjadi bila foreign key teknisi gagal saat ubah?",
+      "options": [
+        "Rollback dan error diteruskan",
+        "Status tetap diubah tanpa riwayat",
+        "Semua teknisi dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Kegagalan membatalkan unit perubahan transaksi."
+    }
   ]
 }

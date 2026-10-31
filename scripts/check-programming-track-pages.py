@@ -7,8 +7,9 @@ from html import unescape
 root = Path(__file__).resolve().parents[1]
 order = json.loads((root / 'lib/programming-order.json').read_text())
 tracks = [
+    ('basis-data', [slug for group in order if group['title'].startswith('Basis Data ·') for slug in group['slugs']]),
     ('oop', [slug for group in order if group['title'].startswith('OOP ·') for slug in group['slugs']]),
-    ('terstruktur', [slug for group in order if group['title'] != 'Struktur Data' and not group['title'].startswith('OOP ·') for slug in group['slugs']]),
+    ('terstruktur', [slug for group in order if group['title'] != 'Struktur Data' and not group['title'].startswith('OOP ·') and not group['title'].startswith('Basis Data ·') for slug in group['slugs']]),
     ('struktur-data', [slug for group in order if group['title'] == 'Struktur Data' for slug in group['slugs']]),
 ]
 for track, slugs in tracks:
@@ -26,6 +27,6 @@ for track, slugs in tracks:
     assert (root / '.next/server/app/programming' / (track + '.html')).exists()
 chooser = (root / '.next/server/app/programming.html').read_text()
 assert 'programming-track-terstruktur' in chooser and 'programming-track-struktur-data' in chooser
-assert 'programming-track-oop' in chooser
+assert 'programming-track-oop' in chooser and 'programming-track-basis-data' in chooser
 assert '<div class="net-catalog"' not in chooser
-print('PASS: all 95 rendered sidebars and previous/next links stay in the right path; selector has three paths')
+print('PASS: all 113 rendered sidebars and previous/next links stay in the right path; selector has four paths')

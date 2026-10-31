@@ -28,5 +28,7 @@
 .programming-track-card:hover{border-color:#65508a}.programming-track-card h2{font-family:Georgia,serif;font-size:clamp(26px,3vw,35px);line-height:1.25;margin:18px 0}
 .programming-track-card p,.programming-track-card li{font-size:15px;line-height:1.8;color:#526079}.programming-track-card ul{padding-left:20px;list-style:disc;margin:18px 0 26px}
 .programming-track-card small{display:block;margin-top:auto;color:#64748b;font-size:12px}.programming-track-card strong{display:block;color:#514298;font-size:14px;margin-top:18px}
-.programming-track-oop{background:#edf5f7}.programming-track-struktur-data{background:#f4f1f8}.programming-track-terstruktur{background:#fffdf8}
+.programming-track-basis-data{background:#fff3ea}.programming-track-oop{background:#edf5f7}.programming-track-struktur-data{background:#f4f1f8}.programming-track-terstruktur{background:#fffdf8}
 @media(max-width:700px){.programming-paths{padding-top:32px}.programming-track-grid{grid-template-columns:1fr;gap:18px}.programming-track-card{padding:24px}}
+
+.academy-header-programming .academy-nav-menu{min-width:0;flex-wrap:wrap;row-gap:6px}.academy-header-programming .academy-nav-links{flex-wrap:wrap;min-width:0}.academy-header-programming .academy-nav-actions{flex-shrink:0}
