@@ -5,7 +5,7 @@ import {programmingTracks} from '@/lib/programming-tracks';
 const track = programmingTracks.find(item => item.id === 'oop')!;
 export const metadata = {
   title:'Pemrograman Berorientasi Objek dengan Python | Learn Programming',
-  description:'Belajar OOP bertahap: class, object, self, enkapsulasi, inheritance, polymorphism, abstraksi, komposisi, dataclass, pengujian, dan dua studi kasus. Contoh Python serta tes pemahaman.',
+  description:'Belajar OOP bertahap: class, object, self, enkapsulasi, inheritance, polymorphism, abstraksi, komposisi, dataclass, pengujian, studi kasus, dan proyek tiket. Contoh Python serta tes pemahaman.',
   alternates:{canonical:'https://article.fikss.site/programming/oop'},
 };
 
