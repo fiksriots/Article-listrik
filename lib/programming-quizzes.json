@@ -3412,5 +3412,593 @@
       "answer": 0,
       "explanation": "Validitas sintaks tidak menggantikan aturan bisnis."
     }
+  ],
+  "lingkungan-python": [
+    {
+      "question": "Apa kegunaan venv?",
+      "options": [
+        "Memisahkan paket antarproyek",
+        "Mengamankan semua kode berbahaya",
+        "Menggantikan instalasi Python dasar"
+      ],
+      "answer": 0,
+      "explanation": "Venv mengatur lingkungan dependensi, bukan batas keamanan."
+    },
+    {
+      "question": "Mengapa memakai python -m pip?",
+      "options": [
+        "Agar tidak perlu internet selamanya",
+        "Agar pip mengikuti interpreter yang dipilih",
+        "Agar seluruh OS diubah"
+      ],
+      "answer": 1,
+      "explanation": "Interpreter tersebut menjalankan modul pip miliknya."
+    },
+    {
+      "question": "Apakah json perlu dipasang dari pip?",
+      "options": [
+        "Ya selalu",
+        "Hanya pada Windows",
+        "Tidak, termasuk library standar"
+      ],
+      "answer": 2,
+      "explanation": "json tersedia pada instalasi Python standar."
+    },
+    {
+      "question": "Apakah .venv sebaiknya disimpan ke Git?",
+      "options": [
+        "Tidak; buat ulang dari catatan dependensi",
+        "Ya beserta semua executable",
+        "Hanya bila ukurannya kecil"
+      ],
+      "answer": 0,
+      "explanation": "Venv bersifat lokal dan tidak dirancang untuk dipindahkan begitu saja."
+    }
+  ],
+  "type-hint-dasar": [
+    {
+      "question": "Apa tugas type hint?",
+      "options": [
+        "Menjelaskan tipe yang diharapkan",
+        "Memaksa semua nilai otomatis benar",
+        "Menyimpan data ke file"
+      ],
+      "answer": 0,
+      "explanation": "Anotasi membantu pembaca dan alat pemeriksa."
+    },
+    {
+      "question": "Apa arti str | None?",
+      "options": [
+        "String selalu kosong",
+        "Hasil bisa string atau None",
+        "Dua string sekaligus"
+      ],
+      "answer": 1,
+      "explanation": "Pemakai perlu menangani kemungkinan tidak ada hasil."
+    },
+    {
+      "question": "Apakah anotasi otomatis mengonversi string menjadi int?",
+      "options": [
+        "Ya selalu",
+        "Hanya bila namanya umur",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Konversi memerlukan operasi eksplisit seperti int jika sesuai."
+    },
+    {
+      "question": "Mengapa tetap perlu validasi rentang?",
+      "options": [
+        "Tipe integer tidak membatasi nilai 0..100",
+        "Anotasi meniadakan tes",
+        "Agar nama fungsi lebih panjang"
+      ],
+      "answer": 0,
+      "explanation": "Tipe dan aturan bisnis menyatakan hal berbeda."
+    }
+  ],
+  "traceback-debugger": [
+    {
+      "question": "Apa langkah awal membaca traceback?",
+      "options": [
+        "Baca jenis dan pesan error lalu telusuri frame terkait",
+        "Hapus seluruh fungsi",
+        "Selalu abaikan baris terakhir"
+      ],
+      "answer": 0,
+      "explanation": "Akhir traceback menjelaskan kategori kegagalan."
+    },
+    {
+      "question": "Apa fungsi s pada pdb?",
+      "options": [
+        "Selalu menyimpan file",
+        "Masuk ke pemanggilan fungsi",
+        "Menghentikan Python selamanya"
+      ],
+      "answer": 1,
+      "explanation": "Step masuk membantu menelusuri isi fungsi."
+    },
+    {
+      "question": "Apa yang p banyak lakukan?",
+      "options": [
+        "Menambah banyak satu",
+        "Menghapus banyak",
+        "Menampilkan nilai ekspresi banyak"
+      ],
+      "answer": 2,
+      "explanation": "p dipakai untuk inspeksi ekspresi."
+    },
+    {
+      "question": "Mengapa breakpoint perlu dikelola pada proses otomatis?",
+      "options": [
+        "Dapat membuat proses menunggu input",
+        "Selalu membuat data hilang",
+        "Mengubah tipe semua variabel"
+      ],
+      "answer": 0,
+      "explanation": "Titik henti interaktif bisa menghambat proses tanpa pengguna."
+    }
+  ],
+  "struktur-iterator-generator": [
+    {
+      "question": "Apa yang dikembalikan iter(list)?",
+      "options": [
+        "Iterator",
+        "Salinan mendalam semua elemen",
+        "String JSON"
+      ],
+      "answer": 0,
+      "explanation": "Iterator menyimpan posisi pengambilan nilai."
+    },
+    {
+      "question": "Kapan isi fungsi generator mulai berjalan?",
+      "options": [
+        "Selalu selesai saat fungsi dipanggil",
+        "Saat nilai diminta melalui iterasi",
+        "Hanya saat file disimpan"
+      ],
+      "answer": 1,
+      "explanation": "Generator menunda pelaksanaan hingga konsumsi."
+    },
+    {
+      "question": "Apa hasil setelah generator habis dan dibungkus list lagi?",
+      "options": [
+        "Seluruh data awal",
+        "Otomatis error sintaks",
+        "[]"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada nilai tersisa untuk dikumpulkan."
+    },
+    {
+      "question": "Apakah list(generator) tetap menampung semua hasil?",
+      "options": [
+        "Ya",
+        "Tidak pernah",
+        "Hanya hasil terakhir"
+      ],
+      "answer": 0,
+      "explanation": "Mengubah generator menjadi list mengumpulkan seluruh nilai hasil."
+    }
+  ],
+  "struktur-kasus-pemilihan": [
+    {
+      "question": "Struktur yang langsung menyatakan lokasi unik?",
+      "options": [
+        "Set",
+        "List tanpa aturan tambahan",
+        "String"
+      ],
+      "answer": 0,
+      "explanation": "Set menghilangkan duplikat berdasarkan kesetaraan elemennya."
+    },
+    {
+      "question": "Apa nilai T01 pada dictionary terakhir?",
+      "options": [
+        "Seluruh kejadian T01",
+        "Kejadian terakhir dalam urutan input",
+        "Kejadian pertama saja"
+      ],
+      "answer": 1,
+      "explanation": "Key berulang diberi nilai yang lebih akhir."
+    },
+    {
+      "question": "Apa yang terjadi ketika deque maxlen penuh lalu ditambah?",
+      "options": [
+        "Panjang tumbuh tanpa batas",
+        "Selalu ValueError",
+        "Item paling lama dibuang"
+      ],
+      "answer": 2,
+      "explanation": "Deque terbatas mempertahankan jumlah maksimum."
+    },
+    {
+      "question": "Apa yang perlu dipertimbangkan sebelum membuat indeks?",
+      "options": [
+        "Frekuensi pencarian, biaya pembentukan, pembaruan, dan memori",
+        "Nama struktur paling panjang",
+        "Warna tabel"
+      ],
+      "answer": 0,
+      "explanation": "Keuntungan indeks memiliki biaya dan kebutuhan konsistensi."
+    }
+  ],
+  "oop-modul-package": [
+    {
+      "question": "Apa fungsi __init__.py pada contoh?",
+      "options": [
+        "Menandai regular package",
+        "Menginstal paket dari internet",
+        "Menjalankan semua tes otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Latihan memakai regular package dengan __init__.py."
+    },
+    {
+      "question": "Dari mana perintah dijalankan?",
+      "options": [
+        "Selalu dari folder OS",
+        "Folder proyek yang berisi main.py",
+        "Hanya dari folder tiket_belajar"
+      ],
+      "answer": 1,
+      "explanation": "Root proyek menyediakan jalur impor yang disepakati."
+    },
+    {
+      "question": "Arah ketergantungan yang diinginkan?",
+      "options": [
+        "model wajib mengimpor main",
+        "Semua file saling mengimpor",
+        "main dan tes mengimpor model"
+      ],
+      "answer": 2,
+      "explanation": "Aturan domain dapat dipakai tanpa bergantung titik masuk."
+    },
+    {
+      "question": "Apa perintah menjalankan tes pada contoh?",
+      "options": [
+        "python -m unittest discover -v",
+        "python -m pip test",
+        "python model.py selalu menjalankan tes"
+      ],
+      "answer": 0,
+      "explanation": "Discovery mencari file tes dan menjalankan TestCase."
+    }
+  ],
+  "oop-refactoring": [
+    {
+      "question": "Apa yang dipertahankan saat refactoring?",
+      "options": [
+        "Perilaku yang dapat diamati",
+        "Susunan kode harus tetap sama",
+        "Semua nama variabel wajib sama"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan internal tidak seharusnya mengubah hasil dan aturan yang disepakati."
+    },
+    {
+      "question": "Apa yang sebaiknya tersedia sebelum mengubah struktur?",
+      "options": [
+        "Hanya logo proyek",
+        "Contoh perilaku dan tes",
+        "Sebanyak mungkin class kosong"
+      ],
+      "answer": 1,
+      "explanation": "Tes menjadi pembanding ketika struktur diubah."
+    },
+    {
+      "question": "Apakah semua fungsi harus menjadi class?",
+      "options": [
+        "Ya agar disebut OOP",
+        "Hanya fungsi pendek",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Class dipilih ketika pengelompokan state dan perilaku membantu."
+    },
+    {
+      "question": "Apa yang perlu dibandingkan selain nilai total?",
+      "options": [
+        "Exception dan perubahan state",
+        "Hanya warna output",
+        "Jumlah huruf nama class"
+      ],
+      "answer": 0,
+      "explanation": "Perilaku mencakup hasil, kegagalan, serta efek perubahan data."
+    }
+  ],
+  "oop-relasi-uml": [
+    {
+      "question": "Apa association nyatakan?",
+      "options": [
+        "Hubungan antarobjek",
+        "Selalu pewarisan",
+        "Selalu deep copy"
+      ],
+      "answer": 0,
+      "explanation": "Association tidak otomatis menetapkan kepemilikan."
+    },
+    {
+      "question": "Apa ciri aggregation pada contoh?",
+      "options": [
+        "Buku harus dihapus saat koleksi berubah",
+        "Buku dibuat dari luar dan tetap mandiri",
+        "Semua buku disalin mendalam"
+      ],
+      "answer": 1,
+      "explanation": "Bagian tidak bergantung sepenuhnya pada siklus hidup koleksi."
+    },
+    {
+      "question": "Apa multiplicity jelaskan?",
+      "options": [
+        "Kecepatan CPU",
+        "Jumlah file Python",
+        "Banyaknya objek dalam hubungan"
+      ],
+      "answer": 2,
+      "explanation": "Contohnya satu anggota dapat memiliki banyak peminjaman."
+    },
+    {
+      "question": "Apakah Python otomatis memaksakan seluruh aturan composition UML?",
+      "options": [
+        "Tidak",
+        "Ya melalui nama class",
+        "Ya jika atribut memakai underscore"
+      ],
+      "answer": 0,
+      "explanation": "Kepemilikan merupakan kontrak rancangan yang perlu dijaga."
+    }
+  ],
+  "oop-solid": [
+    {
+      "question": "Apa fokus SRP?",
+      "options": [
+        "Tanggung jawab dan alasan perubahan yang terfokus",
+        "Satu method wajib per class",
+        "Menghapus semua fungsi"
+      ],
+      "answer": 0,
+      "explanation": "SRP tidak diukur hanya dari jumlah method."
+    },
+    {
+      "question": "Apa yang LSP tuntut?",
+      "options": [
+        "Turunan harus selalu lebih panjang",
+        "Pengganti memenuhi kontrak yang diharapkan pemakai",
+        "Semua class mempunyai atribut sama"
+      ],
+      "answer": 1,
+      "explanation": "Kesamaan nama method belum menjamin kesesuaian perilaku."
+    },
+    {
+      "question": "Apa keuntungan antarmuka kecil menurut ISP?",
+      "options": [
+        "Tidak ada kontrak lagi",
+        "Semua method menjadi global",
+        "Pemakai tidak dibebani kemampuan yang tidak diperlukan"
+      ],
+      "answer": 2,
+      "explanation": "Kontrak disesuaikan dengan kebutuhan klien."
+    },
+    {
+      "question": "Bagaimana DIP tampak pada contoh?",
+      "options": [
+        "Layanan menerima pengirim berkontrak kirim",
+        "Layanan membuat semua koneksi sendiri",
+        "Semua data disimpan global"
+      ],
+      "answer": 0,
+      "explanation": "Logika laporan bergantung pada kemampuan pengiriman, bukan detailnya."
+    }
+  ],
+  "oop-mock": [
+    {
+      "question": "Apa return_value atur?",
+      "options": [
+        "Nilai yang dikembalikan pemanggilan mock",
+        "Nama file tes",
+        "Jumlah thread"
+      ],
+      "answer": 0,
+      "explanation": "Hasil terkontrol memudahkan menguji kondisi tertentu."
+    },
+    {
+      "question": "Bagaimana mensimulasikan timeout?",
+      "options": [
+        "Selalu menunggu perangkat asli",
+        "Gunakan side_effect=TimeoutError(...)",
+        "Menghapus assertion"
+      ],
+      "answer": 1,
+      "explanation": "side_effect dapat melempar exception ketika mock dipanggil."
+    },
+    {
+      "question": "Apa manfaat autospec?",
+      "options": [
+        "Memvalidasi seluruh data fisik",
+        "Menggantikan semua tes integrasi",
+        "Membantu mengikuti signature dan atribut acuan"
+      ],
+      "answer": 2,
+      "explanation": "Autospec membatasi sebagian bentuk pemakaian, bukan seluruh semantik."
+    },
+    {
+      "question": "Apakah exception seharusnya selalu diubah menjadi NORMAL?",
+      "options": [
+        "Tidak; ikuti kontrak penanganan kegagalan",
+        "Ya agar tes lolos",
+        "Ya untuk semua sensor"
+      ],
+      "answer": 0,
+      "explanation": "Menganggap kegagalan sebagai normal dapat menyembunyikan masalah."
+    }
+  ],
+  "oop-strategy": [
+    {
+      "question": "Bagian mana yang bervariasi?",
+      "options": [
+        "Algoritma potongan",
+        "Cara Python menjalankan print",
+        "Nama folder saja"
+      ],
+      "answer": 0,
+      "explanation": "Strategy memisahkan aturan yang dapat diganti."
+    },
+    {
+      "question": "Siapa yang memilih strategi pada contoh?",
+      "options": [
+        "Tagihan lewat nama class otomatis",
+        "Pemanggil Tagihan",
+        "Interpreter secara acak"
+      ],
+      "answer": 1,
+      "explanation": "Strategi diberikan dari luar."
+    },
+    {
+      "question": "Mengapa hasil strategi diperiksa?",
+      "options": [
+        "Agar semua strategi sama persis",
+        "Agar diskon selalu maksimal",
+        "Agar total tidak melanggar kontrak"
+      ],
+      "answer": 2,
+      "explanation": "Implementasi baru tetap harus memberi potongan dalam rentang sah."
+    },
+    {
+      "question": "Apakah Strategy selalu harus berupa class?",
+      "options": [
+        "Tidak; fungsi juga dapat dipakai",
+        "Ya dalam semua Python",
+        "Hanya jika namanya panjang"
+      ],
+      "answer": 0,
+      "explanation": "Fungsi cocok bila kontrak dan state sederhana."
+    }
+  ],
+  "oop-factory": [
+    {
+      "question": "Apa tugas factory?",
+      "options": [
+        "Memilih atau membuat objek",
+        "Menjalankan semua algoritma bisnis",
+        "Menyimpan seluruh objek permanen"
+      ],
+      "answer": 0,
+      "explanation": "Factory memusatkan keputusan pembuatan."
+    },
+    {
+      "question": "Apa hasil jenis tidak dikenal pada contoh?",
+      "options": [
+        "Pengirim layar diam-diam",
+        "ValueError",
+        "None tanpa pesan"
+      ],
+      "answer": 1,
+      "explanation": "Penolakan eksplisit membantu menemukan salah konfigurasi."
+    },
+    {
+      "question": "Apa perbedaan dari Strategy?",
+      "options": [
+        "Keduanya selalu sama",
+        "Strategy hanya untuk file",
+        "Factory membuat objek, Strategy menyediakan variasi perilaku"
+      ],
+      "answer": 2,
+      "explanation": "Pola dapat digabung karena tanggung jawabnya berbeda."
+    },
+    {
+      "question": "Apakah contoh mengirim SMS?",
+      "options": [
+        "Tidak",
+        "Ya jika jenis sms",
+        "Ya tanpa konfigurasi"
+      ],
+      "answer": 0,
+      "explanation": "Jenis sms ditolak dan seluruh produk yang ada hanya simulasi."
+    }
+  ],
+  "oop-observer": [
+    {
+      "question": "Apa tujuan Observer?",
+      "options": [
+        "Memisahkan penerbit dari penerima kejadian",
+        "Menyalin semua objek",
+        "Mempercepat semua loop"
+      ],
+      "answer": 0,
+      "explanation": "Penerbit memberi kabar melalui kontrak callback."
+    },
+    {
+      "question": "Bagaimana notifikasi dijalankan pada contoh?",
+      "options": [
+        "Selalu paralel",
+        "Sinkron dalam urutan pendaftaran",
+        "Dijamin terkirim setelah proses mati"
+      ],
+      "answer": 1,
+      "explanation": "Tidak ada thread atau antrean persisten."
+    },
+    {
+      "question": "Apa manfaat snapshot tuple penerima?",
+      "options": [
+        "Membuat deep copy semua objek",
+        "Menghapus semua exception",
+        "Perubahan daftar tidak mengubah putaran saat ini"
+      ],
+      "answer": 2,
+      "explanation": "Snapshot menetapkan penerima untuk satu putaran emit."
+    },
+    {
+      "question": "Apa terjadi jika callback melempar error?",
+      "options": [
+        "Error diteruskan dan callback berikutnya tidak dijalankan",
+        "Selalu diabaikan",
+        "Semua callback diulang otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Ini kebijakan fail-fast yang dipilih contoh."
+    }
+  ],
+  "oop-proyek-tiket": [
+    {
+      "question": "Apa prasyarat penugasan tiket?",
+      "options": [
+        "Tiket BARU dan teknisi terdaftar",
+        "Tiket sudah selesai",
+        "Kode teknisi boleh sembarang"
+      ],
+      "answer": 0,
+      "explanation": "Layanan memeriksa registry dan Tiket memeriksa status."
+    },
+    {
+      "question": "Apa manfaat dictionary pada layanan?",
+      "options": [
+        "Penyimpanan permanen otomatis",
+        "Pencarian berdasarkan kode dan pemeriksaan duplikat",
+        "Menghapus kebutuhan validasi"
+      ],
+      "answer": 1,
+      "explanation": "Registry menghubungkan kode ke objek."
+    },
+    {
+      "question": "Apa yang dilakukan pemuat dengan riwayat BARU → SELESAI?",
+      "options": [
+        "Menerima semua string",
+        "Menghapus riwayat lalu diam",
+        "Menolak karena melompati alur"
+      ],
+      "answer": 2,
+      "explanation": "Riwayat harus merupakan prefix alur yang disepakati."
+    },
+    {
+      "question": "Apakah demo sudah mempunyai audit lengkap serta akses serentak?",
+      "options": [
+        "Belum",
+        "Sudah otomatis karena memakai JSON",
+        "Sudah karena memakai class"
+      ],
+      "answer": 0,
+      "explanation": "Riwayat latihan hanya urutan status; audit dan konkurensi perlu rancangan tambahan."
+    }
   ]
 }

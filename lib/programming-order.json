@@ -4,6 +4,7 @@
     "slugs": [
       "pemrograman-terstruktur",
       "menjalankan-python",
+      "lingkungan-python",
       "variabel-tipe-data",
       "input-output-operator"
     ]
@@ -48,6 +49,7 @@
     "slugs": [
       "fungsi-parameter-return",
       "fungsi-lanjutan",
+      "type-hint-dasar",
       "modul-import"
     ]
   },
@@ -57,6 +59,7 @@
       "struktur-data-dasar",
       "struktur-kompleksitas",
       "struktur-array-list-lanjutan",
+      "struktur-iterator-generator",
       "struktur-set",
       "struktur-dictionary",
       "struktur-hash-lanjutan",
@@ -82,6 +85,7 @@
       "struktur-sort-lanjutan",
       "struktur-priority-heap",
       "struktur-pemilihan",
+      "struktur-kasus-pemilihan",
       "struktur-pengujian",
       "struktur-benchmark",
       "struktur-kasus-kurung",
@@ -95,6 +99,7 @@
     "slugs": [
       "kesalahan-validasi",
       "debugging-pengujian",
+      "traceback-debugger",
       "file-teks-csv-json"
     ]
   },
@@ -119,12 +124,13 @@
   {
     "title": "OOP · Rancangan dan relasi",
     "slugs": [
-      "oop-merancang-class",
       "oop-enkapsulasi",
+      "oop-merancang-class",
       "oop-inheritance",
       "oop-polymorphism",
       "oop-abstraksi",
-      "oop-komposisi"
+      "oop-komposisi",
+      "oop-relasi-uml"
     ]
   },
   {
@@ -135,14 +141,32 @@
       "oop-dataclass",
       "oop-exception-khusus",
       "oop-json-objek",
-      "oop-pengujian"
+      "oop-pengujian",
+      "oop-mock"
+    ]
+  },
+  {
+    "title": "OOP · Penyusunan proyek",
+    "slugs": [
+      "oop-modul-package",
+      "oop-refactoring",
+      "oop-solid"
+    ]
+  },
+  {
+    "title": "OOP · Pola rancangan",
+    "slugs": [
+      "oop-strategy",
+      "oop-factory",
+      "oop-observer"
     ]
   },
   {
     "title": "OOP · Studi kasus",
     "slugs": [
       "oop-kasus-inventaris",
-      "oop-kasus-monitoring"
+      "oop-kasus-monitoring",
+      "oop-proyek-tiket"
     ]
   }
 ]

@@ -42,7 +42,9 @@ for lesson in extra + structures + oop:
         # Multi-file module examples share this folder; each other lesson is isolated.
         for block in lesson['blocks']:
             if block.get('filename'):
-                (folder / block['filename']).write_text(block['code'], encoding='utf-8')
+                target = folder / block['filename']
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(block['code'], encoding='utf-8')
         os.chdir(folder)
         sys.path.insert(0, str(folder))
         try:
@@ -51,6 +53,7 @@ for lesson in extra + structures + oop:
                     continue
                 ast.parse(block['code'])
                 target = folder / block.get('filename', f'example_{index}.py')
+                target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text(block['code'], encoding='utf-8')
                 values = iter(block.get('inputs', []))
                 output = io.StringIO()
@@ -111,4 +114,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 81 ordered lessons, 324 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 95 ordered lessons, 380 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

@@ -46,7 +46,7 @@ export default async function Page({params}:{params:Promise<{slug:string}>}) {
         <aside className="net-warning"><strong>Perhatikan bagian ini</strong><p>{lesson.warning}</p></aside>
         <section className="net-check"><h2>Cek pemahaman</h2><p>{lesson.check}</p><details><summary>Lihat pembahasan</summary><p>{lesson.answer}</p></details></section>
         <ProgrammingQuiz key={slug} slug={slug} questions={programmingQuizzes[slug as keyof typeof programmingQuizzes]}/>
-        <section className="net-sources"><h2>Baca sumber resminya</h2><ul><li><a href={lesson.source}>Dokumentasi resmi Python terkait materi ↗</a></li>{slug === 'menjalankan-python' && <li><a href="https://www.python.org/downloads/">Unduh Python dari situs resmi ↗</a></li>}</ul></section>
+        <section className="net-sources"><h2>Baca sumber resminya</h2><ul><li><a href={lesson.source}>Sumber terkait materi ↗</a></li>{slug === 'menjalankan-python' && <li><a href="https://www.python.org/downloads/">Unduh Python dari situs resmi ↗</a></li>}</ul></section>
       </article>
       <ArticleShare title={lesson.title} summary={lesson.summary} path={'/programming/'+slug}/>
       <Complete key={slug} slug={slug}/>

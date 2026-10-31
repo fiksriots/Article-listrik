@@ -1035,5 +1035,255 @@
       "Tutup program dan jalankan lagi; periksa ringkasan.",
       "Uji input tidak valid dan file rusak pada salinan folder, lalu bandingkan dengan tabel."
     ]
+  },
+  {
+    "slug": "lingkungan-python",
+    "title": "Virtual environment, pip, dan dependensi proyek",
+    "summary": "Siapkan lingkungan Python terpisah dan kenali interpreter yang sedang digunakan.",
+    "analogy": "Setiap proyek memiliki kotak alat sendiri; memasang alat pada satu kotak tidak perlu mengubah kotak proyek lain.",
+    "explain": [
+      "Virtual environment atau venv memberi lingkungan paket tersendiri di atas instalasi Python yang sudah ada. Buat folder proyek, masuk ke folder itu, lalu buat .venv. Kode sumber disimpan di luar .venv karena lingkungan tersebut boleh dibuat ulang.",
+      "Pada Windows gunakan py -m venv .venv. Pada Linux/macOS umumnya python3 -m venv .venv. Setelah aktif, python mengarah ke interpreter lingkungan. Jika perintah py tidak tersedia, gunakan nama interpreter Python yang terpasang dan periksa versinya.",
+      "python -m pip memakai pip milik interpreter tersebut. Ini mengurangi kekeliruan memasang paket ke Python lain. Paket library standar seperti json dan unittest tidak perlu dipasang dari pip. Contoh pada Learn Programming memakai library standar, sehingga tidak memerlukan unduhan paket tambahan.",
+      "Untuk proyek yang membutuhkan dependensi eksternal, pasang paket yang memang diperlukan setelah memeriksa dokumentasinya. python -m pip freeze mencatat paket terpasang beserta versinya, tetapi bukan jaminan reproduksi sempurna lintas OS dan versi Python. Catat versi Python, uji pemasangan ulang, dan gunakan lockfile saat kebutuhan proyek meningkat.",
+      "Jangan memasukkan folder .venv ke Git. Simpan source serta catatan dependensi yang sudah diperiksa. Aktivasi hanya memudahkan pemilihan interpreter; tanpa aktivasi pun kamu dapat memanggil .venv/Scripts/python.exe atau .venv/bin/python secara langsung. Venv bukan sandbox keamanan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Membuat venv",
+          "Lingkungan paket proyek",
+          "py / python3 -m venv .venv"
+        ],
+        [
+          "Memilih pip",
+          "Ikuti interpreter aktif",
+          "python -m pip --version"
+        ],
+        [
+          "Library standar",
+          "Sudah bersama Python",
+          "json, pathlib, unittest"
+        ],
+        [
+          "Keluar",
+          "Mengakhiri aktivasi shell",
+          "deactivate"
+        ],
+        [
+          "Git",
+          "Simpan source, bukan venv",
+          "Tambahkan .venv/ ke .gitignore"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Windows · PowerShell",
+        "code": "py -m venv .venv\n.venv\\Scripts\\Activate.ps1\npython --version\npython -m pip --version",
+        "output": "",
+        "explanation": "Jalankan di terminal PowerShell, satu baris setiap kali. Jika kebijakan PowerShell menolak aktivasi, gunakan .venv\\Scripts\\python.exe secara langsung; tidak perlu mengubah kebijakan keamanan.",
+        "language": "text"
+      },
+      {
+        "label": "Linux / macOS · terminal",
+        "code": "python3 -m venv .venv\nsource .venv/bin/activate\npython --version\npython -m pip --version",
+        "output": "",
+        "explanation": "Jalankan di shell yang mendukung source. Beberapa distribusi perlu memasang dukungan venv melalui pengelola paket OS terlebih dahulu; ikuti pesan dan dokumentasi distribusinya.",
+        "language": "text"
+      },
+      {
+        "label": "Periksa interpreter · terminal",
+        "code": "python -c \"import sys; print(sys.executable); print(sys.prefix != sys.base_prefix)\"",
+        "output": "",
+        "explanation": "Jalankan di terminal setelah aktivasi. Baris pertama menampilkan path interpreter; baris kedua seharusnya True ketika memakai venv. Path berbeda menurut folder dan OS. Perintah ini hanya membaca informasi lingkungan.",
+        "language": "text"
+      },
+      {
+        "label": "Catat dan pasang ulang dependensi",
+        "code": "python -m pip freeze > requirements.txt\npython -m pip install -r requirements.txt\ndeactivate",
+        "output": "",
+        "explanation": "Ini perintah terminal, bukan Python. Freeze dapat menimpa requirements.txt; gunakan nama baru bila sudah mempunyai berkas penting. Tinjau isinya; perintah install dapat memerlukan akses internet.",
+        "language": "text"
+      }
+    ],
+    "steps": [
+      "Buat folder latihan kosong di luar proyek penting.",
+      "Buat venv sesuai OS dan periksa pip serta interpreter.",
+      "Jalankan kode pemeriksaan memakai interpreter venv.",
+      "Keluar dari aktivasi dan jelaskan perbedaan sebelum serta sesudahnya."
+    ],
+    "practice": [
+      "Jalankan pemeriksaan tanpa aktivasi lewat path interpreter venv.",
+      "Tuliskan perbedaan library standar dan paket eksternal.",
+      "Buat .gitignore yang mengecualikan .venv/ dan __pycache__/."
+    ],
+    "warning": "Keluaran pemeriksaan lingkungan memang bervariasi. Jangan menyalin nama folder atau executable milik orang lain tanpa menyesuaikan OS dan interpreter.",
+    "check": "Apakah aktivasi venv selalu wajib sebelum menjalankan program?",
+    "answer": "Tidak. Aktivasi memudahkan pemilihan interpreter; path lengkap interpreter venv juga dapat dipanggil langsung.",
+    "source": "https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "type-hint-dasar",
+    "title": "Type hint: menjelaskan masukan dan hasil fungsi",
+    "summary": "Gunakan anotasi untuk memperjelas kontrak tanpa menggantikan validasi.",
+    "analogy": "Label pada kotak menjelaskan isi yang diharapkan; label itu sendiri tidak mencegah orang memasukkan barang yang salah.",
+    "explain": [
+      "Type hint memberi informasi tipe pada parameter, hasil fungsi, dan variabel. Contoh def rata_rata(nilai: list[int]) -> float berarti pemakai diharapkan memberi list integer dan menerima float. Anotasi tidak otomatis mengubah data atau menolak tipe salah saat runtime.",
+      "Pada Python 3.11, list[int], dict[str, int], dan str | None dapat ditulis langsung. None menyatakan tidak ada hasil, misalnya pencarian kode yang tidak ditemukan. Pemakai perlu memeriksa None sebelum memperlakukan hasil sebagai string.",
+      "Editor dan pemeriksa tipe statis dapat menemukan sebagian ketidakcocokan tanpa menjalankan semua jalur program. Library typing mendukung anotasi tambahan, tetapi pemeriksaan statis eksternal bukan bagian otomatis dari eksekusi python berkas.py.",
+      "Aturan domain tetap perlu validasi. Fungsi contoh menerima list angka integer 0 sampai 100, menolak list kosong, bool, serta nilai di luar rentang. Type hint list[int] sendiri tidak menyatakan rentang itu. Pemeriksaan runtime dan anotasi mempunyai tugas berbeda."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "nilai: list[int]",
+          "Informasi tipe parameter",
+          "List integer diharapkan"
+        ],
+        [
+          "-> float",
+          "Informasi tipe hasil",
+          "Rata-rata berupa float"
+        ],
+        [
+          "str | None",
+          "Dua kemungkinan hasil",
+          "Ditemukan atau tidak"
+        ],
+        [
+          "Validasi",
+          "Memeriksa data saat berjalan",
+          "Tipe, kosong, dan rentang"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Kontrak fungsi dan validasi",
+        "code": "def rata_rata(nilai: list[int]) -> float:\n    if not isinstance(nilai, list) or not nilai:\n        raise ValueError(\"Nilai harus list yang tidak kosong\")\n    if any(type(n) is not int or not 0 <= n <= 100 for n in nilai):\n        raise ValueError(\"Setiap nilai harus integer 0..100\")\n    return sum(nilai) / len(nilai)\n\ndef cari_nama(kode: str, data: dict[str, str]) -> str | None:\n    return data.get(kode)\n\nprint(rata_rata([80, 90]))\nhasil = cari_nama(\"B02\", {\"B01\": \"Buku\"})\nprint(\"Tidak ditemukan\" if hasil is None else hasil)\ntry:\n    rata_rata([True])\nexcept ValueError as error:\n    print(error)",
+        "output": "85.0\nTidak ditemukan\nSetiap nilai harus integer 0..100",
+        "explanation": "cari_nama mendokumentasikan tipe tetapi tidak melakukan validasi runtime tambahan. rata_rata mempunyai aturan domain yang diperiksa secara eksplisit."
+      }
+    ],
+    "steps": [
+      "Baca anotasi tanpa menjalankan kode; jelaskan input dan hasilnya.",
+      "Jalankan contoh valid dan pencarian yang tidak ditemukan.",
+      "Uji list kosong, bool, float, dan nilai 101."
+    ],
+    "practice": [
+      "Tambahkan type hint pada fungsi subtotal proyek kasir.",
+      "Buat fungsi pencarian angka yang menghasilkan int | None.",
+      "Pisahkan aturan tipe dan rentang dalam penjelasan fungsi."
+    ],
+    "warning": "Anotasi bukan konversi. Menulis umur: int tidak otomatis mengubah \"20\" menjadi 20. Pemeriksa tipe statis juga tidak menggantikan tes perilaku.",
+    "check": "Apakah list[int] memastikan semua nilai berada pada 0 sampai 100?",
+    "answer": "Tidak. Rentang nilai adalah aturan domain yang perlu diperiksa secara terpisah.",
+    "source": "https://docs.python.org/3.11/library/typing.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "traceback-debugger",
+    "title": "Membaca traceback dan menelusuri program dengan debugger",
+    "summary": "Temukan lokasi error lalu periksa nilai sebelum memperbaiki penyebabnya.",
+    "analogy": "Jejak perjalanan menunjukkan rute sebelum kendaraan berhenti. Baris terakhir menunjukkan masalah, sedangkan jejak sebelumnya menunjukkan bagaimana sampai ke sana.",
+    "explain": [
+      "Traceback menunjukkan rangkaian pemanggilan yang berakhir pada exception. Mulai dengan membaca jenis dan pesan exception di bagian akhir, lalu cari frame kode milikmu yang berkaitan. Nomor baris dan path berbeda menurut lokasi penyimpanan berkas.",
+      "Pada contoh, rata_rata([]) membagi total 0 dengan panjang 0. Kita menangkap ZeroDivisionError untuk menampilkan kategori dan daftar nama fungsi secara ringkas. Pada error yang tidak ditangkap, Python menampilkan traceback lengkap. Perbaikan seharusnya mengikuti kebutuhan: misalnya list kosong ditolak dengan ValueError, bukan asal mengembalikan nol.",
+      "Debugger pdb memungkinkan berhenti di suatu baris, melihat variabel, dan menjalankan langkah berikutnya. Jalankan python -m pdb debug_latihan.py dari terminal. Gunakan n untuk next, s untuk masuk fungsi, p ekspresi untuk memeriksa nilai, c untuk melanjutkan, dan q untuk keluar.",
+      "Alternatifnya, breakpoint() dapat ditempatkan sebelum operasi yang ingin diperiksa. Jangan meninggalkan breakpoint aktif pada program otomatis karena proses dapat menunggu input. Hapus atau kelola titik henti setelah investigasi selesai."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Akhir traceback",
+          "Jenis serta pesan error",
+          "ZeroDivisionError"
+        ],
+        [
+          "Frame",
+          "Lokasi pemanggilan",
+          "main → rata_rata"
+        ],
+        [
+          "n / s",
+          "Langkah berikut / masuk fungsi",
+          "Telusuri perubahan nilai"
+        ],
+        [
+          "p len(nilai)",
+          "Periksa ekspresi",
+          "Lihat jumlah elemen"
+        ],
+        [
+          "c / q",
+          "Lanjut / keluar",
+          "Selesaikan sesi debugger"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Jejak kegagalan yang ringkas",
+        "code": "import traceback\n\ndef rata_rata(nilai):\n    return sum(nilai) / len(nilai)\n\ndef main():\n    return rata_rata([])\n\ntry:\n    main()\nexcept ZeroDivisionError as error:\n    frames = traceback.extract_tb(error.__traceback__)\n    print(type(error).__name__)\n    print(\" -> \".join(frame.name for frame in frames))",
+        "output": "ZeroDivisionError\n<module> -> main -> rata_rata",
+        "explanation": "Contoh menangkap error agar keluaran tetap pendek. Frame paling akhir menunjuk operasi pembagian yang gagal."
+      },
+      {
+        "label": "debug_latihan.py · program untuk sesi pdb",
+        "code": "def rata_rata(nilai):\n    total = sum(nilai)\n    banyak = len(nilai)\n    return total / banyak\n\nprint(rata_rata([70, 90]))",
+        "output": "80.0",
+        "explanation": "Simpan dengan nama debug_latihan.py. Jalankan normal untuk melihat hasil, lalu jalankan perintah terminal pada blok berikut.",
+        "filename": "debug_latihan.py"
+      },
+      {
+        "label": "Terminal · mulai debugger",
+        "code": "python -m pdb debug_latihan.py",
+        "output": "",
+        "explanation": "Saat pdb berhenti, ketik n sampai mencapai pemanggilan rata_rata, lalu s untuk masuk. Periksa p nilai, p total, dan p banyak setelah assignment masing-masing terjadi; c melanjutkan, q keluar. Prompt, path, dan nomor baris bervariasi.",
+        "language": "text"
+      }
+    ],
+    "steps": [
+      "Jalankan contoh jejak dan baca urutan dari main menuju rata_rata.",
+      "Buka program debug_latihan.py dengan pdb dari terminal.",
+      "Periksa total dan banyak sebelum baris return dijalankan.",
+      "Tambahkan validasi list kosong lalu uji kembali hasil normal serta input kosong."
+    ],
+    "practice": [
+      "Buat traceback IndexError dari akses list dan temukan baris sumbernya.",
+      "Perbaiki rata_rata agar input kosong menghasilkan ValueError yang jelas.",
+      "Tuliskan perbedaan n dan s setelah mencobanya."
+    ],
+    "warning": "Debugger menjalankan program sungguhan. Menjalankan ekspresi yang mengubah objek saat inspeksi dapat memengaruhi state; mulai dengan pemeriksaan yang hanya membaca data.",
+    "check": "Apakah nama exception di akhir traceback cukup untuk memperbaiki program?",
+    "answer": "Belum. Hubungkan jenis error dengan frame, nilai variabel, dan aturan input yang diinginkan.",
+    "source": "https://docs.python.org/3.11/library/pdb.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   }
 ]

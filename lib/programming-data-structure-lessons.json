@@ -2130,5 +2130,149 @@
     "diagramAlt": "Graph berarah dengan biaya A ke B 4, A ke C 1, C ke B 2, B ke D 1, dan C ke D 5. Rute A–C–B–D berbiaya 4. E terpisah.",
     "stage": 0,
     "minutes": 55
+  },
+  {
+    "slug": "struktur-iterator-generator",
+    "title": "Iterator dan generator: mengolah data bertahap",
+    "summary": "Bedakan kumpulan yang bisa diulang dengan aliran yang dikonsumsi sekali.",
+    "analogy": "Daripada mengangkat semua kotak sekaligus, petugas meminta satu kotak berikutnya ketika siap memprosesnya.",
+    "explain": [
+      "Iterable adalah objek yang dapat menghasilkan iterator, misalnya list. iter(data) menghasilkan iterator; next(iterator) mengambil nilai berikutnya. Ketika habis, iterator menghasilkan StopIteration. for menangani mekanisme ini secara otomatis.",
+      "Generator adalah cara membuat iterator menggunakan fungsi yang berisi yield. Pemanggilan fungsi generator menghasilkan objek generator; isi fungsi baru dijalankan saat diminta nilai berikutnya. State lokal tersimpan di antara yield.",
+      "Iterator umumnya dikonsumsi sekali. Setelah list(aliran) menghabiskan generator, pemanggilan list(aliran) berikutnya menghasilkan list kosong. Panggil fungsi generator lagi jika perlu aliran baru; jangan menganggap generator dapat di-reset otomatis.",
+      "Pemrosesan bertahap dapat mengurangi penampungan hasil antara, tetapi tidak menghilangkan memori sumber yang sudah berupa list. list(generator) tetap mengumpulkan seluruh hasil. Efek samping dan error di dalam fungsi generator juga terjadi ketika iterasi dijalankan, bukan selalu saat generator dibuat."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Iterable",
+          "Bisa menghasilkan iterator",
+          "list, tuple"
+        ],
+        [
+          "Iterator",
+          "Memberikan nilai berikut",
+          "next(it)"
+        ],
+        [
+          "yield",
+          "Kirim satu nilai lalu jeda",
+          "State fungsi dilanjutkan"
+        ],
+        [
+          "StopIteration",
+          "Tidak ada nilai lagi",
+          "Ditangani oleh for"
+        ],
+        [
+          "Lazy",
+          "Dikerjakan sesuai permintaan",
+          "Bukan otomatis tanpa biaya memori"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Meminta nilai berikut dan menyaring bertahap",
+        "code": "def suhu_tinggi(data, batas):\n    for nilai in data:\n        if nilai >= batas:\n            yield nilai\n\niterator = iter([10, 20])\nprint(next(iterator))\nprint(next(iterator))\nprint(next(iterator, \"Habis\"))\n\naliran = suhu_tinggi([28, 35, 31, 37], 35)\nprint(next(aliran))\nprint(list(aliran))\nprint(list(aliran))\nprint(list(suhu_tinggi([28, 35, 31, 37], 35)))",
+        "output": "10\n20\nHabis\n35\n[37]\n[]\n[35, 37]",
+        "explanation": "next dengan default menghasilkan Habis ketika iterator selesai. Nilai 35 sudah dikonsumsi sebelum list(aliran) mengumpulkan sisanya."
+      }
+    ],
+    "steps": [
+      "Jalankan iterator kecil dan tandai posisi sesudah setiap next.",
+      "Prediksi hasil list setelah satu nilai generator dikonsumsi.",
+      "Buat generator baru dan bandingkan dengan generator yang sudah habis."
+    ],
+    "practice": [
+      "Buat generator bilangan genap dari iterable input.",
+      "Gunakan range berukuran besar tanpa langsung membungkus hasil dengan list.",
+      "Jelaskan mengapa generator tidak mengurangi ukuran list sumber yang sudah dibuat."
+    ],
+    "warning": "Jangan menyimpan generator yang sama untuk dua pemakai yang sama-sama mengharapkan semua data. Mereka berbagi posisi konsumsi; buat aliran baru atau tentukan strategi penampungan secara sengaja.",
+    "check": "Mengapa pemanggilan list kedua pada generator yang sama menghasilkan []?",
+    "answer": "Generator sudah habis dikonsumsi. Ia tidak otomatis mengulang dari awal.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html#generators",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "struktur-kasus-pemilihan",
+    "title": "Studi kasus: memilih struktur untuk log gangguan",
+    "summary": "Bandingkan kebutuhan urutan, keunikan, pencarian kode, dan riwayat terbatas.",
+    "analogy": "Satu ruang NOC memiliki buku kejadian berurutan, daftar lokasi unik, indeks tiket, dan papan kejadian terbaru. Masing-masing mempunyai tugas berbeda.",
+    "explain": [
+      "Mulailah dari operasi yang dibutuhkan, bukan dari nama algoritma yang paling rumit. Untuk log gangguan, simpan urutan kejadian dengan list, lokasi unik dengan set, pencarian tiket berdasarkan kode dengan dictionary, serta tiga kejadian terakhir dengan deque(maxlen=3).",
+      "Kejadian dan tiket bukan entitas yang sama. Satu tiket dapat menghasilkan banyak kejadian. Contoh indeks dictionary memilih kejadian terakhir yang terlihat untuk setiap kode; ini aturan yang sengaja dipilih, bukan jaminan bahwa dictionary menyimpan seluruh riwayat tiket.",
+      "Pada CPython, pencarian keanggotaan list memeriksa elemen hingga ketemu atau habis, sedangkan dictionary dan set memberi pencarian rata-rata yang efisien melalui hashing dengan asumsi hash yang sesuai. Tetap pertimbangkan biaya membuat indeks, memori tambahan, dan kebutuhan pembaruan; jangan menyatakan satu struktur selalu lebih cepat.",
+      "Contoh hanya mengolah satu snapshot kecil. Dalam aplikasi yang menerima perubahan, indeks serta sumber perlu diperbarui secara konsisten. deque terbatas sengaja membuang kejadian terlama ketika penuh sehingga tidak cocok sebagai satu-satunya arsip permanen."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Urutan seluruh kejadian",
+          "list",
+          "Menyimpan duplikat kejadian"
+        ],
+        [
+          "Lokasi unik",
+          "set",
+          "Hilangkan duplikat, urutkan saat ditampilkan"
+        ],
+        [
+          "Cari kode tiket",
+          "dict",
+          "Contoh: kejadian terakhir per kode"
+        ],
+        [
+          "Riwayat terbaru terbatas",
+          "deque(maxlen=3)",
+          "Buang paling lama saat penuh"
+        ],
+        [
+          "Trade-off",
+          "Biaya indeks dan memori",
+          "Pilih berdasarkan operasi nyata"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Satu sumber, beberapa pandangan data",
+        "code": "from collections import deque\n\nlog = [\n    {\"kode\": \"T01\", \"lokasi\": \"A\", \"status\": \"BARU\"},\n    {\"kode\": \"T02\", \"lokasi\": \"B\", \"status\": \"BARU\"},\n    {\"kode\": \"T01\", \"lokasi\": \"A\", \"status\": \"DIPROSES\"},\n    {\"kode\": \"T01\", \"lokasi\": \"A\", \"status\": \"SELESAI\"},\n]\nlokasi_unik = {item[\"lokasi\"] for item in log}\nterakhir = {item[\"kode\"]: item for item in log}\nterbaru = deque(log, maxlen=3)\nprint(\"Kejadian:\", len(log))\nprint(\"Lokasi:\", sorted(lokasi_unik))\nprint(\"T01:\", terakhir[\"T01\"][\"status\"])\nprint(\"Tiga terbaru:\", [item[\"kode\"] for item in terbaru])\nprint(\"T99 ada:\", \"T99\" in terakhir)",
+        "output": "Kejadian: 4\nLokasi: ['A', 'B']\nT01: SELESAI\nTiga terbaru: ['T02', 'T01', 'T01']\nT99 ada: False",
+        "explanation": "Dictionary comprehension menimpa nilai untuk kode berulang dengan kejadian yang lebih akhir di list. Wadah baru tetap merujuk dictionary kejadian yang sama; ini bukan deep copy."
+      }
+    ],
+    "steps": [
+      "Tuliskan operasi dan aturan duplikat sebelum membaca kode.",
+      "Cocokkan setiap struktur dengan kebutuhan pada tabel.",
+      "Tambahkan satu kejadian dan bangun ulang pandangan; amati item yang keluar dari deque."
+    ],
+    "practice": [
+      "Ubah indeks menjadi kode → list seluruh kejadian jika seluruh riwayat diperlukan.",
+      "Bandingkan pencarian satu kali dengan banyak pencarian sebelum membangun indeks.",
+      "Jelaskan kebutuhan konsistensi ketika data sumber diubah setelah indeks dibuat."
+    ],
+    "warning": "Urutan kejadian mengikuti urutan list, bukan waktu nyata yang diperiksa otomatis. Indeks terakhir pada contoh berarti terakhir dalam urutan input.",
+    "check": "Apakah dictionary terakhir menggantikan seluruh log?",
+    "answer": "Tidak. Dictionary tersebut hanya memegang satu kejadian per kode; log menyimpan seluruh urutan kejadian.",
+    "source": "https://docs.python.org/3.11/library/collections.html#collections.deque",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   }
 ]

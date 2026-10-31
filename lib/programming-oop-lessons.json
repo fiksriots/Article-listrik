@@ -1287,5 +1287,674 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 35
+  },
+  {
+    "slug": "oop-modul-package",
+    "title": "Modul dan package: merapikan proyek OOP",
+    "summary": "Pisahkan model, program utama, dan pengujian tanpa membuat import melingkar.",
+    "analogy": "Alih-alih satu laci berisi semua alat, kelompokkan alat berdasarkan tugas dan beri jalur yang jelas untuk mengambilnya.",
+    "explain": [
+      "Modul adalah berkas Python, sedangkan package mengelompokkan modul melalui nama bertingkat. Contoh memakai regular package tiket_belajar yang mempunyai __init__.py dan model.py. Python juga mendukung namespace package, tetapi itu belum diperlukan pada latihan ini.",
+      "Buat folder proyek lalu simpan berkas persis seperti nama di setiap blok: tiket_belajar/__init__.py, tiket_belajar/model.py, main.py, dan test_model.py. Tanda / menunjukkan folder, bukan bagian dari nama berkas. Seluruh perintah dijalankan dari folder proyek yang berisi main.py.",
+      "Model menyimpan aturan objek tanpa mengimpor program utama. main.py mengimpor model untuk menjalankan aplikasi. File tes juga mengimpor model, sehingga mengimpor class tidak otomatis menjalankan demonstrasi. Guard if __name__ == \"__main__\" membatasi pemanggilan main pada eksekusi langsung.",
+      "Jika modul A mengimpor B dan B kembali membutuhkan A ketika belum selesai dimuat, muncul risiko circular import. Pisahkan kontrak bersama atau ubah arah ketergantungan. Jangan menyelesaikannya dengan menyalin seluruh class ke tiap file.",
+      "Jalankan python main.py untuk demo dan python -m unittest discover -v untuk tes. File test_model.py hanya mendefinisikan tes saat diimpor; penemuan dan pelaksanaannya dilakukan oleh unittest. Tidak ada dependensi eksternal."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "tiket_belajar/__init__.py",
+          "Penanda regular package",
+          "Boleh hanya berisi docstring"
+        ],
+        [
+          "tiket_belajar/model.py",
+          "Aturan domain",
+          "Class Penghitung"
+        ],
+        [
+          "main.py",
+          "Titik masuk aplikasi",
+          "Mengimpor model"
+        ],
+        [
+          "test_model.py",
+          "Pengujian",
+          "Ditemukan unittest"
+        ],
+        [
+          "Arah import",
+          "Pemakai → model",
+          "Model tidak mengimpor main"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tiket_belajar/__init__.py",
+        "code": "\"\"\"Package latihan model tiket.\"\"\"",
+        "output": "",
+        "explanation": "Buat folder tiket_belajar dan simpan file ini di dalamnya.",
+        "filename": "tiket_belajar/__init__.py"
+      },
+      {
+        "label": "tiket_belajar/model.py",
+        "code": "class Penghitung:\n    def __init__(self):\n        self.nilai = 0\n\n    def tambah(self, jumlah):\n        if type(jumlah) is not int or jumlah <= 0:\n            raise ValueError(\"Jumlah harus integer positif\")\n        self.nilai += jumlah",
+        "output": "",
+        "explanation": "File model hanya mendefinisikan class. Mengimpornya tidak mencetak demo atau mengakses file.",
+        "filename": "tiket_belajar/model.py"
+      },
+      {
+        "label": "main.py",
+        "code": "from tiket_belajar.model import Penghitung\n\ndef main():\n    penghitung = Penghitung()\n    penghitung.tambah(2)\n    print(\"Nilai:\", penghitung.nilai)\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "Nilai: 2",
+        "explanation": "Jalankan python main.py dari folder proyek, bukan dari dalam folder tiket_belajar.",
+        "filename": "main.py"
+      },
+      {
+        "label": "test_model.py",
+        "code": "import unittest\nfrom tiket_belajar.model import Penghitung\n\nclass TesPenghitung(unittest.TestCase):\n    def test_tambah(self):\n        objek = Penghitung()\n        objek.tambah(2)\n        self.assertEqual(objek.nilai, 2)\n\n    def test_invalid(self):\n        objek = Penghitung()\n        with self.assertRaises(ValueError):\n            objek.tambah(0)\n        self.assertEqual(objek.nilai, 0)",
+        "output": "",
+        "explanation": "Jalankan python -m unittest discover -v. Dua tes diharapkan berstatus ok dan ringkasan OK; waktu serta format path dapat bervariasi.",
+        "filename": "test_model.py"
+      }
+    ],
+    "steps": [
+      "Buat folder dan keempat berkas sesuai label blok.",
+      "Jalankan main.py dari root proyek.",
+      "Jalankan unittest discover dan pastikan kedua tes lolos.",
+      "Periksa bahwa model tidak mengimpor main atau test."
+    ],
+    "practice": [
+      "Pindahkan class Barang dari studi kasus inventaris ke modul tersendiri.",
+      "Tambahkan satu tes instance terpisah tanpa mengubah main.py.",
+      "Jelaskan akibat memberi nama file json.py atau unittest.py yang menutupi library standar."
+    ],
+    "warning": "Jangan menamai file latihan sama seperti library yang ingin diimpor, misalnya json.py. Jangan menjalankan model dari folder berbeda lalu menambal sys.path secara acak; tentukan root proyek dan cara menjalankannya.",
+    "check": "Mengapa demo dibungkus guard __main__?",
+    "answer": "Agar impor main sebagai modul tidak otomatis menjalankan demo; pemanggilan main hanya terjadi saat file dieksekusi langsung.",
+    "source": "https://docs.python.org/3.11/tutorial/modules.html#packages",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-refactoring",
+    "title": "Refactoring: dari fungsi menjadi objek tanpa mengubah hasil",
+    "summary": "Pindahkan pengelolaan state secara bertahap dan bandingkan perilaku sebelum–sesudah.",
+    "analogy": "Mengatur ulang rak gudang seharusnya tidak mengubah jumlah barang yang diterima pelanggan.",
+    "explain": [
+      "Refactoring mengubah susunan internal kode sambil mempertahankan perilaku yang dapat diamati. Ini berbeda dari menambah fitur baru atau mengganti aturan bisnis. Buat contoh hasil dan tes terlebih dahulu, lalu pindahkan bagian kecil satu per satu.",
+      "Pada versi fungsi, dictionary keranjang memegang state dan fungsi tambah serta total mengolahnya. Pada versi objek, state dipindah ke instance Keranjang dengan method yang sama tujuannya. Keduanya tetap menerima integer tidak negatif sebagai harga dan menghasilkan subtotal yang sama.",
+      "Validasi harga dipakai bersama agar perubahan susunan tidak diam-diam mengubah aturan. Uji keranjang kosong, harga nol, beberapa item, dan penolakan input invalid. Pastikan input yang ditolak tidak menambah item.",
+      "Class berguna ketika state dan operasi terkait perlu dijaga bersama. Jika sebuah pekerjaan hanya mentransformasi nilai tanpa state yang bertahan, fungsi biasa mungkin lebih sederhana. Mengubah semua fungsi menjadi class tanpa kebutuhan bukan tujuan refactoring."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Sebelum",
+          "Dictionary + fungsi",
+          "State diberikan sebagai argumen"
+        ],
+        [
+          "Sesudah",
+          "Instance + method",
+          "State disimpan pada self"
+        ],
+        [
+          "Tetap sama",
+          "Aturan input serta subtotal",
+          "Tes sebelum–sesudah"
+        ],
+        [
+          "Berubah",
+          "Organisasi internal",
+          "Bukan fitur baru"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Bandingkan kedua versi",
+        "code": "def harga_valid(harga):\n    if type(harga) is not int or harga < 0:\n        raise ValueError(\"Harga harus integer >= 0\")\n    return harga\n\ndef tambah_lama(keranjang, harga):\n    keranjang[\"harga\"].append(harga_valid(harga))\n\ndef total_lama(keranjang):\n    return sum(keranjang[\"harga\"])\n\nclass Keranjang:\n    def __init__(self):\n        self._harga = []\n\n    def tambah(self, harga):\n        self._harga.append(harga_valid(harga))\n\n    def total(self):\n        return sum(self._harga)\n\nfor data in ([], [0], [5000, 7000]):\n    lama, baru = {\"harga\": []}, Keranjang()\n    for harga in data:\n        tambah_lama(lama, harga)\n        baru.tambah(harga)\n    print(total_lama(lama), baru.total())",
+        "output": "0 0\n0 0\n12000 12000",
+        "explanation": "Aturan penambahan dan perhitungan dipertahankan. Perbedaan ada pada lokasi state dan cara pemanggilannya."
+      }
+    ],
+    "steps": [
+      "Catat hasil versi fungsi pada beberapa input.",
+      "Pindahkan state ke __init__ dan operasi ke method.",
+      "Bandingkan hasil kedua versi untuk input yang sama.",
+      "Uji input invalid dan periksa state tidak berubah."
+    ],
+    "practice": [
+      "Tambahkan tes untuk True, harga negatif, dan string pada kedua versi.",
+      "Pindahkan kode versi lama setelah seluruh pemakai berhasil memakai versi baru.",
+      "Sebutkan satu fungsi murni dari programmu yang tidak perlu diubah menjadi class."
+    ],
+    "warning": "Perbandingan tiga contoh belum membuktikan kesetaraan seluruh perilaku. Periksa juga exception, perubahan state, dan cara pemakai bergantung pada data yang sebelumnya terbuka.",
+    "check": "Apakah menambah diskon baru bersamaan dengan refactoring termasuk perubahan susunan saja?",
+    "answer": "Tidak. Diskon baru mengubah perilaku. Pisahkan agar kegagalan lebih mudah ditelusuri.",
+    "source": "https://refactoring.com/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-relasi-uml",
+    "title": "Relasi antarobjek dan diagram class sederhana",
+    "summary": "Bedakan association, aggregation, dan composition melalui kepemilikan serta siklus hidup.",
+    "analogy": "Anggota terhubung dengan peminjaman, perpustakaan mengelompokkan buku, dan laporan memiliki baris-baris yang dibuat khusus untuk laporan itu.",
+    "explain": [
+      "Association menyatakan hubungan antarobjek tanpa otomatis menentukan kepemilikan. Contohnya satu Peminjaman menghubungkan satu Anggota dengan satu Buku. Multiplicity menjelaskan banyaknya objek yang dapat terhubung, misalnya satu anggota dapat mempunyai nol atau banyak peminjaman.",
+      "Aggregation sering dipakai untuk hubungan keseluruhan–bagian yang bagiannya tetap mandiri. Perpustakaan mengelompokkan Buku yang sudah dibuat dari luar. Mengeluarkan buku dari koleksi tidak berarti objek bukunya langsung hilang atau tidak boleh digunakan pihak lain.",
+      "Composition dalam UML menyatakan kepemilikan yang lebih kuat, termasuk siklus hidup bagian mengikuti pemiliknya. Pada latihan, Laporan membuat BarisLaporan sendiri dan mengelolanya secara konseptual. Python tidak otomatis memaksakan kepemilikan tunggal atau menghapus semua referensi dari luar; aturan itu tetap bagian rancangan.",
+      "Diagram class menampilkan nama class, atribut atau method penting, serta hubungan. Kotak atau garis bukan tujuan akhir: gunakan untuk memeriksa apakah relasi sesuai kebutuhan sebelum kode bertambah besar. Gambar pada artikel memakai label hubungan eksplisit agar dapat dibaca tanpa menghafal seluruh simbol UML.",
+      "Contoh executable berfokus pada aggregation: Perpustakaan menyimpan referensi Buku yang diberikan dari luar. Daftar wadah disalin, tetapi objek Buku tetap sama. Ini menghubungkan materi relasi dengan penyalinan objek yang sudah dipelajari."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Association",
+          "Hubungan umum",
+          "Peminjaman menghubungkan Anggota dan Buku"
+        ],
+        [
+          "Aggregation",
+          "Bagian tetap mandiri",
+          "Perpustakaan memakai Buku dari luar"
+        ],
+        [
+          "Composition",
+          "Kepemilikan bagian lebih kuat",
+          "Laporan membuat baris miliknya"
+        ],
+        [
+          "Multiplicity",
+          "Banyaknya objek terkait",
+          "Satu anggota, nol atau banyak pinjaman"
+        ],
+        [
+          "Python",
+          "Referensi tidak menegakkan UML otomatis",
+          "Kontrak desain perlu dijaga"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Objek bagian tetap mandiri",
+        "code": "class Buku:\n    def __init__(self, judul):\n        self.judul = judul\n\nclass Perpustakaan:\n    def __init__(self, buku):\n        self._buku = list(buku)\n\n    def judul_buku(self):\n        return [item.judul for item in self._buku]\n\nbuku = Buku(\"Python\")\nsumber = [buku]\nperpus = Perpustakaan(sumber)\nsumber.clear()\nprint(perpus.judul_buku())\nbuku.judul = \"Python OOP\"\nprint(perpus.judul_buku())",
+        "output": "['Python']\n['Python OOP']",
+        "explanation": "Wadah sumber terpisah setelah list(buku), tetapi objek Buku masih dibagikan. Karena itu perubahan judul terlihat dari koleksi perpustakaan."
+      }
+    ],
+    "steps": [
+      "Baca tiga relasi pada tabel dan sebutkan pemilik datanya.",
+      "Gambar hubungan anggota, buku, dan peminjaman serta banyaknya relasi.",
+      "Jalankan contoh lalu bedakan penyalinan wadah dengan penyalinan elemen."
+    ],
+    "practice": [
+      "Rancang aturan satu buku hanya boleh mempunyai satu peminjaman aktif.",
+      "Jelaskan apakah Teknisi dan Tiket saling memiliki atau hanya berhubungan.",
+      "Buat Laporan yang membuat baris internal sendiri tanpa membagikan list internalnya langsung."
+    ],
+    "warning": "Jangan menganggap del pemilik otomatis menghapus objek bagian yang masih dirujuk dari tempat lain. Garbage collection mengikuti keterjangkauan objek, bukan label diagram.",
+    "check": "Apakah aggregation berarti salinan semua objek bagian dibuat otomatis?",
+    "answer": "Tidak. Contoh menyimpan referensi ke Buku yang sama; hanya wadah list yang dibuat baru.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "oop-hubungan",
+    "diagramAlt": "Association menghubungkan Peminjaman dengan Buku; aggregation mengelompokkan Buku mandiri; composition menyatakan Laporan memiliki BarisLaporan secara konseptual.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-solid",
+    "title": "SOLID secara bertahap: membagi tanggung jawab",
+    "summary": "Kenali lima prinsip melalui masalah perubahan, bukan sekadar menghafal singkatan.",
+    "analogy": "Bagian penerimaan tiket dan bagian pengiriman laporan mempunyai alasan perubahan yang berbeda, sehingga tidak perlu selalu dirombak bersama.",
+    "explain": [
+      "SRP (Single Responsibility) mengarahkan satu unit pada satu tanggung jawab dan alasan perubahan yang terfokus. “Satu alasan berubah” berkaitan dengan kebutuhan pihak atau aktor yang dilayani, bukan aturan bahwa satu class hanya boleh mempunyai satu method. Contoh memisahkan penghitung ringkasan dari pengirim.",
+      "OCP (Open–Closed) mendorong rancangan agar variasi yang sudah diantisipasi dapat ditambah melalui implementasi baru dengan sedikit perubahan pada logika stabil. Bukan berarti kode lama tidak boleh pernah diedit. Pada contoh, layanan menerima objek pengirim dengan kontrak kirim(teks).",
+      "LSP (Liskov Substitution) menekankan bahwa pengganti harus memenuhi harapan pemakai terhadap kontrak. Jika pengirim baru tiba-tiba menuntut format yang tidak disepakati atau mengubah makna hasil, sekadar mempunyai nama method sama belum cukup.",
+      "ISP (Interface Segregation) menyarankan antarmuka mengikuti kebutuhan pemakai. Layanan yang hanya mengirim ringkasan tidak perlu memaksa pengirim memiliki method cetak_pdf atau hapus_database. DIP (Dependency Inversion) mengarahkan logika tingkat tinggi bergantung pada kontrak, bukan terikat pada detail layanan tertentu.",
+      "Kode berikut memperlihatkan SRP, OCP, dan DIP secara kecil. Tabel serta latihan menerapkan LSP dan ISP sebagai pemeriksaan kontrak. Pada Python, kontrak dapat dinyatakan lewat dokumentasi, duck typing, ABC, atau Protocol sesuai kebutuhan. Prinsip ini panduan keputusan, bukan alasan membuat banyak lapisan pada program sederhana."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "S · SRP",
+          "Tanggung jawab terfokus",
+          "Pisahkan perhitungan dan pengiriman"
+        ],
+        [
+          "O · OCP",
+          "Variasi lewat implementasi baru",
+          "Tambah pengirim tanpa mengubah Layanan"
+        ],
+        [
+          "L · LSP",
+          "Pengganti menjaga kontrak",
+          "kirim(str) tetap menghasilkan str"
+        ],
+        [
+          "I · ISP",
+          "Kontrak sesuai kebutuhan pemakai",
+          "Cukup method kirim"
+        ],
+        [
+          "D · DIP",
+          "Bergantung pada kemampuan",
+          "Pengirim diberikan dari luar"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Layanan memakai kontrak kecil",
+        "code": "def ringkas_tiket(status):\n    return f\"Tiket aktif: {sum(s != 'SELESAI' for s in status)}\"\n\nclass PengirimLayar:\n    def kirim(self, teks):\n        return f\"Layar: {teks}\"\n\nclass PengirimArsipSimulasi:\n    def kirim(self, teks):\n        return f\"Arsip: {teks}\"\n\nclass Layanan:\n    def __init__(self, pengirim):\n        self.pengirim = pengirim\n\n    def laporkan(self, status):\n        return self.pengirim.kirim(ringkas_tiket(status))\n\nstatus = [\"BARU\", \"DIPROSES\", \"SELESAI\"]\nprint(Layanan(PengirimLayar()).laporkan(status))\nprint(Layanan(PengirimArsipSimulasi()).laporkan(status))",
+        "output": "Layar: Tiket aktif: 2\nArsip: Tiket aktif: 2",
+        "explanation": "Pengirim arsip hanya simulasi string; tidak menulis berkas. Contoh mengasumsikan status sudah divalidasi oleh model domain."
+      }
+    ],
+    "steps": [
+      "Temukan dua alasan perubahan: aturan ringkasan dan cara pengiriman.",
+      "Jalankan kedua implementasi melalui Layanan yang sama.",
+      "Tambahkan pengirim baru tanpa menambah if berdasarkan nama class di Layanan.",
+      "Periksa apakah pengirim baru memenuhi kontrak hasil dan kegagalan."
+    ],
+    "practice": [
+      "Tulis satu contoh pelanggaran LSP pada method kirim.",
+      "Pangkas antarmuka besar menjadi kemampuan yang dibutuhkan pemakai.",
+      "Jelaskan kapan fungsi dan satu class kecil cukup tanpa lapisan tambahan."
+    ],
+    "warning": "SOLID tidak otomatis membuat kode lebih singkat atau lebih cepat. Nilai penerapannya dilihat dari perubahan yang lebih aman, kontrak yang jelas, serta kemudahan pengujian.",
+    "check": "Apakah SRP berarti satu class hanya boleh mempunyai satu method?",
+    "answer": "Tidak. Beberapa method dapat mendukung satu tanggung jawab yang sama; perhatikan alasan perubahan dan pihak yang dilayani.",
+    "source": "https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-mock",
+    "title": "Pengujian dengan mock dan dependency injection",
+    "summary": "Uji hasil serta jalur kegagalan tanpa sensor atau layanan sungguhan.",
+    "analogy": "Untuk melatih petugas membaca alarm, kita dapat memberikan angka latihan yang terkontrol tanpa menunggu perangkat benar-benar bermasalah.",
+    "explain": [
+      "Mock menggantikan ketergantungan dalam tes dan dapat mencatat cara pemanggilannya. Pada contoh, Monitor membutuhkan objek pembaca dengan baca(). Tes memberikan mock dari kontrak Pembaca sehingga tidak ada sensor fisik atau jaringan.",
+      "create_autospec memeriksa atribut dan signature sesuai objek acuan; instance=True membuat mock yang berperilaku sebagai instance. spec_set membatasi penambahan atribut yang tidak ada pada acuan. Semua ini membantu menangkap sebagian salah ketik, tetapi tidak membuktikan kesesuaian semantik dengan perangkat nyata.",
+      "return_value menentukan hasil simulasi. side_effect dapat membuat pemanggilan melempar exception, misalnya TimeoutError. Test memeriksa bahwa hasil normal sesuai dan timeout tetap diteruskan agar pemakai dapat menanganinya, bukan diubah diam-diam menjadi NORMAL.",
+      "Contoh memakai dependency injection; objek pembaca diberikan ke Monitor. Jika menggunakan patch, lakukan pada lokasi nama dipakai oleh modul yang diuji, bukan sembarang lokasi definisinya. Selain unit test dengan mock, proyek nyata tetap memerlukan integration test terhadap implementasi dan format data sebenarnya."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "return_value",
+          "Hasil pemanggilan simulasi",
+          "35"
+        ],
+        [
+          "side_effect",
+          "Perilaku lain / exception",
+          "TimeoutError"
+        ],
+        [
+          "assert_called_once_with",
+          "Periksa interaksi penting",
+          "baca dipanggil sekali tanpa argumen"
+        ],
+        [
+          "autospec",
+          "Ikuti signature acuan",
+          "Kurangi salah pemanggilan"
+        ],
+        [
+          "Batas mock",
+          "Bukan perangkat sungguhan",
+          "Tetap butuh tes integrasi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Dua tes dengan pembaca tiruan",
+        "code": "import io\nimport unittest\nfrom unittest.mock import create_autospec\n\nclass Pembaca:\n    def baca(self):\n        raise NotImplementedError\n\nclass Monitor:\n    def __init__(self, pembaca):\n        self.pembaca = pembaca\n\n    def status(self):\n        return \"WASPADA\" if self.pembaca.baca() >= 35 else \"NORMAL\"\n\nclass TesMonitor(unittest.TestCase):\n    def test_batas(self):\n        pembaca = create_autospec(Pembaca, instance=True, spec_set=True)\n        pembaca.baca.return_value = 35\n        self.assertEqual(Monitor(pembaca).status(), \"WASPADA\")\n        pembaca.baca.assert_called_once_with()\n\n    def test_timeout_diteruskan(self):\n        pembaca = create_autospec(Pembaca, instance=True, spec_set=True)\n        pembaca.baca.side_effect = TimeoutError(\"Sensor lambat\")\n        with self.assertRaises(TimeoutError):\n            Monitor(pembaca).status()\n        pembaca.baca.assert_called_once_with()\n\nsuite = unittest.defaultTestLoader.loadTestsFromTestCase(TesMonitor)\nhasil = unittest.TextTestRunner(stream=io.StringIO()).run(suite)\nprint(\"Tes dijalankan:\", hasil.testsRun)\nprint(\"Semua lolos:\", hasil.wasSuccessful())",
+        "output": "Tes dijalankan: 2\nSemua lolos: True",
+        "explanation": "Batas 35 hanya untuk latihan. Mock mengendalikan hasil dan kegagalan; tes tidak menghubungi perangkat apa pun."
+      }
+    ],
+    "steps": [
+      "Jalankan dua tes dan periksa hasil sukses.",
+      "Ubah batas pada implementasi sementara dan lihat tes yang terdampak.",
+      "Tambah tes 34.9 menghasilkan NORMAL lalu pulihkan kode yang sesuai."
+    ],
+    "practice": [
+      "Buat mock pembaca file yang menghasilkan data rusak.",
+      "Uji salah penulisan nama method dan jelaskan manfaat spec_set.",
+      "Rencanakan tes integrasi untuk memastikan hasil sensor nyata memenuhi satuan serta tipe yang disepakati."
+    ],
+    "warning": "Mock yang terlalu meniru detail implementasi membuat tes rapuh. Periksa hasil dan interaksi yang menjadi kontrak; jangan menguji setiap langkah internal tanpa kebutuhan.",
+    "check": "Apakah mock yang lolos membuktikan integrasi sensor nyata sudah benar?",
+    "answer": "Tidak. Mock hanya mengikuti skenario yang kita tentukan; format, komunikasi, serta perilaku sensor nyata perlu diverifikasi terpisah.",
+    "source": "https://docs.python.org/3.11/library/unittest.mock.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-strategy",
+    "title": "Strategy: mengganti aturan tanpa mengubah pemakai",
+    "summary": "Pisahkan algoritma yang bervariasi dan pilih dari luar.",
+    "analogy": "Petugas menghitung tagihan dengan aturan diskon berbeda, tetapi kasir tetap memanggil operasi hitung yang sama.",
+    "explain": [
+      "Strategy menempatkan variasi algoritma di balik kontrak yang sama. Contoh Tagihan menerima strategi potongan dengan method hitung(subtotal), lalu menghitung total akhir tanpa memeriksa nama class strateginya.",
+      "Aturan diskon berbeda dapat ditambahkan melalui objek strategi baru. Pada Python, fungsi yang diberikan sebagai argumen juga bisa menjadi strategy bila tidak memerlukan state atau antarmuka class. Pola bukan kewajiban menambah class pada semua fungsi.",
+      "Kontrak contoh: subtotal adalah integer rupiah tidak negatif; potongan hasil strategi juga integer dalam rentang nol sampai subtotal. Tagihan memeriksa kontrak hasil sehingga implementasi yang mengembalikan potongan berlebih ditolak.",
+      "Contoh memakai diskon 10 persen dengan pembulatan ke bawah melalui pembagian integer. Itu aturan latihan yang harus disepakati, bukan aturan seluruh bisnis. Membuat strategi baru yang mengubah cara pembulatan membutuhkan tes yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Context",
+          "Pemakai strategi",
+          "Tagihan"
+        ],
+        [
+          "Strategy",
+          "Kontrak algoritma",
+          "hitung(subtotal) → potongan"
+        ],
+        [
+          "Implementasi",
+          "Variasi aturan",
+          "TanpaDiskon, DiskonSepuluh"
+        ],
+        [
+          "Validasi",
+          "Jaga batas hasil",
+          "0 <= potongan <= subtotal"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Dua aturan, satu Tagihan",
+        "code": "class TanpaDiskon:\n    def hitung(self, subtotal):\n        return 0\n\nclass DiskonSepuluh:\n    def hitung(self, subtotal):\n        return subtotal // 10\n\nclass Tagihan:\n    def __init__(self, strategi):\n        self.strategi = strategi\n\n    def total(self, subtotal):\n        if type(subtotal) is not int or subtotal < 0:\n            raise ValueError(\"Subtotal harus integer >= 0\")\n        potongan = self.strategi.hitung(subtotal)\n        if type(potongan) is not int or not 0 <= potongan <= subtotal:\n            raise ValueError(\"Potongan strategi tidak valid\")\n        return subtotal - potongan\n\nprint(Tagihan(TanpaDiskon()).total(105000))\nprint(Tagihan(DiskonSepuluh()).total(105000))",
+        "output": "105000\n94500",
+        "explanation": "Tagihan tidak mengandung if untuk nama strategi. Ia tetap memeriksa kontrak input dan hasil potongan."
+      }
+    ],
+    "steps": [
+      "Temukan operasi yang bervariasi dan kontraknya.",
+      "Jalankan kedua strategi pada subtotal yang sama.",
+      "Tambahkan strategi baru tanpa mengubah Tagihan."
+    ],
+    "practice": [
+      "Buat strategi potongan tetap dengan maksimum sebesar subtotal.",
+      "Uji subtotal 0, 1, 99999, serta input invalid.",
+      "Tulis versi strategy menggunakan fungsi dan bandingkan keterbacaannya."
+    ],
+    "warning": "Jangan memakai strategi hanya untuk menyembunyikan satu operasi yang tidak pernah bervariasi. Periksa kebutuhan perubahan sebelum menambah abstraksi.",
+    "check": "Apa bedanya Strategy dengan sekadar if berdasarkan nama class?",
+    "answer": "Pemakai mendelegasikan algoritma ke objek berkontrak sama, sehingga variasi baru tidak memerlukan cabang berdasarkan nama class di pemakai.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-factory",
+    "title": "Factory sederhana: memusatkan pemilihan objek",
+    "summary": "Pisahkan keputusan pembuatan objek dari penggunaan objek.",
+    "analogy": "Loket memilih jenis formulir yang dibutuhkan, lalu petugas berikutnya cukup memakai formulir yang sudah dibuat.",
+    "explain": [
+      "Factory menyatukan keputusan pembuatan objek di satu tempat. Contoh buat_pengirim menerima jenis yang sudah disepakati dan mengembalikan objek dengan method kirim(teks). Kode pemakai tidak perlu mengetahui konstruktor tiap implementasi.",
+      "Artikel ini menggunakan simple factory berupa fungsi. Ini bukan implementasi lengkap pola Factory Method berbasis pewarisan maupun Abstract Factory untuk keluarga objek. Bedakan istilah supaya tidak mengira semua pembuat objek mempunyai struktur yang sama.",
+      "Factory dan Strategy dapat dipakai bersama tetapi tugasnya berbeda: factory memilih atau membuat objek, sedangkan strategy menyediakan perilaku yang dipakai setelah objek tersedia. Satu pola tidak otomatis menggantikan pola lain.",
+      "Jenis yang tidak dikenal harus ditangani secara eksplisit. Contoh menolak dengan ValueError dan tidak melakukan fallback diam-diam. Seluruh pengirim hanya simulasi string; tidak ada email atau layanan luar."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Simple factory",
+          "Fungsi pembuat objek",
+          "buat_pengirim(jenis)"
+        ],
+        [
+          "Produk",
+          "Objek berkontrak sama",
+          "kirim(teks)"
+        ],
+        [
+          "Pemakai",
+          "Menggunakan hasil factory",
+          "Tidak perlu memilih konstruktor lagi"
+        ],
+        [
+          "Jenis tak dikenal",
+          "Kegagalan yang jelas",
+          "ValueError"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Pembuatan terpusat",
+        "code": "class PengirimLayar:\n    def kirim(self, teks):\n        return f\"Layar: {teks}\"\n\nclass PengirimArsip:\n    def kirim(self, teks):\n        return f\"Arsip simulasi: {teks}\"\n\ndef buat_pengirim(jenis):\n    if jenis == \"layar\":\n        return PengirimLayar()\n    if jenis == \"arsip\":\n        return PengirimArsip()\n    raise ValueError(\"Jenis pengirim tidak dikenal\")\n\nfor jenis in (\"layar\", \"arsip\"):\n    print(buat_pengirim(jenis).kirim(\"Tiket T01\"))\ntry:\n    buat_pengirim(\"sms\")\nexcept ValueError as error:\n    print(error)",
+        "output": "Layar: Tiket T01\nArsip simulasi: Tiket T01\nJenis pengirim tidak dikenal",
+        "explanation": "Factory mengembalikan objek baru setiap panggilan yang valid. Pengirim arsip pada contoh tidak menulis file."
+      }
+    ],
+    "steps": [
+      "Catat kontrak hasil factory sebelum membaca implementasi.",
+      "Jalankan jenis valid dan jenis yang tidak dikenal.",
+      "Tambahkan satu implementasi simulasi dan perbarui factory."
+    ],
+    "practice": [
+      "Uji bahwa dua panggilan factory menghasilkan instance terpisah.",
+      "Jelaskan kapan memanggil konstruktor langsung lebih sederhana.",
+      "Pisahkan parameter konfigurasi yang diperlukan tiap produk bila proyek berkembang."
+    ],
+    "warning": "Factory tidak otomatis menghapus seluruh percabangan; contoh justru memusatkannya. Hindari pembuat serbaguna yang diam-diam mengubah konfigurasi global.",
+    "check": "Apakah simple factory di artikel sama persis dengan Factory Method berbasis subclass?",
+    "answer": "Tidak. Ini fungsi pemilih produk sederhana; pola Factory Method mempunyai struktur pewarisan pembuat yang berbeda.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-observer",
+    "title": "Observer: memberi kabar kepada beberapa pemakai",
+    "summary": "Daftarkan penerima perubahan dan tetapkan aturan urutan serta kegagalan.",
+    "analogy": "Saat tiket diperbarui, papan status dan catatan aktivitas sama-sama ingin diberi kabar tanpa harus menjadi bagian dari class tiket.",
+    "explain": [
+      "Observer memisahkan penerbit kejadian dari penerima yang ingin bereaksi. Penerbit menyimpan daftar callback dan memberi kabar saat emit dipanggil. Observer dapat berupa fungsi maupun method objek.",
+      "Kontrak contoh sederhana: callback menerima satu string pesan. Pendaftaran callback sama dua kali tidak menggandakan notifikasi; lepas berhenti berlangganan. Notifikasi berjalan sinkron dalam urutan pendaftaran.",
+      "Loop memakai tuple(self._penerima), yaitu snapshot daftar penerima. Jika callback mengubah pendaftaran ketika notifikasi berjalan, putaran saat ini tetap memakai snapshot lama; perubahan berlaku pada emit berikutnya. Aturan ini perlu dinyatakan dan diuji.",
+      "Jika callback melempar exception, contoh meneruskannya dan menghentikan penerima berikutnya. Pada sistem nyata dapat dipilih kebijakan lain, misalnya mencatat kegagalan lalu melanjutkan, tetapi itu perlu rancangan eksplisit. Observer sinkron bukan message queue, tidak otomatis memberi retry atau pengiriman terjamin."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Publisher",
+          "Menyimpan penerima",
+          "Kanal"
+        ],
+        [
+          "Subscribe",
+          "Mendaftar callback",
+          "daftar(callback)"
+        ],
+        [
+          "Unsubscribe",
+          "Menghapus callback",
+          "lepas(callback)"
+        ],
+        [
+          "Emit",
+          "Memberi kabar sesuai urutan",
+          "Snapshot penerima"
+        ],
+        [
+          "Kegagalan",
+          "Kontrak contoh: fail-fast",
+          "Exception diteruskan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Dua penerima lalu satu dilepas",
+        "code": "class Kanal:\n    def __init__(self):\n        self._penerima = []\n\n    def daftar(self, callback):\n        if not callable(callback):\n            raise ValueError(\"Penerima harus callable\")\n        if callback not in self._penerima:\n            self._penerima.append(callback)\n\n    def lepas(self, callback):\n        if callback in self._penerima:\n            self._penerima.remove(callback)\n\n    def emit(self, pesan):\n        for callback in tuple(self._penerima):\n            callback(pesan)\n\ndef papan(pesan):\n    print(\"Papan:\", pesan)\n\ndef log(pesan):\n    print(\"Log:\", pesan)\n\nkanal = Kanal()\nkanal.daftar(papan)\nkanal.daftar(log)\nkanal.daftar(papan)\nkanal.emit(\"T01 diproses\")\nkanal.lepas(papan)\nkanal.emit(\"T01 selesai\")",
+        "output": "Papan: T01 diproses\nLog: T01 diproses\nLog: T01 selesai",
+        "explanation": "Pendaftaran papan kedua tidak menambah notifikasi ganda. Semua pesan hanya dicetak di proses lokal."
+      }
+    ],
+    "steps": [
+      "Jalankan notifikasi pertama dan catat urutan callback.",
+      "Lepas satu penerima dan jalankan notifikasi kedua.",
+      "Uji callback yang mendaftar penerima baru saat emit berlangsung.",
+      "Uji exception pada callback pertama dan periksa kebijakan berhentinya."
+    ],
+    "practice": [
+      "Ganti print dengan list rekaman untuk membuat assertion urutan.",
+      "Tuliskan kebijakan jika satu observer gagal.",
+      "Jelaskan mengapa observer ini belum cocok sebagai pengiriman pesan yang harus tahan proses mati."
+    ],
+    "warning": "Penerbit menyimpan referensi callback. Lepas penerima yang tidak diperlukan; referensi yang terus disimpan dapat mempertahankan objek lebih lama dari yang diharapkan.",
+    "check": "Jika callback baru didaftarkan saat emit sedang berjalan, apakah ia menerima emit yang sama?",
+    "answer": "Tidak pada implementasi ini, karena loop menggunakan snapshot sebelum callback dijalankan.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-proyek-tiket",
+    "title": "Proyek gabungan: pengelola tiket gangguan jaringan",
+    "summary": "Buat tiket, tugaskan teknisi, jaga alur status, simpan JSON, dan uji pemulihannya.",
+    "analogy": "Satu meja helpdesk memegang indeks teknisi dan tiket; setiap tiket menyimpan urutan perubahan yang sudah dilaluinya.",
+    "explain": [
+      "Proyek ini menggabungkan tiga jalur: fungsi dan percabangan menjaga alur, dictionary mencari tiket serta teknisi berdasarkan kode, sedangkan class membagi tanggung jawab data dan perubahan status. Seluruh data contoh adalah simulasi lokal.",
+      "Kebutuhan: kode teknisi dan nomor tiket wajib unik setelah spasi tepi dibuang. Tiket mengikuti BARU → DITUGASKAN → DIPROSES → SELESAI. Penugasan harus memakai teknisi terdaftar; penyelesaian sebelum diproses serta perubahan ulang setelah selesai ditolak.",
+      "Teknisi menyimpan kode dan nama. Tiket menjaga perpindahan status serta riwayat. LayananTiket menyimpan registry dan memeriksa hubungan antarkode. Gunakan API LayananTiket untuk penugasan agar aturan teknisi terdaftar tetap diperiksa. Contoh memakai ValueError untuk ringkas; sebagai latihan, pecah kategori error menggunakan exception khusus.",
+      "riwayat dikembalikan sebagai tuple agar pemakai tidak memutasi list internal melalui hasil property. Riwayat latihan hanya menyimpan urutan status, belum timestamp, pelaku perubahan, atau bukti audit. Atribut identitas masih publik; setelah registrasi, pemakai tidak boleh mengubah nomor atau kode langsung. Produksi perlu kontrak identitas yang lebih kuat.",
+      "Format JSON memuat versi, list teknisi, dan list tiket. Pemuat menolak field yang salah, versi asing, kode duplikat, teknisi hilang, dan riwayat yang melompati alur. Pemulihan dilakukan dengan menjalankan kembali operasi domain pada LayananTiket baru, bukan mengisi status akhir secara sembarang.",
+      "Demo memakai direktori sementara agar aman dicoba berulang. Fungsi simpan dapat dipakai dengan path folder latihan untuk penyimpanan antarproses; ia akan menimpa file tujuan. Belum ada penulisan atomik, lock, database, login, pengiriman pesan, menu interaktif, atau integrasi router."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Teknisi",
+          "Identitas petugas",
+          "Kode unik pada registry"
+        ],
+        [
+          "Tiket",
+          "Alur dan riwayat satu tiket",
+          "Tidak boleh lompat status"
+        ],
+        [
+          "LayananTiket",
+          "Registry dan relasi",
+          "Cek teknisi terdaftar"
+        ],
+        [
+          "JSON",
+          "Snapshot data dasar",
+          "Versi + validasi saat muat"
+        ],
+        [
+          "Tes",
+          "Normal dan kegagalan",
+          "Duplikat, transisi, referensi, round-trip"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "proyek_tiket.py · program lengkap",
+        "code": "import json\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\n\ndef teks(nilai):\n    if not isinstance(nilai, str) or not nilai.strip():\n        raise ValueError(\"Teks wajib diisi\")\n    return nilai.strip()\n\ndef bentuk(data, field):\n    if not isinstance(data, dict) or set(data) != set(field):\n        raise ValueError(\"Field data tidak sesuai\")\n\nclass Teknisi:\n    def __init__(self, kode, nama):\n        self.kode, self.nama = teks(kode), teks(nama)\n\nclass Tiket:\n    def __init__(self, nomor, judul):\n        self.nomor, self.judul = teks(nomor), teks(judul)\n        self._teknisi = None\n        self._riwayat = [\"BARU\"]\n\n    @property\n    def status(self):\n        return self._riwayat[-1]\n\n    @property\n    def riwayat(self):\n        return tuple(self._riwayat)\n\n    @property\n    def teknisi(self):\n        return self._teknisi\n\n    def _ubah(self, awal, tujuan):\n        if self.status != awal:\n            raise ValueError(\"Perpindahan status tidak diizinkan\")\n        self._riwayat.append(tujuan)\n\n    def tugaskan(self, kode):\n        kode = teks(kode)\n        if self.status != \"BARU\":\n            raise ValueError(\"Hanya tiket BARU dapat ditugaskan\")\n        self._teknisi = kode\n        self._ubah(\"BARU\", \"DITUGASKAN\")\n\n    def proses(self):\n        self._ubah(\"DITUGASKAN\", \"DIPROSES\")\n\n    def selesaikan(self):\n        self._ubah(\"DIPROSES\", \"SELESAI\")\n\nclass LayananTiket:\n    def __init__(self):\n        self._teknisi, self._tiket = {}, {}\n\n    def tambah_teknisi(self, kode, nama):\n        orang = Teknisi(kode, nama)\n        if orang.kode in self._teknisi:\n            raise ValueError(\"Kode teknisi duplikat\")\n        self._teknisi[orang.kode] = orang\n\n    def buat(self, nomor, judul):\n        tiket = Tiket(nomor, judul)\n        if tiket.nomor in self._tiket:\n            raise ValueError(\"Nomor tiket duplikat\")\n        self._tiket[tiket.nomor] = tiket\n\n    def ambil(self, nomor):\n        nomor = teks(nomor)\n        if nomor not in self._tiket:\n            raise ValueError(\"Tiket tidak ditemukan\")\n        return self._tiket[nomor]\n\n    def tugaskan(self, nomor, kode):\n        kode = teks(kode)\n        if kode not in self._teknisi:\n            raise ValueError(\"Teknisi tidak ditemukan\")\n        self.ambil(nomor).tugaskan(kode)\n\n    def proses(self, nomor):\n        self.ambil(nomor).proses()\n\n    def selesaikan(self, nomor):\n        self.ambil(nomor).selesaikan()\n\n    def to_dict(self):\n        return {\"versi\": 1,\n                \"teknisi\": [{\"kode\": t.kode, \"nama\": t.nama} for t in self._teknisi.values()],\n                \"tiket\": [{\"nomor\": t.nomor, \"judul\": t.judul, \"teknisi\": t.teknisi,\n                           \"riwayat\": list(t.riwayat)} for t in self._tiket.values()]}\n\n    @classmethod\n    def from_dict(cls, data):\n        bentuk(data, (\"versi\", \"teknisi\", \"tiket\"))\n        if type(data[\"versi\"]) is not int or data[\"versi\"] != 1:\n            raise ValueError(\"Versi tidak didukung\")\n        if not isinstance(data[\"teknisi\"], list) or not isinstance(data[\"tiket\"], list):\n            raise ValueError(\"Koleksi harus list\")\n        hasil = cls()\n        for orang in data[\"teknisi\"]:\n            bentuk(orang, (\"kode\", \"nama\"))\n            hasil.tambah_teknisi(orang[\"kode\"], orang[\"nama\"])\n        alur = [\"BARU\", \"DITUGASKAN\", \"DIPROSES\", \"SELESAI\"]\n        for item in data[\"tiket\"]:\n            bentuk(item, (\"nomor\", \"judul\", \"teknisi\", \"riwayat\"))\n            riwayat = item[\"riwayat\"]\n            if not isinstance(riwayat, list) or not 1 <= len(riwayat) <= 4:\n                raise ValueError(\"Riwayat tidak valid\")\n            if riwayat != alur[:len(riwayat)]:\n                raise ValueError(\"Urutan riwayat tidak valid\")\n            if len(riwayat) == 1 and item[\"teknisi\"] is not None:\n                raise ValueError(\"Tiket BARU belum mempunyai teknisi\")\n            hasil.buat(item[\"nomor\"], item[\"judul\"])\n            nomor = item[\"nomor\"]\n            if len(riwayat) >= 2:\n                hasil.tugaskan(nomor, item[\"teknisi\"])\n            if len(riwayat) >= 3:\n                hasil.proses(nomor)\n            if len(riwayat) == 4:\n                hasil.selesaikan(nomor)\n        return hasil\n\ndef simpan(path, layanan):\n    data = LayananTiket.from_dict(layanan.to_dict()).to_dict()\n    Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding=\"utf-8\")\n\ndef muat(path):\n    data = json.loads(Path(path).read_text(encoding=\"utf-8\"))\n    return LayananTiket.from_dict(data)\n\ndef main():\n    layanan = LayananTiket()\n    layanan.tambah_teknisi(\"N01\", \"Ana\")\n    layanan.buat(\"T01\", \"Link pelanggan putus\")\n    try:\n        layanan.selesaikan(\"T01\")\n    except ValueError as error:\n        print(\"Ditolak:\", error)\n    layanan.tugaskan(\"T01\", \"N01\")\n    layanan.proses(\"T01\")\n    layanan.selesaikan(\"T01\")\n    with TemporaryDirectory() as folder:\n        path = Path(folder) / \"tiket.json\"\n        simpan(path, layanan)\n        pulih = muat(path)\n        tiket = pulih.ambil(\"T01\")\n        print(tiket.nomor, tiket.teknisi, tiket.status)\n        print(\" -> \".join(tiket.riwayat))\n        print(\"Data sama:\", pulih.to_dict() == layanan.to_dict())\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "Ditolak: Perpindahan status tidak diizinkan\nT01 N01 SELESAI\nBARU -> DITUGASKAN -> DIPROSES -> SELESAI\nData sama: True",
+        "explanation": "Simpan seluruh program sebagai proyek_tiket.py dan jalankan python proyek_tiket.py. Bagian main adalah demo; class dan fungsi dapat diimpor tanpa menjalankan demo.",
+        "filename": "proyek_tiket.py"
+      }
+    ],
+    "steps": [
+      "Baca aturan sebelum menyalin program dan telusuri alur pada diagram.",
+      "Jalankan demo lengkap dan pastikan hasil muat sama dengan data awal.",
+      "Uji nomor duplikat, teknisi tidak terdaftar, serta proses sebelum penugasan.",
+      "Uji file JSON rusak, versi lain, kode referensi hilang, dan urutan riwayat yang salah.",
+      "Pisahkan Teknisi dan Tiket ke model.py, registry ke layanan.py, penyimpanan ke penyimpanan.py, lalu buat main.py serta test_*.py."
+    ],
+    "practice": [
+      "Buat menu CLI yang memanggil API layanan dan menangani kesalahan tanpa menutup aplikasi.",
+      "Tambahkan exception TiketTidakDitemukan dan TransisiTidakValid.",
+      "Tambahkan tes unit serta tes round-trip JSON memakai TemporaryDirectory.",
+      "Buat ringkasan jumlah tiket aktif per teknisi tanpa mengubah data domain.",
+      "Sebagai pengembangan terpisah, rancang identitas baca saja dan penulisan file atomik; jangan menambahkan pembatalan sebelum aturan transisinya disepakati."
+    ],
+    "warning": "Ini proyek latihan satu proses. Gunakan layanan untuk perubahan relasi, jangan mengubah identitas terdaftar atau detail internal langsung. File invalid tidak otomatis diperbaiki atau ditimpa oleh muat; tangani kegagalan dan pertahankan data asli untuk pemeriksaan.",
+    "check": "Mengapa pemuat menjalankan kembali alur, bukan langsung menerima status SELESAI dari file?",
+    "answer": "Agar urutan riwayat, referensi teknisi, dan aturan perpindahan status diperiksa oleh operasi domain yang sama seperti pemakaian normal.",
+    "source": "https://docs.python.org/3.11/library/json.html",
+    "diagram": "oop-tiket-alur",
+    "diagramAlt": "Tiket BARU ditugaskan ke teknisi terdaftar, kemudian DIPROSES dan SELESAI. JSON dimuat kembali dengan memeriksa alur serta referensi.",
+    "stage": 0,
+    "minutes": 60
   }
 ]

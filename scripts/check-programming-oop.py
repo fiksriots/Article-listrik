@@ -10,10 +10,12 @@ import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[1]
 lessons = json.loads((root / 'lib/programming-oop-lessons.json').read_text())
-assert len(lessons) == 19
+assert len(lessons) == 28
 with tempfile.TemporaryDirectory() as directory:
     modules = {}
     for lesson in lessons:
+        if lesson['slug'] == 'oop-modul-package':
+            continue
         target = Path(directory) / (lesson['slug'] + '.py')
         target.write_text(lesson['blocks'][0]['code'])
         with contextlib.redirect_stdout(io.StringIO()):
@@ -130,4 +132,4 @@ with tempfile.TemporaryDirectory() as directory:
         def baca(self):
             return -2
     assert Monitor(OtherReader(), 0).periksa() == (-2, 'NORMAL')
-print('PASS: 19 OOP lessons; identity, isolation, validation, factories, ABCs, composition, dataclasses, inventory state model, monitor boundaries and failures')
+print('PASS: 28 OOP lessons; identity, isolation, validation, factories, ABCs, composition, dataclasses, inventory state model, monitor boundaries and failures')
