@@ -3244,5 +3244,173 @@
       "answer": 0,
       "explanation": "Batas operasional harus mengikuti kebutuhan serta spesifikasi perangkat."
     }
+  ],
+  "oop-merancang-class": [
+    {
+      "question": "Apa langkah awal merancang class?",
+      "options": [
+        "Memahami kebutuhan dan aturan",
+        "Membuat semua kata benda menjadi class",
+        "Menulis inheritance sebanyak mungkin"
+      ],
+      "answer": 0,
+      "explanation": "Class mengikuti kebutuhan, bukan jumlah nama dalam cerita."
+    },
+    {
+      "question": "Apa invariant tiket pada contoh?",
+      "options": [
+        "Tiket selalu boleh langsung selesai",
+        "Status mengikuti BARU → DIPROSES → SELESAI",
+        "Semua tiket mempunyai judul sama"
+      ],
+      "answer": 1,
+      "explanation": "Urutan status dijaga oleh method perubahan state."
+    },
+    {
+      "question": "Apa status setelah selesaikan ditolak pada tiket BARU?",
+      "options": [
+        "SELESAI",
+        "None",
+        "BARU"
+      ],
+      "answer": 2,
+      "explanation": "Pemeriksaan terjadi sebelum assignment status."
+    },
+    {
+      "question": "Di mana print laporan ditempatkan pada contoh?",
+      "options": [
+        "Di luar class Tiket",
+        "Di setiap getter",
+        "Di __init__ sebagai kewajiban"
+      ],
+      "answer": 0,
+      "explanation": "Penyajian dipisahkan dari aturan satu tiket."
+    }
+  ],
+  "oop-copy-objek": [
+    {
+      "question": "Apa yang dilakukan alias = asli?",
+      "options": [
+        "Menunjuk instance yang sama",
+        "Membuat shallow copy",
+        "Membuat deep copy"
+      ],
+      "answer": 0,
+      "explanation": "Penugasan nama tidak menyalin objek."
+    },
+    {
+      "question": "Apa yang masih dibagikan setelah copy(asli) pada contoh?",
+      "options": [
+        "Identitas objek Rak luar",
+        "List buku",
+        "Tidak ada apa pun"
+      ],
+      "answer": 1,
+      "explanation": "Salinan dangkal tetap menyimpan referensi ke list buku yang sama."
+    },
+    {
+      "question": "Mengapa dalam tidak berisi Jaringan?",
+      "options": [
+        "Deep copy menghapus kata Jaringan",
+        "Semua list selalu sama",
+        "Disalin sebelum append dan list-nya terpisah"
+      ],
+      "answer": 2,
+      "explanation": "Waktu penyalinan dan pemisahan list menentukan isi hasil."
+    },
+    {
+      "question": "Apa efek dangkal.buku = [\"Linux\"]?",
+      "options": [
+        "Mengganti referensi atribut dangkal saja",
+        "Mengganti isi list asli",
+        "Mengubah semua Rak"
+      ],
+      "answer": 0,
+      "explanation": "Assignment atribut berbeda dari mutasi list yang sebelumnya dibagikan."
+    }
+  ],
+  "oop-exception-khusus": [
+    {
+      "question": "Apa manfaat exception khusus?",
+      "options": [
+        "Pemakai dapat membedakan kegagalan berdasarkan jenis",
+        "Semua kegagalan otomatis hilang",
+        "Pesan error tidak diperlukan lagi"
+      ],
+      "answer": 0,
+      "explanation": "Jenis exception menyatakan kategori kegagalan yang bermakna."
+    },
+    {
+      "question": "Apa error untuk jumlah True pada contoh?",
+      "options": [
+        "StokTidakCukup",
+        "ValueError",
+        "Tidak ada error"
+      ],
+      "answer": 1,
+      "explanation": "Aturan input menolak bool sebelum memeriksa kecukupan stok."
+    },
+    {
+      "question": "Handler mana sebaiknya lebih dahulu?",
+      "options": [
+        "InventarisError sebelum StokTidakCukup",
+        "Urutan tidak berpengaruh",
+        "StokTidakCukup sebelum InventarisError"
+      ],
+      "answer": 2,
+      "explanation": "Handler induk juga menangkap turunannya."
+    },
+    {
+      "question": "Apa stok sesudah permintaan 3 ditolak dari stok 2?",
+      "options": [
+        "2",
+        "-1",
+        "0"
+      ],
+      "answer": 0,
+      "explanation": "Kegagalan terjadi sebelum pengurangan stok."
+    }
+  ],
+  "oop-json-objek": [
+    {
+      "question": "Apa yang disimpan JSON pada contoh?",
+      "options": [
+        "Data dasar versi dan barang",
+        "Method serta class Python lengkap",
+        "Referensi instance di memori"
+      ],
+      "answer": 0,
+      "explanation": "Method dibentuk kembali melalui class yang sudah ada pada program."
+    },
+    {
+      "question": "Mengapa from_dict memanggil konstruktor?",
+      "options": [
+        "Agar validasi dilewati",
+        "Agar aturan nilai diperiksa kembali",
+        "Agar identitas instance lama kembali"
+      ],
+      "answer": 1,
+      "explanation": "Pemulihan data mengikuti jalur validasi seperti pembuatan biasa."
+    },
+    {
+      "question": "Apa hasil pulih is asli setelah muat?",
+      "options": [
+        "True",
+        "Selalu error",
+        "False"
+      ],
+      "answer": 2,
+      "explanation": "Pemuat membuat instance baru dengan nilai yang dipulihkan."
+    },
+    {
+      "question": "Apa akibat JSON berisi stok -1?",
+      "options": [
+        "Ditolak saat validasi Barang",
+        "Diterima karena sintaks JSON sah",
+        "Diubah otomatis menjadi 0"
+      ],
+      "answer": 0,
+      "explanation": "Validitas sintaks tidak menggantikan aturan bisnis."
+    }
   ]
 }

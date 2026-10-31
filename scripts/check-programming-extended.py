@@ -111,4 +111,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 77 ordered lessons, 308 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 81 ordered lessons, 324 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

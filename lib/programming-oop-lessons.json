@@ -990,5 +990,302 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 45
+  },
+  {
+    "slug": "oop-merancang-class",
+    "title": "Merancang class dari kebutuhan masalah",
+    "summary": "Ubah cerita kebutuhan menjadi atribut, method, dan aturan yang dapat diuji.",
+    "analogy": "Sebelum membuat meja kerja, tentukan tugas tiap petugas. Satu petugas tidak perlu sekaligus mengelola gudang, kasir, dan laporan harian.",
+    "explain": [
+      "Jangan mulai dengan membuat class sebanyak mungkin. Mulai dari cerita kebutuhan: petugas mencatat tiket gangguan; tiket baru berstatus BARU, dapat diproses, lalu diselesaikan. Nomor dan judul tidak boleh kosong. Status hanya boleh mengikuti urutan tersebut.",
+      "Cari data yang perlu bertahan antaroperasi: nomor, judul, dan status. Lalu cari tindakan yang mengubahnya: mulai dan selesaikan. Aturan yang selalu harus benar disebut invariant; pada contoh, status tidak boleh melompat dari BARU langsung ke SELESAI.",
+      "Pisahkan tanggung jawab. Tiket menjaga data dan perubahan status satu tiket. Daftar banyak tiket dapat dikelola objek lain ketika memang diperlukan. Mencetak laporan, menulis file, atau mengirim pesan tidak perlu dimasukkan ke Tiket hanya karena semuanya berhubungan dengan tiket.",
+      "Pada contoh, nomor, judul, dan status dibaca melalui property. Pengubahan status dilakukan lewat method agar urutan dapat diperiksa. Underscore hanya menandai detail internal menurut konvensi Python; kode pemakai tetap perlu mengikuti antarmuka yang disepakati.",
+      "Tentukan contoh penerimaan sebelum menulis kode: tiket baru berstatus BARU; selesai sebelum diproses ditolak; setelah mulai, selesai diperbolehkan; memulai lagi juga ditolak. Jika class sulit dijelaskan tugasnya dalam satu kalimat, periksa apakah tanggung jawabnya terlalu banyak."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Keputusan",
+        "Alasan / hasil"
+      ],
+      "rows": [
+        [
+          "Kebutuhan",
+          "Satu tiket mengikuti alur kerja",
+          "Tidak mengurus pengiriman pesan"
+        ],
+        [
+          "Atribut",
+          "nomor, judul, status",
+          "Data yang bertahan pada instance"
+        ],
+        [
+          "Method",
+          "mulai(), selesaikan()",
+          "Tindakan bisnis yang jelas"
+        ],
+        [
+          "Invariant",
+          "BARU → DIPROSES → SELESAI",
+          "Perpindahan salah ditolak"
+        ],
+        [
+          "Penyajian",
+          "print berada di luar Tiket",
+          "Tampilan dapat diganti"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Merancang class dari kebutuhan masalah",
+        "code": "class Tiket:\n    def __init__(self, nomor, judul):\n        if not isinstance(nomor, str) or not nomor.strip():\n            raise ValueError(\"Nomor wajib diisi\")\n        if not isinstance(judul, str) or not judul.strip():\n            raise ValueError(\"Judul wajib diisi\")\n        self._nomor = nomor.strip()\n        self._judul = judul.strip()\n        self._status = \"BARU\"\n\n    @property\n    def nomor(self):\n        return self._nomor\n\n    @property\n    def judul(self):\n        return self._judul\n\n    @property\n    def status(self):\n        return self._status\n\n    def mulai(self):\n        if self.status != \"BARU\":\n            raise ValueError(\"Hanya tiket BARU yang dapat diproses\")\n        self._status = \"DIPROSES\"\n\n    def selesaikan(self):\n        if self.status != \"DIPROSES\":\n            raise ValueError(\"Tiket harus DIPROSES sebelum selesai\")\n        self._status = \"SELESAI\"\n\ntiket = Tiket(\" T001 \", \"Internet putus\")\nprint(tiket.nomor, tiket.status)\ntry:\n    tiket.selesaikan()\nexcept ValueError as error:\n    print(error)\nprint(\"Setelah ditolak:\", tiket.status)\ntiket.mulai()\nprint(tiket.status)\ntiket.selesaikan()\nprint(tiket.status)",
+        "output": "T001 BARU\nTiket harus DIPROSES sebelum selesai\nSetelah ditolak: BARU\nDIPROSES\nSELESAI",
+        "explanation": "Validasi selalu dijalankan sebelum state diubah. Tiket tidak mencetak sendiri; pemakai membaca property untuk menyajikan hasil sesuai kebutuhan."
+      }
+    ],
+    "steps": [
+      "Tuliskan kebutuhan tiket dalam kalimat tanpa kode.",
+      "Kelompokkan data, tindakan, dan aturan seperti pada tabel.",
+      "Jalankan contoh dan cocokkan urutan status.",
+      "Uji pemanggilan mulai dua kali serta selesaikan dua kali; pastikan penolakan tidak mengubah state."
+    ],
+    "practice": [
+      "Rancang class Peminjaman: tentukan data, tindakan kembali, dan aturan agar tidak dikembalikan dua kali.",
+      "Tuliskan tiga tes penerimaan sebelum membuat implementasinya.",
+      "Jelaskan apakah mengirim WhatsApp cocok menjadi tugas Tiket atau komponen terpisah."
+    ],
+    "warning": "Aturan tiket di sini sengaja sederhana: belum ada pembatalan, pembukaan kembali, penugasan teknisi, penyimpanan, atau akses serentak. Tambahkan kebutuhan terlebih dahulu sebelum menambah status dan class.",
+    "check": "Apakah setiap kata benda dalam cerita harus menjadi class?",
+    "answer": "Tidak. Pilih class ketika ada data dan tanggung jawab yang bermakna. Nilai sederhana dapat tetap berupa string, angka, list, atau dictionary.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-copy-objek",
+    "title": "Referensi, shallow copy, dan deep copy",
+    "summary": "Telusuri bagian objek yang masih dibagikan setelah penyalinan.",
+    "analogy": "Menyalin map arsip dapat memberi map baru berisi dokumen yang sama. Menyalin dokumennya juga memerlukan langkah tambahan.",
+    "explain": [
+      "Penugasan alias = asli hanya menambahkan nama yang menunjuk objek yang sama. Tidak ada instance baru. Jika alias.nama diubah, asli.nama juga berubah karena keduanya menunjuk instance yang sama.",
+      "copy.copy membuat objek luar baru, tetapi atribut yang menunjuk objek di dalamnya tetap merujuk objek yang sama. Pada contoh, dua instance Rak berbeda masih menunjuk list buku yang sama. Menambah buku lewat salinan dangkal akan tampak dari rak asli.",
+      "copy.deepcopy menyalin struktur bersarang secara rekursif untuk objek yang mendukungnya. List buku pada salinan dalam contoh menjadi terpisah dari list asli. Menambah atau mengganti buku pada salinan dalam tidak mengubah rak asli.",
+      "Bedakan mutasi dengan penugasan ulang. dangkal.buku.append(\"X\") memutasi list yang dibagikan. dangkal.buku = [\"Y\"] mengganti referensi atribut milik instance dangkal sehingga tidak lagi menunjuk list asli. Dua operasi itu menghasilkan hubungan berbeda.",
+      "Deep copy bukan pilihan otomatis untuk semua data. Ia dapat menyalin bagian yang seharusnya dibagikan, memerlukan waktu serta memori, dan tidak membuat salinan koneksi file atau socket yang siap dipakai. Tentukan kepemilikan data terlebih dahulu; class juga dapat mengatur perilaku copy sendiri."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Keputusan",
+        "Alasan / hasil"
+      ],
+      "rows": [
+        [
+          "alias = asli",
+          "Objek luar yang sama",
+          "Perubahan atribut terlihat dari kedua nama"
+        ],
+        [
+          "copy.copy(asli)",
+          "Objek luar baru",
+          "List bersarang masih dibagikan"
+        ],
+        [
+          "copy.deepcopy(asli)",
+          "Salinan rekursif yang didukung",
+          "List contoh menjadi terpisah"
+        ],
+        [
+          "append",
+          "Mutasi list yang dirujuk",
+          "Referensi lain melihat perubahan"
+        ],
+        [
+          "Atribut = list baru",
+          "Mengganti referensi",
+          "Tidak memutasi list lama"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Referensi, shallow copy, dan deep copy",
+        "code": "from copy import copy, deepcopy\n\nclass Rak:\n    def __init__(self, nama, buku):\n        self.nama = nama\n        self.buku = list(buku)\n\nasli = Rak(\"Rak A\", [\"Python\"])\nalias = asli\ndangkal = copy(asli)\ndalam = deepcopy(asli)\n\nprint(\"Alias sama:\", alias is asli)\nprint(\"Dangkal sama:\", dangkal is asli)\nprint(\"List dangkal sama:\", dangkal.buku is asli.buku)\nprint(\"List dalam sama:\", dalam.buku is asli.buku)\n\ndangkal.buku.append(\"Jaringan\")\ndalam.buku.append(\"IoT\")\nprint(\"Asli:\", asli.buku)\nprint(\"Dalam:\", dalam.buku)\n\ndangkal.buku = [\"Linux\"]\nprint(\"Asli setelah assignment:\", asli.buku)\nprint(\"Dangkal setelah assignment:\", dangkal.buku)",
+        "output": "Alias sama: True\nDangkal sama: False\nList dangkal sama: True\nList dalam sama: False\nAsli: ['Python', 'Jaringan']\nDalam: ['Python', 'IoT']\nAsli setelah assignment: ['Python', 'Jaringan']\nDangkal setelah assignment: ['Linux']",
+        "explanation": "Urutan membuat salinan penting: dalam dibuat sebelum list asli ditambah Jaringan. Setelah atribut dangkal diberi list Linux, ia tidak lagi berbagi list dengan asli."
+      }
+    ],
+    "steps": [
+      "Gambar objek luar dan list yang dirujuk sebelum menjalankan kode.",
+      "Jalankan seluruh contoh dan cocokkan pemeriksaan is.",
+      "Pindahkan pembuatan deepcopy ke setelah append Jaringan, lalu amati hasilnya.",
+      "Bandingkan append dengan penugasan list baru pada dangkal."
+    ],
+    "practice": [
+      "Ubah alias.nama dan jelaskan mengapa asli.nama berubah.",
+      "Gunakan list berisi dictionary dan bandingkan list.copy dengan deepcopy.",
+      "Tentukan data mana yang harus dibagikan dan mana yang harus disalin pada keranjang pengguna."
+    ],
+    "warning": "__init__ pada Rak menyalin wadah input satu tingkat; itu belum menjadi deep copy bila elemen input berupa objek mutable. copy.copy juga tidak memanggil __init__ untuk menginisialisasi ulang seperti Rak(...).",
+    "check": "Apakah objek luar yang berbeda berarti seluruh isi di dalamnya pasti terpisah?",
+    "answer": "Tidak. Shallow copy membuat objek luar baru tetapi dapat tetap berbagi objek bersarang seperti list buku.",
+    "source": "https://docs.python.org/3.11/library/copy.html",
+    "diagram": "oop-copy",
+    "diagramAlt": "Alias menunjuk Rak asli. Shallow copy membuat Rak baru yang berbagi list buku. Deep copy mempunyai Rak dan list terpisah.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-exception-khusus",
+    "title": "Exception khusus untuk aturan bisnis",
+    "summary": "Bedakan input tidak valid dengan operasi bisnis yang belum dapat dilakukan.",
+    "analogy": "Petugas gudang membedakan formulir salah isi dan stok yang belum mencukupi. Keduanya membutuhkan respons berbeda.",
+    "explain": [
+      "Exception khusus memberi nama bermakna pada kegagalan yang ingin ditangani pemakai. Contohnya StokTidakCukup lebih jelas daripada menebak makna error berdasarkan potongan teks pesan. Buat turunan Exception atau turunan exception yang sesuai.",
+      "Pada contoh, InventarisError adalah dasar untuk kegagalan bisnis inventaris. StokTidakCukup turun darinya dan menyimpan tersedia serta diminta. Angka itu dapat dipakai untuk menampilkan detail tanpa mengurai string pesan.",
+      "Bedakan kesalahan input dan aturan bisnis. Jumlah negatif atau bool ditolak dengan ValueError. Jumlah integer positif yang melebihi stok ditolak dengan StokTidakCukup. Keduanya diperiksa sebelum pengurangan sehingga stok lama tetap terjaga.",
+      "Tempatkan penanganan exception pada pemakai yang dapat memutuskan respons. Method keluarkan cukup memberi sinyal kegagalan; pemakai dapat menampilkan pesan atau menawarkan jumlah lebih kecil. Hindari except: pass karena menyembunyikan masalah yang belum diselesaikan.",
+      "Jika beberapa except berada pada try yang sama, letakkan turunan lebih khusus sebelum induknya. except InventarisError akan menangkap StokTidakCukup juga; blok khusus di bawahnya tidak akan tercapai untuk error itu. Jangan menangkap semua Exception hanya untuk menyatakan program berhasil."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Keputusan",
+        "Alasan / hasil"
+      ],
+      "rows": [
+        [
+          "ValueError",
+          "Nilai input melanggar format / rentang",
+          "Jumlah harus integer positif"
+        ],
+        [
+          "InventarisError",
+          "Dasar error bisnis inventaris",
+          "Bisa ditangkap sebagai satu kelompok"
+        ],
+        [
+          "StokTidakCukup",
+          "Operasi sah tetapi stok kurang",
+          "Memiliki tersedia dan diminta"
+        ],
+        [
+          "Urutan except",
+          "Khusus sebelum umum",
+          "Turunan sebelum induk"
+        ],
+        [
+          "State",
+          "Validasi sebelum mutasi",
+          "Stok tetap ketika operasi ditolak"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Exception khusus untuk aturan bisnis",
+        "code": "class InventarisError(Exception):\n    pass\n\nclass StokTidakCukup(InventarisError):\n    def __init__(self, tersedia, diminta):\n        self.tersedia = tersedia\n        self.diminta = diminta\n        super().__init__(f\"Stok {tersedia}, permintaan {diminta}\")\n\nclass Persediaan:\n    def __init__(self, stok):\n        if type(stok) is not int or stok < 0:\n            raise ValueError(\"Stok harus integer >= 0\")\n        self._stok = stok\n\n    @property\n    def stok(self):\n        return self._stok\n\n    def keluarkan(self, jumlah):\n        if type(jumlah) is not int or jumlah <= 0:\n            raise ValueError(\"Jumlah harus integer positif\")\n        if jumlah > self.stok:\n            raise StokTidakCukup(self.stok, jumlah)\n        self._stok -= jumlah\n\nbarang = Persediaan(2)\ntry:\n    barang.keluarkan(3)\nexcept StokTidakCukup as error:\n    print(error)\n    print(\"Kekurangan:\", error.diminta - error.tersedia)\nexcept InventarisError:\n    print(\"Operasi inventaris gagal\")\nprint(\"Stok tetap:\", barang.stok)\nbarang.keluarkan(2)\nprint(\"Stok akhir:\", barang.stok)",
+        "output": "Stok 2, permintaan 3\nKekurangan: 1\nStok tetap: 2\nStok akhir: 0",
+        "explanation": "super().__init__ menetapkan pesan exception. Pemakai menangkap jenis error dan membaca atributnya; tidak ada pemeriksaan berbasis pencarian kata di pesan."
+      }
+    ],
+    "steps": [
+      "Baca hierarki exception dari induk ke turunan.",
+      "Jalankan pengeluaran yang terlalu besar dan periksa atribut error.",
+      "Uji pengeluaran tepat sebesar stok, lalu coba keluarkan satu lagi.",
+      "Uji input invalid dengan except ValueError terpisah dan pastikan stok tidak berubah."
+    ],
+    "practice": [
+      "Buat exception TiketSudahSelesai untuk latihan perubahan status tiket.",
+      "Tulis tes assertRaises untuk stok kurang dan input negatif secara terpisah.",
+      "Jelaskan alasan penanganan error berada pada pemakai, bukan print di dalam method."
+    ],
+    "warning": "Jangan memakai exception khusus untuk setiap kejadian biasa. Pakai jenis bawaan bila sudah menjelaskan masalah; tambahkan jenis khusus ketika pemakai perlu membedakan kegagalan domain. Contoh belum menangani transaksi serentak.",
+    "check": "Apakah except InventarisError menangkap StokTidakCukup?",
+    "answer": "Ya, karena StokTidakCukup adalah turunannya. Letakkan handler khusus lebih dahulu bila responsnya berbeda.",
+    "source": "https://docs.python.org/3.11/tutorial/errors.html#user-defined-exceptions",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-json-objek",
+    "title": "Menyimpan dan memulihkan objek melalui JSON",
+    "summary": "Pisahkan objek Python dari format data dan validasi ulang saat memuatnya.",
+    "analogy": "Kartu barang disalin menjadi formulir standar untuk disimpan. Saat formulir dibaca kembali, petugas memeriksa isinya sebelum membuat kartu aktif baru.",
+    "explain": [
+      "JSON menyimpan nilai dasar seperti object/dictionary, array/list, string, angka, boolean, dan null. Ia tidak menyimpan identitas class Python beserta method-nya. json.dumps(Barang(...)) tidak otomatis memahami class buatan kita.",
+      "Tentukan skema data secara sengaja. to_dict mengubah data Barang menjadi dictionary berisi kode dan stok. from_dict memeriksa bentuk dictionary serta field yang diizinkan, lalu memanggil konstruktor yang memvalidasi nilai. Hindari menyalin seluruh __dict__ karena detail internal dapat ikut terbawa.",
+      "Berkas contoh memuat versi skema dan satu barang. Nomor versi berguna ketika format kelak berubah. Pemuat menolak versi yang belum didukung, field hilang atau tambahan, stok negatif, bool sebagai stok, serta kode kosong. Parsing JSON yang berhasil baru membuktikan sintaksnya, bukan kebenaran aturan bisnis.",
+      "simpan membentuk dan memvalidasi payload serta menyiapkan string JSON sebelum menulis file. muat membaca JSON lalu membangun instance baru. Instance hasil muat mempunyai nilai yang sama, tetapi bukan identitas yang sama dengan instance awal.",
+      "Demo memakai TemporaryDirectory supaya percobaan tidak menimpa file pribadi. Folder demo dihapus ketika blok with berakhir. Untuk latihan penyimpanan yang bertahan, ganti folder demo dengan folder latihan milikmu dan gunakan nama file yang jelas. Fungsi simpan akan menimpa file tujuan yang sudah ada."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Keputusan",
+        "Alasan / hasil"
+      ],
+      "rows": [
+        [
+          "to_dict",
+          "Objek → data dasar",
+          "Hanya field yang disepakati"
+        ],
+        [
+          "json.dumps / loads",
+          "Data dasar ↔ teks JSON",
+          "Bukan pemulihan class otomatis"
+        ],
+        [
+          "from_dict",
+          "Validasi lalu buat instance",
+          "Konstruktor tetap dijalankan"
+        ],
+        [
+          "versi",
+          "Penanda skema file",
+          "Versi tidak dikenal ditolak"
+        ],
+        [
+          "Identitas",
+          "Objek baru setelah dimuat",
+          "Nilai sama, is menghasilkan False"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Menyimpan dan memulihkan objek melalui JSON",
+        "code": "import json\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\n\nclass Barang:\n    def __init__(self, kode, stok):\n        if not isinstance(kode, str) or not kode.strip():\n            raise ValueError(\"Kode wajib diisi\")\n        if type(stok) is not int or stok < 0:\n            raise ValueError(\"Stok harus integer >= 0\")\n        self._kode = kode.strip()\n        self._stok = stok\n\n    @property\n    def kode(self):\n        return self._kode\n\n    @property\n    def stok(self):\n        return self._stok\n\n    def to_dict(self):\n        return {\"kode\": self.kode, \"stok\": self.stok}\n\n    @classmethod\n    def from_dict(cls, data):\n        if not isinstance(data, dict) or set(data) != {\"kode\", \"stok\"}:\n            raise ValueError(\"Field barang tidak sesuai\")\n        return cls(data[\"kode\"], data[\"stok\"])\n\ndef simpan(path, barang):\n    data = Barang.from_dict(barang.to_dict()).to_dict()\n    teks = json.dumps({\"versi\": 1, \"barang\": data}, ensure_ascii=False, indent=2)\n    Path(path).write_text(teks, encoding=\"utf-8\")\n\ndef muat(path):\n    data = json.loads(Path(path).read_text(encoding=\"utf-8\"))\n    if not isinstance(data, dict) or set(data) != {\"versi\", \"barang\"}:\n        raise ValueError(\"Format file tidak sesuai\")\n    if type(data[\"versi\"]) is not int or data[\"versi\"] != 1:\n        raise ValueError(\"Versi belum didukung\")\n    return Barang.from_dict(data[\"barang\"])\n\nwith TemporaryDirectory() as folder:\n    path = Path(folder) / \"barang_latihan.json\"\n    asli = Barang(\" K01 \", 3)\n    simpan(path, asli)\n    pulih = muat(path)\n    print(\"Data:\", pulih.to_dict())\n    print(\"Instance sama:\", pulih is asli)\n    path.write_text('{\"versi\": 1, \"barang\": {\"kode\": \"K01\", \"stok\": -1}}', encoding=\"utf-8\")\n    try:\n        muat(path)\n    except ValueError as error:\n        print(\"Ditolak:\", error)",
+        "output": "Data: {'kode': 'K01', 'stok': 3}\nInstance sama: False\nDitolak: Stok harus integer >= 0",
+        "explanation": "muat tidak menulis ulang file bila data invalid. Contoh sengaja mengganti file demo dengan stok negatif untuk menunjukkan validasi saat pemulihan; file itu tetap berada di folder sementara."
+      }
+    ],
+    "steps": [
+      "Catat skema file: versi dan barang; barang berisi kode dan stok.",
+      "Jalankan demo dan periksa bahwa pemulihan menghasilkan instance baru.",
+      "Pada folder latihan terpisah, simpan file lalu jalankan pemuat pada proses Python berikutnya.",
+      "Uji sintaks JSON rusak, field hilang, versi tidak dikenal, dan stok invalid. Tangani JSONDecodeError, ValueError, serta OSError sesuai kebutuhan pemakai."
+    ],
+    "practice": [
+      "Tambahkan field harga dan perbarui skema, validasi, serta tes round-trip.",
+      "Simpan beberapa barang sebagai list dan tolak kode duplikat saat memuat.",
+      "Pisahkan program pembuat file dan pembaca file untuk membuktikan data bertahan antarproses.",
+      "Rancang pesan pemulihan yang tidak menimpa file rusak sebelum pengguna memutuskan tindakan."
+    ],
+    "warning": "simpan di sini dapat menimpa file dan belum memakai penulisan atomik, cadangan, pembatas ukuran input, atau penguncian antarproses. Jika penulisan terganggu, file dapat tidak lengkap. Gunakan folder latihan dan tangani kegagalan I/O sebelum mengembangkan penyimpanan nyata.",
+    "check": "Apakah JSON valid otomatis berarti data Barang boleh diterima?",
+    "answer": "Tidak. JSON valid dapat berisi stok negatif atau versi yang tidak dikenal. Periksa skema, tipe, dan aturan nilai sebelum membentuk objek.",
+    "source": "https://docs.python.org/3.11/library/json.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   }
 ]

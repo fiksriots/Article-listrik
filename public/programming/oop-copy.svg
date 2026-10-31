@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="480" viewBox="0 0 860 480" role="img" aria-labelledby="title desc">
+<title id="title">Penyalinan objek dan list bersarang</title><desc id="desc">asli dan alias menunjuk Rak A yang sama. Salinan dangkal adalah Rak B tetapi berbagi list buku dengan Rak A. Salinan dalam adalah Rak C dengan list buku terpisah.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#65508a"/></marker></defs>
+<rect width="860" height="480" rx="20" fill="#f6f5fa"/>
+<g font-family="Arial,sans-serif" fill="#27334a"><text x="35" y="42" font-size="22" font-weight="bold">Objek luar baru belum tentu punya isi terpisah</text>
+<text x="155" y="95" text-anchor="middle" font-size="19" font-weight="bold">asli / alias</text><text x="430" y="95" text-anchor="middle" font-size="19" font-weight="bold">copy(asli)</text><text x="705" y="95" text-anchor="middle" font-size="19" font-weight="bold">deepcopy(asli)</text>
+<rect x="45" y="120" width="220" height="95" rx="12" fill="#fff" stroke="#65508a"/><rect x="320" y="120" width="220" height="95" rx="12" fill="#fff" stroke="#65508a"/><rect x="595" y="120" width="220" height="95" rx="12" fill="#edf5f7" stroke="#32718a"/>
+<text x="155" y="157" text-anchor="middle" font-size="21" font-weight="bold">Rak A</text><text x="430" y="157" text-anchor="middle" font-size="21" font-weight="bold">Rak B</text><text x="705" y="157" text-anchor="middle" font-size="21" font-weight="bold">Rak C</text>
+<text x="155" y="189" text-anchor="middle" font-size="16">dua nama, satu instance</text><text x="430" y="189" text-anchor="middle" font-size="16">instance baru</text><text x="705" y="189" text-anchor="middle" font-size="16">instance baru</text>
+<path d="M155 215V270H270V314M430 215V270H320V314" fill="none" stroke="#65508a" stroke-width="2" marker-end="url(#arrow)"/><path d="M705 215V314" fill="none" stroke="#32718a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="120" y="320" width="345" height="82" rx="12" fill="#f0ecf8" stroke="#65508a"/><rect x="575" y="320" width="260" height="82" rx="12" fill="#edf5f7" stroke="#32718a"/>
+<text x="292" y="354" text-anchor="middle" font-size="20" font-weight="bold">List buku bersama</text><text x="292" y="382" text-anchor="middle" font-size="17">['Python']</text><text x="705" y="354" text-anchor="middle" font-size="20" font-weight="bold">List buku terpisah</text><text x="705" y="382" text-anchor="middle" font-size="17">['Python']</text>
+<text x="430" y="447" text-anchor="middle" font-size="17" fill="#58647b">Keadaan setelah penyalinan, sebelum append atau assignment.</text></g></svg>

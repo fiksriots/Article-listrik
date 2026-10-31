@@ -112,12 +112,14 @@
       "oop-pengantar",
       "oop-class-object",
       "oop-init-self",
-      "oop-atribut"
+      "oop-atribut",
+      "oop-copy-objek"
     ]
   },
   {
     "title": "OOP · Rancangan dan relasi",
     "slugs": [
+      "oop-merancang-class",
       "oop-enkapsulasi",
       "oop-inheritance",
       "oop-polymorphism",
@@ -131,6 +133,8 @@
       "oop-jenis-method",
       "oop-dunder",
       "oop-dataclass",
+      "oop-exception-khusus",
+      "oop-json-objek",
       "oop-pengujian"
     ]
   },
