@@ -105,5 +105,40 @@
       "studi-kasus-nilai-siswa",
       "studi-kasus-pencatat-pengeluaran"
     ]
+  },
+  {
+    "title": "OOP · Fondasi objek",
+    "slugs": [
+      "oop-pengantar",
+      "oop-class-object",
+      "oop-init-self",
+      "oop-atribut"
+    ]
+  },
+  {
+    "title": "OOP · Rancangan dan relasi",
+    "slugs": [
+      "oop-enkapsulasi",
+      "oop-inheritance",
+      "oop-polymorphism",
+      "oop-abstraksi",
+      "oop-komposisi"
+    ]
+  },
+  {
+    "title": "OOP · Fitur Python dan pengujian",
+    "slugs": [
+      "oop-jenis-method",
+      "oop-dunder",
+      "oop-dataclass",
+      "oop-pengujian"
+    ]
+  },
+  {
+    "title": "OOP · Studi kasus",
+    "slugs": [
+      "oop-kasus-inventaris",
+      "oop-kasus-monitoring"
+    ]
   }
 ]

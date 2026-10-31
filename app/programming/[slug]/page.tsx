@@ -33,7 +33,7 @@ export default async function Page({params}:{params:Promise<{slug:string}>}) {
     <main id="konten" className="net-lesson-main">
       <Link href={track.href+"#kurikulum"} className="net-back">← Semua materi {track.title}</Link>
       <header className="net-lesson-heading"><p className="net-eyebrow">TAHAP {lesson.stage+1} / {track.stages[lesson.stage]} · MATERI {index+1} DARI {track.lessons.length}</p><h1>{lesson.title}</h1><p>{lesson.summary}</p><span>±{lesson.minutes} menit · Tambahkan waktu untuk praktik</span></header>
-      <aside className="net-track-note"><strong>Jalur {track.title}</strong><p><Link href="/programming">Pilih jalur lain: Pemrograman Terstruktur atau Struktur Data →</Link></p></aside>
+      <aside className="net-track-note"><strong>Jalur {track.title}</strong><p><Link href="/programming">Pilih jalur lain di Learn Programming →</Link></p></aside>
       <LessonReader key={slug} catalog={track.href+"#kurikulum"} next={next ? {href:'/programming/'+next.slug,title:next.title} : undefined}/>
       <article className="net-article programming-article">
         <aside className="net-analogy"><span>BAYANGKAN DULU</span><p>{lesson.analogy}</p></aside>

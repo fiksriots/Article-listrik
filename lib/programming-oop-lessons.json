@@ -1,0 +1,994 @@
+[
+  {
+    "slug": "oop-pengantar",
+    "title": "Mengenal OOP: data dan perilaku dalam satu objek",
+    "summary": "Pahami tujuan OOP dan hubungannya dengan pemrograman terstruktur.",
+    "analogy": "Sebuah kartu perangkat mencatat nama dan status. Tombol pada kartu menjalankan tindakan yang mengubah status perangkat itu.",
+    "explain": [
+      "OOP adalah singkatan Object-Oriented Programming, atau pemrograman berorientasi objek. Kita memodelkan sesuatu sebagai objek yang memiliki data (atribut) dan perilaku (method). Contohnya objek Lampu mempunyai nama dan status, serta tindakan nyalakan dan matikan.",
+      "Pada pemrograman terstruktur, kita menyusun urutan, keputusan, perulangan, dan fungsi. Semua itu tetap dipakai di dalam OOP. Perbedaannya terletak pada cara mengelompokkan data dan pekerjaan, bukan mengganti if atau for.",
+      "Class merupakan definisi untuk membuat objek dengan pola yang sama. Instance adalah objek tertentu yang dibuat dari class. Pada contoh, Lampu adalah class; meja dan teras adalah dua instance yang menyimpan status masing-masing.",
+      "Bekal awal jalur ini adalah variabel, fungsi, list, dictionary, import, dan try/except. Jika belum memahami fungsi, pelajari jalur Pemrograman Terstruktur terlebih dahulu. OOP membantu ketika data dan aturan yang saling berkaitan mulai banyak; program hitung sederhana tetap boleh memakai fungsi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Class",
+          "Definisi pola objek",
+          "Lampu"
+        ],
+        [
+          "Object / instance",
+          "Objek tertentu dari class",
+          "meja, teras"
+        ],
+        [
+          "Atribut",
+          "Data milik objek",
+          "nama, aktif"
+        ],
+        [
+          "Method",
+          "Perilaku milik objek",
+          "nyalakan()"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Mengenal OOP: data dan perilaku dalam satu objek",
+        "code": "class Lampu:\n    def __init__(self, nama):\n        self.nama = nama\n        self.aktif = False\n\n    def nyalakan(self):\n        self.aktif = True\n\nmeja = Lampu(\"Meja\")\nteras = Lampu(\"Teras\")\nmeja.nyalakan()\nprint(meja.nama, meja.aktif)\nprint(teras.nama, teras.aktif)",
+        "output": "Meja True\nTeras False",
+        "explanation": "Baca kode sebagai gambaran awal. __init__ mengisi kondisi awal; self menunjuk instance yang sedang dipakai. Dua materi berikut akan membedahnya."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_pengantar.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Tambahkan instance Lampu bernama Gudang.",
+      "Buat method matikan yang mengubah aktif menjadi False.",
+      "Sebutkan atribut dan perilaku yang cocok untuk Buku."
+    ],
+    "warning": "Contoh hanya simulasi di memori. Memanggil nyalakan tidak mengendalikan perangkat fisik. OOP juga tidak otomatis membuat kode lebih cepat.",
+    "check": "Apakah memakai OOP berarti tidak memakai percabangan dan perulangan lagi?",
+    "answer": "Tidak. Method tetap berisi instruksi terstruktur, termasuk if, for, dan pemanggilan fungsi.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "oop-objek",
+    "diagramAlt": "Class Lampu mendefinisikan nama dan aktif; instance Meja aktif, instance Teras belum aktif.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-class-object",
+    "title": "Class dan object: membuat instance pertama",
+    "summary": "Bedakan definisi class, pembuatan instance, dan identitas objek.",
+    "analogy": "Satu format kartu anggota bisa menghasilkan banyak kartu berbeda. Isi setiap kartu mengikuti pemiliknya.",
+    "explain": [
+      "Tulis class dengan nama berawalan huruf besar, misalnya Buku. Isi class ditulis menjorok ke dalam. Contoh awal memakai pass, yaitu instruksi kosong agar definisi class tetap sah.",
+      "Buku() membuat instance baru. Nama buku_a menyimpan referensi ke instance itu. Kita dapat menambahkan atribut dengan tanda titik, misalnya buku_a.judul. Pada program yang lebih rapi, atribut awal ditetapkan dalam __init__, seperti materi berikutnya.",
+      "Penugasan alias = buku_a tidak menyalin objek. Keduanya menunjuk objek yang sama. Jika alias.judul diganti, perubahan juga terlihat melalui buku_a. Instance yang dibuat dengan Buku() lagi tetap terpisah.",
+      "Operator is memeriksa apakah dua referensi menunjuk objek yang sama. Operator == memeriksa kesetaraan nilai menurut aturan tipe; class sederhana ini belum mendefinisikan kesetaraan nilai khusus. Jangan memakai is untuk membandingkan isi string atau angka."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "class Buku",
+          "Mendefinisikan tipe",
+          "Belum membuat kartu buku tertentu"
+        ],
+        [
+          "Buku()",
+          "Membuat instance",
+          "Objek baru setiap pemanggilan"
+        ],
+        [
+          "alias = buku_a",
+          "Berbagi referensi",
+          "Tidak membuat salinan"
+        ],
+        [
+          "is",
+          "Membandingkan identitas",
+          "buku_a is alias"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Class dan object: membuat instance pertama",
+        "code": "class Buku:\n    pass\n\nbuku_a = Buku()\nbuku_a.judul = \"Python Dasar\"\nbuku_b = Buku()\nbuku_b.judul = \"Jaringan Dasar\"\nalias = buku_a\nalias.judul = \"Python OOP\"\nprint(buku_a.judul)\nprint(buku_b.judul)\nprint(buku_a is alias)\nprint(buku_a is buku_b)",
+        "output": "Python OOP\nJaringan Dasar\nTrue\nFalse",
+        "explanation": "Perubahan lewat alias tampak di buku_a, tetapi buku_b tidak ikut berubah."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_class_object.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Buat instance ketiga dan beri judul yang sama dengan buku_a.",
+      "Bandingkan identitas instance ketiga dengan buku_a memakai is.",
+      "Jelaskan mengapa alias bukan salinan."
+    ],
+    "warning": "Membaca atribut yang belum pernah diisi menimbulkan AttributeError. __init__ membantu memastikan atribut dasar tersedia sejak instance dibuat.",
+    "check": "Jika x = buku_a lalu x.judul diganti, apakah buku_a melihat perubahan?",
+    "answer": "Ya, karena x dan buku_a menunjuk objek yang sama.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-init-self",
+    "title": "__init__, self, dan method instance",
+    "summary": "Beri setiap objek kondisi awal dan tindakan yang jelas.",
+    "analogy": "Saat kartu pelanggan dibuat, nama diisi sekali. Petugas kemudian bisa memperbarui paket pada kartu yang sedang dilayani.",
+    "explain": [
+      "Python memanggil __init__ setelah instance dibuat untuk menyiapkan kondisi awal. Method ini sering disebut bagian konstruktor dalam percakapan, tetapi pembuatan instance sebenarnya dikerjakan oleh __new__. Pemula cukup memakai __init__ untuk inisialisasi.",
+      "self adalah parameter pertama method instance menurut konvensi Python. Saat memanggil pelanggan.ubah_paket(\"Familia\"), Python memasukkan pelanggan sebagai self secara otomatis. Karena itu kita hanya memasukkan argumen paket baru.",
+      "self.nama adalah atribut yang tersimpan pada instance. Variabel paket_baru di dalam method hanya nama lokal selama pemanggilan berlangsung. Nilai lokal perlu ditugaskan ke self.paket jika ingin disimpan pada objek.",
+      "Return mengirim hasil ke pemanggil. Method yang hanya mengubah atribut tanpa return menghasilkan None. Pisahkan keputusan apakah method mengubah objek, menghasilkan nilai, atau keduanya agar mudah dipakai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "__init__",
+          "Menyiapkan instance",
+          "Tidak mengembalikan nilai selain None"
+        ],
+        [
+          "self",
+          "Instance penerima",
+          "Diisi otomatis pada pemanggilan lewat objek"
+        ],
+        [
+          "self.paket",
+          "State tersimpan",
+          "Tetap tersedia setelah method selesai"
+        ],
+        [
+          "return",
+          "Hasil method",
+          "Bisa dipakai oleh pemanggil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · __init__, self, dan method instance",
+        "code": "class Pelanggan:\n    def __init__(self, nama, paket=\"Home\"):\n        self.nama = nama\n        self.paket = paket\n\n    def ubah_paket(self, paket_baru):\n        self.paket = paket_baru\n\n    def ringkasan(self):\n        return f\"{self.nama}: {self.paket}\"\n\nana = Pelanggan(\"Ana\")\nbudi = Pelanggan(\"Budi\", \"Familia\")\nana.ubah_paket(\"Bisnis\")\nprint(ana.ringkasan())\nprint(budi.ringkasan())",
+        "output": "Ana: Bisnis\nBudi: Familia",
+        "explanation": "Nilai default Home hanya dipakai ketika paket tidak diberikan. ringkasan mengembalikan string; print berada di luar class."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_init_self.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Tambahkan atribut wilayah dengan nilai awal.",
+      "Panggil ringkasan lalu simpan hasilnya ke variabel.",
+      "Periksa hasil print(ana.ubah_paket(\"Home\")) dan jelaskan None."
+    ],
+    "warning": "Jangan menulis return self atau return angka di __init__. Nilai kembalian __init__ wajib None. Menulis nama tanpa self tidak membuat atribut instance.",
+    "check": "Mengapa ana.ubah_paket(\"Bisnis\") tidak perlu menerima ana lagi?",
+    "answer": "Pemanggilan method melalui instance otomatis mengikat ana sebagai self.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-atribut",
+    "title": "Atribut instance dan atribut class",
+    "summary": "Hindari data mutable yang tidak sengaja dibagikan antarpengguna.",
+    "analogy": "Nama lembaga dapat sama di semua kartu. Daftar pinjaman harus berbeda untuk setiap anggota.",
+    "explain": [
+      "Atribut class ditulis langsung di badan class dan tersedia melalui class maupun instance. Gunakan untuk nilai bersama seperti nama organisasi atau konstanta. Atribut instance biasanya diisi melalui self dalam __init__.",
+      "Pencarian anggota.cabang dapat menemukan atribut pada class jika instance tidak memilikinya. Jika kemudian anggota.cabang diberi nilai baru, muncul atribut pada instance yang menutupi nilai class untuk anggota itu saja.",
+      "List atau dictionary yang ditulis sebagai atribut class akan dibagikan ke instance yang masih memakai atribut tersebut. Jika data harus terpisah, buat self.pinjaman = [] dalam __init__. Setiap panggilan __init__ membuat list baru.",
+      "Perhatikan juga default parameter mutable. Hindari def __init__(self, data=[]). Gunakan None lalu buat list baru, atau salin input secara sengaja. Penyalinan list biasa bersifat dangkal; objek di dalamnya masih dapat dibagikan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Atribut class",
+          "Nilai bersama",
+          "Anggota.lembaga"
+        ],
+        [
+          "Atribut instance",
+          "Data tiap instance",
+          "self.nama"
+        ],
+        [
+          "Mutable milik instance",
+          "List dibuat di __init__",
+          "self.pinjaman = []"
+        ],
+        [
+          "Shadowing",
+          "Instance menutupi atribut class",
+          "a.lembaga = nama_baru"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Atribut instance dan atribut class",
+        "code": "class Anggota:\n    lembaga = \"Pojok Baca\"\n\n    def __init__(self, nama):\n        self.nama = nama\n        self.pinjaman = []\n\nana = Anggota(\"Ana\")\nbudi = Anggota(\"Budi\")\nana.pinjaman.append(\"Python\")\nprint(ana.lembaga)\nprint(ana.pinjaman)\nprint(budi.pinjaman)\nana.lembaga = \"Cabang Timur\"\nprint(ana.lembaga, budi.lembaga)",
+        "output": "Pojok Baca\n['Python']\n[]\nCabang Timur Pojok Baca",
+        "explanation": "Dua list pinjaman terpisah. Penugasan lembaga melalui ana hanya membuat atribut instance ana."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_atribut.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Tambahkan pinjaman Budi dan periksa list Ana.",
+      "Ganti Anggota.lembaga dan amati instance yang belum menutupinya.",
+      "Buat contoh aman parameter data=None."
+    ],
+    "warning": "List sebagai atribut class bukan selalu salah, tetapi berarti berbagi satu list. Jangan gunakan pola itu untuk keranjang atau riwayat yang harus terpisah.",
+    "check": "Di mana sebaiknya list keranjang pelanggan dibuat?",
+    "answer": "Pada self.keranjang di __init__, sehingga tiap instance memiliki list baru.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-enkapsulasi",
+    "title": "Enkapsulasi, validasi, dan property",
+    "summary": "Jaga aturan data melalui jalur akses yang jelas.",
+    "analogy": "Pengubahan stok melewati petugas yang memeriksa jumlah. Rak tetap terlihat, tetapi ada prosedur yang disepakati.",
+    "explain": [
+      "Enkapsulasi menyatukan data dan aturan perubahannya. Contohnya stok harus bilangan bulat nol atau lebih. Kita menyediakan property agar penulisan barang.stok = 5 tetap sederhana sambil menjalankan validasi.",
+      "@property mengubah method getter menjadi akses atribut. @stok.setter menetapkan fungsi yang dijalankan saat stok diberi nilai baru. __init__ memakai setter yang sama agar data awal juga divalidasi.",
+      "Nama _stok adalah konvensi bahwa data tersebut merupakan detail internal. Python tetap memungkinkan akses langsung. Nama __stok memakai name mangling untuk mengurangi benturan nama pada pewarisan; itu juga bukan perlindungan keamanan atau larangan akses mutlak.",
+      "Validasi dilakukan sebelum penugasan. Jika nilai salah, ValueError dilempar dan stok lama tidak berubah. Kita memakai type(nilai) is int agar bool ditolak, karena bool adalah turunan int di Python."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "@property",
+          "Membaca melalui getter",
+          "barang.stok"
+        ],
+        [
+          "@stok.setter",
+          "Memeriksa penugasan",
+          "barang.stok = 5"
+        ],
+        [
+          "_stok",
+          "Detail internal menurut konvensi",
+          "Bukan rahasia / kontrol keamanan"
+        ],
+        [
+          "ValueError",
+          "Nilai melanggar aturan",
+          "Stok negatif ditolak"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Enkapsulasi, validasi, dan property",
+        "code": "class Barang:\n    def __init__(self, stok):\n        self.stok = stok\n\n    @property\n    def stok(self):\n        return self._stok\n\n    @stok.setter\n    def stok(self, nilai):\n        if type(nilai) is not int or nilai < 0:\n            raise ValueError(\"Stok harus integer >= 0\")\n        self._stok = nilai\n\nbarang = Barang(3)\nbarang.stok = 5\nprint(barang.stok)\ntry:\n    barang.stok = -1\nexcept ValueError as error:\n    print(error)\nprint(barang.stok)",
+        "output": "5\nStok harus integer >= 0\n5",
+        "explanation": "Stok tetap 5 setelah percobaan invalid. Kode pemakai sebaiknya mengikuti property, bukan menulis _stok secara langsung."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_enkapsulasi.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Uji stok 0, True, 2.5, dan \"5\".",
+      "Uji data awal negatif saat Barang dibuat.",
+      "Jelaskan mengapa setter harus memeriksa sebelum mengubah _stok."
+    ],
+    "warning": "Enkapsulasi dalam contoh adalah aturan desain dan validasi, bukan batas keamanan. Kode lain masih dapat melewati property dengan mengubah _stok langsung.",
+    "check": "Mengapa stok tetap 5 setelah nilai -1 ditolak?",
+    "answer": "Exception terjadi sebelum penugasan ke _stok, sehingga state lama dipertahankan.",
+    "source": "https://docs.python.org/3.11/library/functions.html#property",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-inheritance",
+    "title": "Inheritance dan overriding dengan super",
+    "summary": "Turunkan perilaku umum dan sesuaikan perilaku khusus.",
+    "analogy": "Semua kartu teknisi memiliki nama. Kartu teknisi jaringan juga mencatat area kerjanya.",
+    "explain": [
+      "Inheritance atau pewarisan membuat class turunan memakai perilaku dari class induk. Gunakan ketika hubungan “adalah jenis” masuk akal: TeknisiJaringan adalah jenis Teknisi. Jangan mewariskan class hanya karena ingin meminjam satu fungsi.",
+      "Tulis class TeknisiJaringan(Teknisi). Method yang tidak ditulis ulang dicari pada induknya. Saat turunan memberi method dengan nama yang sama, terjadi overriding; pemanggilan melalui instance turunan memakai implementasi yang sesuai.",
+      "super().__init__(nama) menjalankan inisialisasi berikutnya dalam method resolution order (MRO). Pada contoh pewarisan tunggal, itu adalah __init__ milik Teknisi. Setelah nama terisi, turunan menambahkan area.",
+      "Override harus tetap memenuhi harapan pemakai. Jika induk menyediakan ringkasan() tanpa argumen tambahan wajib, usahakan turunan mempertahankan cara pemanggilan itu. Materi ini membatasi pada pewarisan tunggal agar alurnya mudah ditelusuri."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Induk",
+          "Perilaku umum",
+          "Teknisi"
+        ],
+        [
+          "Turunan",
+          "Jenis yang lebih khusus",
+          "TeknisiJaringan"
+        ],
+        [
+          "Override",
+          "Implementasi ulang method",
+          "ringkasan()"
+        ],
+        [
+          "super()",
+          "Delegasi mengikuti MRO",
+          "super().__init__(nama)"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Inheritance dan overriding dengan super",
+        "code": "class Teknisi:\n    def __init__(self, nama):\n        self.nama = nama\n\n    def ringkasan(self):\n        return f\"Teknisi {self.nama}\"\n\nclass TeknisiJaringan(Teknisi):\n    def __init__(self, nama, area):\n        super().__init__(nama)\n        self.area = area\n\n    def ringkasan(self):\n        return f\"{super().ringkasan()} / {self.area}\"\n\norang = TeknisiJaringan(\"Ana\", \"Surabaya\")\nprint(orang.ringkasan())\nprint(isinstance(orang, Teknisi))",
+        "output": "Teknisi Ana / Surabaya\nTrue",
+        "explanation": "super pada ringkasan mengambil teks umum, lalu turunan menambahkan area tanpa menduplikasi format induk."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_inheritance.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Buat turunan TeknisiCCTV dengan lokasi gedung.",
+      "Panggil ringkasan pada instance induk dan turunan.",
+      "Uji isinstance untuk kedua class."
+    ],
+    "warning": "Jika turunan mendefinisikan __init__, inisialisasi induk tidak otomatis dijalankan. Panggil super ketika state induk diperlukan.",
+    "check": "Mengapa orang dianggap instance Teknisi?",
+    "answer": "TeknisiJaringan mewarisi Teknisi, sehingga instance turunannya juga memenuhi hubungan tipe induk.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "oop-relasi",
+    "diagramAlt": "TeknisiJaringan adalah jenis Teknisi; Dashboard memiliki pembaca sensor, bukan jenis sensor.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-polymorphism",
+    "title": "Polymorphism dan duck typing",
+    "summary": "Gunakan antarmuka yang sama untuk perilaku yang berbeda.",
+    "analogy": "Berbagai petugas bisa diminta membuat laporan; isi laporannya berbeda, tetapi cara memintanya sama.",
+    "explain": [
+      "Polymorphism berarti satu cara pemanggilan dapat menghasilkan perilaku berbeda sesuai objek yang menerima. Contohnya kirim_semua meminta setiap objek menjalankan kirim(pesan), tanpa mengatur detail masing-masing pengirim.",
+      "Duck typing di Python berfokus pada kemampuan objek. Dua class tidak harus memiliki induk buatan yang sama; jika menyediakan method yang diperlukan dengan perilaku dan argumen yang sesuai, keduanya bisa dipakai.",
+      "Kesamaan nama saja tidak cukup. Sepakati input, hasil, dan kegagalan. Pada contoh, kirim menerima string dan mengembalikan string laporan. Jika satu class memerlukan dua argumen wajib atau mengembalikan tipe yang tidak diharapkan, kontraknya tidak lagi cocok.",
+      "Contoh hanya mencetak simulasi pengiriman. Tidak ada koneksi email, API, atau pesan ke pihak lain. Tujuannya memisahkan pemakai dari detail implementasi; integrasi nyata memerlukan penanganan kegagalan layanan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Polymorphism",
+          "Satu antarmuka, beberapa perilaku",
+          "pengirim.kirim(pesan)"
+        ],
+        [
+          "Duck typing",
+          "Cukup memenuhi kemampuan yang dibutuhkan",
+          "Tidak wajib induk yang sama"
+        ],
+        [
+          "Kontrak",
+          "Input, hasil, kegagalan yang disepakati",
+          "kirim(str) menghasilkan str"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Polymorphism dan duck typing",
+        "code": "class Layar:\n    def kirim(self, pesan):\n        return f\"Layar: {pesan}\"\n\nclass LogSimulasi:\n    def kirim(self, pesan):\n        return f\"Log: {pesan}\"\n\ndef kirim_semua(pengirim, pesan):\n    return [alat.kirim(pesan) for alat in pengirim]\n\nfor hasil in kirim_semua([Layar(), LogSimulasi()], \"Link putus\"):\n    print(hasil)",
+        "output": "Layar: Link putus\nLog: Link putus",
+        "explanation": "kirim_semua tidak memeriksa nama class. Ia bergantung pada method kirim dengan kontrak yang sama."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_polymorphism.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Tambahkan class ArsipSimulasi dengan method kirim.",
+      "Masukkan objek tanpa kirim lalu amati AttributeError.",
+      "Tuliskan kontrak sederhana kirim dalam satu kalimat."
+    ],
+    "warning": "Duck typing tidak berarti objek apa pun pasti cocok. Pemakai tetap membutuhkan method dan semantik yang sesuai.",
+    "check": "Haruskah Layar dan LogSimulasi mewarisi class yang sama?",
+    "answer": "Tidak. Untuk fungsi ini keduanya cukup memenuhi kontrak kirim(pesan).",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-abstraksi",
+    "title": "Abstraksi dan abstract base class",
+    "summary": "Pisahkan kemampuan yang dijanjikan dari cara mengerjakannya.",
+    "analogy": "Sopir memakai pedal rem tanpa perlu memahami seluruh mekanisme rem. Antarmuka menampilkan yang perlu dipakai.",
+    "explain": [
+      "Abstraksi adalah menyajikan bagian yang dibutuhkan pemakai sambil menyimpan detail pelaksanaan di balik antarmuka. Fungsi biasa dan class sederhana juga dapat memberi abstraksi; konsep ini tidak terbatas pada abstract class.",
+      "Modul abc menyediakan ABC dan abstractmethod untuk menyatakan kewajiban turunan. Class PembacaSensor menjanjikan baca(). Turunan konkret wajib mengimplementasikannya sebelum instance turunan dapat dibuat.",
+      "Python menolak pembuatan instance class yang masih memiliki abstract method dengan TypeError. Akan tetapi ABC tidak otomatis memeriksa bahwa nilai kembalian atau seluruh perilakunya benar. Kita tetap perlu dokumentasi, validasi, dan pengujian.",
+      "Contoh membatasi kontrak baca menjadi angka suhu simulasi dalam derajat Celsius. Implementasi sensor fisik kelak bisa diganti tanpa mengubah kode pemakai, selama kontraknya dipenuhi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Abstraksi",
+          "Tampilkan kemampuan penting",
+          "baca()"
+        ],
+        [
+          "ABC",
+          "Dasar untuk kontrak turunan",
+          "PembacaSensor"
+        ],
+        [
+          "@abstractmethod",
+          "Method wajib diimplementasikan",
+          "baca pada turunan konkret"
+        ],
+        [
+          "Batas ABC",
+          "Tidak memvalidasi seluruh semantik",
+          "Satuan suhu tetap harus disepakati"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Abstraksi dan abstract base class",
+        "code": "from abc import ABC, abstractmethod\n\nclass PembacaSensor(ABC):\n    @abstractmethod\n    def baca(self):\n        \"\"\"Kembalikan suhu Celsius.\"\"\"\n        pass\n\nclass SensorSimulasi(PembacaSensor):\n    def baca(self):\n        return 28.5\n\ntry:\n    PembacaSensor()\nexcept TypeError:\n    print(\"Class abstrak belum lengkap\")\n\nsensor = SensorSimulasi()\nprint(sensor.baca())",
+        "output": "Class abstrak belum lengkap\n28.5",
+        "explanation": "pass tidak memberikan implementasi konkret pada induk; dekorator abstractmethod membuat kewajiban tersebut tercatat."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_abstraksi.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Buat turunan yang belum menulis baca dan coba instansiasi.",
+      "Buat turunan kedua dengan nilai simulasi berbeda.",
+      "Tuliskan satuan dan tipe hasil pada kontrak."
+    ],
+    "warning": "ABC bukan pengganti tes. Turunan dapat menulis baca tetapi tetap mengembalikan data yang tidak sesuai kebutuhan.",
+    "check": "Apakah ABC otomatis menjamin hasil baca adalah angka suhu?",
+    "answer": "Tidak. ABC memastikan kewajiban method diselesaikan untuk instansiasi, bukan kebenaran nilai hasilnya.",
+    "source": "https://docs.python.org/3.11/library/abc.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-komposisi",
+    "title": "Komposisi: merakit objek dari objek lain",
+    "summary": "Pilih hubungan memiliki atau menggunakan ketika pewarisan tidak tepat.",
+    "analogy": "Dashboard menggunakan pembaca sensor. Dashboard bukan jenis sensor, jadi hubungan memiliki lebih masuk akal.",
+    "explain": [
+      "Komposisi menyusun satu objek dengan menggunakan objek lain sebagai bagiannya. Alih-alih Dashboard mewarisi Sensor, Dashboard menyimpan referensi pembaca dan memanggil baca ketika membutuhkan data.",
+      "Pada contoh, pembaca diberikan sebagai argumen __init__. Teknik ini sering disebut dependency injection: kebutuhan objek diberikan dari luar. Kita bisa mengganti sumber data dengan objek simulasi saat menguji tanpa mengubah Dashboard.",
+      "Dalam istilah UML yang ketat, objek yang dimiliki penuh dan siklus hidupnya mengikuti pemilik disebut composition; referensi ke objek mandiri yang bisa dibagikan sering disebut aggregation. Di praktik Python, “composition over inheritance” kerap dipakai secara lebih umum untuk rancangan menggunakan objek seperti ini.",
+      "Pilih inheritance untuk hubungan jenis yang memenuhi kontrak induk. Pilih penggunaan objek untuk bagian yang dapat diganti. Jangan membuat hierarki turunan panjang hanya untuk membagikan kode kecil."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Hubungan jenis",
+          "Cocok untuk inheritance",
+          "TeknisiJaringan adalah Teknisi"
+        ],
+        [
+          "Hubungan menggunakan",
+          "Cocok untuk susunan objek",
+          "Dashboard menggunakan pembaca"
+        ],
+        [
+          "Dependency injection",
+          "Kebutuhan diberikan dari luar",
+          "Dashboard(pembaca)"
+        ],
+        [
+          "Manfaat",
+          "Mudah mengganti implementasi",
+          "Pembaca simulasi saat tes"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Komposisi: merakit objek dari objek lain",
+        "code": "class PembacaTetap:\n    def __init__(self, nilai):\n        self.nilai = nilai\n\n    def baca(self):\n        return self.nilai\n\nclass Dashboard:\n    def __init__(self, pembaca):\n        self.pembaca = pembaca\n\n    def tampilkan(self):\n        return f\"Suhu: {self.pembaca.baca():.1f} C\"\n\nutama = Dashboard(PembacaTetap(29))\nuji = Dashboard(PembacaTetap(35.5))\nprint(utama.tampilkan())\nprint(uji.tampilkan())",
+        "output": "Suhu: 29.0 C\nSuhu: 35.5 C",
+        "explanation": "Dashboard tidak tahu asal data. Ia membutuhkan objek dengan baca yang mengembalikan angka yang bisa diformat."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_komposisi.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Buat pembaca kedua yang mengembalikan angka berbeda.",
+      "Jelaskan mengapa Dashboard bukan turunan PembacaTetap.",
+      "Uji pembaca yang mengembalikan teks dan amati masalah kontraknya."
+    ],
+    "warning": "Komposisi tetap membutuhkan kontrak. Mengganti pembaca dengan objek sembarang bisa menyebabkan error atau hasil salah.",
+    "check": "Mengapa pembaca diberikan dari luar?",
+    "answer": "Agar sumber data dapat diganti, termasuk dengan simulasi untuk pengujian, tanpa mengubah Dashboard.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "oop-relasi",
+    "diagramAlt": "Bandingkan hubungan adalah jenis pada Teknisi dengan hubungan menggunakan pada Dashboard dan pembaca.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-jenis-method",
+    "title": "Method instance, classmethod, dan staticmethod",
+    "summary": "Pilih method sesuai data yang dibutuhkannya.",
+    "analogy": "Kartu pelanggan punya operasi miliknya, pembuat kartu alternatif, serta pemeriksa format yang tidak bergantung kartu tertentu.",
+    "explain": [
+      "Method instance menerima self dan digunakan ketika pekerjaan membutuhkan data atau perilaku instance. Contoh label membaca nama serta paket milik pelanggan tertentu.",
+      "@classmethod menerima cls, yaitu class yang menerima pemanggilan. Sering dipakai sebagai pembuat alternatif, misalnya dari_teks mengurai format nama|paket kemudian membuat instance melalui cls(...). Ini juga mempertahankan class turunan saat diwarisi.",
+      "@staticmethod tidak menerima self atau cls otomatis. Cocok untuk fungsi pendukung yang secara konsep berkaitan dengan class, tetapi tidak membutuhkan state instance atau class. Fungsi tingkat modul juga sah jika lebih jelas.",
+      "Dekorator adalah penanda yang mengubah cara definisi diproses. Pada materi ini cukup pahami efek @classmethod dan @staticmethod. Validasi contoh memeriksa pemisah dan teks kosong; nama atau paket yang memuat | tidak didukung format sederhana ini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Instance method",
+          "Memakai self",
+          "obj.label()"
+        ],
+        [
+          "classmethod",
+          "Memakai cls",
+          "Pelanggan.dari_teks(...)"
+        ],
+        [
+          "staticmethod",
+          "Tidak mendapat self / cls",
+          "Pelanggan.valid_nama(...)"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Method instance, classmethod, dan staticmethod",
+        "code": "class Pelanggan:\n    def __init__(self, nama, paket):\n        self.nama = nama\n        self.paket = paket\n\n    def label(self):\n        return f\"{self.nama} / {self.paket}\"\n\n    @staticmethod\n    def valid_nama(nama):\n        return isinstance(nama, str) and bool(nama.strip())\n\n    @classmethod\n    def dari_teks(cls, teks):\n        if not isinstance(teks, str):\n            raise ValueError(\"Format nama|paket diperlukan\")\n        bagian = teks.split(\"|\")\n        if len(bagian) != 2 or not cls.valid_nama(bagian[0]) or not bagian[1].strip():\n            raise ValueError(\"Format nama|paket diperlukan\")\n        return cls(bagian[0].strip(), bagian[1].strip())\n\norang = Pelanggan.dari_teks(\" Ana | Home \")\nprint(orang.label())\nprint(Pelanggan.valid_nama(\"  \"))",
+        "output": "Ana / Home\nFalse",
+        "explanation": "dari_teks memakai cls agar proses pembuatan mengikuti class penerima. valid_nama hanya memeriksa string, tanpa state instance."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_jenis_method.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Uji teks tanpa pemisah dan teks dengan paket kosong.",
+      "Buat turunan sederhana lalu panggil dari_teks pada turunan.",
+      "Sebutkan pekerjaan yang lebih jelas sebagai fungsi modul."
+    ],
+    "warning": "Validasi di factory ini hanya berlaku jika pemakai memakai dari_teks. Pemanggilan __init__ langsung belum memiliki aturan tambahan; letakkan invariant penting di konstruktor atau property bila wajib untuk semua jalur.",
+    "check": "Mengapa factory memakai cls dan bukan nama Pelanggan langsung?",
+    "answer": "cls memungkinkan pembuat alternatif mengikuti class penerima, termasuk turunan dengan konstruktor kompatibel.",
+    "source": "https://docs.python.org/3.11/library/functions.html#classmethod",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-dunder",
+    "title": "Special method: __str__, __repr__, dan __len__",
+    "summary": "Buat objek bekerja dengan print, repr, dan len secara wajar.",
+    "analogy": "Satu keranjang bisa menampilkan label singkat untuk pembeli dan rincian teknis untuk pemeriksaan.",
+    "explain": [
+      "Special method atau dunder method memakai dua underscore di awal dan akhir. Python memanggilnya melalui operasi tertentu. str(objek) dan print memakai __str__; repr memakai __repr__; len memakai __len__.",
+      "__str__ sebaiknya menghasilkan teks yang nyaman dibaca pengguna. __repr__ memberi representasi yang membantu pemeriksaan pengembang. Representasi tidak selalu dapat dieksekusi ulang; jangan menjanjikan hal itu bila belum dirancang.",
+      "__len__ harus mengembalikan integer tidak negatif. Dalam contoh, panjang keranjang berarti jumlah item di list, bukan total harga atau jumlah karakter nama. Kontrak panjang perlu jelas agar pemakai tidak bingung.",
+      "Jangan membuat nama dunder sendiri yang tidak punya kontrak Python. Untuk perilaku bisnis biasa, nama seperti tambah_barang lebih jelas. Special method juga bukan tempat menyisipkan efek samping yang mengejutkan seperti mengirim pesan saat print."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "__str__",
+          "Teks untuk pengguna",
+          "print(objek)"
+        ],
+        [
+          "__repr__",
+          "Representasi pemeriksaan",
+          "repr(objek)"
+        ],
+        [
+          "__len__",
+          "Ukuran tidak negatif",
+          "len(objek)"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Special method: __str__, __repr__, dan __len__",
+        "code": "class Keranjang:\n    def __init__(self, pemilik, item):\n        self.pemilik = pemilik\n        self.item = list(item)\n\n    def __str__(self):\n        return f\"Keranjang {self.pemilik}: {len(self)} item\"\n\n    def __repr__(self):\n        return f\"Keranjang({self.pemilik!r}, {self.item!r})\"\n\n    def __len__(self):\n        return len(self.item)\n\nkeranjang = Keranjang(\"Ana\", [\"Buku\", \"Pena\"])\nprint(keranjang)\nprint(repr(keranjang))\nprint(len(keranjang))",
+        "output": "Keranjang Ana: 2 item\nKeranjang('Ana', ['Buku', 'Pena'])\n2",
+        "explanation": "!r pada f-string memakai repr untuk nilai di dalamnya. list(item) menyalin wadah satu tingkat sehingga penambahan ke list asal tidak menambah keranjang."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_dunder.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Coba keranjang kosong.",
+      "Tambahkan satu item lalu periksa len dan print.",
+      "Bandingkan shallow copy wadah dengan penyalinan objek bersarang."
+    ],
+    "warning": "__str__ dan __repr__ harus mengembalikan string. __len__ harus integer tidak negatif; hasil bertipe salah dapat menyebabkan TypeError.",
+    "check": "Apakah len(keranjang) pada contoh berarti total harga?",
+    "answer": "Tidak. Definisi __len__ mengembalikan banyaknya item pada list.",
+    "source": "https://docs.python.org/3.11/reference/datamodel.html#special-method-names",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-dataclass",
+    "title": "Dataclass untuk objek pembawa data",
+    "summary": "Kurangi kode berulang sambil menjaga default mutable tetap terpisah.",
+    "analogy": "Formulir inspeksi mempunyai kolom baku. Dataclass menyiapkan pembuat dan tampilan formulir tanpa menulis semua bagian berulang.",
+    "explain": [
+      "@dataclass dari library standar membantu class yang terutama membawa data. Dari anotasi field, Python dapat menghasilkan __init__, __repr__, dan kesetaraan nilai. Kita masih dapat menambahkan method untuk perilaku terkait.",
+      "Anotasi seperti nama: str memberi informasi tipe bagi pembaca dan alat pemeriksa. Dataclass tidak otomatis menolak nilai yang salah tipe pada runtime. Jika aturan wajib, tambahkan pemeriksaan misalnya pada __post_init__.",
+      "Gunakan field(default_factory=list) untuk list baru pada tiap instance. Menulis list mutable langsung sebagai default field akan ditolak pada kasus bawaan seperti list. Factory dipanggil ketika instance membutuhkan nilai default.",
+      "Kesetaraan default membandingkan field pada instance dengan tipe identik. frozen=True dapat mencegah assignment field biasa, tetapi tidak otomatis membekukan list yang disimpan di dalamnya. Contoh ini memakai dataclass biasa yang tetap mutable."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "@dataclass",
+          "Menghasilkan method umum",
+          "__init__, __repr__, __eq__"
+        ],
+        [
+          "Anotasi",
+          "Informasi tipe",
+          "Bukan validasi runtime otomatis"
+        ],
+        [
+          "default_factory",
+          "Nilai default baru per instance",
+          "field(default_factory=list)"
+        ],
+        [
+          "__post_init__",
+          "Kait setelah __init__ buatan dataclass",
+          "Tempat validasi tambahan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Dataclass untuk objek pembawa data",
+        "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass Catatan:\n    lokasi: str\n    temuan: list[str] = field(default_factory=list)\n\n    def jumlah(self):\n        return len(self.temuan)\n\nawal = Catatan(\"BTS A\")\nlain = Catatan(\"BTS B\")\nawal.temuan.append(\"Kabel longgar\")\nprint(awal)\nprint(lain.temuan)\nprint(awal.jumlah())\nprint(Catatan(\"BTS B\") == lain)",
+        "output": "Catatan(lokasi='BTS A', temuan=['Kabel longgar'])\n[]\n1\nTrue",
+        "explanation": "Masing-masing catatan mendapat list baru. Dataclass juga menghasilkan repr serta perbandingan field untuk contoh kesetaraan terakhir."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_dataclass.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Buat dua catatan pada lokasi sama dengan temuan berbeda.",
+      "Tambahkan field teknisi dengan default string.",
+      "Coba lokasi berupa angka dan amati bahwa anotasi tidak otomatis menolaknya."
+    ],
+    "warning": "Jangan mengandalkan anotasi untuk validasi data dari pengguna. default_factory juga bukan mekanisme menyalin input eksplisit yang diberikan pemakai.",
+    "check": "Mengapa default_factory=list lebih tepat daripada satu list bersama?",
+    "answer": "Factory membuat list baru bagi setiap instance yang tidak menerima nilai temuan eksplisit.",
+    "source": "https://docs.python.org/3.11/library/dataclasses.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-pengujian",
+    "title": "Menguji perilaku objek dan perubahan state",
+    "summary": "Periksa aturan, batas nilai, dan pemisahan antarinstance.",
+    "analogy": "Setelah membuat penghitung, uji tombolnya pada kondisi normal dan salah input, lalu pastikan penghitung lain tidak ikut bergerak.",
+    "explain": [
+      "Tes yang baik memeriksa perilaku yang dibutuhkan pemakai. Untuk objek penghitung, kita perlu memeriksa nilai awal, penambahan yang sah, penolakan nilai salah, serta kondisi sesudah penolakan.",
+      "Library unittest menyediakan TestCase dan assertion seperti assertEqual serta assertRaises. assertRaises memeriksa bahwa operasi menghasilkan exception yang diharapkan. Tes tidak perlu mengikuti setiap baris implementasi.",
+      "Buat instance baru pada setiap skenario agar tes tidak bergantung urutan. Uji juga dua instance untuk memastikan state tidak berbagi tanpa sengaja. Pada contoh, type(jumlah) is int menolak bool maupun float.",
+      "Kode menyusun suite dua tes dan menjalankannya ke StringIO agar keluaran contoh tetap ringkas. Dalam proyek nyata, tes umumnya diletakkan di file terpisah bernama test_*.py, lalu dijalankan dengan python -m unittest discover."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Normal",
+          "Input sah mengubah state",
+          "tambah(2)"
+        ],
+        [
+          "Batas / invalid",
+          "Input di luar aturan ditolak",
+          "0, -1, True, 1.5"
+        ],
+        [
+          "Atomisitas sederhana",
+          "Gagal tidak mengubah state",
+          "nilai lama tetap"
+        ],
+        [
+          "Isolasi",
+          "Instance tidak saling mengubah",
+          "a dan b terpisah"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Menguji perilaku objek dan perubahan state",
+        "code": "import io\nimport unittest\n\nclass Penghitung:\n    def __init__(self):\n        self.nilai = 0\n\n    def tambah(self, jumlah):\n        if type(jumlah) is not int or jumlah <= 0:\n            raise ValueError(\"Jumlah harus integer positif\")\n        self.nilai += jumlah\n\nclass TesPenghitung(unittest.TestCase):\n    def test_normal_dan_terpisah(self):\n        a, b = Penghitung(), Penghitung()\n        a.tambah(2)\n        self.assertEqual(a.nilai, 2)\n        self.assertEqual(b.nilai, 0)\n\n    def test_invalid_tidak_mengubah(self):\n        a = Penghitung()\n        a.tambah(3)\n        for nilai in (0, -1, True, 1.5):\n            with self.assertRaises(ValueError):\n                a.tambah(nilai)\n            self.assertEqual(a.nilai, 3)\n\nsuite = unittest.defaultTestLoader.loadTestsFromTestCase(TesPenghitung)\nhasil = unittest.TextTestRunner(stream=io.StringIO()).run(suite)\nprint(\"Tes dijalankan:\", hasil.testsRun)\nprint(\"Semua lolos:\", hasil.wasSuccessful())",
+        "output": "Tes dijalankan: 2\nSemua lolos: True",
+        "explanation": "Ada dua method tes; loop di tes kedua mencakup empat input invalid. Jika implementasi diubah sehingga aturan rusak, hasil sukses berubah False."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_pengujian.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Hapus validasi sementara lalu lihat tes gagal; kembalikan validasinya.",
+      "Tambahkan test nilai awal 0.",
+      "Tambahkan input string pada tes invalid."
+    ],
+    "warning": "Dua tes yang lolos tidak membuktikan seluruh program bebas bug. Pilih skenario berdasarkan aturan dan risiko; tambah tes saat menemukan kasus yang belum tercakup.",
+    "check": "Mengapa nilai diperiksa lagi setelah exception?",
+    "answer": "Untuk memastikan operasi yang ditolak tidak meninggalkan perubahan state yang salah.",
+    "source": "https://docs.python.org/3.11/library/unittest.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "oop-kasus-inventaris",
+    "title": "Studi kasus: inventaris barang dengan OOP",
+    "summary": "Bangun objek barang yang menjaga stok dan melaporkan nilai persediaan.",
+    "analogy": "Petugas gudang tidak hanya mencatat stok, tetapi mengikuti aturan penerimaan dan pengeluaran barang.",
+    "explain": [
+      "Kebutuhan: setiap Barang memiliki kode, harga rupiah bulat, dan stok. Stok awal boleh nol; penambahan dan pengeluaran harus bilangan bulat positif. Pengeluaran yang melebihi stok ditolak tanpa mengubah data.",
+      "Kita memilih satu class yang mengurus aturan satu barang. Kode disimpan sebagai identitas baca saja melalui property. Harga serta stok disediakan melalui property baca saja; perubahan stok hanya lewat tambah dan keluarkan. Underscore menandai detail internal menurut konvensi.",
+      "Validasi dipisahkan menjadi fungsi integer agar aturan angka dipakai ulang. type(x) is int menolak bool, string, dan float. Rupiah dipakai dalam integer untuk menghindari pecahan floating-point pada contoh; kebutuhan mata uang pecahan dapat memakai Decimal dengan aturan pembulatan yang disepakati.",
+      "Inventaris disimpan sebagai dictionary berdasarkan kode. Contoh menggunakan dua barang tetap dan belum menyediakan menu, penyimpanan file, pencarian, maupun aturan pencegahan kode duplikat saat input. Setelah program berakhir, semua perubahan di memori hilang."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Identitas",
+          "Kode dibaca melalui property",
+          "kode"
+        ],
+        [
+          "State",
+          "Harga dan stok tervalidasi",
+          "Integer >= 0"
+        ],
+        [
+          "Perubahan",
+          "Jumlah positif dan stok cukup",
+          "tambah / keluarkan"
+        ],
+        [
+          "Hasil",
+          "Nilai persediaan saat ini",
+          "harga × stok"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Studi kasus: inventaris barang dengan OOP",
+        "code": "def integer(nilai, minimum):\n    if type(nilai) is not int or nilai < minimum:\n        raise ValueError(f\"Nilai harus integer >= {minimum}\")\n    return nilai\n\nclass Barang:\n    def __init__(self, kode, harga, stok=0):\n        if not isinstance(kode, str) or not kode.strip():\n            raise ValueError(\"Kode wajib diisi\")\n        self._kode = kode.strip()\n        self._harga = integer(harga, 0)\n        self._stok = integer(stok, 0)\n\n    @property\n    def kode(self):\n        return self._kode\n\n    @property\n    def harga(self):\n        return self._harga\n\n    @property\n    def stok(self):\n        return self._stok\n\n    def tambah(self, jumlah):\n        self._stok += integer(jumlah, 1)\n\n    def keluarkan(self, jumlah):\n        jumlah = integer(jumlah, 1)\n        if jumlah > self._stok:\n            raise ValueError(\"Stok tidak cukup\")\n        self._stok -= jumlah\n\n    def nilai_persediaan(self):\n        return self.harga * self.stok\n\ninventaris = {\"K01\": Barang(\"K01\", 5000, 3),\n              \"K02\": Barang(\"K02\", 20000, 1)}\nkabel = inventaris[\"K01\"]\nkabel.tambah(2)\nkabel.keluarkan(4)\nprint(kabel.kode, kabel.stok, kabel.nilai_persediaan())\ntry:\n    kabel.keluarkan(2)\nexcept ValueError as error:\n    print(error)\nprint(\"Stok akhir:\", kabel.stok)\nprint(\"Total nilai:\", sum(b.nilai_persediaan() for b in inventaris.values()))",
+        "output": "K01 1 5000\nStok tidak cukup\nStok akhir: 1\nTotal nilai: 25000",
+        "explanation": "Urutannya: stok 3 menjadi 5, keluar 4 menjadi 1, keluar 2 ditolak. Nilai barang K01 5000 dan K02 20000 menjadikan total 25000."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_kasus_inventaris.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Uji pengeluaran tepat sebesar stok, lalu coba keluarkan lagi.",
+      "Tambahkan fungsi registrasi yang menolak kode duplikat sebelum memasukkan ke dictionary.",
+      "Buat tes untuk input negatif, bool, harga nol, dan dua barang terpisah.",
+      "Sebagai pengembangan, simpan data primitif ke JSON dan bangun ulang objek melalui konstruktor tervalidasi."
+    ],
+    "warning": "Property baca saja bukan pengamanan terhadap kode yang sengaja menulis _stok. Contoh belum menangani akses serentak atau transaksi database; jangan gunakan langsung sebagai sistem stok produksi.",
+    "check": "Jika stok 1 lalu diminta keluar 2, apa kondisi yang seharusnya terjadi?",
+    "answer": "ValueError terjadi dan stok tetap 1. Validasi jumlah serta kecukupan dilakukan sebelum pengurangan.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "oop-kasus-monitoring",
+    "title": "Studi kasus: pemantauan perangkat dengan objek simulasi",
+    "summary": "Gabungkan komposisi, polymorphism, validasi, dan pengujian tanpa perangkat fisik.",
+    "analogy": "Petugas NOC menerima angka dari pembaca, lalu memberi status berdasarkan batas yang disepakati.",
+    "explain": [
+      "Kebutuhan simulasi: PembacaSimulasi menyimpan rangkaian suhu Celsius dan mengeluarkan satu nilai per panggilan baca. Monitor meminta pembacaan lalu memberi status WASPADA jika suhu lebih besar atau sama dengan batas, selain itu NORMAL.",
+      "Monitor menerima pembaca dari luar sehingga sumber data dapat diganti. Kontrak pembaca adalah menyediakan baca() yang mengembalikan angka terbatas (bukan NaN atau infinity). Ketika data simulasi habis, StopIteration diperlakukan sebagai akhir rangkaian oleh loop pemakai.",
+      "Fungsi angka menolak bool, teks, NaN, dan infinity. Batas serta hasil pembacaan sama-sama diperiksa. Ambang 35 C hanya nilai latihan untuk memahami >=, bukan standar alarm perangkat jaringan atau rekomendasi operasional.",
+      "Pisahkan tugas: pembaca menyediakan data, Monitor menilai status, dan loop menampilkan hasil. Tidak ada ping, koneksi router, sensor fisik, notifikasi, atau konfigurasi perangkat yang dijalankan. Sumber nyata perlu menangani timeout dan error komunikasi dengan aturan tersendiri."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Contoh / aturan"
+      ],
+      "rows": [
+        [
+          "Pembaca",
+          "Menghasilkan data",
+          "baca()"
+        ],
+        [
+          "Monitor",
+          "Mengelompokkan status",
+          "nilai >= batas"
+        ],
+        [
+          "Komposisi",
+          "Monitor memakai pembaca",
+          "Diberikan ke __init__"
+        ],
+        [
+          "Akhir rangkaian",
+          "StopIteration",
+          "Ditangani loop pemakai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Praktik Python · Studi kasus: pemantauan perangkat dengan objek simulasi",
+        "code": "import math\n\ndef angka(nilai):\n    if type(nilai) not in (int, float) or not math.isfinite(nilai):\n        raise ValueError(\"Suhu harus angka terbatas\")\n    return nilai\n\nclass PembacaSimulasi:\n    def __init__(self, data):\n        self._data = iter(list(data))\n\n    def baca(self):\n        return next(self._data)\n\nclass Monitor:\n    def __init__(self, pembaca, batas=35):\n        self.pembaca = pembaca\n        self.batas = angka(batas)\n\n    def periksa(self):\n        nilai = angka(self.pembaca.baca())\n        status = \"WASPADA\" if nilai >= self.batas else \"NORMAL\"\n        return nilai, status\n\nmonitor = Monitor(PembacaSimulasi([28, 35, 37]))\nwhile True:\n    try:\n        nilai, status = monitor.periksa()\n    except StopIteration:\n        print(\"Simulasi selesai\")\n        break\n    print(f\"{nilai:.1f} C: {status}\")",
+        "output": "28.0 C: NORMAL\n35.0 C: WASPADA\n37.0 C: WASPADA\nSimulasi selesai",
+        "explanation": "Nilai tepat 35 termasuk WASPADA karena memakai >=. StopIteration hanya ditangani sebagai akhir input simulasi, bukan sebagai sinyal perangkat offline."
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan contoh dan perkirakan hasil setiap print.",
+      "Simpan seluruh contoh sebagai oop_kasus_monitoring.py, lalu jalankan dengan Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran; ubah satu bagian sesuai latihan dan jalankan kembali."
+    ],
+    "practice": [
+      "Uji nilai 34.9, 35, dan 35.1 untuk batas 35.",
+      "Ganti pembaca dengan objek lain yang mempunyai baca sesuai kontrak.",
+      "Uji data kosong dan pastikan loop selesai.",
+      "Uji True, \"35\", NaN, dan infinity, lalu tulis cara menampilkan kesalahan kepada pengguna."
+    ],
+    "warning": "Satu pembacaan invalid sudah dikonsumsi dari iterator sebelum ValueError terjadi. Jangan menganggap kegagalan otomatis mengembalikan posisi pembaca. Batas suhu adalah contoh latihan.",
+    "check": "Apakah 35 C termasuk NORMAL saat batas 35?",
+    "answer": "Tidak, karena kondisi >= memasukkan nilai tepat pada batas ke WASPADA.",
+    "source": "https://docs.python.org/3.11/tutorial/classes.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  }
+]

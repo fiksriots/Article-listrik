@@ -2614,5 +2614,635 @@
       "answer": 0,
       "explanation": "Algoritma dapat memilih salah satu rute minimum tergantung aturan iterasi."
     }
+  ],
+  "oop-pengantar": [
+    {
+      "question": "Apa yang dikelompokkan oleh objek?",
+      "options": [
+        "Data dan perilaku terkait",
+        "Hanya tampilan layar",
+        "Hanya nama file"
+      ],
+      "answer": 0,
+      "explanation": "Atribut menyimpan data; method menjalankan perilaku."
+    },
+    {
+      "question": "Apa hubungan OOP dan pemrograman terstruktur?",
+      "options": [
+        "OOP melarang fungsi",
+        "Alur terstruktur tetap dipakai di dalam method",
+        "OOP menghapus perulangan"
+      ],
+      "answer": 1,
+      "explanation": "OOP mengubah pengorganisasian, bukan menghilangkan alur program."
+    },
+    {
+      "question": "Mengapa teras tetap False?",
+      "options": [
+        "Semua lampu berbagi status",
+        "nyalakan tidak dijalankan",
+        "meja dan teras adalah instance berbeda"
+      ],
+      "answer": 2,
+      "explanation": "self.aktif disimpan pada instance yang menerima pemanggilan."
+    },
+    {
+      "question": "Kapan fungsi sederhana masih cocok?",
+      "options": [
+        "Saat masalah kecil dan pengelompokan objek belum membantu",
+        "Tidak pernah setelah belajar class",
+        "Hanya untuk mencetak teks"
+      ],
+      "answer": 0,
+      "explanation": "Pilih bentuk kode yang paling mudah dipahami dan diuji untuk kebutuhannya."
+    }
+  ],
+  "oop-class-object": [
+    {
+      "question": "Apa hasil Buku()?",
+      "options": [
+        "Satu instance baru",
+        "File buku baru",
+        "Salinan semua instance"
+      ],
+      "answer": 0,
+      "explanation": "Memanggil class membuat instance baru."
+    },
+    {
+      "question": "Apa yang dilakukan alias = buku_a?",
+      "options": [
+        "Menyalin semua atribut ke objek baru",
+        "Menunjuk objek yang sama",
+        "Membuat class turunan"
+      ],
+      "answer": 1,
+      "explanation": "Penugasan referensi tidak menyalin instance."
+    },
+    {
+      "question": "Operator apa untuk identitas?",
+      "options": [
+        "== selalu identik dengan is",
+        "in",
+        "is"
+      ],
+      "answer": 2,
+      "explanation": "is menguji apakah objek yang ditunjuk sama."
+    },
+    {
+      "question": "Apa akibat membaca atribut yang belum ada?",
+      "options": [
+        "AttributeError",
+        "Nilai otomatis nol",
+        "Class otomatis dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Python tidak mengisi atribut yang belum didefinisikan secara otomatis."
+    }
+  ],
+  "oop-init-self": [
+    {
+      "question": "Apa tugas __init__?",
+      "options": [
+        "Menyiapkan atribut awal instance",
+        "Mencetak semua atribut otomatis",
+        "Menyimpan ke database otomatis"
+      ],
+      "answer": 0,
+      "explanation": "__init__ menginisialisasi state objek yang baru dibuat."
+    },
+    {
+      "question": "Apa arti self.paket?",
+      "options": [
+        "Variabel global semua pelanggan",
+        "Atribut paket pada instance penerima",
+        "Parameter yang harus selalu dimasukkan manual"
+      ],
+      "answer": 1,
+      "explanation": "Titik setelah self mengakses atribut instance."
+    },
+    {
+      "question": "Apa hasil method tanpa return eksplisit?",
+      "options": [
+        "True",
+        "String kosong",
+        "None"
+      ],
+      "answer": 2,
+      "explanation": "Python mengembalikan None ketika tidak ada return nilai."
+    },
+    {
+      "question": "Berapa argumen eksplisit ana.ubah_paket membutuhkan pada contoh?",
+      "options": [
+        "Satu, paket baru",
+        "Dua, ana dan paket baru",
+        "Nol"
+      ],
+      "answer": 0,
+      "explanation": "self terikat otomatis saat method dipanggil melalui ana."
+    }
+  ],
+  "oop-atribut": [
+    {
+      "question": "Di mana self.pinjaman disimpan?",
+      "options": [
+        "Pada setiap instance",
+        "Hanya pada class",
+        "Di file otomatis"
+      ],
+      "answer": 0,
+      "explanation": "__init__ memberi atribut pada instance penerima."
+    },
+    {
+      "question": "Apa risiko pinjaman = [] di badan class?",
+      "options": [
+        "List tidak bisa ditambah",
+        "List dapat dibagikan antarinstance",
+        "List berubah menjadi tuple"
+      ],
+      "answer": 1,
+      "explanation": "Mutasi list bersama tampak dari semua instance yang merujuknya."
+    },
+    {
+      "question": "Apakah ana.lembaga = \"X\" mengubah Anggota.lembaga?",
+      "options": [
+        "Ya untuk semua instance",
+        "Menghapus lembaga Budi",
+        "Tidak, membuat atribut instance ana"
+      ],
+      "answer": 2,
+      "explanation": "Penugasan melalui instance menutupi atribut class untuk instance itu."
+    },
+    {
+      "question": "Default parameter yang aman untuk list baru per instance?",
+      "options": [
+        "None lalu buat list di __init__",
+        "[] langsung sebagai default",
+        "List pada class untuk semua kebutuhan"
+      ],
+      "answer": 0,
+      "explanation": "Default mutable dievaluasi sekali saat fungsi didefinisikan."
+    }
+  ],
+  "oop-enkapsulasi": [
+    {
+      "question": "Apa kegunaan setter?",
+      "options": [
+        "Memeriksa penugasan atribut",
+        "Menyembunyikan semua kode",
+        "Mengubah objek menjadi string"
+      ],
+      "answer": 0,
+      "explanation": "Setter dapat menegakkan aturan ketika nilai ditulis."
+    },
+    {
+      "question": "Apakah _stok tidak mungkin diakses?",
+      "options": [
+        "Tidak mungkin dari luar class",
+        "Masih bisa; underscore adalah konvensi",
+        "Hanya dapat dibaca oleh OS"
+      ],
+      "answer": 1,
+      "explanation": "Underscore menandai detail internal tanpa kontrol akses mutlak."
+    },
+    {
+      "question": "Mengapa type(nilai) is int dipakai?",
+      "options": [
+        "Agar float selalu diterima",
+        "Agar string menjadi int otomatis",
+        "Agar bool juga ditolak"
+      ],
+      "answer": 2,
+      "explanation": "bool adalah subclass int; aturan contoh hanya menerima int murni."
+    },
+    {
+      "question": "Apa hasil setter gagal sebelum assignment?",
+      "options": [
+        "Nilai lama tetap tersimpan",
+        "Nilai otomatis nol",
+        "Objek selalu terhapus"
+      ],
+      "answer": 0,
+      "explanation": "Validasi mendahului perubahan state."
+    }
+  ],
+  "oop-inheritance": [
+    {
+      "question": "Hubungan yang cocok untuk inheritance?",
+      "options": [
+        "Adalah jenis",
+        "Sekadar menggunakan",
+        "Sekadar berlokasi dekat"
+      ],
+      "answer": 0,
+      "explanation": "Turunan perlu masuk akal sebagai jenis induknya."
+    },
+    {
+      "question": "Apa itu overriding?",
+      "options": [
+        "Menghapus semua method induk",
+        "Mengganti implementasi method pada turunan",
+        "Menyalin file class"
+      ],
+      "answer": 1,
+      "explanation": "Nama method sama pada turunan memberi perilaku khusus."
+    },
+    {
+      "question": "Apa fungsi super().__init__(nama) di contoh?",
+      "options": [
+        "Membuat dua objek orang",
+        "Mencetak nama otomatis",
+        "Menyiapkan atribut nama lewat induk"
+      ],
+      "answer": 2,
+      "explanation": "Pada pewarisan tunggal, panggilan meneruskan inisialisasi ke induk."
+    },
+    {
+      "question": "Jika turunan mempunyai __init__, apakah __init__ induk otomatis dipanggil?",
+      "options": [
+        "Tidak",
+        "Selalu dua kali",
+        "Hanya saat print"
+      ],
+      "answer": 0,
+      "explanation": "Inisialisasi induk harus dipanggil jika dibutuhkan."
+    }
+  ],
+  "oop-polymorphism": [
+    {
+      "question": "Apa yang dibutuhkan kirim_semua?",
+      "options": [
+        "Objek dengan kirim(pesan) yang sesuai",
+        "Semua objek bernama sama",
+        "Semua objek berupa string"
+      ],
+      "answer": 0,
+      "explanation": "Fungsi bergantung pada kemampuan dan kontrak method."
+    },
+    {
+      "question": "Apa keuntungan polymorphism di contoh?",
+      "options": [
+        "Menghilangkan semua bug",
+        "Menambah implementasi tanpa mengubah kirim_semua",
+        "Membuat pengiriman jaringan nyata"
+      ],
+      "answer": 1,
+      "explanation": "Pemakai tetap memanggil antarmuka yang sama."
+    },
+    {
+      "question": "Apakah kesamaan nama method saja cukup?",
+      "options": [
+        "Ya dalam semua keadaan",
+        "Hanya jika namanya pendek",
+        "Tidak; argumen dan perilakunya juga harus sesuai"
+      ],
+      "answer": 2,
+      "explanation": "Kontrak mencakup input, output, dan kegagalan."
+    },
+    {
+      "question": "Apakah contoh mengirim email sungguhan?",
+      "options": [
+        "Tidak, hanya mengembalikan string simulasi",
+        "Ya otomatis",
+        "Ya jika ada internet"
+      ],
+      "answer": 0,
+      "explanation": "Tidak ada API atau koneksi jaringan pada kode."
+    }
+  ],
+  "oop-abstraksi": [
+    {
+      "question": "Apa tujuan abstraksi?",
+      "options": [
+        "Menyediakan antarmuka yang cukup bagi pemakai",
+        "Membuat semua atribut rahasia",
+        "Menghapus implementasi"
+      ],
+      "answer": 0,
+      "explanation": "Pemakai cukup mengetahui kemampuan yang relevan."
+    },
+    {
+      "question": "Apa akibat instansiasi class dengan abstract method belum lengkap?",
+      "options": [
+        "Objek kosong selalu dibuat",
+        "TypeError",
+        "Nilai None"
+      ],
+      "answer": 1,
+      "explanation": "ABC menolak instansiasi sampai abstract method terpenuhi."
+    },
+    {
+      "question": "Apakah semua abstraksi memerlukan ABC?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika punya dua method",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Fungsi dan class biasa juga dapat menyembunyikan detail."
+    },
+    {
+      "question": "Apa yang tetap perlu diuji setelah memakai ABC?",
+      "options": [
+        "Kebenaran hasil dan perilaku method",
+        "Hanya warna editor",
+        "Tidak ada lagi"
+      ],
+      "answer": 0,
+      "explanation": "Kelengkapan method tidak membuktikan semantik hasil."
+    }
+  ],
+  "oop-komposisi": [
+    {
+      "question": "Hubungan Dashboard dengan pembaca?",
+      "options": [
+        "Menggunakan objek pembaca",
+        "Dashboard adalah jenis pembaca",
+        "Keduanya harus satu class"
+      ],
+      "answer": 0,
+      "explanation": "Dashboard mendelegasikan pembacaan kepada objek lain."
+    },
+    {
+      "question": "Apa dependency injection pada contoh?",
+      "options": [
+        "Mengunduh library otomatis",
+        "Memberikan pembaca ke __init__",
+        "Mewarisi dua induk"
+      ],
+      "answer": 1,
+      "explanation": "Ketergantungan disediakan oleh pemanggil."
+    },
+    {
+      "question": "Apa manfaat saat pengujian?",
+      "options": [
+        "Tidak perlu tes apa pun",
+        "Sensor fisik selalu wajib",
+        "Dapat memakai pembaca dengan nilai terkontrol"
+      ],
+      "answer": 2,
+      "explanation": "Objek simulasi membuat masukan dapat ditentukan."
+    },
+    {
+      "question": "Kapan inheritance lebih cocok?",
+      "options": [
+        "Saat turunan adalah jenis induk dan memenuhi kontraknya",
+        "Setiap kali ada atribut yang sama",
+        "Saat ingin menghindari semua fungsi"
+      ],
+      "answer": 0,
+      "explanation": "Hubungan jenis perlu masuk akal secara perilaku."
+    }
+  ],
+  "oop-jenis-method": [
+    {
+      "question": "Method yang membutuhkan state instance memakai apa?",
+      "options": [
+        "self",
+        "cls selalu",
+        "Tidak ada parameter"
+      ],
+      "answer": 0,
+      "explanation": "self menunjuk instance yang datanya dipakai."
+    },
+    {
+      "question": "Parameter otomatis classmethod?",
+      "options": [
+        "self",
+        "cls",
+        "Tidak ada"
+      ],
+      "answer": 1,
+      "explanation": "classmethod menerima class penerima sebagai argumen pertama."
+    },
+    {
+      "question": "Apakah staticmethod menerima self otomatis?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika dipanggil dari class",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "staticmethod berperilaku seperti fungsi tanpa pengikatan instance."
+    },
+    {
+      "question": "Mengapa factory ini memakai cls(...)?",
+      "options": [
+        "Agar tipe objek mengikuti class penerima",
+        "Agar objek tidak dibuat",
+        "Agar semua atribut global"
+      ],
+      "answer": 0,
+      "explanation": "Factory yang diwarisi dapat membuat instance turunan yang kompatibel."
+    }
+  ],
+  "oop-dunder": [
+    {
+      "question": "Apa yang dipakai print untuk representasi ramah pengguna?",
+      "options": [
+        "__str__",
+        "__len__",
+        "__init__ saja"
+      ],
+      "answer": 0,
+      "explanation": "print memakai konversi string objek."
+    },
+    {
+      "question": "Apa fungsi __repr__?",
+      "options": [
+        "Selalu mengirim laporan",
+        "Representasi yang membantu pemeriksaan",
+        "Menghitung harga otomatis"
+      ],
+      "answer": 1,
+      "explanation": "repr ditujukan untuk representasi teknis yang berguna."
+    },
+    {
+      "question": "Apa kontrak nilai __len__?",
+      "options": [
+        "String angka",
+        "Float apa pun",
+        "Integer tidak negatif"
+      ],
+      "answer": 2,
+      "explanation": "len membutuhkan ukuran integer tidak negatif."
+    },
+    {
+      "question": "Apa arti !r pada f-string?",
+      "options": [
+        "Menggunakan repr nilai",
+        "Membalik string",
+        "Membaca file"
+      ],
+      "answer": 0,
+      "explanation": "Konversi !r menggunakan representasi repr."
+    }
+  ],
+  "oop-dataclass": [
+    {
+      "question": "Apa yang dataclass dapat hasilkan?",
+      "options": [
+        "__init__, __repr__, dan __eq__",
+        "Database otomatis",
+        "GUI otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Dekorator menghasilkan method umum dari field."
+    },
+    {
+      "question": "Apakah lokasi: str menjamin runtime hanya menerima string?",
+      "options": [
+        "Ya selalu",
+        "Tidak",
+        "Hanya di Windows"
+      ],
+      "answer": 1,
+      "explanation": "Anotasi tidak otomatis memvalidasi tipe runtime."
+    },
+    {
+      "question": "Apa kegunaan default_factory=list?",
+      "options": [
+        "Membagikan satu list global",
+        "Membuat tuple",
+        "Membuat list default baru per instance"
+      ],
+      "answer": 2,
+      "explanation": "Factory dipanggil saat nilai default dibutuhkan."
+    },
+    {
+      "question": "Apakah frozen=True membekukan isi list secara mendalam?",
+      "options": [
+        "Tidak",
+        "Ya seluruh objek bersarang",
+        "Mengubah list menjadi set"
+      ],
+      "answer": 0,
+      "explanation": "Pembekuan assignment field tidak berarti deep immutability."
+    }
+  ],
+  "oop-pengujian": [
+    {
+      "question": "Apa yang assertRaises periksa?",
+      "options": [
+        "Exception yang diharapkan terjadi",
+        "Nilai selalu naik",
+        "Waktu eksekusi saja"
+      ],
+      "answer": 0,
+      "explanation": "Assertion ini menguji jalur kegagalan."
+    },
+    {
+      "question": "Mengapa perlu dua instance dalam tes?",
+      "options": [
+        "Agar class diwarisi otomatis",
+        "Memeriksa pemisahan state",
+        "Agar tes menjadi cepat tanpa batas"
+      ],
+      "answer": 1,
+      "explanation": "Mutasi a tidak boleh memengaruhi b untuk kontrak ini."
+    },
+    {
+      "question": "Apa yang diuji setelah input invalid?",
+      "options": [
+        "Hanya teks nama class",
+        "Warna keluaran",
+        "State lama masih sama"
+      ],
+      "answer": 2,
+      "explanation": "Kegagalan seharusnya tidak merusak nilai sebelumnya."
+    },
+    {
+      "question": "Apakah tes lolos membuktikan tidak ada bug?",
+      "options": [
+        "Tidak; hanya skenario yang diuji terbukti sesuai",
+        "Ya selalu",
+        "Ya jika ada dua tes"
+      ],
+      "answer": 0,
+      "explanation": "Cakupan skenario menentukan batas bukti pengujian."
+    }
+  ],
+  "oop-kasus-inventaris": [
+    {
+      "question": "Mengapa keluarkan memeriksa kecukupan sebelum mengurangi?",
+      "options": [
+        "Agar penolakan tidak merusak stok",
+        "Agar stok boleh negatif",
+        "Agar harga otomatis berubah"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan hanya dilakukan setelah seluruh prasyarat terpenuhi."
+    },
+    {
+      "question": "Berapa stok sesudah 3 + 2 - 4?",
+      "options": [
+        "2",
+        "1",
+        "5"
+      ],
+      "answer": 1,
+      "explanation": "Penambahan menjadi 5 lalu pengeluaran menjadi 1."
+    },
+    {
+      "question": "Apa tujuan dictionary pada studi kasus ini?",
+      "options": [
+        "Menggantikan semua method",
+        "Menyimpan permanen otomatis",
+        "Mengakses objek Barang berdasarkan kode"
+      ],
+      "answer": 2,
+      "explanation": "Dictionary menghubungkan kode ke instance barang."
+    },
+    {
+      "question": "Apa batas program ini?",
+      "options": [
+        "Data masih di memori dan belum ada transaksi serentak",
+        "Sudah menangani semua kondisi gudang",
+        "Sudah sinkron otomatis antarpengguna"
+      ],
+      "answer": 0,
+      "explanation": "Penyimpanan dan pengendalian akses serentak perlu rancangan tambahan."
+    }
+  ],
+  "oop-kasus-monitoring": [
+    {
+      "question": "Apa status nilai tepat pada batas?",
+      "options": [
+        "WASPADA",
+        "NORMAL",
+        "Selalu error"
+      ],
+      "answer": 0,
+      "explanation": "Kondisi >= mencakup nilai yang sama dengan batas."
+    },
+    {
+      "question": "Apa arti StopIteration di contoh?",
+      "options": [
+        "Router pasti offline",
+        "Data simulasi habis",
+        "Suhu terlalu tinggi"
+      ],
+      "answer": 1,
+      "explanation": "Iterator tidak mempunyai nilai berikutnya."
+    },
+    {
+      "question": "Apa yang memungkinkan pembaca diganti?",
+      "options": [
+        "Monitor mewarisi semua sensor",
+        "Semua nilai global",
+        "Monitor menerima objek pembaca lewat konstruktor"
+      ],
+      "answer": 2,
+      "explanation": "Komposisi dan kontrak baca memisahkan sumber dari penilaian."
+    },
+    {
+      "question": "Apakah batas 35 merupakan standar operasional perangkat?",
+      "options": [
+        "Tidak, hanya contoh latihan",
+        "Ya untuk semua router",
+        "Ya untuk semua sensor"
+      ],
+      "answer": 0,
+      "explanation": "Batas operasional harus mengikuti kebutuhan serta spesifikasi perangkat."
+    }
   ]
 }

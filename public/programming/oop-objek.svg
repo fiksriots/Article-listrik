@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="480" viewBox="0 0 860 480" role="img" aria-labelledby="title desc">
+<title id="title">Class dan dua instance Lampu</title><desc id="desc">Class Lampu memiliki nama, aktif, dan method nyalakan. Meja dan Teras adalah instance berbeda. Menyalakan Meja tidak mengubah Teras.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#65508a"/></marker></defs>
+<rect width="860" height="480" rx="22" fill="#f6f5fa"/>
+<g font-family="Arial,sans-serif" fill="#27334a"><text x="40" y="43" font-size="21" font-weight="bold">Satu definisi, data tiap objek terpisah</text>
+<rect x="260" y="67" width="340" height="151" rx="14" fill="#fff" stroke="#65508a" stroke-width="2"/><text x="430" y="99" text-anchor="middle" font-size="20" font-weight="bold">CLASS · Lampu</text><path d="M260 113H600" stroke="#d8d4e5"/><text x="285" y="141" font-size="18">Atribut: nama, aktif</text><text x="285" y="174" font-size="18">Method: nyalakan()</text><text x="285" y="201" font-size="15" fill="#58647b">Pola untuk membuat instance</text>
+<path d="M360 218V244H225V275M500 218V244H635V275" fill="none" stroke="#65508a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="50" y="280" width="350" height="136" rx="14" fill="#edf7f1" stroke="#49745b"/><rect x="460" y="280" width="350" height="136" rx="14" fill="#fff" stroke="#9098ac"/>
+<text x="75" y="314" font-size="20" font-weight="bold">meja = Lampu("Meja")</text><text x="75" y="350" font-size="18">nama: Meja</text><text x="75" y="383" font-size="18">aktif: True · setelah nyalakan()</text>
+<text x="485" y="314" font-size="20" font-weight="bold">teras = Lampu("Teras")</text><text x="485" y="350" font-size="18">nama: Teras</text><text x="485" y="383" font-size="18">aktif: False · belum dinyalakan</text>
+<text x="430" y="451" text-anchor="middle" font-size="17" fill="#58647b">Perubahan pada meja tidak mengubah status teras.</text></g></svg>
