@@ -10,7 +10,7 @@ from programming_sql_runner import statements, run_sql
 
 root = Path(__file__).resolve().parents[1]
 lessons = json.loads((root / 'lib/programming-database-lessons.json').read_text())
-assert len(lessons) == 18
+assert len(lessons) == 31
 by_slug = {lesson['slug']: lesson for lesson in lessons}
 
 def sql(slug):
@@ -145,4 +145,4 @@ with tempfile.TemporaryDirectory() as directory:
         assert con.execute('PRAGMA foreign_key_check').fetchall() == []
     finally:
         con.close()
-print('PASS: 18 database examples, constraints, FK enforcement, rollback atomicity, migration failures, backup restore, active loan uniqueness and ticket/history consistency')
+print('PASS: 31 database examples, constraints, FK enforcement, rollback atomicity, migration failures, backup restore, active loan uniqueness and ticket/history consistency')

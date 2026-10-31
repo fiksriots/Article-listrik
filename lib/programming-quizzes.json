@@ -4756,5 +4756,551 @@
       "answer": 0,
       "explanation": "Kegagalan membatalkan unit perubahan transaksi."
     }
+  ],
+  "db-subquery-exists": [
+    {
+      "question": "Apa EXISTS periksa?",
+      "options": [
+        "Keberadaan minimal satu baris",
+        "Nilai SELECT harus selalu satu",
+        "Jumlah kolom tabel"
+      ],
+      "answer": 0,
+      "explanation": "EXISTS menghasilkan keputusan keberadaan."
+    },
+    {
+      "question": "Apa correlated subquery?",
+      "options": [
+        "Tabel yang tidak punya relasi",
+        "Subquery yang merujuk baris kueri luar",
+        "Kueri yang selalu menghasilkan NULL"
+      ],
+      "answer": 1,
+      "explanation": "Referensi ke alias luar mengaitkan pemeriksaan dengan baris saat ini."
+    },
+    {
+      "question": "Apa risiko NOT IN jika subquery memuat NULL?",
+      "options": [
+        "Semua NULL otomatis dihapus",
+        "Selalu sama dengan NOT EXISTS",
+        "Hasil dapat terpengaruh logika tak diketahui"
+      ],
+      "answer": 2,
+      "explanation": "NULL dapat mengubah hasil kondisi NOT IN."
+    },
+    {
+      "question": "Apa dampak beberapa pasangan pada EXISTS?",
+      "options": [
+        "Baris luar tetap satu",
+        "Selalu muncul sebanyak pasangan",
+        "Selalu error"
+      ],
+      "answer": 0,
+      "explanation": "EXISTS memfilter, bukan menggabungkan seluruh pasangan."
+    }
+  ],
+  "db-cte": [
+    {
+      "question": "Apa fungsi utama CTE pada contoh?",
+      "options": [
+        "Memberi nama hasil antara",
+        "Menyimpan backup permanen",
+        "Menghapus kebutuhan JOIN"
+      ],
+      "answer": 0,
+      "explanation": "WITH membantu membagi kueri menjadi tahap yang terbaca."
+    },
+    {
+      "question": "Berapa lama nama CTE tersedia?",
+      "options": [
+        "Selamanya sampai DROP TABLE",
+        "Selama satu statement",
+        "Hanya selama INSERT"
+      ],
+      "answer": 1,
+      "explanation": "CTE bukan objek skema permanen."
+    },
+    {
+      "question": "Mengapa COALESCE digunakan?",
+      "options": [
+        "Membuat tiket baru",
+        "Menghapus teknisi",
+        "Menampilkan nol untuk hasil jumlah yang tidak ada"
+      ],
+      "answer": 2,
+      "explanation": "LEFT JOIN dapat menghasilkan NULL pada sisi jumlah."
+    },
+    {
+      "question": "Apakah CTE pasti lebih cepat?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya jika namanya pendek"
+      ],
+      "answer": 0,
+      "explanation": "Rencana engine dan data menentukan biaya eksekusi."
+    }
+  ],
+  "db-cte-rekursif": [
+    {
+      "question": "Apa bagian anchor?",
+      "options": [
+        "Baris awal penelusuran",
+        "Hasil akhir setelah ORDER BY",
+        "Indeks database"
+      ],
+      "answer": 0,
+      "explanation": "Anchor memulai perluasan rekursif."
+    },
+    {
+      "question": "Mengapa siklus contoh berhenti?",
+      "options": [
+        "Semua graph tidak mempunyai siklus",
+        "UNION menghapus node yang sudah sama pada hasil satu kolom",
+        "SQLite hanya membaca satu edge"
+      ],
+      "answer": 1,
+      "explanation": "Tidak ada node baru setelah semua yang terjangkau ditemukan."
+    },
+    {
+      "question": "Apakah menambahkan depth selalu tetap aman dengan UNION saja?",
+      "options": [
+        "Ya untuk semua graph",
+        "Hanya jika depth bertipe integer",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Pasangan node-depth baru dapat terus muncul pada siklus."
+    },
+    {
+      "question": "Apa tujuan kueri contoh?",
+      "options": [
+        "Mencari node terjangkau",
+        "Mencari rute termurah berbobot",
+        "Menampilkan semua kemungkinan jalur"
+      ],
+      "answer": 0,
+      "explanation": "Kueri tidak menyimpan biaya maupun jalur."
+    }
+  ],
+  "db-window": [
+    {
+      "question": "Apa perbedaan window dengan GROUP BY biasa?",
+      "options": [
+        "Window dapat mempertahankan tiap baris detail",
+        "Window selalu menghapus baris",
+        "Keduanya selalu identik"
+      ],
+      "answer": 0,
+      "explanation": "Window menambahkan perhitungan tanpa harus merangkum baris detail."
+    },
+    {
+      "question": "Apa RANK untuk skor 5, 5, 2?",
+      "options": [
+        "1, 2, 3",
+        "1, 1, 3",
+        "1, 1, 2 selalu"
+      ],
+      "answer": 1,
+      "explanation": "RANK mempertahankan seri dan melompati posisi setelahnya."
+    },
+    {
+      "question": "Apa fungsi PARTITION BY?",
+      "options": [
+        "Membuat file database baru",
+        "Menghapus indeks",
+        "Memisahkan kelompok perhitungan window"
+      ],
+      "answer": 2,
+      "explanation": "Setiap partisi dihitung sebagai kelompok window tersendiri."
+    },
+    {
+      "question": "Apakah ORDER BY dalam OVER otomatis mengatur tampilan akhir?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya bila memakai SUM"
+      ],
+      "answer": 0,
+      "explanation": "Gunakan ORDER BY luar untuk urutan hasil akhir."
+    }
+  ],
+  "db-waktu-laporan": [
+    {
+      "question": "Apa bentuk rentang hari yang digunakan?",
+      "options": [
+        ">= awal dan < hari berikutnya",
+        "Selalu BETWEEN awal dan 23:59:59",
+        "Hanya LIKE nama bulan"
+      ],
+      "answer": 0,
+      "explanation": "Rentang setengah terbuka mencakup seluruh hari tanpa menebak presisi terakhir."
+    },
+    {
+      "question": "Apakah TEXT otomatis memvalidasi tanggal?",
+      "options": [
+        "Ya selalu",
+        "Tidak",
+        "Hanya saat panjangnya 19"
+      ],
+      "answer": 1,
+      "explanation": "Validasi waktu memerlukan aturan terpisah."
+    },
+    {
+      "question": "Jika data UTC dan laporan lokal, apa yang perlu disepakati?",
+      "options": [
+        "Menghapus seluruh offset tanpa berpikir",
+        "Memakai zona mesin secara acak",
+        "Konversi batas periode ke zona penyimpanan"
+      ],
+      "answer": 2,
+      "explanation": "Batas yang benar menentukan kejadian yang termasuk."
+    },
+    {
+      "question": "Apa hasil baris tepat pada awal hari berikut?",
+      "options": [
+        "Tidak masuk hari pertama",
+        "Masuk dua hari sekaligus",
+        "Selalu NULL"
+      ],
+      "answer": 0,
+      "explanation": "Batas akhir eksklusif mencegah tumpang tindih."
+    }
+  ],
+  "db-pagination": [
+    {
+      "question": "Apa yang cursor keyset simpan?",
+      "options": [
+        "Nilai pengurutan baris terakhir",
+        "Seluruh database",
+        "Nomor acak tanpa makna"
+      ],
+      "answer": 0,
+      "explanation": "Cursor menetapkan posisi untuk kueri berikutnya."
+    },
+    {
+      "question": "Mengapa id ditambahkan pada urutan?",
+      "options": [
+        "Menghapus kebutuhan indeks",
+        "Memecahkan nilai tanggal yang seri",
+        "Agar tanggal berubah"
+      ],
+      "answer": 1,
+      "explanation": "Urutan harus tegas agar kelanjutan tidak ambigu."
+    },
+    {
+      "question": "Apakah keyset otomatis snapshot lintas permintaan?",
+      "options": [
+        "Ya selalu",
+        "Hanya bila LIMIT dua",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Data yang berubah dapat memengaruhi hasil berikutnya."
+    },
+    {
+      "question": "Apa yang berubah untuk pengurutan turun?",
+      "options": [
+        "Arah pembanding cursor",
+        "Nama semua tabel",
+        "Seluruh primary key dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Kondisi cursor harus mengikuti arah urutan."
+    }
+  ],
+  "db-view": [
+    {
+      "question": "Apa yang disimpan view biasa?",
+      "options": [
+        "Definisi SELECT",
+        "Seluruh hasil sebagai cache otomatis",
+        "Cadangan file"
+      ],
+      "answer": 0,
+      "explanation": "Hasil dihitung dari data dasar ketika view dibaca."
+    },
+    {
+      "question": "Apakah perubahan tabel dasar dapat terlihat saat view dibaca lagi?",
+      "options": [
+        "Tidak pernah",
+        "Ya",
+        "Hanya setelah DROP database"
+      ],
+      "answer": 1,
+      "explanation": "View mengikuti data yang terlihat pada transaksi pembaca."
+    },
+    {
+      "question": "Apakah view SQLite biasa dapat ditulis langsung tanpa rancangan tambahan?",
+      "options": [
+        "Ya semua operasi pasti bisa",
+        "Hanya jika memakai SELECT *",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "View biasa read-only; kebutuhan tulis memerlukan mekanisme yang sesuai."
+    },
+    {
+      "question": "Apa yang tetap diperlukan untuk urutan laporan?",
+      "options": [
+        "ORDER BY pada kueri pemakai",
+        "Nama view panjang",
+        "Menghapus primary key"
+      ],
+      "answer": 0,
+      "explanation": "Jangan menganggap definisi view menjamin urutan akhir."
+    }
+  ],
+  "db-trigger": [
+    {
+      "question": "Apa OLD dan NEW nyatakan?",
+      "options": [
+        "Nilai baris sebelum dan sesudah operasi",
+        "Nama dua database",
+        "Nomor versi Python"
+      ],
+      "answer": 0,
+      "explanation": "Ketersediaannya mengikuti jenis operasi trigger."
+    },
+    {
+      "question": "Mengapa UPDATE status sama tidak dicatat lagi?",
+      "options": [
+        "SQLite tidak pernah menjalankan UPDATE",
+        "WHEN membatasi perubahan yang benar-benar berbeda",
+        "Semua trigger dinonaktifkan"
+      ],
+      "answer": 1,
+      "explanation": "Kondisi trigger melewati penulisan ulang status sama."
+    },
+    {
+      "question": "Apa yang dijaga CHECK status pada contoh?",
+      "options": [
+        "Seluruh urutan transisi",
+        "Semua aturan audit",
+        "Himpunan nilai status yang sah"
+      ],
+      "answer": 2,
+      "explanation": "Transisi memerlukan aturan tambahan pada trigger."
+    },
+    {
+      "question": "Apa risiko mencatat riwayat di aplikasi dan trigger tanpa koordinasi?",
+      "options": [
+        "Riwayat dapat ganda",
+        "Semua SELECT pasti gagal",
+        "Database otomatis dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Pemilik tanggung jawab pencatatan perlu jelas."
+    }
+  ],
+  "db-upsert": [
+    {
+      "question": "Apa excluded nyatakan?",
+      "options": [
+        "Nilai calon baris INSERT",
+        "Semua baris yang dihapus",
+        "Koneksi lain"
+      ],
+      "answer": 0,
+      "explanation": "Nilai itu dipakai dalam DO UPDATE."
+    },
+    {
+      "question": "Mengapa data 10:02 tidak menimpa 10:05?",
+      "options": [
+        "SQLite selalu mengurutkan INSERT",
+        "WHERE pada DO UPDATE memerlukan waktu lebih baru",
+        "Semua nilai suhu ditolak"
+      ],
+      "answer": 1,
+      "explanation": "Aturan pembaruan ditulis eksplisit."
+    },
+    {
+      "question": "Apakah UPSERT mengabaikan seluruh constraint?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika memakai TEXT",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Konflik yang ditangani tidak meniadakan aturan lain."
+    },
+    {
+      "question": "Apa yang perlu untuk operasi sekali pada pesan ulang?",
+      "options": [
+        "Identitas kejadian dan transaksi yang memeriksanya",
+        "Menambah counter lagi",
+        "Menghapus kunci unik"
+      ],
+      "answer": 0,
+      "explanation": "Snapshot terbaru berbeda dari deduplikasi operasi."
+    }
+  ],
+  "db-konkurensi": [
+    {
+      "question": "Apa yang B baca sebelum A commit pada demo?",
+      "options": [
+        "Nilai lama 5",
+        "Nilai baru 3",
+        "Nilai acak"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan belum commit A tidak terlihat pada B dalam konfigurasi ini."
+    },
+    {
+      "question": "Apa arti SQLITE_BUSY pada BEGIN IMMEDIATE B?",
+      "options": [
+        "Tabel pasti rusak",
+        "Penulis lain masih memegang transaksi",
+        "SQL pasti salah eja"
+      ],
+      "answer": 1,
+      "explanation": "Ketersediaan transaksi tulis perlu ditangani."
+    },
+    {
+      "question": "Apa makna rowcount nol pada UPDATE versi lama?",
+      "options": [
+        "Sukses memperbarui satu baris",
+        "Commit otomatis gagal selamanya",
+        "Sasaran versi tidak cocok sehingga tidak diperbarui"
+      ],
+      "answer": 2,
+      "explanation": "Pemakai perlu memperlakukan ini sebagai konflik."
+    },
+    {
+      "question": "Apakah retry semua exception tanpa batas tepat?",
+      "options": [
+        "Tidak",
+        "Ya agar akhirnya berhasil",
+        "Hanya jika database kecil"
+      ],
+      "answer": 0,
+      "explanation": "Jenis kegagalan dan unit pekerjaan menentukan kebijakan retry."
+    }
+  ],
+  "db-optimasi-lanjutan": [
+    {
+      "question": "Apa langkah awal optimasi?",
+      "options": [
+        "Pastikan kebutuhan hasil dan pola kueri",
+        "Buat indeks untuk seluruh kolom",
+        "Selalu hapus constraint"
+      ],
+      "answer": 0,
+      "explanation": "Kebenaran dan kebutuhan akses mendahului penyesuaian indeks."
+    },
+    {
+      "question": "Apa gagasan covering index?",
+      "options": [
+        "Semua tabel disalin ke backup",
+        "Kolom yang dibutuhkan kueri tersedia pada indeks",
+        "Indeks tidak memakai ruang"
+      ],
+      "answer": 1,
+      "explanation": "Dapat mengurangi kebutuhan mengambil data tambahan dari tabel."
+    },
+    {
+      "question": "Apa trade-off indeks lebih lebar?",
+      "options": [
+        "Semua operasi selalu lebih cepat",
+        "Tidak ada biaya tambahan",
+        "Ruang serta pemeliharaan tulis bertambah"
+      ],
+      "answer": 2,
+      "explanation": "Lebih banyak kolom berarti lebih banyak data indeks dipelihara."
+    },
+    {
+      "question": "Apa yang harus tetap sama sebelum–sesudah optimasi?",
+      "options": [
+        "Hasil kueri yang disepakati",
+        "Seluruh teks EXPLAIN",
+        "Nomor halaman disk"
+      ],
+      "answer": 0,
+      "explanation": "Rencana dapat berubah, makna hasil tetap dijaga."
+    }
+  ],
+  "db-kasus-dashboard": [
+    {
+      "question": "Mengapa perlu kalender CTE?",
+      "options": [
+        "Agar tanggal tanpa tiket tetap tampil",
+        "Agar semua hari punya tiket baru",
+        "Agar indeks dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Kalender menjadi sisi kiri laporan lengkap."
+    },
+    {
+      "question": "Mengapa COUNT(t.id), bukan COUNT(*) pada LEFT JOIN?",
+      "options": [
+        "Agar semua nilai NULL menjadi satu",
+        "Agar hari tanpa tiket dihitung nol",
+        "Keduanya selalu sama"
+      ],
+      "answer": 1,
+      "explanation": "COUNT(*) akan menghitung baris kalender tanpa pasangan."
+    },
+    {
+      "question": "Apa kumulatif pada hari kedua contoh?",
+      "options": [
+        "0",
+        "3",
+        "2"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada tiket baru sehingga total berjalan tetap dua."
+    },
+    {
+      "question": "Apa yang dibutuhkan untuk metrik selesai pada hari tertentu?",
+      "options": [
+        "Timestamp atau event penyelesaian yang benar",
+        "Status terkini saja pasti cukup",
+        "Nama teknisi saja"
+      ],
+      "answer": 0,
+      "explanation": "Tanggal dibuat tidak menunjukkan kapan pekerjaan selesai."
+    }
+  ],
+  "db-kasus-stok-atomik": [
+    {
+      "question": "Apa akibat permintaan R01 yang sama diulang?",
+      "options": [
+        "Tidak mengurangi stok lagi",
+        "Mengurangi lagi setiap kali",
+        "Menghapus semua catatan"
+      ],
+      "answer": 0,
+      "explanation": "Kode serta isi sama dikenali sebagai operasi yang sudah diterapkan."
+    },
+    {
+      "question": "Mengapa jumlah diperiksa di WHERE UPDATE?",
+      "options": [
+        "Agar stok boleh negatif",
+        "Agar pemeriksaan dan pengurangan dilakukan dalam operasi bersyarat",
+        "Agar SELECT tidak diperlukan selamanya"
+      ],
+      "answer": 1,
+      "explanation": "rowcount memberi sinyal apakah prasyarat stok terpenuhi."
+    },
+    {
+      "question": "Apa respons kode sama dengan isi berbeda?",
+      "options": [
+        "Selalu dianggap permintaan baru",
+        "Jumlah lama ditambah otomatis",
+        "Ditolak"
+      ],
+      "answer": 2,
+      "explanation": "Identitas operasi tidak boleh ambigu."
+    },
+    {
+      "question": "Apakah pola ini menjamin exactly-once email di luar database?",
+      "options": [
+        "Tidak",
+        "Ya tanpa tambahan",
+        "Hanya jika kode pendek"
+      ],
+      "answer": 0,
+      "explanation": "Transaksi database tidak otomatis mencakup efek eksternal."
+    }
   ]
 }

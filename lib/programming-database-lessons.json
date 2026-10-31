@@ -1226,5 +1226,892 @@
     "diagramAlt": "Teknisi dirujuk oleh Tiket; satu Tiket mempunyai banyak Riwayat. Pembaruan status dan penambahan riwayat dilakukan dalam satu transaksi.",
     "stage": 0,
     "minutes": 50
+  },
+  {
+    "slug": "db-subquery-exists",
+    "title": "Subquery dan EXISTS: kueri di dalam kueri",
+    "summary": "Pilih data berdasarkan hasil kueri lain sambil memahami NULL serta kardinalitas.",
+    "analogy": "Sebelum menampilkan kartu teknisi, petugas memeriksa apakah ada tiket aktif yang menunjuk kepadanya.",
+    "explain": [
+      "Subquery adalah SELECT yang menjadi bagian pernyataan lain. Subquery skalar menghasilkan satu nilai untuk suatu ekspresi, sedangkan subquery pada IN menyediakan kumpulan pembanding. Di SQLite, subquery skalar dengan beberapa baris mengambil baris pertama; jangan mengandalkannya tanpa aturan urutan dan batas yang jelas.",
+      "EXISTS memeriksa keberadaan setidaknya satu baris. Isi kolom SELECT di dalam EXISTS tidak menjadi hasil yang ditampilkan; SELECT 1 hanyalah cara ringkas menyatakan bahwa yang diperiksa adalah keberadaannya.",
+      "Correlated subquery merujuk baris dari kueri luar. Contoh memeriksa tiket aktif untuk tiap teknisi melalui t.teknisi_id = n.id. Ini menyatakan kebutuhan tanpa menggandakan baris teknisi ketika ia mempunyai banyak tiket aktif.",
+      "NOT EXISTS sering membantu mencari baris tanpa pasangan. Berhati-hatilah dengan NOT IN jika hasil subquery dapat berisi NULL: logika nilai tak diketahui dapat membuat hasil berbeda dari dugaan. Pilih bentuk berdasarkan makna dan periksa rencana serta hasilnya, bukan anggapan bahwa semua subquery selalu lambat."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Subquery",
+          "SELECT di dalam pernyataan lain",
+          "Bandingkan hasil atau keberadaan"
+        ],
+        [
+          "EXISTS",
+          "Ada setidaknya satu pasangan",
+          "Teknisi mempunyai tiket aktif"
+        ],
+        [
+          "Correlated",
+          "Merujuk baris kueri luar",
+          "t.teknisi_id = n.id"
+        ],
+        [
+          "NOT EXISTS",
+          "Tidak ada pasangan",
+          "Teknisi tanpa tiket aktif"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Subquery dan EXISTS: kueri di dalam kueri",
+        "code": "CREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, teknisi_id INTEGER, status TEXT);\nINSERT INTO teknisi VALUES (1, 'Ana'), (2, 'Budi'), (3, 'Citra');\nINSERT INTO tiket VALUES (1, 1, 'BARU'), (2, 1, 'DIPROSES'), (3, 2, 'SELESAI'), (4, NULL, 'BARU');\nSELECT n.nama FROM teknisi AS n\nWHERE EXISTS (SELECT 1 FROM tiket AS t WHERE t.teknisi_id = n.id AND t.status <> 'SELESAI')\nORDER BY n.id;\nSELECT n.nama FROM teknisi AS n\nWHERE NOT EXISTS (SELECT 1 FROM tiket AS t WHERE t.teknisi_id = n.id AND t.status <> 'SELESAI')\nORDER BY n.id;",
+        "output": "Ana\nBudi\nCitra",
+        "explanation": "SELECT pertama menghasilkan Ana satu kali meski mempunyai dua tiket aktif. SELECT kedua menghasilkan Budi dan Citra; NULL pada teknisi_id tidak menjadi pasangan keduanya.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Bandingkan EXISTS dengan JOIN pada teknisi yang mempunyai beberapa tiket.",
+      "Coba NOT IN pada kolom nullable dan bandingkan dengan NOT EXISTS.",
+      "Buat subquery untuk barang dengan harga di atas rata-rata."
+    ],
+    "warning": "ORDER BY di kueri luar menentukan urutan hasil akhir. Jangan memakai hasil subquery skalar multirow untuk menyembunyikan kebutuhan pemilihan baris yang belum ditentukan.",
+    "check": "Mengapa Ana tidak muncul dua kali pada EXISTS?",
+    "answer": "EXISTS hanya memutuskan benar atau salah untuk baris teknisi luar; jumlah pasangan tidak menggandakan baris luarnya.",
+    "source": "https://www.sqlite.org/lang_expr.html#the_exists_operator",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-cte",
+    "title": "CTE: menyusun kueri menjadi langkah yang terbaca",
+    "summary": "Gunakan WITH untuk memberi nama hasil antara dalam satu pernyataan.",
+    "analogy": "Petugas membuat ringkasan sementara lebih dahulu, lalu memakai ringkasan itu untuk memilih laporan akhir.",
+    "explain": [
+      "Common Table Expression atau CTE memberi nama pada hasil kueri yang dapat dirujuk dalam satu statement. Tulis WITH nama AS (...) di depan SELECT utama. CTE bukan tabel permanen dan tidak dapat dipakai oleh statement berikutnya setelah titik koma.",
+      "Contoh menghitung tiket aktif per teknisi terlebih dahulu, lalu LEFT JOIN ke seluruh teknisi agar petugas tanpa tiket aktif tetap tampil. COALESCE mengubah hasil agregat yang tidak mempunyai pasangan menjadi nol untuk penyajian.",
+      "CTE membantu keterbacaan ketika kueri mempunyai beberapa tahap. Ia tidak otomatis membuat kueri lebih cepat atau memaksa engine menyimpan hasil di memori. Optimizer dapat memilih cara eksekusi yang berbeda; periksa plan jika kinerja menjadi masalah.",
+      "Pilih nama hasil antara yang menjelaskan makna, misalnya aktif_per_teknisi. Tentukan tingkat detail setiap tahap: satu baris per tiket atau satu baris per teknisi. Ini membantu mencegah penghitungan ganda setelah JOIN."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "WITH",
+          "Awal definisi CTE",
+          "aktif_per_teknisi"
+        ],
+        [
+          "Scope",
+          "Satu statement",
+          "Tidak tersedia sesudah titik koma"
+        ],
+        [
+          "Agregasi antara",
+          "Satu baris per teknisi",
+          "COUNT tiket aktif"
+        ],
+        [
+          "LEFT JOIN",
+          "Tetap tampilkan teknisi kosong",
+          "COALESCE menjadi 0"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · CTE: menyusun kueri menjadi langkah yang terbaca",
+        "code": "CREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, teknisi_id INTEGER, status TEXT);\nINSERT INTO teknisi VALUES (1, 'Ana'), (2, 'Budi');\nINSERT INTO tiket VALUES (1, 1, 'BARU'), (2, 1, 'SELESAI');\nWITH aktif_per_teknisi AS (\n SELECT teknisi_id, COUNT(*) AS jumlah FROM tiket\n WHERE status <> 'SELESAI' GROUP BY teknisi_id\n)\nSELECT n.nama, COALESCE(a.jumlah, 0)\nFROM teknisi n LEFT JOIN aktif_per_teknisi a ON a.teknisi_id = n.id\nORDER BY n.id;",
+        "output": "Ana | 1\nBudi | 0",
+        "explanation": "CTE menghasilkan jumlah aktif, bukan jumlah seluruh tiket. Budi tidak ada pada hasil antara tetapi dipertahankan oleh LEFT JOIN.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan teknisi ketiga tanpa tiket.",
+      "Buat CTE kedua untuk jumlah tiket selesai, lalu gabungkan keduanya.",
+      "Jelaskan tingkat detail setiap CTE sebelum menulis JOIN."
+    ],
+    "warning": "CTE adalah alat pengorganisasian kueri, bukan jaminan performa. Jangan menganggapnya sebagai tabel yang dapat diakses setelah statement selesai.",
+    "check": "Apakah CTE dapat dipanggil oleh SELECT baru setelah titik koma?",
+    "answer": "Tidak. Nama CTE berlaku pada statement tempat WITH didefinisikan.",
+    "source": "https://www.sqlite.org/lang_with.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-cte-rekursif",
+    "title": "CTE rekursif: menelusuri hierarki dan graph kecil",
+    "summary": "Pisahkan langkah awal dari langkah perluasan dan cegah penelusuran tanpa batas.",
+    "analogy": "Dari satu lokasi induk, petugas menelusuri lokasi anak, lalu anak dari anak tersebut.",
+    "explain": [
+      "WITH RECURSIVE memungkinkan hasil suatu tahap menjadi masukan tahap berikutnya. Ada bagian awal atau anchor, lalu bagian rekursif yang memperluas baris yang sudah ditemukan. Contoh menelusuri node yang dapat dicapai dari A pada tabel edge berarah.",
+      "Contoh memakai UNION, bukan UNION ALL, dan hasil rekursinya hanya kolom node. Dengan demikian node yang sudah ditemukan tidak ditambahkan ulang; siklus C ke A tidak membuat pengulangan tak berakhir pada graph berhingga ini.",
+      "Pilihan kolom memengaruhi deduplikasi. Jika menambahkan depth pada hasil, baris A pada depth 0 dan A pada depth 3 berbeda, sehingga UNION saja tidak lagi cukup menjadi penjaga siklus. Tentukan visited path, batas kedalaman, atau pembatas lain sesuai kebutuhan.",
+      "Ini penelusuran keterjangkauan, bukan pencarian biaya termurah atau semua jalur. Urutan hasil akhir ditentukan ORDER BY node, bukan bukti urutan kunjungan BFS/DFS. Untuk data besar, pikirkan batas sumber daya dan indeks pada asal edge."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Anchor",
+          "Titik awal",
+          "SELECT A"
+        ],
+        [
+          "Bagian rekursif",
+          "Perluas node",
+          "edge.asal = hasil.node"
+        ],
+        [
+          "UNION",
+          "Hilangkan node yang sama",
+          "Menghentikan siklus pada hasil satu kolom"
+        ],
+        [
+          "Batas makna",
+          "Keterjangkauan",
+          "Bukan shortest path berbobot"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · CTE rekursif: menelusuri hierarki dan graph kecil",
+        "code": "CREATE TABLE edge (asal TEXT NOT NULL, tujuan TEXT NOT NULL, PRIMARY KEY(asal, tujuan));\nINSERT INTO edge VALUES ('A', 'B'), ('B', 'C'), ('C', 'A'), ('B', 'D');\nWITH RECURSIVE terjangkau(node) AS (\n SELECT 'A'\n UNION\n SELECT e.tujuan FROM edge e JOIN terjangkau t ON e.asal = t.node\n)\nSELECT node FROM terjangkau ORDER BY node;",
+        "output": "A\nB\nC\nD",
+        "explanation": "A termasuk hasil karena menjadi anchor. Siklus kembali ke A tidak menambah node baru yang sama.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan node terpisah dan pastikan tidak ikut hasil.",
+      "Ubah anchor ke D dan periksa bahwa hanya D ditemukan.",
+      "Jelaskan mengapa menambah depth dapat membatalkan sifat penghentian melalui deduplikasi node."
+    ],
+    "warning": "Jangan mengganti UNION menjadi UNION ALL pada graph bersiklus tanpa penjaga siklus atau batas yang benar. Latihan memakai graph kecil dan berhingga.",
+    "check": "Apakah hasil A, B, C, D menunjukkan jalur yang harus ditempuh berurutan?",
+    "answer": "Tidak. Itu kumpulan node terjangkau yang diurutkan untuk tampilan, bukan satu jalur perjalanan.",
+    "source": "https://www.sqlite.org/lang_with.html",
+    "diagram": "db-rekursif",
+    "diagramAlt": "Edge A ke B, B ke C, C kembali ke A, dan B ke D. UNION pada node mencegah penambahan ulang node yang sama.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-window",
+    "title": "Window function: peringkat dan total berjalan",
+    "summary": "Hitung informasi kelompok sambil mempertahankan detail baris.",
+    "analogy": "Laporan tetap memperlihatkan setiap teknisi, sekaligus menambahkan peringkat dan jumlah akumulasi pekerjaannya.",
+    "explain": [
+      "Window function memakai OVER dan menghitung informasi dari sekumpulan baris terkait tanpa merangkum semuanya menjadi satu baris seperti GROUP BY. SQLite memerlukan dukungan window function; materi lanjutan ini memakai SQLite 3.25.0 atau lebih baru.",
+      "ROW_NUMBER memberi nomor unik menurut urutan. RANK memberi peringkat yang sama untuk nilai seri dan menyisakan loncatan sesudahnya; DENSE_RANK tidak menyisakan loncatan. Tentukan apakah id digunakan hanya sebagai pemecah nomor baris atau memang bagian kriteria peringkat.",
+      "PARTITION BY memisahkan kelompok perhitungan. ORDER BY di OVER mengatur urutan perhitungan window, bukan otomatis urutan tampilan akhir. Gunakan ORDER BY pada SELECT luar untuk hasil yang ingin ditampilkan.",
+      "Untuk total berjalan, nyatakan frame secara eksplisit, misalnya ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW. Frame default yang melibatkan peer dengan nilai urut sama bisa berbeda dari akumulasi baris demi baris. Filter hasil window melalui CTE atau subquery luar, karena tidak langsung tersedia pada WHERE di tingkat SELECT yang sama."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "OVER",
+          "Menentukan window",
+          "PARTITION BY / ORDER BY"
+        ],
+        [
+          "ROW_NUMBER",
+          "Nomor tiap baris",
+          "Pemecah urutan id"
+        ],
+        [
+          "RANK",
+          "Peringkat dengan seri",
+          "1, 1, 3"
+        ],
+        [
+          "ROWS frame",
+          "Batas baris perhitungan",
+          "Akumulasi sampai baris saat ini"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Window function: peringkat dan total berjalan",
+        "code": "CREATE TABLE kinerja (id INTEGER PRIMARY KEY, nama TEXT, selesai INTEGER);\nINSERT INTO kinerja VALUES (1, 'Ana', 5), (2, 'Budi', 5), (3, 'Citra', 2);\nSELECT nama,\n ROW_NUMBER() OVER (ORDER BY selesai DESC, id) AS nomor,\n RANK() OVER (ORDER BY selesai DESC) AS peringkat,\n SUM(selesai) OVER (ORDER BY selesai DESC, id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS akumulasi\nFROM kinerja ORDER BY selesai DESC, id;",
+        "output": "Ana | 1 | 1 | 5\nBudi | 2 | 1 | 10\nCitra | 3 | 3 | 12",
+        "explanation": "RANK hanya memakai selesai sehingga Ana dan Budi seri; ROW_NUMBER dan akumulasi memakai id untuk urutan yang pasti.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Ganti RANK dengan DENSE_RANK dan bandingkan baris Citra.",
+      "Tambahkan kolom tim lalu pisahkan perhitungan dengan PARTITION BY.",
+      "Gunakan CTE untuk memilih dua nomor baris teratas."
+    ],
+    "warning": "Jangan menambahkan id pada urutan RANK jika maksudnya semua nilai selesai yang sama harus mempunyai peringkat sama. Urutan window dan urutan akhir mempunyai tugas berbeda.",
+    "check": "Mengapa Citra mempunyai RANK 3, bukan 2?",
+    "answer": "Dua baris sebelumnya sama-sama berada pada peringkat 1 sehingga RANK melompati peringkat 2.",
+    "source": "https://www.sqlite.org/windowfunctions.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-waktu-laporan",
+    "title": "Tanggal, waktu, dan batas periode laporan",
+    "summary": "Gunakan representasi waktu konsisten dan rentang awal-inklusif akhir-eksklusif.",
+    "analogy": "Laporan satu hari mengikuti pintu masuk awal hari dan berhenti tepat sebelum awal hari berikutnya.",
+    "explain": [
+      "SQLite tidak memiliki tipe waktu terpisah seperti beberapa DBMS lain. Pilih representasi yang konsisten, misalnya teks UTC berformat YYYY-MM-DD HH:MM:SS untuk contoh ini. Validasi format dan waktu sebenarnya pada lapisan masukan; label TEXT sendiri tidak menjamin tanggal valid.",
+      "Untuk satu hari, gunakan waktu >= awal dan waktu < awal_hari_berikut. Rentang setengah terbuka menghindari tebakan detik terakhir seperti 23:59:59 yang dapat melupakan pecahan detik.",
+      "Jika sumber disimpan dalam UTC tetapi laporan mengikuti Asia/Jakarta, ubah batas periode lokal menjadi UTC terlebih dahulu. Contoh memakai hari UTC tetap agar hasil tidak bergantung zona waktu mesin atau waktu saat program dijalankan. Jangan mencampur teks dengan offset berbeda lalu mengandalkan perbandingan leksikal.",
+      "date dan strftime membantu pengelompokan waktu sesuai fungsi SQLite. Untuk pencarian yang dapat memanfaatkan indeks pada waktu, filter rentang pada kolom asli sering lebih sesuai daripada selalu membungkus kolom dengan fungsi. Uji makna, rencana, dan data batasnya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Representasi",
+          "Teks UTC konsisten",
+          "YYYY-MM-DD HH:MM:SS"
+        ],
+        [
+          "Awal inklusif",
+          "Masuk tepat di awal",
+          ">= awal"
+        ],
+        [
+          "Akhir eksklusif",
+          "Tidak termasuk awal periode berikut",
+          "< akhir"
+        ],
+        [
+          "Zona laporan",
+          "Konversi batas secara sengaja",
+          "Lokal ke UTC sebelum kueri"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Tanggal, waktu, dan batas periode laporan",
+        "code": "CREATE TABLE kejadian (id INTEGER PRIMARY KEY, waktu_utc TEXT NOT NULL);\nINSERT INTO kejadian VALUES\n (1, '2026-01-01 00:00:00'), (2, '2026-01-01 23:59:59.900'),\n (3, '2026-01-02 00:00:00');\nSELECT id, waktu_utc FROM kejadian\nWHERE waktu_utc >= '2026-01-01 00:00:00' AND waktu_utc < '2026-01-02 00:00:00'\nORDER BY waktu_utc, id;",
+        "output": "1 | 2026-01-01 00:00:00\n2 | 2026-01-01 23:59:59.900",
+        "explanation": "Tanggal adalah data latihan tetap. Baris 3 tepat pada awal hari berikutnya sehingga tidak termasuk laporan hari pertama.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan kejadian satu pecahan detik sebelum batas akhir.",
+      "Uji kejadian tepat pada awal dan akhir periode.",
+      "Rancang konversi batas hari Asia/Jakarta ke UTC menggunakan datetime berzona pada Python."
+    ],
+    "warning": "Teks waktu harus mengikuti format serta zona yang konsisten agar perbandingan urut bermakna. Jangan menyamakan waktu tanpa zona dengan UTC tanpa aturan masukan.",
+    "check": "Mengapa akhir periode memakai < hari berikutnya?",
+    "answer": "Agar seluruh pecahan detik pada hari laporan masuk dan tidak ada tumpang tindih dengan periode berikutnya.",
+    "source": "https://www.sqlite.org/lang_datefunc.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-pagination",
+    "title": "Pagination dengan keyset dan urutan stabil",
+    "summary": "Ambil halaman berikutnya menggunakan kunci hasil terakhir.",
+    "analogy": "Petugas melanjutkan membaca arsip setelah nomor kartu terakhir yang sudah dibaca, bukan menghitung ulang seluruh kartu dari awal.",
+    "explain": [
+      "LIMIT dan OFFSET mudah untuk halaman sederhana, tetapi OFFSET besar dapat membutuhkan pekerjaan melewati banyak baris. Perubahan data sebelum posisi offset juga dapat menggeser hasil antarpermintaan.",
+      "Keyset pagination menyimpan nilai pengurutan terakhir sebagai cursor. Pada contoh urutan (dibuat, id), halaman berikutnya mengambil dibuat yang lebih besar, atau dibuat sama dengan id yang lebih besar. id memecahkan waktu yang seri.",
+      "Cursor harus mencakup seluruh kolom yang menentukan urutan. Untuk urutan turun, arah pembanding juga harus disesuaikan. Kolom nullable memerlukan kebijakan NULL eksplisit agar cursor tidak melewatkan baris tanpa sengaja.",
+      "Keyset bukan snapshot lintas permintaan. Jika kolom urut pada data lama diubah, hasil tetap dapat berpindah. Pilih kunci urut yang stabil, validasi cursor dari pemakai, dan batasi ukuran halaman; untuk snapshot konsisten diperlukan rancangan lain."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Urutan gabungan",
+          "Waktu + id",
+          "Tidak ambigu ketika waktu seri"
+        ],
+        [
+          "Cursor",
+          "Nilai baris terakhir",
+          "(dibuat, id)"
+        ],
+        [
+          "Keyset",
+          "Lanjut setelah cursor",
+          "Kondisi lebih besar secara berurutan"
+        ],
+        [
+          "Batas",
+          "Bukan snapshot lintas request",
+          "Perubahan kolom urut dapat memindahkan hasil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Pagination dengan keyset dan urutan stabil",
+        "code": "CREATE TABLE tiket (id INTEGER PRIMARY KEY, dibuat TEXT NOT NULL);\nINSERT INTO tiket VALUES (1, '2026-01-01'), (2, '2026-01-01'),\n (3, '2026-01-02'), (4, '2026-01-03');\nCREATE INDEX idx_tiket_dibuat_id ON tiket(dibuat, id);\nSELECT id, dibuat FROM tiket ORDER BY dibuat, id LIMIT 2;\nSELECT id, dibuat FROM tiket\nWHERE dibuat > '2026-01-01' OR (dibuat = '2026-01-01' AND id > 2)\nORDER BY dibuat, id LIMIT 2;",
+        "output": "1 | 2026-01-01\n2 | 2026-01-01\n3 | 2026-01-02\n4 | 2026-01-03",
+        "explanation": "SELECT pertama adalah halaman awal; cursor terakhirnya tanggal 2026-01-01 dan id 2. SELECT kedua melanjutkan setelah cursor tersebut.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Ubah ukuran halaman menjadi satu dan telusuri semua cursor.",
+      "Tambahkan beberapa tiket dengan tanggal sama.",
+      "Tulis versi urut turun dan uji pembandingnya."
+    ],
+    "warning": "Contoh menulis cursor tetap agar mudah dilihat. Pada aplikasi Python, ikat nilai cursor sebagai parameter dan gunakan identifier pengurutan yang sudah disetujui.",
+    "check": "Mengapa cursor hanya berisi tanggal belum cukup?",
+    "answer": "Beberapa baris dapat mempunyai tanggal sama; id diperlukan untuk posisi yang tegas dalam urutan gabungan.",
+    "source": "https://www.sqlite.org/rowvalue.html#scrolling_window_queries",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-view",
+    "title": "View: menyimpan definisi kueri",
+    "summary": "Sediakan bentuk pembacaan yang konsisten tanpa menyalin hasil menjadi tabel baru.",
+    "analogy": "Sebuah formulir laporan menyimpan aturan penyajian, bukan salinan tetap dari seluruh kartu arsip.",
+    "explain": [
+      "CREATE VIEW menyimpan definisi SELECT sebagai objek skema. Saat view dibaca, hasilnya berasal dari data dasar pada saat pembacaan sesuai transaksi. View biasa SQLite tidak menyimpan cache hasil secara otomatis.",
+      "Contoh view_tiket_aktif menggabungkan tiket dan teknisi lalu menyaring status selain SELESAI. Pemakai dapat membaca view dengan SELECT tanpa mengulang seluruh SQL gabungan.",
+      "Perubahan data dasar tercermin saat view dibaca lagi. Urutan tetap dinyatakan pada SELECT pemakai. Cantumkan kolom view secara eksplisit agar kontrak nama hasil lebih jelas ketika definisi berkembang.",
+      "View biasa di SQLite bersifat read-only untuk operasi tulis langsung; INSTEAD OF trigger dapat dirancang untuk kebutuhan tertentu, tetapi belum diperlukan pada contoh. View pada file SQLite juga bukan batas izin server: akses file dan API aplikasi tetap harus dikelola."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "CREATE VIEW",
+          "Simpan definisi SELECT",
+          "Bukan salinan hasil"
+        ],
+        [
+          "Data dasar",
+          "Sumber kebenaran",
+          "tiket dan teknisi"
+        ],
+        [
+          "Kontrak kolom",
+          "Nama hasil eksplisit",
+          "id, judul, petugas"
+        ],
+        [
+          "Akses tulis",
+          "View biasa read-only",
+          "Ubah tabel dasar sesuai aturan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · View: menyimpan definisi kueri",
+        "code": "CREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, judul TEXT, teknisi_id INTEGER, status TEXT);\nINSERT INTO teknisi VALUES (1, 'Ana');\nINSERT INTO tiket VALUES (1, 'Link A', 1, 'BARU'), (2, 'Link B', 1, 'SELESAI');\nCREATE VIEW view_tiket_aktif(id, judul, petugas) AS\n SELECT t.id, t.judul, n.nama FROM tiket t JOIN teknisi n ON n.id = t.teknisi_id\n WHERE t.status <> 'SELESAI';\nSELECT id, judul, petugas FROM view_tiket_aktif ORDER BY id;\nUPDATE tiket SET status = 'SELESAI' WHERE id = 1;\nSELECT COUNT(*) FROM view_tiket_aktif;",
+        "output": "1 | Link A | Ana\n0",
+        "explanation": "Baris terakhir adalah jumlah setelah perubahan pada tabel tiket. View tidak mempertahankan hasil lama dari SELECT pertama.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan tiket aktif lalu baca kembali view.",
+      "Bandingkan view dengan CTE pada lingkup pemakaiannya.",
+      "Rancang nama kolom view yang stabil untuk laporan."
+    ],
+    "warning": "View tidak otomatis mempercepat kueri atau memberikan isolasi keamanan pada file database. Periksa definisi dan rencana jika biaya pembacaan meningkat.",
+    "check": "Apa perbedaan lingkup view dan CTE?",
+    "answer": "View disimpan sebagai objek skema; CTE hanya berlaku dalam satu statement.",
+    "source": "https://www.sqlite.org/lang_createview.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-trigger",
+    "title": "Trigger: menjaga transisi dan mencatat riwayat",
+    "summary": "Pusatkan aturan tertentu agar berlaku juga bagi penulis yang melewati fungsi aplikasi.",
+    "analogy": "Petugas pemeriksa otomatis mengawasi perubahan kartu dan menambah catatan jika perubahan sah.",
+    "explain": [
+      "Trigger berjalan ketika operasi tertentu terjadi pada tabel. Pada contoh, BEFORE INSERT mewajibkan status awal BARU, BEFORE UPDATE OF status menolak perpindahan yang melompati alur, sedangkan AFTER INSERT dan AFTER UPDATE mencatat riwayat status.",
+      "OLD dan NEW menunjuk nilai baris sebelum serta sesudah operasi sesuai konteks trigger. WHEN membatasi kapan isi trigger dijalankan. RAISE(ABORT, pesan) menolak statement pemicu; aplikasi tetap perlu rollback seluruh transaksi jika unit pekerjaannya lebih besar.",
+      "Contoh membolehkan BARU → DIPROSES → SELESAI dan penulisan status yang sama tanpa riwayat tambahan. CHECK membatasi himpunan status, trigger menjaga perpindahan. Trigger penolakan hanya memeriksa dan tidak mengubah baris pemicu, sementara perubahan riwayat ditempatkan pada AFTER.",
+      "Pisahkan tanggung jawab aplikasi dan trigger agar riwayat tidak tercatat dua kali. Trigger ini belum mencatat pelaku atau waktu dan belum melarang perubahan langsung ke tabel riwayat maupun penghapusan tiket. Jika ada akses mengubah skema, aturan trigger juga dapat diubah; jangan menyamakannya dengan audit yang tidak bisa dimanipulasi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "BEFORE",
+          "Periksa sebelum perubahan",
+          "Tolak lompatan status"
+        ],
+        [
+          "AFTER",
+          "Reaksi setelah perubahan sah",
+          "Tambahkan riwayat"
+        ],
+        [
+          "OLD / NEW",
+          "Nilai lama dan baru",
+          "Perbandingan status"
+        ],
+        [
+          "RAISE(ABORT)",
+          "Batalkan statement",
+          "Bukan selalu seluruh transaksi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Trigger: menjaga transisi dan mencatat riwayat",
+        "code": "PRAGMA foreign_keys = ON;\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, status TEXT NOT NULL CHECK(status IN ('BARU','DIPROSES','SELESAI')));\nCREATE TABLE riwayat (id INTEGER PRIMARY KEY, tiket_id INTEGER NOT NULL REFERENCES tiket(id), status TEXT NOT NULL);\nCREATE TRIGGER cek_awal BEFORE INSERT ON tiket\nWHEN NEW.status <> 'BARU'\nBEGIN SELECT RAISE(ABORT, 'Tiket baru harus BARU'); END;\nCREATE TRIGGER cek_status BEFORE UPDATE OF status ON tiket\nWHEN NEW.status <> OLD.status AND NOT (\n (OLD.status = 'BARU' AND NEW.status = 'DIPROSES') OR\n (OLD.status = 'DIPROSES' AND NEW.status = 'SELESAI'))\nBEGIN SELECT RAISE(ABORT, 'Transisi tidak valid'); END;\nCREATE TRIGGER catat_awal AFTER INSERT ON tiket\nBEGIN INSERT INTO riwayat(tiket_id, status) VALUES(NEW.id, NEW.status); END;\nCREATE TRIGGER catat_ubah AFTER UPDATE OF status ON tiket\nWHEN NEW.status <> OLD.status\nBEGIN INSERT INTO riwayat(tiket_id, status) VALUES(NEW.id, NEW.status); END;\nINSERT INTO tiket VALUES (1, 'BARU');\nUPDATE tiket SET status = 'DIPROSES' WHERE id = 1;\nUPDATE tiket SET status = 'SELESAI' WHERE id = 1;\nUPDATE tiket SET status = 'SELESAI' WHERE id = 1;\nSELECT tiket_id, status FROM riwayat ORDER BY id;",
+        "output": "1 | BARU\n1 | DIPROSES\n1 | SELESAI",
+        "explanation": "UPDATE status yang sama tidak menambah riwayat. Coba lompatan BARU ke SELESAI pada tiket baru secara terpisah untuk melihat error.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Uji lompatan status pada tiket kedua.",
+      "Periksa bahwa status dan jumlah riwayat tidak berubah setelah penolakan.",
+      "Bandingkan penulisan riwayat oleh trigger dengan penulisan eksplisit pada studi kasus dasar."
+    ],
+    "warning": "Trigger dapat menyembunyikan efek perubahan bila tidak didokumentasikan. Uji setiap jalur penulisan dan hindari rantai trigger yang sulit ditelusuri.",
+    "check": "Apakah RAISE(ABORT) otomatis membatalkan seluruh transaksi besar?",
+    "answer": "Tidak. Ia membatalkan statement pemicu menurut aturan ABORT; aplikasi harus mengelola rollback transaksi bila seluruh unit pekerjaan harus batal.",
+    "source": "https://www.sqlite.org/lang_createtrigger.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-upsert",
+    "title": "UPSERT: memperbarui snapshot berdasarkan kunci unik",
+    "summary": "Tangani benturan identitas tanpa menyamakan snapshot dengan kejadian yang boleh ditambahkan berulang.",
+    "analogy": "Laporan suhu terakhir mengganti kartu lokasi yang sama hanya jika data yang datang memang lebih baru.",
+    "explain": [
+      "UPSERT memakai INSERT ... ON CONFLICT untuk menentukan tindakan saat constraint keunikan tertentu berbenturan. DO UPDATE memperbarui baris yang sudah ada, sementara DO NOTHING melewati konflik yang sesuai.",
+      "excluded menunjuk nilai yang hendak dimasukkan oleh INSERT. Contoh menyimpan snapshot suhu terakhir per perangkat dan hanya menerima waktu yang lebih baru. Kueri bersyarat mencegah data terlambat menimpa snapshot yang lebih baru.",
+      "Format waktu harus konsisten agar perbandingan teks bermakna. Aturan contoh menolak waktu sama untuk pembaruan, sehingga jika waktu sama datang dengan nilai berbeda, nilai lama dipertahankan. Kebutuhan nyata harus menentukan penentu urutan yang dapat dipercaya.",
+      "UPSERT snapshot tidak sama dengan idempotensi seluruh pekerjaan. Menggunakan DO UPDATE jumlah = jumlah + excluded.jumlah dapat menambah nilai lagi jika pesan dikirim ulang. Untuk kejadian yang hanya boleh diterapkan sekali, gunakan identitas permintaan dan transaksi seperti studi kasus stok lanjutan. Hindari mengganti ini dengan INSERT OR REPLACE tanpa memahami semantik hapus dan sisipnya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Conflict target",
+          "Kunci unik yang diperiksa",
+          "perangkat"
+        ],
+        [
+          "excluded",
+          "Nilai calon INSERT",
+          "waktu dan suhu baru"
+        ],
+        [
+          "WHERE pada DO UPDATE",
+          "Syarat pembaruan",
+          "Waktu harus lebih baru"
+        ],
+        [
+          "Snapshot vs kejadian",
+          "Makna data berbeda",
+          "Keadaan terbaru vs operasi sekali"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · UPSERT: memperbarui snapshot berdasarkan kunci unik",
+        "code": "CREATE TABLE suhu_terakhir (perangkat TEXT PRIMARY KEY NOT NULL, waktu TEXT NOT NULL, suhu INTEGER NOT NULL);\nINSERT INTO suhu_terakhir VALUES ('BTS-A', '2026-01-01 10:00:00', 28);\nINSERT INTO suhu_terakhir VALUES ('BTS-A', '2026-01-01 10:05:00', 30)\nON CONFLICT(perangkat) DO UPDATE SET waktu = excluded.waktu, suhu = excluded.suhu\nWHERE excluded.waktu > suhu_terakhir.waktu;\nINSERT INTO suhu_terakhir VALUES ('BTS-A', '2026-01-01 10:02:00', 29)\nON CONFLICT(perangkat) DO UPDATE SET waktu = excluded.waktu, suhu = excluded.suhu\nWHERE excluded.waktu > suhu_terakhir.waktu;\nSELECT perangkat, waktu, suhu FROM suhu_terakhir ORDER BY perangkat;",
+        "output": "BTS-A | 2026-01-01 10:05:00 | 30",
+        "explanation": "Data jam 10:02 datang setelah snapshot jam 10:05, tetapi tidak menimpanya. Ini contoh data sensor simulasi.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Uji waktu sama dengan nilai suhu berbeda.",
+      "Tambahkan perangkat kedua tanpa konflik.",
+      "Jelaskan mengapa penambahan counter melalui UPSERT dapat berulang ketika pesan diulang."
+    ],
+    "warning": "UPSERT menangani konflik keunikan yang ditetapkan; ia bukan pengabaian semua error. NOT NULL, CHECK, atau foreign key tetap dapat menolak data.",
+    "check": "Apakah UPSERT jumlah = jumlah + nilai otomatis membuat pesan ulang aman?",
+    "answer": "Tidak. Pengiriman ulang dapat menambah lagi; kejadian yang diterapkan sekali memerlukan identitas dan pemeriksaan yang sesuai.",
+    "source": "https://www.sqlite.org/lang_upsert.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-konkurensi",
+    "title": "Dua koneksi, database sibuk, dan optimistic locking",
+    "summary": "Amati data belum commit serta tolak perubahan berdasarkan versi yang sudah usang.",
+    "analogy": "Dua petugas membaca kartu yang sama. Petugas kedua tidak boleh menimpa hasil petugas pertama hanya karena masih memegang salinan lama.",
+    "explain": [
+      "Koneksi terpisah tidak melihat perubahan belum commit dari koneksi lain pada konfigurasi normal tanpa shared-cache read-uncommitted. Contoh memakai dua koneksi ke satu file dan mode jurnal rollback bawaan, bukan dua database memori yang terpisah.",
+      "BEGIN IMMEDIATE meminta transaksi tulis sejak awal. Ketika koneksi A masih memegang transaksi tulis, B tidak dapat memulai penulis lain. timeout=0 dipakai pada demo agar SQLITE_BUSY segera terlihat; ini bukan rekomendasi timeout universal.",
+      "Setelah A commit, pembacaan B yang baru melihat data yang disahkan. Jika B tetap menulis berdasarkan versi yang dibaca sebelum perubahan A, UPDATE ... WHERE versi = versi_lama menghasilkan rowcount nol. Itulah contoh optimistic locking: perubahan ditolak bila versi sudah berubah.",
+      "Pada aplikasi nyata, bedakan database sibuk sementara dari konflik bisnis atau versi usang. Retry harus terbatas dan mengulang unit pekerjaan dari pembacaan yang sesuai; jangan mengulang semua exception tanpa batas. WAL dapat membantu pembaca dan penulis berjalan bersama dalam kondisi tertentu, tetapi tetap hanya ada satu penulis dan bukan pengganti rancangan konflik."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Koneksi terpisah",
+          "Isolasi antarpetugas",
+          "Belum commit tidak terlihat"
+        ],
+        [
+          "SQLITE_BUSY",
+          "Transaksi tulis belum tersedia",
+          "Tangani sesuai kebijakan terbatas"
+        ],
+        [
+          "Kolom versi",
+          "Penanda perubahan",
+          "Naik setiap perubahan yang dijaga"
+        ],
+        [
+          "rowcount 0",
+          "Versi tidak lagi cocok",
+          "Konflik, bukan sukses"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Dua koneksi, database sibuk, dan optimistic locking",
+        "code": "import sqlite3\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\n\nwith TemporaryDirectory() as folder:\n    path = Path(folder) / \"bersama.db\"\n    a = sqlite3.connect(path, isolation_level=None, timeout=0)\n    b = sqlite3.connect(path, isolation_level=None, timeout=0)\n    try:\n        a.execute(\"CREATE TABLE stok (id INTEGER PRIMARY KEY, jumlah INTEGER NOT NULL, versi INTEGER NOT NULL)\")\n        a.execute(\"INSERT INTO stok VALUES (1, 5, 0)\")\n        versi_lama = b.execute(\"SELECT versi FROM stok WHERE id = 1\").fetchone()[0]\n        a.execute(\"BEGIN IMMEDIATE\")\n        a.execute(\"UPDATE stok SET jumlah = 3, versi = versi + 1 WHERE id = 1\")\n        print(\"Pembaca sebelum commit:\", b.execute(\"SELECT jumlah FROM stok WHERE id = 1\").fetchone()[0])\n        try:\n            b.execute(\"BEGIN IMMEDIATE\")\n        except sqlite3.OperationalError as error:\n            if error.sqlite_errorcode != sqlite3.SQLITE_BUSY:\n                raise\n            print(\"Penulis kedua ditunda\")\n        a.execute(\"COMMIT\")\n        print(\"Pembaca sesudah commit:\", b.execute(\"SELECT jumlah FROM stok WHERE id = 1\").fetchone()[0])\n        cur = b.execute(\"UPDATE stok SET jumlah = 4, versi = versi + 1 WHERE id = 1 AND versi = ?\", (versi_lama,))\n        print(\"Update memakai versi lama:\", cur.rowcount)\n        print(\"Data:\", b.execute(\"SELECT jumlah, versi FROM stok WHERE id = 1\").fetchone())\n    finally:\n        a.close()\n        b.close()",
+        "output": "Pembaca sebelum commit: 5\nPenulis kedua ditunda\nPembaca sesudah commit: 3\nUpdate memakai versi lama: 0\nData: (3, 1)",
+        "explanation": "Dua koneksi dijalankan bergantian dalam satu proses agar kondisi konflik dapat diulang tanpa thread atau penundaan acak. Ini tetap menguji penguncian antar-koneksi.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Jalankan demo dan perhatikan data yang dibaca sebelum serta sesudah commit.",
+      "Uji UPDATE dengan versi terbaru dan periksa rowcount satu.",
+      "Rancang respons pengguna untuk konflik versi dibanding database sibuk."
+    ],
+    "warning": "Kolom versi hanya efektif jika seluruh penulis yang relevan ikut menaikkannya dan memeriksanya. Contoh bukan jaminan bahwa menambah satu kolom otomatis menyelesaikan semua konflik.",
+    "check": "Mengapa UPDATE B dengan versi lama tidak mengubah data?",
+    "answer": "Nilai versi pada WHERE tidak lagi cocok karena A sudah menaikkannya saat memperbarui data.",
+    "source": "https://www.sqlite.org/isolation.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-optimasi-lanjutan",
+    "title": "Optimasi kueri: indeks gabungan, covering, dan filter rentang",
+    "summary": "Hubungkan bentuk kueri dengan indeks lalu buktikan hasil tetap benar.",
+    "analogy": "Indeks buku yang disusun menurut topik lalu tanggal membantu pencarian tertentu, tetapi tidak semua cara membuka buku memakai indeks yang sama.",
+    "explain": [
+      "Optimasi dimulai dari hasil yang benar, pola akses yang sering dipakai, serta ukuran data yang mewakili kebutuhan. Jangan menambah indeks sebelum mengetahui filter, urutan, dan kolom hasil yang diperlukan.",
+      "Contoh indeks (status, dibuat, id, judul) dapat membantu kueri yang menyaring status, membatasi rentang dibuat, serta mengurutkan dibuat dan id. Kolom judul ditambahkan agar data yang diminta juga berada pada indeks, yaitu gagasan covering index. Manfaat nyata tetap bergantung rencana engine dan beban kerja.",
+      "Filter rentang pada dibuat dibandingkan dengan membungkus setiap nilai lewat fungsi date(dibuat). Keduanya dapat mempunyai makna sama untuk format contoh, tetapi pemanfaatan indeks biasa dapat berbeda. Expression index adalah fitur tersendiri jika memang pola berbasis ekspresi dibutuhkan.",
+      "Gunakan EXPLAIN QUERY PLAN untuk memahami rencana dan ukur sebelum–sesudah pada data representatif. Bentuk teks plan dapat berubah; jangan menyamakan satu kata plan dengan jaminan waktu. Perhitungkan biaya pembentukan, ruang, dan penulisan indeks, lalu hapus indeks tumpang tindih hanya setelah memeriksa seluruh pemakai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Filter awalan",
+          "status = nilai",
+          "Memanfaatkan awalan indeks"
+        ],
+        [
+          "Rentang",
+          "dibuat >= awal AND dibuat < akhir",
+          "Hindari pembatas akhir yang ambigu"
+        ],
+        [
+          "Covering",
+          "Kolom hasil tersedia pada indeks",
+          "Trade-off ukuran indeks"
+        ],
+        [
+          "Validasi optimasi",
+          "Hasil sama + ukur biaya",
+          "Bukan hanya plan terlihat menarik"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Optimasi kueri: indeks gabungan, covering, dan filter rentang",
+        "code": "CREATE TABLE tiket (id INTEGER PRIMARY KEY, status TEXT NOT NULL, dibuat TEXT NOT NULL, judul TEXT NOT NULL);\nINSERT INTO tiket VALUES\n (1, 'BARU', '2026-01-01 08:00:00', 'Link A'),\n (2, 'BARU', '2026-01-02 08:00:00', 'Link B'),\n (3, 'SELESAI', '2026-01-01 09:00:00', 'Link C');\nCREATE INDEX idx_laporan ON tiket(status, dibuat, id, judul);\nSELECT id, judul FROM tiket\nWHERE status = 'BARU' AND dibuat >= '2026-01-01 00:00:00' AND dibuat < '2026-01-02 00:00:00'\nORDER BY dibuat, id;",
+        "output": "1 | Link A",
+        "explanation": "Jalankan EXPLAIN QUERY PLAN di depan SELECT secara terpisah. Hasil barisnya tetap sama dengan atau tanpa indeks; yang dinilai untuk optimasi adalah biaya aksesnya.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Bandingkan hasil sebelum dan sesudah CREATE INDEX.",
+      "Lihat plan bentuk rentang dan bentuk date(dibuat).",
+      "Uji kueri lain yang tidak menyaring status lalu tentukan apakah indeks ini tetap sesuai."
+    ],
+    "warning": "Indeks covering lebih lebar dapat menambah ruang dan biaya tulis. Jangan menyalin indeks contoh ke semua tabel tanpa mengukur kebutuhan.",
+    "check": "Apakah perubahan indeks boleh mengubah makna hasil kueri?",
+    "answer": "Tidak. Optimasi harus mempertahankan hasil yang disepakati; perubahan urutan memerlukan ORDER BY yang benar.",
+    "source": "https://www.sqlite.org/queryplanner.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-kasus-dashboard",
+    "title": "Studi kasus: laporan harian lengkap dengan tanggal kosong",
+    "summary": "Gabungkan kalender CTE, LEFT JOIN, agregasi, dan total berjalan.",
+    "analogy": "Papan laporan harus tetap menampilkan hari tanpa kejadian, bukan melompat dari Senin langsung ke Rabu.",
+    "explain": [
+      "Tetapkan arti metrik sebelum menulis SQL. Contoh menghitung tiket yang dibuat pada setiap hari UTC, lalu menghitung berapa dari tiket tersebut yang status terkininya SELESAI. Ini bukan jumlah penyelesaian yang terjadi pada hari itu karena contoh tidak menyimpan waktu selesai.",
+      "CTE rekursif membuat kalender tiga hari, termasuk hari yang tidak mempunyai tiket. LEFT JOIN menghubungkan tiap hari ke tiket dalam rentang awal-inklusif dan akhir-eksklusif. COUNT(t.id) menghasilkan nol untuk hari tanpa pasangan.",
+      "CTE ringkasan menghasilkan satu baris per hari. Window SUM kemudian menghitung kumulatif tiket dibuat sampai hari saat ini tanpa menghilangkan detail harian. Urutan akhir dinyatakan secara eksplisit.",
+      "Untuk laporan SLA atau waktu penyelesaian, simpan event atau timestamp yang tepat dan definisikan kapan jam layanan mulai, berhenti, atau dijeda. Jangan menyimpulkan kecepatan teknisi dari status terkini dan tanggal dibuat saja. Periode contoh adalah data latihan tetap, bukan laporan waktu sekarang."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Kalender",
+          "Seluruh hari dalam periode",
+          "Termasuk tanggal tanpa tiket"
+        ],
+        [
+          "dibuat",
+          "Jumlah tiket dibuat pada hari UTC",
+          "COUNT(t.id)"
+        ],
+        [
+          "selesai_saat_ini",
+          "Status terkini pada cohort hari dibuat",
+          "Bukan selesai pada hari itu"
+        ],
+        [
+          "kumulatif",
+          "Total dibuat sampai hari ini",
+          "Window SUM atas ringkasan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL SQLite · Studi kasus: laporan harian lengkap dengan tanggal kosong",
+        "code": "CREATE TABLE tiket (id INTEGER PRIMARY KEY, dibuat TEXT NOT NULL, status TEXT NOT NULL);\nINSERT INTO tiket VALUES\n (1, '2026-01-01 08:00:00', 'SELESAI'),\n (2, '2026-01-01 09:00:00', 'BARU'),\n (3, '2026-01-03 10:00:00', 'SELESAI');\nWITH RECURSIVE hari(tanggal) AS (\n SELECT '2026-01-01'\n UNION ALL\n SELECT date(tanggal, '+1 day') FROM hari WHERE tanggal < '2026-01-03'\n), ringkasan AS (\n SELECT h.tanggal, COUNT(t.id) AS dibuat,\n SUM(CASE WHEN t.status = 'SELESAI' THEN 1 ELSE 0 END) AS selesai_saat_ini\n FROM hari h LEFT JOIN tiket t\n ON t.dibuat >= h.tanggal || ' 00:00:00' AND t.dibuat < datetime(h.tanggal, '+1 day')\n GROUP BY h.tanggal\n)\nSELECT tanggal, dibuat, selesai_saat_ini,\n SUM(dibuat) OVER (ORDER BY tanggal ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS kumulatif\nFROM ringkasan ORDER BY tanggal;",
+        "output": "2026-01-01 | 2 | 1 | 2\n2026-01-02 | 0 | 0 | 2\n2026-01-03 | 1 | 1 | 3",
+        "explanation": "Kalender mempunyai batas akhir eksplisit sehingga rekursi berhenti. Hari kedua tetap tampil dan tidak menambah kumulatif.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Tambahkan hari tanpa tiket di awal atau akhir periode.",
+      "Tambahkan tiket tepat pada tengah malam hari berikutnya.",
+      "Ubah status terkini tiket lama dan jelaskan metrik mana yang berubah.",
+      "Rancang skema tambahan untuk menghitung penyelesaian berdasarkan waktu selesai sebenarnya."
+    ],
+    "warning": "Laporan yang kelihatan rapi tetap dapat salah bila definisi metrik tidak jelas. Jika periode berasal dari pemakai, validasi awal <= akhir dan batasi panjang rentang sebelum menjalankan kueri.",
+    "check": "Mengapa kolom selesai_saat_ini tidak boleh disebut jumlah tiket selesai pada tanggal itu?",
+    "answer": "Kolom itu mengelompokkan tiket menurut tanggal dibuat dan membaca status terkini, bukan timestamp kejadian penyelesaian.",
+    "source": "https://www.sqlite.org/windowfunctions.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 55
+  },
+  {
+    "slug": "db-kasus-stok-atomik",
+    "title": "Studi kasus: reservasi stok atomik dan permintaan ulang",
+    "summary": "Cegah stok negatif serta penerapan ganda melalui transaksi dan identitas permintaan.",
+    "analogy": "Satu surat permintaan mempunyai nomor unik. Jika surat yang sama datang lagi, petugas mengakui hasil lama tanpa mengeluarkan barang kedua kali.",
+    "explain": [
+      "Aturan latihan: satu kode permintaan hanya boleh diterapkan untuk satu barang dan jumlah tertentu. Permintaan baru mengurangi stok serta mencatat operasi sebagai satu transaksi. Pengiriman ulang dengan kode dan isi sama tidak mengurangi stok lagi.",
+      "BEGIN IMMEDIATE memastikan unit pembacaan dan penulisan berjalan sebagai transaksi penulis. UPDATE bersyarat memeriksa stok >= jumlah sekaligus menguranginya. rowcount nol ditolak tanpa membuat catatan permintaan.",
+      "Jika kode sudah ada dengan isi berbeda, fungsi menolak daripada menganggapnya sebagai operasi baru. Jika INSERT catatan gagal setelah stok diubah, rollback mengembalikan stok. Constraint stok nonnegatif serta kunci unik permintaan menambah penjagaan database.",
+      "Ini idempotensi terbatas pada operasi yang dicatat dalam database yang sama. Catatan permintaan harus dipertahankan sesuai periode pengulangan yang diizinkan. Menghapus catatan atau mengirim efek eksternal seperti email di luar transaksi memerlukan rancangan lain; pola ini bukan jaminan exactly-once untuk seluruh sistem terdistribusi.",
+      "Demo memakai satu koneksi memori. Uji dua koneksi file dan tangani SQLITE_BUSY sesuai kebijakan terbatas ketika mengembangkan latihan. Ini hanya reservasi pengurangan stok, belum mendukung pelepasan reservasi, kedaluwarsa, atau mutasi stok dari jalur lain."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna",
+        "Penerapan"
+      ],
+      "rows": [
+        [
+          "Kode unik",
+          "Identitas operasi",
+          "Tidak dipakai ulang untuk isi berbeda"
+        ],
+        [
+          "UPDATE bersyarat",
+          "Cek stok dan kurangi bersama",
+          "rowcount harus satu"
+        ],
+        [
+          "Transaksi",
+          "Stok + catatan satu unit",
+          "Rollback jika catatan gagal"
+        ],
+        [
+          "Pengulangan sama",
+          "Tidak diterapkan ulang",
+          "Return False, stok tetap"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Program Python · Studi kasus: reservasi stok atomik dan permintaan ulang",
+        "code": "import sqlite3\n\ndef siapkan(con):\n    con.execute(\"PRAGMA foreign_keys = ON\")\n    con.executescript(\"\"\"\n    CREATE TABLE barang (id INTEGER PRIMARY KEY,\n      stok INTEGER NOT NULL CHECK(typeof(stok) = 'integer' AND stok >= 0));\n    CREATE TABLE permintaan (\n      kode TEXT PRIMARY KEY NOT NULL,\n      barang_id INTEGER NOT NULL REFERENCES barang(id),\n      jumlah INTEGER NOT NULL CHECK(typeof(jumlah) = 'integer' AND jumlah > 0)\n    );\n    \"\"\")\n\ndef reservasi(con, kode, barang_id, jumlah):\n    if not isinstance(kode, str) or not kode.strip():\n        raise ValueError(\"Kode permintaan wajib diisi\")\n    if type(barang_id) is not int or barang_id <= 0 or type(jumlah) is not int or jumlah <= 0:\n        raise ValueError(\"Id dan jumlah harus integer positif\")\n    kode = kode.strip()\n    con.execute(\"BEGIN IMMEDIATE\")\n    try:\n        lama = con.execute(\"SELECT barang_id, jumlah FROM permintaan WHERE kode = ?\", (kode,)).fetchone()\n        if lama is not None:\n            if lama != (barang_id, jumlah):\n                raise ValueError(\"Kode sudah dipakai dengan isi berbeda\")\n            con.execute(\"COMMIT\")\n            return False\n        cur = con.execute(\"UPDATE barang SET stok = stok - ? WHERE id = ? AND stok >= ?\",\n                          (jumlah, barang_id, jumlah))\n        if cur.rowcount != 1:\n            raise ValueError(\"Barang tidak ada atau stok tidak cukup\")\n        con.execute(\"INSERT INTO permintaan (kode, barang_id, jumlah) VALUES (?, ?, ?)\",\n                    (kode, barang_id, jumlah))\n        con.execute(\"COMMIT\")\n        return True\n    except Exception:\n        con.execute(\"ROLLBACK\")\n        raise\n\ndef main():\n    con = sqlite3.connect(\":memory:\", isolation_level=None)\n    try:\n        siapkan(con)\n        con.execute(\"INSERT INTO barang VALUES (1, 5)\")\n        print(\"Baru:\", reservasi(con, \"R01\", 1, 2))\n        print(\"Ulang sama:\", reservasi(con, \"R01\", 1, 2))\n        try:\n            reservasi(con, \"R01\", 1, 3)\n        except ValueError as error:\n            print(\"Ditolak:\", error)\n        try:\n            reservasi(con, \"R02\", 1, 4)\n        except ValueError as error:\n            print(\"Ditolak:\", error)\n        print(\"Stok akhir:\", con.execute(\"SELECT stok FROM barang WHERE id = 1\").fetchone()[0])\n        print(\"Operasi tercatat:\", con.execute(\"SELECT COUNT(*) FROM permintaan\").fetchone()[0])\n    finally:\n        con.close()\n\nif __name__ == \"__main__\":\n    main()",
+        "output": "Baru: True\nUlang sama: False\nDitolak: Kode sudah dipakai dengan isi berbeda\nDitolak: Barang tidak ada atau stok tidak cukup\nStok akhir: 3\nOperasi tercatat: 1",
+        "explanation": "Return True berarti operasi baru diterapkan; False berarti permintaan sama sudah pernah diterapkan. Kegagalan tidak mengubah stok atau jumlah catatan.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan dan perkirakan baris hasil atau perubahan state.",
+      "Jalankan seluruh contoh pada database latihan kosong; blok SQL memakai SQLite, blok Python memakai Python 3.11 atau lebih baru.",
+      "Cocokkan keluaran, lalu kerjakan variasi latihan dan kondisi batas."
+    ],
+    "practice": [
+      "Uji pengeluaran tepat sebesar stok.",
+      "Kirim kode yang sama beberapa kali dengan isi sama.",
+      "Paksa INSERT permintaan gagal dan pastikan stok kembali.",
+      "Uji dua koneksi file secara bergantian lalu buat kebijakan penanganan database sibuk."
+    ],
+    "warning": "Gunakan isolation_level=None karena fungsi mengendalikan BEGIN/COMMIT sendiri. Jangan memanggilnya di dalam transaksi lain. Identitas permintaan dan retensi catatannya merupakan bagian kontrak, bukan detail yang boleh dihapus sembarang.",
+    "check": "Apa yang terjadi bila stok berkurang tetapi penulisan catatan permintaan gagal?",
+    "answer": "Exception ditangani dengan rollback sehingga pengurangan stok dibatalkan bersama catatan yang gagal.",
+    "source": "https://www.sqlite.org/lang_transaction.html",
+    "diagram": "db-stok-atomik",
+    "diagramAlt": "Transaksi memeriksa kode permintaan, mengurangi stok bersyarat, dan mencatat operasi. Kegagalan membatalkan seluruh perubahan.",
+    "stage": 0,
+    "minutes": 55
   }
 ]

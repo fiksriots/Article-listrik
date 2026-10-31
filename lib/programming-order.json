@@ -211,5 +211,38 @@
       "db-kasus-perpustakaan",
       "db-kasus-tiket"
     ]
+  },
+  {
+    "title": "Basis Data · Kueri lanjutan",
+    "slugs": [
+      "db-subquery-exists",
+      "db-cte",
+      "db-cte-rekursif",
+      "db-window",
+      "db-waktu-laporan",
+      "db-pagination"
+    ]
+  },
+  {
+    "title": "Basis Data · Aturan dan penulisan lanjutan",
+    "slugs": [
+      "db-view",
+      "db-trigger",
+      "db-upsert"
+    ]
+  },
+  {
+    "title": "Basis Data · Operasional lanjutan",
+    "slugs": [
+      "db-konkurensi",
+      "db-optimasi-lanjutan"
+    ]
+  },
+  {
+    "title": "Basis Data · Studi kasus lanjutan",
+    "slugs": [
+      "db-kasus-dashboard",
+      "db-kasus-stok-atomik"
+    ]
   }
 ]
