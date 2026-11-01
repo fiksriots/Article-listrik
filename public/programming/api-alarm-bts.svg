@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="650" viewBox="0 0 860 650" role="img" aria-labelledby="title desc">
+<title id="title">Alarm BTS menjadi satu tiket</title><desc id="desc">Body dibatasi lalu signature dan izin diperiksa. Receipt lama mengembalikan respons asli; event baru menyimpan tiket, receipt dan audit dalam satu transaksi. Kegagalan membatalkan ketiganya.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#7c829d" stroke-width="1.5"/></marker></defs>
+<rect width="860" height="650" rx="22" fill="#f5f4fa"/>
+<g font-family="Arial, sans-serif" fill="#26312e"><text x="35" y="44" font-size="25" font-weight="700">Alarm dapat diulang, tiket tetap satu</text>
+<text x="35" y="75" font-size="18">Scope deduplikasi: pengirim + event_id</text>
+<g fill="#fff" stroke="#c1bfd2" stroke-width="2"><rect x="40" y="105" width="345" height="95" rx="12"/><rect x="475" y="105" width="345" height="95" rx="12"/><rect x="475" y="255" width="345" height="90" rx="12"/><rect x="40" y="255" width="345" height="90" rx="12"/><rect x="40" y="410" width="345" height="110" rx="12" fill="#e5eee8"/><rect x="475" y="410" width="345" height="110" rx="12"/></g>
+<g font-size="20" font-weight="700"><text x="60" y="138">Monitor mengirim alarm</text><text x="495" y="138">API memeriksa request</text><text x="495" y="289">Cari receipt</text><text x="60" y="289">Event baru</text><text x="60" y="444">Satu transaksi</text><text x="495" y="444">Receipt sudah ada</text></g>
+<g font-size="17"><text x="60" y="169">event_id · body · signature</text><text x="495" y="167">Batas byte · HMAC · waktu</text><text x="495" y="189">Schema · izin perangkat</text><text x="495" y="320">Cocokkan key dan fingerprint</text><text x="60" y="320">Belum ada operasi yang disahkan</text><text x="60" y="474">Tiket + receipt + audit</text><text x="60" y="501">Commit, baru respons sukses</text><text x="495" y="474">Body sama → respons asli</text><text x="495" y="501">Body berbeda → konflik 409</text></g>
+<g fill="none" stroke="#7c829d" stroke-width="2" marker-end="url(#arrow)"><path d="M385 152H475"/><path d="M647 200V255"/><path d="M475 300H385"/><path d="M212 345V410"/><path d="M647 345V410"/></g>
+<text x="397" y="286" font-size="16">Baru</text><text x="660" y="383" font-size="16">Ada</text>
+<rect x="40" y="554" width="780" height="60" rx="12" fill="#ebe5f6"/><text x="60" y="581" font-size="18" font-weight="700">Jika audit gagal, tiket dan receipt ikut rollback.</text><text x="60" y="603" font-size="16">Timestamp membatasi umur request; receipt mencegah efek bisnis berulang.</text>
+</g></svg>

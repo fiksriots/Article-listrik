@@ -6,7 +6,7 @@ const definitions = [
   {id:'struktur-data', title:'Struktur Data', href:'/programming/struktur-data', summary:'Pelajari cara mengatur data: stack, queue, linked list, tree, graph, heap, pencarian, dan pengurutan.', groups:order.filter(group => group.title === 'Struktur Data')},
   {id:'oop', title:'Pemrograman Berorientasi Objek', href:'/programming/oop', summary:'Belajar OOP dengan Python: class, object, enkapsulasi, inheritance, polymorphism, komposisi, serta studi kasus.', groups:order.filter(group => group.title.startsWith('OOP ·'))},
   {id:'basis-data', title:'Basis Data', href:'/programming/basis-data', summary:'Pahami tabel, relasi, SQL, transaksi, indeks, SQLite dan PostgreSQL, relasi ORM, migrasi Alembic, JSONB, pencarian teks, serta RLS melalui latihan dan studi kasus.', groups:order.filter(group => group.title.startsWith('Basis Data ·'))},
-  {id:'backend-api', title:'Backend/API', href:'/programming/backend-api', summary:'Hubungkan client dan database melalui HTTP, JSON, REST, FastAPI, CRUD, autentikasi, transaksi, error, async, serta pengujian Python.', groups:order.filter(group => group.title.startsWith('Backend/API ·'))},
+  {id:'backend-api', title:'Backend/API', href:'/programming/backend-api', summary:'Hubungkan client dan database melalui HTTP, JSON, REST, FastAPI, CRUD, autentikasi, transaksi, error, JWT, idempotensi, webhook, deployment, serta pengujian Python.', groups:order.filter(group => group.title.startsWith('Backend/API ·'))},
 ];
 
 // Keep article URLs and programming/<slug> progress keys stable.

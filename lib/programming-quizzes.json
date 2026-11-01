@@ -6562,5 +6562,299 @@
       "answer": 0,
       "explanation": "Statistik membantu planner memperkirakan jumlah baris."
     }
+  ],
+  "api-response-kontrak": [
+    {
+      "question": "Apa fungsi response model?",
+      "options": [
+        "Memvalidasi dan menyaring bentuk keluaran",
+        "Memberi semua orang izin membaca",
+        "Menghapus kebutuhan tes"
+      ],
+      "answer": 0,
+      "explanation": "Model respons adalah batas representasi publik."
+    },
+    {
+      "question": "Data response tidak sesuai model merupakan kesalahan siapa?",
+      "options": [
+        "Selalu input client",
+        "Implementasi server",
+        "Selalu DNS"
+      ],
+      "answer": 1,
+      "explanation": "Server harus memenuhi kontrak keluarannya."
+    },
+    {
+      "question": "Apakah OpenAPI membuktikan seluruh perilaku runtime?",
+      "options": [
+        "Ya tanpa request uji",
+        "Ya termasuk izin database",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Dokumentasi dan tes runtime saling melengkapi."
+    },
+    {
+      "question": "Apa contoh perubahan berpotensi mematahkan client?",
+      "options": [
+        "Menghapus field yang digunakan client",
+        "Memperbaiki ejaan komentar Python",
+        "Mengganti nama variabel lokal"
+      ],
+      "answer": 0,
+      "explanation": "Kontrak publik perlu dikelola sepanjang masa dukungan."
+    }
+  ],
+  "api-jwt-sesi": [
+    {
+      "question": "Apakah JWT sama dengan OAuth2?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya beda nama file"
+      ],
+      "answer": 0,
+      "explanation": "Format token berbeda dari kerangka alur otorisasi."
+    },
+    {
+      "question": "Bagaimana algoritme verifikasi ditentukan?",
+      "options": [
+        "Mengikuti alg dari client begitu saja",
+        "Dikunci pada konfigurasi server",
+        "Selalu tanpa verifikasi"
+      ],
+      "answer": 1,
+      "explanation": "Jangan menyerahkan pilihan algoritme kepada token tidak terpercaya."
+    },
+    {
+      "question": "Mengapa exp dimasukkan ke claim wajib?",
+      "options": [
+        "Agar token tidak pernah berakhir",
+        "Agar payload terenkripsi",
+        "Agar token tanpa expiry ditolak"
+      ],
+      "answer": 2,
+      "explanation": "Pemeriksaan expiry saja tidak selalu mewajibkan field tersebut hadir."
+    },
+    {
+      "question": "Mengapa allowlist memori kurang untuk multiworker?",
+      "options": [
+        "State tiap proses berbeda",
+        "JWT berhenti menjadi JSON",
+        "Argon2 hanya mendukung satu pengguna"
+      ],
+      "answer": 0,
+      "explanation": "State sesi harus konsisten pada semua pemverifikasi."
+    }
+  ],
+  "api-idempotensi": [
+    {
+      "question": "Kapan client mempertahankan key yang sama?",
+      "options": [
+        "Saat mengulang operasi logis yang sama",
+        "Untuk semua operasi berbeda selamanya",
+        "Hanya pada GET"
+      ],
+      "answer": 0,
+      "explanation": "Key mengenali satu operasi, bukan seluruh pengguna."
+    },
+    {
+      "question": "Apa respons contoh jika key sama membawa data berbeda?",
+      "options": [
+        "Membuat tiket baru diam-diam",
+        "409",
+        "Menghapus tiket pertama"
+      ],
+      "answer": 1,
+      "explanation": "Konflik fingerprint tidak diperlakukan sebagai retry yang sah."
+    },
+    {
+      "question": "Mengapa principal menjadi bagian scope key?",
+      "options": [
+        "Agar tidak perlu login",
+        "Agar semua pengguna melihat receipt bersama",
+        "Agar respons tidak tertukar antar pengguna"
+      ],
+      "answer": 2,
+      "explanation": "Isolasi identitas merupakan bagian kontrak."
+    },
+    {
+      "question": "Apa yang dijamin transaksi contoh?",
+      "options": [
+        "Tiket dan receipt disahkan bersama",
+        "Semua layanan eksternal tepat sekali",
+        "Semua retry selalu sukses"
+      ],
+      "answer": 0,
+      "explanation": "Atomisitas database tidak meliputi efek jaringan sembarang."
+    }
+  ],
+  "api-rate-limit": [
+    {
+      "question": "Apa arti status 429?",
+      "options": [
+        "Frekuensi request melewati kebijakan",
+        "Token selalu kedaluwarsa",
+        "Database hilang"
+      ],
+      "answer": 0,
+      "explanation": "Client perlu mengikuti kebijakan penundaan."
+    },
+    {
+      "question": "Mengapa memakai monotonic clock?",
+      "options": [
+        "Untuk menerbitkan tanggal sertifikat",
+        "Untuk mengukur interval waktu",
+        "Untuk mengganti autentikasi"
+      ],
+      "answer": 1,
+      "explanation": "Clock interval tidak perlu mengikuti perubahan jam kalender."
+    },
+    {
+      "question": "Apakah Lock menyatukan kuota beberapa worker?",
+      "options": [
+        "Ya termasuk seluruh server",
+        "Ya bila endpoint sama",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Lock contoh hanya berlaku di satu proses."
+    },
+    {
+      "question": "Dari mana key kuota pengguna berasal?",
+      "options": [
+        "Principal yang telah diverifikasi",
+        "Header identitas bebas",
+        "Body role dari client"
+      ],
+      "answer": 0,
+      "explanation": "Identitas tidak boleh dipilih client untuk menghindari kuota."
+    }
+  ],
+  "api-webhook-signature": [
+    {
+      "question": "Apa yang ditandatangani contoh?",
+      "options": [
+        "Timestamp dan body mentah",
+        "Hanya status 200",
+        "Nama endpoint saja"
+      ],
+      "answer": 0,
+      "explanation": "Ikatan pada isi dan waktu penting untuk verifikasi."
+    },
+    {
+      "question": "Apakah timestamp menggantikan deduplikasi event_id?",
+      "options": [
+        "Ya untuk semua retry",
+        "Tidak",
+        "Ya jika jendela lima menit"
+      ],
+      "answer": 1,
+      "explanation": "Replay dalam jendela waktu masih mungkin terjadi."
+    },
+    {
+      "question": "Kapan parsing schema dilakukan?",
+      "options": [
+        "Setelah membuat tiket",
+        "Tanpa membaca body",
+        "Setelah batas byte dan verifikasi signature"
+      ],
+      "answer": 2,
+      "explanation": "Input belum dipercaya sebelum pemeriksaan yang sesuai."
+    },
+    {
+      "question": "Apa syarat respons 2xx yang jujur?",
+      "options": [
+        "Jaminan penerimaan yang dijanjikan sudah tercapai",
+        "Sekadar JSON dapat dibaca",
+        "Pekerjaan hanya ada di memori sementara"
+      ],
+      "answer": 0,
+      "explanation": "ACK harus sesuai durabilitas atau penyelesaian yang dijanjikan."
+    }
+  ],
+  "api-deployment": [
+    {
+      "question": "Apa fungsi reverse proxy pada contoh?",
+      "options": [
+        "Menerima HTTPS lalu meneruskan ke aplikasi lokal",
+        "Menggantikan seluruh otorisasi",
+        "Membuat backup otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Proxy dan aplikasi mempunyai tanggung jawab berbeda."
+    },
+    {
+      "question": "Apakah --reload tepat untuk layanan produksi?",
+      "options": [
+        "Ya untuk semua worker",
+        "Tidak",
+        "Ya agar migrasi otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Reload merupakan alat pengembangan, bukan strategi pengoperasian layanan."
+    },
+    {
+      "question": "Dari mana forwarded headers boleh dipercaya?",
+      "options": [
+        "Semua client internet",
+        "Body JSON pengguna",
+        "Proxy yang secara eksplisit dipercaya"
+      ],
+      "answer": 2,
+      "explanation": "Header jaringan harus mengikuti batas kepercayaan yang dikonfigurasi."
+    },
+    {
+      "question": "Apakah rollback kode otomatis memulihkan data?",
+      "options": [
+        "Tidak",
+        "Ya termasuk semua tabel",
+        "Ya jika proses direstart"
+      ],
+      "answer": 0,
+      "explanation": "Kompatibilitas skema dan pemulihan data perlu dirancang terpisah."
+    }
+  ],
+  "api-kasus-alarm-bts": [
+    {
+      "question": "Apa identitas deduplikasi proyek?",
+      "options": [
+        "Pasangan pengirim dan event_id",
+        "Timestamp saja",
+        "Judul tiket saja"
+      ],
+      "answer": 0,
+      "explanation": "Scope pengirim mencegah event dari partner berbeda tertukar."
+    },
+    {
+      "question": "Kapan respons sukses dikirim?",
+      "options": [
+        "Sebelum validasi signature",
+        "Setelah transaksi commit",
+        "Setelah data hanya ada di variabel"
+      ],
+      "answer": 1,
+      "explanation": "ACK mencerminkan pekerjaan yang benar-benar disahkan."
+    },
+    {
+      "question": "Apa akibat audit gagal pada event baru?",
+      "options": [
+        "Tiket tetap commit terpisah",
+        "Receipt mengklaim sukses palsu",
+        "Tiket dan receipt ikut rollback"
+      ],
+      "answer": 2,
+      "explanation": "Ketiganya berada dalam satu transaksi."
+    },
+    {
+      "question": "Mengapa sqlite3 dipanggil lewat thread pool?",
+      "options": [
+        "Agar operasi sinkron tidak langsung memblokir event loop",
+        "Agar SQLite menjadi multiwriter",
+        "Agar signature tidak perlu dicek"
+      ],
+      "answer": 0,
+      "explanation": "Memindahkan kerja blocking tidak mengubah aturan transaksi engine."
+    }
   ]
 }

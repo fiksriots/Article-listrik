@@ -1074,5 +1074,634 @@
     "diagramAlt": "Client, API, service, repository, dan database dalam alur transaksi tiket.",
     "stage": 0,
     "minutes": 90
+  },
+  {
+    "slug": "api-response-kontrak",
+    "title": "Response model, OpenAPI, dan perubahan kontrak",
+    "summary": "Tentukan field respons yang boleh keluar serta rencanakan perubahan API.",
+    "analogy": "Formulir untuk pelanggan hanya memuat informasi yang dijanjikan; catatan petugas tidak ikut difotokopi.",
+    "explain": [
+      "Prasyarat: FastAPI, validasi, CRUD, dan Pydantic. Model input menyatakan data yang diterima, sedangkan response model menyatakan bentuk data yang dikirim. Keduanya sering berbeda. Misalnya, password dapat diterima saat login, tetapi hash password tidak pernah menjadi bagian model respons publik.",
+      "FastAPI memakai response_model atau return type yang sesuai untuk memvalidasi serta menyaring data respons. Contoh hanya mengirim id dan judul meskipun fixture juga mempunyai catatan_internal. Penyaringan ini membantu menjaga batas data; endpoint tetap wajib memeriksa otorisasi sebelum mengambil atau mengembalikan objek.",
+      "Jika implementasi tidak memenuhi model respons, itu kesalahan server, bukan kesalahan input client. Jangan mengubahnya menjadi 422 atau menonaktifkan validasi agar tes lewat. Perbaiki implementasi dan tambahkan tes kontrak, termasuk assertion bahwa field internal tidak muncul.",
+      "OpenAPI mendeskripsikan endpoint, schema, status, dan security scheme yang dideklarasikan. FastAPI menyediakannya pada /openapi.json serta antarmuka /docs. Dokumentasi tidak otomatis membuktikan seluruh runtime sesuai kontrak; uji response nyata dan periksa schema setelah perubahan.",
+      "Contoh memakai path /v1 dan metadata version=1.0.0. Nomor metadata tidak otomatis membuat routing versi atau menjaga kompatibilitas. Menghapus field, mengganti tipe, mengubah arti status, atau menjadikan input opsional wajib dapat mematahkan client. Tentukan periode migrasi, dokumentasikan perubahan, dan jalankan tes client lama sebelum melepas versi lama."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "Model input",
+          "Validasi data masuk",
+          "Terpisah dari data publik"
+        ],
+        [
+          "Response model",
+          "Validasi dan penyaringan keluaran",
+          "id dan judul saja"
+        ],
+        [
+          "OpenAPI",
+          "Deskripsi kontrak",
+          "/openapi.json"
+        ],
+        [
+          "Versi API",
+          "Rencana perubahan perilaku",
+          "Path dan kebijakan migrasi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · response_api.py",
+        "code": "from fastapi import FastAPI\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, Field\n\nclass TiketOut(BaseModel):\n    id: int\n    judul: str = Field(min_length=1, max_length=120)\n\napp = FastAPI(title=\"API Tiket Latihan\", version=\"1.0.0\")\n@app.get(\"/v1/tiket/{id}\", response_model=TiketOut)\ndef detail(id: int):\n    # Fixture untuk menunjukkan penyaringan; otorisasi ada pada bab sebelumnya.\n    return {\"id\": id, \"judul\": \"Link A\", \"catatan_internal\": \"Data internal\"}\n\nif __name__ == \"__main__\":\n    with TestClient(app) as client:\n        print(client.get(\"/v1/tiket/1\").json())\n        schema = client.get(\"/openapi.json\").json()\n        print(\"/v1/tiket/{id}\" in schema[\"paths\"])\n        print(schema[\"info\"][\"version\"])",
+        "output": "{'id': 1, 'judul': 'Link A'}\nTrue\n1.0.0",
+        "explanation": "Fixture selalu mengembalikan tiket contoh untuk mendemonstrasikan kontrak. Ini bukan repository atau endpoint detail dengan otorisasi produksi.",
+        "language": "python",
+        "filename": "response_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Tambahkan field internal lain dan pastikan tidak muncul pada respons.",
+      "Kembalikan id yang tidak bisa divalidasi sebagai integer; uji dengan raise_server_exceptions=False dan pastikan status kesalahan server.",
+      "Ubah tipe judul dalam versi percobaan dan tulis alasan perubahan itu dapat mematahkan client.",
+      "Simpan kontrak OpenAPI untuk ditinjau pada perubahan; hindari menganggap diff schema sebagai satu-satunya tes kompatibilitas."
+    ],
+    "warning": "Response model bukan pengganti otorisasi dan tidak menyamarkan rahasia yang sudah masuk log. Jangan memakai model database lengkap sebagai model publik tanpa meninjau semua field.",
+    "check": "Apakah mengganti app.version otomatis membuat /v2 dan mempertahankan /v1?",
+    "answer": "Tidak. Routing, dukungan versi, serta kompatibilitas harus dirancang dan diuji.",
+    "source": "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "api-jwt-sesi",
+    "title": "JWT, hash password, dan lifecycle sesi",
+    "summary": "Verifikasi token secara lengkap dan pahami akibat kedaluwarsa serta logout.",
+    "analogy": "Kartu akses mempunyai penerbit, tujuan, identitas, nomor kartu, dan masa berlaku; membaca tulisan kartunya saja belum membuktikan keasliannya.",
+    "explain": [
+      "Prasyarat: autentikasi dasar, dependency, dan response model. Password disimpan sebagai hash adaptif menggunakan pwdlib dengan Argon2, bukan plaintext atau SHA-256 biasa. Contoh membuat password acak hanya untuk demo, menyimpan hash dalam data pengguna latihan, dan tidak mencetak password maupun token.",
+      "JWT adalah format token, OAuth2 adalah kerangka otorisasi, dan OpenID Connect menambahkan lapisan identitas. Endpoint JSON /login contoh adalah login lokal untuk mempelajari JWT, bukan implementasi penyedia OAuth2/OIDC. Untuk integrasi identitas, pelajari Authorization Code dengan PKCE melalui penyedia yang sesuai. RFC 9700 melarang penggunaan grant Resource Owner Password Credentials; jangan menganggap alur password lama sebagai rancangan SSO baru.",
+      "JWT bertanda tangan tidak otomatis terenkripsi. Jangan memasukkan password atau rahasia pada payload. Contoh mengunci algoritme HS256 pada server dan memverifikasi signature, issuer, audience, sub, jti, iat, nbf, serta exp menggunakan PyJWT. Daftar claim wajib memastikan field tidak sekadar diperiksa bila kebetulan tersedia. Jangan memilih algoritme berdasarkan header token dari client.",
+      "Token berlaku lima menit. Session allowlist menyimpan pasangan identitas dan expiry menurut jti. Logout menghapus sesi token tersebut sehingga token yang signature-nya masih benar tetap ditolak. Pengguna yang berbeda tidak dipilih dari body /me; identitas berasal dari token terverifikasi dan data pengguna server.",
+      "Contoh menyimpan maksimum lima sesi aktif per pengguna dalam satu proses dan membersihkan sesi kedaluwarsa. Restart menghilangkan allowlist sehingga seluruh sesi contoh tidak lagi berlaku. Beberapa worker membutuhkan penyimpanan bersama dengan operasi atomik, batas sumber daya, serta pengelolaan akun aktif yang konsisten. Password hash dan status akun nyata harus dibaca dari penyimpanan yang sesuai.",
+      "Contoh sengaja tidak menerapkan refresh token. Sistem refresh perlu penyimpanan aman, rotasi, pencabutan, deteksi reuse, dan kebijakan umur sesi. Jika memakai cookie, rancang atribut cookie dan perlindungan CSRF. Jika memakai bearer header, cegah kebocoran token dan XSS pada client. Tambahkan pembatasan percobaan login; HTTPS diperlukan di luar latihan lokal."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "Argon2",
+          "Hash password adaptif",
+          "Bukan SHA-256 password"
+        ],
+        [
+          "JWT decode",
+          "Verifikasi, bukan hanya baca",
+          "Algoritme dan claim dikunci"
+        ],
+        [
+          "exp / nbf",
+          "Batas waktu",
+          "Jam server perlu benar"
+        ],
+        [
+          "jti + allowlist",
+          "Identitas sesi",
+          "Logout mencabut satu sesi"
+        ],
+        [
+          "OAuth2 / OIDC",
+          "Alur otorisasi / identitas",
+          "Berbeda dari format JWT"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Terminal · dependensi JWT",
+        "code": "python -m pip install \"PyJWT==2.15.1\" \"pwdlib[argon2]==0.3.0\"",
+        "output": "",
+        "explanation": "Tambahkan pada virtual environment yang sudah memasang FastAPI.",
+        "language": "text"
+      },
+      {
+        "label": "Python · jwt_api.py",
+        "code": "from datetime import datetime, timedelta, timezone\nfrom secrets import token_urlsafe\nfrom threading import Lock\nfrom uuid import uuid4\nimport jwt\nfrom pwdlib import PasswordHash\nfrom fastapi import FastAPI, Depends, HTTPException, Response\nfrom fastapi.security import HTTPBearer\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, Field\n\nclass Login(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    username: str = Field(min_length=1, max_length=80)\n    password: str = Field(min_length=1, max_length=256)\nclass TokenOut(BaseModel):\n    access_token: str\n    token_type: str = \"bearer\"\n\nISSUER, AUDIENCE = \"kursus-login\", \"kursus-api\"\nREQUIRED = [\"sub\", \"jti\", \"iat\", \"nbf\", \"exp\", \"iss\", \"aud\"]\n\ndef create_app(secret, users):\n    if len(secret.encode()) < 32:\n        raise ValueError(\"Gunakan secret acak minimal 32 byte\")\n    hasher = PasswordHash.recommended()\n    dummy_hash = hasher.hash(token_urlsafe(32))\n    users = {name: dict(data) for name, data in users.items()}\n    sessions, lock = {}, Lock()\n    bearer = HTTPBearer(auto_error=False)\n    app = FastAPI()\n    def denied():\n        return HTTPException(401, \"Kredensial tidak diterima\", headers={\"WWW-Authenticate\": \"Bearer\"})\n    def purge(now):\n        for jti in [k for k, value in sessions.items() if value[1] <= now]:\n            del sessions[jti]\n    def current(credentials=Depends(bearer)):\n        if credentials is None:\n            raise denied()\n        try:\n            claims = jwt.decode(credentials.credentials, secret, algorithms=[\"HS256\"],\n                                issuer=ISSUER, audience=AUDIENCE,\n                                options={\"require\": REQUIRED, \"strict_aud\": True})\n        except jwt.InvalidTokenError:\n            raise denied()\n        user = users.get(claims[\"sub\"])\n        with lock:\n            purge(int(datetime.now(timezone.utc).timestamp()))\n            stored = sessions.get(claims[\"jti\"])\n        if user is None or user.get(\"disabled\", False) or stored != (claims[\"sub\"], claims[\"exp\"]):\n            raise denied()\n        return claims\n    @app.post(\"/login\", response_model=TokenOut)\n    def login(data: Login, response: Response):\n        user = users.get(data.username)\n        password_hash = user[\"password_hash\"] if user else dummy_hash\n        valid = hasher.verify(data.password, password_hash)\n        if not valid or user is None or user.get(\"disabled\", False):\n            raise denied()\n        now = datetime.now(timezone.utc)\n        claims = {\"sub\": data.username, \"jti\": str(uuid4()), \"iat\": int(now.timestamp()),\n                  \"nbf\": int(now.timestamp()), \"exp\": int((now + timedelta(minutes=5)).timestamp()),\n                  \"iss\": ISSUER, \"aud\": AUDIENCE}\n        with lock:\n            purge(int(now.timestamp()))\n            own = [key for key, value in sessions.items() if value[0] == data.username]\n            if len(own) >= 5:\n                del sessions[own[0]]\n            sessions[claims[\"jti\"]] = (claims[\"sub\"], claims[\"exp\"])\n        response.headers[\"Cache-Control\"] = \"no-store\"\n        return {\"access_token\": jwt.encode(claims, secret, algorithm=\"HS256\")}\n    @app.get(\"/me\")\n    def me(claims=Depends(current)):\n        return {\"username\": claims[\"sub\"]}\n    @app.post(\"/logout\", status_code=204)\n    def logout(claims=Depends(current)):\n        with lock:\n            sessions.pop(claims[\"jti\"], None)\n        return Response(status_code=204)\n    return app\n\nif __name__ == \"__main__\":\n    password, secret = token_urlsafe(24), token_urlsafe(48)\n    users = {\"ana\": {\"password_hash\": PasswordHash.recommended().hash(password)}}\n    with TestClient(create_app(secret, users)) as client:\n        r = client.post(\"/login\", json={\"username\": \"ana\", \"password\": password})\n        h = {\"Authorization\": \"Bearer \" + r.json()[\"access_token\"]}\n        print(r.status_code, client.get(\"/me\", headers=h).json())\n        print(client.post(\"/logout\", headers=h).status_code)\n        print(client.get(\"/me\", headers=h).status_code)",
+        "output": "200 {'username': 'ana'}\n204\n401",
+        "explanation": "Jalankan python jwt_api.py. Secret dan password demo dibuat acak, tidak disimpan dalam kode, dan tidak dicetak. Registry akun/sesi merupakan fixture satu proses.",
+        "language": "python",
+        "filename": "jwt_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Uji password salah, pengguna tidak ada, akun disabled, signature salah, token kedaluwarsa, audience salah, dan claim wajib hilang.",
+      "Login dua kali, logout satu token, lalu pastikan token sesi lain tetap dapat dipakai.",
+      "Login enam kali; amati sesi tertua dicabut sesuai batas lima sesi contoh.",
+      "Rancang penyimpanan sesi bersama untuk multiworker dan jelaskan apa yang harus tetap atomik."
+    ],
+    "warning": "HS256 menggunakan secret bersama: siapa pun yang dapat memverifikasi dengan secret itu juga dapat menandatangani token. Jangan membagikannya ke client atau repository. Contoh ini bukan sistem akun atau penyedia OAuth2/OIDC siap produksi.",
+    "check": "Apakah token bertanda tangan valid harus diterima setelah logout?",
+    "answer": "Tidak pada kontrak contoh. Allowlist sesi sudah mencabut jti meskipun signature dan expiry token masih valid.",
+    "source": "https://pyjwt.readthedocs.io/en/latest/api.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 60
+  },
+  {
+    "slug": "api-idempotensi",
+    "title": "Idempotensi server: key, fingerprint, dan transaksi",
+    "summary": "Tangani request pembuatan yang diulang tanpa membuat tiket ganda.",
+    "analogy": "Nomor tanda terima yang sama mengacu pada pekerjaan yang sama; formulir berbeda tidak boleh memakai nomor lama untuk menyamar sebagai pengulangan.",
+    "explain": [
+      "Prasyarat: transaksi, CRUD, autentikasi, dan retry client. Ketika balasan POST hilang, client tidak tahu apakah server sudah commit. Idempotency-Key memberi identitas operasi agar client dapat mengulang pekerjaan yang sama sesuai kontrak server. Ini melengkapi pembatasan retry, bukan alasan mengulang tanpa batas.",
+      "Client membuat key acak untuk satu operasi logis dan mempertahankannya pada retry. Server menggabungkan principal terautentikasi dan key sebagai scope; key pengguna lain tidak boleh mengembalikan respons milik kita. Key bukan bukti autentikasi dan sebaiknya tidak memuat data pribadi.",
+      "Contoh menormalkan judul lewat model input lalu menghitung fingerprint JSON terurut dari data yang sudah valid. Key yang sama dan payload setara menurut normalisasi itu mengembalikan status serta body sukses yang disimpan. Key yang sama dengan data berbeda mendapat 409. Missing/invalid key mendapat 422. X-Replayed hanya penanda tambahan; body asli tetap sama.",
+      "Tiket dan receipt ditulis dalam satu transaksi SQLite. BEGIN IMMEDIATE mengambil giliran penulis sebelum memeriksa receipt; primary key gabungan melengkapi keunikan. Jika receipt gagal ditulis, tiket ikut rollback. Koneksi file dibuka per operasi dan ditutup setelahnya. Database sibuk sementara menghasilkan 503 dengan Retry-After; retry memakai key semula.",
+      "Receipt disimpan pada file sehingga pengulangan setelah proses dibuka kembali tetap dikenali. Contoh tidak menghapus receipt otomatis. Rancang TTL, kuota penyimpanan, audit, dan pemulihan sesuai durasi retry bisnis; sesudah receipt dihapus, key lama dapat menciptakan operasi baru jika tidak ada pengaman lain.",
+      "Ini strategi latihan khusus SQLite, bukan kode transaksi PostgreSQL. Pada engine lain, rancang atomic claim/upsert dan penanganan konflik sesuai engine lalu uji beberapa koneksi. Untuk efek eksternal seperti mengirim pesan, transaksi database saja tidak membuat seluruh jaringan tepat sekali; pertimbangkan outbox dan deduplikasi di penerima."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "Scope key",
+          "Identitas operasi per principal",
+          "PRIMARY KEY(pemilik,key)"
+        ],
+        [
+          "Fingerprint",
+          "Ikat key pada input",
+          "Payload berbeda → 409"
+        ],
+        [
+          "Receipt",
+          "Respons sukses asli",
+          "Persisten di SQLite"
+        ],
+        [
+          "Transaksi",
+          "Tiket dan receipt bersama",
+          "Gagal salah satu → rollback"
+        ],
+        [
+          "Retry",
+          "Usaha terbatas",
+          "Key tidak diganti"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · idempotent_api.py",
+        "code": "import json\nimport sqlite3\nfrom hashlib import sha256\nfrom secrets import token_urlsafe\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom fastapi import FastAPI, Depends, Header, HTTPException\nfrom fastapi.security import HTTPBearer\nfrom fastapi.responses import JSONResponse\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, Field\n\nclass Baru(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\", str_strip_whitespace=True)\n    judul: str = Field(min_length=1, max_length=120)\n\ndef create_app(path, registry):\n    def connect():\n        con = sqlite3.connect(path, timeout=1)\n        con.execute(\"PRAGMA foreign_keys=ON\")\n        return con\n    con = connect()\n    try:\n        with con:\n            con.execute(\"CREATE TABLE IF NOT EXISTS tiket(id INTEGER PRIMARY KEY, pemilik TEXT NOT NULL, judul TEXT NOT NULL)\")\n            con.execute(\"CREATE TABLE IF NOT EXISTS receipt(pemilik TEXT NOT NULL, key TEXT NOT NULL, fingerprint TEXT NOT NULL, body TEXT NOT NULL, tiket_id INTEGER NOT NULL REFERENCES tiket(id), PRIMARY KEY(pemilik,key))\")\n    finally:\n        con.close()\n    app, bearer = FastAPI(), HTTPBearer(auto_error=False)\n    identities = dict(registry)\n    def current(credentials=Depends(bearer)):\n        user = None if credentials is None else identities.get(sha256(credentials.credentials.encode()).hexdigest())\n        if user is None:\n            raise HTTPException(401, \"Token tidak diterima\", headers={\"WWW-Authenticate\": \"Bearer\"})\n        return user\n    @app.post(\"/tiket\", status_code=201)\n    def create(data: Baru, key: str = Header(alias=\"Idempotency-Key\", min_length=1, max_length=128, pattern=r\"^[A-Za-z0-9_-]+$\"), user=Depends(current)):\n        canonical = json.dumps(data.model_dump(), sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)\n        fingerprint = sha256(canonical.encode()).hexdigest()\n        con = connect()\n        try:\n            with con:\n                con.execute(\"BEGIN IMMEDIATE\")\n                old = con.execute(\"SELECT fingerprint, body FROM receipt WHERE pemilik=? AND key=?\", (user, key)).fetchone()\n                if old:\n                    if old[0] != fingerprint:\n                        raise HTTPException(409, \"Key telah dipakai untuk data berbeda\")\n                    return JSONResponse(status_code=201, content=json.loads(old[1]), headers={\"X-Replayed\": \"true\"})\n                id = con.execute(\"INSERT INTO tiket(pemilik,judul) VALUES (?,?)\", (user, data.judul)).lastrowid\n                body = {\"id\": id, \"judul\": data.judul}\n                con.execute(\"INSERT INTO receipt VALUES (?,?,?,?,?)\", (user, key, fingerprint, json.dumps(body), id))\n            return JSONResponse(status_code=201, content=body, headers={\"X-Replayed\": \"false\"})\n        except sqlite3.OperationalError as exc:\n            if getattr(exc, \"sqlite_errorcode\", None) == sqlite3.SQLITE_BUSY:\n                raise HTTPException(503, \"Database sibuk; ulangi dengan key yang sama\", headers={\"Retry-After\": \"1\"})\n            raise\n        finally:\n            con.close()\n    return app\n\nif __name__ == \"__main__\":\n    token = token_urlsafe(32)\n    registry = {sha256(token.encode()).hexdigest(): \"ana\"}\n    with TemporaryDirectory() as folder:\n        path = str(Path(folder) / \"idempotensi.db\")\n        with TestClient(create_app(path, registry)) as client:\n            h = {\"Authorization\": f\"Bearer {token}\", \"Idempotency-Key\": \"request-001\"}\n            first = client.post(\"/tiket\", json={\"judul\": \"Link A\"}, headers=h)\n            again = client.post(\"/tiket\", json={\"judul\": \"Link A\"}, headers=h)\n            print(first.status_code, again.status_code, first.json() == again.json())\n            print(again.headers[\"X-Replayed\"])\n            print(client.post(\"/tiket\", json={\"judul\": \"Link B\"}, headers=h).status_code)\n        with sqlite3.connect(path) as con:\n            print(\"Jumlah tiket:\", con.execute(\"SELECT count(*) FROM tiket\").fetchone()[0])",
+        "output": "201 201 True\ntrue\n409\nJumlah tiket: 1",
+        "explanation": "Demo memakai file sementara. Dalam aplikasi latihan yang dijalankan ulang, berikan path file tetap dan simpan pada lokasi yang dapat ditulis oleh pengguna proses. Tidak ada endpoint daftar publik pada contoh ini.",
+        "language": "python",
+        "filename": "idempotent_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Kirim dua request bersamaan dengan principal/key/payload sama; pastikan hanya satu tiket terbentuk.",
+      "Buka aplikasi baru dengan file sama dan ulangi request; pastikan respons asli dikembalikan.",
+      "Gunakan key sama dengan payload berbeda serta principal lain; periksa perbedaan kontraknya.",
+      "Buat trigger penolak receipt pada database uji dan pastikan tiket tidak tertinggal."
+    ],
+    "warning": "Key baru pada setiap retry mengalahkan tujuan idempotensi. BEGIN IMMEDIATE tidak mengubah SQLite menjadi database multiwriter; pertahankan transaksi singkat dan uji kontensi.",
+    "check": "Mengapa receipt tidak boleh disimpan setelah tiket di-commit terpisah?",
+    "answer": "Jika proses berhenti di antara keduanya, tiket sudah ada tetapi receipt belum ada sehingga retry dapat membuat duplikat.",
+    "source": "https://docs.stripe.com/api/idempotent_requests",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 55
+  },
+  {
+    "slug": "api-rate-limit",
+    "title": "Rate limiting, batas input, dan respons 429",
+    "summary": "Batasi permintaan per identitas tanpa mempercayai header client sebagai identitas.",
+    "analogy": "Loket membatasi giliran dalam suatu rentang waktu; kartu pengenal diverifikasi sebelum kuota pengguna ditentukan.",
+    "explain": [
+      "Prasyarat: autentikasi dan error HTTP. Rate limiting membatasi frekuensi operasi dalam rentang waktu. Contoh menggunakan sliding window sederhana: maksimal tiga permintaan terautentikasi pada endpoint catatan dalam sepuluh detik per principal. Ini kebijakan latihan, bukan angka yang cocok untuk seluruh aplikasi.",
+      "Principal berasal dari registry token server, bukan X-User atau X-Forwarded-For bebas. Semua token yang dipetakan ke principal sama berbagi kuota. Bucket hanya dibuat untuk identitas yang sudah terdaftar sehingga input acak tidak menambah dictionary tanpa batas. Permintaan tanpa token valid mendapat 401; perlindungan sebelum autentikasi tetap dibutuhkan di gateway.",
+      "Lock melindungi pemeriksaan dan pencatatan dalam satu proses. Clock monotonic dipakai agar perhitungan interval tidak bergantung penyesuaian jam kalender. Ketika kuota habis, server menjawab 429 serta Retry-After dalam detik. Client perlu menunda dengan batas retry; jangan membuat loop tanpa jeda.",
+      "Model membatasi panjang catatan dan menolak field tambahan. Validasi panjang field tidak sama dengan membatasi ukuran body HTTP sebelum parser bekerja. Terapkan batas byte, timeout baca, dan batas koneksi pada reverse proxy/gateway; bab webhook memperlihatkan pembacaan stream dengan batas byte. Request invalid yang telah melewati dependency dapat ikut menghabiskan kuota menurut alur ini.",
+      "State memori ini tidak dibagi antarworker, hilang saat restart, dan tidak memberi kuota global pada beberapa server. Untuk produksi, pilih gateway atau penyimpanan counter bersama dengan operasi atomik, expiry, serta kebijakan saat backend limiter bermasalah. Pisahkan kuota login, endpoint mahal, dan operasi biasa sesuai kebutuhan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "401",
+          "Identitas tidak diterima",
+          "Tidak diberi bucket baru"
+        ],
+        [
+          "429",
+          "Kuota sementara habis",
+          "Retry-After"
+        ],
+        [
+          "Monotonic clock",
+          "Ukur interval",
+          "Tidak memakai waktu kalender"
+        ],
+        [
+          "Lock lokal",
+          "Cegah race satu proses",
+          "Bukan koordinasi multiworker"
+        ],
+        [
+          "Batas input",
+          "Bentuk dan ukuran",
+          "Karakter berbeda dari byte body"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · limit_api.py",
+        "code": "import math\nimport time\nfrom collections import deque\nfrom hashlib import sha256\nfrom secrets import token_urlsafe\nfrom threading import Lock\nfrom fastapi import FastAPI, Depends, HTTPException\nfrom fastapi.security import HTTPBearer\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, Field\n\nclass Catatan(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\", str_strip_whitespace=True)\n    isi: str = Field(min_length=1, max_length=120)\n\ndef create_app(registry, clock=time.monotonic):\n    app, lock = FastAPI(), Lock()\n    identities = dict(registry)\n    # Hanya principal yang terdaftar mendapat bucket: tidak membuat key dari input bebas.\n    buckets = {user: deque() for user in set(identities.values())}\n    bearer = HTTPBearer(auto_error=False)\n    def quota(credentials=Depends(bearer)):\n        user = None if credentials is None else identities.get(sha256(credentials.credentials.encode()).hexdigest())\n        if user is None:\n            raise HTTPException(401, \"Token tidak diterima\", headers={\"WWW-Authenticate\": \"Bearer\"})\n        with lock:\n            now = clock()\n            queue = buckets[user]\n            while queue and queue[0] <= now - 10:\n                queue.popleft()\n            if len(queue) >= 3:\n                retry = max(1, math.ceil(10 - (now - queue[0])))\n                raise HTTPException(429, \"Kuota sementara habis\", headers={\"Retry-After\": str(retry)})\n            queue.append(now)\n        return user\n    @app.post(\"/catatan\")\n    def catatan(data: Catatan, user=Depends(quota)):\n        return {\"diterima\": True}\n    return app\n\nif __name__ == \"__main__\":\n    now = [0.0]\n    token = token_urlsafe(32)\n    app = create_app({sha256(token.encode()).hexdigest(): \"ana\"}, clock=lambda: now[0])\n    with TestClient(app) as client:\n        h = {\"Authorization\": f\"Bearer {token}\"}\n        print([client.post(\"/catatan\", json={\"isi\": \"Link A\"}, headers=h).status_code for _ in range(4)])\n        now[0] = 10.0\n        print(client.post(\"/catatan\", json={\"isi\": \"Link B\"}, headers=h).status_code)",
+        "output": "[200, 200, 200, 429]\n200",
+        "explanation": "Clock palsu membuat tes selesai tanpa tidur sepuluh detik. Registry memuat digest token acak, bukan password hash; pengelolaan token lengkap dipelajari pada bab autentikasi.",
+        "language": "python",
+        "filename": "limit_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Uji request keempat mendapat 429 dan Retry-After positif.",
+      "Pada tepat sepuluh detik, pastikan slot lama sudah dilepas.",
+      "Petakan dua token ke pengguna sama dan pastikan kuotanya dibagi; pengguna lain tetap mempunyai kuota sendiri.",
+      "Rancang perilaku saat counter bersama tidak tersedia dan jelaskan trade-off layanan serta perlindungannya."
+    ],
+    "warning": "Limiter ini hanya demonstrasi satu proses. Jangan mengklaimnya mencegah DDoS atau memberikan kuota global. Batasi juga biaya parsing, ukuran body, durasi request, dan koneksi di lapisan yang sesuai.",
+    "check": "Apakah batas 120 karakter pada model otomatis membatasi seluruh body HTTP menjadi 120 byte?",
+    "answer": "Tidak. Body mempunyai struktur dan encoding; batas byte transport perlu ditegakkan terpisah.",
+    "source": "https://www.rfc-editor.org/rfc/rfc6585.html#section-4",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "api-webhook-signature",
+    "title": "Webhook: signature, timestamp, dan pengiriman ulang",
+    "summary": "Verifikasi body mentah sebelum mempercayai event dari aplikasi lain.",
+    "analogy": "Surat mempunyai segel yang terikat pada isi dan waktu pengiriman; menyalin surat tetap perlu dikenali agar pekerjaan tidak dilakukan dua kali.",
+    "explain": [
+      "Prasyarat: HTTP, autentikasi, retry, dan idempotensi. Webhook adalah request yang dikirim suatu sistem ketika event terjadi. Penerima tidak boleh percaya event hanya karena JSON-nya terlihat benar atau karena URL sulit ditebak. Tentukan protokol signature sesuai dokumentasi penyedia yang benar-benar diintegrasikan.",
+      "Contoh mendefinisikan protokol latihan sendiri: header X-Timestamp berisi detik Unix dan X-Signature berisi sha256= diikuti HMAC-SHA256 atas timestamp, titik, dan body mentah. Secret acak dibagi oleh pengirim dan penerima. Ini contoh pembelajaran, bukan format signature universal Stripe, GitHub, atau penyedia lain.",
+      "Verifikasi memakai byte body asli, sebelum parsing atau serialisasi ulang JSON. Spasi dan urutan key dapat mengubah byte sehingga signature berbeda. hmac.compare_digest membandingkan nilai signature. Secret dan signature tidak dicetak ke log; gunakan HTTPS dan mekanisme rotasi key pada integrasi nyata.",
+      "Timestamp ikut ditandatangani dan diterima hanya dalam jendela plus/minus 300 detik. Jam sistem harus tersinkron. Jendela ini menolak request lama, tetapi tidak mencegah pengulangan yang masih berada di dalam jendela. Deduplikasi event_id persisten tetap dibutuhkan sebelum menjalankan efek bisnis; studi kasus alarm berikutnya memperagakannya.",
+      "Body dibaca sebagai stream dengan batas 8192 byte untuk endpoint contoh, termasuk bila Content-Length tidak dikirim. Setelah signature lolos, server memeriksa application/json dan schema event. Format salah mendapat 422, tipe konten salah 415, signature salah 401, dan body terlalu besar 413. Batasi koneksi serta waktu pembacaan juga melalui gateway.",
+      "Pengiriman ulang yang sah biasanya mempertahankan event_id serta payload dan memakai signature/timestamp sesuai protokol penyedia. Kirim 2xx hanya setelah penerimaan atau pekerjaan sudah mencapai jaminan yang dijanjikan. Jika pekerjaan dipindah ke worker, simpan pada antrean/outbox yang tahan restart dahulu; background task memori tidak otomatis memberi durabilitas."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "HMAC",
+          "Keaslian dan integritas",
+          "Terikat pada byte body"
+        ],
+        [
+          "Timestamp",
+          "Batas umur request",
+          "Ikut ditandatangani"
+        ],
+        [
+          "event_id",
+          "Identitas event",
+          "Deduplikasi persisten"
+        ],
+        [
+          "Stream limit",
+          "Batas byte body",
+          "8192 byte pada contoh"
+        ],
+        [
+          "ACK 2xx",
+          "Janji penerimaan",
+          "Sesuaikan titik commit/antrean"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · webhook_api.py",
+        "code": "import hmac\nimport hashlib\nimport time\nfrom secrets import token_bytes\nfrom fastapi import FastAPI, Request, HTTPException\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, Field, ValidationError\n\n# Protokol latihan: HMAC atas timestamp ASCII + titik + body mentah.\ndef sign(secret, timestamp, raw):\n    return \"sha256=\" + hmac.new(secret, timestamp.encode(\"ascii\") + b\".\" + raw, hashlib.sha256).hexdigest()\n\ndef verify(secret, timestamp, signature, raw, now):\n    if not timestamp or len(timestamp) > 12 or not timestamp.isascii() or not timestamp.isdecimal():\n        raise ValueError(\"Signature tidak diterima\")\n    if abs(now - int(timestamp)) > 300:\n        raise ValueError(\"Signature tidak diterima\")\n    if not signature or len(signature) != 71:\n        raise ValueError(\"Signature tidak diterima\")\n    expected = sign(secret, timestamp, raw)\n    if not hmac.compare_digest(expected.encode(\"ascii\"), signature.encode(\"ascii\", errors=\"replace\")):\n        raise ValueError(\"Signature tidak diterima\")\n\nclass Event(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    event_id: str = Field(min_length=1, max_length=64)\n    pesan: str = Field(min_length=1, max_length=120)\n\ndef create_app(secret, clock=time.time):\n    if len(secret) < 32:\n        raise ValueError(\"Secret minimal 32 byte acak\")\n    app = FastAPI()\n    @app.post(\"/webhook\")\n    async def webhook(request: Request):\n        raw = bytearray()\n        async for chunk in request.stream():\n            if len(raw) + len(chunk) > 8192:\n                raise HTTPException(413, \"Body terlalu besar\")\n            raw.extend(chunk)\n        try:\n            verify(secret, request.headers.get(\"X-Timestamp\"), request.headers.get(\"X-Signature\"), bytes(raw), clock())\n        except ValueError:\n            raise HTTPException(401, \"Signature tidak diterima\")\n        if request.headers.get(\"Content-Type\", \"\").split(\";\")[0].strip().lower() != \"application/json\":\n            raise HTTPException(415, \"Gunakan application/json\")\n        try:\n            event = Event.model_validate_json(raw)\n        except ValidationError:\n            raise HTTPException(422, \"Format event tidak sesuai\")\n        return {\"diterima\": event.event_id}\n    return app\n\nif __name__ == \"__main__\":\n    secret, now = token_bytes(32), 1700000000\n    raw = b'{\"event_id\":\"evt-1\",\"pesan\":\"Link putus\"}'\n    timestamp = str(now)\n    headers = {\"Content-Type\": \"application/json\", \"X-Timestamp\": timestamp,\n               \"X-Signature\": sign(secret, timestamp, raw)}\n    with TestClient(create_app(secret, clock=lambda: now)) as client:\n        print(client.post(\"/webhook\", content=raw, headers=headers).status_code)\n        print(client.post(\"/webhook\", content=raw + b\" \", headers=headers).status_code)",
+        "output": "200\n401",
+        "explanation": "Contoh memverifikasi dan memvalidasi event, tetapi belum mempunyai efek database atau deduplikasi. Body dengan tambahan satu spasi ditolak karena signature masih milik body lama.",
+        "language": "python",
+        "filename": "webhook_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Uji signature hilang, secret salah, timestamp kedaluwarsa, timestamp masa depan di luar jendela, dan body berubah.",
+      "Kirim JSON salah bentuk dengan signature yang benar; bedakan error schema dari signature.",
+      "Kirim event sama dua kali dalam jendela waktu; jelaskan mengapa verifikasi saja belum mencegah efek ganda.",
+      "Uji batas byte melalui body stream tanpa Content-Length; jangan hanya mengandalkan header panjang dari client."
+    ],
+    "warning": "Pihak yang mempunyai secret HMAC dapat membuat signature yang sah. Jangan membagikan satu secret ke seluruh partner tanpa kebutuhan; rancang key per pengirim dan rotasinya. Webhook yang mengirim ke URL pilihan pengguna juga memerlukan perlindungan SSRF.",
+    "check": "Mengapa memverifikasi JSON yang sudah di-parse lalu diubah kembali menjadi string dapat gagal?",
+    "answer": "Serialisasi ulang dapat menghasilkan byte berbeda dari body yang ditandatangani. Verifikasi protokol contoh menggunakan body mentah.",
+    "source": "https://cheatsheetseries.owasp.org/cheatsheets/Webhook_Security_Cheat_Sheet.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 55
+  },
+  {
+    "slug": "api-deployment",
+    "title": "Deployment API: proses, reverse proxy, HTTPS, dan health check",
+    "summary": "Pindahkan aplikasi latihan dari terminal ke layanan yang dapat dikelola.",
+    "analogy": "Membuka loket memerlukan jadwal penjaga, jalur masuk, batas antrean, dan prosedur pemulihan; menjalankan program sekali belum mencakup semuanya.",
+    "explain": [
+      "Prasyarat: server lokal, konfigurasi environment, logging, dan dasar Linux. Deployment adalah pengoperasian aplikasi: pemasangan dependensi, proses yang terus dikelola, koneksi masuk, HTTPS, konfigurasi rahasia, pemantauan, migrasi, serta pemulihan. Bab ini memberi template Linux dengan systemd dan Nginx; situs pembelajaran tidak otomatis menjalankan API milik pembaca.",
+      "Mulai dari deploy_api.py dan jalankan demo TestClient. Untuk proses lokal, gunakan Uvicorn pada 127.0.0.1:8000. Jangan memakai --reload untuk layanan. systemd dapat menjalankan proses sebagai user non-root, merestart ketika gagal, dan mengirim sinyal penghentian agar pekerjaan dapat diselesaikan sesuai batas waktu.",
+      "Template mengasumsikan Linux dengan systemd, user/group api-lab sudah dibuat, kode serta virtual environment tersedia di /opt/api-lab, dan izin file sesuai. Buat virtual environment, pasang dependensi yang telah dikunci serta diuji, lalu tempatkan deploy_api.py. Simpan unit sebagai /etc/systemd/system/api-lab.service. Perintah administrasi dijalankan sendiri pada server latihan yang dimiliki, bukan dari browser materi ini.",
+      "Nginx menerima koneksi HTTPS lalu meneruskannya ke Uvicorn lokal. Template menggunakan domain contoh api.example.com dan path sertifikat contoh yang harus diganti dengan domain serta sertifikat valid milik pembaca. Terbitkan/perbarui sertifikat melalui prosedur CA yang sesuai, pastikan DNS mengarah benar, dan buka hanya port yang diperlukan. Jangan menonaktifkan verifikasi TLS agar error sertifikat hilang.",
+      "Forwarded headers hanya dipercaya dari proxy lokal yang dikonfigurasi. Jangan mengekspos port upstream langsung ke internet atau mempercayai seluruh X-Forwarded-For. Nginx menetapkan ulang header ke nilai koneksi yang diterimanya; jika ada CDN/proxy tambahan, rantai kepercayaan perlu dirancang ulang sesuai infrastrukturnya.",
+      "/health/live hanya membuktikan proses dapat menjawab, bukan kesiapan database atau kualitas backup. Readiness perlu memeriksa dependency yang diperlukan dengan timeout dan respons aman. Untuk rilis, jalankan tes, migrasi skema terencana sekali oleh role migrator, mulai versi baru, lakukan smoke test, lalu pantau error. Jangan menjalankan migrasi destruktif serentak dari setiap worker.",
+      "Gunakan environment rahasia di luar repository dengan izin file/pengelolaan akses yang tepat. Untuk proyek alarm, ganti ExecStart menjadi factory bts_alarm_api:create_local_app --factory dan sediakan ALARM_SECRET, ALARM_DEVICES, serta ALARM_DB_PATH melalui environment layanan. Direktori database harus bisa ditulis user layanan dan dicadangkan. Rencana rollback aplikasi harus mempertimbangkan kompatibilitas skema; rollback kode tidak otomatis mengembalikan data."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "Uvicorn",
+          "Proses aplikasi",
+          "Loopback 127.0.0.1"
+        ],
+        [
+          "systemd",
+          "Lifecycle proses",
+          "User non-root, restart, log"
+        ],
+        [
+          "Nginx + TLS",
+          "Pintu masuk HTTPS",
+          "Sertifikat valid dan batas body"
+        ],
+        [
+          "Liveness / readiness",
+          "Proses / dependency",
+          "Jangan membocorkan rahasia"
+        ],
+        [
+          "Rilis",
+          "Perubahan terencana",
+          "Tes, migrasi, smoke test, pantau"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · deploy_api.py",
+        "code": "from fastapi import FastAPI\nfrom fastapi.testclient import TestClient\n\napp = FastAPI()\n@app.get(\"/health/live\")\ndef live():\n    return {\"status\": \"ok\"}\n\nif __name__ == \"__main__\":\n    with TestClient(app) as client:\n        response = client.get(\"/health/live\")\n        print(response.status_code, response.json())",
+        "output": "200 {'status': 'ok'}",
+        "explanation": "Contoh ini hanya mempunyai endpoint liveness. Jalankan python deploy_api.py; untuk server interaktif gunakan Uvicorn pada loopback.",
+        "language": "python",
+        "filename": "deploy_api.py"
+      },
+      {
+        "label": "Terminal · verifikasi lokal",
+        "code": "python -m uvicorn deploy_api:app --host 127.0.0.1 --port 8000\n# Pada terminal kedua:\ncurl --fail http://127.0.0.1:8000/health/live",
+        "output": "",
+        "explanation": "Jalankan dari folder berkas. Hentikan server pengembangan manual dengan Ctrl+C; tahap systemd berikutnya menggantikan pengelolaan manual.",
+        "language": "text"
+      },
+      {
+        "label": "Linux · api-lab.service",
+        "code": "[Unit]\nDescription=API latihan\nAfter=network.target\n\n[Service]\nUser=api-lab\nGroup=api-lab\nWorkingDirectory=/opt/api-lab\nExecStart=/opt/api-lab/.venv/bin/python -m uvicorn deploy_api:app --host 127.0.0.1 --port 8000 --proxy-headers --forwarded-allow-ips=127.0.0.1\nRestart=on-failure\nRestartSec=3\nTimeoutStopSec=20\nNoNewPrivileges=true\nPrivateTmp=true\n\n[Install]\nWantedBy=multi-user.target",
+        "output": "",
+        "explanation": "Template untuk server latihan yang telah disiapkan. Unit ini tidak memuat secret. Sesuaikan path, user, dan metode environment sebelum menggunakannya pada proyek lain.",
+        "language": "text"
+      },
+      {
+        "label": "Nginx · template situs HTTPS",
+        "code": "server {\n    listen 80;\n    server_name api.example.com;\n    return 308 https://api.example.com$request_uri;\n}\nserver {\n    listen 443 ssl;\n    server_name api.example.com;\n    ssl_certificate /etc/letsencrypt/live/api.example.com/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/api.example.com/privkey.pem;\n    client_max_body_size 64k;\n    client_body_timeout 10s;\n    location / {\n        proxy_pass http://127.0.0.1:8000;\n        proxy_set_header Host $host;\n        proxy_set_header X-Forwarded-Proto $scheme;\n        proxy_set_header X-Forwarded-For $remote_addr;\n        proxy_connect_timeout 3s;\n        proxy_read_timeout 30s;\n    }\n}",
+        "output": "",
+        "explanation": "Ganti domain/path sertifikat dengan milik sendiri. Ini template dasar, bukan konfigurasi seluruh kebutuhan produksi. Batas body endpoint alarm 8192 byte tetap lebih ketat daripada batas umum proxy.",
+        "language": "text"
+      },
+      {
+        "label": "Linux · pemeriksaan dan pengoperasian",
+        "code": "sudo systemd-analyze verify /etc/systemd/system/api-lab.service\nsudo nginx -t\nsudo systemctl daemon-reload\nsudo systemctl enable --now api-lab\nsudo systemctl reload nginx\nsystemctl status api-lab --no-pager\njournalctl -u api-lab -n 50 --no-pager\ncurl --fail https://api.example.com/health/live",
+        "output": "",
+        "explanation": "Jalankan setelah file dan prasyarat benar. Baca hasil pemeriksaan sebelum melanjutkan ke perubahan berikutnya. systemctl enable mengatur startup; pantau status dan log, jangan menganggap keluar tanpa error sebagai bukti endpoint dapat dijangkau.",
+        "language": "text"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Pada VM latihan, hentikan proses aplikasi dan amati kebijakan restart systemd.",
+      "Periksa endpoint lewat HTTPS dari client dan pastikan port upstream tidak terbuka ke jaringan publik.",
+      "Uji payload melebihi batas dan pahami apakah ditolak proxy atau endpoint.",
+      "Simulasikan database tidak tersedia pada readiness terpisah dengan timeout; liveness tidak harus mempunyai makna yang sama.",
+      "Tulis prosedur rilis dan rollback yang tetap sesuai migrasi skema, backup, dan uji restore."
+    ],
+    "warning": "Demo Python diuji melalui TestClient. Template systemd, Nginx, sertifikat, dan firewall harus diverifikasi di server target; contoh ini tidak berarti infrastruktur tersebut sudah dipasang atau diuji pada server pembaca.",
+    "check": "Apakah respons /health/live 200 membuktikan seluruh database dan backup sehat?",
+    "answer": "Tidak. Health endpoint hanya membuktikan cakupan pemeriksaan yang benar-benar diimplementasikan.",
+    "source": "https://fastapi.tiangolo.com/deployment/concepts/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 70
+  },
+  {
+    "slug": "api-kasus-alarm-bts",
+    "title": "Studi kasus: alarm BTS menjadi tiket tanpa duplikasi",
+    "summary": "Gabungkan signature, otorisasi perangkat, deduplikasi persisten, dan transaksi audit.",
+    "analogy": "Pusat NOC memeriksa pengirim serta perangkat yang menjadi kewenangannya, mencatat nomor alarm, lalu membuka satu tiket dengan riwayatnya.",
+    "explain": [
+      "Prasyarat: webhook, idempotensi, transaksi SQLite, async dasar, dan pengujian API. Alur proyek: monitor mengirim POST /webhooks/alarm; API membatasi body, memverifikasi signature dan waktu, memvalidasi schema, memeriksa izin perangkat, lalu menyimpan tiket, receipt, serta audit dalam satu transaksi.",
+      "X-Sender memilih konfigurasi secret dan daftar perangkat pada server. Header itu sendiri bukan bukti identitas; HMAC harus cocok dengan secret pengirim tersebut. Pengirim yang sah untuk BTS-A tidak otomatis berhak membuat alarm BTS-B. Jenis alarm dibatasi RADIO_DOWN atau DAYA_RENDAH dan waktu kejadian wajib mempunyai zona waktu.",
+      "Waktu kejadian alarm dan timestamp pengiriman mempunyai arti berbeda. Alarm lama mungkin dikirim ulang setelah gangguan koneksi, sedangkan signature pengiriman harus dibuat ulang sesuai jendela waktu. Jendela signature tidak dipakai sebagai alasan mengubah waktu kejadian asli. Contoh hanya memvalidasi bentuk waktu kejadian; kewajaran waktu sensor perlu kebijakan tersendiri.",
+      "Receipt memakai pasangan pengirim dan event_id sebagai primary key. Fingerprint proyek ini mengikat byte body mentah, berbeda dari normalisasi model pada bab idempotensi sebelumnya. Retry sah mempertahankan byte payload/event_id; timestamp serta signature dapat diperbarui. Event_id sama dengan byte body berbeda mendapat 409, termasuk jika perbedaannya hanya serialisasi JSON.",
+      "Transaksi BEGIN IMMEDIATE membuat pemeriksaan receipt dan penulisan sebagai satu unit penulis SQLite. Jika audit gagal, tiket dan receipt ikut rollback. Respons 201 baru dibuat setelah commit; retry sukses mengembalikan body asli dan X-Replayed: true. Ini mencegah duplikasi pada penyimpanan latihan, bukan klaim semua efek eksternal terjadi tepat sekali.",
+      "Handler async membaca stream dengan batas 8192 byte. Pekerjaan sqlite3 yang sinkron dijalankan melalui run_in_threadpool agar tidak langsung memblokir event loop. Setiap pekerjaan membuka koneksinya sendiri. Database sibuk menghasilkan 503 dan Retry-After; pengirim mengulang event yang sama dengan usaha serta budget waktu terbatas.",
+      "Demo menggunakan file sementara dan tidak mengirim notifikasi eksternal. Tidak ada endpoint publik untuk membaca seluruh tiket. Pengembangan berikutnya dapat menghubungkannya dengan API tiket berotorisasi dan outbox notifikasi. Jangan mengirim WhatsApp/email langsung di tengah transaksi database karena kegagalan jaringan tidak ikut rollback.",
+      "Untuk menjalankan server lokal, simpan bts_alarm_api.py dan atur ALARM_DB_PATH ke file SQLite latihan, ALARM_DEVICES ke daftar perangkat dipisahkan koma, serta ALARM_SECRET ke string acak minimal 32 byte yang hanya dibagi dengan pengirim monitor-1. Jalankan factory pada loopback. Bootstrap di sini memakai CREATE TABLE IF NOT EXISTS untuk database lab baru, bukan migrasi skema yang sudah berjalan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak latihan"
+      ],
+      "rows": [
+        [
+          "Signature",
+          "Keaslian body dan pengirim",
+          "Secret per pengirim"
+        ],
+        [
+          "Izin perangkat",
+          "Otorisasi objek",
+          "Daftar server, bukan body bebas"
+        ],
+        [
+          "Receipt",
+          "Pengenalan retry",
+          "PRIMARY KEY(pengirim,event_id)"
+        ],
+        [
+          "Transaksi",
+          "Tiket + receipt + audit",
+          "Commit sebelum 201"
+        ],
+        [
+          "Retry",
+          "Pengiriman ulang",
+          "Event/body tetap, signature boleh baru"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment Python 3.11+ yang terpisah. Dependensi tambahan disebutkan bila diperlukan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · bts_alarm_api.py",
+        "code": "import os\nimport hmac\nimport hashlib\nimport json\nimport sqlite3\nimport time\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom secrets import token_bytes\nfrom typing import Literal\nfrom fastapi import FastAPI, Request, HTTPException\nfrom fastapi.responses import JSONResponse\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, Field, ValidationError, AwareDatetime\nfrom starlette.concurrency import run_in_threadpool\n\ndef sign(secret, timestamp, raw):\n    return \"sha256=\" + hmac.new(secret, timestamp.encode(\"ascii\") + b\".\" + raw, hashlib.sha256).hexdigest()\n\ndef verify(secret, timestamp, signature, raw, now):\n    if not timestamp or len(timestamp) > 12 or not timestamp.isascii() or not timestamp.isdecimal():\n        raise ValueError(\"Signature ditolak\")\n    if abs(now - int(timestamp)) > 300 or not signature or len(signature) != 71:\n        raise ValueError(\"Signature ditolak\")\n    if not hmac.compare_digest(sign(secret, timestamp, raw).encode(\"ascii\"), signature.encode(\"ascii\", errors=\"replace\")):\n        raise ValueError(\"Signature ditolak\")\n\nclass Alarm(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    event_id: str = Field(min_length=1, max_length=64, pattern=r\"^[A-Za-z0-9_-]+$\")\n    perangkat: str = Field(min_length=1, max_length=40, pattern=r\"^[A-Za-z0-9_-]+$\")\n    jenis: Literal[\"RADIO_DOWN\", \"DAYA_RENDAH\"]\n    waktu: AwareDatetime\n\ndef create_app(path, sources, clock=time.time):\n    sources = {key: {\"secret\": value[\"secret\"], \"perangkat\": frozenset(value[\"perangkat\"])} for key, value in sources.items()}\n    if not sources or any(len(x[\"secret\"]) < 32 or not x[\"perangkat\"] for x in sources.values()):\n        raise ValueError(\"Konfigurasi pengirim tidak lengkap\")\n    def connect():\n        con = sqlite3.connect(path, timeout=1)\n        con.execute(\"PRAGMA foreign_keys=ON\")\n        return con\n    con = connect()\n    try:\n        with con:\n            con.execute(\"CREATE TABLE IF NOT EXISTS tiket(id INTEGER PRIMARY KEY, pengirim TEXT NOT NULL, perangkat TEXT NOT NULL, jenis TEXT NOT NULL, waktu TEXT NOT NULL, status TEXT NOT NULL CHECK(status='BARU'))\")\n            con.execute(\"CREATE TABLE IF NOT EXISTS receipt(pengirim TEXT NOT NULL, event_id TEXT NOT NULL, fingerprint TEXT NOT NULL, body TEXT NOT NULL, tiket_id INTEGER NOT NULL REFERENCES tiket(id), PRIMARY KEY(pengirim,event_id))\")\n            con.execute(\"CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, tiket_id INTEGER NOT NULL REFERENCES tiket(id), aksi TEXT NOT NULL)\")\n    finally:\n        con.close()\n    app = FastAPI()\n    def save(sender, alarm, fingerprint):\n        con = connect()\n        try:\n            with con:\n                con.execute(\"BEGIN IMMEDIATE\")\n                old = con.execute(\"SELECT fingerprint,body FROM receipt WHERE pengirim=? AND event_id=?\", (sender, alarm.event_id)).fetchone()\n                if old:\n                    if old[0] != fingerprint:\n                        raise HTTPException(409, \"Event id dipakai untuk body berbeda\")\n                    return json.loads(old[1]), True\n                id = con.execute(\"INSERT INTO tiket(pengirim,perangkat,jenis,waktu,status) VALUES (?,?,?,?,'BARU')\",\n                                 (sender, alarm.perangkat, alarm.jenis, alarm.waktu.isoformat())).lastrowid\n                body = {\"tiket_id\": id, \"status\": \"BARU\"}\n                con.execute(\"INSERT INTO receipt VALUES (?,?,?,?,?)\", (sender, alarm.event_id, fingerprint, json.dumps(body), id))\n                con.execute(\"INSERT INTO audit(tiket_id,aksi) VALUES (?,?)\", (id, \"ALARM_MASUK\"))\n            return body, False\n        except sqlite3.OperationalError as exc:\n            if getattr(exc, \"sqlite_errorcode\", None) == sqlite3.SQLITE_BUSY:\n                raise HTTPException(503, \"Database sibuk; ulangi event yang sama\", headers={\"Retry-After\": \"1\"})\n            raise\n        finally:\n            con.close()\n    @app.get(\"/health/live\")\n    def live():\n        return {\"status\": \"ok\"}\n    @app.post(\"/webhooks/alarm\", status_code=201)\n    async def webhook(request: Request):\n        raw = bytearray()\n        async for chunk in request.stream():\n            if len(raw) + len(chunk) > 8192:\n                raise HTTPException(413, \"Body terlalu besar\")\n            raw.extend(chunk)\n        source_id = request.headers.get(\"X-Sender\", \"\")\n        source = sources.get(source_id)\n        if source is None:\n            raise HTTPException(401, \"Signature tidak diterima\")\n        try:\n            verify(source[\"secret\"], request.headers.get(\"X-Timestamp\"), request.headers.get(\"X-Signature\"), bytes(raw), clock())\n        except ValueError:\n            raise HTTPException(401, \"Signature tidak diterima\")\n        if request.headers.get(\"Content-Type\", \"\").split(\";\")[0].strip().lower() != \"application/json\":\n            raise HTTPException(415, \"Gunakan application/json\")\n        try:\n            alarm = Alarm.model_validate_json(raw)\n        except ValidationError:\n            raise HTTPException(422, \"Format alarm tidak sesuai\")\n        if alarm.perangkat not in source[\"perangkat\"]:\n            raise HTTPException(403, \"Perangkat bukan kewenangan pengirim\")\n        fingerprint = hashlib.sha256(raw).hexdigest()\n        body, replayed = await run_in_threadpool(save, source_id, alarm, fingerprint)\n        return JSONResponse(status_code=201, content=body, headers={\"X-Replayed\": str(replayed).lower()})\n    return app\n\ndef create_local_app():\n    secret = os.environ[\"ALARM_SECRET\"].encode()\n    devices = {x.strip() for x in os.environ[\"ALARM_DEVICES\"].split(\",\") if x.strip()}\n    return create_app(os.environ[\"ALARM_DB_PATH\"], {\"monitor-1\": {\"secret\": secret, \"perangkat\": devices}})\n\nif __name__ == \"__main__\":\n    secret, now = token_bytes(32), 1700000000\n    raw = json.dumps({\"event_id\": \"evt-001\", \"perangkat\": \"BTS-A\", \"jenis\": \"RADIO_DOWN\", \"waktu\": \"2026-01-01T00:00:00+00:00\"}, separators=(\",\", \":\")).encode()\n    timestamp = str(now)\n    headers = {\"X-Sender\": \"monitor-1\", \"X-Timestamp\": timestamp,\n               \"X-Signature\": sign(secret, timestamp, raw), \"Content-Type\": \"application/json\"}\n    with TemporaryDirectory() as folder:\n        path = str(Path(folder) / \"alarm.db\")\n        sources = {\"monitor-1\": {\"secret\": secret, \"perangkat\": {\"BTS-A\"}}}\n        with TestClient(create_app(path, sources, clock=lambda: now)) as client:\n            first = client.post(\"/webhooks/alarm\", content=raw, headers=headers)\n            again = client.post(\"/webhooks/alarm\", content=raw, headers=headers)\n            print(first.status_code, first.json())\n            print(again.status_code, again.headers[\"X-Replayed\"])\n        with sqlite3.connect(path) as con:\n            print(\"Tiket:\", con.execute(\"SELECT count(*) FROM tiket\").fetchone()[0])\n            print(\"Audit:\", con.execute(\"SELECT count(*) FROM audit\").fetchone()[0])",
+        "output": "201 {'tiket_id': 1, 'status': 'BARU'}\n201 true\nTiket: 1\nAudit: 1",
+        "explanation": "Jalankan python bts_alarm_api.py. Dua request identik menghasilkan satu tiket dan satu audit. Nilai secret dibuat acak dan tidak dicetak.",
+        "language": "python",
+        "filename": "bts_alarm_api.py"
+      },
+      {
+        "label": "Terminal · factory server lokal",
+        "code": "python -m uvicorn bts_alarm_api:create_local_app --factory --host 127.0.0.1 --port 8000",
+        "output": "",
+        "explanation": "Atur ALARM_DB_PATH, ALARM_DEVICES, dan ALARM_SECRET lewat environment lokal terlebih dahulu. Pengirim server lokal memakai X-Sender: monitor-1 dan protokol signature yang sama. Jangan menulis secret ke repository atau contoh curl yang dibagikan.",
+        "language": "text"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat dan batas contoh. Simpan kode dengan nama berkas yang dicantumkan.",
+      "Pasang dependensi pada virtual environment, lalu jalankan berkas Python untuk demo TestClient tanpa membuka port. Bab deployment mempunyai langkah tambahan khusus Linux.",
+      "Cocokkan hasil, coba kondisi gagal, dan kerjakan latihan sebelum menjawab tes pemahaman."
+    ],
+    "practice": [
+      "Uji signature salah, request kedaluwarsa, body terlalu besar, tipe konten salah, field ekstra, jenis tidak dikenal, dan waktu tanpa zona.",
+      "Gunakan signature valid dari pengirim A untuk perangkat di luar kewenangannya; pastikan 403 dan tidak ada tiket.",
+      "Ulangi event setelah aplikasi dibuka kembali serta kirim dua request bersamaan; pastikan hanya satu tiket, receipt, dan audit.",
+      "Kirim event_id sama dengan body berbeda; pastikan 409 tanpa data tambahan.",
+      "Pasang trigger penolak audit di database uji; pastikan seluruh perubahan dibatalkan dan event dapat diulang setelah masalah diperbaiki.",
+      "Rancang TTL receipt, rotasi secret, limiter bersama, readiness, backup/restore, serta migrasi sebelum membuat layanan produksi."
+    ],
+    "warning": "Lab ini memakai SQLite satu penulis dan tidak mempunyai antrean durabel, rotasi secret otomatis, atau limiter lintas proses. Template deployment bukan bukti ketahanan produksi. Jangan menghubungkannya ke BTS nyata sebelum kontrak dan pengoperasiannya diuji sesuai kebutuhan.",
+    "check": "Apakah signature valid cukup untuk menerima alarm bagi semua perangkat?",
+    "answer": "Tidak. Server masih harus memeriksa apakah perangkat berada dalam kewenangan pengirim, lalu menegakkan kontrak event dan deduplikasi.",
+    "source": "https://cheatsheetseries.owasp.org/cheatsheets/Webhook_Security_Cheat_Sheet.html",
+    "diagram": "api-alarm-bts",
+    "diagramAlt": "Alur alarm BTS dari pemeriksaan signature sampai transaksi tiket dan receipt.",
+    "stage": 0,
+    "minutes": 100
   }
 ]

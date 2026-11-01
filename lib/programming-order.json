@@ -295,6 +295,7 @@
       "api-validasi-error",
       "api-pengujian",
       "api-crud-lengkap",
+      "api-response-kontrak",
       "api-dependency-transaksi"
     ]
   },
@@ -302,6 +303,7 @@
     "title": "Backend/API · Identitas dan penanganan kegagalan",
     "slugs": [
       "api-autentikasi-otorisasi",
+      "api-jwt-sesi",
       "api-error-observabilitas",
       "api-client-timeout-retry"
     ]
@@ -314,10 +316,25 @@
     ]
   },
   {
+    "title": "Backend/API · Ketahanan dan integrasi",
+    "slugs": [
+      "api-idempotensi",
+      "api-rate-limit",
+      "api-webhook-signature"
+    ]
+  },
+  {
+    "title": "Backend/API · Deployment layanan",
+    "slugs": [
+      "api-deployment"
+    ]
+  },
+  {
     "title": "Backend/API · Proyek gabungan",
     "slugs": [
       "api-proyek-tiket",
-      "api-proyek-tiket-aman"
+      "api-proyek-tiket-aman",
+      "api-kasus-alarm-bts"
     ]
   }
 ]
