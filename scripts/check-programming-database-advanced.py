@@ -15,7 +15,7 @@ by_slug = {x['slug']: x for x in lessons}
 assert sqlite3.sqlite_version_info >= (3, 25, 0)
 order = json.loads((root / 'lib/programming-order.json').read_text())
 slugs = [slug for g in order if g['title'].startswith('Basis Data ·') for slug in g['slugs']]
-assert len(slugs) == len(set(slugs)) == 38
+assert len(slugs) == len(set(slugs)) == 40
 for early, late in [('db-select-filter', 'db-subquery-exists'), ('db-subquery-exists', 'db-cte'),
                     ('db-cte', 'db-cte-rekursif'), ('db-agregasi', 'db-window'),
                     ('db-transaksi', 'db-trigger'), ('db-parameter', 'db-konkurensi'),

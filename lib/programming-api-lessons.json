@@ -445,5 +445,634 @@
     "diagramAlt": "Client → API → service dan repository → database. Transaksi menyatukan perubahan status dan riwayat.",
     "stage": 0,
     "minutes": 75
+  },
+  {
+    "slug": "api-crud-lengkap",
+    "title": "CRUD lengkap: buat, baca, ubah, hapus, dan daftar terbatas",
+    "summary": "Susun endpoint yang konsisten serta uji kondisi hilang dan body invalid.",
+    "analogy": "Sebuah loket tidak hanya menerima kartu baru, tetapi juga menyediakan cara melihat, memperbaiki, dan menghapus kartu latihan yang dipilih.",
+    "explain": [
+      "CRUD perlu kontrak yang lebih jelas daripada sekadar ada lima fungsi. Tentukan bentuk body, field yang boleh diubah, identitas stabil, status sukses, serta arti penghapusan. Contoh ini memakai hard delete pada data dictionary latihan, berbeda dari soft delete proyek akhir.",
+      "POST membuat id baru, GET membaca, PATCH mengubah judul, dan DELETE menghapus satu sumber. Respons DELETE 204 tidak mempunyai body. Penghapusan ulang menghasilkan 404; efek akhirnya tetap sumber tidak ada, sehingga tidak bertentangan dengan semantik idempotensi DELETE.",
+      "Daftar memakai keyset id dan limit 1..100. Counter id tetap naik setelah penghapusan agar id sumber lain tidak digunakan ulang tanpa sengaja. Dictionary belum aman sebagai storage multiworker atau akses bersamaan; bab ini memusatkan perhatian pada kontrak HTTP.",
+      "Validasi menolak judul kosong dan field ekstra. PUT tidak disediakan karena contoh hanya mendefinisikan PATCH judul; metode yang tidak didukung mendapat 405. Jangan memberi endpoint nama lengkap bila perilaku perubahan sebenarnya belum disepakati."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "POST /tiket",
+          "Buat",
+          "201"
+        ],
+        [
+          "GET /tiket/{id}",
+          "Baca satu",
+          "200 / 404"
+        ],
+        [
+          "PATCH /tiket/{id}",
+          "Ubah judul",
+          "200 / 404 / 422"
+        ],
+        [
+          "DELETE /tiket/{id}",
+          "Hapus latihan",
+          "204 tanpa body"
+        ],
+        [
+          "GET /tiket",
+          "Daftar terbatas",
+          "setelah + limit"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "Gunakan virtual environment latihan.",
+        "language": "text"
+      },
+      {
+        "label": "crud_api.py",
+        "code": "from typing import Annotated\nfrom fastapi import FastAPI, HTTPException, Query, Response\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, StringConstraints\n\nclass JudulInput(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    judul: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=120)]\n\ndef create_app():\n    app, data = FastAPI(), {}\n    nomor_berikut = 1\n    @app.post(\"/tiket\", status_code=201)\n    def buat(body: JudulInput):\n        nonlocal nomor_berikut\n        nomor = nomor_berikut\n        nomor_berikut += 1\n        data[nomor] = {\"id\": nomor, \"judul\": body.judul}\n        return dict(data[nomor])\n    @app.get(\"/tiket\")\n    def daftar(setelah: int = Query(0, ge=0), limit: int = Query(20, ge=1, le=100)):\n        return [dict(data[k]) for k in sorted(data) if k > setelah][:limit]\n    @app.get(\"/tiket/{nomor}\")\n    def ambil(nomor: int):\n        if nomor not in data:\n            raise HTTPException(404, \"Tiket tidak ditemukan\")\n        return dict(data[nomor])\n    @app.patch(\"/tiket/{nomor}\")\n    def ubah(nomor: int, body: JudulInput):\n        ambil(nomor)\n        data[nomor][\"judul\"] = body.judul\n        return dict(data[nomor])\n    @app.delete(\"/tiket/{nomor}\", status_code=204)\n    def hapus(nomor: int):\n        ambil(nomor)\n        del data[nomor]\n        return Response(status_code=204)\n    return app\n\nif __name__ == \"__main__\":\n    with TestClient(create_app()) as client:\n        print(client.post(\"/tiket\", json={\"judul\": \" Link A \"}).status_code)\n        print(client.patch(\"/tiket/1\", json={\"judul\": \"Link B\"}).json())\n        print(client.get(\"/tiket?limit=1\").json())\n        hasil = client.delete(\"/tiket/1\")\n        print(hasil.status_code, hasil.content == b\"\")\n        print(client.get(\"/tiket/1\").status_code)",
+        "output": "201\n{'id': 1, 'judul': 'Link B'}\n[{'id': 1, 'judul': 'Link B'}]\n204 True\n404",
+        "explanation": "Simpan sebagai crud_api.py. Demo TestClient tidak membuka port; server lokal dapat memakai factory Uvicorn.",
+        "language": "python",
+        "filename": "crud_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Uji judul kosong, id hilang, field ekstra, dan metode yang tidak disediakan.",
+      "Hapus tiket lalu buat lagi; pastikan id tidak dipakai ulang.",
+      "Bandingkan kontrak hard delete di sini dengan arsip pada proyek akhir."
+    ],
+    "warning": "Data dictionary hilang ketika proses berakhir. Contoh ini bukan repository database atau implementasi yang aman untuk beberapa worker.",
+    "check": "Mengapa DELETE kedua boleh berstatus 404 meskipun DELETE idempoten?",
+    "answer": "Efek yang dimaksud tetap sumber tidak ada; idempotensi tidak menuntut seluruh status dan body pengulangan identik.",
+    "source": "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-dependency-transaksi",
+    "title": "Dependency injection, session per request, dan transaksi",
+    "summary": "Pisahkan cara memperoleh sumber daya dari batas unit pekerjaan.",
+    "analogy": "Loket menerima akses arsip sementara, tetapi satu pekerjaan tetap harus menentukan kapan seluruh perubahan disahkan.",
+    "explain": [
+      "Depends memberi cara menyatakan kebutuhan endpoint, misalnya session atau identitas pengguna. Dependency dengan yield dapat membuka sumber daya, memberikannya pada endpoint, lalu membersihkannya setelah dipakai.",
+      "Membuka session per request tidak berarti seluruh request otomatis mempunyai unit transaksi yang benar. Service atau endpoint perlu membingkai pekerjaan yang harus berhasil bersama dengan session.begin. Jangan commit di setiap repository jika status serta riwayat harus atomik.",
+      "Contoh membuat dua tabel dan dependency session. POST menulis keduanya pada satu transaksi. Jika pencatatan riwayat gagal, transaksi membatalkan tiket yang baru dibuat. Dependency bertanggung jawab menutup session, bukan menyatakan semua operasi sukses.",
+      "Override dependency berguna saat tes memakai sumber berbeda, tetapi kontrak tetap harus dipenuhi. Session tidak boleh dibagikan sebagai global lintas request. Aplikasi sinkron memakai driver sinkron; pemilihan async memerlukan stack yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "Depends",
+          "Deklarasi kebutuhan",
+          "Endpoint menerima session"
+        ],
+        [
+          "yield",
+          "Berikan lalu bersihkan",
+          "Tutup session"
+        ],
+        [
+          "session.begin",
+          "Batas transaksi",
+          "Tiket + riwayat bersama"
+        ],
+        [
+          "Override",
+          "Sumber uji terpisah",
+          "Bukan akses ke produksi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "SQLAlchemy 2.0 dipakai bersama FastAPI.",
+        "language": "text"
+      },
+      {
+        "label": "Python · dependency dan unit transaksi",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom fastapi import FastAPI, Depends\nfrom fastapi.testclient import TestClient\nfrom sqlalchemy import create_engine, text\nfrom sqlalchemy.orm import Session\n\ndef create_app(url):\n    engine = create_engine(url, connect_args={\"check_same_thread\": False})\n    with engine.begin() as con:\n        con.execute(text(\"CREATE TABLE tiket(id INTEGER PRIMARY KEY, judul TEXT NOT NULL)\"))\n        con.execute(text(\"CREATE TABLE riwayat(id INTEGER PRIMARY KEY, tiket_id INTEGER NOT NULL, status TEXT NOT NULL)\"))\n    app = FastAPI()\n    app.state.engine = engine\n    def session_db():\n        with Session(engine) as session:\n            yield session\n    @app.post(\"/latihan\", status_code=201)\n    def buat(session: Session = Depends(session_db)):\n        with session.begin():\n            session.execute(text(\"INSERT INTO tiket VALUES (1, 'Link A')\"))\n            session.execute(text(\"INSERT INTO riwayat VALUES (1, 1, 'BARU')\"))\n        return {\"status\": \"tersimpan\"}\n    return app\n\nwith TemporaryDirectory() as folder:\n    app = create_app(\"sqlite+pysqlite:///\" + str(Path(folder) / \"latihan.db\"))\n    try:\n        with TestClient(app) as client:\n            print(client.post(\"/latihan\").status_code)\n        with app.state.engine.connect() as con:\n            print(con.execute(text(\"SELECT COUNT(*) FROM tiket\")).scalar_one(),\n                  con.execute(text(\"SELECT COUNT(*) FROM riwayat\")).scalar_one())\n    finally:\n        app.state.engine.dispose()",
+        "output": "201\n1 1",
+        "explanation": "URL contoh hanya untuk SQLite file sementara. Endpoint berisi fixture id tetap agar unit transaksi mudah diperiksa, bukan CRUD publik lengkap.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Pasang trigger penolak riwayat lalu pastikan tiket ikut batal.",
+      "Override dependency pada contoh yang menyediakan sumber database alternatif.",
+      "Tentukan siapa yang memiliki transaksi ketika service memanggil dua repository."
+    ],
+    "warning": "Jangan menelan exception lalu mengembalikan sukses. Penutupan session tidak menggantikan kontrak commit/rollback unit bisnis.",
+    "check": "Apakah yield session berarti dependency harus commit semua pekerjaan?",
+    "answer": "Tidak. Pemilik use case menentukan transaksi; dependency dapat fokus pada lifecycle session.",
+    "source": "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-autentikasi-otorisasi",
+    "title": "Autentikasi, peran, dan kepemilikan data",
+    "summary": "Bedakan siapa pengguna, tindakan yang diizinkan, dan data yang boleh dibaca.",
+    "analogy": "Kartu pegawai membuktikan identitas; jabatan dan penanggung jawab berkas menentukan akses.",
+    "explain": [
+      "Autentikasi menjawab siapa pengguna. Otorisasi memeriksa apakah pengguna itu boleh menjalankan operasi pada objek tertentu. Token valid tidak berarti boleh membaca seluruh tiket.",
+      "Bearer token dikirim melalui Authorization: Bearer <token>. Siapa pun yang memegang token dapat memakainya. Gunakan HTTPS di luar latihan lokal, hindari token pada URL/log, dan sediakan kedaluwarsa serta pencabutan. HTTPBearer hanya membaca header; aplikasi tetap memverifikasi kredensial.",
+      "Contoh membuat token acak dengan secrets.token_urlsafe(32) lalu menyimpan digest SHA-256 pada registry server. Ini latihan token berentropi tinggi, bukan teknik penyimpanan password. Sistem login nyata membutuhkan pengelolaan akun, hashing password yang sesuai, pemulihan akun, serta pengelolaan sesi/token.",
+      "Identitas dan peran berasal dari registry terpercaya. Jangan menerima owner_id atau role dari body sebagai bukti izin. Kueri daftar dan detail harus dibatasi juga; menyembunyikan tombol pada frontend tidak menegakkan izin. Contoh mengembalikan 404 untuk objek yang tidak terlihat dan 403 untuk fungsi supervisor."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "401",
+          "Kredensial tidak diterima",
+          "WWW-Authenticate: Bearer"
+        ],
+        [
+          "403",
+          "Identitas diketahui, fungsi ditolak",
+          "Operator bukan supervisor"
+        ],
+        [
+          "404",
+          "Objek tidak terlihat",
+          "Hindari membocorkan tiket orang lain"
+        ],
+        [
+          "Owner",
+          "Pembatasan per objek",
+          "Bukan sekadar peran"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "",
+        "language": "text"
+      },
+      {
+        "label": "Python · izin fungsi dan objek",
+        "code": "from hashlib import sha256\nfrom secrets import token_urlsafe\nfrom fastapi import FastAPI, Depends, HTTPException\nfrom fastapi.security import HTTPBearer\nfrom fastapi.testclient import TestClient\n\ndef create_app(registry):\n    app = FastAPI()\n    bearer = HTTPBearer(auto_error=False)\n    def current(credentials=Depends(bearer)):\n        user = None if credentials is None else registry.get(sha256(credentials.credentials.encode()).hexdigest())\n        if user is None:\n            raise HTTPException(401, \"Token tidak diterima\", headers={\"WWW-Authenticate\": \"Bearer\"})\n        return user\n    @app.get(\"/tiket/{id}\")\n    def detail(id: int, user=Depends(current)):\n        tiket = {\"id\": 1, \"owner_id\": 10, \"judul\": \"Link A\"}\n        if id != 1 or (user[\"role\"] != \"supervisor\" and user[\"id\"] != tiket[\"owner_id\"]):\n            raise HTTPException(404, \"Tiket tidak ditemukan\")\n        return tiket\n    @app.get(\"/supervisor\")\n    def supervisor(user=Depends(current)):\n        if user[\"role\"] != \"supervisor\":\n            raise HTTPException(403, \"Perlu supervisor\")\n        return {\"ok\": True}\n    return app\n\nif __name__ == \"__main__\":\n    token = token_urlsafe(32)\n    registry = {sha256(token.encode()).hexdigest(): {\"id\": 10, \"role\": \"operator\"}}\n    with TestClient(create_app(registry)) as client:\n        h = {\"Authorization\": f\"Bearer {token}\"}\n        print(client.get(\"/tiket/1\").status_code)\n        print(client.get(\"/tiket/1\", headers=h).status_code)\n        print(client.get(\"/supervisor\", headers=h).status_code)",
+        "output": "401\n200\n403",
+        "explanation": "Registry memori hanya untuk latihan. Token tidak dicetak. Tambahkan expiry/revocation sebelum digunakan sebagai sistem autentikasi nyata.",
+        "language": "python",
+        "filename": "izin_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Tambahkan pengguna kedua dan uji ia mendapat 404 atas tiket pertama.",
+      "Uji token tidak dikenal, header kosong, dan skema selain Bearer.",
+      "Rancang pencabutan token di sisi server tanpa menyimpan token mentah."
+    ],
+    "warning": "Token contoh tidak mempunyai expiry atau login. Jangan menganggapnya penyedia identitas siap produksi.",
+    "check": "Apakah validasi token cukup untuk mengizinkan update /tiket/123?",
+    "answer": "Tidak. Periksa tindakan, peran, dan kepemilikan tiket tersebut.",
+    "source": "https://fastapi.tiangolo.com/reference/security/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-error-observabilitas",
+    "title": "Kontrak error dan penelusuran request",
+    "summary": "Berikan error yang konsisten dan hubungkan laporan pengguna dengan request terkait.",
+    "analogy": "Nomor tanda terima membantu petugas menelusuri masalah tanpa menampilkan isi arsip rahasia.",
+    "explain": [
+      "Error perlu bermakna bagi client: kode stabil untuk program, pesan aman bagi manusia, dan request_id untuk penelusuran. Jangan mengembalikan traceback, SQL, kredensial, atau isi input sensitif.",
+      "Contoh middleware membuat UUID baru per request dan menambahkan X-Request-ID. Handler memetakan HTTPException dan RequestValidationError ke bentuk seragam. Kesalahan internal tetap dicatat di server dengan kebijakan penyamaran data; jangan mengubah semua kegagalan menjadi status 200.",
+      "Validasi 422 berbeda dari data tidak ditemukan 404, konflik versi 409, dan gangguan internal 500. Client dapat mengambil tindakan yang berbeda. Header penting seperti WWW-Authenticate harus tetap diteruskan saat mengganti bentuk body error.",
+      "Nomor korelasi bukan autentikasi dan bukan pengganti logging terstruktur atau tracing terdistribusi. Jika menerima ID dari upstream, validasi panjang/format dan batas kepercayaannya terlebih dahulu. Contoh memilih membuat ID sendiri."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "code",
+          "Kontrak mesin",
+          "HTTP_404 atau VALIDATION_ERROR"
+        ],
+        [
+          "message",
+          "Penjelasan aman",
+          "Tanpa SQL/traceback"
+        ],
+        [
+          "request_id",
+          "Korelasi",
+          "Sama pada body dan header"
+        ],
+        [
+          "Status HTTP",
+          "Makna kegagalan",
+          "Tetap 4xx/5xx"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "",
+        "language": "text"
+      },
+      {
+        "label": "Python · response error konsisten",
+        "code": "from uuid import uuid4\nfrom fastapi import FastAPI, HTTPException, Request\nfrom fastapi.exceptions import RequestValidationError\nfrom starlette.exceptions import HTTPException as StarletteHTTPException\nfrom fastapi.responses import JSONResponse\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, Field\n\napp = FastAPI()\n@app.middleware(\"http\")\nasync def correlation(request: Request, call_next):\n    request.state.request_id = str(uuid4())\n    response = await call_next(request)\n    response.headers[\"X-Request-ID\"] = request.state.request_id\n    return response\n\ndef error(request, status, code, message, headers=None):\n    return JSONResponse(status_code=status, content={\"error\": {\"code\": code, \"message\": message, \"request_id\": request.state.request_id}}, headers=headers)\n@app.exception_handler(StarletteHTTPException)\nasync def http_error(request, exc):\n    return error(request, exc.status_code, f\"HTTP_{exc.status_code}\", \"Permintaan tidak dapat dipenuhi\", exc.headers)\n@app.exception_handler(RequestValidationError)\nasync def validation_error(request, exc):\n    return error(request, 422, \"VALIDATION_ERROR\", \"Periksa format masukan\")\nclass Input(BaseModel):\n    jumlah: int = Field(gt=0)\n@app.post(\"/contoh\")\ndef contoh(data: Input):\n    raise HTTPException(404, \"Tidak ditemukan\")\n\nif __name__ == \"__main__\":\n    with TestClient(app) as client:\n        r = client.post(\"/contoh\", json={\"jumlah\": 0})\n        print(r.status_code, r.json()[\"error\"][\"code\"])\n        print(r.json()[\"error\"][\"request_id\"] == r.headers[\"X-Request-ID\"])\n        print(client.post(\"/contoh\", json={\"jumlah\": 1}).json()[\"error\"][\"code\"])",
+        "output": "422 VALIDATION_ERROR\nTrue\nHTTP_404",
+        "explanation": "Contoh menangani error HTTP dan validasi. Tambahkan penanganan 500 serta logging tersamar di lingkungan aplikasi; middleware ini tidak menjanjikan header bagi seluruh kegagalan infrastruktur.",
+        "language": "python",
+        "filename": "error_api.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Uji header autentikasi tetap ada pada response 401.",
+      "Tentukan kode konflik versi yang akan dipakai client.",
+      "Susun daftar field yang tidak boleh masuk log."
+    ],
+    "warning": "Jangan memasukkan exc.errors() mentah jika input dapat berisi rahasia. Error seragam tetap harus mempertahankan status dan header yang relevan.",
+    "check": "Mengapa request_id tidak boleh dianggap sebagai bukti identitas?",
+    "answer": "ID hanya membantu korelasi; siapa pun dapat mengetahui nomor request tanpa memperoleh hak akses.",
+    "source": "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-client-timeout-retry",
+    "title": "Client HTTP: timeout, kegagalan, dan retry terbatas",
+    "summary": "Panggil layanan lain dengan batas waktu dan kebijakan pengulangan yang jelas.",
+    "analogy": "Menelpon ulang perlu batas; pesanan yang tidak mendapat balasan belum tentu belum diterima.",
+    "explain": [
+      "HTTP client dapat gagal sebelum mendapat response, saat menunggu isi, atau menerima status error dari server. Bedakan gangguan transport dari HTTPStatusError. Tetapkan timeout koneksi, baca, tulis, dan pool; timeout per operasi bukan jaminan batas waktu keseluruhan bisnis.",
+      "Gunakan satu Client dalam lifecycle yang jelas agar koneksi dapat dipakai ulang, kemudian tutup. raise_for_status memeriksa status sebelum memproses JSON. Bentuk JSON juga perlu divalidasi bila menjadi batas kepercayaan aplikasi.",
+      "Contoh hanya mengulang GET ketika ConnectTimeout atau ConnectError, maksimal tiga percobaan dengan jeda. MockTransport membuat tes deterministik tanpa internet. Ia meniru error, bukan membuktikan perilaku timeout jaringan nyata.",
+      "Jangan otomatis mengulang POST pembayaran/pembuatan data hanya karena balasan hilang. Server mungkin sudah commit. Rancang idempotency key, rekonsiliasi, budget waktu keseluruhan, backoff/jitter, dan kebijakan status 429/503 bila diperlukan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "Timeout",
+          "Batas operasi I/O",
+          "Connect/read/write/pool"
+        ],
+        [
+          "Retry",
+          "Usaha terbatas",
+          "GET: maksimal 3 percobaan"
+        ],
+        [
+          "HTTP status",
+          "Balasan server",
+          "raise_for_status"
+        ],
+        [
+          "POST ulang",
+          "Risiko efek ganda",
+          "Perlu kontrak idempotensi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"httpx==0.28.1\"",
+        "output": "",
+        "explanation": "",
+        "language": "text"
+      },
+      {
+        "label": "Python · client dan transport uji",
+        "code": "import time\nimport httpx\n\ndef baca_status(client, jeda=time.sleep):\n    for attempt in range(3):\n        try:\n            response = client.get(\"https://latihan.invalid/status\")\n            response.raise_for_status()\n            data = response.json()\n            if not isinstance(data, dict) or not isinstance(data.get(\"ok\"), bool):\n                raise ValueError(\"Kontrak response tidak sesuai\")\n            return data\n        except (httpx.ConnectError, httpx.ConnectTimeout):\n            if attempt == 2:\n                raise\n            jeda(0.1 * (2 ** attempt))\n\nif __name__ == \"__main__\":\n    attempts = []\n    def handler(request):\n        attempts.append(1)\n        if len(attempts) == 1:\n            raise httpx.ConnectTimeout(\"Simulasi\", request=request)\n        return httpx.Response(200, json={\"ok\": True})\n    with httpx.Client(transport=httpx.MockTransport(handler), timeout=httpx.Timeout(5, connect=2, pool=2)) as client:\n        print(baca_status(client, jeda=lambda _: None))\n        print(\"Percobaan:\", len(attempts))",
+        "output": "{'ok': True}\nPercobaan: 2",
+        "explanation": "Tidak mengakses internet. Jeda diganti pada tes; di aplikasi nyata gunakan budget waktu dan observasi kegagalan.",
+        "language": "python",
+        "filename": "client_http.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Uji tiga kegagalan koneksi dan pastikan exception diteruskan.",
+      "Kembalikan 404 lalu buktikan tidak diulang.",
+      "Kembalikan JSON salah bentuk dan periksa validasi kontraknya."
+    ],
+    "warning": "GET semestinya tidak mengubah state server. Kebijakan retry ini tidak boleh disalin begitu saja untuk operasi tulis.",
+    "check": "Apakah timeout berarti server pasti belum mengubah data?",
+    "answer": "Tidak. Respons dapat hilang setelah perubahan disahkan.",
+    "source": "https://www.python-httpx.org/advanced/timeouts/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-sync-async",
+    "title": "Memilih def, async def, dan pekerjaan latar",
+    "summary": "Pahami kapan concurrency membantu dan kapan pekerjaan memblokir.",
+    "analogy": "Saat menunggu kurir, petugas dapat melayani urusan lain; menghitung laporan berat tetap memerlukan tenaga komputasi.",
+    "explain": [
+      "Concurrency mengatur beberapa pekerjaan yang saling menunggu; parallelism menjalankan pekerjaan secara bersamaan pada sumber daya eksekusi berbeda. Menulis async tidak otomatis mempercepat komputasi CPU.",
+      "Pada FastAPI, fungsi endpoint def biasa dijalankan lewat thread pool. async def berjalan pada event loop dan cocok untuk library I/O async yang benar-benar di-await. Memanggil requests.get, time.sleep, atau operasi database sinkron langsung di async def dapat memblokir event loop.",
+      "Contoh asyncio.gather menunggu dua coroutine. asyncio.sleep mensimulasikan I/O tanpa memblokir loop. Hasil gather mengikuti urutan input, bukan urutan selesai. Gunakan asyncio.run pada program mandiri, bukan dari event loop yang sudah berjalan.",
+      "Pekerjaan singkat setelah response dapat memakai BackgroundTasks, tetapi proses aplikasi bisa berhenti. Tugas penting yang harus tahan restart memerlukan antrean, penyimpanan status, retry terbatas, serta idempotensi. CPU berat sering lebih sesuai dijalankan pada proses/worker terpisah dengan batas sumber daya."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "def endpoint",
+          "Library sinkron",
+          "FastAPI mengelola thread pool"
+        ],
+        [
+          "async def",
+          "Library I/O async",
+          "await, hindari blocking"
+        ],
+        [
+          "CPU berat",
+          "Komputasi",
+          "Worker/proses sesuai kebutuhan"
+        ],
+        [
+          "Background task",
+          "Sesudah response",
+          "Tidak otomatis tahan restart"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · dua pekerjaan menunggu",
+        "code": "import asyncio\n\nasync def baca_sumber(nama):\n    await asyncio.sleep(0)\n    return {\"sumber\": nama, \"ok\": True}\n\nasync def main():\n    hasil = await asyncio.gather(baca_sumber(\"inventaris\"), baca_sumber(\"tiket\"))\n    for data in hasil:\n        print(data[\"sumber\"], data[\"ok\"])\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+        "output": "inventaris True\ntiket True",
+        "explanation": "Simulasi I/O; bukan benchmark. Library standard cukup untuk program ini.",
+        "language": "python",
+        "filename": "async_dasar.py"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Identifikasi pemanggilan blocking dalam endpoint async.",
+      "Rancang pembatas jumlah request paralel agar tidak membanjiri layanan lain.",
+      "Tentukan penyimpanan status untuk job laporan yang harus bertahan setelah restart."
+    ],
+    "warning": "Jangan berbagi satu Session SQLAlchemy secara bersamaan pada beberapa thread/task. Sesuaikan lifecycle sumber daya dengan model concurrency library.",
+    "check": "Apakah async def cocok jika isinya time.sleep(10)?",
+    "answer": "Tidak untuk menunggu nonblocking; gunakan await asyncio.sleep untuk simulasi async, atau desain endpoint sinkron sesuai library.",
+    "source": "https://fastapi.tiangolo.com/async/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-cors-operasional",
+    "title": "CORS, konfigurasi, dan menjalankan API lokal",
+    "summary": "Hubungkan frontend lokal sambil menjaga konfigurasi dan batas akses tetap jelas.",
+    "analogy": "Daftar asal situs yang boleh membaca balasan berbeda dari daftar orang yang boleh membuka arsip.",
+    "explain": [
+      "Origin terdiri dari skema, host, dan port. http://localhost:5173 berbeda dari http://localhost:3000. Browser menegakkan CORS ketika JavaScript mengakses origin lain; curl dan aplikasi server tidak memperoleh pembatasan identitas dari CORS.",
+      "Contoh mengizinkan satu origin, metode GET, dan header Authorization. Preflight OPTIONS memeriksa izin sebelum request tertentu. Perluas daftar hanya sesuai kebutuhan frontend. Jangan memakai wildcard origin sebagai pengganti rancangan autentikasi dan jangan mengizinkan credentials lintas origin tanpa kebutuhan yang jelas.",
+      "Untuk menjalankan contoh, simpan sebagai cors_api.py, pasang dependensi, lalu jalankan python -m uvicorn cors_api:app --host 127.0.0.1 --port 8000. Buka /docs untuk mencoba endpoint dan hentikan dengan Ctrl+C. Gunakan --reload hanya saat pengembangan. TestClient tidak memerlukan proses server terpisah.",
+      "Pisahkan konfigurasi development, test, dan deployment melalui environment. Jangan commit file rahasia. Rilis nyata juga membutuhkan HTTPS, pengelolaan proses, observasi error, timeout, batas request, migrasi skema, serta backup/restore yang telah diuji. Health endpoint sederhana bukan bukti semua dependency sehat."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "CORS",
+          "Izin browser membaca response",
+          "Origin spesifik"
+        ],
+        [
+          "Autentikasi",
+          "Identitas pengguna",
+          "Tetap dibutuhkan"
+        ],
+        [
+          "127.0.0.1",
+          "Akses lokal",
+          "Bukan binding publik"
+        ],
+        [
+          "Health",
+          "Sinyal terbatas",
+          "Tidak membocorkan konfigurasi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "",
+        "language": "text"
+      },
+      {
+        "label": "Python · preflight lokal",
+        "code": "from fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom fastapi.testclient import TestClient\n\napp = FastAPI()\napp.add_middleware(CORSMiddleware,\n    allow_origins=[\"http://localhost:5173\"],\n    allow_methods=[\"GET\"],\n    allow_headers=[\"Authorization\"],\n    allow_credentials=False)\n@app.get(\"/health\")\ndef health():\n    return {\"status\": \"ok\"}\n\nif __name__ == \"__main__\":\n    with TestClient(app) as client:\n        r = client.options(\"/health\", headers={\n            \"Origin\": \"http://localhost:5173\",\n            \"Access-Control-Request-Method\": \"GET\",\n            \"Access-Control-Request-Headers\": \"Authorization\"})\n        print(r.status_code)\n        print(r.headers[\"access-control-allow-origin\"])\n        print(client.get(\"/health\").json())",
+        "output": "200\nhttp://localhost:5173\n{'status': 'ok'}",
+        "explanation": "Uji preflight melalui TestClient, lalu periksa integrasi browser bila memakai frontend nyata.",
+        "language": "python",
+        "filename": "cors_api.py"
+      },
+      {
+        "label": "Terminal · server lokal",
+        "code": "python -m uvicorn cors_api:app --host 127.0.0.1 --port 8000",
+        "output": "",
+        "explanation": "Jalankan dari folder berkas cors_api.py. Jangan menjalankan server ini di dalam pemeriksa contoh otomatis.",
+        "language": "text"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Uji origin lain dan amati header izin tidak diberikan.",
+      "Pisahkan liveness sederhana dan readiness dependency dengan timeout.",
+      "Dokumentasikan variabel wajib tanpa menuliskan nilai rahasianya."
+    ],
+    "warning": "CORS tidak mencegah pemanggilan API dari program nonbrowser dan tidak menggantikan otorisasi. Jangan menaruh token pada contoh perintah yang disimpan dalam Git.",
+    "check": "Apakah API aman karena hanya origin frontend yang ada di CORS?",
+    "answer": "Belum. Endpoint tetap membutuhkan autentikasi, otorisasi, dan validasi sesuai fungsinya.",
+    "source": "https://fastapi.tiangolo.com/tutorial/cors/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-proyek-tiket-aman",
+    "title": "Studi kasus: tiket dengan akses, versi, dan audit",
+    "summary": "Gabungkan CRUD database, identitas server, izin objek, dan transaksi dalam proyek latihan.",
+    "analogy": "Berkas punya pemilik, petugas berwenang, nomor revisi, dan buku riwayat; perubahan yang gagal tidak boleh meninggalkan catatan setengah jadi.",
+    "explain": [
+      "Prasyarat: proyek tiket dasar, transaksi, pengujian API, dan seluruh pendalaman Backend/API sebelumnya. Proyek ini memakai SQLAlchemy Core agar kondisi UPDATE dan batas transaksi terlihat. Setiap request mendapat Session sendiri. create_all dipakai hanya untuk bootstrap database latihan baru; skema yang sudah berjalan harus dikelola dengan migrasi yang direview.",
+      "Kontrak: POST membuat tiket BARU milik pengguna; GET daftar/detail dan riwayat membatasi pemilik kecuali supervisor; PATCH menerima judul atau status beserta versi yang dibaca; DELETE mengarsipkan tiket BARU; POST restore hanya untuk supervisor. Status bergerak BARU → DIPROSES → SELESAI. Ini penyederhanaan workflow; penugasan teknisi terdapat pada proyek sebelumnya.",
+      "PATCH dan DELETE memeriksa nomor versi lalu melakukan UPDATE dengan kondisi versi lama. Jika request lain telah mengubahnya, rowcount nol menghasilkan 409; client harus membaca ulang dan memutuskan perubahan, bukan menimpa diam-diam. Ini optimistic concurrency, bukan pengujian beban atau bukti semua konflik concurrency lintas engine telah terselesaikan.",
+      "Perubahan tiket dan penulisan audit berada dalam satu transaksi. Jika audit gagal, perubahan tiket ikut rollback. Pemilik berasal dari token registry, bukan request. Body menolak field tambahan sehingga pengguna tidak dapat menyisipkan owner_id atau role. Id objek yang tidak terlihat mendapat 404; operasi restore oleh operator mendapat 403.",
+      "Token acak dan registry digest di memori hanya sarana latihan; tidak ada login, expiry, revocation persisten, rate limit, atau pengelolaan akun. Jangan memublikasikan sebagai layanan produksi. PostgreSQL memakai URL postgresql+psycopg dan memerlukan driver psycopg[binary]; gunakan database uji khusus. Tes SQLite tidak membuktikan perilaku locking PostgreSQL.",
+      "Cara belajar: simpan tiket_aman.py, jalankan langsung untuk demo otomatis tanpa server. Untuk mencoba /docs, atur DATABASE_URL serta TOKEN_OPERATOR dan TOKEN_SUPERVISOR lewat environment lokal dengan dua token acak berbeda minimal 32 karakter, lalu jalankan factory Uvicorn pada 127.0.0.1. Jangan mencetak token atau menyimpannya di repository."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "Identitas",
+          "Registry server",
+          "Owner tidak dikirim body"
+        ],
+        [
+          "Izin objek",
+          "Daftar, detail, perubahan, audit",
+          "Pemilik atau supervisor"
+        ],
+        [
+          "Versi",
+          "Cegah overwrite diam-diam",
+          "409 jika versi lama"
+        ],
+        [
+          "Audit",
+          "Satu transaksi",
+          "Gagal audit membatalkan perubahan"
+        ],
+        [
+          "Arsip",
+          "Soft delete",
+          "Restore oleh supervisor"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\" \"psycopg[binary]==3.3.6\"",
+        "output": "",
+        "explanation": "",
+        "language": "text"
+      },
+      {
+        "label": "Python · tiket_aman.py",
+        "code": "import os\nfrom hashlib import sha256\nfrom secrets import token_urlsafe\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom typing import Literal\nfrom contextlib import asynccontextmanager\nfrom fastapi import FastAPI, Depends, HTTPException, Query, Response\nfrom fastapi.security import HTTPBearer\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, Field, ConfigDict, model_validator\nfrom sqlalchemy import (create_engine, MetaData, Table, Column, Integer, String,\n                        Boolean, ForeignKey, CheckConstraint, select, insert, update, event)\nfrom sqlalchemy.orm import Session\n\nmetadata = MetaData()\ntiket = Table(\"tiket_aman\", metadata,\n    Column(\"id\", Integer, primary_key=True),\n    Column(\"judul\", String(120), nullable=False),\n    Column(\"owner_id\", Integer, nullable=False),\n    Column(\"status\", String(20), nullable=False),\n    Column(\"versi\", Integer, nullable=False),\n    Column(\"arsip\", Boolean, nullable=False),\n    CheckConstraint(\"status IN ('BARU', 'DIPROSES', 'SELESAI')\"),\n    CheckConstraint(\"versi > 0\"))\naudit = Table(\"audit_aman\", metadata,\n    Column(\"id\", Integer, primary_key=True),\n    Column(\"tiket_id\", ForeignKey(\"tiket_aman.id\"), nullable=False),\n    Column(\"aktor_id\", Integer, nullable=False),\n    Column(\"aksi\", String(30), nullable=False))\n\nclass Baru(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\", str_strip_whitespace=True)\n    judul: str = Field(min_length=1, max_length=120)\nclass Ubah(Baru):\n    judul: str | None = Field(default=None, min_length=1, max_length=120)\n    status: Literal[\"BARU\", \"DIPROSES\", \"SELESAI\"] | None = None\n    versi: int = Field(gt=0)\n    @model_validator(mode=\"after\")\n    def ada_perubahan(self):\n        if self.judul is None and self.status is None:\n            raise ValueError(\"Isi judul atau status\")\n        return self\n\ndef digest(token):\n    return sha256(token.encode()).hexdigest()\n\ndef create_app(database_url, registry):\n    engine = create_engine(database_url)\n    if engine.dialect.name == \"sqlite\":\n        @event.listens_for(engine, \"connect\")\n        def sqlite_fk(connection, record):\n            connection.execute(\"PRAGMA foreign_keys=ON\")\n    metadata.create_all(engine)  # bootstrap database latihan baru\n    @asynccontextmanager\n    async def lifespan(app):\n        yield\n        engine.dispose()\n    app = FastAPI(lifespan=lifespan)\n    app.state.engine = engine\n    bearer = HTTPBearer(auto_error=False)\n    identities = {key: dict(value) for key, value in registry.items()}\n    def current(credentials=Depends(bearer)):\n        user = None if credentials is None else identities.get(digest(credentials.credentials))\n        if user is None:\n            raise HTTPException(401, \"Token tidak diterima\", headers={\"WWW-Authenticate\": \"Bearer\"})\n        return user\n    def db():\n        with Session(engine) as session:\n            yield session\n    def visible(user):\n        return True if user[\"role\"] == \"supervisor\" else tiket.c.owner_id == user[\"id\"]\n    def get_row(session, id, user, archived=False):\n        row = session.execute(select(tiket).where(tiket.c.id == id, tiket.c.arsip == archived, visible(user))).mappings().first()\n        if row is None:\n            raise HTTPException(404, \"Tiket tidak ditemukan\")\n        return dict(row)\n    def record(session, id, user, action):\n        session.execute(insert(audit).values(tiket_id=id, aktor_id=user[\"id\"], aksi=action))\n    def change(session, old, user, values, action):\n        result = session.execute(update(tiket).where(\n            tiket.c.id == old[\"id\"], tiket.c.versi == old[\"versi\"],\n            tiket.c.arsip == old[\"arsip\"], visible(user)\n        ).values(**values, versi=old[\"versi\"] + 1))\n        if result.rowcount != 1:\n            raise HTTPException(409, \"Konflik versi; baca ulang\")\n        record(session, old[\"id\"], user, action)\n    @app.post(\"/tiket\", status_code=201)\n    def create(data: Baru, session=Depends(db), user=Depends(current)):\n        with session.begin():\n            id = session.execute(insert(tiket).values(judul=data.judul, owner_id=user[\"id\"], status=\"BARU\", versi=1, arsip=False)).inserted_primary_key[0]\n            record(session, id, user, \"BUAT\")\n            return get_row(session, id, user)\n    @app.get(\"/tiket\")\n    def listing(after_id: int = Query(0, ge=0), limit: int = Query(20, ge=1, le=100), session=Depends(db), user=Depends(current)):\n        query = select(tiket).where(tiket.c.id > after_id, tiket.c.arsip == False, visible(user)).order_by(tiket.c.id).limit(limit)\n        return [dict(row) for row in session.execute(query).mappings()]\n    @app.get(\"/tiket/{id}\")\n    def detail(id: int, session=Depends(db), user=Depends(current)):\n        return get_row(session, id, user)\n    @app.patch(\"/tiket/{id}\")\n    def patch(id: int, data: Ubah, session=Depends(db), user=Depends(current)):\n        with session.begin():\n            old = get_row(session, id, user)\n            if old[\"versi\"] != data.versi:\n                raise HTTPException(409, \"Konflik versi; baca ulang\")\n            values = data.model_dump(exclude_none=True, exclude={\"versi\"})\n            if data.status is not None and {\"BARU\": \"DIPROSES\", \"DIPROSES\": \"SELESAI\"}.get(old[\"status\"]) != data.status:\n                raise HTTPException(409, \"Transisi status ditolak\")\n            change(session, old, user, values, \"UBAH\")\n            return get_row(session, id, user)\n    @app.delete(\"/tiket/{id}\", status_code=204)\n    def archive(id: int, versi: int = Query(gt=0), session=Depends(db), user=Depends(current)):\n        with session.begin():\n            old = get_row(session, id, user)\n            if old[\"versi\"] != versi or old[\"status\"] != \"BARU\":\n                raise HTTPException(409, \"Versi atau status tidak sesuai\")\n            change(session, old, user, {\"arsip\": True}, \"ARSIP\")\n        return Response(status_code=204)\n    @app.post(\"/tiket/{id}/restore\")\n    def restore(id: int, versi: int = Query(gt=0), session=Depends(db), user=Depends(current)):\n        if user[\"role\"] != \"supervisor\":\n            raise HTTPException(403, \"Perlu supervisor\")\n        with session.begin():\n            old = get_row(session, id, user, archived=True)\n            if old[\"versi\"] != versi:\n                raise HTTPException(409, \"Konflik versi; baca ulang\")\n            change(session, old, user, {\"arsip\": False}, \"RESTORE\")\n            return get_row(session, id, user)\n    @app.get(\"/tiket/{id}/riwayat\")\n    def history(id: int, session=Depends(db), user=Depends(current)):\n        get_row(session, id, user)\n        rows = session.execute(select(audit).where(audit.c.tiket_id == id).order_by(audit.c.id)).mappings()\n        return [dict(row) for row in rows]\n    return app\n\ndef create_local_app():\n    # Isi lewat environment lokal; tidak ada fallback token bawaan.\n    operator = os.environ[\"TOKEN_OPERATOR\"]\n    supervisor = os.environ[\"TOKEN_SUPERVISOR\"]\n    if min(len(operator), len(supervisor)) < 32 or operator == supervisor:\n        raise ValueError(\"Gunakan dua token acak berbeda minimal 32 karakter\")\n    registry = {digest(operator): {\"id\": 10, \"role\": \"operator\"},\n                digest(supervisor): {\"id\": 99, \"role\": \"supervisor\"}}\n    return create_app(os.environ[\"DATABASE_URL\"], registry)\n\nif __name__ == \"__main__\":\n    token = token_urlsafe(32)\n    other = token_urlsafe(32)\n    registry = {digest(token): {\"id\": 10, \"role\": \"operator\"},\n                digest(other): {\"id\": 20, \"role\": \"operator\"}}\n    with TemporaryDirectory() as folder:\n        url = \"sqlite+pysqlite:///\" + str(Path(folder) / \"latihan.db\")\n        with TestClient(create_app(url, registry)) as client:\n            h = {\"Authorization\": f\"Bearer {token}\"}\n            r = client.post(\"/tiket\", json={\"judul\": \"Link A\"}, headers=h)\n            id = r.json()[\"id\"]\n            print(r.status_code, r.json()[\"versi\"])\n            print(client.get(f\"/tiket/{id}\", headers={\"Authorization\": f\"Bearer {other}\"}).status_code)\n            r = client.patch(f\"/tiket/{id}\", json={\"judul\": \"Link B\", \"versi\": 1}, headers=h)\n            print(r.status_code, r.json()[\"versi\"])\n            print(client.patch(f\"/tiket/{id}\", json={\"judul\": \"Lama\", \"versi\": 1}, headers=h).status_code)\n            print([x[\"aksi\"] for x in client.get(f\"/tiket/{id}/riwayat\", headers=h).json()])",
+        "output": "201 1\n404\n200 2\n409\n['BUAT', 'UBAH']",
+        "explanation": "Jalankan python tiket_aman.py. Tes lanjutan harus mencakup pemilik lain, supervisor, arsip/restore, kegagalan audit, dan konflik versi pada engine target.",
+        "language": "python",
+        "filename": "tiket_aman.py"
+      },
+      {
+        "label": "Terminal · factory server lokal",
+        "code": "python -m uvicorn tiket_aman:create_local_app --factory --host 127.0.0.1 --port 8000",
+        "output": "",
+        "explanation": "Atur DATABASE_URL, TOKEN_OPERATOR, dan TOKEN_SUPERVISOR pada environment lokal terlebih dahulu. DATABASE_URL SQLite menunjuk file latihan baru; gunakan token acak berbeda yang dihasilkan oleh secrets.token_urlsafe(32).",
+        "language": "text"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Buat dua operator; pastikan daftar, detail, PATCH, DELETE, dan riwayat tidak membocorkan tiket operator lain.",
+      "Arsipkan tiket BARU dengan versi benar; operator tidak dapat restore dan supervisor dapat restore dengan versi terbaru.",
+      "Ubah versi 1 menjadi 2, kirim perubahan dengan versi 1 lalu pastikan 409 dan audit tidak bertambah.",
+      "Pasang trigger penolak INSERT audit di database uji; pastikan PATCH gagal dan judul, versi, serta audit tidak berubah.",
+      "Jalankan pengujian yang sama pada SQLite dan PostgreSQL uji; tambah uji concurrency dua koneksi pada PostgreSQL native.",
+      "Refactor menjadi schema, dependency, repository, service, dan router tanpa mengubah kontrak response; lanjutkan dengan migrasi Alembic."
+    ],
+    "warning": "Contoh pendidikan ini tidak mempunyai pengelolaan akun/token produksi. create_all bukan pengganti migrasi. Jangan menjalankan tes destruktif pada database pengguna.",
+    "check": "Apa yang harus terjadi jika UPDATE tiket berhasil tetapi INSERT audit gagal?",
+    "answer": "Keduanya satu transaksi sehingga UPDATE ikut rollback; client tidak mendapat sukses palsu.",
+    "source": "https://docs.sqlalchemy.org/en/20/tutorial/data_update.html",
+    "diagram": "server-api-alur",
+    "diagramAlt": "Client, API, service, repository, dan database dalam alur transaksi tiket.",
+    "stage": 0,
+    "minutes": 90
   }
 ]

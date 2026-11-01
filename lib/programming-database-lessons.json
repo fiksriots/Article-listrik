@@ -2597,5 +2597,155 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 40
+  },
+  {
+    "slug": "db-orm-relasi",
+    "title": "Relasi ORM, eager loading, dan masalah N+1",
+    "summary": "Baca data terkait dengan rencana pemuatan yang sesuai kebutuhan.",
+    "analogy": "Membaca satu daftar teknisi lalu meminta arsip tiket satu per satu bisa membuat perjalanan bolak-balik yang tidak diperlukan.",
+    "explain": [
+      "Foreign key menjaga relasi database, sedangkan relationship SQLAlchemy memberi cara menavigasi relasi melalui objek. Keduanya mempunyai tugas berbeda: mendefinisikan relationship saja tidak menggantikan constraint pada engine.",
+      "Lazy loading dapat memicu SELECT ketika atribut relasi diakses. Jika daftar N teknisi diikuti pembacaan tiket masing-masing, kueri dapat bertambah menjadi pola N+1. Itu bukan selalu salah, tetapi harus disadari dan diukur pada pola akses nyata.",
+      "Contoh menggunakan selectinload untuk memuat koleksi terkait secara berkelompok. joinedload adalah pilihan lain dengan trade-off jumlah baris dan kebutuhan unique pada hasil koleksi tertentu. Jangan memilih strategi hanya karena namanya eager.",
+      "Bentuk response API sebaiknya berupa DTO atau data dasar yang sudah disiapkan saat session masih tersedia. Mengembalikan objek ORM lalu memicu lazy load setelah session ditutup dapat menimbulkan error atau kueri tidak terduga. Batasi kolom dan relasi yang memang diperlukan pemakai."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "Foreign key",
+          "Menjaga referensi",
+          "Di database"
+        ],
+        [
+          "relationship",
+          "Navigasi objek",
+          "Teknisi.tiket"
+        ],
+        [
+          "selectinload",
+          "Pemuatan koleksi berkelompok",
+          "Kurangi pola N+1"
+        ],
+        [
+          "DTO",
+          "Representasi response",
+          "Tidak bergantung lazy load setelah session selesai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment latihan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · relasi satu-ke-banyak",
+        "code": "from sqlalchemy import create_engine, ForeignKey, select\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session, selectinload\n\nclass Base(DeclarativeBase):\n    pass\nclass Teknisi(Base):\n    __tablename__ = \"teknisi\"\n    id: Mapped[int] = mapped_column(primary_key=True)\n    nama: Mapped[str]\n    tiket: Mapped[list[\"Tiket\"]] = relationship(back_populates=\"teknisi\", order_by=\"Tiket.id\")\nclass Tiket(Base):\n    __tablename__ = \"tiket\"\n    id: Mapped[int] = mapped_column(primary_key=True)\n    judul: Mapped[str]\n    teknisi_id: Mapped[int] = mapped_column(ForeignKey(\"teknisi.id\"))\n    teknisi: Mapped[Teknisi] = relationship(back_populates=\"tiket\")\n\nengine = create_engine(\"sqlite+pysqlite:///:memory:\")\ntry:\n    Base.metadata.create_all(engine)\n    with Session(engine) as s, s.begin():\n        s.add_all([Teknisi(nama=\"Ana\", tiket=[Tiket(judul=\"Link A\"), Tiket(judul=\"Link B\")]), Teknisi(nama=\"Budi\")])\n    with Session(engine) as s:\n        rows = s.scalars(select(Teknisi).options(selectinload(Teknisi.tiket)).order_by(Teknisi.id)).all()\n        data = [{\"nama\": t.nama, \"tiket\": [x.judul for x in t.tiket]} for t in rows]\n    for row in data:\n        print(row)\nfinally:\n    engine.dispose()",
+        "output": "{'nama': 'Ana', 'tiket': ['Link A', 'Link B']}\n{'nama': 'Budi', 'tiket': []}",
+        "explanation": "Data dasar dibentuk sebelum session ditutup. Demo berfokus pemuatan relasi; aktifkan foreign key pada setiap koneksi SQLite ketika mengembangkan penulisan nyata.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Aktifkan echo=True dan amati SQL yang dijalankan.",
+      "Bandingkan akses relasi dengan dan tanpa selectinload menggunakan session baru.",
+      "Tambahkan teknisi tanpa tiket dan pastikan tetap muncul."
+    ],
+    "warning": "Jumlah kueri bukan satu-satunya ukuran kinerja. Periksa jumlah baris, ukuran hasil, indeks, serta kebutuhan paging; eager loading seluruh koleksi besar juga dapat mahal.",
+    "check": "Apakah relationship menggantikan foreign key?",
+    "answer": "Tidak. Relationship mengatur navigasi objek; foreign key menjaga referensi di database.",
+    "source": "https://docs.sqlalchemy.org/en/20/orm/queryguide/relationships.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-alembic",
+    "title": "Alembic: revisi migrasi, upgrade, dan verifikasi",
+    "summary": "Kelola perubahan skema sebagai riwayat yang dapat ditinjau dan diuji.",
+    "analogy": "Format arsip berubah melalui instruksi revisi, bukan dengan berharap kartu lama mengikuti gambar formulir baru secara otomatis.",
+    "explain": [
+      "Alembic mengelola revisi migrasi yang menggunakan SQLAlchemy. Perubahan model ORM dan create_all tidak otomatis memperbarui tabel yang sudah ada. Migrasi menyatakan langkah dari revisi sebelumnya ke revisi tujuan.",
+      "Alur proyek: buat environment melalui alembic init migrations, hubungkan env.py ke metadata model serta URL latihan, buat revisi, tinjau upgrade/downgrade, lalu jalankan upgrade pada database uji dari versi lama. Jangan menyimpan kredensial di alembic.ini yang masuk Git.",
+      "Autogenerate menghasilkan kandidat perubahan, bukan keputusan bisnis final. Rename dapat terbaca sebagai drop/add; data backfill, default, constraint, dan operasi yang dapat menghilangkan data perlu ditinjau. Downgrade tidak otomatis dapat mengembalikan data yang sudah hilang.",
+      "Program berikut memperagakan migration environment sementara lengkap dengan dua revisi: membuat tabel awal dan menambah kolom. command.upgrade mencatat revisi pada alembic_version. Sesudah dua kali upgrade head, data lama tetap ada dan revisi tidak dijalankan ulang. Untuk proyek nyata, berkas revisi disimpan serta direview di repository."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Tujuan",
+        "Kontrak contoh"
+      ],
+      "rows": [
+        [
+          "Revision",
+          "Identitas perubahan",
+          "001 → 002"
+        ],
+        [
+          "upgrade",
+          "Maju sesuai riwayat",
+          "Tambah kolom tanpa menghapus data"
+        ],
+        [
+          "alembic_version",
+          "Revisi yang diterapkan",
+          "Bukan user_version SQLite"
+        ],
+        [
+          "Autogenerate",
+          "Kandidat yang perlu review",
+          "Bukan migrasi bisnis otomatis"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"SQLAlchemy==2.0.55\" \"alembic==1.20.1\"",
+        "output": "",
+        "explanation": "Versi contoh dikunci; gunakan virtual environment latihan.",
+        "language": "text"
+      },
+      {
+        "label": "Python · dua revisi yang dijalankan sungguhan",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom alembic import command\nfrom alembic.config import Config\nfrom sqlalchemy import create_engine, text\n\ndef latihan(folder):\n    folder = Path(folder)\n    scripts = folder / \"migrations\"\n    (scripts / \"versions\").mkdir(parents=True)\n    (scripts / \"env.py\").write_text(\n        \"from alembic import context\\nfrom sqlalchemy import create_engine\\n\"\n        \"engine = create_engine(context.config.get_main_option('sqlalchemy.url'))\\n\"\n        \"with engine.connect() as connection:\\n\"\n        \"    context.configure(connection=connection)\\n\"\n        \"    with context.begin_transaction(): context.run_migrations()\\n\"\n        \"engine.dispose()\\n\".replace(\"\\n\", chr(10)))\n    (scripts / \"versions\" / \"001_awal.py\").write_text(\n        \"from alembic import op\\nimport sqlalchemy as sa\\nrevision='001'\\ndown_revision=None\\n\"\n        \"def upgrade():\\n    op.create_table('tiket', sa.Column('id', sa.Integer, primary_key=True), sa.Column('judul', sa.Text, nullable=False))\\n\"\n        \"def downgrade():\\n    op.drop_table('tiket')\\n\".replace(\"\\n\", chr(10)))\n    (scripts / \"versions\" / \"002_prioritas.py\").write_text(\n        \"from alembic import op\\nimport sqlalchemy as sa\\nrevision='002'\\ndown_revision='001'\\n\"\n        \"def upgrade():\\n    op.add_column('tiket', sa.Column('prioritas', sa.Text, nullable=False, server_default='NORMAL'))\\n\"\n        \"def downgrade():\\n    raise RuntimeError('Downgrade perlu prosedur yang ditinjau')\\n\".replace(\"\\n\", chr(10)))\n    cfg = Config()\n    cfg.set_main_option(\"script_location\", str(scripts))\n    url = \"sqlite+pysqlite:///\" + str(folder / \"latihan.db\")\n    cfg.set_main_option(\"sqlalchemy.url\", url)\n    command.upgrade(cfg, \"001\")\n    engine = create_engine(url)\n    try:\n        with engine.begin() as con:\n            con.execute(text(\"INSERT INTO tiket(id, judul) VALUES (1, 'Link putus')\"))\n        command.upgrade(cfg, \"head\")\n        command.upgrade(cfg, \"head\")\n        with engine.connect() as con:\n            print(\"Revisi:\", con.execute(text(\"SELECT version_num FROM alembic_version\")).scalar_one())\n            print(con.execute(text(\"SELECT id, prioritas FROM tiket\")).all())\n    finally:\n        engine.dispose()\n\nwith TemporaryDirectory() as folder:\n    latihan(folder)",
+        "output": "Revisi: 002\n[(1, 'NORMAL')]",
+        "explanation": "Environment dan revisi dibuat di folder sementara agar contoh mandiri. Proyek normal menyimpan berkas migrasi, bukan membuat ulang riwayat setiap aplikasi mulai.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca prasyarat, kontrak, dan batas contoh sebelum menyalin kode.",
+      "Buat virtual environment latihan dan pasang dependensi yang dicantumkan. Simpan berkas sesuai label lalu jalankan.",
+      "Cocokkan hasil; kerjakan variasi latihan dan periksa efek data setelah operasi gagal."
+    ],
+    "practice": [
+      "Periksa isi revisi sebelum menjalankan upgrade.",
+      "Uji migrasi dari data lama, bukan hanya database kosong.",
+      "Simulasikan penambahan kolom gagal dan periksa skema serta alembic_version."
+    ],
+    "warning": "Contoh sengaja menolak downgrade revisi 002. Jangan menjanjikan pengembalian otomatis atas perubahan destruktif; siapkan backup, rehearsal, serta prosedur yang ditinjau.",
+    "check": "Apakah autogenerate boleh langsung dianggap benar tanpa review?",
+    "answer": "Tidak. Ia tidak mengetahui seluruh maksud rename, backfill, retensi, atau aturan bisnis.",
+    "source": "https://alembic.sqlalchemy.org/en/latest/tutorial.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
   }
 ]

@@ -266,6 +266,13 @@
     ]
   },
   {
+    "title": "Basis Data · Relasi ORM dan migrasi",
+    "slugs": [
+      "db-orm-relasi",
+      "db-alembic"
+    ]
+  },
+  {
     "title": "Backend/API · HTTP dan kontrak",
     "slugs": [
       "api-http-json",
@@ -277,13 +284,31 @@
     "slugs": [
       "api-fastapi",
       "api-validasi-error",
-      "api-pengujian"
+      "api-pengujian",
+      "api-crud-lengkap",
+      "api-dependency-transaksi"
+    ]
+  },
+  {
+    "title": "Backend/API · Identitas dan penanganan kegagalan",
+    "slugs": [
+      "api-autentikasi-otorisasi",
+      "api-error-observabilitas",
+      "api-client-timeout-retry"
+    ]
+  },
+  {
+    "title": "Backend/API · Eksekusi dan operasi lokal",
+    "slugs": [
+      "api-sync-async",
+      "api-cors-operasional"
     ]
   },
   {
     "title": "Backend/API · Proyek gabungan",
     "slugs": [
-      "api-proyek-tiket"
+      "api-proyek-tiket",
+      "api-proyek-tiket-aman"
     ]
   }
 ]

@@ -5974,5 +5974,425 @@
       "answer": 0,
       "explanation": "Lingkupnya laboratorium lokal dengan data simulasi."
     }
+  ],
+  "db-orm-relasi": [
+    {
+      "question": "Apa N+1 pada konteks ini?",
+      "options": [
+        "Kueri daftar ditambah kueri relasi per objek",
+        "Satu constraint tambahan",
+        "Jumlah kolom harus N+1"
+      ],
+      "answer": 0,
+      "explanation": "Akses relasi berulang dapat menghasilkan banyak SELECT."
+    },
+    {
+      "question": "Apa tujuan selectinload?",
+      "options": [
+        "Menghapus semua indeks",
+        "Memuat relasi secara berkelompok",
+        "Membekukan database"
+      ],
+      "answer": 1,
+      "explanation": "Strategi loading dipilih sesuai pola akses."
+    },
+    {
+      "question": "Kapan membentuk DTO response?",
+      "options": [
+        "Sesudah semua atribut dibuang",
+        "Hanya saat database mati",
+        "Saat data yang diperlukan masih tersedia dalam session"
+      ],
+      "answer": 2,
+      "explanation": "DTO tidak perlu memicu lazy load setelah session ditutup."
+    },
+    {
+      "question": "Apakah eager loading selalu lebih baik?",
+      "options": [
+        "Tidak",
+        "Ya untuk semua koleksi",
+        "Hanya namanya yang penting"
+      ],
+      "answer": 0,
+      "explanation": "Ukuran data dan pola kueri tetap perlu diukur."
+    }
+  ],
+  "db-alembic": [
+    {
+      "question": "Apa yang Alembic catat?",
+      "options": [
+        "Revisi migrasi yang diterapkan",
+        "Seluruh request HTTP",
+        "Semua backup otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Riwayat migrasi berbeda dari isi data aplikasi."
+    },
+    {
+      "question": "Mengapa upgrade head kedua tidak menambah kolom lagi?",
+      "options": [
+        "Semua ALTER diabaikan engine",
+        "Revisi sudah tercatat",
+        "Data sudah dihapus"
+      ],
+      "answer": 1,
+      "explanation": "Alembic mengikuti posisi revisi database."
+    },
+    {
+      "question": "Apakah downgrade menjamin data lama pulih?",
+      "options": [
+        "Ya selalu",
+        "Hanya jika revisi bernama angka",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Data yang dihapus tidak otomatis dapat direkonstruksi."
+    },
+    {
+      "question": "Apa yang perlu diuji sebelum rilis migrasi?",
+      "options": [
+        "Upgrade dari skema lama dengan data representatif",
+        "Hanya nama file revisi",
+        "Warna diagram"
+      ],
+      "answer": 0,
+      "explanation": "Migrasi harus menjaga data serta kontrak yang disepakati."
+    }
+  ],
+  "api-crud-lengkap": [
+    {
+      "question": "Apa body respons 204 contoh?",
+      "options": [
+        "Kosong",
+        "Seluruh tiket",
+        "Traceback"
+      ],
+      "answer": 0,
+      "explanation": "204 tidak membawa representasi body."
+    },
+    {
+      "question": "Mengapa counter tidak dihitung dari panjang dictionary?",
+      "options": [
+        "Agar id selalu satu",
+        "Agar penghapusan tidak memakai ulang id",
+        "Agar tidak perlu validasi"
+      ],
+      "answer": 1,
+      "explanation": "Identitas tetap berbeda saat data dihapus."
+    },
+    {
+      "question": "Apa tujuan limit maksimum?",
+      "options": [
+        "Mengganti hak akses",
+        "Menyimpan semua data",
+        "Membatasi ukuran hasil"
+      ],
+      "answer": 2,
+      "explanation": "Pembatasan daftar merupakan bagian kontrak."
+    },
+    {
+      "question": "Apakah dictionary ini storage multiworker?",
+      "options": [
+        "Bukan",
+        "Ya otomatis",
+        "Hanya bila id integer"
+      ],
+      "answer": 0,
+      "explanation": "State lokal proses tidak menjadi penyimpanan bersama."
+    }
+  ],
+  "api-dependency-transaksi": [
+    {
+      "question": "Apa tugas Depends?",
+      "options": [
+        "Mendeklarasikan kebutuhan endpoint",
+        "Membuat semua operasi atomik otomatis",
+        "Menghapus kebutuhan database"
+      ],
+      "answer": 0,
+      "explanation": "Sumber daya diberikan melalui dependency."
+    },
+    {
+      "question": "Apa yang yield dependency bantu kelola?",
+      "options": [
+        "Semua izin bisnis tanpa kode",
+        "Lifecycle sumber daya",
+        "Jumlah primary key"
+      ],
+      "answer": 1,
+      "explanation": "Pembersihan dilakukan setelah penggunaan."
+    },
+    {
+      "question": "Mengapa dua INSERT satu transaksi?",
+      "options": [
+        "Agar semua id sama",
+        "Agar endpoint tidak perlu dites",
+        "Agar berhasil atau batal bersama"
+      ],
+      "answer": 2,
+      "explanation": "Keduanya merupakan satu unit pekerjaan."
+    },
+    {
+      "question": "Apakah session global lintas request tepat?",
+      "options": [
+        "Tidak",
+        "Ya agar hemat objek",
+        "Hanya untuk PostgreSQL"
+      ],
+      "answer": 0,
+      "explanation": "Session mempunyai state unit kerja yang tidak dibagi sembarang."
+    }
+  ],
+  "api-autentikasi-otorisasi": [
+    {
+      "question": "Autentikasi menjawab apa?",
+      "options": [
+        "Siapa pengguna",
+        "Berapa baris tabel",
+        "Bagaimana mengurutkan JSON"
+      ],
+      "answer": 0,
+      "explanation": "Identitas dibuktikan lewat kredensial."
+    },
+    {
+      "question": "Apa yang masih diperlukan setelah token valid?",
+      "options": [
+        "Percaya semua owner_id body",
+        "Pemeriksaan izin pada objek dan tindakan",
+        "Membuka seluruh daftar"
+      ],
+      "answer": 1,
+      "explanation": "Otorisasi tetap diperlukan."
+    },
+    {
+      "question": "Mengapa token tidak diletakkan di URL?",
+      "options": [
+        "Karena JSON tidak mendukung string",
+        "Karena token harus berupa angka",
+        "URL dapat terekam log dan riwayat"
+      ],
+      "answer": 2,
+      "explanation": "Rahasia tidak boleh tersebar lewat URL."
+    },
+    {
+      "question": "Apakah digest token acak ini resep hashing password?",
+      "options": [
+        "Tidak",
+        "Ya tanpa salt untuk semua password",
+        "Ya asal password pendek"
+      ],
+      "answer": 0,
+      "explanation": "Password mempunyai karakteristik berbeda dari token acak berentropi tinggi."
+    }
+  ],
+  "api-error-observabilitas": [
+    {
+      "question": "Apa manfaat code stabil?",
+      "options": [
+        "Client dapat merespons tanpa membaca pesan bebas",
+        "Membocorkan SQL",
+        "Menggantikan status HTTP"
+      ],
+      "answer": 0,
+      "explanation": "Kode mesin dapat diperiksa program."
+    },
+    {
+      "question": "Apa yang perlu diteruskan pada error 401?",
+      "options": [
+        "Password pengguna",
+        "Header WWW-Authenticate",
+        "Traceback database"
+      ],
+      "answer": 1,
+      "explanation": "Header autentikasi tetap bagian kontrak."
+    },
+    {
+      "question": "Apakah request_id memberi izin?",
+      "options": [
+        "Ya untuk semua endpoint",
+        "Ya jika UUID panjang",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Korelasi berbeda dengan autentikasi."
+    },
+    {
+      "question": "Mengapa error tidak semuanya 200?",
+      "options": [
+        "Client perlu membedakan sukses dan gagal",
+        "Agar JSON lebih besar",
+        "Karena semua error harus 404"
+      ],
+      "answer": 0,
+      "explanation": "Status bermakna membantu client dan pemantauan."
+    }
+  ],
+  "api-client-timeout-retry": [
+    {
+      "question": "Apa fungsi timeout?",
+      "options": [
+        "Membatasi waktu tunggu operasi",
+        "Menjamin server tidak commit",
+        "Menghapus kebutuhan penanganan error"
+      ],
+      "answer": 0,
+      "explanation": "Timeout mengendalikan penantian client."
+    },
+    {
+      "question": "Berapa percobaan maksimum contoh?",
+      "options": [
+        "Tidak terbatas",
+        "Tiga",
+        "Sampai server dimatikan"
+      ],
+      "answer": 1,
+      "explanation": "Loop membatasi jumlah usaha."
+    },
+    {
+      "question": "Apa risiko retry POST tanpa kontrak?",
+      "options": [
+        "JSON menjadi terurut",
+        "Response selalu 204",
+        "Efek bisnis ganda"
+      ],
+      "answer": 2,
+      "explanation": "Server mungkin telah menerima usaha pertama."
+    },
+    {
+      "question": "Apa yang MockTransport buktikan?",
+      "options": [
+        "Logika client pada response/error simulasi",
+        "Kinerja internet nyata",
+        "Keamanan TLS produksi"
+      ],
+      "answer": 0,
+      "explanation": "Transport simulasi tidak menguji jaringan nyata."
+    }
+  ],
+  "api-sync-async": [
+    {
+      "question": "Apa tujuan await pada I/O async?",
+      "options": [
+        "Memberi kesempatan loop mengerjakan task lain saat menunggu",
+        "Membuat CPU tak terbatas",
+        "Mengubah SQLite menjadi server"
+      ],
+      "answer": 0,
+      "explanation": "Await bekerja dengan operasi awaitable."
+    },
+    {
+      "question": "Apakah async mempercepat semua komputasi CPU?",
+      "options": [
+        "Ya selalu",
+        "Tidak",
+        "Ya tanpa worker"
+      ],
+      "answer": 1,
+      "explanation": "CPU dan I/O mempunyai hambatan berbeda."
+    },
+    {
+      "question": "Apa risiko task latar dalam proses?",
+      "options": [
+        "Selalu tersimpan di database",
+        "Pasti tepat sekali",
+        "Dapat hilang saat proses berhenti"
+      ],
+      "answer": 2,
+      "explanation": "Durabilitas perlu dirancang."
+    },
+    {
+      "question": "Apakah satu Session aman dipakai task paralel sembarang?",
+      "options": [
+        "Tidak",
+        "Ya karena objek Python",
+        "Ya jika tabel kecil"
+      ],
+      "answer": 0,
+      "explanation": "Session memuat state unit kerja yang perlu diisolasi."
+    }
+  ],
+  "api-cors-operasional": [
+    {
+      "question": "Apa pembentuk origin?",
+      "options": [
+        "Skema, host, dan port",
+        "Nama tabel",
+        "Hanya path URL"
+      ],
+      "answer": 0,
+      "explanation": "Perbedaan port dapat menghasilkan origin berbeda."
+    },
+    {
+      "question": "Siapa yang menegakkan pembatasan CORS?",
+      "options": [
+        "Semua client HTTP sebagai otorisasi",
+        "Browser",
+        "Primary key"
+      ],
+      "answer": 1,
+      "explanation": "CORS merupakan mekanisme browser."
+    },
+    {
+      "question": "Apa binding contoh?",
+      "options": [
+        "0.0.0.0 otomatis",
+        "Seluruh internet",
+        "127.0.0.1"
+      ],
+      "answer": 2,
+      "explanation": "Contoh berjalan lokal."
+    },
+    {
+      "question": "Apakah health ok membuktikan semua dependency sehat?",
+      "options": [
+        "Tidak",
+        "Ya termasuk backup",
+        "Ya termasuk semua izin"
+      ],
+      "answer": 0,
+      "explanation": "Cakupan health harus didefinisikan."
+    }
+  ],
+  "api-proyek-tiket-aman": [
+    {
+      "question": "Dari mana owner tiket baru berasal?",
+      "options": [
+        "Identitas terpercaya pada server",
+        "owner_id bebas dari body",
+        "Query parameter role"
+      ],
+      "answer": 0,
+      "explanation": "Pemilik tidak boleh dipilih untuk mengakali izin."
+    },
+    {
+      "question": "Mengapa UPDATE juga menyertakan versi lama?",
+      "options": [
+        "Membuat semua request selalu sukses",
+        "Mendeteksi perubahan yang terjadi setelah pembacaan",
+        "Menghapus kebutuhan transaksi"
+      ],
+      "answer": 1,
+      "explanation": "Periksa rowcount untuk mendeteksi konflik."
+    },
+    {
+      "question": "Apa respons atas versi lama pada contoh?",
+      "options": [
+        "200 dengan menimpa",
+        "204 tanpa pemeriksaan",
+        "409"
+      ],
+      "answer": 2,
+      "explanation": "Client perlu membaca ulang dan memutuskan perubahan."
+    },
+    {
+      "question": "Apa sifat audit dan perubahan tiket?",
+      "options": [
+        "Berhasil atau batal dalam satu transaksi",
+        "Audit boleh selalu gagal diam-diam",
+        "Masing-masing commit lebih dulu"
+      ],
+      "answer": 0,
+      "explanation": "Transaksi menjaga konsistensi keduanya."
+    }
   ]
 }
