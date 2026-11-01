@@ -1956,5 +1956,73 @@
     "diagramAlt": "Tiket BARU ditugaskan ke teknisi terdaftar, kemudian DIPROSES dan SELESAI. JSON dimuat kembali dengan memeriksa alur serta referensi.",
     "stage": 0,
     "minutes": 60
+  },
+  {
+    "slug": "oop-repository-service",
+    "title": "Repository dan service: memisahkan aturan bisnis dari penyimpanan",
+    "summary": "Tentukan kontrak akses data dan pemilik transaksi tanpa menyembunyikan kebutuhan database.",
+    "analogy": "Petugas layanan memutuskan aturan penugasan; petugas arsip mengetahui cara mengambil dan menyimpan kartu.",
+    "explain": [
+      "Repository menyajikan operasi akses data yang diperlukan domain, sedangkan service mengoordinasikan aturan satu use case. Pemisahan ini membantu menguji aturan tanpa selalu bergantung pada bentuk penyimpanan tertentu.",
+      "Contoh service hanya mengizinkan tiket BARU menjadi DIPROSES. Repository memori menyediakan ambil serta ubah_jika dengan kondisi status lama. Hasil dictionary disalin agar pemakai tidak mengubah data internal melalui hasil pembacaan.",
+      "Pada repository SQL, ubah_jika diterjemahkan menjadi UPDATE ... WHERE status = status_lama lalu memeriksa rowcount. Untuk beberapa penulisan, service atau unit of work harus mempunyai batas transaksi yang jelas. Jangan membiarkan tiap repository commit sendiri ketika seluruh pekerjaan harus atomik.",
+      "Repository bukan kewajiban membungkus setiap fungsi ORM tanpa manfaat. Tentukan operasi berdasarkan kebutuhan pemakai, dan integration test implementasi SQL agar kontraknya sesuai tes memori. Repository memori tidak membuktikan penguncian atau constraint server."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Repository",
+          "Akses dan perubahan data",
+          "ambil, ubah_jika"
+        ],
+        [
+          "Service",
+          "Aturan use case",
+          "Mulai hanya dari BARU"
+        ],
+        [
+          "Kontrak kegagalan",
+          "Bedakan hilang dan konflik",
+          "LookupError, ValueError"
+        ],
+        [
+          "Transaksi",
+          "Satu pemilik unit kerja",
+          "Jangan commit parsial di tiap bagian"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · kontrak kecil",
+        "code": "class RepositoryMemori:\n    def __init__(self):\n        self._data = {1: {\"id\": 1, \"status\": \"BARU\"}}\n\n    def ambil(self, nomor):\n        row = self._data.get(nomor)\n        return None if row is None else dict(row)\n\n    def ubah_jika(self, nomor, lama, baru):\n        row = self._data.get(nomor)\n        if row is None or row[\"status\"] != lama:\n            return False\n        row[\"status\"] = baru\n        return True\n\nclass LayananTiket:\n    def __init__(self, repo):\n        self.repo = repo\n\n    def mulai(self, nomor):\n        if self.repo.ambil(nomor) is None:\n            raise LookupError(\"Tiket tidak ditemukan\")\n        if not self.repo.ubah_jika(nomor, \"BARU\", \"DIPROSES\"):\n            raise ValueError(\"Status sudah berubah\")\n        return self.repo.ambil(nomor)\n\nrepo = RepositoryMemori()\nlayanan = LayananTiket(repo)\nprint(layanan.mulai(1))\ntry:\n    layanan.mulai(1)\nexcept ValueError as error:\n    print(error)",
+        "output": "{'id': 1, 'status': 'DIPROSES'}\nStatus sudah berubah",
+        "explanation": "ubah_jika adalah kontrak pembaruan bersyarat. Implementasi memori hanya untuk latihan satu proses dan belum menjamin thread safety.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Implementasikan kontrak yang sama dengan SQLite dan UPDATE bersyarat.",
+      "Uji tiket hilang, konflik status, dan perubahan sah.",
+      "Rancang siapa yang membuka transaksi bila status dan riwayat harus ditulis bersama."
+    ],
+    "warning": "Abstraksi yang menyembunyikan semua transaksi dapat justru merusak atomisitas. Tetap pahami query serta engine di balik repository.",
+    "check": "Apakah tes repository memori cukup untuk membuktikan implementasi PostgreSQL benar?",
+    "answer": "Tidak. Kontrak umum bisa diuji bersama, tetapi constraint dan transaksi server perlu integration test.",
+    "source": "https://docs.sqlalchemy.org/en/20/orm/session_basics.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
   }
 ]

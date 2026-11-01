@@ -18,13 +18,15 @@ structures = json.loads((ROOT / 'lib/programming-data-structure-lessons.json').r
 oop = json.loads((ROOT / 'lib/programming-oop-lessons.json').read_text())
 databases = json.loads((ROOT / 'lib/programming-database-lessons.json').read_text())
 from programming_sql_runner import run_sql
+from programming_postgres_runner import run_postgres
+api = json.loads((ROOT / 'lib/programming-api-lessons.json').read_text())
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
-slugs = [item['slug'] for item in base + extra + structures + oop + databases]
+slugs = [item['slug'] for item in base + extra + structures + oop + databases + api]
 ordered = [slug for group in order for slug in group['slugs']]
-assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases)
+assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases + api)
 assert set(slugs) == set(ordered) == set(quizzes)
-for lesson in base + extra + structures + oop + databases:
+for lesson in base + extra + structures + oop + databases + api:
     assert len(lesson['explain']) >= 3
     assert all(len(row) == len(lesson['table']['headers']) for row in lesson['table']['rows'])
     if lesson['diagram']:
@@ -38,7 +40,7 @@ for lesson in base + extra + structures + oop + databases:
             ast.parse(question['code'])
 
 previous_cwd = Path.cwd()
-for lesson in extra + structures + oop + databases:
+for lesson in extra + structures + oop + databases + api:
     with tempfile.TemporaryDirectory() as temp:
         folder = Path(temp)
         # Multi-file module examples share this folder; each other lesson is isolated.
@@ -52,6 +54,9 @@ for lesson in extra + structures + oop + databases:
         try:
             for index, block in enumerate(lesson['blocks']):
                 if block.get('language') == 'text':
+                    continue
+                if block.get('language') == 'postgresql':
+                    assert run_postgres(block['code']).strip() == block['output'].strip(), lesson['slug']
                     continue
                 if block.get('language') == 'sql':
                     assert run_sql(block['code']).strip() == block['output'].strip(), lesson['slug']
@@ -119,4 +124,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 126 ordered lessons, 504 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 142 ordered lessons, 568 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

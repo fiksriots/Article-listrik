@@ -1,0 +1,449 @@
+[
+  {
+    "slug": "api-http-json",
+    "title": "HTTP dan JSON: percakapan client dan server",
+    "summary": "Bedakan metode, path, status, header, serta body dalam sebuah request–response.",
+    "analogy": "Client mengirim formulir ke loket tertentu; server mengembalikan tanda hasil beserta isi yang disepakati.",
+    "explain": [
+      "HTTP mengatur pertukaran request dan response. Request mempunyai metode seperti GET atau POST, target path, header, dan body bila diperlukan. Response mempunyai status, header, dan body. Database biasanya berada di belakang server aplikasi, bukan diakses langsung oleh browser dengan kredensial database.",
+      "JSON adalah format data, bukan protokol jaringan. Content-Type: application/json menyatakan representasi body. JSON memakai true, false, dan null; ketika dibaca Python, nilainya dipetakan menjadi True, False, dan None.",
+      "Kode 2xx menandakan kelas sukses, 4xx berkaitan dengan request atau akses, dan 5xx kegagalan server. Status 200, 201, 404, 409, dan 422 mempunyai kegunaan berbeda yang perlu ditetapkan pada kontrak endpoint.",
+      "Contoh hanya membentuk representasi response di memori untuk memahami bagian-bagiannya. Belum ada server atau koneksi HTTP yang dibuka. Bab FastAPI berikutnya menyediakan server lokal serta test client."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Method dan path",
+          "Operasi serta sumber",
+          "GET /tiket/1"
+        ],
+        [
+          "Header",
+          "Metadata representasi",
+          "Content-Type"
+        ],
+        [
+          "Status",
+          "Hasil operasi HTTP",
+          "200 / 201 / 404"
+        ],
+        [
+          "JSON body",
+          "Data terstruktur",
+          "Objek, array, string, angka"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · bentuk response simulasi",
+        "code": "import json\nfrom http import HTTPStatus\n\npayload = {\"id\": 1, \"judul\": \"Link putus\", \"aktif\": True}\nbody = json.dumps(payload, ensure_ascii=False)\nprint(HTTPStatus.OK.value, HTTPStatus.OK.phrase)\nprint(\"Content-Type: application/json\")\nprint(body)\nprint(json.loads(body)[\"aktif\"] is True)",
+        "output": "200 OK\nContent-Type: application/json\n{\"id\": 1, \"judul\": \"Link putus\", \"aktif\": true}\nTrue",
+        "explanation": "json.dumps membentuk teks; json.loads memulihkan data dasar. Ini simulasi bentuk respons, bukan implementasi transport HTTP.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Pisahkan status, header, dan body pada contoh response.",
+      "Bandingkan null JSON dengan None Python.",
+      "Gambar client → API → database tanpa mengekspos password database ke client."
+    ],
+    "warning": "Jangan menyamakan JSON valid dengan data bisnis valid. Server masih harus memeriksa bentuk, nilai, izin, dan aturan operasi.",
+    "check": "Apakah JSON sama dengan HTTP?",
+    "answer": "Tidak. HTTP mengatur pertukaran pesan; JSON adalah salah satu format body yang dapat dibawa.",
+    "source": "https://www.rfc-editor.org/rfc/rfc9110.html",
+    "diagram": "server-api-alur",
+    "diagramAlt": "Client mengirim request ke API; service memakai repository dan database lalu membentuk response.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-rest-kontrak",
+    "title": "REST dan kontrak endpoint yang jelas",
+    "summary": "Tentukan sumber, metode, status, pagination, dan bentuk kesalahan sebelum implementasi.",
+    "analogy": "Loket mempunyai alamat serta jenis layanan yang konsisten, sehingga pemakai tidak perlu menebak cara mengirim formulir.",
+    "explain": [
+      "Rancang resource melalui path yang stabil, misalnya /tiket dan /tiket/123. GET membaca, POST biasanya membuat sumber atau menjalankan operasi yang didefinisikan, PUT mengganti representasi sesuai kontrak, PATCH mengubah sebagian, dan DELETE meminta penghapusan sesuai makna API.",
+      "Idempotensi berarti mengulang request yang sama mempunyai efek yang dimaksud sama, bukan body dan status response selalu identik. Semantik HTTP menyatakan PUT dan DELETE idempoten; POST tidak otomatis demikian. Implementasi tetap harus menjaga kontrak, termasuk saat koneksi putus atau request diulang.",
+      "Tentukan respons: 201 untuk pembuatan, 404 jika sumber tidak tersedia, 409 untuk konflik state yang disepakati, serta 422 pada validasi model FastAPI. Jangan memakai 200 untuk semua kegagalan hanya agar client mudah membaca JSON.",
+      "Dokumentasikan ukuran halaman maksimum, cursor, field wajib, serta bentuk error. Contoh tabel endpoint di artikel ini adalah rancangan kontrak, bukan server yang sudah berjalan. Bab berikutnya menerjemahkan sebagian kontrak ke FastAPI."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "GET /tiket",
+          "Daftar terbatas",
+          "200 + array"
+        ],
+        [
+          "POST /tiket",
+          "Buat tiket",
+          "201 + objek"
+        ],
+        [
+          "PATCH /tiket/{id}/status",
+          "Perubahan status bersyarat",
+          "200 / 404 / 409"
+        ],
+        [
+          "GET /tiket/{id}/riwayat",
+          "Baca perubahan",
+          "200 + array"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · kontrak sebagai data",
+        "code": "kontrak = {\n    (\"GET\", \"/tiket\"): (200, \"Daftar tiket\"),\n    (\"POST\", \"/tiket\"): (201, \"Tiket dibuat\"),\n}\nfor method, path in [(\"GET\", \"/tiket\"), (\"POST\", \"/tiket\")]:\n    status, arti = kontrak[(method, path)]\n    print(method, path, status, arti)",
+        "output": "GET /tiket 200 Daftar tiket\nPOST /tiket 201 Tiket dibuat",
+        "explanation": "Dictionary ini membantu merencanakan kontrak. Ia tidak mengimplementasikan routing atau HTTP sungguhan.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Rancang kontrak request dan response pembuatan tiket.",
+      "Jelaskan pengulangan DELETE pada sumber yang sudah tidak ada.",
+      "Tentukan perbedaan id hilang, input salah, dan konflik status."
+    ],
+    "warning": "Memilih nama REST tidak otomatis memberi autentikasi atau membuktikan idempotensi. Uji efek perubahan, bukan hanya status respons.",
+    "check": "Apakah idempoten berarti setiap response pengulangan harus sama persis?",
+    "answer": "Tidak. Yang dipertahankan adalah efek yang dimaksud menurut semantik operasi, bukan seluruh isi response identik.",
+    "source": "https://www.rfc-editor.org/rfc/rfc9110.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-fastapi",
+    "title": "FastAPI pertama dan server lokal",
+    "summary": "Buat endpoint kecil, jalankan melalui Uvicorn, lalu uji tanpa jaringan luar.",
+    "analogy": "Bangun satu loket yang menjawab pertanyaan kesehatan layanan sebelum menambah operasi data.",
+    "explain": [
+      "FastAPI memetakan path dan metode HTTP ke fungsi Python serta memakai anotasi untuk memproses sebagian input dan output. Uvicorn adalah server ASGI yang dapat menjalankan aplikasinya. Versi contoh dikunci pada perintah dependensi agar pembaca mempunyai acuan yang dapat diuji.",
+      "Simpan program sebagai api_awal.py. Jalankan python api_awal.py untuk demonstrasi TestClient. Untuk server nyata pada mesin sendiri, jalankan python -m uvicorn api_awal:app --host 127.0.0.1 --port 8000, lalu buka /health atau /docs pada alamat lokal tersebut.",
+      "TestClient menguji request melalui aplikasi di dalam proses tanpa membuka listener internet. Test ini memeriksa routing dan response, tetapi tidak membuktikan DNS, TLS, proxy, maupun konfigurasi deployment.",
+      "Gunakan def biasa untuk fungsi yang memakai driver database sinkron pada materi ini. Menulis async def tidak otomatis membuat operasi database sinkron menjadi nonblocking. Jalur ini memperkenalkan API sinkron terlebih dahulu."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "FastAPI app",
+          "Objek aplikasi ASGI",
+          "app = FastAPI()"
+        ],
+        [
+          "Decorator",
+          "Metode dan path",
+          "@app.get"
+        ],
+        [
+          "Uvicorn",
+          "Menjalankan server",
+          "Host lokal 127.0.0.1"
+        ],
+        [
+          "TestClient",
+          "Request dalam proses",
+          "Tanpa listener internet"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Jalankan dalam virtual environment khusus latihan.",
+        "language": "text"
+      },
+      {
+        "label": "api_awal.py",
+        "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/health\")\ndef health():\n    return {\"status\": \"ok\"}\n\nif __name__ == \"__main__\":\n    from fastapi.testclient import TestClient\n    with TestClient(app) as client:\n        response = client.get(\"/health\")\n        print(response.status_code, response.json())",
+        "output": "200 {'status': 'ok'}",
+        "explanation": "Jalankan python api_awal.py untuk demo; gunakan Uvicorn untuk server lokal. Mengimpor file tidak menjalankan demo TestClient.",
+        "language": "python",
+        "filename": "api_awal.py"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Jalankan demo lalu server Uvicorn pada alamat loopback.",
+      "Baca dokumentasi otomatis /docs.",
+      "Tambahkan endpoint /versi dengan hasil tetap dan tesnya."
+    ],
+    "warning": "Contoh belum memiliki autentikasi atau batas laju. Host loopback dipilih untuk latihan lokal; jangan menganggap ini konfigurasi layanan publik yang sudah lengkap.",
+    "check": "Apakah TestClient yang lolos membuktikan konfigurasi TLS produksi sudah benar?",
+    "answer": "Tidak. TestClient menguji aplikasi dalam proses, bukan seluruh jalur jaringan dan deployment.",
+    "source": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-validasi-error",
+    "title": "Validasi body, batas input, dan respons error",
+    "summary": "Pisahkan masalah bentuk request dari konflik aturan bisnis.",
+    "analogy": "Formulir yang lengkap belum tentu boleh diproses bila status tiket sudah selesai.",
+    "explain": [
+      "Pydantic memvalidasi body berdasarkan model. Tetapkan panjang teks, rentang angka, field ekstra, serta kebijakan konversi tipe. Contoh memakai string yang di-strip dan integer strict agar boolean atau teks angka tidak diterima sebagai prioritas.",
+      "Validasi schema menghasilkan 422 pada contoh FastAPI. Sumber yang tidak ditemukan dapat menghasilkan 404, sementara konflik perubahan status dapat menghasilkan 409. Bentuk serta arti error adalah bagian kontrak yang perlu diketahui client.",
+      "Jangan mengirim exception internal atau connection string ke response. Handler boleh mengubah error domain yang dikenal menjadi status HTTP yang sesuai, sementara kegagalan tak dikenal dicatat di log internal dan ditangani sebagai kesalahan server.",
+      "Contoh endpoint tidak menyimpan tiket; ia hanya memvalidasi dan mengembalikan representasi hasil. API dengan penyimpanan serta transaksi berada pada proyek gabungan di akhir jalur."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "StringConstraints",
+          "Normalisasi dan panjang",
+          "Strip, 1..120 karakter"
+        ],
+        [
+          "StrictInt",
+          "Tolak bool dan string angka",
+          "Prioritas integer"
+        ],
+        [
+          "extra=forbid",
+          "Tolak field tak dikenal",
+          "Kontrak masukan jelas"
+        ],
+        [
+          "HTTPException",
+          "Error HTTP yang disengaja",
+          "404 atau konflik domain"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Gunakan virtual environment latihan yang sama.",
+        "language": "text"
+      },
+      {
+        "label": "Python · validasi request",
+        "code": "from typing import Annotated\nfrom fastapi import FastAPI\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel, ConfigDict, Field, StrictInt, StringConstraints\n\nJudul = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=120)]\n\nclass TiketInput(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    judul: Judul\n    prioritas: StrictInt = Field(ge=1, le=3)\n\napp = FastAPI()\n@app.post(\"/tiket\", status_code=201)\ndef buat(body: TiketInput):\n    return body.model_dump()\n\nwith TestClient(app) as client:\n    valid = client.post(\"/tiket\", json={\"judul\": \" Link putus \", \"prioritas\": 2})\n    print(valid.status_code, valid.json())\n    print(client.post(\"/tiket\", json={\"judul\": \" \", \"prioritas\": 2}).status_code)\n    print(client.post(\"/tiket\", json={\"judul\": \"Link\", \"prioritas\": True}).status_code)",
+        "output": "201 {'judul': 'Link putus', 'prioritas': 2}\n422\n422",
+        "explanation": "Prioritas True ditolak meskipun bool merupakan turunan int di Python; strict validation menjaga kontrak model.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Uji field ekstra, teks terlalu panjang, dan prioritas \"2\".",
+      "Tuliskan perbedaan input schema invalid dengan konflik status tiket.",
+      "Rancang pesan error yang berguna tanpa membocorkan detail penyimpanan."
+    ],
+    "warning": "Validasi model bukan pengganti otorisasi. Request berbentuk benar tetap harus diperiksa hak serta aturan bisnisnya ketika aplikasi mempunyai pengguna.",
+    "check": "Mengapa prioritas True ditolak?",
+    "answer": "Kontrak mengharuskan integer strict, bukan boolean, walaupun Python menganggap bool sebagai subtype int.",
+    "source": "https://fastapi.tiangolo.com/tutorial/body/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-pengujian",
+    "title": "Pengujian API: sukses, invalid, hilang, dan isolasi",
+    "summary": "Bangun aplikasi baru pada setiap tes agar hasil tidak tergantung urutan.",
+    "analogy": "Setiap latihan petugas dimulai dengan arsip uji yang diketahui, bukan sisa pekerjaan kelompok sebelumnya.",
+    "explain": [
+      "Tes API sebaiknya memeriksa status, bentuk JSON, nilai penting, dan efek data. Satu tes GET sukses belum mencakup input invalid, sumber hilang, atau konflik perubahan.",
+      "Application factory membuat instance aplikasi dengan state yang baru. Pada contoh, setUp membuat aplikasi serta client baru untuk setiap method tes sehingga data yang ditambah satu tes tidak bocor ke tes berikutnya.",
+      "Gunakan context manager TestClient agar lifecycle aplikasi ditangani. Pada proyek database, dependency atau factory dapat diarahkan ke database uji yang terpisah. Jangan mengganti URL produksi secara diam-diam di fixture.",
+      "Tes dalam proses perlu dilengkapi pemeriksaan jalur deployment bila layanan benar-benar diterbitkan. Pada materi ini kita menguji aplikasi latihan, bukan menambahkan endpoint aktif ke situs artikel."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Factory",
+          "Aplikasi baru",
+          "Isolasi state tes"
+        ],
+        [
+          "Assertion",
+          "Status dan nilai",
+          "201, 404, isi JSON"
+        ],
+        [
+          "Lifecycle",
+          "Buka dan tutup TestClient",
+          "Context manager"
+        ],
+        [
+          "Database uji",
+          "Target eksplisit",
+          "Terpisah dari data operasional"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\"",
+        "output": "",
+        "explanation": "Tes memakai unittest bawaan Python serta TestClient dari dependensi di atas.",
+        "language": "text"
+      },
+      {
+        "label": "Python · dua skenario API",
+        "code": "import io\nimport unittest\nfrom fastapi import FastAPI, HTTPException\nfrom fastapi.testclient import TestClient\nfrom pydantic import BaseModel\n\ndef create_app():\n    app = FastAPI()\n    data = {}\n    class Input(BaseModel):\n        judul: str\n    @app.post(\"/tiket\", status_code=201)\n    def buat(body: Input):\n        nomor = len(data) + 1\n        data[nomor] = {\"id\": nomor, \"judul\": body.judul}\n        return data[nomor]\n    @app.get(\"/tiket/{nomor}\")\n    def ambil(nomor: int):\n        if nomor not in data:\n            raise HTTPException(404, \"Tiket tidak ditemukan\")\n        return data[nomor]\n    return app\n\nclass TesAPI(unittest.TestCase):\n    def test_buat_dan_baca(self):\n        with TestClient(create_app()) as client:\n            hasil = client.post(\"/tiket\", json={\"judul\": \"Link\"})\n            self.assertEqual(hasil.status_code, 201)\n            self.assertEqual(client.get(\"/tiket/1\").json()[\"judul\"], \"Link\")\n    def test_isolasi_dan_invalid(self):\n        with TestClient(create_app()) as client:\n            self.assertEqual(client.get(\"/tiket/1\").status_code, 404)\n            self.assertEqual(client.post(\"/tiket\", json={}).status_code, 422)\n\nsuite = unittest.defaultTestLoader.loadTestsFromTestCase(TesAPI)\nhasil = unittest.TextTestRunner(stream=io.StringIO()).run(suite)\nprint(\"Tes:\", hasil.testsRun, \"Lolos:\", hasil.wasSuccessful())",
+        "output": "Tes: 2 Lolos: True",
+        "explanation": "Penyimpanan dictionary hanya untuk memahami pengujian dan factory; bukan storage yang aman untuk beberapa worker atau request bersamaan.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Tambahkan tes method yang tidak didukung menghasilkan 405.",
+      "Periksa JSON error 404 tanpa bergantung seluruh teks traceback.",
+      "Terapkan factory dengan database file sementara pada proyek akhir."
+    ],
+    "warning": "Contoh Input sengaja sederhana; gunakan pembatasan dari materi validasi untuk aplikasi yang menerima data nyata. Lolos dua tes tidak membuktikan seluruh API bebas bug.",
+    "check": "Mengapa factory dipanggil lagi pada tes kedua?",
+    "answer": "Agar tes mulai dengan state baru dan tidak bergantung tiket yang dibuat tes lain.",
+    "source": "https://fastapi.tiangolo.com/tutorial/testing/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "api-proyek-tiket",
+    "title": "Proyek: tiket gangguan dengan database server dan API",
+    "summary": "Gabungkan validasi request, SQLAlchemy, transaksi, dan laporan melalui endpoint.",
+    "analogy": "Loket API menerima formulir, layanan memeriksa alur, lalu perubahan kartu dan riwayat disahkan bersama di database.",
+    "explain": [
+      "Proyek menyediakan POST /teknisi, POST /tiket, GET /tiket, GET /tiket/{id}, PATCH status, GET riwayat, dan GET /laporan. Alur latihan BARU → DIPROSES → SELESAI; teknisi dipilih saat mulai diproses. Data yang dipakai seluruhnya simulasi.",
+      "Simpan program sebagai proyek_api.py. Demo python proyek_api.py memakai SQLite file sementara agar cepat dicoba. Untuk server PostgreSQL, siapkan database latihan kosong, pasang driver psycopg, dan atur DATABASE_URL berformat postgresql+psycopg://... melalui mekanisme konfigurasi lokalmu tanpa menaruh kredensial di source. Jalankan python -m uvicorn proyek_api:create_from_env --factory --host 127.0.0.1 --port 8000.",
+      "Factory membuat engine serta session per request. Model deklaratif dipakai kembali pada SQLite dan PostgreSQL, tetapi create_all hanya bootstrap laboratorium; pada penggunaan dengan role runtime terbatas, buat/migrasikan schema melalui role pemilik terlebih dahulu. Jangan menganggap mengganti URL saja membuktikan seluruh perilaku engine identik.",
+      "Pembaruan status dan penambahan riwayat berada pada satu transaksi. PostgreSQL SELECT FOR UPDATE mengunci baris yang sedang diubah; UPDATE juga memeriksa status lama dan rowcount. SQLite tidak menyediakan row lock yang sama, sehingga uji konflik pada engine tujuan dan tangani database sibuk sesuai kebutuhan.",
+      "Factory ini sengaja menjaga contoh dalam satu file agar dapat dijalankan. Sesudah memahami alurnya, pisahkan model, repository, service, router, dan test. Pemilik transaksi tetap unit use case; jangan membuat repository commit sendiri sebelum pencatatan riwayat.",
+      "API hanya untuk latihan loopback. Belum ada autentikasi, otorisasi per tiket, audit pelaku/waktu, retensi, migrasi produksi, atau pembatasan laju. Error input, sumber hilang, dan konflik status sudah dibedakan; request berulang pada perubahan status tidak otomatis dianggap sukses idempoten."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Input",
+          "Pydantic dengan pembatasan",
+          "Tolak kosong, ekstra, dan bool id"
+        ],
+        [
+          "Persistence",
+          "SQLAlchemy + driver",
+          "SQLite demo / PostgreSQL latihan"
+        ],
+        [
+          "Transaksi",
+          "Status dan riwayat bersama",
+          "Rollback bila salah satu gagal"
+        ],
+        [
+          "Kontrak",
+          "201 / 404 / 409 / 422",
+          "Sukses dan kegagalan terpisah"
+        ],
+        [
+          "Daftar",
+          "Keyset id dan limit",
+          "Maksimum 100"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi proyek",
+        "code": "python -m pip install \"fastapi==0.162.0\" \"pydantic==2.14.2\" \"httpx==0.28.1\" \"uvicorn==0.54.0\" \"SQLAlchemy==2.0.55\" \"psycopg[binary]==3.3.6\"",
+        "output": "",
+        "explanation": "Gunakan virtual environment latihan. Database server harus sudah tersedia; perintah pip tidak memasang PostgreSQL server.",
+        "language": "text"
+      },
+      {
+        "label": "proyek_api.py · program lengkap",
+        "code": "import os\nfrom contextlib import asynccontextmanager\nfrom typing import Annotated, Literal\nfrom fastapi import FastAPI, Depends, HTTPException, Query\nfrom pydantic import BaseModel, ConfigDict, Field, StrictInt, StringConstraints\nfrom sqlalchemy import create_engine, event, Integer, String, ForeignKey, CheckConstraint, select, update, func\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session\n\nclass Base(DeclarativeBase):\n    pass\n\nclass Teknisi(Base):\n    __tablename__ = \"teknisi_api\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    kode: Mapped[str] = mapped_column(String(30), unique=True)\n    nama: Mapped[str] = mapped_column(String(80))\n\nclass Tiket(Base):\n    __tablename__ = \"tiket_api\"\n    __table_args__ = (\n        CheckConstraint(\"status IN ('BARU','DIPROSES','SELESAI')\"),\n        CheckConstraint(\"length(trim(judul)) > 0\"),\n        CheckConstraint(\"status = 'BARU' OR teknisi_id IS NOT NULL\"),\n    )\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    judul: Mapped[str] = mapped_column(String(120))\n    status: Mapped[str] = mapped_column(String(20), default=\"BARU\")\n    teknisi_id: Mapped[int | None] = mapped_column(ForeignKey(\"teknisi_api.id\"))\n\nclass Riwayat(Base):\n    __tablename__ = \"riwayat_api\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    tiket_id: Mapped[int] = mapped_column(ForeignKey(\"tiket_api.id\"))\n    status: Mapped[str] = mapped_column(String(20))\n\nTeks = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=120)]\n\nclass TiketInput(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    judul: Teks\n\nclass TeknisiInput(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    kode: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=30)]\n    nama: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=80)]\n\nclass StatusInput(BaseModel):\n    model_config = ConfigDict(extra=\"forbid\")\n    status: Literal[\"DIPROSES\", \"SELESAI\"]\n    teknisi_id: StrictInt | None = Field(default=None, gt=0)\n\nclass TiketOutput(BaseModel):\n    id: int\n    judul: str\n    status: str\n    teknisi_id: int | None\n\ndef tampilan(tiket):\n    return {\"id\": tiket.id, \"judul\": tiket.judul, \"status\": tiket.status, \"teknisi_id\": tiket.teknisi_id}\n\ndef create_app(database_url):\n    options = {\"check_same_thread\": False} if database_url.startswith(\"sqlite\") else {}\n    engine = create_engine(database_url, connect_args=options, pool_pre_ping=True)\n    if engine.dialect.name == \"sqlite\":\n        @event.listens_for(engine, \"connect\")\n        def aktifkan_fk(connection, _):\n            cursor = connection.cursor()\n            cursor.execute(\"PRAGMA foreign_keys = ON\")\n            cursor.close()\n    # Hanya bootstrap database latihan baru, bukan pengganti migrasi.\n    Base.metadata.create_all(engine)\n    @asynccontextmanager\n    async def lifespan(app):\n        yield\n        engine.dispose()\n    app = FastAPI(lifespan=lifespan)\n    app.state.engine = engine\n\n    def db():\n        with Session(engine) as session:\n            yield session\n\n    @app.post(\"/teknisi\", status_code=201)\n    def buat_teknisi(body: TeknisiInput, session: Session = Depends(db)):\n        from sqlalchemy.exc import IntegrityError\n        try:\n            with session.begin():\n                orang = Teknisi(**body.model_dump())\n                session.add(orang)\n                session.flush()\n                hasil = {\"id\": orang.id, \"kode\": orang.kode, \"nama\": orang.nama}\n            return hasil\n        except IntegrityError as error:\n            raise HTTPException(409, \"Kode teknisi bentrok\") from error\n\n    @app.post(\"/tiket\", status_code=201, response_model=TiketOutput)\n    def buat_tiket(body: TiketInput, session: Session = Depends(db)):\n        with session.begin():\n            tiket = Tiket(judul=body.judul, status=\"BARU\")\n            session.add(tiket)\n            session.flush()\n            session.add(Riwayat(tiket_id=tiket.id, status=\"BARU\"))\n            hasil = tampilan(tiket)\n        return hasil\n\n    @app.get(\"/tiket\", response_model=list[TiketOutput])\n    def daftar(setelah: int = Query(0, ge=0), limit: int = Query(20, ge=1, le=100), session: Session = Depends(db)):\n        return [tampilan(t) for t in session.scalars(select(Tiket).where(Tiket.id > setelah).order_by(Tiket.id).limit(limit))]\n\n    @app.get(\"/tiket/{nomor}\", response_model=TiketOutput)\n    def ambil(nomor: int, session: Session = Depends(db)):\n        tiket = session.get(Tiket, nomor)\n        if tiket is None:\n            raise HTTPException(404, \"Tiket tidak ditemukan\")\n        return tampilan(tiket)\n\n    @app.patch(\"/tiket/{nomor}/status\", response_model=TiketOutput)\n    def ubah(nomor: int, body: StatusInput, session: Session = Depends(db)):\n        with session.begin():\n            tiket = session.get(Tiket, nomor, with_for_update=True)\n            if tiket is None:\n                raise HTTPException(404, \"Tiket tidak ditemukan\")\n            petugas = tiket.teknisi_id\n            if tiket.status == \"BARU\" and body.status == \"DIPROSES\" and body.teknisi_id is not None:\n                if session.get(Teknisi, body.teknisi_id) is None:\n                    raise HTTPException(404, \"Teknisi tidak ditemukan\")\n                petugas = body.teknisi_id\n            elif tiket.status == \"DIPROSES\" and body.status == \"SELESAI\" and body.teknisi_id is None:\n                pass\n            else:\n                raise HTTPException(409, \"Transisi tidak diizinkan\")\n            lama = tiket.status\n            hasil_update = session.execute(update(Tiket).where(Tiket.id == nomor, Tiket.status == lama)\n                                           .values(status=body.status, teknisi_id=petugas))\n            if hasil_update.rowcount != 1:\n                raise HTTPException(409, \"Status sudah berubah\")\n            session.add(Riwayat(tiket_id=nomor, status=body.status))\n            hasil = {\"id\": nomor, \"judul\": tiket.judul, \"status\": body.status, \"teknisi_id\": petugas}\n        return hasil\n\n    @app.get(\"/tiket/{nomor}/riwayat\")\n    def riwayat(nomor: int, session: Session = Depends(db)):\n        if session.get(Tiket, nomor) is None:\n            raise HTTPException(404, \"Tiket tidak ditemukan\")\n        return [{\"id\": r.id, \"status\": r.status} for r in session.scalars(\n            select(Riwayat).where(Riwayat.tiket_id == nomor).order_by(Riwayat.id))]\n\n    @app.get(\"/laporan\")\n    def laporan(session: Session = Depends(db)):\n        hasil = {\"BARU\": 0, \"DIPROSES\": 0, \"SELESAI\": 0}\n        hasil.update(dict(session.execute(select(Tiket.status, func.count()).group_by(Tiket.status)).all()))\n        return hasil\n    return app\n\ndef create_from_env():\n    url = os.environ.get(\"DATABASE_URL\")\n    if not url:\n        raise RuntimeError(\"DATABASE_URL wajib diatur untuk database latihan\")\n    return create_app(url)\n\nif __name__ == \"__main__\":\n    from pathlib import Path\n    from tempfile import TemporaryDirectory\n    from fastapi.testclient import TestClient\n    with TemporaryDirectory() as folder:\n        app = create_app(\"sqlite+pysqlite:///\" + str(Path(folder) / \"uji.db\"))\n        with TestClient(app) as client:\n            teknisi = client.post(\"/teknisi\", json={\"kode\": \"N01\", \"nama\": \"Ana\"}).json()\n            baru = client.post(\"/tiket\", json={\"judul\": \" Link putus \"})\n            nomor = baru.json()[\"id\"]\n            print(\"Buat:\", baru.status_code)\n            print(\"Lompat:\", client.patch(f\"/tiket/{nomor}/status\", json={\"status\": \"SELESAI\"}).status_code)\n            client.patch(f\"/tiket/{nomor}/status\", json={\"status\": \"DIPROSES\", \"teknisi_id\": teknisi[\"id\"]})\n            client.patch(f\"/tiket/{nomor}/status\", json={\"status\": \"SELESAI\"})\n            print(\"Riwayat:\", [r[\"status\"] for r in client.get(f\"/tiket/{nomor}/riwayat\").json()])\n            print(\"Laporan:\", client.get(\"/laporan\").json())",
+        "output": "Buat: 201\nLompat: 409\nRiwayat: ['BARU', 'DIPROSES', 'SELESAI']\nLaporan: {'BARU': 0, 'DIPROSES': 0, 'SELESAI': 1}",
+        "explanation": "Demo TestClient berjalan tanpa listener HTTP. Untuk server lokal pakai factory dari environment sesuai petunjuk. Session dan engine ditutup melalui context serta lifecycle.",
+        "language": "python",
+        "filename": "proyek_api.py"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Jalankan demo SQLite lalu uji judul kosong, teknisi hilang, dan lompatan status.",
+      "Jalankan server lokal dengan PostgreSQL pada database latihan baru.",
+      "Paksa INSERT riwayat gagal dan pastikan status tidak berubah.",
+      "Uji laporan serta daftar dengan limit dan cursor.",
+      "Pisahkan file sesuai materi package tanpa mengubah kontrak endpoint."
+    ],
+    "warning": "Jangan mengarahkan contoh create_all atau pengujian ke database operasional. Belum ada mekanisme login; publikasi artikel ini tidak berarti API contoh dijalankan sebagai layanan di situs.",
+    "check": "Mengapa session serta transaksi tidak dibuat global untuk semua request?",
+    "answer": "Setiap request mempunyai unit kerja sendiri. State session dan transaksi yang dibagikan sembarang dapat mencampur pekerjaan dan konflik antarrequest.",
+    "source": "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "diagram": "server-api-alur",
+    "diagramAlt": "Client → API → service dan repository → database. Transaksi menyatukan perubahan status dan riwayat.",
+    "stage": 0,
+    "minutes": 75
+  }
+]

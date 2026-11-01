@@ -1285,5 +1285,141 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 35
+  },
+  {
+    "slug": "logging-aplikasi",
+    "title": "Logging: mencatat kejadian tanpa membocorkan data",
+    "summary": "Pilih tingkat pesan, konteks operasi, dan tujuan log yang berguna.",
+    "analogy": "Buku piket mencatat kejadian penting beserta nomor tiket, bukan menyalin semua isi percakapan dan password pelanggan.",
+    "explain": [
+      "Logging memberi rekaman kejadian yang membantu diagnosis setelah program berjalan. DEBUG, INFO, WARNING, ERROR, dan CRITICAL menyatakan tingkat pesan. Tetapkan level serta tujuan log pada titik masuk aplikasi; modul cukup meminta logger bernama.",
+      "Gunakan konteks yang dapat ditelusuri, misalnya nomor tiket atau request id. Hindari mencatat password, token, connection string, dan isi data pribadi mentah. Parameter logging seperti logger.info(\"Tiket %s\", kode) menunda pemformatan pesan sampai dibutuhkan.",
+      "logger.exception dapat mencatat traceback ketika dipanggil di dalam penanganan exception. Itu berguna pada log internal yang aksesnya dibatasi, tetapi jangan mengembalikan traceback lengkap ke pengguna API. Konfigurasikan rotasi, retensi, serta pembatasan akses sesuai kebutuhan operasional.",
+      "Contoh memakai handler ke StringIO agar hasil deterministik. propagate=False mencegah pesan diduplikasi ke root logger dalam demo. Aplikasi nyata biasanya mengonfigurasi handler sekali saat startup, bukan menambah handler setiap request."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Level",
+          "Keparahan / detail pesan",
+          "INFO dan WARNING"
+        ],
+        [
+          "Konteks",
+          "Jejak operasi",
+          "kode tiket atau request id"
+        ],
+        [
+          "Handler",
+          "Tujuan pesan",
+          "Console, file, kolektor"
+        ],
+        [
+          "Privasi",
+          "Batasi yang direkam",
+          "Jangan log kredensial"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · log yang terkontrol",
+        "code": "import io\nimport logging\n\nstream = io.StringIO()\nlogger = logging.getLogger(\"latihan.tiket\")\nlogger.setLevel(logging.INFO)\nlogger.propagate = False\nhandler = logging.StreamHandler(stream)\nhandler.setFormatter(logging.Formatter(\"%(levelname)s | %(message)s\"))\nlogger.addHandler(handler)\ntry:\n    logger.debug(\"Detail tidak tampil\")\n    logger.info(\"Tiket %s diterima\", \"T01\")\n    logger.warning(\"Tiket %s belum ditugaskan\", \"T01\")\n    print(stream.getvalue().strip())\nfinally:\n    logger.removeHandler(handler)\n    handler.close()",
+        "output": "INFO | Tiket T01 diterima\nWARNING | Tiket T01 belum ditugaskan",
+        "explanation": "DEBUG tersaring oleh level logger. Handler dilepas di akhir agar demo yang dijalankan ulang tidak menggandakan pesan.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Tambahkan request id pada format pesan tanpa mencatat isi sensitif.",
+      "Uji level WARNING lalu bandingkan pesan yang tersaring.",
+      "Buat kebijakan retensi log latihan tanpa menentukan aturan hukum secara sembarang."
+    ],
+    "warning": "Log adalah salinan data yang juga perlu dikelola. Lebih banyak log tidak selalu lebih berguna; pilih kejadian yang membantu diagnosis.",
+    "check": "Mengapa jangan menambah handler di setiap request?",
+    "answer": "Handler dapat menumpuk, menggandakan pesan, serta memakai sumber daya tanpa kebutuhan.",
+    "source": "https://docs.python.org/3.11/library/logging.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "konfigurasi-aplikasi",
+    "title": "Konfigurasi aplikasi dan environment variable",
+    "summary": "Pisahkan pengaturan lingkungan dari kode dan validasi saat startup.",
+    "analogy": "Program yang sama dapat bekerja pada ruang latihan dan ruang operasional dengan alamat serta batas yang berbeda.",
+    "explain": [
+      "Konfigurasi adalah pengaturan yang dapat berbeda antarlingkungan, misalnya ukuran halaman, lokasi database, atau level log. Jangan mengubah source hanya untuk berpindah konfigurasi latihan ke pengujian.",
+      "Environment variable selalu diterima sebagai string. Fungsi pembaca harus mengubah tipe dan memeriksa rentang. Gunakan default hanya jika memang aman; nilai wajib seperti URL database server sebaiknya menyebabkan startup gagal jelas bila tidak tersedia.",
+      "Contoh membaca dictionary yang bentuknya sama seperti os.environ agar mudah diuji tanpa mengubah mesin. Di program utama, panggil baca_konfigurasi(os.environ). Environment variable bukan tempat yang otomatis aman dari semua akses; tetap jangan mencetak rahasia atau memasukkannya ke Git.",
+      "Pisahkan contoh nama variabel dari nilai asli. Berkas .env tidak dibaca otomatis oleh os.environ; loader eksternal diperlukan bila ingin memakai berkas tersebut. Dokumentasikan nama dan format yang dibutuhkan, serta simpan template tanpa kredensial."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Sumber",
+          "Environment atau objek pengaturan",
+          "os.environ"
+        ],
+        [
+          "Konversi",
+          "String menjadi tipe tujuan",
+          "int untuk ukuran halaman"
+        ],
+        [
+          "Validasi",
+          "Rentang dan nilai wajib",
+          "1..100"
+        ],
+        [
+          "Fail fast",
+          "Gagal saat startup",
+          "Jangan menunggu request pertama"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · pembaca konfigurasi yang dapat diuji",
+        "code": "def baca_konfigurasi(env):\n    try:\n        batas = int(env.get(\"PAGE_SIZE\", \"20\"))\n    except ValueError as error:\n        raise ValueError(\"PAGE_SIZE harus integer\") from error\n    if not 1 <= batas <= 100:\n        raise ValueError(\"PAGE_SIZE harus 1..100\")\n    mode = env.get(\"APP_MODE\", \"latihan\")\n    if mode not in {\"latihan\", \"uji\"}:\n        raise ValueError(\"APP_MODE tidak dikenal\")\n    return {\"page_size\": batas, \"mode\": mode}\n\nprint(baca_konfigurasi({}))\nprint(baca_konfigurasi({\"PAGE_SIZE\": \"5\", \"APP_MODE\": \"uji\"}))\ntry:\n    baca_konfigurasi({\"PAGE_SIZE\": \"0\"})\nexcept ValueError as error:\n    print(error)",
+        "output": "{'page_size': 20, 'mode': 'latihan'}\n{'page_size': 5, 'mode': 'uji'}\nPAGE_SIZE harus 1..100",
+        "explanation": "Pengaturan contoh bukan rahasia. Kode tidak mengubah environment proses dan dapat diuji melalui input dictionary.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Uji angka bukan integer, batas 1, 100, dan 101.",
+      "Tambahkan variabel wajib tanpa mencetak nilainya ke log.",
+      "Tuliskan template konfigurasi berisi nama variabel serta petunjuk nilainya."
+    ],
+    "warning": "Jangan memakai fallback diam-diam dari database produksi ke database kosong bila URL hilang. Startup yang gagal jelas lebih mudah ditangani daripada aplikasi bekerja pada data yang salah.",
+    "check": "Apakah os.environ otomatis mengubah \"20\" menjadi integer?",
+    "answer": "Tidak. Nilainya string; aplikasi melakukan konversi serta validasi.",
+    "source": "https://docs.python.org/3.11/library/os.html#os.environ",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
   }
 ]

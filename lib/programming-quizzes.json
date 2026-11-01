@@ -5302,5 +5302,677 @@
       "answer": 0,
       "explanation": "Transaksi database tidak otomatis mencakup efek eksternal."
     }
+  ],
+  "db-rancangan-aplikasi": [
+    {
+      "question": "Apa langkah pertama perancangan?",
+      "options": [
+        "Memahami aturan dan tingkat detail data",
+        "Langsung membuat semua indeks",
+        "Memilih warna ERD"
+      ],
+      "answer": 0,
+      "explanation": "Skema mengikuti kebutuhan yang dapat diuji."
+    },
+    {
+      "question": "Bagaimana penugasan opsional dimodelkan?",
+      "options": [
+        "Nama teknisi digabung ke judul",
+        "Foreign key boleh NULL",
+        "Seluruh FK dihapus"
+      ],
+      "answer": 1,
+      "explanation": "NULL menyatakan belum ada pasangan pada model ini."
+    },
+    {
+      "question": "Apa yang membuktikan aturan implementasi?",
+      "options": [
+        "ERD saja",
+        "Jumlah tabel",
+        "Tes data sah dan invalid"
+      ],
+      "answer": 2,
+      "explanation": "Pengujian menghubungkan aturan dengan perilaku aktual."
+    },
+    {
+      "question": "Kapan memikirkan indeks tambahan?",
+      "options": [
+        "Setelah memahami pola kueri dan biaya",
+        "Selalu sebelum entitas",
+        "Tidak pernah"
+      ],
+      "answer": 0,
+      "explanation": "Indeks dipilih mengikuti kebutuhan akses."
+    }
+  ],
+  "db-postgresql-server": [
+    {
+      "question": "Apa perbedaan arsitektur utama dari SQLite?",
+      "options": [
+        "PostgreSQL memakai server yang menerima client",
+        "PostgreSQL hanya file JSON",
+        "SQLite wajib server terpisah"
+      ],
+      "answer": 0,
+      "explanation": "Koneksi server berbeda dari membuka file engine tertanam."
+    },
+    {
+      "question": "Apa tugas schema?",
+      "options": [
+        "Membuat semua role superuser",
+        "Mengelompokkan objek dalam database",
+        "Mengganti seluruh koneksi"
+      ],
+      "answer": 1,
+      "explanation": "Nama schema membantu organisasi dan pengaturan akses."
+    },
+    {
+      "question": "Apa makna timestamptz?",
+      "options": [
+        "Selalu menyimpan nama zona asal",
+        "String bebas tanpa tipe",
+        "Instant yang ditampilkan menurut zona sesi"
+      ],
+      "answer": 2,
+      "explanation": "Aturan tampilan zona perlu disepakati."
+    },
+    {
+      "question": "Mengapa contoh diakhiri ROLLBACK?",
+      "options": [
+        "Agar objek latihan tidak dipertahankan",
+        "Agar PostgreSQL mati",
+        "Agar semua database dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Transaksi membatalkan perubahan contoh pada database latihan."
+    }
+  ],
+  "db-role-akses": [
+    {
+      "question": "Apa tujuan role pembaca?",
+      "options": [
+        "Membaca tanpa hak tulis yang tidak diperlukan",
+        "Menjadi superuser cadangan",
+        "Mengubah semua schema"
+      ],
+      "answer": 0,
+      "explanation": "Hak mengikuti tugas yang diperlukan."
+    },
+    {
+      "question": "Apakah USAGE schema sama dengan INSERT tabel?",
+      "options": [
+        "Ya selalu",
+        "Tidak",
+        "Hanya jika nama schema public"
+      ],
+      "answer": 1,
+      "explanation": "Privilege schema dan tabel berbeda."
+    },
+    {
+      "question": "Mengapa runtime dipisah dari owner?",
+      "options": [
+        "Agar tidak bisa terhubung selamanya",
+        "Agar semua query menjadi lambat",
+        "Owner mempunyai kemampuan mengubah objek lebih luas"
+      ],
+      "answer": 2,
+      "explanation": "Pemisahan membatasi dampak hak runtime."
+    },
+    {
+      "question": "Untuk apa ALTER DEFAULT PRIVILEGES?",
+      "options": [
+        "Mengatur privilege objek masa depan dari pembuat tertentu",
+        "Mengubah semua password",
+        "Menghapus semua role"
+      ],
+      "answer": 0,
+      "explanation": "Periksa role pembuat dan jenis objek yang diatur."
+    }
+  ],
+  "db-retensi": [
+    {
+      "question": "Apa yang dilakukan soft delete?",
+      "options": [
+        "Menandai baris tanpa menghapusnya",
+        "Selalu memusnahkan seluruh salinan",
+        "Menghapus database"
+      ],
+      "answer": 0,
+      "explanation": "Data masih ada pada tabel."
+    },
+    {
+      "question": "Apa risiko kueri lupa filter aktif?",
+      "options": [
+        "Semua data otomatis hilang",
+        "Data arsip dapat muncul sebagai aktif",
+        "Indeks menjadi tidak ada"
+      ],
+      "answer": 1,
+      "explanation": "Kebijakan penyaringan perlu konsisten."
+    },
+    {
+      "question": "Apa konsekuensi email dipakai ulang?",
+      "options": [
+        "Semua akun otomatis digabung",
+        "Tidak ada konflik mungkin",
+        "Pemulihan akun lama bisa bentrok"
+      ],
+      "answer": 2,
+      "explanation": "Keunikan aktif memengaruhi operasi restore."
+    },
+    {
+      "question": "Apakah satu masa retensi cocok untuk semua data?",
+      "options": [
+        "Tidak",
+        "Ya satu tahun selalu",
+        "Ya selamanya selalu"
+      ],
+      "answer": 0,
+      "explanation": "Kebijakan mengikuti kebutuhan dan kewajiban yang berlaku."
+    }
+  ],
+  "db-impor-csv": [
+    {
+      "question": "Apa yang perlu ditentukan sebelum impor?",
+      "options": [
+        "Header, tipe, aturan nilai, dan duplikat",
+        "Nama warna file",
+        "Seluruh indeks dihapus"
+      ],
+      "answer": 0,
+      "explanation": "Kontrak impor mendahului penulisan."
+    },
+    {
+      "question": "Apa yang terjadi pada duplikat contoh?",
+      "options": [
+        "Ditimpa diam-diam",
+        "Ditolak dan dilaporkan",
+        "Seluruh tabel dihapus"
+      ],
+      "answer": 1,
+      "explanation": "Constraint melindungi kode yang sudah ada."
+    },
+    {
+      "question": "Apa fungsi laporan penolakan?",
+      "options": [
+        "Menyimpan semua rahasia mentah",
+        "Mengganti backup",
+        "Menunjukkan lokasi dan alasan koreksi"
+      ],
+      "answer": 2,
+      "explanation": "Laporan membantu pemakai memperbaiki data."
+    },
+    {
+      "question": "Apakah semua error database sebaiknya ditelan sebagai baris invalid?",
+      "options": [
+        "Tidak",
+        "Ya semua exception",
+        "Hanya jika file kecil"
+      ],
+      "answer": 0,
+      "explanation": "Kegagalan sistem berbeda dari data yang melanggar kontrak."
+    }
+  ],
+  "db-tes-integrasi": [
+    {
+      "question": "Apa yang integration test buktikan?",
+      "options": [
+        "Interaksi nyata antarbagian dalam lingkungan uji",
+        "Seluruh produksi pasti benar",
+        "Warna laporan"
+      ],
+      "answer": 0,
+      "explanation": "Hasilnya dibatasi engine dan skenario yang diuji."
+    },
+    {
+      "question": "Mengapa mulai dari skema lama?",
+      "options": [
+        "Agar data selalu kosong",
+        "Untuk membuktikan jalur migrasi",
+        "Agar tidak perlu constraint"
+      ],
+      "answer": 1,
+      "explanation": "create_all terbaru tidak menguji perpindahan versi."
+    },
+    {
+      "question": "Mengapa koneksi dibuka ulang?",
+      "options": [
+        "Menghapus data otomatis",
+        "Menggandakan seluruh schema",
+        "Memeriksa data tersimpan dan dapat dibaca lagi"
+      ],
+      "answer": 2,
+      "explanation": "Persistensi perlu diuji setelah sumber daya ditutup."
+    },
+    {
+      "question": "Database mana untuk tes?",
+      "options": [
+        "Database pengujian terpisah",
+        "Produksi demi realistis",
+        "Database orang lain"
+      ],
+      "answer": 0,
+      "explanation": "Fixture harus mempunyai lingkup yang jelas."
+    }
+  ],
+  "db-sqlalchemy": [
+    {
+      "question": "Apa tugas ORM?",
+      "options": [
+        "Memetakan objek ke struktur data relasional",
+        "Menghapus kebutuhan SQL",
+        "Menjamin semua engine identik"
+      ],
+      "answer": 0,
+      "explanation": "ORM tetap membangun dan menjalankan SQL."
+    },
+    {
+      "question": "Lingkup session yang sesuai?",
+      "options": [
+        "Global dibagi seluruh thread",
+        "Per pekerjaan atau request",
+        "Satu untuk selamanya"
+      ],
+      "answer": 1,
+      "explanation": "Session menyimpan state unit kerja dan tidak untuk dibagi sembarang."
+    },
+    {
+      "question": "Apa fungsi session.begin()?",
+      "options": [
+        "Membuat server PostgreSQL",
+        "Menghapus seluruh model",
+        "Membingkai commit/rollback transaksi"
+      ],
+      "answer": 2,
+      "explanation": "Unit perubahan diselesaikan sesuai keberhasilan konteks."
+    },
+    {
+      "question": "Apa yang tetap perlu diuji pada engine tujuan?",
+      "options": [
+        "Tipe, constraint, SQL, dan transaksi",
+        "Hanya nama class",
+        "Tidak ada lagi"
+      ],
+      "answer": 0,
+      "explanation": "ORM tidak menyamakan seluruh perilaku database."
+    }
+  ],
+  "logging-aplikasi": [
+    {
+      "question": "Apa tugas level log?",
+      "options": [
+        "Mengatur tingkat pesan yang ditampilkan",
+        "Mengganti tipe data",
+        "Menghapus semua error"
+      ],
+      "answer": 0,
+      "explanation": "Level membantu memilih detail yang diperlukan."
+    },
+    {
+      "question": "Apa konteks log yang berguna?",
+      "options": [
+        "Password pengguna",
+        "Request id atau nomor tiket",
+        "Token akses lengkap"
+      ],
+      "answer": 1,
+      "explanation": "Konteks membantu penelusuran tanpa menyalin rahasia."
+    },
+    {
+      "question": "Kapan logger.exception digunakan?",
+      "options": [
+        "Untuk semua print biasa",
+        "Untuk mengirim password",
+        "Di dalam penanganan exception untuk traceback internal"
+      ],
+      "answer": 2,
+      "explanation": "Traceback harus diarahkan ke log yang sesuai aksesnya."
+    },
+    {
+      "question": "Apa risiko handler ditambah berulang?",
+      "options": [
+        "Pesan ganda dan sumber daya menumpuk",
+        "Semua data otomatis hilang",
+        "Level selalu menjadi DEBUG"
+      ],
+      "answer": 0,
+      "explanation": "Konfigurasi umumnya dilakukan sekali di startup."
+    }
+  ],
+  "konfigurasi-aplikasi": [
+    {
+      "question": "Apa tipe nilai environment?",
+      "options": [
+        "String",
+        "Selalu integer",
+        "Selalu boolean"
+      ],
+      "answer": 0,
+      "explanation": "Aplikasi perlu melakukan parsing."
+    },
+    {
+      "question": "Kapan konfigurasi penting divalidasi?",
+      "options": [
+        "Hanya sesudah semua data ditulis",
+        "Saat startup",
+        "Tidak perlu"
+      ],
+      "answer": 1,
+      "explanation": "Kesalahan ditemukan sebelum aplikasi melayani pekerjaan."
+    },
+    {
+      "question": "Apakah .env otomatis dimuat os.environ?",
+      "options": [
+        "Ya tanpa library",
+        "Hanya bila nama file pendek",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Perlu mekanisme loader jika memakai berkas .env."
+    },
+    {
+      "question": "Apa contoh default yang berisiko?",
+      "options": [
+        "URL produksi hilang lalu diam-diam memakai database lain",
+        "Ukuran halaman latihan yang disepakati",
+        "Level INFO untuk demo"
+      ],
+      "answer": 0,
+      "explanation": "Fallback dapat membuat program memakai sumber data yang salah."
+    }
+  ],
+  "oop-repository-service": [
+    {
+      "question": "Apa tanggung jawab service?",
+      "options": [
+        "Mengkoordinasikan aturan use case",
+        "Menyembunyikan seluruh kebutuhan transaksi",
+        "Membuat semua objek global"
+      ],
+      "answer": 0,
+      "explanation": "Service menghubungkan aturan dan operasi yang diperlukan."
+    },
+    {
+      "question": "Apa arti ubah_jika gagal?",
+      "options": [
+        "Perubahan pasti berhasil",
+        "Sasaran atau status lama tidak cocok",
+        "Semua database rusak"
+      ],
+      "answer": 1,
+      "explanation": "Pemakai harus menangani konflik sesuai kontrak."
+    },
+    {
+      "question": "Siapa harus memutuskan unit transaksi?",
+      "options": [
+        "Setiap repository commit bebas",
+        "Tidak ada yang perlu",
+        "Lapisan yang mengkoordinasikan seluruh pekerjaan"
+      ],
+      "answer": 2,
+      "explanation": "Batas transaksi harus sesuai unit bisnis."
+    },
+    {
+      "question": "Apakah repository wajib pada semua program kecil?",
+      "options": [
+        "Tidak",
+        "Ya agar disebut OOP",
+        "Hanya jika memakai print"
+      ],
+      "answer": 0,
+      "explanation": "Gunakan bila pemisahan memberi manfaat yang jelas."
+    }
+  ],
+  "api-http-json": [
+    {
+      "question": "Apa JSON itu?",
+      "options": [
+        "Format representasi data",
+        "Server database",
+        "Metode HTTP"
+      ],
+      "answer": 0,
+      "explanation": "JSON dapat dipakai sebagai body HTTP."
+    },
+    {
+      "question": "Apa Content-Type jelaskan?",
+      "options": [
+        "Password database",
+        "Jenis representasi body",
+        "Nomor thread"
+      ],
+      "answer": 1,
+      "explanation": "Header membantu penerima membaca representasi."
+    },
+    {
+      "question": "Apa kelas status 5xx?",
+      "options": [
+        "Selalu sukses",
+        "Selalu data kosong",
+        "Kegagalan server"
+      ],
+      "answer": 2,
+      "explanation": "Status perlu ditafsirkan menurut kontrak HTTP."
+    },
+    {
+      "question": "Apakah contoh sudah membuka server?",
+      "options": [
+        "Tidak, hanya simulasi bentuk response",
+        "Ya otomatis pada internet",
+        "Ya ke database pengguna"
+      ],
+      "answer": 0,
+      "explanation": "Transport HTTP dipraktikkan pada materi FastAPI."
+    }
+  ],
+  "api-rest-kontrak": [
+    {
+      "question": "Apa tujuan kontrak endpoint?",
+      "options": [
+        "Menyepakati masukan, hasil, dan kegagalan",
+        "Menghapus kebutuhan pengujian",
+        "Membuka database langsung"
+      ],
+      "answer": 0,
+      "explanation": "Client membutuhkan perilaku yang dapat diprediksi."
+    },
+    {
+      "question": "Apa status yang cocok untuk pembuatan sesuai contoh?",
+      "options": [
+        "500",
+        "201",
+        "404"
+      ],
+      "answer": 1,
+      "explanation": "201 menyatakan sumber berhasil dibuat."
+    },
+    {
+      "question": "Apakah POST otomatis idempoten?",
+      "options": [
+        "Ya semua POST",
+        "Hanya jika memakai JSON",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Jika dibutuhkan, pengulangan perlu dirancang secara eksplisit."
+    },
+    {
+      "question": "Apa yang dibatasi pada daftar besar?",
+      "options": [
+        "Ukuran halaman dan aturan cursor",
+        "Hanya panjang judul situs",
+        "Jumlah nama endpoint"
+      ],
+      "answer": 0,
+      "explanation": "Pembatasan mengendalikan beban dan kontrak pembacaan."
+    }
+  ],
+  "api-fastapi": [
+    {
+      "question": "Apa tugas Uvicorn?",
+      "options": [
+        "Menjalankan aplikasi ASGI",
+        "Mengganti database",
+        "Membuat role PostgreSQL"
+      ],
+      "answer": 0,
+      "explanation": "FastAPI mendefinisikan aplikasi, server ASGI menjalankannya."
+    },
+    {
+      "question": "Apa alamat host latihan?",
+      "options": [
+        "Semua alamat publik secara otomatis",
+        "127.0.0.1",
+        "Alamat pelanggan"
+      ],
+      "answer": 1,
+      "explanation": "Loopback membatasi listener pada mesin sendiri."
+    },
+    {
+      "question": "Apa yang TestClient uji?",
+      "options": [
+        "Seluruh TLS dan DNS produksi",
+        "Backup database otomatis",
+        "Routing dan response aplikasi"
+      ],
+      "answer": 2,
+      "explanation": "Lingkupnya aplikasi di dalam proses."
+    },
+    {
+      "question": "Apakah async def otomatis membuat driver sinkron nonblocking?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya jika path pendek"
+      ],
+      "answer": 0,
+      "explanation": "Model eksekusi dan driver perlu sesuai."
+    }
+  ],
+  "api-validasi-error": [
+    {
+      "question": "Apa status validasi schema contoh?",
+      "options": [
+        "422",
+        "201",
+        "200 selalu"
+      ],
+      "answer": 0,
+      "explanation": "FastAPI mengembalikan error validasi request."
+    },
+    {
+      "question": "Apa manfaat extra=forbid?",
+      "options": [
+        "Menghapus semua validasi",
+        "Menolak field yang tidak disepakati",
+        "Memaksa seluruh field opsional"
+      ],
+      "answer": 1,
+      "explanation": "Kontrak tidak menerima data tambahan diam-diam."
+    },
+    {
+      "question": "Apakah request valid berarti pengguna berhak menjalankannya?",
+      "options": [
+        "Ya otomatis",
+        "Hanya jika JSON",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Otorisasi merupakan pemeriksaan berbeda."
+    },
+    {
+      "question": "Apa yang tidak boleh dimasukkan ke respons error?",
+      "options": [
+        "Kredensial dan detail internal sensitif",
+        "Status HTTP yang jelas",
+        "Kode error domain yang aman"
+      ],
+      "answer": 0,
+      "explanation": "Detail diagnosis internal bukan bagian response publik."
+    }
+  ],
+  "api-pengujian": [
+    {
+      "question": "Apa yang sebaiknya diuji selain status?",
+      "options": [
+        "Nilai JSON dan efek data",
+        "Hanya warna terminal",
+        "Nama mesin"
+      ],
+      "answer": 0,
+      "explanation": "Status sukses saja belum membuktikan operasi benar."
+    },
+    {
+      "question": "Apa manfaat aplikasi baru per tes?",
+      "options": [
+        "Membuka produksi otomatis",
+        "Isolasi state",
+        "Menghapus kebutuhan fixture"
+      ],
+      "answer": 1,
+      "explanation": "Urutan tes tidak menentukan data awal."
+    },
+    {
+      "question": "Apa yang terjadi pada body tanpa judul?",
+      "options": [
+        "201 otomatis",
+        "500 selalu",
+        "422"
+      ],
+      "answer": 2,
+      "explanation": "Model request menolak field wajib yang hilang."
+    },
+    {
+      "question": "Apakah dictionary ini storage multiworker yang lengkap?",
+      "options": [
+        "Tidak",
+        "Ya tanpa batas",
+        "Hanya jika jumlah id kecil"
+      ],
+      "answer": 0,
+      "explanation": "State lokal proses tidak menjadi penyimpanan bersama yang terkoordinasi."
+    }
+  ],
+  "api-proyek-tiket": [
+    {
+      "question": "Apa yang ditulis dalam satu transaksi?",
+      "options": [
+        "Status tiket dan riwayat",
+        "Hanya log console",
+        "Seluruh request selamanya"
+      ],
+      "answer": 0,
+      "explanation": "Keduanya harus berhasil atau batal bersama."
+    },
+    {
+      "question": "Apa status untuk transisi yang tidak diizinkan?",
+      "options": [
+        "201",
+        "409",
+        "200 selalu"
+      ],
+      "answer": 1,
+      "explanation": "Konflik state dipisahkan dari pembuatan dan validasi schema."
+    },
+    {
+      "question": "Apa peran DATABASE_URL pada factory server?",
+      "options": [
+        "Menjadi field yang ditampilkan ke client",
+        "Menginstal server otomatis",
+        "Memilih koneksi database latihan"
+      ],
+      "answer": 2,
+      "explanation": "URL dibaca dari konfigurasi, bukan ditanam sebagai kredensial source."
+    },
+    {
+      "question": "Apakah proyek siap menjadi API publik tanpa tambahan?",
+      "options": [
+        "Belum; autentikasi dan aspek operasional belum disediakan",
+        "Ya karena sudah ada /docs",
+        "Ya karena memakai PostgreSQL"
+      ],
+      "answer": 0,
+      "explanation": "Lingkupnya laboratorium lokal dengan data simulasi."
+    }
   ]
 }

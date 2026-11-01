@@ -2113,5 +2113,489 @@
     "diagramAlt": "Transaksi memeriksa kode permintaan, mengurangi stok bersyarat, dan mencatat operasi. Kegagalan membatalkan seluruh perubahan.",
     "stage": 0,
     "minutes": 55
+  },
+  {
+    "slug": "db-rancangan-aplikasi",
+    "title": "Merancang database dari kebutuhan sampai pengujian",
+    "summary": "Ikuti satu alur: aturan bisnis, ERD, skema, kueri, lalu tes penerimaan.",
+    "analogy": "Sebelum menggambar lemari arsip, tentukan satu kartu mewakili apa dan siapa yang boleh terhubung dengannya.",
+    "explain": [
+      "Mulai dari cerita: teknisi dapat menangani banyak tiket; tiket boleh belum ditugaskan; judul wajib diisi; kode tiket harus unik. Tuliskan contoh keadaan sah dan tidak sah sebelum memilih tipe kolom.",
+      "Tentukan entitas dan tingkat detail: satu baris teknisi adalah satu petugas, satu baris tiket adalah satu kasus gangguan. Foreign key nullable menyatakan penugasan opsional. Jangan memakai nama petugas sebagai kunci relasi karena nama dapat sama atau berubah.",
+      "Terjemahkan aturan sederhana menjadi primary key, UNIQUE, NOT NULL, CHECK, serta foreign key. Aturan alur lintas perubahan perlu fungsi layanan atau trigger yang dirancang terpisah. Pilih kueri berdasarkan kebutuhan laporan, lalu pertimbangkan indeks setelah pola akses jelas.",
+      "Pengujian penerimaan menghubungkan kebutuhan dengan bukti: tiket tanpa teknisi diterima, teknisi tidak dikenal ditolak, judul kosong ditolak, kode duplikat ditolak, dan laporan tetap menampilkan tiket belum ditugaskan. Diagram adalah alat berpikir; skema dan tes yang benar-benar menjaga implementasinya."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Kebutuhan",
+          "Aturan yang bisa diuji",
+          "Judul wajib, penugasan opsional"
+        ],
+        [
+          "ERD",
+          "Entitas dan banyaknya hubungan",
+          "Teknisi satu ke banyak tiket"
+        ],
+        [
+          "Skema",
+          "Penjagaan di database",
+          "FK nullable, UNIQUE, CHECK"
+        ],
+        [
+          "Tes penerimaan",
+          "Bukti tiap aturan",
+          "Data sah dan invalid"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Skema dan laporan SQLite",
+        "code": "PRAGMA foreign_keys = ON;\nCREATE TABLE teknisi (id INTEGER PRIMARY KEY, nama TEXT NOT NULL);\nCREATE TABLE tiket (id INTEGER PRIMARY KEY, kode TEXT NOT NULL UNIQUE,\n judul TEXT NOT NULL CHECK(length(trim(judul)) > 0),\n teknisi_id INTEGER REFERENCES teknisi(id));\nINSERT INTO teknisi VALUES (1, 'Ana');\nINSERT INTO tiket VALUES (1, 'T01', 'Link putus', NULL), (2, 'T02', 'Kabel rusak', 1);\nSELECT t.kode, COALESCE(n.nama, 'Belum ditugaskan') FROM tiket t\nLEFT JOIN teknisi n ON n.id = t.teknisi_id ORDER BY t.id;",
+        "output": "T01 | Belum ditugaskan\nT02 | Ana",
+        "explanation": "Setiap aturan punya bentuk implementasi dan skenario pengujian. SQL ini memakai SQLite dan database latihan kosong.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Tuliskan lima kebutuhan sebelum memodifikasi tabel.",
+      "Uji kode duplikat, judul kosong, dan teknisi hilang.",
+      "Tambahkan kebutuhan tanggal dibuat lalu tentukan format, validasi, serta kueri periode."
+    ],
+    "warning": "Jangan menyimpulkan aturan bisnis sudah lengkap hanya karena tabel berhasil dibuat. Periksa seluruh jalur penulisan dan laporan yang dibutuhkan.",
+    "check": "Bagaimana memastikan rancangan mengikuti kebutuhan, bukan sekadar mempunyai banyak tabel?",
+    "answer": "Hubungkan setiap aturan dengan kolom/constraint atau layanan, lalu tulis tes penerimaan yang membuktikannya.",
+    "source": "https://www.sqlite.org/foreignkeys.html",
+    "diagram": "server-api-alur",
+    "diagramAlt": "Kebutuhan diturunkan menjadi model, skema, layanan, dan pengujian sebelum dipakai melalui API.",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-postgresql-server",
+    "title": "PostgreSQL: database server, schema, dan tipe data",
+    "summary": "Pahami perpindahan dari file SQLite ke koneksi client–server.",
+    "analogy": "Banyak petugas mendatangi satu pusat arsip melalui loket; setiap petugas mempunyai koneksi dan hak akses yang ditentukan.",
+    "explain": [
+      "PostgreSQL menjalankan proses server yang menerima koneksi client. Satu cluster dapat mempunyai beberapa database; setiap database mempunyai schema yang mengelompokkan objek. Schema bukan database terpisah dan bukan otomatis batas keamanan tanpa pengaturan hak akses.",
+      "Untuk latihan, pasang PostgreSQL dari distribusi resmi sesuai OS, buat database khusus seperti kursus_db, lalu hubungkan dengan psql -h localhost -U nama_role -d kursus_db. Gunakan prompt password bila dikonfigurasi; jangan menulis password ke contoh kode atau riwayat command. Contoh SQL di artikel ini dijalankan di PostgreSQL, bukan SQLite.",
+      "Gunakan nama schema eksplisit agar objek tidak tertukar melalui search_path. Contoh memakai GENERATED BY DEFAULT AS IDENTITY, boolean, dan timestamptz. PostgreSQL menegakkan tipe lebih ketat daripada affinity tabel SQLite biasa. Timestamptz mewakili suatu instant; tampilannya mengikuti zona sesi, bukan menyimpan nama zona asal pengguna.",
+      "Contoh dibungkus BEGIN dan ROLLBACK supaya schema latihan tidak dipertahankan setelah diperiksa. Memerlukan role yang boleh membuat schema pada database latihan. Untuk aplikasi nyata, pisahkan pemilik/migrator dari role DML pemakai; pembahasan berikutnya menguraikan hak akses. Materi memakai fitur yang tersedia pada PostgreSQL 17 dan 18."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Client",
+          "Program atau psql",
+          "Mengirim SQL lewat koneksi"
+        ],
+        [
+          "Database dan schema",
+          "Dua tingkat pengelompokan",
+          "kursus_db → kursus_pg"
+        ],
+        [
+          "Identity",
+          "Id yang dihasilkan server",
+          "BY DEFAULT AS IDENTITY"
+        ],
+        [
+          "timestamptz",
+          "Instant dengan tampilan menurut zona sesi",
+          "Bukan nama zona asal"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL PostgreSQL · schema latihan",
+        "code": "BEGIN;\nCREATE SCHEMA kursus_pg;\nCREATE TABLE kursus_pg.perangkat (\n id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,\n nama text NOT NULL, aktif boolean NOT NULL DEFAULT true,\n dibuat timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP\n);\nINSERT INTO kursus_pg.perangkat(nama) VALUES ('BTS A');\nSELECT id, nama, CASE WHEN aktif THEN 'aktif' ELSE 'nonaktif' END FROM kursus_pg.perangkat ORDER BY id;\nROLLBACK;",
+        "output": "1 | BTS A | aktif",
+        "explanation": "Jalankan melalui koneksi ke database PostgreSQL latihan sebagai role yang mempunyai izin CREATE schema. Rollback membatalkan objek dan data contoh.",
+        "language": "postgresql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Buat database latihan terpisah melalui administrator lokal.",
+      "Hubungkan psql dan periksa SELECT version(); tanpa mengasumsikan port selalu sama.",
+      "Bandingkan tipe boolean dan timestamptz dengan pola penyimpanan SQLite."
+    ],
+    "warning": "Jangan menyalin berkas SQLite lalu berharap otomatis menjadi database PostgreSQL. Skema, tipe, data, kueri, dan transaksi perlu diuji pada engine tujuan.",
+    "check": "Apakah schema PostgreSQL sama dengan database baru?",
+    "answer": "Tidak. Schema mengelompokkan objek di dalam satu database yang terhubung pada koneksi tersebut.",
+    "source": "https://www.postgresql.org/docs/18/tutorial.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-role-akses",
+    "title": "Role, GRANT, dan pemisahan hak akses PostgreSQL",
+    "summary": "Bedakan pemilik skema, aplikasi penulis, dan pembaca laporan.",
+    "analogy": "Petugas pembaca laporan tidak perlu mempunyai kunci untuk mengubah struktur lemari arsip.",
+    "explain": [
+      "Role PostgreSQL dapat mempunyai LOGIN atau berfungsi sebagai kelompok NOLOGIN. Hak efektif dipengaruhi kepemilikan objek, grant langsung, keanggotaan role, serta privilege yang tersedia melalui PUBLIC. Menguji hanya satu GRANT tanpa melihat semuanya dapat menyesatkan.",
+      "Role aplikasi biasanya membutuhkan CONNECT database, USAGE schema, dan privilege tabel yang sesuai. Pemilik objek mempunyai kemampuan khusus untuk mengubah atau menghancurkan objeknya; karena itu role runtime sebaiknya tidak merangkap pemilik schema migrasi.",
+      "Contoh membuat role pembaca NOLOGIN sementara, memberi USAGE pada schema serta SELECT pada tabel, lalu SET LOCAL ROLE untuk membuktikan pembacaan. Contoh memerlukan administrator latihan yang boleh membuat role dan berpindah role; seluruh perubahan dibungkus transaksi lalu dibatalkan.",
+      "GRANT pada tabel yang sudah ada tidak otomatis berlaku pada seluruh tabel baru. ALTER DEFAULT PRIVILEGES berlaku untuk objek masa depan yang dibuat role pembuat tertentu. Jika memakai sequence untuk nilai default, periksa privilege sequence juga. Jangan memberi superuser agar error izin cepat hilang; uji operasi yang memang perlu diizinkan dan yang harus ditolak."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "CONNECT",
+          "Boleh masuk database",
+          "Dikelola administrator"
+        ],
+        [
+          "USAGE schema",
+          "Mengakses nama objek schema",
+          "Tidak sama dengan izin tulis"
+        ],
+        [
+          "SELECT tabel",
+          "Membaca data",
+          "Tidak otomatis INSERT"
+        ],
+        [
+          "Default privileges",
+          "Aturan objek masa depan",
+          "Terkait role pembuat"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQL PostgreSQL · pembaca terbatas",
+        "code": "BEGIN;\nCREATE SCHEMA kursus_acl;\nCREATE TABLE kursus_acl.laporan (id integer PRIMARY KEY, judul text NOT NULL);\nINSERT INTO kursus_acl.laporan VALUES (1, 'Ringkasan tiket');\nCREATE ROLE kursus_reader NOLOGIN;\nREVOKE ALL ON SCHEMA kursus_acl FROM PUBLIC;\nGRANT USAGE ON SCHEMA kursus_acl TO kursus_reader;\nGRANT SELECT ON kursus_acl.laporan TO kursus_reader;\nSET LOCAL ROLE kursus_reader;\nSELECT id, judul FROM kursus_acl.laporan ORDER BY id;\nRESET ROLE;\nSELECT CASE WHEN has_table_privilege('kursus_reader','kursus_acl.laporan','INSERT') THEN 'boleh' ELSE 'ditolak' END;\nROLLBACK;",
+        "output": "1 | Ringkasan tiket\nditolak",
+        "explanation": "Role pembaca tidak menjadi owner tabel. Untuk membuktikan penolakan INSERT sungguhan tanpa merusak transaksi utama, gunakan SAVEPOINT pada latihan atau koneksi uji tersendiri.",
+        "language": "postgresql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Uji SELECT berhasil dan INSERT ditolak pada role pembaca.",
+      "Daftar operasi yang diperlukan role aplikasi tiket.",
+      "Rancang role migrator dan role runtime yang terpisah."
+    ],
+    "warning": "Nama role bersifat cluster-wide. Pakai server/database latihan sendiri dan nama yang belum digunakan. Contoh bukan perubahan akses pada akun atau layanan milikmu.",
+    "check": "Apakah GRANT SELECT pada tabel otomatis memberi hak membaca semua tabel yang dibuat nanti?",
+    "answer": "Tidak. Grant objek yang ada dan default privileges untuk objek masa depan mempunyai lingkup berbeda.",
+    "source": "https://www.postgresql.org/docs/18/ddl-priv.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-retensi",
+    "title": "Soft delete, arsip, dan retensi data",
+    "summary": "Pilih penghapusan sesuai makna data dan kebutuhan pemulihan.",
+    "analogy": "Kartu yang dinonaktifkan masih berada dalam arsip; itu berbeda dari kartu yang benar-benar dimusnahkan.",
+    "explain": [
+      "Hard delete menghapus baris, soft delete menandai baris tidak aktif, sedangkan arsip memindahkan atau memisahkan data berdasarkan kebijakan. Pilihan mengikuti kebutuhan penggunaan, relasi, pemulihan, dan retensi yang disepakati; tidak ada satu aturan lama simpan yang cocok untuk semua data.",
+      "Contoh memakai deleted_at NULL untuk anggota aktif. Semua kueri pemakai yang membutuhkan data aktif harus menyaringnya. Foreign key yang masih menunjuk baris soft-deleted tetap sah secara referensial, tetapi belum tentu sah menurut aturan bisnis.",
+      "Indeks unik parsial email WHERE deleted_at IS NULL memungkinkan email dipakai kembali oleh akun aktif baru. Konsekuensinya, pemulihan akun lama dapat gagal karena bentrok email aktif. Tentukan respons pemulihan; jangan menghapus konflik diam-diam.",
+      "Soft delete bukan penghapusan data pribadi secara fisik, dan bukan audit yang tidak dapat diubah. Prosedur arsip/pemusnahan, backup, dan pemulihan perlu mengikuti kebijakan nyata. Latihan ini hanya memperlihatkan konsekuensi teknis tanpa menentukan masa retensi hukum."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Hard delete",
+          "Baris dihapus",
+          "Periksa relasi dan riwayat"
+        ],
+        [
+          "Soft delete",
+          "Baris ditandai",
+          "Kueri aktif wajib memfilter"
+        ],
+        [
+          "Arsip",
+          "Pisahkan data sesuai kebijakan",
+          "Tetap perlu pemeriksaan relasi"
+        ],
+        [
+          "Pemulihan",
+          "Dapat berbenturan",
+          "Email aktif sudah dipakai ulang"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "SQLite · identitas aktif dan arsip",
+        "code": "CREATE TABLE anggota (id INTEGER PRIMARY KEY, email TEXT NOT NULL, deleted_at TEXT);\nCREATE UNIQUE INDEX email_aktif ON anggota(email) WHERE deleted_at IS NULL;\nINSERT INTO anggota VALUES (1, 'ana@example.test', NULL);\nUPDATE anggota SET deleted_at = '2026-01-02' WHERE id = 1;\nINSERT INTO anggota VALUES (2, 'ana@example.test', NULL);\nSELECT id, email FROM anggota WHERE deleted_at IS NULL ORDER BY id;\nSELECT COUNT(*) FROM anggota;",
+        "output": "2 | ana@example.test\n2",
+        "explanation": "Akun lama masih disimpan. Mengubah deleted_at akun 1 menjadi NULL sekarang akan berbenturan dengan email aktif akun 2.",
+        "language": "sql"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Uji pemulihan akun lama dan periksa constraint yang menolak.",
+      "Daftar laporan yang harus melihat arsip dan yang hanya melihat aktif.",
+      "Rancang prosedur pemulihan dengan konflik yang perlu diputuskan pengguna."
+    ],
+    "warning": "Jangan menyebut soft delete sebagai penghapusan permanen. Data juga dapat berada pada cadangan dan log, sehingga retensi perlu dilihat menyeluruh.",
+    "check": "Apakah foreign key otomatis menganggap induk soft-deleted sebagai tidak ada?",
+    "answer": "Tidak. Barisnya masih ada; aturan status aktif perlu diperiksa aplikasi atau mekanisme tambahan.",
+    "source": "https://www.sqlite.org/partialindex.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-impor-csv",
+    "title": "Migrasi data dan impor CSV: validasi serta rekonsiliasi",
+    "summary": "Pisahkan pembacaan, pemeriksaan, serta penulisan agar impor dapat dijelaskan.",
+    "analogy": "Petugas memeriksa setiap formulir sebelum memasukkannya ke arsip dan mencatat alasan jika ditolak.",
+    "explain": [
+      "CSV hanya format teks dengan baris dan kolom; isinya belum otomatis sesuai skema. Tetapkan header wajib, tipe nilai, aturan kosong, serta kebijakan duplikat sebelum impor. Contoh memakai kode barang unik dan stok integer tidak negatif.",
+      "Kebijakan contoh adalah menerima baris valid satu per satu dan mencatat baris invalid dengan nomor baris serta alasan. Baris yang ditolak tidak menghentikan seluruh impor. Ini berbeda dari kebijakan all-or-nothing; tentukan yang diperlukan sebelum membungkus transaksi.",
+      "Validasi struktur dilakukan terlebih dahulu melalui DictReader. Nomor baris memakai reader.line_num yang mengikuti baris fisik CSV, termasuk kemungkinan field multiline. Contoh menganggap pemisah koma dan encoding masukan sudah ditangani saat file dibuka.",
+      "Jangan otomatis menimpa duplikat tanpa aturan. Contoh menolak kode yang sudah ada; menjalankan ulang file tidak menambah duplikat tetapi menghasilkan penolakan untuk kode lama. Pada data besar, gunakan staging, pembatas ukuran, batch transaksi, dan laporan impor yang menjaga privasi.",
+      "Untuk migrasi dari sistem lama, tentukan pemetaan kolom dan identitas, ambil snapshot sumber yang konsisten, lalu muat ke staging tujuan sebelum mengganti alur aplikasi. Bandingkan jumlah baris, kunci unik, total penting, relasi, serta baris yang ditolak. Lakukan latihan cutover dan rencana kembali; bila memuat id eksplisit ke PostgreSQL, periksa generator id setelah migrasi agar nilai baru tidak berbenturan. Contoh importer di bawah adalah bagian muat dan validasi dari alur tersebut, bukan migrasi produksi lengkap."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Header",
+          "Kontrak bentuk file",
+          "kode, stok"
+        ],
+        [
+          "Validasi",
+          "Periksa sebelum INSERT",
+          "Stok integer >= 0"
+        ],
+        [
+          "Duplikat",
+          "Ditolak eksplisit",
+          "Kode unik"
+        ],
+        [
+          "Laporan",
+          "Baris dan alasan",
+          "Jangan salin rahasia ke log"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · impor snapshot kecil",
+        "code": "import csv\nimport io\nimport sqlite3\n\ndef impor(con, teks):\n    reader = csv.DictReader(io.StringIO(teks))\n    if reader.fieldnames != [\"kode\", \"stok\"]:\n        raise ValueError(\"Header harus kode,stok\")\n    diterima, ditolak = 0, []\n    for row in reader:\n        try:\n            if None in row or not row[\"kode\"] or row[\"stok\"] is None:\n                raise ValueError(\"Kolom tidak sesuai\")\n            kode = row[\"kode\"].strip()\n            if not kode:\n                raise ValueError(\"Kode kosong\")\n            stok = int(row[\"stok\"])\n            if stok < 0:\n                raise ValueError(\"Stok negatif\")\n            with con:\n                con.execute(\"INSERT INTO barang(kode, stok) VALUES (?, ?)\", (kode, stok))\n            diterima += 1\n        except (ValueError, sqlite3.IntegrityError) as error:\n            alasan = \"Duplikat/constraint\" if isinstance(error, sqlite3.IntegrityError) else str(error)\n            ditolak.append((reader.line_num, alasan))\n    return diterima, ditolak\n\ncon = sqlite3.connect(\":memory:\")\ntry:\n    con.execute(\"CREATE TABLE barang(kode TEXT PRIMARY KEY NOT NULL, stok INTEGER NOT NULL CHECK(stok >= 0))\")\n    jumlah, gagal = impor(con, chr(10).join([\"kode,stok\", \"K01,3\", \"K02,-1\", \"K01,5\", \"K03,abc\"]))\n    print(\"Diterima:\", jumlah)\n    print(\"Ditolak:\", [nomor for nomor, _ in gagal])\n    print(con.execute(\"SELECT kode, stok FROM barang ORDER BY kode\").fetchall())\nfinally:\n    con.close()",
+        "output": "Diterima: 1\nDitolak: [3, 4, 5]\n[('K01', 3)]",
+        "explanation": "with con menyelesaikan transaksi tiap baris; bukan menutup koneksi. Kegagalan I/O atau OperationalError tidak ditelan sebagai kesalahan data biasa.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Uji header salah, field hilang, dan field tambahan.",
+      "Jalankan file dua kali dan jelaskan hasil duplikatnya.",
+      "Buat versi all-or-nothing dan bandingkan kontraknya."
+    ],
+    "warning": "Fungsi ini memegang seluruh teks contoh di memori. Untuk berkas besar, baca stream bertahap dan tentukan batas ukuran serta kebijakan batch secara sengaja.",
+    "check": "Apakah kebijakan baris valid diterima sama dengan transaksi seluruh file?",
+    "answer": "Tidak. Pada contoh setiap baris berhasil disahkan sendiri; all-or-nothing memerlukan unit transaksi yang berbeda.",
+    "source": "https://docs.python.org/3.11/library/csv.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-tes-integrasi",
+    "title": "Pengujian integrasi database dan migrasi",
+    "summary": "Uji engine, skema, transaksi, serta pemulihan pada database pengujian terpisah.",
+    "analogy": "Memeriksa satu petugas lewat simulasi berbeda dari mencoba alur formulir sampai tersimpan dan dibaca kembali dari arsip.",
+    "explain": [
+      "Unit test memeriksa komponen kecil, sedangkan integration test memeriksa kerja sama dengan database sungguhan pada engine yang diuji. Mock tidak membuktikan constraint, dialek, privilege, atau transaksi database berjalan sebagaimana mestinya.",
+      "Gunakan database pengujian terpisah dan data deterministik. Uji perubahan skema dari versi lama, bukan hanya membuat skema terbaru dari nol. Periksa bahwa migrasi yang gagal tidak meninggalkan versi baru palsu atau perubahan sebagian.",
+      "Contoh memakai SQLite file sementara, menambahkan kolom melalui transaksi, menolak stok negatif, lalu menutup dan membuka ulang koneksi. Pengujian SQLite ini tidak membuktikan seluruh perilaku PostgreSQL; jalankan suite yang sama pada engine tujuan untuk bagian yang relevan.",
+      "Jangan mengandalkan rollback fixture untuk semua efek samping: sequence, koneksi lain, file, dan layanan luar dapat mempunyai perilaku berbeda. Tentukan isolasi fixture dan pembersihan sumber daya yang kamu miliki, bukan menghapus database lain secara otomatis."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Engine nyata",
+          "Constraint dan SQL dieksekusi",
+          "Bukan mock koneksi"
+        ],
+        [
+          "Migrasi",
+          "Mulai dari skema lama",
+          "Periksa versi dan data"
+        ],
+        [
+          "Persistensi",
+          "Tutup lalu buka ulang",
+          "Baca file yang sama"
+        ],
+        [
+          "Isolasi",
+          "Database uji terpisah",
+          "Fixture tidak menyentuh produksi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Python · integrasi file sementara",
+        "code": "import sqlite3\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\n\nwith TemporaryDirectory() as folder:\n    path = Path(folder) / \"uji.db\"\n    con = sqlite3.connect(path, isolation_level=None)\n    try:\n        con.execute(\"CREATE TABLE barang(id INTEGER PRIMARY KEY, stok INTEGER NOT NULL CHECK(stok >= 0))\")\n        con.execute(\"INSERT INTO barang VALUES (1, 3)\")\n        con.execute(\"BEGIN\")\n        con.execute(\"ALTER TABLE barang ADD COLUMN nama TEXT NOT NULL DEFAULT 'Belum diisi'\")\n        con.execute(\"PRAGMA user_version = 1\")\n        con.execute(\"COMMIT\")\n        try:\n            con.execute(\"UPDATE barang SET stok = -1 WHERE id = 1\")\n        except sqlite3.IntegrityError:\n            pass\n        assert con.execute(\"SELECT stok FROM barang\").fetchone()[0] == 3\n    finally:\n        con.close()\n    ulang = sqlite3.connect(path)\n    try:\n        assert ulang.execute(\"PRAGMA user_version\").fetchone()[0] == 1\n        assert ulang.execute(\"SELECT nama FROM barang\").fetchone()[0] == \"Belum diisi\"\n        print(\"Migrasi, constraint, dan pembukaan ulang: lolos\")\n    finally:\n        ulang.close()",
+        "output": "Migrasi, constraint, dan pembukaan ulang: lolos",
+        "explanation": "Assertion memakai nilai yang ditentukan kebutuhan. File berada di direktori sementara khusus tes.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Tambahkan tes migrasi gagal dengan nama kolom duplikat.",
+      "Uji foreign key pada koneksi baru.",
+      "Rancang suite PostgreSQL yang memeriksa role pembaca serta penulis secara terpisah."
+    ],
+    "warning": "Jangan menjalankan tes yang membuat atau menghapus skema pada database produksi. URL pengujian harus eksplisit dan terisolasi.",
+    "check": "Mengapa tes SQLite tidak otomatis cukup untuk migrasi ke PostgreSQL?",
+    "answer": "Engine berbeda pada tipe, SQL, privilege, penguncian, dan perilaku lain yang harus diuji pada tujuan.",
+    "source": "https://docs.python.org/3.11/library/sqlite3.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "db-sqlalchemy",
+    "title": "SQLAlchemy ORM: objek, tabel, session, dan transaksi",
+    "summary": "Gunakan pemetaan objek sambil tetap memahami SQL dan batas transaksi.",
+    "analogy": "Kartu objek di program dapat dipetakan ke baris arsip, tetapi petugas tetap harus memutuskan kapan perubahan disahkan.",
+    "explain": [
+      "SQLAlchemy menyediakan Core dan ORM. ORM memetakan class ke tabel, sedangkan engine mengelola akses koneksi. Artikel ini memakai API SQLAlchemy 2.0.x secara sengaja agar contoh mempunyai kontrak versi yang jelas; bukan klaim bahwa itu satu-satunya rilis tersedia.",
+      "Session mengelola unit kerja objek serta transaksi. Gunakan session per pekerjaan/request, bukan satu session global yang dibagikan antarthread. with Session(engine) menutup session; with session.begin() mengelola commit atau rollback unit perubahan.",
+      "ORM tetap menjalankan SQL. select(Barang) menghasilkan permintaan ke engine; constraint database tetap dapat menolak flush/commit. create_all membuat tabel yang belum ada, bukan migrator yang memperbarui struktur tabel lama secara lengkap.",
+      "Contoh menggunakan SQLite memori agar dapat dicoba tanpa server. Untuk PostgreSQL gunakan URL postgresql+psycopg dan driver yang sesuai. ORM tidak menjamin semua dialek identik; uji query, constraint, tipe, dan transaksi pada engine tujuan. Hindari pola N+1 saat membaca relasi berulang dan ukur SQL yang benar-benar dijalankan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Aturan / contoh"
+      ],
+      "rows": [
+        [
+          "Model ORM",
+          "Class yang dipetakan",
+          "Barang"
+        ],
+        [
+          "Engine",
+          "Akses koneksi database",
+          "SQLite / PostgreSQL"
+        ],
+        [
+          "Session",
+          "Unit kerja dan transaksi",
+          "Jangan global lintas request"
+        ],
+        [
+          "create_all",
+          "Membuat tabel belum ada",
+          "Bukan migrasi lengkap"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi contoh",
+        "code": "python -m pip install \"SQLAlchemy==2.0.55\"",
+        "output": "",
+        "explanation": "Jalankan di virtual environment latihan. Versi API contoh dikunci agar hasil pengujian dapat diulang.",
+        "language": "text"
+      },
+      {
+        "label": "Python · ORM 2.0",
+        "code": "from sqlalchemy import Integer, String, CheckConstraint, create_engine, select\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session\n\nclass Base(DeclarativeBase):\n    pass\n\nclass Barang(Base):\n    __tablename__ = \"barang\"\n    __table_args__ = (CheckConstraint(\"stok >= 0\"),)\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    nama: Mapped[str] = mapped_column(String(80))\n    stok: Mapped[int] = mapped_column(Integer)\n\nengine = create_engine(\"sqlite+pysqlite:///:memory:\")\ntry:\n    Base.metadata.create_all(engine)\n    with Session(engine) as session:\n        with session.begin():\n            session.add(Barang(nama=\"Kabel\", stok=3))\n    with Session(engine) as session:\n        barang = session.scalars(select(Barang).order_by(Barang.id)).one()\n        print(barang.nama, barang.stok)\nfinally:\n    engine.dispose()",
+        "output": "Kabel 3",
+        "explanation": "Model tidak menghilangkan constraint atau keputusan transaksi. Engine dilepas setelah seluruh session selesai.",
+        "language": "python"
+      }
+    ],
+    "steps": [
+      "Baca kebutuhan, prasyarat, serta label bahasa pada setiap blok.",
+      "Siapkan folder latihan terpisah dan dependensi yang dicantumkan. Ikuti nama file serta dialek SQL yang ditulis pada contoh.",
+      "Jalankan contoh, cocokkan hasil, lalu uji variasi dan kegagalan pada latihan."
+    ],
+    "practice": [
+      "Aktifkan echo=True pada engine untuk mempelajari SQL yang dikirim.",
+      "Uji stok negatif dan pastikan transaksi ditolak.",
+      "Jelaskan apa yang terjadi jika model diubah tetapi tabel lama sudah ada."
+    ],
+    "warning": "Anotasi model dan ORM bukan pengganti validasi input maupun migrasi. Jangan mencetak URL koneksi berisi kredensial ke log.",
+    "check": "Apakah create_all otomatis memigrasikan seluruh perubahan model ke tabel lama?",
+    "answer": "Tidak. Migrasi skema perlu dikelola dan diuji secara terpisah.",
+    "source": "https://docs.sqlalchemy.org/en/20/tutorial/index.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
   }
 ]

@@ -100,7 +100,9 @@
       "kesalahan-validasi",
       "debugging-pengujian",
       "traceback-debugger",
-      "file-teks-csv-json"
+      "file-teks-csv-json",
+      "logging-aplikasi",
+      "konfigurasi-aplikasi"
     ]
   },
   {
@@ -150,7 +152,8 @@
     "slugs": [
       "oop-modul-package",
       "oop-refactoring",
-      "oop-solid"
+      "oop-solid",
+      "oop-repository-service"
     ]
   },
   {
@@ -243,6 +246,44 @@
     "slugs": [
       "db-kasus-dashboard",
       "db-kasus-stok-atomik"
+    ]
+  },
+  {
+    "title": "Basis Data · Dari rancangan ke aplikasi",
+    "slugs": [
+      "db-rancangan-aplikasi",
+      "db-impor-csv",
+      "db-tes-integrasi"
+    ]
+  },
+  {
+    "title": "Basis Data · PostgreSQL dan pemeliharaan",
+    "slugs": [
+      "db-postgresql-server",
+      "db-role-akses",
+      "db-retensi",
+      "db-sqlalchemy"
+    ]
+  },
+  {
+    "title": "Backend/API · HTTP dan kontrak",
+    "slugs": [
+      "api-http-json",
+      "api-rest-kontrak"
+    ]
+  },
+  {
+    "title": "Backend/API · Implementasi dan pengujian",
+    "slugs": [
+      "api-fastapi",
+      "api-validasi-error",
+      "api-pengujian"
+    ]
+  },
+  {
+    "title": "Backend/API · Proyek gabungan",
+    "slugs": [
+      "api-proyek-tiket"
     ]
   }
 ]
