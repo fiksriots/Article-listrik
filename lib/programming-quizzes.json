@@ -6394,5 +6394,173 @@
       "answer": 0,
       "explanation": "Transaksi menjaga konsistensi keduanya."
     }
+  ],
+  "db-postgresql-jsonb": [
+    {
+      "question": "Kapan kolom biasa tetap lebih tepat?",
+      "options": [
+        "Identitas dan aturan data yang stabil",
+        "Semua data harus JSONB",
+        "Ketika tidak ingin memakai foreign key"
+      ],
+      "answer": 0,
+      "explanation": "Data inti tetap memerlukan model relasional yang jelas."
+    },
+    {
+      "question": "Apa keluaran operator ->>?",
+      "options": [
+        "Selalu sebuah objek JSONB",
+        "Teks atau SQL NULL",
+        "Selalu integer"
+      ],
+      "answer": 1,
+      "explanation": "Cast dilakukan setelah memeriksa tipe yang diharapkan."
+    },
+    {
+      "question": "Apa tujuan IS TRUE pada CHECK contoh?",
+      "options": [
+        "Membuat JSON null menjadi angka",
+        "Menghilangkan constraint",
+        "Menolak hasil FALSE maupun SQL NULL"
+      ],
+      "answer": 2,
+      "explanation": "CHECK biasa menerima hasil NULL; IS TRUE menutup celah bentuk yang hilang."
+    },
+    {
+      "question": "Apakah GIN payload membantu seluruh kueri JSONB otomatis?",
+      "options": [
+        "Tidak",
+        "Ya termasuk semua cast",
+        "Ya tanpa melihat operator"
+      ],
+      "answer": 0,
+      "explanation": "Kecocokan operator dan ekspresi harus diperiksa lewat rencana."
+    }
+  ],
+  "db-postgresql-pencarian": [
+    {
+      "question": "Apa fungsi @@?",
+      "options": [
+        "Mencocokkan tsvector dengan tsquery",
+        "Mengubah semua teks menjadi angka",
+        "Menghapus indeks"
+      ],
+      "answer": 0,
+      "explanation": "Operator ini menguji kecocokan pencarian teks."
+    },
+    {
+      "question": "Apa makna dua kata pada plainto_tsquery contoh?",
+      "options": [
+        "Harus selalu frasa berdampingan",
+        "Keduanya harus cocok",
+        "Selalu salah satu kata saja"
+      ],
+      "answer": 1,
+      "explanation": "Fungsi membentuk query AND untuk teks biasa."
+    },
+    {
+      "question": "Apakah simple menjanjikan stemming Indonesia?",
+      "options": [
+        "Ya untuk semua imbuhan",
+        "Ya jika ada GIN",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Konfigurasi bahasa perlu dipilih dan diuji sesuai kebutuhan."
+    },
+    {
+      "question": "Apa terjadi ketika sumber kolom generated diubah?",
+      "options": [
+        "Vector tersimpan ikut dihitung ulang",
+        "Vector pasti menjadi usang selamanya",
+        "Indeks dihapus otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Generated expression menjaga representasi sesuai kolom sumber."
+    }
+  ],
+  "db-postgresql-rls": [
+    {
+      "question": "Apa beda GRANT dengan RLS?",
+      "options": [
+        "Privilege operasi dengan pembatasan baris",
+        "Keduanya selalu identik",
+        "RLS menggantikan semua privilege"
+      ],
+      "answer": 0,
+      "explanation": "Operasi dan baris yang boleh dituju merupakan dua lapisan berbeda."
+    },
+    {
+      "question": "Apa fungsi WITH CHECK?",
+      "options": [
+        "Hanya mengurutkan SELECT",
+        "Memeriksa baris baru hasil INSERT/UPDATE",
+        "Mematikan foreign key"
+      ],
+      "answer": 1,
+      "explanation": "Pemilik tidak boleh dipindahkan untuk melanggar policy."
+    },
+    {
+      "question": "Siapa yang tetap dapat melewati RLS?",
+      "options": [
+        "Semua role yang bisa SELECT",
+        "Semua pemilik tiket",
+        "Superuser dan role BYPASSRLS"
+      ],
+      "answer": 2,
+      "explanation": "FORCE tidak menghilangkan bypass superuser/BYPASSRLS."
+    },
+    {
+      "question": "Apakah current_user membedakan pengguna API pada satu role koneksi bersama?",
+      "options": [
+        "Tidak",
+        "Ya dari body JSON",
+        "Ya dari alamat browser"
+      ],
+      "answer": 0,
+      "explanation": "Identitas database dan identitas aplikasi harus dipetakan dengan benar."
+    }
+  ],
+  "db-postgresql-explain": [
+    {
+      "question": "Apakah EXPLAIN ANALYZE mengeksekusi query?",
+      "options": [
+        "Ya",
+        "Tidak pernah",
+        "Hanya jika tanpa indeks"
+      ],
+      "answer": 0,
+      "explanation": "Efek query tetap terjadi sehingga pemilihannya harus sesuai lingkungan latihan."
+    },
+    {
+      "question": "Apa arti cost pada plan?",
+      "options": [
+        "Milidetik yang dijamin",
+        "Unit perkiraan planner",
+        "Jumlah byte tabel persis"
+      ],
+      "answer": 1,
+      "explanation": "Cost tidak sama dengan waktu aktual."
+    },
+    {
+      "question": "Apakah Seq Scan selalu salah?",
+      "options": [
+        "Ya meskipun tabel sangat kecil",
+        "Ya karena semua query harus memakai indeks",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Pilihan yang tepat bergantung selektivitas dan biaya akses."
+    },
+    {
+      "question": "Apa yang diperbarui ANALYZE nama_tabel?",
+      "options": [
+        "Statistik untuk planner",
+        "Semua password role",
+        "Seluruh source code API"
+      ],
+      "answer": 0,
+      "explanation": "Statistik membantu planner memperkirakan jumlah baris."
+    }
   ]
 }

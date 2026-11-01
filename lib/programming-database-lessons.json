@@ -2747,5 +2747,314 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 40
+  },
+  {
+    "slug": "db-postgresql-jsonb",
+    "title": "JSONB: data fleksibel tanpa kehilangan aturan",
+    "summary": "Gabungkan kolom relasional dan atribut tambahan melalui studi kecil telemetri perangkat.",
+    "analogy": "Identitas perangkat ada pada kartu utama; variasi atribut sensor dicatat pada formulir tambahan dengan aturan yang jelas.",
+    "explain": [
+      "Prasyarat: tabel, constraint, kueri berparameter, dan PostgreSQL dasar. JSONB menyimpan dokumen JSON dalam representasi biner yang dapat ditelusuri dan diindeks. Ia tidak mempertahankan spasi atau urutan key objek; key duplikat tidak dipertahankan sebagai beberapa nilai. JSONB bukan cara menyimpan semua data tanpa rancangan.",
+      "Gunakan kolom biasa untuk identitas, foreign key, waktu, dan nilai yang mempunyai aturan atau pola kueri tetap. Atribut tambahan yang bervariasi antarperangkat dapat cocok di JSONB. Jika suatu atribut kemudian menjadi inti pelaporan, pertimbangkan pemindahan ke kolom bertipe atau tabel terkait melalui migrasi.",
+      "Operator -> mengambil nilai JSON, sedangkan ->> menghasilkan teks. Operator ? menguji keberadaan key pada tingkat atas; @> memeriksa containment dokumen. Key hilang, JSON null, dan SQL NULL berbeda. Ekstraksi teks atas JSON null atau key hilang sama-sama dapat menghasilkan SQL NULL, jadi gunakan pemeriksaan keberadaan serta tipe bila perlu membedakannya.",
+      "CHECK tidak menolak ekspresi SQL NULL secara otomatis. Contoh memakai IS TRUE untuk mensyaratkan objek dan nilai tegangan JSON bertipe number. Nilai yang kurang, null, string, atau array akan ditolak. Ini hanya validasi bentuk; batas pengukuran, satuan, kalibrasi, dan kewajaran nilai tetap perlu dirancang terpisah.",
+      "GIN pada payload dapat mendukung operator JSONB tertentu, termasuk @> dengan operator class bawaan. Ia tidak otomatis mempercepat setiap ekspresi ->> atau setiap cast numerik. Pilih indeks yang sesuai kueri, periksa rencana, dan perhitungkan biaya penulisan. Demo kecil berikut memeriksa hasil, bukan mengklaim peningkatan kecepatan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Contoh penggunaan"
+      ],
+      "rows": [
+        [
+          "Kolom relasional",
+          "Identitas dan aturan stabil",
+          "perangkat_id, dicatat"
+        ],
+        [
+          "-> / ->>",
+          "JSON / teks",
+          "payload->>'mode'"
+        ],
+        [
+          "? / @>",
+          "Key ada / containment",
+          "payload @> dokumen_filter"
+        ],
+        [
+          "CHECK ... IS TRUE",
+          "Tolak bentuk yang tidak memenuhi",
+          "tegangan harus number"
+        ],
+        [
+          "GIN",
+          "Indeks operator JSONB",
+          "Tidak melayani semua ekspresi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "PostgreSQL · telemetri perangkat",
+        "code": "BEGIN;\nCREATE SCHEMA lp_jsonb;\nCREATE TABLE lp_jsonb.telemetri (\n    id integer PRIMARY KEY,\n    perangkat_id text NOT NULL,\n    dicatat timestamptz NOT NULL,\n    payload jsonb NOT NULL,\n    CHECK ((jsonb_typeof(payload) = 'object'\n       AND jsonb_typeof(payload -> 'tegangan') = 'number') IS TRUE)\n);\nINSERT INTO lp_jsonb.telemetri VALUES\n (1, 'BTS-A', '2026-01-01 00:00:00+00', '{\"tegangan\":12.4,\"mode\":\"baterai\",\"suhu\":31}'),\n (2, 'BTS-B', '2026-01-01 00:00:00+00', '{\"tegangan\":13.1,\"mode\":\"charger\"}'),\n (3, 'BTS-A', '2026-01-01 00:05:00+00', '{\"tegangan\":12.2,\"mode\":\"baterai\",\"suhu\":null}');\nCREATE INDEX telemetri_payload_gin ON lp_jsonb.telemetri USING gin(payload);\nSELECT id, (payload ->> 'tegangan')::numeric AS volt\nFROM lp_jsonb.telemetri\nWHERE payload @> '{\"mode\":\"baterai\"}'::jsonb\nORDER BY id;\nSELECT id, payload ? 'suhu' AS key_ada,\n       COALESCE(jsonb_typeof(payload -> 'suhu'), 'KEY_HILANG') AS jenis\nFROM lp_jsonb.telemetri ORDER BY id;\nROLLBACK;",
+        "output": "1 | 12.4\n3 | 12.2\n1 | True | number\n2 | False | KEY_HILANG\n3 | True | null",
+        "explanation": "Baris SQL null ditampilkan berbeda dari teks JSON null. SQL dapat dijalankan lewat psql atau client PostgreSQL pada satu koneksi. Nilai sensor hanya contoh data, bukan aturan keselamatan perangkat.",
+        "language": "postgresql"
+      }
+    ],
+    "steps": [
+      "Pelajari prasyarat dan gunakan database PostgreSQL latihan terpisah. Contoh SQL bab ini bukan untuk SQLite.",
+      "Jalankan satu blok utuh pada satu koneksi. Contoh dibungkus transaksi yang dibatalkan agar objek latihan tidak menetap.",
+      "Cocokkan hasil, lalu ubah satu kondisi pada latihan dan jelaskan mengapa hasilnya berubah."
+    ],
+    "practice": [
+      "Ganti payload dengan {}, array, JSON null, atau tegangan berupa string; jalankan masing-masing pada transaksi baru dan amati constraint menolak.",
+      "Tambahkan filter rentang tegangan. Bandingkan kebutuhan indeks ekspresi dengan containment mode.",
+      "Rancang tabel perangkat lalu tambahkan foreign key perangkat_id; bedakan metadata perangkat dengan pembacaan historis."
+    ],
+    "warning": "Jangan menganggap tegangan sesaat dapat menentukan kapasitas baterai atau waktu cadangan secara akurat. Bab ini membahas model dan kueri data, bukan kalibrasi sensor atau perhitungan kapasitas.",
+    "check": "Apakah key suhu yang hilang sama dengan key suhu yang berisi JSON null?",
+    "answer": "Tidak. Operator ? menunjukkan apakah key ada, sedangkan jsonb_typeof membedakan jenis nilai JSON.",
+    "source": "https://www.postgresql.org/docs/18/datatype-json.html",
+    "diagram": "db-jsonb-pilihan",
+    "diagramAlt": "Alur penentuan data relasional atau JSONB.",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "db-postgresql-pencarian",
+    "title": "Pencarian teks PostgreSQL: tsvector, tsquery, dan GIN",
+    "summary": "Cari kata pada tiket dengan konfigurasi eksplisit dan hasil yang dibatasi.",
+    "analogy": "Indeks kata mirip daftar istilah di belakang buku; mencari kata berbeda dari mencari potongan huruf.",
+    "explain": [
+      "Prasyarat: SELECT, indeks, dan PostgreSQL dasar. LIKE atau ILIKE cocok untuk pola string tertentu. Full-text search mengubah dokumen menjadi lexeme dalam tsvector dan mencocokkannya dengan tsquery menggunakan @@. Ini bukan pengganti semua pencarian substring, fuzzy search, atau pencocokan salah ketik.",
+      "Contoh memakai konfigurasi simple untuk teks Indonesia: kata diproses menurut parser dan kamus simple, tanpa menjanjikan stemming bahasa Indonesia. Istilah gangguan tidak otomatis sama dengan mengganggu. Tentukan kebutuhan bahasa serta sinonim sebelum memilih konfigurasi; jangan menganggap konfigurasi english cocok untuk semua bahasa.",
+      "Kolom generated STORED membentuk dokumen pencarian dari judul dan catatan. coalesce mencegah catatan NULL membuat seluruh gabungan menjadi NULL. Konfigurasi simple dituliskan pada pembentukan vector dan query agar perilaku tidak berubah mengikuti default sesi.",
+      "plainto_tsquery memperlakukan masukan sebagai teks biasa dan menggabungkan kata yang relevan dengan AND. Frasa berurutan, operator lanjutan, atau pencarian gaya web memerlukan fungsi/kontrak berbeda. Bila nilai berasal dari pengguna di Python, tetap kirim sebagai parameter SQL, bukan interpolasi string.",
+      "GIN pada tsvector dapat membantu pencarian kata. Urutan hasil tetap perlu ditentukan; contoh memakai id agar deterministik dan LIMIT agar ukuran respons terkendali. Ranking dapat ditambahkan sesuai kebutuhan, dengan id sebagai tie-breaker. Biaya pembaruan kolom dan indeks tetap harus dipertimbangkan."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Contoh penggunaan"
+      ],
+      "rows": [
+        [
+          "tsvector",
+          "Representasi kata dokumen",
+          "Dibentuk dari judul dan catatan"
+        ],
+        [
+          "plainto_tsquery",
+          "Teks biasa menjadi query",
+          "Dua kata → AND"
+        ],
+        [
+          "simple",
+          "Konfigurasi eksplisit",
+          "Tidak menjanjikan stemming Indonesia"
+        ],
+        [
+          "@@",
+          "Pencocokan",
+          "Vector cocok dengan query"
+        ],
+        [
+          "GIN + LIMIT",
+          "Akses dan batas hasil",
+          "Tetap tentukan ORDER BY"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "PostgreSQL · pencarian tiket",
+        "code": "BEGIN;\nCREATE SCHEMA lp_pencarian;\nCREATE TABLE lp_pencarian.tiket (\n    id integer PRIMARY KEY,\n    judul text NOT NULL,\n    catatan text,\n    dokumen tsvector GENERATED ALWAYS AS (\n        to_tsvector('simple', coalesce(judul, '') || ' ' || coalesce(catatan, ''))\n    ) STORED\n);\nINSERT INTO lp_pencarian.tiket(id, judul, catatan) VALUES\n (1, 'Gangguan radio BTS', 'Link putus saat hujan'),\n (2, 'Penggantian router', NULL),\n (3, 'Gangguan listrik', 'Radio tetap aktif');\nCREATE INDEX tiket_dokumen_gin ON lp_pencarian.tiket USING gin(dokumen);\nSELECT id, judul FROM lp_pencarian.tiket\nWHERE dokumen @@ plainto_tsquery('simple', 'gangguan radio')\nORDER BY id LIMIT 10;\nUPDATE lp_pencarian.tiket SET catatan = 'Pemeriksaan router selesai' WHERE id = 3;\nSELECT id FROM lp_pencarian.tiket\nWHERE dokumen @@ plainto_tsquery('simple', 'gangguan radio')\nORDER BY id LIMIT 10;\nSELECT id FROM lp_pencarian.tiket\nWHERE dokumen @@ plainto_tsquery('simple', 'router')\nORDER BY id LIMIT 10;\nROLLBACK;",
+        "output": "1 | Gangguan radio BTS\n3 | Gangguan listrik\n1\n2\n3",
+        "explanation": "Query pertama cocok jika kedua kata ada di gabungan judul dan catatan, tidak harus berdampingan. UPDATE sumber membuat generated vector ikut diperbarui.",
+        "language": "postgresql"
+      }
+    ],
+    "steps": [
+      "Pelajari prasyarat dan gunakan database PostgreSQL latihan terpisah. Contoh SQL bab ini bukan untuk SQLite.",
+      "Jalankan satu blok utuh pada satu koneksi. Contoh dibungkus transaksi yang dibatalkan agar objek latihan tidak menetap.",
+      "Cocokkan hasil, lalu ubah satu kondisi pada latihan dan jelaskan mengapa hasilnya berubah."
+    ],
+    "practice": [
+      "Bandingkan pencarian radio dengan potongan radi: jelaskan mengapa full-text search bukan substring search.",
+      "Uji catatan NULL, kapitalisasi kata, masukan kosong, dan dua kata yang tidak berada berdampingan.",
+      "Tambahkan filter status dan pagination; uji hasil kosong serta urutan stabil."
+    ],
+    "warning": "Jangan membangun string tsquery atau SQL dengan menggabungkan input mentah. Tentukan arti masukan kosong dan batasi panjang query di aplikasi.",
+    "check": "Mengapa tiket 3 semula cocok dengan gangguan radio walaupun dua kata tidak berdampingan?",
+    "answer": "plainto_tsquery memakai AND; kedua kata cukup ada di dokumen gabungan judul dan catatan.",
+    "source": "https://www.postgresql.org/docs/18/textsearch-tables.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "db-postgresql-rls",
+    "title": "Row-Level Security: membatasi baris di PostgreSQL",
+    "summary": "Lengkapi privilege tabel dengan aturan baris yang boleh dibaca atau ditulis.",
+    "analogy": "Petugas boleh masuk ruang arsip, tetapi hanya boleh membuka map yang menjadi tanggung jawabnya.",
+    "explain": [
+      "Prasyarat: role, GRANT, transaksi, dan otorisasi API. GRANT SELECT pada tabel memberi privilege operasi; Row-Level Security atau RLS menambahkan pemeriksaan baris. Keduanya diperlukan. ENABLE ROW LEVEL SECURITY mengaktifkannya; tabel tanpa policy yang berlaku menggunakan default deny untuk akses yang tunduk pada RLS.",
+      "USING menentukan baris lama yang terlihat atau boleh ditarget operasi. WITH CHECK membatasi bentuk baris baru dari INSERT/UPDATE. Hanya memfilter pembacaan belum cukup jika pengguna dapat mengubah pemilik ke pihak lain. Contoh mendefinisikan kedua ekspresi secara eksplisit.",
+      "Lab memakai dua role database, lp_rls_ana dan lp_rls_budi, dengan role kelompok lp_rls_pemakai. Kolom pemilik dibandingkan dengan current_user, yaitu role database yang sedang efektif, bukan nama pengguna aplikasi. SET LOCAL ROLE hanya dipakai administrator lab agar policy dapat diuji pada satu koneksi.",
+      "Owner tabel biasanya melewati RLS; FORCE ROW LEVEL SECURITY dapat membuat owner tunduk, tetapi superuser dan role BYPASSRLS tetap melewatinya. Karena itu tes harus memakai role runtime yang tidak mempunyai bypass dan tidak merangkap owner. Lab membutuhkan administrator database uji yang boleh membuat role dan berpindah role.",
+      "Contoh role per identitas ini bukan rancangan login API dengan satu role koneksi bersama. Pada connection pool bersama, current_user yang sama tidak membedakan pengguna aplikasi. Pemetaan identitas dan konteks transaksi harus dirancang sebagai batas kepercayaan server; jangan mempercayai owner_id atau variabel sesi yang bebas ditentukan client.",
+      "Policy dapat memengaruhi kinerja dan cakupan hasil. Banyak policy permissive dapat digabung dengan OR; menambah policy bukan selalu mempersempit akses. RLS juga tidak menggantikan hak akses schema/tabel, audit, keamanan fungsi, maupun pengujian operasi yang harus ditolak."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Contoh penggunaan"
+      ],
+      "rows": [
+        [
+          "GRANT",
+          "Privilege operasi",
+          "Boleh SELECT/UPDATE tabel"
+        ],
+        [
+          "USING",
+          "Baris yang terlihat/ditarget",
+          "pemilik = current_user"
+        ],
+        [
+          "WITH CHECK",
+          "Baris hasil penulisan",
+          "Pemilik baru tetap sah"
+        ],
+        [
+          "Role runtime",
+          "Identitas efektif database",
+          "Bukan owner/superuser"
+        ],
+        [
+          "Pool bersama",
+          "Konteks identitas perlu dirancang",
+          "current_user sama untuk semua request"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "PostgreSQL · dua pemilik tiket",
+        "code": "BEGIN;\nCREATE ROLE lp_rls_pemakai NOLOGIN NOSUPERUSER NOBYPASSRLS;\nCREATE ROLE lp_rls_ana NOLOGIN NOSUPERUSER NOBYPASSRLS;\nCREATE ROLE lp_rls_budi NOLOGIN NOSUPERUSER NOBYPASSRLS;\nGRANT lp_rls_pemakai TO lp_rls_ana, lp_rls_budi;\nCREATE SCHEMA lp_rls;\nCREATE TABLE lp_rls.tiket (\n    id integer PRIMARY KEY,\n    pemilik name NOT NULL DEFAULT current_user,\n    judul text NOT NULL\n);\nINSERT INTO lp_rls.tiket VALUES (1, 'lp_rls_ana', 'Link A'), (2, 'lp_rls_budi', 'Link B');\nGRANT USAGE ON SCHEMA lp_rls TO lp_rls_pemakai;\nGRANT SELECT, INSERT, UPDATE, DELETE ON lp_rls.tiket TO lp_rls_pemakai;\nALTER TABLE lp_rls.tiket ENABLE ROW LEVEL SECURITY;\nCREATE POLICY milik_sendiri ON lp_rls.tiket TO lp_rls_pemakai\n    USING (pemilik = current_user)\n    WITH CHECK (pemilik = current_user);\nSET LOCAL ROLE lp_rls_ana;\nSELECT id, judul FROM lp_rls.tiket ORDER BY id;\nUPDATE lp_rls.tiket SET judul = 'Tidak boleh' WHERE id = 2;\nINSERT INTO lp_rls.tiket(id, judul) VALUES (3, 'Link C');\nSELECT id, judul FROM lp_rls.tiket ORDER BY id;\nSET LOCAL ROLE lp_rls_budi;\nSELECT id, judul FROM lp_rls.tiket ORDER BY id;\nRESET ROLE;\nROLLBACK;",
+        "output": "1 | Link A\n1 | Link A\n3 | Link C\n2 | Link B",
+        "explanation": "Ana tidak melihat tiket Budi; UPDATE terhadap id 2 tidak menemukan baris yang boleh diubah. INSERT tanpa pemilik memakai current_user. Role dan schema dibatalkan saat ROLLBACK; gunakan nama ini hanya di database lab kosong.",
+        "language": "postgresql"
+      }
+    ],
+    "steps": [
+      "Pelajari prasyarat dan gunakan database PostgreSQL latihan terpisah. Contoh SQL bab ini bukan untuk SQLite.",
+      "Jalankan satu blok utuh pada satu koneksi. Contoh dibungkus transaksi yang dibatalkan agar objek latihan tidak menetap.",
+      "Cocokkan hasil, lalu ubah satu kondisi pada latihan dan jelaskan mengapa hasilnya berubah."
+    ],
+    "practice": [
+      "Saat menjadi Ana, coba INSERT dengan pemilik Budi pada transaksi lab baru; harapkan penolakan policy.",
+      "Coba UPDATE tiket Ana agar pemiliknya menjadi Budi; pastikan WITH CHECK menolak dan data tidak berubah.",
+      "Bandingkan hasil dengan role owner lab untuk memahami bypass. Jangan melakukan eksperimen ini pada database operasional.",
+      "Susun matriks izin SELECT, INSERT, UPDATE, DELETE untuk pemilik, pengguna lain, dan administrator."
+    ],
+    "warning": "Jangan menguji policy hanya sebagai superuser lalu menyimpulkan RLS gagal atau berhasil. Nama role harus belum dipakai; lab tidak menghapus role yang sudah ada. Jangan memberikan CREATEROLE atau BYPASSRLS kepada aplikasi runtime.",
+    "check": "Apakah WHERE pemilik dari frontend dapat menggantikan RLS dan otorisasi server?",
+    "answer": "Tidak. Client dapat mengubah request; batas akses harus ditegakkan pada sisi terpercaya dan diuji dengan role yang sesuai.",
+    "source": "https://www.postgresql.org/docs/18/ddl-rowsecurity.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 55
+  },
+  {
+    "slug": "db-postgresql-explain",
+    "title": "EXPLAIN ANALYZE: membaca rencana PostgreSQL",
+    "summary": "Bedakan perkiraan, pengukuran eksekusi, dan keputusan indeks.",
+    "analogy": "Rencana perjalanan adalah perkiraan; catatan perjalanan nyata menunjukkan baris yang benar-benar dilalui dan waktu yang terpakai.",
+    "explain": [
+      "Prasyarat: indeks, optimasi kueri, PostgreSQL, dan konfigurasi Python. EXPLAIN menampilkan rencana yang dipilih planner. EXPLAIN ANALYZE menjalankan pernyataan dan menambahkan ukuran aktual. Cost adalah unit perkiraan planner, bukan milidetik; actual time dan waktu eksekusi memakai ukuran waktu.",
+      "Baca node dari pekerjaan sumber menuju hasil akhir. Seq Scan tidak otomatis buruk: untuk tabel kecil atau hasil yang mencakup banyak baris, scan sekuensial dapat masuk akal. Index Scan, Bitmap Scan, Sort, dan join perlu dinilai sesuai filter, jumlah data, urutan, serta batas hasil yang diminta.",
+      "Bandingkan Plan Rows dengan Actual Rows dan perhatikan Actual Loops. Pada node berulang, nilai actual rows/time umumnya dilaporkan per eksekusi node; jangan menjumlahkan seluruh waktu node begitu saja karena kerja parent mencakup child. Selisih besar perkiraan dapat mengarah pada statistik, distribusi data, atau korelasi kolom yang perlu diteliti.",
+      "ANALYZE nama_tabel memperbarui statistik planner; ini berbeda dari opsi ANALYZE pada EXPLAIN yang menjalankan query. BUFFERS memberi informasi aktivitas buffer, bukan sekadar ukuran tabel. Cache hangat, parameter server, versi engine, dan mesin dapat mengubah hasil, jadi satu eksekusi bukan benchmark yang memadai.",
+      "Contoh Python memerlukan DATABASE_URL PostgreSQL latihan, misalnya postgresql://nama_role@localhost/kursus_db dengan metode autentikasi lokal yang telah disiapkan. Jangan menaruh password pada kode atau output. Kode membuat tabel TEMP dan membatalkan transaksi. FORMAT JSON memudahkan mengambil atribut rencana tanpa bergantung pada tata letak teks.",
+      "Hasil contoh sengaja hanya memeriksa lima baris aktual pada node hasil dan keberadaan waktu eksekusi. Untuk belajar membaca rencana penuh, tampilkan variabel report dengan json.dumps(report, indent=2) secara lokal. Jangan menghafal satu nama node atau angka waktu sebagai hasil wajib pada semua server."
+    ],
+    "table": {
+      "headers": [
+        "Bagian",
+        "Makna",
+        "Contoh penggunaan"
+      ],
+      "rows": [
+        [
+          "EXPLAIN",
+          "Rencana perkiraan",
+          "Belum menjalankan query biasa"
+        ],
+        [
+          "EXPLAIN ANALYZE",
+          "Rencana dan hasil ukur",
+          "Query benar-benar dijalankan"
+        ],
+        [
+          "ANALYZE tabel",
+          "Perbarui statistik",
+          "Berbeda tujuan dari opsi EXPLAIN"
+        ],
+        [
+          "Plan/Actual Rows",
+          "Perkiraan dibanding aktual",
+          "Periksa juga loops"
+        ],
+        [
+          "BUFFERS",
+          "Aktivitas buffer",
+          "Baca konteks cache dan I/O"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal · dependensi",
+        "code": "python -m pip install \"psycopg[binary]==3.3.6\"",
+        "output": "",
+        "explanation": "Gunakan virtual environment. Atur DATABASE_URL melalui environment lokal menuju database uji; jangan gunakan database operasional.",
+        "language": "text"
+      },
+      {
+        "label": "Python · baca rencana dalam JSON",
+        "code": "import os\nimport json\nimport psycopg\n\nwith psycopg.connect(os.environ[\"DATABASE_URL\"], autocommit=True) as con:\n    con.execute(\"BEGIN\")\n    try:\n        con.execute(\"CREATE TEMP TABLE lp_plan_tiket(id integer PRIMARY KEY, status text NOT NULL)\")\n        con.execute(\"INSERT INTO lp_plan_tiket SELECT n, CASE WHEN n % 10 = 0 THEN 'BARU' ELSE 'SELESAI' END FROM generate_series(1, 2000) AS n\")\n        con.execute(\"CREATE INDEX lp_plan_status_id ON lp_plan_tiket(status, id)\")\n        con.execute(\"ANALYZE lp_plan_tiket\")\n        query = \"SELECT id FROM lp_plan_tiket WHERE status = %s ORDER BY id LIMIT 5\"\n        report = con.execute(\"EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) \" + query, (\"BARU\",)).fetchone()[0][0]\n        # Untuk inspeksi manual: print(json.dumps(report, indent=2))\n        print(\"Baris aktual:\", int(report[\"Plan\"][\"Actual Rows\"]))\n        print(\"Waktu eksekusi tersedia:\", \"Execution Time\" in report)\n        print([row[0] for row in con.execute(query, (\"BARU\",)).fetchall()])\n    finally:\n        con.execute(\"ROLLBACK\")",
+        "output": "Baris aktual: 5\nWaktu eksekusi tersedia: True\n[10, 20, 30, 40, 50]",
+        "explanation": "Simpan sebagai baca_plan.py, atur DATABASE_URL, lalu jalankan python baca_plan.py. Kode tidak mencetak URL. Penggabungan prefix EXPLAIN dengan query konstan tidak menyisipkan input pengguna; nilai status tetap parameter.",
+        "language": "python",
+        "filename": "baca_plan.py",
+        "requiresPostgres": true
+      }
+    ],
+    "steps": [
+      "Pelajari prasyarat dan gunakan database PostgreSQL latihan terpisah. Contoh SQL bab ini bukan untuk SQLite.",
+      "Jalankan satu blok utuh pada satu koneksi. Contoh dibungkus transaksi yang dibatalkan agar objek latihan tidak menetap.",
+      "Cocokkan hasil, lalu ubah satu kondisi pada latihan dan jelaskan mengapa hasilnya berubah."
+    ],
+    "practice": [
+      "Tampilkan JSON rencana penuh. Tandai Node Type, Plan Rows, Actual Rows, Actual Loops, biaya, dan informasi buffer yang tersedia.",
+      "Pada database lab, ulangi tanpa indeks lalu dengan indeks. Pertahankan query dan data, ulangi pengukuran, dan jangan memaksa planner hanya agar muncul Index Scan.",
+      "Ubah proporsi BARU dan LIMIT, jalankan ANALYZE tabel, lalu jelaskan perubahan rencana yang benar-benar diamati.",
+      "Tuliskan mengapa pengukuran pada PGlite atau laptop pribadi tidak membuktikan performa server produksi."
+    ],
+    "warning": "EXPLAIN ANALYZE benar-benar menjalankan query, termasuk perubahan data dan fungsi berefek samping. ROLLBACK tidak membatalkan semua kemungkinan efek seperti konsumsi sequence atau layanan eksternal. Gunakan SELECT tanpa efek samping pada database latihan untuk bab ini.",
+    "check": "Apakah biaya planner 100 berarti query akan selesai dalam 100 milidetik?",
+    "answer": "Tidak. Cost memakai unit perkiraan planner; ukur waktu aktual secara terpisah dengan konteks beban dan lingkungan.",
+    "source": "https://www.postgresql.org/docs/18/using-explain.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 55
   }
 ]

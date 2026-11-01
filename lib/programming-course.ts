@@ -7,7 +7,7 @@ import api from './programming-api-lessons.json';
 import order from './programming-order.json';
 
 export const programmingStages = order.map(group => group.title);
-type ProgrammingBlock = {label:string; code:string; output:string; explanation:string; language?:string; filename?:string; inputs?:string[]; measurement?:boolean};
+type ProgrammingBlock = {label:string; code:string; output:string; explanation:string; language?:string; filename?:string; inputs?:string[]; measurement?:boolean; requiresPostgres?:boolean};
 type ProgrammingLesson = Omit<(typeof data)[number], 'blocks'> & {blocks:ProgrammingBlock[]};
 const allLessons:ProgrammingLesson[] = [...data, ...extended, ...structures, ...oop, ...databases, ...api];
 // One order drives the catalogue, previous/next links, search and progress.

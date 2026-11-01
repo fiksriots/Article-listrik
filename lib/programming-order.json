@@ -266,6 +266,15 @@
     ]
   },
   {
+    "title": "Basis Data · PostgreSQL lanjutan",
+    "slugs": [
+      "db-postgresql-jsonb",
+      "db-postgresql-pencarian",
+      "db-postgresql-rls",
+      "db-postgresql-explain"
+    ]
+  },
+  {
     "title": "Basis Data · Relasi ORM dan migrasi",
     "slugs": [
       "db-orm-relasi",

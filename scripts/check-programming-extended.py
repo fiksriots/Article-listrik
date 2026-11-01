@@ -18,7 +18,7 @@ structures = json.loads((ROOT / 'lib/programming-data-structure-lessons.json').r
 oop = json.loads((ROOT / 'lib/programming-oop-lessons.json').read_text())
 databases = json.loads((ROOT / 'lib/programming-database-lessons.json').read_text())
 from programming_sql_runner import run_sql
-from programming_postgres_runner import run_postgres
+from programming_postgres_runner import run_postgres, postgres_dsn
 api = json.loads((ROOT / 'lib/programming-api-lessons.json').read_text())
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
@@ -71,7 +71,12 @@ for lesson in extra + structures + oop + databases + api:
                     value = next(values)
                     print(prompt + value)
                     return value
-                with contextlib.redirect_stdout(output), patch('builtins.input', input_example):
+                pg_context = contextlib.nullcontext()
+                if block.get('requiresPostgres'):
+                    import time
+                    pg_context = patch.dict(os.environ, {'DATABASE_URL': postgres_dsn()})
+                    time.sleep(0.2)
+                with contextlib.redirect_stdout(output), patch('builtins.input', input_example), pg_context:
                     runpy.run_path(str(target), run_name='__main__')
                 if block.get('measurement'):
                     pattern = r'n=(1000|10000) \| list=\d+\.\d{9} \| set=\d+\.\d{9} \| peak_list=\d+ \| peak_set=\d+'
@@ -124,4 +129,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 152 ordered lessons, 608 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 156 ordered lessons, 624 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
