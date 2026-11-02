@@ -7,12 +7,14 @@ import api from './programming-api-lessons.json';
 import web from './programming-web-lessons.json';
 import django from './programming-django-lessons.json';
 import supplements from './programming-supplement-lessons.json';
+import analysis from './programming-data-analysis-lessons.json';
+import science from './programming-data-science-lessons.json';
 import order from './programming-order.json';
 
 export const programmingStages = order.map(group => group.title);
 type ProgrammingBlock = {label:string; code:string; output:string; explanation:string; language?:string; filename?:string; inputs?:string[]; measurement?:boolean; requiresPostgres?:boolean};
 type ProgrammingLesson = Omit<(typeof data)[number], 'blocks'> & {blocks:ProgrammingBlock[]};
-const allLessons:ProgrammingLesson[] = [...data, ...extended, ...structures, ...oop, ...databases, ...api, ...web, ...django, ...supplements];
+const allLessons:ProgrammingLesson[] = [...data, ...extended, ...structures, ...oop, ...databases, ...api, ...web, ...django, ...supplements, ...analysis, ...science];
 // One order drives the catalogue, previous/next links, search and progress.
 // Existing lesson slugs remain stable so completed marks are retained.
 export const programmingLessons = order.flatMap((group, stage) => group.slugs.map(slug => {

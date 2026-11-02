@@ -416,5 +416,69 @@
       "django-kasus-inventaris",
       "django-kasus-tiket"
     ]
+  },
+  {
+    "title": "Data Analysis · Fondasi dan persiapan",
+    "slugs": [
+      "da-pengantar",
+      "da-python-numpy",
+      "da-pandas-csv"
+    ]
+  },
+  {
+    "title": "Data Analysis · Pembersihan dan pengolahan",
+    "slugs": [
+      "da-kualitas-data",
+      "da-filter-transformasi",
+      "da-agregasi",
+      "da-join-sql"
+    ]
+  },
+  {
+    "title": "Data Analysis · Visualisasi dan pelaporan",
+    "slugs": [
+      "da-visualisasi",
+      "da-waktu-kpi",
+      "da-laporan-reproduksi"
+    ]
+  },
+  {
+    "title": "Data Analysis · Studi kasus",
+    "slugs": [
+      "da-kasus-penjualan",
+      "da-kasus-monitoring"
+    ]
+  },
+  {
+    "title": "Data Science · Masalah dan statistik",
+    "slugs": [
+      "ds-pengantar",
+      "ds-statistik-probabilitas",
+      "ds-sampling-bootstrap",
+      "ds-eda-korelasi"
+    ]
+  },
+  {
+    "title": "Data Science · Data dan evaluasi model",
+    "slugs": [
+      "ds-split-leakage",
+      "ds-pipeline",
+      "ds-regresi",
+      "ds-klasifikasi"
+    ]
+  },
+  {
+    "title": "Data Science · Pemilihan dan eksplorasi model",
+    "slugs": [
+      "ds-cross-validation",
+      "ds-clustering"
+    ]
+  },
+  {
+    "title": "Data Science · Studi kasus",
+    "slugs": [
+      "ds-kasus-durasi",
+      "ds-kasus-risiko"
+    ]
   }
 ]

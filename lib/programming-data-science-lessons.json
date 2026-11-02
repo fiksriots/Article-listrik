@@ -1,0 +1,770 @@
+[
+  {
+    "slug": "ds-pengantar",
+    "title": "Data Science: masalah, fitur, target, dan evaluasi",
+    "summary": "Pahami perbedaan analisis, prediksi, serta keputusan sebelum memilih algoritma.",
+    "analogy": "Prediksi seperti perkiraan waktu perjalanan: butuh informasi yang sudah tersedia sebelum berangkat dan cara memeriksa kesalahannya.",
+    "explain": [
+      "Data Science menggabungkan pemahaman masalah, statistik, pemrograman, dan evaluasi untuk membangun penjelasan atau model berbasis data. Machine learning adalah salah satu alatnya. Tidak semua masalah memerlukan model, dan laporan analisis yang baik tidak menjadi kurang bernilai karena tidak memakai AI.",
+      "Fitur adalah masukan yang tersedia ketika prediksi dibuat; target adalah hasil yang ingin diperkirakan. Misalnya antrean saat tiket masuk dan jenis keluhan dipakai memperkirakan durasi penyelesaian. Waktu selesai aktual tidak tersedia saat awal dan akan membocorkan target jika dijadikan fitur.",
+      "Tentukan unit prediksi, waktu prediksi, siapa yang menggunakan hasil, biaya kesalahan, dan baseline sederhana. Regresi memprediksi nilai numerik; klasifikasi memprediksi kelas atau skor terkait kelas; clustering mencari kelompok tanpa label target yang diberikan.",
+      "Jalur ini melanjutkan Data Analysis, NumPy, pandas, dan dasar Python. Seluruh contoh menggunakan data fiktif atau sintetis. Hasil model latihan tidak otomatis layak dipakai pada operasi, keputusan penting, atau pengendalian perangkat."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Fitur",
+          "Masukan yang tersedia saat prediksi"
+        ],
+        [
+          "Target",
+          "Hasil yang ingin diprediksi"
+        ],
+        [
+          "Baseline",
+          "Pembanding sederhana"
+        ],
+        [
+          "Evaluasi",
+          "Kinerja pada data yang sesuai tujuan penggunaan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds01_masalah.py",
+        "filename": "ds01_masalah.py",
+        "language": "python",
+        "code": "if __name__ == '__main__':\n    fitur_saat_prediksi = ['antrean_awal', 'jenis_keluhan']\n    target = 'durasi_selesai_menit'\n    bocor = 'waktu_selesai_aktual'\n    print('Fitur:', ', '.join(fitur_saat_prediksi))\n    print('Target:', target)\n    print('Dilarang sebagai fitur:', bocor)\n",
+        "output": "Fitur: antrean_awal, jenis_keluhan\nTarget: durasi_selesai_menit\nDilarang sebagai fitur: waktu_selesai_aktual",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds01_masalah.py dari folder data-lab dengan virtual environment aktif.",
+      "Tentukan waktu prediksi pada contoh tiket.",
+      "Pisahkan data yang sudah diketahui di awal dari informasi setelah tiket selesai."
+    ],
+    "practice": [
+      "Tulis satu masalah regresi dan satu masalah klasifikasi dari aktivitas helpdesk.",
+      "Jelaskan kapan tabel ringkasan sudah cukup tanpa machine learning."
+    ],
+    "warning": "Jangan memakai informasi masa depan, hasil akhir, atau identitas yang membocorkan target sebagai fitur. Definisi masalah lebih penting daripada nama algoritma.",
+    "check": "Mengapa waktu selesai aktual tidak boleh dipakai memprediksi durasi saat tiket baru masuk?",
+    "answer": "Informasi itu baru ada setelah hasil terjadi. Memakainya membuat evaluasi terlihat baik tetapi tidak sesuai situasi penggunaan sebenarnya.",
+    "source": "https://scikit-learn.org/stable/getting_started.html",
+    "diagram": "data-science-split",
+    "diagramAlt": "Data dibagi sebelum preprocessing. Latih serta validasi pada train; gunakan test hanya untuk evaluasi akhir.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-statistik-probabilitas",
+    "title": "Statistik deskriptif dan probabilitas dasar",
+    "summary": "Bedakan mean, median, variasi, proporsi sampel, dan peluang populasi.",
+    "analogy": "Satu angka ringkasan seperti foto dari satu sudut: membantu, tetapi tidak memperlihatkan seluruh ruangan.",
+    "explain": [
+      "Mean adalah jumlah nilai dibagi jumlah observasi. Median adalah nilai tengah setelah diurutkan. Pada durasi [10,12,13,15,100], mean 30 dan median 13; nilai ekstrem menarik mean jauh dari kebanyakan observasi.",
+      "Simpangan baku merangkum sebaran sekitar mean dalam satuan yang sama dengan data. Contoh memakai ddof=1 untuk simpangan baku sampel. NumPy std tanpa ddof memakai 0; pilih rumus sesuai tujuan dan pastikan jumlah data mencukupi.",
+      "Proporsi kejadian pada sampel adalah jumlah yang memenuhi kondisi dibagi jumlah observasi. Satu dari lima tiket melebihi 20 menit, sehingga proporsinya 0,2. Ini bukan bukti peluang populasi tepat 20% karena representasi sampel dan ketidakpastian belum dinilai.",
+      "Peluang berada pada 0 sampai 1 dan aturan bersyarat perlu penyebut yang tepat. Peluang gangguan ketika hujan berbeda dari peluang hujan ketika ada gangguan. Gunakan tabel frekuensi untuk memahami kelompok yang menjadi kondisi sebelum memakai model probabilistik."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Mean / median",
+          "Rata-rata / nilai tengah"
+        ],
+        [
+          "Simpangan baku",
+          "Ukuran variasi dalam satuan data"
+        ],
+        [
+          "Proporsi sampel",
+          "Kejadian dibagi observasi sampel"
+        ],
+        [
+          "Peluang bersyarat",
+          "Peluang dalam kelompok kondisi tertentu"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds02_statistik.py",
+        "filename": "ds02_statistik.py",
+        "language": "python",
+        "code": "import numpy as np\nif __name__ == '__main__':\n    menit = np.array([10,12,13,15,100], dtype=float)\n    print('Mean:', float(menit.mean()))\n    print('Median:', float(np.median(menit)))\n    print('Simpangan baku sampel:', round(float(menit.std(ddof=1)), 2))\n    print('Proporsi > 20 menit:', float((menit>20).mean()))\n",
+        "output": "Mean: 30.0\nMedian: 13.0\nSimpangan baku sampel: 39.17\nProporsi > 20 menit: 0.2",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds02_statistik.py dari folder data-lab dengan virtual environment aktif.",
+      "Hitung mean dan median secara manual sebelum menjalankan contoh.",
+      "Bandingkan std(ddof=1) dengan std(ddof=0) dan catat asumsi masing-masing."
+    ],
+    "practice": [
+      "Ganti 100 menjadi 20 dan bandingkan perubahan mean serta median.",
+      "Buat tabel kecil hujan/tidak hujan dan gangguan/tidak gangguan; hitung dua peluang bersyarat yang berbeda."
+    ],
+    "warning": "Outlier tidak otomatis kesalahan. Periksa proses pengumpulan dan konteks sebelum menghapus nilai yang terlihat ekstrem.",
+    "check": "Apakah proporsi sampel 0,2 berarti peluang semua tiket di dunia tepat 0,2?",
+    "answer": "Tidak. Itu ringkasan lima observasi tertentu. Generalisasi memerlukan rancangan sampel, konteks, serta ukuran ketidakpastian.",
+    "source": "https://numpy.org/doc/stable/reference/routines.statistics.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-sampling-bootstrap",
+    "title": "Sampling, bias, dan ketidakpastian bootstrap",
+    "summary": "Kenali keterwakilan sampel dan ilustrasikan interval tanpa menganggapnya kepastian.",
+    "analogy": "Mencicipi sup dari satu bagian panci tidak selalu mewakili seluruh isi jika bahan belum tercampur merata.",
+    "explain": [
+      "Sampel adalah bagian observasi dari populasi yang ingin dipahami. Sampel yang mudah diambil dapat berbeda sistematis dari populasi, misalnya hanya tiket jam kerja atau perangkat yang selalu berhasil melapor. Menambah ukuran sampel bias tidak otomatis memperbaiki keterwakilannya.",
+      "Bootstrap mengambil ulang observasi sampel dengan pengembalian untuk melihat variasi statistik. Contoh menghitung mean dari 2000 resample berukuran sama dengan sampel awal, lalu mengambil persentil 2,5 dan 97,5. Seed tetap membantu mengulang ilustrasi.",
+      "Ini interval bootstrap percentile sederhana, bukan metode terbaik untuk semua data. Penafsiran confidence interval berkaitan dengan prosedur pengambilan sampel berulang, bukan jaminan bahwa parameter tetap mempunyai peluang 95% di interval tertentu setelah data diamati.",
+      "Asumsinya perlu ditinjau: sampel cukup mewakili dan observasi independen untuk resampling sederhana ini. Data waktu yang berkorelasi atau data berkelompok memerlukan rancangan resampling lain. Enam angka contoh hanya untuk memahami proses, bukan dasar klaim layanan nyata."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Bias sampel",
+          "Perbedaan sistematis terhadap populasi sasaran"
+        ],
+        [
+          "Resampling",
+          "Mengambil ulang dengan pengembalian"
+        ],
+        [
+          "Seed",
+          "Membantu mengulang simulasi"
+        ],
+        [
+          "Interval",
+          "Ukuran ketidakpastian dengan asumsi tertentu"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds03_bootstrap.py",
+        "filename": "ds03_bootstrap.py",
+        "language": "python",
+        "code": "import numpy as np\n\ndef interval_bootstrap(data, seed=42):\n    data=np.asarray(data, dtype=float)\n    if data.ndim!=1 or len(data)<2 or not np.isfinite(data).all():\n        raise ValueError('Butuh minimal dua observasi numerik terbatas.')\n    rng=np.random.default_rng(seed)\n    rerata=rng.choice(data, size=(2000,len(data)), replace=True).mean(axis=1)\n    return np.percentile(rerata,[2.5,97.5])\n\nif __name__ == '__main__':\n    batas=interval_bootstrap([10,12,15,18,20,25])\n    print('Interval ilustrasi:', [round(float(x),2) for x in batas])\n    print('Asumsi: sampel cukup mewakili dan observasi independen.')\n",
+        "output": "Interval ilustrasi: [12.83, 20.5]\nAsumsi: sampel cukup mewakili dan observasi independen.",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds03_bootstrap.py dari folder data-lab dengan virtual environment aktif.",
+      "Jalankan dengan seed tetap lalu bandingkan ketika seed diubah.",
+      "Periksa input dengan satu observasi atau NaN dan lihat penolakan validasi."
+    ],
+    "practice": [
+      "Tambahkan lebih banyak observasi fiktif dan bandingkan variasi hasil.",
+      "Jelaskan mengapa tiket dari satu shift saja mungkin tidak mewakili seluruh operasi."
+    ],
+    "warning": "Bootstrap tidak memperbaiki bias pengumpulan data secara otomatis. Jangan menerapkan resampling independen pada deret waktu atau kelompok tanpa menilai ketergantungannya.",
+    "check": "Mengapa seed tetap tidak membuat interval menjadi kebenaran populasi?",
+    "answer": "Seed hanya mengulang bilangan acak simulasi. Validitas inferensi masih bergantung pada data, rancangan sampel, metode, dan asumsi.",
+    "source": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-eda-korelasi",
+    "title": "EDA, korelasi, dan batas sebab-akibat",
+    "summary": "Eksplorasi distribusi serta hubungan tanpa menafsirkan asosiasi sebagai penyebab.",
+    "analogy": "Dua jarum jam bergerak bersama, tetapi salah satunya tidak otomatis menyebabkan yang lain bergerak.",
+    "explain": [
+      "Exploratory Data Analysis membantu memahami distribusi, missing, kategori, hubungan, dan nilai yang perlu ditinjau. Gunakan tabel serta grafik untuk menemukan pertanyaan lanjutan, bukan hanya mencari pola yang mendukung dugaan awal.",
+      "Korelasi Pearson merangkum hubungan linear dua variabel numerik. Nilai mendekati 1 atau -1 menunjukkan arah linear yang kuat pada data tersebut; nilai mendekati 0 tidak membuktikan tidak ada hubungan nonlinier. Outlier dan rentang data dapat mengubah ringkasan.",
+      "Contoh sengaja membuat jumlah tiket dan penjualan payung sama-sama naik terhadap waktu fiktif. Korelasinya 1, tetapi kode tidak membuktikan bahwa tiket menyebabkan pembelian payung. Faktor bersama, tren, seleksi data, atau kebetulan perlu dipertimbangkan.",
+      "Pada pemodelan, batasi eksplorasi yang memandu pemilihan fitur/model pada data pengembangan. Jangan berulang kali melihat test akhir lalu mengubah keputusan berdasarkan hasilnya. Gunakan rancangan eksperimen atau analisis kausal yang sesuai jika pertanyaannya benar-benar tentang dampak sebab-akibat."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "EDA",
+          "Eksplorasi kualitas, distribusi, dan hubungan"
+        ],
+        [
+          "Pearson",
+          "Ringkasan hubungan linear"
+        ],
+        [
+          "Confounding",
+          "Faktor lain yang terkait dengan keduanya"
+        ],
+        [
+          "Test akhir",
+          "Tidak dipakai berulang untuk memilih cerita/model"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds04_korelasi.py",
+        "filename": "ds04_korelasi.py",
+        "language": "python",
+        "code": "import numpy as np\nif __name__ == '__main__':\n    # Keduanya mengikuti tren waktu fiktif, bukan bukti sebab-akibat.\n    waktu=np.arange(1,6)\n    tiket=3*waktu+2\n    penjualan_payung=5*waktu+10\n    print('Korelasi:', round(float(np.corrcoef(tiket,penjualan_payung)[0,1]), 3))\n    print('Sebab-akibat terbukti:', False)\n",
+        "output": "Korelasi: 1.0\nSebab-akibat terbukti: False",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds04_korelasi.py dari folder data-lab dengan virtual environment aktif.",
+      "Telusuri bagaimana dua variabel dibuat dari tren yang sama.",
+      "Buat scatter plot untuk melihat pola sebelum membaca koefisien."
+    ],
+    "practice": [
+      "Buat contoh hubungan melengkung dan bandingkan dengan korelasi linear.",
+      "Tulis dua dugaan faktor bersama untuk hubungan hujan dan tiket jaringan."
+    ],
+    "warning": "Mencoba banyak hubungan lalu hanya melaporkan yang menarik dapat menyesatkan. Nyatakan proses eksplorasi dan bedakan temuan awal dari bukti yang telah diuji.",
+    "check": "Apakah korelasi 1 membuktikan tiket menyebabkan penjualan payung?",
+    "answer": "Tidak. Pada contoh keduanya dibentuk dari tren waktu yang sama. Hubungan numerik tidak menetapkan mekanisme sebab-akibat.",
+    "source": "https://numpy.org/doc/stable/reference/generated/numpy.corrcoef.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-split-leakage",
+    "title": "Train, validation, test, dan data leakage",
+    "summary": "Bagi data sesuai tujuan penggunaan dan pelajari preprocessing hanya dari bagian latihan.",
+    "analogy": "Latihan ujian boleh memakai contoh soal; melihat kunci ujian akhir sebelum memilih cara menjawab membuat penilaian tidak jujur.",
+    "explain": [
+      "Train digunakan mempelajari parameter model. Validation atau cross-validation membantu memilih hyperparameter serta keputusan pengembangan. Test akhir digunakan setelah keputusan dikunci untuk mengukur generalisasi pada skenario yang diwakilinya.",
+      "Data leakage terjadi ketika informasi yang tidak seharusnya tersedia ikut memengaruhi pelatihan atau evaluasi. Contohnya target masa depan sebagai fitur, duplikat yang tersebar di train/test, serta scaler yang di-fit pada seluruh data sebelum split.",
+      "Contoh membuktikan indeks train dan test tidak tumpang tindih. Contoh terpisah menunjukkan mean scaler tetap 2,5 karena hanya di-fit pada [1,2,3,4], meskipun transform kemudian menerima [100,200]. Transform tidak boleh mempelajari ulang statistik test.",
+      "Random split cocok hanya untuk skenario yang mendukung pengacakan observasi. Gunakan pembagian berbasis waktu untuk prediksi masa depan dan group split bila entitas yang sama tidak boleh muncul di kedua sisi. Stratify membantu komposisi kelas, tetapi tidak mengatasi kebocoran kelompok atau waktu dengan sendirinya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Train",
+          "Belajar parameter"
+        ],
+        [
+          "Validation",
+          "Memilih keputusan pengembangan"
+        ],
+        [
+          "Test",
+          "Evaluasi akhir setelah keputusan dikunci"
+        ],
+        [
+          "Leakage",
+          "Informasi terlarang memengaruhi hasil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds05_split.py",
+        "filename": "ds05_split.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nif __name__ == '__main__':\n    train, test=train_test_split(np.arange(20),test_size=0.2,random_state=42)\n    print('Train/test:', len(train), len(test))\n    print('Tanpa indeks tumpang tindih:', set(train).isdisjoint(test))\n    # Contoh terpisah: statistik preprocessing hanya dari train.\n    scaler=StandardScaler().fit([[1.],[2.],[3.],[4.]])\n    scaler.transform([[100.],[200.]])\n    print('Mean yang dipelajari:', scaler.mean_.tolist())\n",
+        "output": "Train/test: 16 4\nTanpa indeks tumpang tindih: True\nMean yang dipelajari: [2.5]",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds05_split.py dari folder data-lab dengan virtual environment aktif.",
+      "Cocokkan 16 indeks train dan 4 test yang saling terpisah.",
+      "Periksa mean_ scaler sebelum serta sesudah transform data test."
+    ],
+    "practice": [
+      "Rancang split untuk memprediksi tiket minggu depan.",
+      "Rancang split untuk menguji pada BTS baru yang tidak ada di data latihan."
+    ],
+    "warning": "Random_state tetap membuat pembagian dapat diulang, bukan membuatnya otomatis sesuai tujuan penggunaan. Kebocoran identitas, waktu, dan duplikasi harus dicegah terpisah.",
+    "check": "Mengapa scaler tidak boleh di-fit menggunakan seluruh data sebelum split?",
+    "answer": "Statistik bagian test akan memengaruhi transformasi latihan. Evaluasi kemudian tidak lagi mencerminkan data yang belum dilihat dalam pengembangan.",
+    "source": "https://scikit-learn.org/stable/common_pitfalls.html",
+    "diagram": "data-science-split",
+    "diagramAlt": "Data dibagi sebelum preprocessing. Latih serta validasi pada train; gunakan test hanya untuk evaluasi akhir.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-pipeline",
+    "title": "Preprocessing dengan Pipeline dan ColumnTransformer",
+    "summary": "Gabungkan imputasi, scaling, encoding, dan model dalam proses yang dapat divalidasi.",
+    "analogy": "Satu jalur kerja yang jelas memastikan bahan latihan dan bahan uji melewati urutan pengolahan yang sama tanpa saling membocorkan informasi.",
+    "explain": [
+      "Data numerik dan kategori sering memerlukan perlakuan berbeda. Contoh mengisi missing numerik dengan median train lalu melakukan scaling, sementara kategori diubah menjadi indikator melalui OneHotEncoder. Encoding bukan pernyataan bahwa satu kota lebih tinggi daripada kota lain.",
+      "ColumnTransformer mengarahkan kolom ke transformasi yang sesuai. Pipeline menggabungkan preprocessing dan estimator sehingga fit pada train mempelajari seluruh langkah yang relevan, lalu predict memakai transformasi tersebut pada data baru.",
+      "Handle_unknown=ignore mencegah kategori baru membuat contoh gagal; kategori yang tidak dikenal menghasilkan indikator nol pada blok encoding itu. Kebijakan ini perlu dinilai sesuai kebutuhan, bukan dianggap selalu benar. Missing kategori juga memerlukan kebijakan tersendiri; contoh kategori train tidak missing.",
+      "Contoh memakai empat observasi latihan kecil untuk memperlihatkan mekanisme, bukan untuk mengukur mutu prediksi. Median yang dipelajari adalah 2 dari train saja, dan prediksi untuk dua baris test menghasilkan dua nilai. Periksa nama serta tipe kolom agar kontrak input tetap sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "SimpleImputer",
+          "Mempelajari pengisi missing dari train"
+        ],
+        [
+          "StandardScaler",
+          "Mempelajari skala dari train"
+        ],
+        [
+          "OneHotEncoder",
+          "Representasi indikator kategori"
+        ],
+        [
+          "Pipeline",
+          "Urutan transformasi serta estimator"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds06_pipeline.py",
+        "filename": "ds06_pipeline.py",
+        "language": "python",
+        "code": "import numpy as np\nimport pandas as pd\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import OneHotEncoder, StandardScaler\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.linear_model import Ridge\n\ndef buat_pipeline():\n    numerik=Pipeline([('isi',SimpleImputer(strategy='median')),('skala',StandardScaler())])\n    kategori=OneHotEncoder(handle_unknown='ignore', sparse_output=False)\n    olah=ColumnTransformer([('num',numerik,['antrean']),('kat',kategori,['lokasi'])])\n    return Pipeline([('olah',olah),('model',Ridge(alpha=1.0))])\n\nif __name__ == '__main__':\n    train=pd.DataFrame({'antrean':[1.,2.,np.nan,4.], 'lokasi':['A','B','A','B']})\n    test=pd.DataFrame({'antrean':[100.,np.nan], 'lokasi':['C','A']})\n    model=buat_pipeline().fit(train,[10.,20.,15.,40.])\n    isi=model.named_steps['olah'].named_transformers_['num'].named_steps['isi']\n    print('Median train:', isi.statistics_.tolist())\n    print('Bentuk prediksi:', model.predict(test).shape)\n",
+        "output": "Median train: [2.0]\nBentuk prediksi: (2,)",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds06_pipeline.py dari folder data-lab dengan virtual environment aktif.",
+      "Periksa statistik median yang dipelajari dari train.",
+      "Coba kategori C pada test dan lihat predict tetap menghasilkan dua nilai."
+    ],
+    "practice": [
+      "Tambahkan kebijakan imputasi kategori bila sumber dapat mengandung missing.",
+      "Uji input dengan nama kolom salah dan tulis pesan yang perlu ditangani aplikasi."
+    ],
+    "warning": "Pipeline membantu mencegah kebocoran preprocessing, tetapi tidak memperbaiki split yang salah, fitur masa depan, atau target yang keliru.",
+    "check": "Mengapa kategori test C tidak perlu ditambahkan melalui fit ulang?",
+    "answer": "Preprocessing harus tetap mengikuti hasil train. Encoder dengan kebijakan ignore menangani kategori baru tanpa belajar dari test.",
+    "source": "https://scikit-learn.org/stable/modules/compose.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-regresi",
+    "title": "Regresi, baseline, dan MAE",
+    "summary": "Bandingkan prediksi numerik dengan pendekatan sederhana memakai metrik dalam satuan target.",
+    "analogy": "Ramalan yang rumit perlu mengalahkan patokan sederhana agar manfaatnya bisa dinilai.",
+    "explain": [
+      "Regresi memprediksi nilai numerik seperti durasi. DummyRegressor dapat memprediksi median train sebagai baseline sederhana. Model yang lebih kompleks belum tentu lebih baik; bandingkan pada pembagian data dan metrik yang sama.",
+      "Mean Absolute Error adalah rata-rata nilai mutlak selisih prediksi dan aktual. Jika target menit, MAE juga menit. Angka ini tidak menunjukkan semua variasi kesalahan; lihat distribusi error serta kelompok yang relevan.",
+      "Contoh menggunakan hubungan fiktif y=2x+3 tanpa noise. LinearRegression dapat mempelajari pola itu dan memperoleh MAE test mendekati nol, sedangkan baseline tidak mengikuti perubahan x. Hasil sempurna ini terjadi karena data sengaja dibuat sederhana.",
+      "Data nyata dapat mengandung noise, perubahan pola, dan fitur yang tidak memadai. Prediksi di luar rentang train adalah ekstrapolasi yang memerlukan kehati-hatian. MAE rendah pada contoh tidak membuktikan kemampuan memprediksi semua durasi di lapangan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Regresi",
+          "Prediksi numerik"
+        ],
+        [
+          "Baseline median",
+          "Prediksi tetap dari median train"
+        ],
+        [
+          "MAE",
+          "Rata-rata error absolut, satuan sama dengan target"
+        ],
+        [
+          "Ekstrapolasi",
+          "Prediksi di luar rentang yang dipelajari"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds07_regresi.py",
+        "filename": "ds07_regresi.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.dummy import DummyRegressor\nfrom sklearn.metrics import mean_absolute_error\nif __name__ == '__main__':\n    X=np.arange(1,11,dtype=float).reshape(-1,1)\n    y=2*X[:,0]+3  # Data fiktif sengaja linear sempurna.\n    trainX,testX=X[:8],X[8:]\n    trainY,testY=y[:8],y[8:]\n    dasar=DummyRegressor(strategy='median').fit(trainX,trainY)\n    model=LinearRegression().fit(trainX,trainY)\n    print('MAE baseline:', round(mean_absolute_error(testY,dasar.predict(testX)),2))\n    print('MAE model:', round(mean_absolute_error(testY,model.predict(testX)),2))\n",
+        "output": "MAE baseline: 10.0\nMAE model: 0.0",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds07_regresi.py dari folder data-lab dengan virtual environment aktif.",
+      "Hitung prediksi baseline dan error dua titik test secara manual.",
+      "Tambahkan noise pada salinan target lalu bandingkan perubahan MAE."
+    ],
+    "practice": [
+      "Bandingkan baseline mean dengan median pada data yang mengandung nilai ekstrem.",
+      "Tulis contoh dua model dengan MAE sama tetapi pola error yang berbeda."
+    ],
+    "warning": "Jangan memilih model dari test akhir berulang kali. Simpan keputusan model untuk proses validation dan gunakan test untuk pemeriksaan akhir.",
+    "check": "Mengapa MAE nol pada contoh tidak bisa dijadikan janji kinerja nyata?",
+    "answer": "Data sengaja mengikuti rumus linear sempurna tanpa noise. Situasi lapangan mempunyai variasi dan pergeseran distribusi yang tidak dicakup latihan.",
+    "source": "https://scikit-learn.org/stable/modules/model_evaluation.html#mean-absolute-error",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-klasifikasi",
+    "title": "Klasifikasi: confusion matrix, precision, recall, dan ambang",
+    "summary": "Baca jenis kesalahan dan pilih metrik berdasarkan kebutuhan keputusan.",
+    "analogy": "Alarm yang terlalu sensitif bisa sering mengganggu; alarm yang terlalu longgar bisa melewatkan masalah penting.",
+    "explain": [
+      "Klasifikasi biner membedakan dua kelas yang definisinya harus jelas. Pada contoh 1 berarti kejadian positif dan 0 negatif. Skor fiktif diubah menjadi label dengan ambang 0,5; skor tersebut disediakan untuk latihan metrik, bukan hasil model yang diklaim akurat.",
+      "Confusion matrix dengan labels=[0,1] menempatkan kelas aktual pada baris dan prediksi pada kolom: [[TN,FP],[FN,TP]]. FP adalah alarm positif yang sebenarnya negatif; FN adalah kejadian positif yang terlewat. Dampak keduanya dapat berbeda.",
+      "Precision adalah TP/(TP+FP), recall TP/(TP+FN), dan F1 adalah harmonic mean precision serta recall. Accuracy saja dapat tampak tinggi pada kelas yang sangat tidak seimbang. Tetapkan metrik menurut biaya kesalahan, kapasitas penanganan, dan tujuan pengguna.",
+      "Ambang yang lebih rendah sering menaikkan recall dengan menambah alarm, tetapi perubahan harus dievaluasi pada validation, bukan dipilih berulang dari test akhir. Nilai predict_proba juga tidak otomatis terkalibrasi menjadi peluang lapangan yang benar."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "FP / FN",
+          "Alarm keliru / kejadian terlewat"
+        ],
+        [
+          "Precision",
+          "Bagian prediksi positif yang benar"
+        ],
+        [
+          "Recall",
+          "Bagian positif aktual yang ditemukan"
+        ],
+        [
+          "Ambang",
+          "Aturan mengubah skor menjadi label"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds08_klasifikasi.py",
+        "filename": "ds08_klasifikasi.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score\nif __name__ == '__main__':\n    aktual=np.array([0,0,0,1,1,1])\n    skor=np.array([0.1,0.6,0.2,0.4,0.8,0.9])  # Skor fiktif yang sudah disediakan.\n    prediksi=(skor>=0.5).astype(int)\n    print('Matriks [TN, FP; FN, TP]:', confusion_matrix(aktual,prediksi,labels=[0,1]).tolist())\n    print('Precision/recall/F1:', [round(f(aktual,prediksi,zero_division=0),3) for f in [precision_score,recall_score,f1_score]])\n",
+        "output": "Matriks [TN, FP; FN, TP]: [[2, 1], [1, 2]]\nPrecision/recall/F1: [0.667, 0.667, 0.667]",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds08_klasifikasi.py dari folder data-lab dengan virtual environment aktif.",
+      "Cocokkan enam label aktual dan prediksi dengan matriks secara manual.",
+      "Pada salinan latihan, ubah ambang menjadi 0,3 dan jelaskan perubahan FP serta FN."
+    ],
+    "practice": [
+      "Buat contoh kelas tidak seimbang yang menunjukkan accuracy tinggi tetapi recall positif nol.",
+      "Tuliskan kebutuhan keputusan yang lebih menekankan precision dan yang lebih menekankan recall."
+    ],
+    "warning": "Jangan menganggap seluruh skor model sebagai probabilitas terkalibrasi. Evaluasi ambang serta biaya kesalahan secara terpisah sebelum penerapan.",
+    "check": "Mengapa model yang selalu menebak kelas mayoritas dapat berbahaya?",
+    "answer": "Accuracy bisa tinggi ketika mayoritas sangat besar, tetapi semua kejadian minoritas penting mungkin terlewat. Periksa confusion matrix dan metrik kelas yang relevan.",
+    "source": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-cross-validation",
+    "title": "Cross-validation dan pencarian hyperparameter",
+    "summary": "Pilih konfigurasi menggunakan data pengembangan sambil menjaga test akhir.",
+    "analogy": "Mencoba beberapa cara latihan pada beberapa putaran membantu memilih metode, sementara ujian akhir tetap disimpan.",
+    "explain": [
+      "Hyperparameter adalah pilihan konfigurasi sebelum fit, misalnya alpha Ridge. Parameter model dipelajari saat fit. GridSearchCV mencoba kombinasi yang ditetapkan dan menilai melalui cross-validation pada data pengembangan.",
+      "Pada KFold, bagian train/validation bergantian di dalam data pengembangan. Pipeline memastikan scaler dipelajari ulang hanya dari bagian latihan setiap fold. Melakukan preprocessing seluruh data sebelum cross-validation dapat membocorkan statistik validation.",
+      "Contoh memakai data regresi sintetis independen, empat fold yang diacak dengan seed tetap, dan skor neg_mean_absolute_error. Scikit-learn menggunakan konvensi skor lebih besar lebih baik, sehingga tanda negatif dibalik ketika MAE ditampilkan.",
+      "Test akhir dipisah sebelum pencarian dan dibaca untuk evaluasi setelah alpha dipilih. Untuk deret waktu atau entitas berkelompok, gunakan splitter yang sesuai seperti TimeSeriesSplit atau GroupKFold. Banyak mencoba konfigurasi tetap dapat overfit pada proses validation; catat percobaan dan hindari mengubah keputusan dari test berulang."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Hyperparameter",
+          "Konfigurasi yang dipilih sebelum fit"
+        ],
+        [
+          "Fold",
+          "Pembagian internal data pengembangan"
+        ],
+        [
+          "GridSearchCV",
+          "Pencarian konfigurasi dengan evaluasi CV"
+        ],
+        [
+          "Negative MAE",
+          "Konvensi skor; ubah tanda saat melaporkan MAE"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds09_validasi.py",
+        "filename": "ds09_validasi.py",
+        "language": "python",
+        "code": "from sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split, KFold, GridSearchCV\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import Ridge\nfrom sklearn.metrics import mean_absolute_error\nif __name__ == '__main__':\n    X,y=make_regression(n_samples=100,n_features=3,noise=10,random_state=42)\n    a,b,c,d=train_test_split(X,y,test_size=.2,random_state=42)\n    pipe=Pipeline([('skala',StandardScaler()),('model',Ridge())])\n    cv=KFold(n_splits=4,shuffle=True,random_state=42)\n    cari=GridSearchCV(pipe,{'model__alpha':[0.1,1.,10.]},cv=cv,scoring='neg_mean_absolute_error',n_jobs=1,error_score='raise')\n    cari.fit(a,c)\n    print('Alpha terpilih:', cari.best_params_['model__alpha'])\n    print('MAE validasi:', round(-cari.best_score_,2))\n    print('MAE test akhir:', round(mean_absolute_error(d,cari.predict(b)),2))\n",
+        "output": "Alpha terpilih: 0.1\nMAE validasi: 8.1\nMAE test akhir: 8.94",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds09_validasi.py dari folder data-lab dengan virtual environment aktif.",
+      "Temukan pemisahan test sebelum pemanggilan GridSearchCV.",
+      "Cocokkan nama model__alpha dengan nama step pada Pipeline."
+    ],
+    "practice": [
+      "Tambahkan satu nilai alpha pada salinan pencarian dan bandingkan hasil validation.",
+      "Jelaskan splitter yang tepat untuk prediksi bulan berikutnya dan untuk pelanggan baru."
+    ],
+    "warning": "Cross-validation bukan alasan mencampur masa depan atau entitas yang sama secara keliru. Pembagian harus mencerminkan situasi penggunaan.",
+    "check": "Mengapa scaler ditempatkan di dalam Pipeline yang diberikan ke GridSearchCV?",
+    "answer": "Agar statistik scaler dipelajari hanya dari bagian latihan masing-masing fold, bukan dari seluruh data pengembangan sebelum pembagian fold.",
+    "source": "https://scikit-learn.org/stable/modules/cross_validation.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-clustering",
+    "title": "Clustering dan scaling: kelompok tanpa label jawaban",
+    "summary": "Gunakan KMeans pada data sintetis sambil memahami skala dan arti label kelompok.",
+    "analogy": "Mengelompokkan barang berdasarkan kemiripan bentuk tidak otomatis menjelaskan barang mana yang rusak.",
+    "explain": [
+      "Clustering adalah pembelajaran tanpa label target yang diberikan untuk mencari pola kelompok. KMeans membagi data menurut kedekatan ke pusat cluster dengan jumlah cluster yang dipilih. Tidak semua bentuk kelompok cocok untuk asumsi metode ini.",
+      "Skala fitur memengaruhi jarak. Pada contoh, RTT puluhan sampai ratusan milidetik dan loss dalam persen memiliki skala berbeda; StandardScaler digunakan sebelum KMeans. Scaling tetap pilihan analitis yang perlu mempertimbangkan arti fitur dan outlier.",
+      "Label cluster 0 atau 1 hanya identitas kelompok dan dapat tertukar antar proses. Contoh melaporkan ukuran kelompok [3,3], bukan menganggap cluster 1 pasti gangguan. N_init dan random_state dibuat eksplisit untuk membantu mengulang latihan.",
+      "Jumlah cluster, stabilitas, interpretasi domain, dan metrik internal seperti silhouette dapat membantu penilaian, tetapi tidak menggantikan validasi tujuan. Kelompok fiktif pada enam observasi tidak membuktikan penyebab masalah atau diagnosis perangkat."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Unsupervised",
+          "Tidak memakai target kelas yang diberikan"
+        ],
+        [
+          "KMeans",
+          "Kelompok berbasis pusat dan jarak"
+        ],
+        [
+          "Scaling",
+          "Mengubah pengaruh skala fitur terhadap jarak"
+        ],
+        [
+          "Label cluster",
+          "Nomor kelompok, bukan diagnosis"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds10_cluster.py",
+        "filename": "ds10_cluster.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.cluster import KMeans\nfrom sklearn.pipeline import Pipeline\nif __name__ == '__main__':\n    X=np.array([[20,0.],[22,0.1],[18,0.2],[120,8.],[125,9.],[115,7.]])\n    model=Pipeline([('skala',StandardScaler()),('kelompok',KMeans(n_clusters=2,n_init=10,random_state=42))])\n    label=model.fit_predict(X)\n    print('Ukuran kelompok:', sorted(np.bincount(label).tolist()))\n    print('Label cluster bukan diagnosis gangguan.')\n",
+        "output": "Ukuran kelompok: [3, 3]\nLabel cluster bukan diagnosis gangguan.",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds10_cluster.py dari folder data-lab dengan virtual environment aktif.",
+      "Bandingkan satuan RTT dan loss pada matriks contoh.",
+      "Jalankan tanpa scaling pada salinan dan bahas pengaruh skala, tanpa menganggap satu hasil selalu terbaik."
+    ],
+    "practice": [
+      "Coba jumlah cluster 3 dan lihat ukuran setiap kelompok.",
+      "Tulis informasi domain yang diperlukan untuk memberi makna pada cluster."
+    ],
+    "warning": "Jangan menamai cluster sebagai pelanggan buruk atau perangkat rusak hanya dari nomor label. Interpretasi dan dampak keputusan perlu ditinjau.",
+    "check": "Mengapa cluster 0 tidak otomatis berarti normal?",
+    "answer": "Nomor cluster adalah penanda algoritmik tanpa makna kesehatan bawaan. Makna memerlukan pemeriksaan fitur, domain, dan validasi tujuan.",
+    "source": "https://scikit-learn.org/stable/modules/clustering.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "ds-kasus-durasi",
+    "title": "Studi kasus Data Science: estimasi durasi tiket sintetis",
+    "summary": "Bangun regresi dengan fitur saat tiket masuk, baseline, dan evaluasi akhir yang terpisah.",
+    "analogy": "Estimasi antrean harus memakai informasi yang ada ketika pelanggan datang, bukan waktu selesai yang baru diketahui nanti.",
+    "explain": [
+      "Kebutuhan latihan adalah memperkirakan durasi tiket dari antrean awal serta jenis keluhan. Data 250 baris dibuat secara sintetis menggunakan rumus dan noise acak dengan seed tetap. Tidak ada catatan pelanggan atau hasil operasional nyata.",
+      "Dua ratus baris pertama digunakan untuk train dan lima puluh terakhir untuk test. Urutan ini mencontohkan holdout bagian akhir, tetapi data yang dihasilkan tetap simulasi independen, bukan bukti validitas temporal di dunia nyata. Hyperparameter alpha ditetapkan sebelum test.",
+      "ColumnTransformer melakukan scaling antrean serta one-hot encoding jenis, lalu Ridge mempelajari hubungan. DummyRegressor median menjadi baseline. Kedua model dinilai memakai MAE pada test yang sama, dalam satuan menit.",
+      "Model dapat mengalahkan baseline karena data memang dibentuk dari hubungan fitur yang sederhana. Hasilnya belum menjadi estimasi SLA. Untuk pengembangan nyata, perlu definisi durasi, penanganan tiket belum selesai, kalender operasional, validasi waktu/kelompok, evaluasi per kategori, pemantauan drift, dan proses pembaruan model."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Fitur",
+          "Antrean awal serta jenis keluhan"
+        ],
+        [
+          "Target",
+          "Durasi sintetis dalam menit"
+        ],
+        [
+          "Pembagian",
+          "200 train / 50 test"
+        ],
+        [
+          "Evaluasi",
+          "MAE model dibanding baseline pada test sama"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds11_kasus_durasi.py",
+        "filename": "ds11_kasus_durasi.py",
+        "language": "python",
+        "code": "import numpy as np\nimport pandas as pd\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.preprocessing import OneHotEncoder, StandardScaler\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.linear_model import Ridge\nfrom sklearn.dummy import DummyRegressor\nfrom sklearn.metrics import mean_absolute_error\n\ndef data_latihan(seed=42):\n    rng=np.random.default_rng(seed)\n    X=pd.DataFrame({'antrean_awal':rng.integers(0,15,250),'jenis':rng.choice(['radio','kabel'],250)})\n    y=20+4*X['antrean_awal'].to_numpy()+15*(X['jenis']=='radio').to_numpy()+rng.normal(0,6,250)\n    return X,y\n\ndef evaluasi(seed=42):\n    X,y=data_latihan(seed)\n    train,test=X.iloc[:200],X.iloc[200:]\n    target_train,target_test=y[:200],y[200:]\n    olah=ColumnTransformer([('num',StandardScaler(),['antrean_awal']),('kat',OneHotEncoder(handle_unknown='ignore',sparse_output=False),['jenis'])])\n    model=Pipeline([('olah',olah),('model',Ridge(alpha=1.0))]).fit(train,target_train)\n    dasar=DummyRegressor(strategy='median').fit(train,target_train)\n    return mean_absolute_error(target_test,dasar.predict(test)),mean_absolute_error(target_test,model.predict(test))\n\nif __name__ == '__main__':\n    dasar,model=evaluasi()\n    print('Data sintetis, train/test: 200/50')\n    print('MAE baseline/model (menit):', round(dasar,2), round(model,2))\n    print('Belum merupakan estimasi SLA lapangan.')\n",
+        "output": "Data sintetis, train/test: 200/50\nMAE baseline/model (menit): 16.04 4.45\nBelum merupakan estimasi SLA lapangan.",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds11_kasus_durasi.py dari folder data-lab dengan virtual environment aktif.",
+      "Temukan generator data dan pastikan informasi selesai tidak menjadi fitur.",
+      "Bandingkan MAE baseline dengan model dan tulis batas kesimpulannya."
+    ],
+    "practice": [
+      "Naikkan noise pada salinan generator dan amati perubahan kinerja.",
+      "Rancang cara menilai error untuk jenis radio dan kabel secara terpisah."
+    ],
+    "warning": "Jangan memakai hasil sintetis sebagai janji durasi layanan. Tiket yang belum selesai juga dapat menimbulkan bias seleksi bila hanya tiket cepat yang masuk data.",
+    "check": "Mengapa hasil model lebih baik pada simulasi belum membuktikan manfaat pada tiket nyata?",
+    "answer": "Hubungan data sengaja dibentuk sederhana dan kondisi lapangan belum diwakili. Validasi pada data yang sah dan representatif tetap diperlukan.",
+    "source": "https://scikit-learn.org/stable/common_pitfalls.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "ds-kasus-risiko",
+    "title": "Studi kasus Data Science: triase risiko gangguan sintetis",
+    "summary": "Evaluasi klasifikasi dari ping, loss, dan beban tanpa mengendalikan perangkat atau melebih-lebihkan hasil.",
+    "analogy": "Skor triase membantu menentukan apa yang perlu diperiksa, tetapi bukan pengganti pemeriksaan teknis dan keputusan operator.",
+    "explain": [
+      "Kebutuhan latihan adalah memprediksi label gangguan berikutnya dari fitur yang diasumsikan tersedia sebelumnya: ping, loss, dan beban. Lima ratus baris beserta label dibuat secara sintetis dengan peluang yang ditentukan generator. Ini tidak terhubung ke router atau monitoring nyata.",
+      "Tiga ratus lima puluh baris menjadi train dan seratus lima puluh bagian akhir menjadi test. Pipeline melakukan scaling lalu LogisticRegression. Ambang 0,5 ditetapkan sebelum membaca test; pemilihan ambang nyata harus memakai validation dan biaya kesalahan yang disepakati.",
+      "Confusion matrix memperlihatkan alarm keliru serta kejadian terlewat. Precision dan recall dilaporkan bersama baseline kelas mayoritas. Pada dataset latihan, model masih membuat banyak kesalahan; angka yang terlihat lebih baik pada satu metrik tidak boleh diklaim sebagai model siap operasi.",
+      "Skor model belum diuji kalibrasinya dan bukan jaminan peluang lapangan. Penerapan nyata memerlukan pemeriksaan kualitas label, pemisahan waktu/kelompok perangkat, biaya FP/FN, kapasitas teknisi, monitoring drift, serta evaluasi ulang. Prediksi tidak boleh otomatis mengubah konfigurasi jaringan hanya karena contoh script dapat berjalan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Fitur",
+          "Ping ms, loss persen, beban 0..1"
+        ],
+        [
+          "Target",
+          "Label sintetis kejadian berikutnya"
+        ],
+        [
+          "Pembagian",
+          "350 train / 150 test"
+        ],
+        [
+          "Keputusan",
+          "Ambang dan biaya kesalahan ditetapkan sebelum test"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds12_kasus_risiko.py",
+        "filename": "ds12_kasus_risiko.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.dummy import DummyClassifier\nfrom sklearn.metrics import confusion_matrix, recall_score, precision_score\n\ndef data_latihan(seed=42):\n    rng=np.random.default_rng(seed)\n    X=np.column_stack([rng.uniform(10,180,500),rng.uniform(0,20,500),rng.uniform(0,1,500)])\n    logit=-5+0.025*X[:,0]+0.08*X[:,1]+2*X[:,2]\n    p=1/(1+np.exp(-logit))\n    y=rng.binomial(1,p)\n    return X,y\n\ndef evaluasi(seed=42):\n    X,y=data_latihan(seed)\n    train,test=X[:350],X[350:]\n    a,b=y[:350],y[350:]\n    model=Pipeline([('skala',StandardScaler()),('model',LogisticRegression(max_iter=500,random_state=42))]).fit(train,a)\n    dasar=DummyClassifier(strategy='most_frequent').fit(train,a)\n    pred=(model.predict_proba(test)[:,1]>=0.5).astype(int)  # Ambang ditetapkan sebelum test.\n    return b,pred,dasar.predict(test)\n\nif __name__ == '__main__':\n    aktual,pred,dasar=evaluasi()\n    print('Data sintetis, train/test: 350/150; ambang: 0.5')\n    print('Matriks model:', confusion_matrix(aktual,pred,labels=[0,1]).tolist())\n    print('Precision/recall:', round(precision_score(aktual,pred,zero_division=0),3), round(recall_score(aktual,pred,zero_division=0),3))\n    print('Recall baseline:', round(recall_score(aktual,dasar,zero_division=0),3))\n    print('Tidak mengendalikan perangkat atau membuktikan akurasi lapangan.')\n",
+        "output": "Data sintetis, train/test: 350/150; ambang: 0.5\nMatriks model: [[68, 27], [27, 28]]\nPrecision/recall: 0.509 0.509\nRecall baseline: 0.0\nTidak mengendalikan perangkat atau membuktikan akurasi lapangan.",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python ds12_kasus_risiko.py dari folder data-lab dengan virtual environment aktif.",
+      "Cocokkan matriks model dengan jumlah 150 observasi test.",
+      "Jelaskan biaya false positive serta false negative dalam antrean pemeriksaan teknis."
+    ],
+    "practice": [
+      "Tulis rencana validation untuk memilih ambang tanpa menyentuh test akhir.",
+      "Buat laporan singkat yang menyebut kesalahan model serta kebutuhan data lapangan."
+    ],
+    "warning": "Jangan menjadikan klasifikasi latihan sebagai diagnosis gangguan atau otomatisasi perangkat. Seluruh hasil bersifat simulasi dan belum membuktikan kelayakan penggunaan nyata.",
+    "check": "Mengapa precision dan recall harus dibaca bersama confusion matrix?",
+    "answer": "Matriks menunjukkan jumlah serta jenis kesalahan yang terjadi. Rasio saja dapat menyembunyikan skala masalah dan biaya tindak lanjutnya.",
+    "source": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  }
+]

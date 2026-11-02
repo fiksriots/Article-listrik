@@ -43,5 +43,5 @@ const baseGroups = [
 ];
 export const learningDirectory:LearningGroup[] = [
  ...baseGroups.map((group,index)=>({...group,id:['networking','electric','iot','git'][index],categories:group.title==='Learn Git'?gitTracks.map(t=>({name:t.title,description:t.summary,path:t.href,lessonCount:t.lessons.length})):group.categories})),
- {id:'programming',title:'Learn Programming',description:'Belajar Python, struktur data, OOP, database, API, pemrograman web, serta Django.',categories:programmingTracks.map(t=>({name:t.title,description:t.summary,path:t.href,lessonCount:t.lessons.length}))},
+ {id:'programming',title:'Learn Programming',description:'Belajar Python, struktur data, OOP, database, API, web, Django, Data Analysis, dan Data Science.',categories:programmingTracks.map(t=>({name:t.title,description:t.summary,path:t.href,lessonCount:t.lessons.length}))},
 ];

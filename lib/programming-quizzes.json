@@ -8536,5 +8536,1013 @@
       "answer": 0,
       "explanation": "Konfigurasi debug berbeda dari identitas serta isi database."
     }
+  ],
+  "da-pengantar": [
+    {
+      "question": "Unit analisis menjelaskan ...",
+      "options": [
+        "Arti satu baris",
+        "Warna grafik",
+        "Versi browser"
+      ],
+      "answer": 0,
+      "explanation": "Makna baris harus ditetapkan sebelum menghitung indikator."
+    },
+    {
+      "question": "Langkah awal analisis yang baik adalah ...",
+      "options": [
+        "Langsung memilih model AI",
+        "Menetapkan pertanyaan dan cakupan",
+        "Menghapus semua nilai kosong"
+      ],
+      "answer": 1,
+      "explanation": "Alat dipilih setelah kebutuhan dipahami."
+    },
+    {
+      "question": "Rata-rata saja dapat menyembunyikan ...",
+      "options": [
+        "Nama paket Python",
+        "Ukuran font",
+        "Variasi antar observasi"
+      ],
+      "answer": 2,
+      "explanation": "Nilai individual dapat jauh dari rata-rata."
+    },
+    {
+      "question": "Jika data belum cukup, analis sebaiknya ...",
+      "options": [
+        "Menyatakan batas kesimpulan",
+        "Mengarang angka pelengkap",
+        "Menganggap data pasti lengkap"
+      ],
+      "answer": 0,
+      "explanation": "Keterbatasan merupakan bagian dari laporan yang jujur."
+    }
+  ],
+  "da-python-numpy": [
+    {
+      "question": "Shape (2,3) berarti ...",
+      "options": [
+        "Dua baris dan tiga kolom",
+        "Dua paket dan tiga akun",
+        "Tiga baris dan dua kolom"
+      ],
+      "answer": 0,
+      "explanation": "Shape menyatakan ukuran tiap dimensi."
+    },
+    {
+      "question": "Virtual environment membantu ...",
+      "options": [
+        "Membuat semua data bersih",
+        "Memisahkan dependensi proyek",
+        "Menghilangkan kebutuhan Python"
+      ],
+      "answer": 1,
+      "explanation": "Versi paket proyek tidak harus bercampur dengan Python sistem."
+    },
+    {
+      "question": "RTT > 25 pada array menghasilkan ...",
+      "options": [
+        "File database",
+        "Akun admin",
+        "Mask boolean"
+      ],
+      "answer": 2,
+      "explanation": "Setiap elemen dibandingkan dengan kondisi."
+    },
+    {
+      "question": "Jupyter diperlukan untuk contoh ini?",
+      "options": [
+        "Tidak, file .py sudah dapat dijalankan",
+        "Selalu",
+        "Hanya jika memakai CSV"
+      ],
+      "answer": 0,
+      "explanation": "Paket latihan memakai program Python biasa."
+    }
+  ],
+  "da-pandas-csv": [
+    {
+      "question": "Read_csv menghasilkan ...",
+      "options": [
+        "DataFrame",
+        "Model klasifikasi",
+        "File HTML"
+      ],
+      "answer": 0,
+      "explanation": "CSV dibaca menjadi tabel pandas."
+    },
+    {
+      "question": "ID 001 sebaiknya disimpan sebagai ...",
+      "options": [
+        "Float 1.0",
+        "String identitas",
+        "Jumlah transaksi"
+      ],
+      "answer": 1,
+      "explanation": "Identitas tidak perlu operasi aritmetika."
+    },
+    {
+      "question": "Isna membantu melihat ...",
+      "options": [
+        "Kausalitas",
+        "Akurasi model",
+        "Nilai hilang"
+      ],
+      "answer": 2,
+      "explanation": "Nilai kosong perlu diketahui sebelum pengolahan."
+    },
+    {
+      "question": "Delapan baris mentah berarti ...",
+      "options": [
+        "Delapan rekaman dibaca, belum tentu valid",
+        "Delapan transaksi sah pasti",
+        "Delapan pelanggan unik pasti"
+      ],
+      "answer": 0,
+      "explanation": "Jumlah mentah berbeda dari hasil validasi."
+    }
+  ],
+  "da-kualitas-data": [
+    {
+      "question": "Nilai kosong berarti ...",
+      "options": [
+        "Perlu ditafsirkan, bukan otomatis nol",
+        "Selalu nol",
+        "Selalu data palsu"
+      ],
+      "answer": 0,
+      "explanation": "Makna missing bergantung proses pengumpulan."
+    },
+    {
+      "question": "ID sama dengan isi berbeda sebaiknya ...",
+      "options": [
+        "Dipilih baris acak",
+        "Ditinjau dengan kebijakan konflik",
+        "Dijumlahkan ID-nya"
+      ],
+      "answer": 1,
+      "explanation": "Contoh mengarantina baris ambigu."
+    },
+    {
+      "question": "Errors=coerce melakukan ...",
+      "options": [
+        "Memperbaiki semua data otomatis",
+        "Menghapus seluruh tabel",
+        "Mengubah kegagalan parsing menjadi missing"
+      ],
+      "answer": 2,
+      "explanation": "Validasi masih diperlukan setelah konversi."
+    },
+    {
+      "question": "Data mentah sebaiknya ...",
+      "options": [
+        "Dipertahankan untuk penelusuran",
+        "Ditimpa tanpa catatan",
+        "Dihapus sebelum laporan"
+      ],
+      "answer": 0,
+      "explanation": "Reproduksibilitas membutuhkan sumber dan aturan yang jelas."
+    }
+  ],
+  "da-filter-transformasi": [
+    {
+      "question": "Operator dan untuk mask Series adalah ...",
+      "options": [
+        "& dengan tanda kurung",
+        "and selalu",
+        "JOIN"
+      ],
+      "answer": 0,
+      "explanation": "Mask perlu operasi elemen per elemen."
+    },
+    {
+      "question": "Loc digunakan untuk ...",
+      "options": [
+        "Memasang paket",
+        "Memilih baris dan kolom",
+        "Menghitung confidence interval otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Pemilihan dapat memakai label atau mask."
+    },
+    {
+      "question": "Copy pada contoh bertujuan ...",
+      "options": [
+        "Membuat semua data valid",
+        "Menyembunyikan sumber",
+        "Mengolah hasil secara terpisah"
+      ],
+      "answer": 2,
+      "explanation": "Kejelasan perubahan membantu menghindari kesalahan."
+    },
+    {
+      "question": "Kolom total jumlah kali harga otomatis merupakan laba?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika semua kolom numeric"
+      ],
+      "answer": 0,
+      "explanation": "Laba memerlukan komponen biaya dan aturan lain."
+    }
+  ],
+  "da-agregasi": [
+    {
+      "question": "Size menghitung ...",
+      "options": [
+        "Baris kelompok",
+        "Hanya nilai nonmissing pada semua kolom",
+        "Jumlah model"
+      ],
+      "answer": 0,
+      "explanation": "Size berbeda dari count kolom tertentu."
+    },
+    {
+      "question": "Rasio keseluruhan dihitung dari ...",
+      "options": [
+        "Rata-rata semua rasio tanpa bobot selalu",
+        "Total pembilang dibagi total penyebut",
+        "Jumlah nama kelompok"
+      ],
+      "answer": 1,
+      "explanation": "Penyebut menentukan bobot yang relevan."
+    },
+    {
+      "question": "Groupby dilakukan setelah ...",
+      "options": [
+        "Menghapus seluruh key",
+        "Menyembunyikan missing",
+        "Memeriksa kualitas dan arti data"
+      ],
+      "answer": 2,
+      "explanation": "Duplikasi dan tipe salah dapat merusak agregasi."
+    },
+    {
+      "question": "Named aggregation membantu ...",
+      "options": [
+        "Memperjelas nama serta operasi hasil",
+        "Membuktikan sebab-akibat",
+        "Melatih model"
+      ],
+      "answer": 0,
+      "explanation": "Hasil yang bernama jelas lebih mudah ditafsirkan."
+    }
+  ],
+  "da-join-sql": [
+    {
+      "question": "Left join mempertahankan ...",
+      "options": [
+        "Semua baris kiri",
+        "Hanya baris kanan",
+        "Hanya key kosong"
+      ],
+      "answer": 0,
+      "explanation": "Baris tidak cocok di kanan tetap dapat dilaporkan."
+    },
+    {
+      "question": "Many_to_one berarti ...",
+      "options": [
+        "Semua key wajib ganda",
+        "Banyak baris kiri menuju satu baris key kanan",
+        "Tidak ada relasi"
+      ],
+      "answer": 1,
+      "explanation": "Master kanan harus unik pada key join."
+    },
+    {
+      "question": "Indicator membantu menemukan ...",
+      "options": [
+        "Password user",
+        "Akurasi klasifikasi",
+        "Baris yang tidak cocok"
+      ],
+      "answer": 2,
+      "explanation": "Left_only menandai key kiri tanpa pasangan."
+    },
+    {
+      "question": "Pandas null key selalu sama dengan SQL NULL JOIN?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Hanya pada grafik"
+      ],
+      "answer": 0,
+      "explanation": "Pandas dapat mencocokkan null ke null; validasi key sesuai aturan."
+    }
+  ],
+  "da-visualisasi": [
+    {
+      "question": "Grafik untuk perbandingan kategori adalah ...",
+      "options": [
+        "Bar chart",
+        "Selalu pie chart",
+        "URLconf"
+      ],
+      "answer": 0,
+      "explanation": "Bentuk grafik dipilih mengikuti pertanyaan."
+    },
+    {
+      "question": "Satuan pada sumbu berfungsi ...",
+      "options": [
+        "Membuktikan data lengkap",
+        "Membantu menafsirkan angka",
+        "Mengubah nilai mentah"
+      ],
+      "answer": 1,
+      "explanation": "Tanpa satuan, angka mudah disalahartikan."
+    },
+    {
+      "question": "Savefig digunakan untuk ...",
+      "options": [
+        "Membersihkan CSV",
+        "Menghapus outlier",
+        "Menyimpan figure"
+      ],
+      "answer": 2,
+      "explanation": "Hasil dapat dibuka di luar Python."
+    },
+    {
+      "question": "Grafik hubungan dua variabel membuktikan kausalitas?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika warnanya berbeda"
+      ],
+      "answer": 0,
+      "explanation": "Asosiasi visual bukan bukti sebab-akibat."
+    }
+  ],
+  "da-waktu-kpi": [
+    {
+      "question": "Jam tanpa pengukuran seharusnya ...",
+      "options": [
+        "Tetap ditandai missing sesuai kebijakan",
+        "Selalu diisi nol",
+        "Dihapus dari penjelasan"
+      ],
+      "answer": 0,
+      "explanation": "Ketiadaan observasi berbeda dari angka nol."
+    },
+    {
+      "question": "Tz_convert mengubah ...",
+      "options": [
+        "Nilai kejadian menjadi hari acak",
+        "Zona tampilan saat yang sama",
+        "Semua data menjadi string"
+      ],
+      "answer": 1,
+      "explanation": "Konversi zona mempertahankan saat absolut."
+    },
+    {
+      "question": "Coverage membandingkan ...",
+      "options": [
+        "Jumlah warna dan label",
+        "Akurasi model dan precision",
+        "Sampel valid dan jadwal yang diharapkan"
+      ],
+      "answer": 2,
+      "explanation": "Penyebut harus ditetapkan secara jelas."
+    },
+    {
+      "question": "Polling up otomatis sama dengan uptime kontinu?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika memakai pandas"
+      ],
+      "answer": 0,
+      "explanation": "Durasi dan aturan SLA memerlukan definisi tambahan."
+    }
+  ],
+  "da-laporan-reproduksi": [
+    {
+      "question": "Hash sumber membantu ...",
+      "options": [
+        "Mengenali berkas yang digunakan",
+        "Membuktikan semua data benar",
+        "Memberi izin membagikan data"
+      ],
+      "answer": 0,
+      "explanation": "Hash dan validitas bisnis berbeda."
+    },
+    {
+      "question": "Laporan sebaiknya memisahkan ...",
+      "options": [
+        "Kolom berdasarkan warna saja",
+        "Fakta, interpretasi, dan keterbatasan",
+        "File yang namanya panjang"
+      ],
+      "answer": 1,
+      "explanation": "Pembaca perlu mengetahui dasar kesimpulan."
+    },
+    {
+      "question": "Data minimum berarti ...",
+      "options": [
+        "Membuang semua data valid",
+        "Mengisi missing dengan password",
+        "Menggunakan informasi yang diperlukan saja"
+      ],
+      "answer": 2,
+      "explanation": "Kebutuhan analisis tidak selalu memerlukan seluruh identitas."
+    },
+    {
+      "question": "Sebelum membagikan notebook, sebaiknya ...",
+      "options": [
+        "Jalankan ulang dari awal pada lingkungan bersih",
+        "Hanya lihat sel terakhir",
+        "Hapus semua hasil yang salah tanpa catatan"
+      ],
+      "answer": 0,
+      "explanation": "State tersembunyi dapat membuat hasil tidak dapat direproduksi."
+    }
+  ],
+  "da-kasus-penjualan": [
+    {
+      "question": "Sebelum menghitung omzet, lakukan ...",
+      "options": [
+        "Validasi dan deduplikasi sesuai aturan",
+        "Langsung menjumlah seluruh baris",
+        "Mengisi jumlah kosong dengan angka acak"
+      ],
+      "answer": 0,
+      "explanation": "Data yang tidak sah dapat merusak total."
+    },
+    {
+      "question": "Delapan baris mentah direkonsiliasi menjadi ...",
+      "options": [
+        "8 diterima selalu",
+        "5 diterima, 2 ditolak, 1 duplikat",
+        "6 ditolak dan 6 diterima"
+      ],
+      "answer": 1,
+      "explanation": "Jumlah tiap kategori sesuai data latihan."
+    },
+    {
+      "question": "Omzet sama dengan laba?",
+      "options": [
+        "Selalu",
+        "Hanya jika memakai integer",
+        "Tidak, biaya belum dihitung"
+      ],
+      "answer": 2,
+      "explanation": "Definisi indikator harus tetap jelas."
+    },
+    {
+      "question": "Grafik studi kasus sebaiknya mengambil nilai dari ...",
+      "options": [
+        "Hasil agregasi aktual",
+        "Angka manual yang tidak diperbarui",
+        "Warna pilihan"
+      ],
+      "answer": 0,
+      "explanation": "Data dan grafik perlu konsisten."
+    }
+  ],
+  "da-kasus-monitoring": [
+    {
+      "question": "Identitas sampel monitoring adalah ...",
+      "options": [
+        "Perangkat dan timestamp",
+        "Warna dashboard",
+        "Nomor baris saja"
+      ],
+      "answer": 0,
+      "explanation": "Duplikasi pasangan itu perlu ditinjau."
+    },
+    {
+      "question": "Missing status pada contoh ...",
+      "options": [
+        "Dianggap selalu up",
+        "Mengurangi coverage",
+        "Dianggap RTT nol"
+      ],
+      "answer": 1,
+      "explanation": "Ketiadaan observasi harus terlihat pada laporan."
+    },
+    {
+      "question": "Penyebut up teramati adalah ...",
+      "options": [
+        "Seluruh kemungkinan pelanggan",
+        "Jumlah warna",
+        "Jumlah status yang valid"
+      ],
+      "answer": 2,
+      "explanation": "Definisi penyebut menentukan arti persentase."
+    },
+    {
+      "question": "Hasil latihan ini membuktikan SLA jaringan nyata?",
+      "options": [
+        "Tidak",
+        "Ya untuk semua ISP",
+        "Ya karena memakai UTC"
+      ],
+      "answer": 0,
+      "explanation": "Data fiktif dan polling terbatas tidak membuktikan SLA lapangan."
+    }
+  ],
+  "ds-pengantar": [
+    {
+      "question": "Fitur yang sah harus tersedia ...",
+      "options": [
+        "Pada saat prediksi dibuat",
+        "Hanya setelah target diketahui",
+        "Setelah laporan akhir selesai"
+      ],
+      "answer": 0,
+      "explanation": "Waktu ketersediaan masukan menentukan apakah prediksi realistis."
+    },
+    {
+      "question": "Regresi memprediksi ...",
+      "options": [
+        "Selalu kelompok tanpa label",
+        "Nilai numerik",
+        "Tipe file"
+      ],
+      "answer": 1,
+      "explanation": "Durasi adalah contoh target numerik."
+    },
+    {
+      "question": "Baseline dipakai sebagai ...",
+      "options": [
+        "Pengganti semua test",
+        "Nama database",
+        "Pembanding sederhana"
+      ],
+      "answer": 2,
+      "explanation": "Model perlu dibandingkan dengan pendekatan yang mudah."
+    },
+    {
+      "question": "Semua masalah data perlu AI?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika datanya CSV"
+      ],
+      "answer": 0,
+      "explanation": "Pilih alat berdasarkan kebutuhan, bukan label teknologi."
+    }
+  ],
+  "ds-statistik-probabilitas": [
+    {
+      "question": "Ringkasan yang biasanya lebih tahan terhadap nilai ekstrem adalah ...",
+      "options": [
+        "Median",
+        "Mean selalu",
+        "ID baris"
+      ],
+      "answer": 0,
+      "explanation": "Median berdasarkan posisi setelah pengurutan."
+    },
+    {
+      "question": "Std ddof=1 pada contoh digunakan untuk ...",
+      "options": [
+        "Jumlah kelas model",
+        "Simpangan baku sampel",
+        "Memperbaiki semua bias"
+      ],
+      "answer": 1,
+      "explanation": "Pilihan ddof perlu mengikuti tujuan perhitungan."
+    },
+    {
+      "question": "Proporsi satu dari lima adalah ...",
+      "options": [
+        "5.0",
+        "20.0 sebagai peluang 0–1",
+        "0.2"
+      ],
+      "answer": 2,
+      "explanation": "Proporsi membagi jumlah kejadian dengan jumlah observasi."
+    },
+    {
+      "question": "Peluang A ketika B selalu sama dengan peluang B ketika A?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika jumlah kolom sama"
+      ],
+      "answer": 0,
+      "explanation": "Penyebut serta kondisi yang digunakan berbeda."
+    }
+  ],
+  "ds-sampling-bootstrap": [
+    {
+      "question": "Bootstrap mengambil sampel ulang ...",
+      "options": [
+        "Dengan pengembalian",
+        "Selalu tanpa pengembalian",
+        "Dari label hasil test masa depan"
+      ],
+      "answer": 0,
+      "explanation": "Satu observasi dapat terpilih beberapa kali dalam satu resample."
+    },
+    {
+      "question": "Sampel besar tetapi bias ...",
+      "options": [
+        "Pasti benar",
+        "Tetap dapat memberi kesimpulan keliru",
+        "Tidak memerlukan definisi populasi"
+      ],
+      "answer": 1,
+      "explanation": "Ukuran sampel tidak menghapus bias secara otomatis."
+    },
+    {
+      "question": "Seed tetap membantu ...",
+      "options": [
+        "Membuktikan keterwakilan",
+        "Menghapus outlier",
+        "Reproduksibilitas simulasi"
+      ],
+      "answer": 2,
+      "explanation": "Asumsi statistik tetap harus ditinjau."
+    },
+    {
+      "question": "Data waktu berkorelasi dapat memerlukan ...",
+      "options": [
+        "Metode resampling yang sesuai ketergantungan",
+        "Resampling IID tanpa pertimbangan selalu",
+        "Penghapusan timestamp"
+      ],
+      "answer": 0,
+      "explanation": "Independensi tidak boleh diasumsikan begitu saja."
+    }
+  ],
+  "ds-eda-korelasi": [
+    {
+      "question": "Pearson merangkum terutama hubungan ...",
+      "options": [
+        "Linear",
+        "Semua bentuk kausalitas",
+        "Izin akses data"
+      ],
+      "answer": 0,
+      "explanation": "Hubungan nonlinier dapat tidak tertangkap oleh satu koefisien."
+    },
+    {
+      "question": "Korelasi kuat membuktikan sebab-akibat?",
+      "options": [
+        "Selalu",
+        "Tidak",
+        "Jika sampelnya CSV"
+      ],
+      "answer": 1,
+      "explanation": "Rancangan dan faktor lain tetap perlu diperiksa."
+    },
+    {
+      "question": "Eksplorasi untuk memilih fitur sebaiknya memakai ...",
+      "options": [
+        "Test akhir berulang kali",
+        "Hasil produksi masa depan",
+        "Data pengembangan"
+      ],
+      "answer": 2,
+      "explanation": "Test akhir perlu dijaga untuk evaluasi yang independen."
+    },
+    {
+      "question": "Outlier dapat ...",
+      "options": [
+        "Mengubah korelasi",
+        "Selalu tidak berpengaruh",
+        "Menjadi label model otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Periksa data serta konteks sebelum menghapusnya."
+    }
+  ],
+  "ds-split-leakage": [
+    {
+      "question": "Validation dipakai untuk ...",
+      "options": [
+        "Memilih keputusan pengembangan",
+        "Menggantikan seluruh data train",
+        "Mengendalikan router"
+      ],
+      "answer": 0,
+      "explanation": "Test akhir sebaiknya tetap disimpan."
+    },
+    {
+      "question": "Fit scaler dilakukan pada ...",
+      "options": [
+        "Train dan test sekaligus selalu",
+        "Train saja",
+        "Test dulu"
+      ],
+      "answer": 1,
+      "explanation": "Statistik preprocessing tidak boleh belajar dari test."
+    },
+    {
+      "question": "Random_state tetap menjamin tidak ada leakage?",
+      "options": [
+        "Selalu",
+        "Jika ukuran test 20 persen",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Seed hanya mengatur pengacakan yang dapat diulang."
+    },
+    {
+      "question": "Untuk memprediksi masa depan, pertimbangkan ...",
+      "options": [
+        "Split berbasis waktu",
+        "Mengacak tanpa menilai urutan",
+        "Memasukkan target masa depan"
+      ],
+      "answer": 0,
+      "explanation": "Pembagian harus meniru situasi penggunaan."
+    }
+  ],
+  "ds-pipeline": [
+    {
+      "question": "ColumnTransformer berguna untuk ...",
+      "options": [
+        "Mengolah kelompok kolom secara berbeda",
+        "Membagi hak akses user",
+        "Menghapus kebutuhan dataset"
+      ],
+      "answer": 0,
+      "explanation": "Numerik dan kategori dapat melewati transformasi masing-masing."
+    },
+    {
+      "question": "Median imputasi dipelajari dari ...",
+      "options": [
+        "Test akhir",
+        "Train",
+        "Semua laporan masa depan"
+      ],
+      "answer": 1,
+      "explanation": "Statistik tidak boleh belajar dari test."
+    },
+    {
+      "question": "One-hot encoding bertujuan ...",
+      "options": [
+        "Menetapkan urutan kota secara otomatis",
+        "Mengenkripsi identitas",
+        "Merepresentasikan kategori sebagai indikator"
+      ],
+      "answer": 2,
+      "explanation": "Kategori nominal tidak mempunyai urutan numerik bawaan."
+    },
+    {
+      "question": "Pipeline menghilangkan semua leakage?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika modelnya Ridge"
+      ],
+      "answer": 0,
+      "explanation": "Fitur dan pembagian data tetap perlu dirancang benar."
+    }
+  ],
+  "ds-regresi": [
+    {
+      "question": "MAE target menit memiliki satuan ...",
+      "options": [
+        "Menit",
+        "Persen selalu",
+        "Tidak bersatuan selalu"
+      ],
+      "answer": 0,
+      "explanation": "Error absolut mengikuti satuan target."
+    },
+    {
+      "question": "Baseline digunakan untuk ...",
+      "options": [
+        "Membuat semua prediksi benar",
+        "Menilai manfaat model terhadap patokan sederhana",
+        "Mengganti validation"
+      ],
+      "answer": 1,
+      "explanation": "Model kompleks perlu pembanding yang jelas."
+    },
+    {
+      "question": "Data linear sempurna dapat menghasilkan ...",
+      "options": [
+        "Jaminan semua prediksi nyata benar",
+        "Bukti sebab-akibat",
+        "Error sangat kecil yang belum mewakili lapangan"
+      ],
+      "answer": 2,
+      "explanation": "Kinerja mengikuti sifat data latihan."
+    },
+    {
+      "question": "Prediksi di luar rentang train disebut ...",
+      "options": [
+        "Ekstrapolasi",
+        "Imputasi",
+        "Join"
+      ],
+      "answer": 0,
+      "explanation": "Keandalannya tidak otomatis sama dengan interpolasi."
+    }
+  ],
+  "ds-klasifikasi": [
+    {
+      "question": "False negative berarti ...",
+      "options": [
+        "Positif aktual diprediksi negatif",
+        "Negatif aktual diprediksi positif",
+        "Prediksi positif yang benar"
+      ],
+      "answer": 0,
+      "explanation": "FN adalah kejadian positif yang terlewat."
+    },
+    {
+      "question": "Recall menghitung ...",
+      "options": [
+        "TN dibagi seluruh sampel selalu",
+        "TP dibagi TP+FN",
+        "FP dibagi TP"
+      ],
+      "answer": 1,
+      "explanation": "Penyebut recall adalah seluruh positif aktual."
+    },
+    {
+      "question": "Ambang model sebaiknya dipilih menggunakan ...",
+      "options": [
+        "Test akhir berulang kali",
+        "Warna grafik",
+        "Validation sesuai tujuan"
+      ],
+      "answer": 2,
+      "explanation": "Pemilihan ambang adalah keputusan pengembangan."
+    },
+    {
+      "question": "Accuracy tinggi cukup untuk semua data imbalanced?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika jumlah baris genap"
+      ],
+      "answer": 0,
+      "explanation": "Periksa jenis kesalahan dan metrik kelas penting."
+    }
+  ],
+  "ds-cross-validation": [
+    {
+      "question": "Alpha Ridge adalah ...",
+      "options": [
+        "Hyperparameter",
+        "ID pelanggan",
+        "Nilai target"
+      ],
+      "answer": 0,
+      "explanation": "Alpha dipilih sebagai konfigurasi sebelum parameter model dipelajari."
+    },
+    {
+      "question": "Pipeline pada CV membantu ...",
+      "options": [
+        "Membuat test menjadi train otomatis",
+        "Mempelajari preprocessing per fold latihan",
+        "Menghapus noise"
+      ],
+      "answer": 1,
+      "explanation": "Statistik validation tidak boleh masuk preprocessing latihan."
+    },
+    {
+      "question": "Neg_mean_absolute_error dilaporkan sebagai MAE dengan ...",
+      "options": [
+        "Menambah 100 selalu",
+        "Menghapus penyebut",
+        "Membalik tandanya"
+      ],
+      "answer": 2,
+      "explanation": "Konvensi scorer lebih besar lebih baik memakai negatif error."
+    },
+    {
+      "question": "KFold acak selalu tepat untuk data waktu?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika seed tetap"
+      ],
+      "answer": 0,
+      "explanation": "Gunakan pembagian yang menjaga urutan waktu bila diperlukan."
+    }
+  ],
+  "ds-clustering": [
+    {
+      "question": "Clustering memakai label target yang sudah diberikan?",
+      "options": [
+        "Tidak pada pola unsupervised ini",
+        "Selalu",
+        "Hanya label admin"
+      ],
+      "answer": 0,
+      "explanation": "Kelompok dibentuk dari struktur fitur."
+    },
+    {
+      "question": "Scaling penting untuk KMeans karena ...",
+      "options": [
+        "Membuat semua cluster sehat",
+        "Jarak dipengaruhi skala fitur",
+        "Menghapus kebutuhan memilih k"
+      ],
+      "answer": 1,
+      "explanation": "Fitur berskala besar dapat mendominasi jarak."
+    },
+    {
+      "question": "Nomor cluster berarti ...",
+      "options": [
+        "Urutan tingkat kerusakan pasti",
+        "Persentase accuracy",
+        "Identitas kelompok tanpa diagnosis bawaan"
+      ],
+      "answer": 2,
+      "explanation": "Nomor dapat tertukar tanpa mengubah pengelompokan."
+    },
+    {
+      "question": "Enam observasi sintetis cukup membuktikan kondisi perangkat nyata?",
+      "options": [
+        "Tidak",
+        "Ya untuk semua router",
+        "Ya jika memakai scaler"
+      ],
+      "answer": 0,
+      "explanation": "Data latihan hanya menggambarkan mekanisme."
+    }
+  ],
+  "ds-kasus-durasi": [
+    {
+      "question": "Fitur studi kasus tersedia pada ...",
+      "options": [
+        "Saat tiket masuk",
+        "Setelah tiket selesai seluruhnya",
+        "Saat label test dibaca"
+      ],
+      "answer": 0,
+      "explanation": "Prediksi harus meniru waktu penggunaan sebenarnya."
+    },
+    {
+      "question": "Baseline yang dipakai adalah ...",
+      "options": [
+        "Rata-rata target test",
+        "Median target train",
+        "Waktu selesai aktual"
+      ],
+      "answer": 1,
+      "explanation": "Baseline tidak belajar dari test."
+    },
+    {
+      "question": "MAE dilaporkan dalam ...",
+      "options": [
+        "Nama kategori",
+        "Nomor cluster",
+        "Menit"
+      ],
+      "answer": 2,
+      "explanation": "Satuan mengikuti target durasi."
+    },
+    {
+      "question": "Kinerja simulasi merupakan jaminan SLA?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika model mengalahkan baseline"
+      ],
+      "answer": 0,
+      "explanation": "Data sintetis tidak membuktikan kinerja operasional."
+    }
+  ],
+  "ds-kasus-risiko": [
+    {
+      "question": "Data studi kasus berasal dari ...",
+      "options": [
+        "Generator sintetis",
+        "Router pengguna secara langsung",
+        "Data pelanggan yang diambil otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Tidak ada koneksi perangkat atau data sensitif."
+    },
+    {
+      "question": "Ambang 0,5 ditetapkan ...",
+      "options": [
+        "Setelah mencoba semua hasil test berulang",
+        "Sebelum membaca test akhir",
+        "Oleh nama file"
+      ],
+      "answer": 1,
+      "explanation": "Pemilihan ambang merupakan keputusan pengembangan."
+    },
+    {
+      "question": "Model dengan banyak FN perlu diperiksa karena ...",
+      "options": [
+        "Semua alarm pasti benar",
+        "Data otomatis lengkap",
+        "Kejadian positif terlewat"
+      ],
+      "answer": 2,
+      "explanation": "FN dapat menimbulkan biaya sesuai konteks."
+    },
+    {
+      "question": "Script ini boleh dianggap siap mengubah konfigurasi jaringan otomatis?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika import berhasil"
+      ],
+      "answer": 0,
+      "explanation": "Kelayakan operasi memerlukan validasi dan pengelolaan tersendiri."
+    }
   ]
 }

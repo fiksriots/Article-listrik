@@ -1,0 +1,770 @@
+[
+  {
+    "slug": "da-pengantar",
+    "title": "Data Analysis: dari pertanyaan ke keputusan",
+    "summary": "Kenali unit analisis, indikator, konteks, dan batas kesimpulan sebelum membuka tabel.",
+    "analogy": "Data seperti catatan perjalanan. Angkanya baru berguna setelah kita tahu perjalanan siapa, pada periode apa, dan pertanyaan yang ingin dijawab.",
+    "explain": [
+      "Data Analysis adalah proses memeriksa, membersihkan, merangkum, dan menafsirkan data untuk menjawab pertanyaan. Contohnya: lokasi mana yang menerima tiket paling banyak minggu ini? Hasilnya tidak harus berupa model machine learning; tabel dan grafik yang tepat sering sudah memadai.",
+      "Mulai dari pertanyaan yang dapat diukur. Tentukan unit analisis, yaitu arti satu baris: satu tiket, satu transaksi, atau satu pengukuran. Tentukan pula periode, satuan, sumber, dan populasi yang ingin dipahami. Tiga baris tiket tidak otomatis mewakili seluruh pelanggan.",
+      "Alur kerja sederhana adalah pertanyaan → data → pemeriksaan kualitas → pengolahan → visualisasi → kesimpulan. Simpan catatan keputusan selama proses. Jika data tidak cukup untuk menjawab pertanyaan, nyatakan keterbatasannya daripada memaksakan angka.",
+      "Contoh memakai tiga tiket fiktif. Rata-rata durasinya 25 menit, tetapi angka itu belum menjelaskan variasi, penyebab keterlambatan, atau kinerja semua teknisi. Pelajari Python dasar, list, fungsi, CSV, dan pengenalan tabel sebelum mengikuti praktik berikutnya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Unit analisis",
+          "Makna satu baris"
+        ],
+        [
+          "Indikator",
+          "Angka untuk menjawab pertanyaan tertentu"
+        ],
+        [
+          "Cakupan",
+          "Periode dan kelompok yang benar-benar teramati"
+        ],
+        [
+          "Kesimpulan",
+          "Temuan beserta batas dan langkah berikutnya"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da01_pertanyaan.py",
+        "filename": "da01_pertanyaan.py",
+        "language": "python",
+        "code": "# Dataset fiktif: satu baris mewakili satu tiket.\ntiket = [{'lokasi': 'A', 'menit': 20}, {'lokasi': 'A', 'menit': 40},\n         {'lokasi': 'B', 'menit': 15}]\nif __name__ == '__main__':\n    total = sum(t['menit'] for t in tiket)\n    print('Unit analisis: satu tiket')\n    print('Jumlah tiket:', len(tiket))\n    print('Rata-rata menit:', total / len(tiket))\n",
+        "output": "Unit analisis: satu tiket\nJumlah tiket: 3\nRata-rata menit: 25.0",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da01_pertanyaan.py dari folder data-lab dengan virtual environment aktif.",
+      "Tuliskan unit, satuan, dan cakupan pada tiga tiket contoh.",
+      "Ubah pertanyaan menjadi perbandingan antar lokasi dan catat data tambahan yang dibutuhkan."
+    ],
+    "practice": [
+      "Tulis dua pertanyaan analisis tentang pekerjaan helpdesk tanpa memakai data pelanggan asli.",
+      "Bedakan pernyataan fakta dari dugaan penyebab pada sebuah laporan."
+    ],
+    "warning": "Jumlah data yang tersedia bukan selalu jumlah kejadian sebenarnya. Pengumpulan data, definisi tiket, dan periode observasi dapat mengubah makna indikator.",
+    "check": "Apakah rata-rata 25 menit membuktikan semua tiket selesai sekitar 25 menit?",
+    "answer": "Tidak. Rata-rata merangkum nilai tetapi tidak menunjukkan seluruh variasinya. Lihat distribusi, jumlah sampel, dan konteks sebelum menyimpulkan.",
+    "source": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html",
+    "diagram": "data-analysis-alur",
+    "diagramAlt": "Alur analisis dari pertanyaan, pemeriksaan data, pengolahan, sampai laporan dengan batas kesimpulan.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-python-numpy",
+    "title": "Lingkungan analisis dan dasar NumPy",
+    "summary": "Siapkan paket latihan lalu pahami array, shape, axis, serta operasi vektor.",
+    "analogy": "Array seperti rak angka dengan baris dan kolom. Shape menjelaskan ukuran rak, sedangkan axis menentukan arah peringkasan.",
+    "explain": [
+      "Gunakan Python 3.12 dan virtual environment terpisah. Dari folder data-lab, jalankan python -m venv .venv; aktifkan dengan source .venv/bin/activate pada macOS/Linux atau .venv\\Scripts\\Activate.ps1 pada PowerShell. Bila aktivasi dibatasi, gunakan interpreter .venv secara langsung tanpa mengubah kebijakan sistem.",
+      "Pasang versi yang diuji melalui python -m pip install -r requirements.lock.txt. Paket utama adalah NumPy, pandas, Matplotlib, dan scikit-learn. Berkas requirements.txt berisi nama paket umum; lock mencatat versi lingkungan pengujian. Jupyter boleh digunakan kemudian, tetapi tidak diperlukan untuk menjalankan contoh .py.",
+      "NumPy menyediakan ndarray untuk data numerik. Pada array dua dimensi, shape (2,3) berarti dua baris dan tiga kolom. Contoh memakai dua perangkat dengan tiga pengukuran per perangkat. Mean(axis=1) merangkum sepanjang kolom untuk setiap baris; mean(axis=0) merangkum antarbaris.",
+      "Operasi rtt > 25 menghasilkan mask boolean yang dapat dihitung. Operasi vektor mengurangi loop Python untuk banyak pekerjaan, tetapi tidak menghilangkan kebutuhan memeriksa satuan, missing values, dan bentuk array. Broadcasting harus mengikuti shape yang kompatibel, bukan menebak hasilnya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "ndarray",
+          "Array numerik dengan shape dan dtype"
+        ],
+        [
+          "shape",
+          "Ukuran setiap dimensi"
+        ],
+        [
+          "axis=1",
+          "Ringkasan sepanjang kolom pada contoh dua dimensi"
+        ],
+        [
+          "Mask boolean",
+          "Hasil kondisi per elemen"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da02_numpy.py",
+        "filename": "da02_numpy.py",
+        "language": "python",
+        "code": "import numpy as np\nif __name__ == '__main__':\n    rtt = np.array([[20, 30, 40], [15, 20, 25]], dtype=float)\n    print('Bentuk:', rtt.shape)\n    print('Rata-rata per perangkat:', rtt.mean(axis=1).tolist())\n    print('Jumlah sampel > 25 ms:', int((rtt > 25).sum()))\n",
+        "output": "Bentuk: (2, 3)\nRata-rata per perangkat: [30.0, 20.0]\nJumlah sampel > 25 ms: 2",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da02_numpy.py dari folder data-lab dengan virtual environment aktif.",
+      "Pasang dependensi sesuai README dan jalankan contoh.",
+      "Hitung mean(axis=0) pada salinan kode dan jelaskan perbedaannya."
+    ],
+    "practice": [
+      "Ubah data menjadi tiga perangkat dengan empat pengukuran.",
+      "Buat mask untuk RTT 20 sampai 40 ms dengan operator & dan tanda kurung."
+    ],
+    "warning": "Nilai milidetik dan detik tidak boleh dicampur tanpa konversi. Bentuk array yang dapat dihitung belum menjamin arti datanya benar.",
+    "check": "Mengapa mean(axis=1) menghasilkan dua nilai pada contoh?",
+    "answer": "Array mempunyai dua baris perangkat. Masing-masing baris diringkas dari tiga pengukuran menjadi satu mean.",
+    "source": "https://numpy.org/doc/stable/user/absolute_beginners.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-pandas-csv",
+    "title": "pandas: membaca CSV dan mengenali DataFrame",
+    "summary": "Periksa kolom, tipe, ukuran, serta nilai kosong sebelum menghitung hasil.",
+    "analogy": "DataFrame seperti lembar kerja yang setiap kolomnya mempunyai nama dan tipe; membukanya belum berarti isinya sudah benar.",
+    "explain": [
+      "Series adalah kumpulan satu dimensi berlabel; DataFrame adalah tabel berlabel dengan kolom yang dapat memiliki tipe berbeda. Read_csv membaca data CSV ke DataFrame. CSV sendiri adalah format teks, bukan file Excel dan bukan database.",
+      "Pada paket latihan, ID disimpan sebagai string agar identitas tidak berubah menjadi bilangan. Kode seperti 001 bukan angka untuk dijumlahkan. Periksa shape, columns, dtypes, head, info, dan isna sebelum memutuskan cara mengolah kolom.",
+      "Path file pada contoh dibentuk dari lokasi __file__, sehingga tidak tergantung folder terminal saat program dijalankan. Jika menyalin kode ke notebook, __file__ tidak tersedia; tentukan path dataset secara eksplisit sesuai lokasi notebook.",
+      "Dataset penjualan berisi delapan baris mentah, termasuk duplikat dan nilai yang tidak valid. Angka baris awal adalah jumlah rekaman yang dibaca, bukan jumlah transaksi sah. Materi kualitas data berikutnya menentukan baris yang diterima."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "DataFrame",
+          "Tabel berlabel"
+        ],
+        [
+          "dtype",
+          "Tipe data kolom"
+        ],
+        [
+          "isna",
+          "Pemeriksaan nilai hilang"
+        ],
+        [
+          "ID string",
+          "Identitas tetap diperlakukan sebagai kode"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da03_csv.py",
+        "filename": "da03_csv.py",
+        "language": "python",
+        "code": "from pathlib import Path\nimport pandas as pd\nif __name__ == '__main__':\n    path = Path(__file__).resolve().parent / 'datasets/penjualan.csv'\n    df = pd.read_csv(path, dtype={'id': 'string'})\n    print('Baris:', len(df))\n    print('Kolom:', len(df.columns))\n    print('Jumlah kosong:', int(df['jumlah'].isna().sum()))\n    print('ID pertama:', df.loc[0, 'id'])\n",
+        "output": "Baris: 8\nKolom: 6\nJumlah kosong: 1\nID pertama: T001",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da03_csv.py dari folder data-lab dengan virtual environment aktif.",
+      "Buka datasets/penjualan.csv sebagai teks dan cocokkan header dengan columns.",
+      "Tambahkan pemeriksaan dtypes serta head pada salinan program."
+    ],
+    "practice": [
+      "Jelaskan mengapa nomor perangkat lebih tepat sebagai string daripada angka hitung.",
+      "Buat daftar aturan untuk setiap kolom sebelum membersihkannya."
+    ],
+    "warning": "Jangan menyamakan tampilan tabel yang rapi dengan kualitas data. Pemisah CSV, encoding, tipe, dan arti satuan perlu diperiksa.",
+    "check": "Mengapa delapan baris mentah belum berarti delapan transaksi valid?",
+    "answer": "Data mentah dapat berisi duplikat, nilai hilang, atau nilai yang melanggar aturan. Validitas harus diperiksa sebelum agregasi.",
+    "source": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-kualitas-data",
+    "title": "Membersihkan data tanpa menyembunyikan masalah",
+    "summary": "Tangani tipe, duplikat, tanggal salah, nilai kosong, dan karantina baris invalid.",
+    "analogy": "Pemeriksaan barang datang memisahkan barang sesuai pesanan dari barang bermasalah, sambil tetap mencatat jumlah masing-masing.",
+    "explain": [
+      "Pembersihan harus mengikuti aturan yang ditulis dahulu. Pada contoh, ID, kota, dan produk wajib terisi; tanggal harus valid; jumlah berupa integer positif; harga rupiah berupa integer tidak negatif dalam batas latihan. Nilai kosong bukan otomatis nol.",
+      "Duplikat identik dihapus satu salinannya. Jika ID yang sama masih muncul dengan isi berbeda, seluruh baris dengan ID ambigu ditolak untuk ditinjau, bukan dipilih sembarang. Normalisasi teks dan konversi tipe dilakukan pada salinan agar sumber tidak diubah diam-diam.",
+      "To_numeric dan to_datetime dengan errors=coerce mengubah kegagalan parsing menjadi nilai hilang untuk diperiksa. Itu hanya alat mendeteksi, bukan alasan mengisi semua nilai dengan mean. Contoh memisahkan diterima, ditolak, dan jumlah duplikat; alasan keputusan dijelaskan melalui aturan validasi.",
+      "Harga dan jumlah yang lolos diubah ke int64 sebelum omzet dihitung. Dataset memakai rupiah utuh dengan batas jumlah/harga agar perkalian masih sesuai tipe. Kebutuhan pecahan uang memerlukan kebijakan Decimal atau satuan terkecil yang dijelaskan pada materi Python."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Missing",
+          "Belum diketahui, bukan selalu nol"
+        ],
+        [
+          "Duplikat identik",
+          "Salinan persis yang dapat dideduplikasi sesuai kebijakan"
+        ],
+        [
+          "ID konflik",
+          "Perlu ditinjau, jangan menebak baris benar"
+        ],
+        [
+          "Karantina",
+          "Simpan baris ditolak untuk tindak lanjut"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da04_kualitas.py",
+        "filename": "da04_kualitas.py",
+        "language": "python",
+        "code": "from pathlib import Path\nimport numpy as np\nimport pandas as pd\n\ndef bersihkan_penjualan(raw):\n    wajib = {'id', 'tanggal', 'kota', 'produk', 'jumlah', 'harga_rupiah'}\n    if not wajib <= set(raw.columns):\n        raise ValueError('Kolom wajib belum lengkap.')\n    data = raw.drop_duplicates().copy()\n    duplikat_identik = len(raw) - len(data)\n    data['tanggal'] = pd.to_datetime(data['tanggal'], format='%Y-%m-%d', errors='coerce')\n    for col in ['id', 'kota', 'produk']:\n        data[col] = data[col].astype('string').str.strip()\n    for col in ['jumlah', 'harga_rupiah']:\n        data[col] = pd.to_numeric(data[col], errors='coerce')\n    valid = data['tanggal'].notna() & ~data['id'].duplicated(keep=False)\n    for col in ['id', 'kota', 'produk']:\n        valid &= data[col].notna() & data[col].ne('')\n    valid &= np.isfinite(data['jumlah']) & data['jumlah'].between(1, 10000) & data['jumlah'].mod(1).eq(0)\n    valid &= np.isfinite(data['harga_rupiah']) & data['harga_rupiah'].between(0, 1000000000) & data['harga_rupiah'].mod(1).eq(0)\n    valid = valid.fillna(False)\n    diterima = data.loc[valid].copy()\n    ditolak = data.loc[~valid].copy()\n    for col in ['jumlah', 'harga_rupiah']:\n        diterima[col] = diterima[col].astype('int64')\n    diterima['omzet_rupiah'] = diterima['jumlah'] * diterima['harga_rupiah']\n    return diterima, ditolak, duplikat_identik\n\nif __name__ == '__main__':\n    raw = pd.read_csv(Path(__file__).resolve().parent / 'datasets/penjualan.csv', dtype={'id':'string'})\n    baik, buruk, duplikat = bersihkan_penjualan(raw)\n    print('Mentah:', len(raw))\n    print('Duplikat identik:', duplikat)\n    print('Ditolak:', len(buruk))\n    print('Diterima:', len(baik))\n",
+        "output": "Mentah: 8\nDuplikat identik: 1\nDitolak: 2\nDiterima: 5",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da04_kualitas.py dari folder data-lab dengan virtual environment aktif.",
+      "Cocokkan 8 baris mentah dengan 5 diterima, 2 ditolak, dan 1 duplikat.",
+      "Tambahkan ID sama dengan isi berbeda pada salinan DataFrame dan lihat kebijakan penolakannya."
+    ],
+    "practice": [
+      "Uji jumlah negatif, harga teks, ID kosong, dan tanggal tidak valid.",
+      "Tulis alasan bisnis kapan missing boleh diisi dan kapan harus ditolak."
+    ],
+    "warning": "Menghapus outlier atau missing tanpa alasan dapat mengubah hasil secara bias. Simpan data mentah dan catatan keputusan, serta hindari menimpa sumber.",
+    "check": "Apakah errors=coerce sudah berarti data berhasil dibersihkan?",
+    "answer": "Tidak. Nilai gagal parsing menjadi missing dan masih harus dinilai berdasarkan aturan. Contoh menolak baris yang tidak memenuhi syarat.",
+    "source": "https://pandas.pydata.org/docs/user_guide/missing_data.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-filter-transformasi",
+    "title": "Memilih dan mentransformasi data dengan loc",
+    "summary": "Gunakan mask, operator kondisi, kolom turunan, dan salinan yang jelas.",
+    "analogy": "Saringan memilih barang yang sesuai; menempelkan label baru pada hasil saringan tidak perlu mengubah gudang sumber.",
+    "explain": [
+      "Loc memilih baris dan kolom berdasarkan label atau mask boolean. Kondisi beberapa kolom dapat digabung dengan & untuk dan, | untuk atau, serta ~ untuk negasi. Beri tanda kurung pada setiap perbandingan agar prioritas operator jelas.",
+      "Contoh memilih produk dengan jumlah minimal dua dan harga positif, lalu membuat kolom total pada hasil .copy(). Pendekatan ini menghindari chained assignment yang membingungkan dan membuat niat perubahan data jelas.",
+      "Operasi antar Series biasanya disejajarkan berdasarkan index. Jika menggabungkan data dari sumber yang berbeda, periksa index dan key daripada menganggap posisi baris pasti sama. Gunakan merge bila hubungan ditentukan oleh key.",
+      "Kolom turunan perlu nama dan satuan yang jelas. Total di sini adalah jumlah kali harga, belum memperhitungkan pajak, diskon, retur, atau biaya. Pilihan transformasi harus mengikuti definisi indikator."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "loc",
+          "Pemilihan berbasis label atau mask"
+        ],
+        [
+          "& / | / ~",
+          "Dan / atau / negasi pada mask"
+        ],
+        [
+          "copy",
+          "Menyatakan hasil yang akan diolah terpisah"
+        ],
+        [
+          "Kolom turunan",
+          "Nilai hasil aturan yang dinyatakan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da05_filter.py",
+        "filename": "da05_filter.py",
+        "language": "python",
+        "code": "import pandas as pd\nif __name__ == '__main__':\n    data = pd.DataFrame({'produk':['Router','Kabel','Switch'], 'jumlah':[2,5,1], 'harga':[500000,20000,300000]})\n    pilihan = data.loc[(data['jumlah'] >= 2) & (data['harga'] > 0)].copy()\n    pilihan['total'] = pilihan['jumlah'] * pilihan['harga']\n    print(pilihan['produk'].tolist())\n    print(pilihan['total'].tolist())\n    print('Kolom sumber tetap:', data.columns.tolist())\n",
+        "output": "['Router', 'Kabel']\n[1000000, 100000]\nKolom sumber tetap: ['produk', 'jumlah', 'harga']",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da05_filter.py dari folder data-lab dengan virtual environment aktif.",
+      "Telusuri mask untuk setiap produk sebelum menjalankan contoh.",
+      "Periksa bahwa kolom sumber tidak berubah setelah kolom total ditambahkan pada pilihan."
+    ],
+    "practice": [
+      "Tambahkan filter produk yang namanya mengandung huruf r.",
+      "Buat kolom total untuk semua baris tanpa chained assignment."
+    ],
+    "warning": "Jangan memakai and/or Python biasa untuk membandingkan seluruh Series. Periksa juga missing pada mask sebelum menentukan kebijakan pemilihan.",
+    "check": "Mengapa hasil filter dibuat copy sebelum diberi kolom baru?",
+    "answer": "Agar perubahan pada hasil terpisah dan maksud kode jelas, tanpa bergantung pada perilaku view atau chained assignment.",
+    "source": "https://pandas.pydata.org/docs/user_guide/indexing.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-agregasi",
+    "title": "Groupby, agregasi, dan rasio yang benar",
+    "summary": "Ringkas per kelompok sambil membedakan jumlah baris, nilai terisi, dan rasio tertimbang.",
+    "analogy": "Dua toko dengan ukuran berbeda tidak selalu boleh dibandingkan dengan sekadar merata-ratakan persentase masing-masing.",
+    "explain": [
+      "Groupby membagi data berdasarkan key, menerapkan operasi, lalu menggabungkan hasil. Named aggregation membuat nama kolom keluaran jelas, misalnya omzet, unit, dan baris. Sum, mean, median, size, serta count menjawab pertanyaan yang berbeda.",
+      "Size menghitung baris termasuk nilai kosong pada kolom tertentu; count menghitung nilai nonmissing pada kolom yang dipilih. Tentukan apakah key kosong perlu kelompok sendiri dengan kebijakan dropna, dan pastikan kategori yang tampil sesuai tujuan laporan.",
+      "Rasio keseluruhan biasanya dihitung dari jumlah pembilang dibagi jumlah penyebut. Pada contoh, kota A memiliki 400 rupiah per 4 unit, B 500 per 10 unit. Rasio keseluruhan 900/14, bukan rata-rata sederhana 100 dan 50.",
+      "Pivot table dapat membantu menyajikan hasil ke bentuk baris–kolom, tetapi tidak mengubah definisi indikator. Kelompokkan hanya setelah validasi tipe dan duplikasi agar total tidak terhitung ganda."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "size / count",
+          "Jumlah baris / nilai nonmissing"
+        ],
+        [
+          "Named aggregation",
+          "Nama hasil yang mudah dibaca"
+        ],
+        [
+          "Rasio keseluruhan",
+          "Jumlah pembilang dibagi jumlah penyebut"
+        ],
+        [
+          "Group key",
+          "Identitas kelompok yang jelas"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da06_agregasi.py",
+        "filename": "da06_agregasi.py",
+        "language": "python",
+        "code": "import pandas as pd\nif __name__ == '__main__':\n    data = pd.DataFrame({'kota':['A','A','B'], 'omzet':[100,300,500], 'unit':[1,3,10]})\n    ringkas = data.groupby('kota', as_index=False, sort=True).agg(omzet=('omzet','sum'), unit=('unit','sum'), baris=('omzet','size'))\n    ringkas['rupiah_per_unit'] = ringkas['omzet'] / ringkas['unit']\n    for row in ringkas.itertuples():\n        print(row.kota, row.omzet, row.unit, row.rupiah_per_unit)\n    print('Rasio keseluruhan:', round(data['omzet'].sum()/data['unit'].sum(), 2))\n",
+        "output": "A 400 4 100.0\nB 500 10 50.0\nRasio keseluruhan: 64.29",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da06_agregasi.py dari folder data-lab dengan virtual environment aktif.",
+      "Hitung total omzet serta unit kedua kota secara manual.",
+      "Bandingkan rasio keseluruhan dengan rata-rata sederhana dua rasio kelompok."
+    ],
+    "practice": [
+      "Tambahkan kelompok ketiga dengan unit jauh lebih banyak.",
+      "Tambahkan nilai omzet kosong dan bandingkan size dengan count."
+    ],
+    "warning": "Rata-rata persentase antar kelompok bisa menyesatkan bila penyebut berbeda. Jelaskan bobot serta baris yang masuk perhitungan.",
+    "check": "Mengapa rata-rata 100 dan 50 tidak sama dengan rasio keseluruhan contoh?",
+    "answer": "Jumlah unit kedua kota berbeda. Rasio keseluruhan memakai total omzet 900 dibagi total unit 14, bukan bobot kelompok yang sama.",
+    "source": "https://pandas.pydata.org/docs/user_guide/groupby.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-join-sql",
+    "title": "Menggabungkan data: key, join, dan kardinalitas",
+    "summary": "Periksa relasi tabel agar merge tidak menggandakan baris atau menyembunyikan data yang tidak cocok.",
+    "analogy": "Daftar tiket dan daftar lokasi dihubungkan lewat kode lokasi, bukan lewat posisi baris pada dua kertas.",
+    "explain": [
+      "Merge menggabungkan tabel melalui key. Left join mempertahankan seluruh baris kiri, sedangkan inner join hanya mempertahankan pasangan yang cocok. Hubungannya mirip JOIN SQL; materi Basis Data menyediakan latihan SQL lebih lanjut.",
+      "Kardinalitas penting: banyak tiket boleh menuju satu lokasi master. Validate=many_to_one menolak master yang mempunyai key ganda, sehingga penggandaan baris tidak lolos diam-diam. Relasi many-to-many yang memang dibutuhkan tetap perlu dipahami ukuran perkalian hasilnya.",
+      "Indicator menandai asal kecocokan seperti both dan left_only. Pada contoh, lokasi C belum ada di master. Jangan langsung menghapusnya: laporkan ketidakcocokan dan periksa apakah master kurang lengkap atau kode sumber keliru.",
+      "Pandas dapat mencocokkan key null dengan null, berbeda dari perilaku JOIN SQL umum. Validasi key kosong sebelum merge bila itu tidak sesuai aturan bisnis. Sesudah join, periksa jumlah baris, key unik, serta total indikator yang seharusnya tidak berubah."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Left / inner",
+          "Pertahankan kiri / hanya pasangan cocok"
+        ],
+        [
+          "Kardinalitas",
+          "Satu-ke-satu, banyak-ke-satu, atau banyak-ke-banyak"
+        ],
+        [
+          "validate",
+          "Pemeriksaan relasi yang diharapkan"
+        ],
+        [
+          "indicator",
+          "Menelusuri baris yang tidak cocok"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da07_join.py",
+        "filename": "da07_join.py",
+        "language": "python",
+        "code": "import pandas as pd\nif __name__ == '__main__':\n    tiket = pd.DataFrame({'id':[1,2,3], 'lokasi':['A','B','C']})\n    lokasi = pd.DataFrame({'lokasi':['A','B'], 'wilayah':['Utara','Selatan']})\n    hasil = tiket.merge(lokasi, on='lokasi', how='left', validate='many_to_one', indicator=True)\n    print('Baris sebelum/sesudah:', len(tiket), len(hasil))\n    print('Tidak cocok:', hasil.loc[hasil['_merge']=='left_only','lokasi'].tolist())\n    try:\n        tiket.merge(pd.concat([lokasi, lokasi.iloc[[0]]]), on='lokasi', validate='many_to_one')\n    except pd.errors.MergeError:\n        print('Master duplikat ditolak')\n",
+        "output": "Baris sebelum/sesudah: 3 3\nTidak cocok: ['C']\nMaster duplikat ditolak",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da07_join.py dari folder data-lab dengan virtual environment aktif.",
+      "Cocokkan tiga tiket dengan dua lokasi master.",
+      "Coba master duplikat dan lihat MergeError."
+    ],
+    "practice": [
+      "Ganti how menjadi inner lalu jelaskan baris yang hilang.",
+      "Tulis aturan penanganan key kosong sebelum menggabungkan tabel."
+    ],
+    "warning": "Join yang menghasilkan lebih banyak baris belum tentu salah, tetapi harus sesuai kardinalitas yang disengaja. Jangan langsung menjumlahkan hasil tanpa pemeriksaan.",
+    "check": "Mengapa validate=many_to_one penting pada contoh?",
+    "answer": "Karena setiap kode lokasi di tabel master seharusnya hanya satu baris. Duplikasi master bisa menggandakan tiket dan merusak ringkasan.",
+    "source": "https://pandas.pydata.org/docs/user_guide/merging.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-visualisasi",
+    "title": "Visualisasi dengan Matplotlib",
+    "summary": "Pilih grafik, beri label satuan, dan hindari tampilan yang membesar-besarkan perbedaan.",
+    "analogy": "Grafik seperti peta: simbol serta skala harus membantu pembaca, bukan membuat jarak terlihat berbeda dari kenyataan.",
+    "explain": [
+      "Bar chart sesuai untuk membandingkan kategori; line chart untuk urutan waktu; histogram untuk distribusi satu variabel; scatter untuk hubungan dua variabel numerik. Pilih grafik berdasarkan pertanyaan, bukan karena bentuknya terlihat menarik.",
+      "Contoh membuat bar chart omzet fiktif dua kota. Judul menyatakan isi, sumbu memberi nama dan satuan rupiah, serta sumbu nilai dimulai dari nol. Memotong sumbu bar dapat melebih-lebihkan perbedaan panjang batang.",
+      "Pola fig, ax memisahkan figure dari axes. Savefig menyimpan gambar dan close melepas figure setelah selesai. Backend Agg membuat contoh dapat berjalan tanpa jendela desktop; buka PNG hasilnya melalui penampil gambar.",
+      "Warna bukan satu-satunya pembawa informasi. Label, urutan, kontras, serta keterangan data tetap diperlukan. Grafik tidak membuktikan sebab-akibat dan harus disertai periode, sumber, serta batas data bila dipakai dalam laporan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Bar / line",
+          "Kategori / urutan waktu"
+        ],
+        [
+          "Histogram / scatter",
+          "Distribusi / hubungan dua variabel"
+        ],
+        [
+          "Label",
+          "Judul, satuan, sumber, periode"
+        ],
+        [
+          "savefig / close",
+          "Menyimpan gambar / melepas figure"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da08_grafik.py",
+        "filename": "da08_grafik.py",
+        "language": "python",
+        "code": "from pathlib import Path\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\n\ndef buat_grafik(folder):\n    folder = Path(folder)\n    folder.mkdir(parents=True, exist_ok=True)\n    fig, ax = plt.subplots(figsize=(6, 4), layout='constrained')\n    ax.bar(['Surabaya', 'Malang'], [1400000, 560000], color=['#357b73','#8b82af'])\n    ax.set(title='Omzet latihan menurut kota', xlabel='Kota', ylabel='Rupiah')\n    ax.ticklabel_format(axis='y', style='plain')\n    target = folder / 'omzet-kota.png'\n    fig.savefig(target, dpi=150)\n    plt.close(fig)\n    return target\n\nif __name__ == '__main__':\n    print('Grafik dibuat:', buat_grafik('hasil-latihan').name)\n",
+        "output": "Grafik dibuat: omzet-kota.png",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da08_grafik.py dari folder data-lab dengan virtual environment aktif.",
+      "Buka hasil-latihan/omzet-kota.png dan cocokkan nilainya dengan label.",
+      "Ubah ukuran figure atau warna tanpa mengubah nilai data."
+    ],
+    "practice": [
+      "Buat line chart dari tiga nilai pada waktu berurutan.",
+      "Tulis catatan sumber, periode, dan keterbatasan untuk grafik latihan."
+    ],
+    "warning": "Jangan memakai grafik tanpa satuan atau sumbu yang menyesatkan. Tampilan yang indah tidak memperbaiki definisi indikator yang salah.",
+    "check": "Mengapa sumbu nilai bar chart biasanya dimulai dari nol?",
+    "answer": "Panjang batang menyatakan besaran. Memotong titik awal dapat membesar-besarkan perbedaan yang tampak.",
+    "source": "https://matplotlib.org/stable/plot_types/index.html",
+    "diagram": "data-omzet",
+    "diagramAlt": "Grafik omzet fiktif: Surabaya 1.400.000 rupiah dan Malang 560.000 rupiah; sumbu dimulai dari nol.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-waktu-kpi",
+    "title": "Data waktu, resampling, dan coverage",
+    "summary": "Bedakan zona waktu, periode tanpa observasi, serta indikator sampel dengan durasi layanan.",
+    "analogy": "Jam yang kosong pada buku pengamatan berarti belum ada catatan, bukan otomatis keadaan normal atau nol.",
+    "explain": [
+      "Tentukan timezone dan arti timestamp sebelum menggabungkan data. Contoh membaca waktu UTC lalu mengubah tampilan ke Asia/Jakarta. Mengubah timezone tampilan tidak sama dengan mengganti saat kejadian sebenarnya.",
+      "Resampling merangkum data ke interval tertentu seperti satu jam. Jika suatu jam tidak memiliki observasi, mean jam itu missing. Jangan mengisinya dengan nol tanpa alasan: nol milidetik adalah nilai pengukuran, bukan tanda data tidak tersedia.",
+      "Tentukan jadwal yang diharapkan dan coverage, yaitu bagian observasi valid terhadap jadwal tersebut. Rata-rata RTT dari sampel valid harus dilaporkan bersama coverage bila ada data hilang. Missing yang muncul saat gangguan dapat membuat rata-rata terlihat terlalu baik.",
+      "Proporsi polling up bukan otomatis durasi uptime kontinu atau SLA kontraktual. Pengamatan berjarak, interval yang tidak sama, kejadian tumpang tindih, serta definisi periode memerlukan metode tambahan. Studi kasus monitoring akan memisahkan coverage dari status up teramati."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "UTC / lokal",
+          "Saat sama dengan zona tampilan berbeda"
+        ],
+        [
+          "resample",
+          "Ringkasan per interval waktu"
+        ],
+        [
+          "Missing interval",
+          "Tidak ada observasi, bukan nilai nol"
+        ],
+        [
+          "Coverage",
+          "Observasi valid dibanding jadwal yang diharapkan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da09_waktu.py",
+        "filename": "da09_waktu.py",
+        "language": "python",
+        "code": "import pandas as pd\nif __name__ == '__main__':\n    data = pd.DataFrame({'waktu':['2026-10-01T00:00:00Z','2026-10-01T02:00:00Z'], 'rtt':[20.,40.]})\n    data['waktu'] = pd.to_datetime(data['waktu'], utc=True)\n    per_jam = data.set_index('waktu')['rtt'].resample('h').mean()\n    print('Jam tersedia:', len(per_jam))\n    print('Jam tanpa observasi:', int(per_jam.isna().sum()))\n    print('Rata-rata sampel valid:', float(data['rtt'].mean()))\n    print('Waktu lokal pertama:', data['waktu'].dt.tz_convert('Asia/Jakarta').iloc[0].strftime('%H:%M'))\n",
+        "output": "Jam tersedia: 3\nJam tanpa observasi: 1\nRata-rata sampel valid: 30.0\nWaktu lokal pertama: 07:00",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da09_waktu.py dari folder data-lab dengan virtual environment aktif.",
+      "Temukan jam yang tidak mempunyai observasi pada hasil resample.",
+      "Cocokkan 00:00 UTC dengan 07:00 Asia/Jakarta pada tanggal contoh."
+    ],
+    "practice": [
+      "Tambahkan observasi pada jam tengah dan lihat perubahan mean per jam.",
+      "Rancang cara melaporkan indikator ketika separuh sampel tidak tersedia."
+    ],
+    "warning": "Jangan mengklaim persentase polling sebagai SLA tanpa definisi kontrak dan metode pengukuran durasi. Nyatakan data yang tidak teramati.",
+    "check": "Mengapa jam tanpa pengukuran tidak diisi RTT 0?",
+    "answer": "Karena 0 adalah nilai numerik yang mengubah ringkasan. Ketiadaan observasi perlu ditandai dan dilaporkan sebagai missing.",
+    "source": "https://pandas.pydata.org/docs/user_guide/timeseries.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-laporan-reproduksi",
+    "title": "Laporan analisis, reproduksibilitas, dan privasi",
+    "summary": "Simpan sumber, versi, aturan, serta keterbatasan agar hasil dapat ditelusuri.",
+    "analogy": "Laporan seperti resep masakan: pembaca perlu tahu bahan dan langkah, bukan hanya foto hasil akhirnya.",
+    "explain": [
+      "Laporan yang berguna menjawab pertanyaan, menunjukkan temuan, menjelaskan bukti, dan menyebutkan keterbatasan serta langkah berikutnya. Pisahkan fakta teramati dari interpretasi dan rekomendasi. Jangan menyebut omzet sebagai laba bila biaya belum dihitung.",
+      "Reproduksibilitas memerlukan sumber data yang dapat dikenali, versi dependensi, parameter, dan urutan proses. Contoh mencatat hash SHA-256 sumber untuk mengenali berkas yang dipakai. Hash membuktikan kecocokan byte terhadap hash pembanding, bukan kebenaran isi atau izin penggunaan data.",
+      "Berkas metadata hanya berisi informasi nonrahasia tentang dataset latihan, unit, serta kebijakan pembersihan. Jangan mencetak token, kontak pelanggan, IP pribadi yang tidak diperlukan, atau data identitas pada laporan publik. Gunakan data minimum dan akses sesuai kebutuhan.",
+      "Semua dataset paket ini fiktif. Untuk data kerja nyata, ikuti kebijakan organisasi terkait akses, retensi, dan pembagian laporan. Notebook yang dijalankan acak dapat menyimpan state tersembunyi; jalankan ulang dari awal pada lingkungan bersih sebelum membagikan hasil."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Metadata",
+          "Sumber, unit, versi, dan kebijakan"
+        ],
+        [
+          "Hash",
+          "Identitas byte, bukan validasi fakta"
+        ],
+        [
+          "Reproduksi",
+          "Menjalankan ulang dengan sumber dan langkah yang jelas"
+        ],
+        [
+          "Laporan",
+          "Temuan, keterbatasan, dan tindak lanjut"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da10_laporan.py",
+        "filename": "da10_laporan.py",
+        "language": "python",
+        "code": "import hashlib\nimport json\nfrom pathlib import Path\n\ndef buat_laporan(sumber, folder):\n    sumber, folder = Path(sumber), Path(folder)\n    folder.mkdir(parents=True, exist_ok=True)\n    laporan = {'dataset':'penjualan fiktif', 'sha256':hashlib.sha256(sumber.read_bytes()).hexdigest(),\n               'unit':'baris transaksi', 'batas':'Omzet bukan laba; hanya data diterima.',\n               'kebijakan':'Duplikat identik dihapus; data invalid dikarantina.'}\n    (folder/'metadata-laporan.json').write_text(json.dumps(laporan, ensure_ascii=False, indent=2), encoding='utf-8')\n    return laporan\n\nif __name__ == '__main__':\n    hasil = buat_laporan(Path(__file__).resolve().parent/'datasets/penjualan.csv','hasil-latihan')\n    print('Metadata dibuat:', len(hasil), 'field')\n    print('Hash lengkap:', len(hasil['sha256']) == 64)\n",
+        "output": "Metadata dibuat: 5 field\nHash lengkap: True",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da10_laporan.py dari folder data-lab dengan virtual environment aktif.",
+      "Buka hasil-latihan/metadata-laporan.json dan baca field-nya.",
+      "Ubah salinan CSV lalu hitung ulang hash untuk melihat perubahan sumber."
+    ],
+    "practice": [
+      "Tulis ringkasan tiga kalimat: temuan, batas data, dan langkah berikutnya.",
+      "Daftar informasi yang perlu disamarkan sebelum laporan dibagikan."
+    ],
+    "warning": "Jangan memuat data pelanggan asli ke repositori atau layanan lain tanpa kebutuhan serta izin yang sesuai. Paket latihan tidak membutuhkan data sensitif.",
+    "check": "Apakah hash yang cocok membuktikan data benar secara bisnis?",
+    "answer": "Tidak. Hash membantu mengenali byte sumber yang sama. Validitas definisi, pengumpulan, dan isi tetap harus diperiksa.",
+    "source": "https://docs.python.org/3.12/library/hashlib.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "da-kasus-penjualan",
+    "title": "Studi kasus Data Analysis: laporan penjualan",
+    "summary": "Gabungkan CSV, validasi, agregasi, grafik, dan laporan data yang ditolak.",
+    "analogy": "Laporan kas tidak cukup menjumlah semua baris yang masuk; transaksi duplikat dan catatan salah harus dibedakan dahulu.",
+    "explain": [
+      "Pertanyaannya adalah berapa omzet transaksi yang diterima dan bagaimana pembagiannya menurut kota. Data mentah mempunyai delapan baris fiktif. Unitnya satu transaksi, mata uang rupiah utuh, dan periodenya tiga tanggal pada dataset.",
+      "Gunakan fungsi kualitas data dari da04_kualitas.py. Satu duplikat identik dikeluarkan, dua baris invalid dikarantina, dan lima transaksi diterima. Jumlah tersebut harus dapat direkonsiliasi dengan baris mentah agar tidak ada data hilang tanpa penjelasan.",
+      "Setelah validasi, omzet dihitung dengan integer lalu diringkas per kota. CSV ringkasan, CSV penolakan, dan PNG grafik disimpan pada folder hasil-latihan. Grafik studi kasus dibentuk dari hasil agregasi aktual, sehingga perubahan data yang sah ikut mengubah grafik.",
+      "Total data diterima 1.960.000 rupiah, terdiri dari Surabaya 1.400.000 dan Malang 560.000. Ini bukan omzet lengkap semua transaksi yang mungkin terjadi dan bukan laba. Baris invalid perlu ditinjau; jangan menebak nilai untuk menaikkan total."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Input",
+          "8 baris transaksi fiktif"
+        ],
+        [
+          "Rekonsiliasi",
+          "5 diterima + 2 ditolak + 1 duplikat"
+        ],
+        [
+          "Output",
+          "Ringkasan kota, karantina, dan grafik"
+        ],
+        [
+          "Batas",
+          "Omzet data diterima; bukan laba atau seluruh bisnis"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da11_kasus_penjualan.py",
+        "filename": "da11_kasus_penjualan.py",
+        "language": "python",
+        "code": "from pathlib import Path\nimport pandas as pd\nfrom da04_kualitas import bersihkan_penjualan\n\ndef analisis_penjualan(sumber, folder):\n    raw = pd.read_csv(sumber, dtype={'id':'string'})\n    baik, buruk, duplikat = bersihkan_penjualan(raw)\n    folder = Path(folder)\n    folder.mkdir(parents=True, exist_ok=True)\n    ringkas = baik.groupby('kota', as_index=False, sort=True)['omzet_rupiah'].sum()\n    ringkas.to_csv(folder/'omzet-per-kota.csv', index=False)\n    buruk.to_csv(folder/'baris-ditolak.csv', index=False)\n    # Grafik memakai hasil aktual, bukan angka yang ditulis manual.\n    import matplotlib\n    matplotlib.use('Agg')\n    import matplotlib.pyplot as plt\n    fig, ax = plt.subplots(figsize=(6,4), layout='constrained')\n    ax.bar(ringkas['kota'], ringkas['omzet_rupiah'])\n    ax.set(title='Omzet data diterima — latihan', xlabel='Kota', ylabel='Rupiah')\n    ax.ticklabel_format(axis='y', style='plain')\n    fig.savefig(folder/'penjualan.png', dpi=150)\n    plt.close(fig)\n    return baik, buruk, duplikat, ringkas\n\nif __name__ == '__main__':\n    baik, buruk, duplikat, ringkas = analisis_penjualan(Path(__file__).resolve().parent/'datasets/penjualan.csv','hasil-latihan')\n    print('Diterima/ditolak/duplikat:', len(baik), len(buruk), duplikat)\n    print('Omzet data diterima:', int(baik['omzet_rupiah'].sum()))\n    print(ringkas.set_index('kota')['omzet_rupiah'].to_dict())\n",
+        "output": "Diterima/ditolak/duplikat: 5 2 1\nOmzet data diterima: 1960000\n{'Malang': 560000, 'Surabaya': 1400000}",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da11_kasus_penjualan.py dari folder data-lab dengan virtual environment aktif.",
+      "Pastikan helper da04_kualitas.py dan folder datasets tersedia dari unduhan.",
+      "Buka tiga berkas keluaran pada hasil-latihan dan cocokkan totalnya dengan contoh."
+    ],
+    "practice": [
+      "Tambahkan satu transaksi valid pada salinan CSV dan prediksi perubahan hasil.",
+      "Tulis rekomendasi untuk memperbaiki dua baris invalid tanpa mengarang nilainya."
+    ],
+    "warning": "Jangan menganggap hasil agregasi mencakup baris yang ditolak. Jelaskan cakupan hasil serta alasan rekonsiliasi pada laporan.",
+    "check": "Mengapa total dinamai omzet data diterima?",
+    "answer": "Karena dua baris invalid belum diperhitungkan dan satu duplikat dikeluarkan. Nama itu menjelaskan cakupan yang benar-benar masuk perhitungan.",
+    "source": "https://pandas.pydata.org/docs/user_guide/groupby.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "da-kasus-monitoring",
+    "title": "Studi kasus Data Analysis: kualitas monitoring jaringan",
+    "summary": "Laporkan RTT, status up teramati, dan coverage tanpa menyamakan data hilang dengan kondisi normal.",
+    "analogy": "Catatan penjaga yang tidak lengkap harus menyebut bagian waktu yang tidak tercatat, bukan menganggap semua aman.",
+    "explain": [
+      "Pertanyaannya adalah bagaimana mutu pengamatan dan hasil polling dua perangkat fiktif pada empat jadwal. Dataset memakai UTC, status up 1/0, dan RTT milidetik. Satu sampel BTS-A tidak diketahui; sampel down mempunyai RTT kosong.",
+      "Identitas satu sampel adalah pasangan perangkat–waktu. Contoh menolak identitas kosong atau ganda, status di luar 0/1, dan RTT negatif. Jadwal diharapkan ditetapkan empat sampel per perangkat; jangan menentukannya hanya dari baris yang berhasil diterima.",
+      "Coverage dihitung dari status valid dibagi jadwal diharapkan. Up teramati dihitung dari jumlah up dibagi status valid. Rata-rata RTT hanya menggunakan sampel dengan status up dan RTT yang tersedia. Ketiga penyebut ini harus dipahami agar laporan tidak menyembunyikan data hilang.",
+      "BTS-A memiliki coverage 75% dan up teramati 66,7%; BTS-B coverage 100% dan up teramati 75%. Data sangat kecil ini bukan penilaian SLA, bukti penyebab gangguan, atau rekomendasi mengganti perangkat. Tindak lanjutnya adalah memeriksa kelengkapan polling dan pengumpulan data."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Unit",
+          "Satu sampel perangkat pada satu waktu"
+        ],
+        [
+          "Coverage",
+          "Status valid / 4 sampel diharapkan"
+        ],
+        [
+          "Up teramati",
+          "Jumlah up / status valid"
+        ],
+        [
+          "RTT",
+          "Mean sampel up dengan RTT tersedia"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da12_kasus_jaringan.py",
+        "filename": "da12_kasus_jaringan.py",
+        "language": "python",
+        "code": "from pathlib import Path\nimport pandas as pd\nimport numpy as np\n\ndef ringkas_monitoring(data, sampel_diharapkan=4):\n    if type(sampel_diharapkan) is not int or sampel_diharapkan < 1:\n        raise ValueError('Jumlah sampel yang diharapkan harus positif.')\n    if not {'waktu','perangkat','up','rtt_ms'} <= set(data.columns) or data.empty:\n        raise ValueError('Data harus mempunyai kolom monitoring dan minimal satu sampel.')\n    data = data.copy()\n    data['perangkat'] = data['perangkat'].astype('string').str.strip()\n    for col in ['up','rtt_ms']:\n        data[col] = pd.to_numeric(data[col], errors='raise')\n    data['waktu'] = pd.to_datetime(data['waktu'], utc=True, errors='raise')\n    if data[['perangkat','waktu']].isna().any().any() or data['perangkat'].eq('').any() or data.duplicated(['perangkat','waktu']).any():\n        raise ValueError('Identitas sampel kosong atau duplikat.')\n    if not data['up'].dropna().isin([0,1]).all() or not np.isfinite(data['rtt_ms'].dropna()).all() or (data['rtt_ms'].dropna()<0).any():\n        raise ValueError('Status atau RTT tidak valid.')\n    hasil=[]\n    for nama, grup in data.groupby('perangkat', sort=True):\n        valid=int(grup['up'].notna().sum())\n        if len(grup)>sampel_diharapkan:\n            raise ValueError('Jadwal sampel tidak sesuai.')\n        up=int(grup['up'].eq(1).sum())\n        hasil.append({'perangkat':nama, 'sampel_valid':valid, 'coverage_pct':100*valid/sampel_diharapkan,\n                      'up_teramati_pct':100*up/valid if valid else float('nan'),\n                      'rtt_rata_ms':grup.loc[grup['up'].eq(1),'rtt_ms'].mean()})\n    return pd.DataFrame(hasil)\n\nif __name__ == '__main__':\n    data=pd.read_csv(Path(__file__).resolve().parent/'datasets/monitoring.csv')\n    hasil=ringkas_monitoring(data)\n    for row in hasil.itertuples():\n        print(f'{row.perangkat}: coverage {row.coverage_pct:.1f}%; up teramati {row.up_teramati_pct:.1f}%; RTT {row.rtt_rata_ms:.1f} ms')\n",
+        "output": "BTS-A: coverage 75.0%; up teramati 66.7%; RTT 22.5 ms\nBTS-B: coverage 100.0%; up teramati 75.0%; RTT 40.0 ms",
+        "explanation": "Jalankan file ini dari paket data-lab setelah memasang dependensi. Berkas yang membaca CSV memakai dataset fiktif dalam folder datasets; studi kasus penjualan juga memakai helper yang sudah disertakan. Hasil numerik mengikuti versi dependensi yang diuji pada requirements.lock.txt."
+      }
+    ],
+    "steps": [
+      "Unduh paket latihan Data Analysis dan Data Science, ekstrak, lalu baca README.md.",
+      "Jalankan python da12_kasus_jaringan.py dari folder data-lab dengan virtual environment aktif.",
+      "Buka datasets/monitoring.csv dan hitung tiga indikator secara manual.",
+      "Kosongkan satu status pada salinan data dan perhatikan perubahan coverage serta penyebut up teramati."
+    ],
+    "practice": [
+      "Tambahkan laporan jumlah RTT valid agar kelengkapan setiap indikator terlihat.",
+      "Rancang data kejadian mulai–selesai jika ingin menghitung durasi downtime kontinu."
+    ],
+    "warning": "Contoh tidak terhubung ke router dan tidak menggunakan data pelanggan. Persentase polling berbeda dari durasi layanan serta tidak otomatis memenuhi definisi SLA.",
+    "check": "Mengapa BTS-A tidak langsung disebut uptime 66,7%?",
+    "answer": "Angka tersebut berasal dari status polling yang diketahui dengan coverage terbatas, bukan pengukuran durasi kontinu sepanjang periode.",
+    "source": "https://pandas.pydata.org/docs/user_guide/timeseries.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  }
+]

@@ -42,7 +42,7 @@
 .programming-header-utility .academy-switch{color:#193a32}
 .programming-header-utility a:hover,.programming-header-menu .academy-nav-links a:hover{background:#f0f5f2}
 .programming-header-menu{padding:8px 0;border-top:1px solid #e4ebe6}
-.programming-header-menu .academy-nav-links{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
+.programming-header-menu .academy-nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .programming-header-menu .academy-nav-links a[aria-current=page]{background:#eaf2ed;color:#236b62}
 .programming-header-utility-mobile{display:none}
 @media(max-width:1000px){
@@ -72,3 +72,5 @@
 .programming-track-web{background:#eff6f2}
 
 .programming-track-django{background:#e8f2ec}
+
+.programming-track-data-analysis{background:#edf4fb}.programming-track-data-science{background:#f3eef9}

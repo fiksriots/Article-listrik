@@ -2,11 +2,11 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const root=path.resolve(__dirname,'..');
 const read=n=>JSON.parse(fs.readFileSync(path.join(root,'lib',n),'utf8'));
 const web=read('programming-web-lessons.json'),order=read('programming-order.json'),quizzes=read('programming-quizzes.json');
-const all=['programming-lessons.json','programming-extended-lessons.json','programming-data-structure-lessons.json','programming-oop-lessons.json','programming-database-lessons.json','programming-api-lessons.json','programming-web-lessons.json','programming-django-lessons.json','programming-supplement-lessons.json'].flatMap(read);
-assert.equal(web.length,12);assert.equal(all.length,203);
+const all=['programming-lessons.json','programming-extended-lessons.json','programming-data-structure-lessons.json','programming-oop-lessons.json','programming-database-lessons.json','programming-api-lessons.json','programming-web-lessons.json','programming-django-lessons.json','programming-supplement-lessons.json','programming-data-analysis-lessons.json','programming-data-science-lessons.json'].flatMap(read);
+assert.equal(web.length,12);assert.equal(all.length,227);
 const slugs=all.map(l=>l.slug),ordered=order.flatMap(g=>g.slugs);
-assert.equal(new Set(slugs).size,203);assert.deepEqual([...slugs].sort(),[...ordered].sort());assert.deepEqual([...slugs].sort(),Object.keys(quizzes).sort());
-assert.equal(Object.values(quizzes).reduce((n,q)=>n+q.length,0),812);
+assert.equal(new Set(slugs).size,227);assert.deepEqual([...slugs].sort(),[...ordered].sort());assert.deepEqual([...slugs].sort(),Object.keys(quizzes).sort());
+assert.equal(Object.values(quizzes).reduce((n,q)=>n+q.length,0),908);
 const webOrder=order.filter(g=>g.title.startsWith('Web ·')).flatMap(g=>g.slugs);
 assert.equal(webOrder.indexOf('web-javascript-dasar')<webOrder.indexOf('web-dom-event'),true);
 assert.equal(webOrder.indexOf('web-dom-event')<webOrder.indexOf('web-formulir'),true);
@@ -31,4 +31,4 @@ for(const l of web){
  }
 }
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
-console.log('PASS: 203 ordered lessons / 812 questions, 12 complete Web lessons, exact runnable HTML sources, JavaScript syntax and deterministic output');
+console.log('PASS: 227 ordered lessons / 908 questions, 12 complete Web lessons, exact runnable HTML sources, JavaScript syntax and deterministic output');

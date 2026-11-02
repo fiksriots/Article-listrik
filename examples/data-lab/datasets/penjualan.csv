@@ -1,0 +1,9 @@
+id,tanggal,kota,produk,jumlah,harga_rupiah
+T001,2026-10-01,Surabaya,Router,2,500000
+T002,2026-10-01,Surabaya,Kabel,5,20000
+T003,2026-10-02,Malang,Router,1,500000
+T003,2026-10-02,Malang,Router,1,500000
+T004,2026-10-02,Malang,Kabel,-1,20000
+T005,2026-10-03,Surabaya,Switch,1,300000
+T006,2026-10-03,Surabaya,Kabel,,20000
+T007,2026-10-03,Malang,Kabel,3,20000
