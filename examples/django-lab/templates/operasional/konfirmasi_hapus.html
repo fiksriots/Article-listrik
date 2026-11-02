@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Konfirmasi hapus perangkat</h1><p>Hapus {{ object }} dari database latihan?</p><form method="post">{% csrf_token %}<button type="submit">Ya, hapus</button></form><a href="{% url 'perangkat-list' %}">Batal</a>
+{% endblock %}

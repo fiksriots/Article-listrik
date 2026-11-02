@@ -1,0 +1,7 @@
+{% load static %}
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lab Django · Operasional</title><link rel="stylesheet" href="{% static 'operasional/style.css' %}"></head>
+<body><header><a href="#isi">Lewati ke isi</a><nav aria-label="Navigasi lab"><a href="{% url 'home' %}">Beranda</a><a href="{% url 'perangkat-list' %}">Perangkat</a><a href="{% url 'tiket-list' %}">Tiket saya</a></nav>
+{% if user.is_authenticated %}<p>Masuk sebagai {{ user.username }}</p><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Keluar</button></form>{% else %}<a href="{% url 'login' %}">Masuk</a>{% endif %}</header>
+<main id="isi">{% block content %}{% endblock %}
+{% if is_paginated %}<nav aria-label="Halaman daftar">{% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}&amp;q={{ request.GET.q|urlencode }}">Sebelumnya</a>{% endif %}<span>Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}&amp;q={{ request.GET.q|urlencode }}">Berikutnya</a>{% endif %}</nav>{% endif %}</main></body></html>

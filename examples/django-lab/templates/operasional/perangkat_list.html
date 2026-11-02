@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Inventaris perangkat</h1>
+<form method="get"><label for="q">Cari nama</label><input id="q" name="q" maxlength="100" value="{{ request.GET.q }}"><button type="submit">Cari</button></form>
+{% if perms.operasional.add_perangkat %}<p><a href="{% url 'perangkat-add' %}">Tambah perangkat</a></p>{% endif %}
+<ul>{% for item in object_list %}<li>{{ item.kode }} · {{ item.nama }} · {{ item.lokasi }} · {{ item.aktif|yesno:'Aktif,Nonaktif' }} {% if perms.operasional.change_perangkat %}<a href="{% url 'perangkat-edit' item.pk %}">Ubah {{ item.kode }}</a>{% endif %} {% if perms.operasional.delete_perangkat %}<a href="{% url 'perangkat-delete' item.pk %}">Hapus {{ item.kode }}</a>{% endif %}</li>{% empty %}<li>Belum ada perangkat yang sesuai.</li>{% endfor %}</ul>
+{% endblock %}

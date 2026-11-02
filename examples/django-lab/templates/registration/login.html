@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Masuk ke lab</h1><form method="post">{% csrf_token %}{{ form.as_p }}<input type="hidden" name="next" value="{{ next }}"><button type="submit">Masuk</button></form>
+<p>Akun dibuat melalui createsuperuser atau Django Admin pada lab lokal Anda. Tidak ada pendaftaran publik.</p>
+{% endblock %}

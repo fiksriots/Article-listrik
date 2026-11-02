@@ -6,10 +6,10 @@ const {programmingTracks,getProgrammingLessonTrack}=require('../lib/programming-
 const {programmingLessons}=require('../lib/programming-course.ts');
 const {learningTracks}=require('../lib/learning-progress-catalog.ts');
 const {progressSummary}=require('../lib/learning-progress-types.ts');
-assert.deepEqual(programmingTracks.map(t=>t.id),['terstruktur','struktur-data','oop','basis-data','backend-api','web']);
-assert.deepEqual(programmingTracks.map(t=>t.lessons.length),[33,36,29,44,21,12]);
+assert.deepEqual(programmingTracks.map(t=>t.id),['terstruktur','struktur-data','oop','basis-data','backend-api','web','django']);
+assert.deepEqual(programmingTracks.map(t=>t.lessons.length),[33,36,29,44,21,12,14]);
 const slugs=programmingTracks.flatMap(t=>t.lessons.map(l=>l.slug));
-assert.equal(new Set(slugs).size,175);
+assert.equal(new Set(slugs).size,189);
 assert.deepEqual([...slugs].sort(),programmingLessons.map(l=>l.slug).sort());
 for(const track of programmingTracks){
  assert.ok(fs.existsSync('app'+track.href+'/page.tsx'));
@@ -21,12 +21,12 @@ for(const track of programmingTracks){
 }
 assert.equal(getProgrammingLessonTrack('not-a-lesson'),undefined);
 const groups=learningTracks.find(t=>t.id==='programming').groups;
-assert.deepEqual(groups.map(g=>g.title),['Pemrograman Terstruktur','Struktur Data','Pemrograman Berorientasi Objek','Basis Data','Backend/API','Pemrograman Web']);
+assert.deepEqual(groups.map(g=>g.title),['Pemrograman Terstruktur','Struktur Data','Pemrograman Berorientasi Objek','Basis Data','Backend/API','Pemrograman Web','Django']);
 const saved={'programming/struktur-stack':{completed:true,dirty:false,revision:'existing'}};
 assert.equal(progressSummary('programming',groups[0].lessons,saved).done,0);
 assert.equal(progressSummary('programming',groups[1].lessons,saved).done,1);
 assert.equal(progressSummary('programming',groups[1].lessons,saved).total,36);
-console.log('PASS: separate 33/36/29/44/21/12 curricula, complete coverage without duplicates, valid overview routes and retained progress keys');
+console.log('PASS: separate 33/36/29/44/21/12/14 curricula, complete coverage without duplicates, valid overview routes and retained progress keys');
 
 assert.equal(progressSummary('programming',groups[2].lessons,saved).done,0);
 

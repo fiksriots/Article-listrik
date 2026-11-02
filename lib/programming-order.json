@@ -368,5 +368,39 @@
       "web-kasus-portofolio",
       "web-kasus-tugas"
     ]
+  },
+  {
+    "title": "Django · Mulai dari fondasi",
+    "slugs": [
+      "django-pengenalan",
+      "django-instalasi",
+      "django-url-view",
+      "django-template"
+    ]
+  },
+  {
+    "title": "Django · Data dan pengelolaan",
+    "slugs": [
+      "django-model-orm",
+      "django-migrasi",
+      "django-admin",
+      "django-form-crud"
+    ]
+  },
+  {
+    "title": "Django · Akses dan kualitas",
+    "slugs": [
+      "django-login-izin",
+      "django-static",
+      "django-pengujian",
+      "django-deployment"
+    ]
+  },
+  {
+    "title": "Django · Studi kasus",
+    "slugs": [
+      "django-kasus-inventaris",
+      "django-kasus-tiket"
+    ]
   }
 ]

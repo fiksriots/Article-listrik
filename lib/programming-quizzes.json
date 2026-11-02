@@ -7360,5 +7360,593 @@
       "answer": 0,
       "explanation": "Sinkronisasi perangkat memerlukan mekanisme tambahan."
     }
+  ],
+  "django-pengenalan": [
+    {
+      "question": "Django terutama berjalan di ...",
+      "options": [
+        "Server Python",
+        "CSS browser",
+        "Firmware router"
+      ],
+      "answer": 0,
+      "explanation": "Django memproses request pada server Python."
+    },
+    {
+      "question": "Template bertugas ...",
+      "options": [
+        "Menggantikan semua tabel",
+        "Menyusun keluaran seperti HTML",
+        "Memeriksa semua izin secara otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Template menggabungkan struktur tampilan dengan context."
+    },
+    {
+      "question": "Bagian yang memilih view berdasarkan alamat adalah ...",
+      "options": [
+        "ModelForm",
+        "CSS Grid",
+        "URLconf"
+      ],
+      "answer": 2,
+      "explanation": "URLconf memetakan pola URL ke view."
+    },
+    {
+      "question": "Apakah Django menggantikan HTML?",
+      "options": [
+        "Tidak, keduanya mempunyai peran berbeda",
+        "Ya, HTML tidak digunakan lagi",
+        "Ya, seluruh tampilan ditulis SQL"
+      ],
+      "answer": 0,
+      "explanation": "Django dapat menghasilkan HTML yang kemudian dibaca browser."
+    }
+  ],
+  "django-instalasi": [
+    {
+      "question": "Mengapa memakai virtual environment?",
+      "options": [
+        "Memisahkan dependensi proyek",
+        "Membuat domain otomatis",
+        "Menghapus kebutuhan Python"
+      ],
+      "answer": 0,
+      "explanation": "Environment mengurangi benturan versi antar proyek."
+    },
+    {
+      "question": "Perintah untuk menerapkan migration adalah ...",
+      "options": [
+        "python manage.py startapp",
+        "python manage.py migrate",
+        "python manage.py logout"
+      ],
+      "answer": 1,
+      "explanation": "Migrate menerapkan perubahan skema yang tercatat."
+    },
+    {
+      "question": "Apa kegunaan createsuperuser?",
+      "options": [
+        "Membuat password default publik",
+        "Membuat semua pengunjung menjadi admin",
+        "Membuat akun admin melalui prompt"
+      ],
+      "answer": 2,
+      "explanation": "Buat kredensial sendiri dan jangan bagikan akun admin."
+    },
+    {
+      "question": "Runserver cocok untuk ...",
+      "options": [
+        "Pengembangan lokal",
+        "Server produksi tanpa pengaturan lain",
+        "Menyimpan semua backup"
+      ],
+      "answer": 0,
+      "explanation": "Runserver adalah server pengembangan, bukan server produksi."
+    }
+  ],
+  "django-url-view": [
+    {
+      "question": "View Django harus mengembalikan ...",
+      "options": [
+        "Response HTTP",
+        "Nama class saja",
+        "File migration saja"
+      ],
+      "answer": 0,
+      "explanation": "View bertugas menghasilkan respons atas request."
+    },
+    {
+      "question": "Include pada URLconf berguna untuk ...",
+      "options": [
+        "Memasang driver database",
+        "Meneruskan routing ke app",
+        "Membuat akun"
+      ],
+      "answer": 1,
+      "explanation": "Include membantu memisahkan routing antar app."
+    },
+    {
+      "question": "Keuntungan named URL adalah ...",
+      "options": [
+        "Semua view menjadi publik",
+        "Query menjadi terenkripsi otomatis",
+        "Alamat dapat dirujuk melalui nama route"
+      ],
+      "answer": 2,
+      "explanation": "Reverse dan tag url menggunakan nama route."
+    },
+    {
+      "question": "Pk dari URL membuktikan ...",
+      "options": [
+        "Hanya parameter yang cocok, bukan izin akses",
+        "Pengguna adalah pemilik",
+        "Data pasti tersedia"
+      ],
+      "answer": 0,
+      "explanation": "Validasi pola URL berbeda dari otorisasi object."
+    }
+  ],
+  "django-template": [
+    {
+      "question": "Context berisi ...",
+      "options": [
+        "Data yang dipakai template",
+        "Semua secret server untuk browser",
+        "Perintah instalasi Python"
+      ],
+      "answer": 0,
+      "explanation": "Context menyediakan variabel untuk proses render."
+    },
+    {
+      "question": "Extends digunakan untuk ...",
+      "options": [
+        "Mengganti database",
+        "Mewariskan kerangka template",
+        "Menjalankan migrate"
+      ],
+      "answer": 1,
+      "explanation": "Pewarisan membantu memakai ulang struktur halaman."
+    },
+    {
+      "question": "Tag empty pada for berguna saat ...",
+      "options": [
+        "Semua field bernilai true",
+        "Server tidak memakai HTML",
+        "Daftar tidak berisi item"
+      ],
+      "answer": 2,
+      "explanation": "Empty memberi tampilan keadaan tanpa data."
+    },
+    {
+      "question": "Untuk judul tiket pengguna, pilihan yang tepat adalah ...",
+      "options": [
+        "Biarkan autoescape aktif",
+        "Selalu tambahkan filter safe",
+        "Gunakan eval"
+      ],
+      "answer": 0,
+      "explanation": "Data pengguna sebaiknya tetap diperlakukan sebagai teks pada konteks HTML."
+    }
+  ],
+  "django-model-orm": [
+    {
+      "question": "ForeignKey tiket ke user berarti ...",
+      "options": [
+        "Banyak tiket dapat dimiliki satu user",
+        "Satu tiket wajib mempunyai banyak pemilik",
+        "Username disalin ke semua tabel"
+      ],
+      "answer": 0,
+      "explanation": "ForeignKey menyimpan relasi ke satu object user."
+    },
+    {
+      "question": "Filter mengembalikan ...",
+      "options": [
+        "Password pengguna",
+        "Queryset",
+        "Selalu satu object"
+      ],
+      "answer": 1,
+      "explanation": "Queryset dapat berisi nol, satu, atau banyak hasil."
+    },
+    {
+      "question": "Unique=True terutama menjaga ...",
+      "options": [
+        "Izin akses pengguna",
+        "Panjang URL",
+        "Keunikan nilai pada database"
+      ],
+      "answer": 2,
+      "explanation": "Constraint unik mencegah nilai duplikat sesuai aturan database."
+    },
+    {
+      "question": "Apakah save otomatis menjalankan full_clean?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Hanya saat memakai CSS"
+      ],
+      "answer": 0,
+      "explanation": "Validasi model penuh tidak otomatis dipanggil oleh save."
+    }
+  ],
+  "django-migrasi": [
+    {
+      "question": "Makemigrations terutama menghasilkan ...",
+      "options": [
+        "File migration",
+        "Akun admin",
+        "Backup lengkap otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Perintah ini mencatat perubahan state model."
+    },
+    {
+      "question": "Perintah yang menerapkan perubahan adalah ...",
+      "options": [
+        "startproject",
+        "migrate",
+        "collectstatic"
+      ],
+      "answer": 1,
+      "explanation": "Migrate menjalankan operasi pada database."
+    },
+    {
+      "question": "Apakah rollback skema selalu memulihkan data terhapus?",
+      "options": [
+        "Selalu",
+        "Ya jika memakai template",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Data yang sudah terhapus tidak otomatis kembali."
+    },
+    {
+      "question": "Migration sebaiknya disimpan ...",
+      "options": [
+        "Bersama kode dalam version control",
+        "Hanya dalam ingatan pengembang",
+        "Di JavaScript publik sebagai secret"
+      ],
+      "answer": 0,
+      "explanation": "Riwayat migration membantu konsistensi antar lingkungan."
+    }
+  ],
+  "django-admin": [
+    {
+      "question": "Admin digunakan terutama untuk ...",
+      "options": [
+        "Pengelolaan internal oleh pengguna berwenang",
+        "Menggantikan semua desain website publik",
+        "Menyimpan CSS"
+      ],
+      "answer": 0,
+      "explanation": "Admin memberi antarmuka pengelolaan model."
+    },
+    {
+      "question": "Is_staff berarti ...",
+      "options": [
+        "Pemilik semua tiket",
+        "Memenuhi syarat akses admin, bukan otomatis semua izin",
+        "Tidak perlu login"
+      ],
+      "answer": 1,
+      "explanation": "Permission model tetap berlaku untuk staff biasa."
+    },
+    {
+      "question": "Search_fields mengatur ...",
+      "options": [
+        "Nama database produksi",
+        "Password user",
+        "Field yang digunakan pencarian admin"
+      ],
+      "answer": 2,
+      "explanation": "Search_fields membantu pencarian data dalam admin."
+    },
+    {
+      "question": "Akun yang tepat untuk pemakaian harian pengguna umum adalah ...",
+      "options": [
+        "User dengan izin sesuai tugas",
+        "Superuser bersama",
+        "Akun admin tanpa password"
+      ],
+      "answer": 0,
+      "explanation": "Hak akses minimum mengurangi tindakan di luar kebutuhan."
+    }
+  ],
+  "django-form-crud": [
+    {
+      "question": "Fields eksplisit pada ModelForm membantu ...",
+      "options": [
+        "Membatasi field yang boleh diisi pengguna",
+        "Membuat semua user admin",
+        "Menonaktifkan validasi"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan model tidak otomatis membuka field sensitif baru."
+    },
+    {
+      "question": "GET pada halaman hapus sebaiknya ...",
+      "options": [
+        "Langsung menghapus data",
+        "Menampilkan konfirmasi",
+        "Menghapus semua tiket"
+      ],
+      "answer": 1,
+      "explanation": "Perubahan data tidak dilakukan melalui request GET."
+    },
+    {
+      "question": "Form POST internal perlu ...",
+      "options": [
+        "Password server dalam HTML",
+        "Filter safe pada semua input",
+        "CSRF token"
+      ],
+      "answer": 2,
+      "explanation": "Token bekerja dengan middleware CSRF yang aktif."
+    },
+    {
+      "question": "Redirect setelah POST membantu ...",
+      "options": [
+        "Mengurangi resubmit saat refresh halaman hasil",
+        "Menjamin semua operasi pasti idempoten",
+        "Menggantikan database constraint"
+      ],
+      "answer": 0,
+      "explanation": "POST–redirect–GET berguna tetapi tidak menyelesaikan seluruh masalah request ganda."
+    }
+  ],
+  "django-login-izin": [
+    {
+      "question": "Authentication menjawab ...",
+      "options": [
+        "Siapa pengguna",
+        "Warna template",
+        "Jumlah kolom database"
+      ],
+      "answer": 0,
+      "explanation": "Authentication berbeda dari authorization."
+    },
+    {
+      "question": "Permission model otomatis memeriksa kepemilikan setiap object?",
+      "options": [
+        "Selalu",
+        "Tidak",
+        "Hanya jika memakai SQLite"
+      ],
+      "answer": 1,
+      "explanation": "Batas kepemilikan perlu diterapkan pada queryset atau mekanisme object permission."
+    },
+    {
+      "question": "Pemilik tiket baru seharusnya ditentukan dari ...",
+      "options": [
+        "Hidden input pemilik",
+        "Parameter CSS",
+        "request.user pada server"
+      ],
+      "answer": 2,
+      "explanation": "Client tidak boleh menentukan pemilik secara bebas."
+    },
+    {
+      "question": "User login tanpa izin yang diperlukan dapat menerima ...",
+      "options": [
+        "403",
+        "Selalu 200",
+        "Kode CSS 3"
+      ],
+      "answer": 0,
+      "explanation": "403 menunjukkan tindakan tidak diizinkan untuk request tersebut."
+    }
+  ],
+  "django-static": [
+    {
+      "question": "Static tag digunakan untuk ...",
+      "options": [
+        "Menyusun URL aset",
+        "Membuat user",
+        "Mengubah password"
+      ],
+      "answer": 0,
+      "explanation": "Template tidak perlu menulis semua path aset secara manual."
+    },
+    {
+      "question": "STATIC_ROOT adalah ...",
+      "options": [
+        "Folder semua secret",
+        "Folder keluaran collectstatic",
+        "Tabel user"
+      ],
+      "answer": 1,
+      "explanation": "Keluaran berbeda dari folder sumber static."
+    },
+    {
+      "question": "Unggahan pengguna disebut ...",
+      "options": [
+        "Migration",
+        "URLconf",
+        "Media"
+      ],
+      "answer": 2,
+      "explanation": "Media memerlukan aturan penyimpanan dan akses tersendiri."
+    },
+    {
+      "question": "Collectstatic otomatis menyiapkan web server produksi?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Hanya jika CSS berwarna hijau"
+      ],
+      "answer": 0,
+      "explanation": "Penyajian aset tetap harus dikonfigurasi sesuai hosting."
+    }
+  ],
+  "django-pengujian": [
+    {
+      "question": "TestCase menggunakan ...",
+      "options": [
+        "Database uji yang terisolasi",
+        "Database produksi wajib",
+        "LocalStorage browser saja"
+      ],
+      "answer": 0,
+      "explanation": "Django menyiapkan database uji untuk menjalankan test."
+    },
+    {
+      "question": "Force_login terutama membantu ...",
+      "options": [
+        "Membuktikan password benar",
+        "Menyiapkan login untuk test izin",
+        "Mengganti hashing password"
+      ],
+      "answer": 1,
+      "explanation": "Pengujian login password tetap memerlukan jalur autentikasi sebenarnya."
+    },
+    {
+      "question": "Untuk menguji CSRF pada client gunakan ...",
+      "options": [
+        "DEBUG=True saja",
+        "Filter safe",
+        "enforce_csrf_checks=True"
+      ],
+      "answer": 2,
+      "explanation": "Test client tidak memaksa CSRF secara default."
+    },
+    {
+      "question": "Setelah edit user lain ditolak, cek juga ...",
+      "options": [
+        "Data asli tidak berubah",
+        "Hanya warna tombol",
+        "Jumlah file CSS"
+      ],
+      "answer": 0,
+      "explanation": "Pemeriksaan state database membuktikan operasi terlarang tidak terjadi."
+    }
+  ],
+  "django-deployment": [
+    {
+      "question": "DEBUG produksi seharusnya ...",
+      "options": [
+        "False",
+        "True agar semua orang melihat traceback",
+        "Diisi nama domain"
+      ],
+      "answer": 0,
+      "explanation": "Detail debug dapat membocorkan informasi internal."
+    },
+    {
+      "question": "Secret produksi sebaiknya ...",
+      "options": [
+        "Disalin dari contoh publik",
+        "Disediakan melalui konfigurasi rahasia hosting",
+        "Ditaruh di CSS"
+      ],
+      "answer": 1,
+      "explanation": "Secret tidak disimpan dalam aset publik atau Git."
+    },
+    {
+      "question": "Database pada filesystem sementara berisiko ...",
+      "options": [
+        "Otomatis tersinkron semua perangkat",
+        "Menjadi lebih aman tanpa backup",
+        "Hilang saat instance diganti"
+      ],
+      "answer": 2,
+      "explanation": "Gunakan storage persisten atau layanan database yang sesuai."
+    },
+    {
+      "question": "Migrate produksi dijalankan ...",
+      "options": [
+        "Sebagai tahap rilis terencana",
+        "Setiap request pengguna",
+        "Setiap tombol hover"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan skema perlu koordinasi, pemeriksaan, dan pemulihan."
+    }
+  ],
+  "django-kasus-inventaris": [
+    {
+      "question": "Kode perangkat pada proyek harus ...",
+      "options": [
+        "Unik",
+        "Sama untuk semua perangkat",
+        "Berupa password"
+      ],
+      "answer": 0,
+      "explanation": "Constraint unik menjaga identitas aset."
+    },
+    {
+      "question": "User tanpa izin dapat dilindungi dengan ...",
+      "options": [
+        "Menyembunyikan tautan saja",
+        "Pemeriksaan permission pada view",
+        "Mengubah warna tombol"
+      ],
+      "answer": 1,
+      "explanation": "Request langsung tetap harus diperiksa server."
+    },
+    {
+      "question": "Pagination membantu ...",
+      "options": [
+        "Membuat backup otomatis",
+        "Menghapus kode duplikat",
+        "Membatasi jumlah item pada satu halaman"
+      ],
+      "answer": 2,
+      "explanation": "Pagination membuat daftar lebih mudah dipakai dan mengurangi item yang dirender per halaman."
+    },
+    {
+      "question": "Untuk aset yang riwayatnya penting, pertimbangkan ...",
+      "options": [
+        "Arsip atau nonaktif dengan kebijakan yang jelas",
+        "Selalu hapus seluruh tabel",
+        "Memberi semua user superuser"
+      ],
+      "answer": 0,
+      "explanation": "Kebutuhan riwayat menentukan apakah penghapusan tepat."
+    }
+  ],
+  "django-kasus-tiket": [
+    {
+      "question": "Pemilik tiket baru ditentukan oleh ...",
+      "options": [
+        "Server dari request.user",
+        "ID bebas dari browser",
+        "Nama file template"
+      ],
+      "answer": 0,
+      "explanation": "Penetapan pemilik tidak dipercayakan kepada client."
+    },
+    {
+      "question": "GET ke endpoint selesai seharusnya ...",
+      "options": [
+        "Menyelesaikan tiket",
+        "Ditolak tanpa mengubah status",
+        "Membuat akun baru"
+      ],
+      "answer": 1,
+      "explanation": "GET tidak dipakai untuk perubahan status."
+    },
+    {
+      "question": "Mengulangi POST selesai pada contoh ...",
+      "options": [
+        "Membuka kembali tiket",
+        "Menghapus pemilik",
+        "Tetap selesai tanpa membuat tiket baru"
+      ],
+      "answer": 2,
+      "explanation": "Update bersyarat membuat tindakan selesai berulang tidak membalik status."
+    },
+    {
+      "question": "Mengapa endpoint selesai memeriksa pemilik sendiri?",
+      "options": [
+        "Karena request bisa dikirim langsung",
+        "Karena CSS tidak dimuat",
+        "Karena semua tiket harus publik"
+      ],
+      "answer": 0,
+      "explanation": "Setiap jalur akses perlu menegakkan aturan object."
+    }
   ]
 }

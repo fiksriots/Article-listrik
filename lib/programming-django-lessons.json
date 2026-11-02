@@ -1,0 +1,1025 @@
+[
+  {
+    "slug": "django-pengenalan",
+    "title": "Mengenal Django: Python di balik website",
+    "summary": "Pahami framework, pola Model–Template–View, dan hubungan Django dengan HTML serta database.",
+    "analogy": "Django seperti dapur restoran dengan perlengkapan siap pakai: penerima pesanan, pengolah data, dan penyusun hidangan tetap mempunyai tugas berbeda.",
+    "explain": [
+      "Django adalah framework Python untuk membangun aplikasi web di server. Ia menyediakan routing URL, ORM, template, formulir, autentikasi, dan antarmuka admin. Framework memberi pola kerja serta komponen yang dapat digunakan ulang; aturan bisnis aplikasi tetap perlu Anda tulis.",
+      "Django sering dijelaskan melalui Model–Template–View. Model menggambarkan data dan perilakunya; template menyusun keluaran seperti HTML; view menerima request, memeriksa aturan, dan mengembalikan response. URLconf memilih view yang sesuai alamat. Tidak semua view harus mengakses database atau memakai template.",
+      "HTML, CSS, dan JavaScript tetap berguna. Django dapat merender HTML di server, sementara CSS mengatur tampilan dan JavaScript menambahkan interaksi browser. Untuk API JSON tersedia pola lain; jalur ini berfokus pada halaman server-side agar alurnya mudah diikuti.",
+      "Materi memakai Django 5.2 LTS dan Python 3.12 sebagai lingkungan latihan. Pilih patch terbaru seri 5.2 saat memasang. Bekalnya adalah fungsi, class dasar, import, exception, tabel/relasi, serta HTML dan formulir. Tidak harus menuntaskan semua JavaScript dahulu.",
+      "Dua studi kasus disediakan dalam satu proyek unduhan: inventaris perangkat dan tiket gangguan. Website belajar hanya menyajikan materi serta sumber latihan. Akun di proyek Django lokal berbeda dari akun dan progres belajar Anda di situs ini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "URLconf",
+          "Memilih view berdasarkan URL"
+        ],
+        [
+          "View",
+          "Memproses request dan mengembalikan response"
+        ],
+        [
+          "Model / ORM",
+          "Struktur data / cara mengakses database"
+        ],
+        [
+          "Template",
+          "Menyusun HTML dari context"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Alur request",
+        "filename": "Alur request",
+        "code": "GET /tiket/ → URLconf → view\nview → queryset milik pengguna → database\nview → context → template → response HTML",
+        "language": "text",
+        "output": "",
+        "explanation": "Alur ini adalah rancangan, bukan kode Python."
+      }
+    ],
+    "steps": [
+      "Baca kembali fungsi, class dasar, database, serta HTML bila istilahnya belum akrab.",
+      "Unduh proyek latihan melalui tautan di artikel ini dan baca README.md.",
+      "Ikuti materi instalasi sebelum menjalankan perintah proyek."
+    ],
+    "practice": [
+      "Kelompokkan tugas memilih URL, mengambil tiket, dan menampilkan judul ke komponen Django yang sesuai.",
+      "Tulis kebutuhan website sederhana yang cukup berupa HTML statis dan satu kebutuhan yang memerlukan data server."
+    ],
+    "warning": "Django bukan pengganti HTML dan tidak otomatis menjadikan setiap aturan aplikasi aman. Pembatasan hak akses serta pemeriksaan data tetap harus dirancang dan diuji.",
+    "check": "Apakah setiap view harus membaca database?",
+    "answer": "Tidak. View dapat langsung mengembalikan HttpResponse. Database dipakai ketika kebutuhan halaman memerlukan data yang disimpan.",
+    "source": "https://docs.djangoproject.com/en/5.2/intro/overview/",
+    "diagram": "django-alur",
+    "diagramAlt": "Request browser dipilih oleh URL, diproses view, dapat memakai model dan database, lalu menghasilkan HTML melalui template.",
+    "stage": 0,
+    "minutes": 20
+  },
+  {
+    "slug": "django-instalasi",
+    "title": "Instalasi Django dan struktur project–app",
+    "summary": "Siapkan virtual environment, kenali manage.py, dan jalankan proyek lokal.",
+    "analogy": "Project seperti kantor secara keseluruhan; app seperti bagian operasional yang mengerjakan satu kelompok fungsi.",
+    "explain": [
+      "Virtual environment memisahkan dependensi proyek dari Python sistem. Buat .venv, aktifkan, lalu pasang kebutuhan proyek melalui python -m pip. Bentuk ini membantu memastikan pip memakai interpreter yang sama dengan python yang sedang aktif.",
+      "Pada folder hasil ekstraksi, manage.py menjadi pintu perintah Django: check, migrate, createsuperuser, test, dan runserver. Folder config adalah project konfigurasi; operasional adalah app berisi fitur inventaris dan tiket. Satu project dapat memiliki beberapa app.",
+      "Jika memulai dari nol, python -m django startproject config . membuat kerangka project pada folder kosong dan python manage.py startapp operasional membuat kerangka app. Daftarkan app dalam INSTALLED_APPS. Jangan menjalankan startproject di atas proyek unduhan karena file-nya sudah tersedia.",
+      "Proyek unduhan sudah berisi migration awal. Jalankan migrate agar tabel dibuat, lalu createsuperuser untuk membuat akun admin sendiri. Password dimasukkan melalui prompt, bukan ditulis pada command atau artikel. Runserver hanya digunakan untuk pengembangan lokal.",
+      "Windows dapat memakai py untuk memilih Python yang terpasang. Jika PowerShell membatasi aktivasi, gunakan .venv\\Scripts\\python.exe langsung sebagai pengganti python. Tidak perlu melemahkan kebijakan sistem. Di macOS/Linux gunakan source .venv/bin/activate."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Project config",
+          "Pengaturan dan URL utama"
+        ],
+        [
+          "App operasional",
+          "Fitur, model, view, dan pengujian"
+        ],
+        [
+          "manage.py",
+          "Perintah pengelolaan project"
+        ],
+        [
+          "requirements.txt",
+          "Rentang dependensi yang perlu dipasang"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python -m venv .venv",
+        "language": "bash",
+        "output": "",
+        "explanation": "Jalankan dari folder hasil ekstraksi yang memuat manage.py. Setelah itu aktifkan .venv sesuai sistem operasi."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python -m pip install -r requirements.txt\npython -m django --version",
+        "language": "bash",
+        "output": "5.2.x — nomor patch mengikuti versi yang dipasang",
+        "explanation": "Jalankan dari folder yang memuat manage.py, dengan virtual environment aktif."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py migrate\npython manage.py createsuperuser\npython manage.py check\npython manage.py runserver 127.0.0.1:8000",
+        "language": "bash",
+        "output": "",
+        "explanation": "Setelah migrate, buat akun melalui prompt. Buka http://127.0.0.1:8000/; Ctrl+C menghentikan server."
+      }
+    ],
+    "steps": [
+      "Ekstrak ZIP ke folder latihan baru, buka terminal di folder manage.py.",
+      "Buat dan aktifkan virtual environment, lalu pasang requirements.txt.",
+      "Jalankan migrate dan createsuperuser, kemudian check.",
+      "Jalankan runserver pada 127.0.0.1:8000 dan buka browser."
+    ],
+    "practice": [
+      "Cari file settings.py, urls.py, models.py, dan templates pada proyek. Jelaskan peran masing-masing.",
+      "Jalankan python -m pip show Django dan cocokkan dengan python -m django --version."
+    ],
+    "warning": "Secret pada config.settings adalah nilai publik khusus latihan lokal. Jangan memakai settings ini pada server publik. Konfigurasi produksi dibahas pada materi deployment.",
+    "check": "Apa perbedaan startproject dan startapp?",
+    "answer": "Startproject menyiapkan konfigurasi sebuah situs; startapp membuat kerangka satu unit fitur. Proyek unduhan sudah mempunyai keduanya sehingga tidak perlu dibuat ulang.",
+    "source": "https://docs.djangoproject.com/en/5.2/intro/tutorial01/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-url-view",
+    "title": "URL dan view: dari alamat ke response",
+    "summary": "Hubungkan path, named URL, dan view tanpa mencampurkan logika dengan alamat mentah.",
+    "analogy": "URLconf seperti petugas penerima tamu yang mengarahkan pengunjung ke meja pelayanan yang tepat.",
+    "explain": [
+      "URLconf adalah daftar urlpatterns. Path kosong di config.urls mengarah ke home; path admin/ mengarah ke Django Admin; include meneruskan pencarian ke URL app. Urutan pola diperhatikan, jadi susun alamat dengan jelas.",
+      "Function-based view menerima request dan mengembalikan HttpResponse atau respons lain seperti redirect. HttpResponse cocok untuk contoh awal; render dipakai ketika ingin menggabungkan template dengan context. Contoh home tidak membaca database.",
+      "Path converter seperti <int:pk> membaca angka dari URL. Angka yang valid hanya berarti URL cocok; itu belum membuktikan pengguna boleh mengakses object tersebut. View tetap harus memeriksa login, permission, dan kepemilikan data.",
+      "Gunakan nama route, misalnya tiket-list, bersama reverse atau template tag url. Ini mengurangi alamat yang ditulis berulang. Class-based view di proyek dipasang dengan as_view(); detail CRUD-nya dipelajari setelah model dan formulir."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "path",
+          "Mendefinisikan pola URL"
+        ],
+        [
+          "include",
+          "Meneruskan routing ke app"
+        ],
+        [
+          "name / reverse",
+          "Nama route / menyusun URL dari namanya"
+        ],
+        [
+          "<int:pk>",
+          "Mengambil parameter angka dari URL"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "config/urls.py",
+        "filename": "config/urls.py",
+        "code": "from django.contrib import admin\nfrom django.contrib.auth import views as auth_views\nfrom django.urls import include, path\nfrom operasional.views import home\n\nurlpatterns = [\n    path('', home, name='home'),\n    path('admin/', admin.site.urls),\n    path('akun/login/', auth_views.LoginView.as_view(), name='login'),\n    path('akun/logout/', auth_views.LogoutView.as_view(), name='logout'),\n    path('', include('operasional.urls')),\n]\n",
+        "language": "python",
+        "output": "",
+        "explanation": "URL utama memasukkan routing app operasional."
+      },
+      {
+        "label": "operasional/views.py · fungsi home",
+        "filename": "operasional/views.py · fungsi home",
+        "code": "from django.contrib.auth.decorators import login_required\n\nfrom django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin\n\nfrom django.db import transaction\n\nfrom django.http import HttpResponse\n\nfrom django.shortcuts import get_object_or_404, redirect\n\nfrom django.urls import reverse_lazy\n\nfrom django.views.decorators.http import require_POST\n\nfrom django.views.generic import CreateView, DeleteView, ListView, UpdateView\n\nfrom .forms import PerangkatForm, TiketForm\n\nfrom .models import Perangkat, Tiket\n\ndef home(request):\n    return HttpResponse('Halo, Django! Buka /tiket/ atau /perangkat/ untuk latihan.')\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Kutipan dari views.py. Fungsi ini langsung menghasilkan response teks."
+      }
+    ],
+    "steps": [
+      "Jalankan proyek dan buka alamat akar localhost.",
+      "Buka config/urls.py lalu cocokkan path kosong dengan fungsi home.",
+      "Baca operasional/urls.py dan temukan pola untuk ubah tiket."
+    ],
+    "practice": [
+      "Ubah pesan home pada salinan lokal lalu muat ulang halaman.",
+      "Bandingkan URL /tiket/ dan /tiket/1/ubah/; jelaskan informasi yang dibawa pk."
+    ],
+    "warning": "Jangan menganggap ID yang sulit ditebak sebagai pengganti otorisasi. ID object dari URL harus diperiksa terhadap hak akses pengguna.",
+    "check": "Jika pk valid, apakah object pasti ada dan boleh dibaca?",
+    "answer": "Tidak. View masih harus memeriksa keberadaan dan hak akses. Pada kasus tiket, queryset dibatasi ke pemilik yang sedang login sebelum object dipilih.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/http/urls/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-template",
+    "title": "Template, context, dan pewarisan halaman",
+    "summary": "Susun HTML server-side, tampilkan daftar, dan pertahankan autoescape.",
+    "analogy": "Template seperti formulir cetak; context membawa data yang akan diisikan pada tempatnya.",
+    "explain": [
+      "Template Django berupa teks, biasanya HTML, dengan variabel {{ ... }} dan tag {% ... %}. Context memasok nilai yang dipakai template. Pada ListView, object_list dan page_obj tersedia melalui perilaku view generik.",
+      "Pewarisan template menghindari pengulangan header, navigasi, dan kerangka dokumen. Base.html mendefinisikan block content; halaman anak memakai extends lalu mengisi block itu. Load static diperlukan pada template yang memakai tag static.",
+      "For menampilkan item daftar dan empty memberi keadaan kosong yang mudah dipahami. If menyesuaikan tampilan, misalnya menampilkan tombol tambah ketika permission ada. Menyembunyikan tombol hanya membantu tampilan; server tetap wajib memeriksa permission.",
+      "Autoescape menampilkan karakter seperti < dan > sebagai teks aman dalam konteks HTML biasa. Jangan memakai filter safe atau mematikan autoescape untuk masukan pengguna. Autoescape bukan alasan menyisipkan data sembarangan ke JavaScript, CSS, atau URL; setiap konteks mempunyai kebutuhan berbeda."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "{{ nilai }}",
+          "Menyisipkan variabel context"
+        ],
+        [
+          "{% for %} / {% empty %}",
+          "Mengulang daftar / menampilkan keadaan kosong"
+        ],
+        [
+          "extends / block",
+          "Mewariskan kerangka halaman"
+        ],
+        [
+          "Autoescape",
+          "Menghindari penafsiran teks sebagai markup dalam konteks HTML"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "templates/operasional/tiket_list.html",
+        "filename": "templates/operasional/tiket_list.html",
+        "code": "{% extends 'base.html' %}{% block content %}\n<h1>Tiket saya</h1><p><a href=\"{% url 'tiket-add' %}\">Tambah tiket</a></p>\n<ul>{% for item in object_list %}<li><h2>{{ item.judul }}</h2><p>{{ item.deskripsi }}</p><p>{{ item.get_status_display }}</p><a href=\"{% url 'tiket-edit' item.pk %}\">Ubah tiket {{ item.pk }}</a>{% if item.status == 'terbuka' %}<form method=\"post\" action=\"{% url 'tiket-close' item.pk %}\">{% csrf_token %}<button type=\"submit\">Selesaikan tiket {{ item.pk }}</button></form>{% endif %}</li>{% empty %}<li>Belum ada tiket milik Anda.</li>{% endfor %}</ul>\n{% endblock %}\n",
+        "language": "html",
+        "output": "",
+        "explanation": "Template anak membaca object_list dari TiketList dan mempertahankan escaping bawaan."
+      },
+      {
+        "label": "templates/base.html",
+        "filename": "templates/base.html",
+        "code": "{% load static %}\n<!doctype html>\n<html lang=\"id\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab Django · Operasional</title><link rel=\"stylesheet\" href=\"{% static 'operasional/style.css' %}\"></head>\n<body><header><a href=\"#isi\">Lewati ke isi</a><nav aria-label=\"Navigasi lab\"><a href=\"{% url 'home' %}\">Beranda</a><a href=\"{% url 'perangkat-list' %}\">Perangkat</a><a href=\"{% url 'tiket-list' %}\">Tiket saya</a></nav>\n{% if user.is_authenticated %}<p>Masuk sebagai {{ user.username }}</p><form method=\"post\" action=\"{% url 'logout' %}\">{% csrf_token %}<button type=\"submit\">Keluar</button></form>{% else %}<a href=\"{% url 'login' %}\">Masuk</a>{% endif %}</header>\n<main id=\"isi\">{% block content %}{% endblock %}\n{% if is_paginated %}<nav aria-label=\"Halaman daftar\">{% if page_obj.has_previous %}<a href=\"?page={{ page_obj.previous_page_number }}&amp;q={{ request.GET.q|urlencode }}\">Sebelumnya</a>{% endif %}<span>Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a href=\"?page={{ page_obj.next_page_number }}&amp;q={{ request.GET.q|urlencode }}\">Berikutnya</a>{% endif %}</nav>{% endif %}</main></body></html>\n",
+        "language": "html",
+        "output": "",
+        "explanation": "Kerangka bersama menyimpan navigasi, stylesheet, dan block content."
+      }
+    ],
+    "steps": [
+      "Masuk sebagai akun lokal dan buka /tiket/.",
+      "Temukan extends, block, for, dan empty pada template tiket.",
+      "Buat tiket berjudul <b>uji</b> dan pastikan karakter tampil sebagai teks, bukan tulisan tebal."
+    ],
+    "practice": [
+      "Ubah judul halaman daftar tanpa mengubah logika query.",
+      "Tambahkan kalimat panduan pada bagian empty saat daftar tiket kosong."
+    ],
+    "warning": "Template bukan tempat memutuskan semua izin atau menjalankan query rumit. Siapkan data di view/queryset dan pertahankan pemeriksaan pada server.",
+    "check": "Mengapa if permission pada tombol tidak cukup untuk melindungi endpoint?",
+    "answer": "Pengguna dapat mengirim request langsung tanpa menekan tombol. View harus menolak request yang tidak memiliki izin, termasuk request POST.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/templates/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-model-orm",
+    "title": "Model dan ORM: perangkat, pengguna, dan tiket",
+    "summary": "Petakan class Python ke tabel dan gunakan queryset untuk membaca data.",
+    "analogy": "Model seperti rancangan kartu inventaris; ORM membantu mencari dan menyimpan kartu tanpa menulis setiap SQL secara manual.",
+    "explain": [
+      "Model adalah class turunan models.Model. CharField menyimpan teks terbatas, BooleanField menyimpan keadaan, dan DateTimeField dapat mencatat waktu pembuatan. Migration diperlukan sebelum perubahan model tersedia pada skema database.",
+      "Perangkat mempunyai kode unik, nama, lokasi, dan aktif. Tiket mempunyai pemilik, judul, deskripsi, status, dan waktu dibuat. ForeignKey ke settings.AUTH_USER_MODEL menghubungkan tiket ke akun tanpa mengunci model ke implementasi user tertentu.",
+      "Queryset adalah rancangan query yang sering baru dieksekusi ketika hasilnya dibaca. Filter menghasilkan queryset; get mencari satu object dan dapat gagal jika tidak ada atau lebih dari satu. Gunakan parameter ORM untuk nilai masukan, bukan merangkai SQL mentah dengan string.",
+      "On_delete=PROTECT pada pemilik menjaga agar penghapusan akun yang masih memiliki tiket tidak menghilangkan relasinya begitu saja. Choices membantu pilihan status di lapisan model/form, tetapi bukan seluruh aturan bisnis atau otorisasi. Jangan mengandalkan save() untuk otomatis menjalankan full_clean()."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Model",
+          "Representasi struktur data"
+        ],
+        [
+          "ForeignKey",
+          "Relasi banyak tiket ke satu akun"
+        ],
+        [
+          "filter / get",
+          "Daftar hasil / satu object"
+        ],
+        [
+          "unique=True",
+          "Constraint keunikan pada database"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/models.py",
+        "filename": "operasional/models.py",
+        "code": "from django.conf import settings\nfrom django.db import models\n\n\nclass Perangkat(models.Model):\n    kode = models.CharField(max_length=30, unique=True)\n    nama = models.CharField(max_length=100)\n    lokasi = models.CharField(max_length=100)\n    aktif = models.BooleanField(default=True)\n\n    class Meta:\n        ordering = ['kode']\n\n    def __str__(self):\n        return f'{self.kode} - {self.nama}'\n\n\nclass Tiket(models.Model):\n    class Status(models.TextChoices):\n        TERBUKA = 'terbuka', 'Terbuka'\n        SELESAI = 'selesai', 'Selesai'\n\n    pemilik = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)\n    judul = models.CharField(max_length=120)\n    deskripsi = models.TextField(max_length=2000)\n    status = models.CharField(max_length=10, choices=Status.choices, default=Status.TERBUKA)\n    dibuat = models.DateTimeField(auto_now_add=True)\n\n    class Meta:\n        ordering = ['-dibuat', '-pk']\n\n    def __str__(self):\n        return self.judul\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Dua model dipakai bersama oleh semua materi proyek."
+      },
+      {
+        "label": "manage.py shell · contoh baca",
+        "filename": "manage.py shell · contoh baca",
+        "code": "from operasional.models import Perangkat\nprint(list(Perangkat.objects.filter(aktif=True).values_list('kode', flat=True)))",
+        "language": "python",
+        "output": "[] jika database latihan belum berisi perangkat.",
+        "explanation": "Jalankan python manage.py shell terlebih dahulu. Kode ini hanya membaca perangkat."
+      }
+    ],
+    "steps": [
+      "Baca models.py dan buat daftar field Perangkat serta Tiket.",
+      "Jalankan migration lalu buka python manage.py shell.",
+      "Jalankan query baca dan bandingkan hasil sebelum serta sesudah menambah perangkat melalui admin."
+    ],
+    "practice": [
+      "Tulis query untuk perangkat pada lokasi tertentu menggunakan filter.",
+      "Jelaskan mengapa pemilik tiket dibuat sebagai ForeignKey, bukan menyalin username pada setiap tiket."
+    ],
+    "warning": "Normalisasi kode menjadi huruf besar dilakukan oleh ModelForm pada contoh. Penulisan langsung melalui ORM atau jalur lain harus mengikuti aturan yang sama bila memerlukan keunikan yang tidak peka huruf besar/kecil.",
+    "check": "Apakah model yang diedit langsung mengubah tabel database?",
+    "answer": "Tidak. Catat perubahan melalui makemigrations, periksa migration, lalu terapkan dengan migrate. Kode model dan skema database harus tetap sesuai.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/db/models/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-migrasi",
+    "title": "Migrasi: menjaga model dan skema tetap sesuai",
+    "summary": "Bedakan makemigrations, migrate, backup, dan perubahan skema yang aman.",
+    "analogy": "Migration seperti catatan renovasi: ada rancangan perubahan dan ada pekerjaan menerapkannya pada bangunan.",
+    "explain": [
+      "Makemigrations membandingkan state model dengan catatan migration lalu menulis file perubahan. Migrate menjalankan migration yang belum diterapkan. Showmigrations menampilkan status penerapannya pada database yang sedang digunakan.",
+      "Proyek unduhan sudah membawa 0001_initial.py. Pada database kosong, migrate membuat tabel app serta tabel bawaan Django. Membuat ulang migration awal tidak diperlukan. Simpan file migration di Git bersama perubahan model agar lingkungan lain dapat mengikuti urutan yang sama.",
+      "Latihan perubahan skema sebaiknya dilakukan pada salinan proyek dan database latihan. Misalnya tambahkan field catatan yang mengizinkan string kosong serta mempunyai default kosong. Periksa file migration sebelum menjalankan migrate. Untuk tabel besar, pemberian default, backfill, indeks, dan penguncian perlu rencana lebih rinci.",
+      "Mundur ke migration lama tidak selalu aman atau mungkin dilakukan tanpa kehilangan data. Backup yang diuji pemulihannya lebih penting daripada menganggap rollback selalu memulihkan isi. Hindari menghapus database atau folder migrations untuk menyelesaikan masalah produksi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "makemigrations",
+          "Menulis catatan perubahan skema"
+        ],
+        [
+          "migrate",
+          "Menerapkan catatan pada database"
+        ],
+        [
+          "showmigrations",
+          "Melihat status migration"
+        ],
+        [
+          "Backup / restore",
+          "Salinan data / proses pemulihan yang diuji"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py showmigrations operasional\npython manage.py migrate\npython manage.py makemigrations --check --dry-run",
+        "language": "bash",
+        "output": "",
+        "explanation": "Pada proyek unduhan tanpa perubahan model, perintah terakhir seharusnya tidak menemukan perubahan baru."
+      },
+      {
+        "label": "operasional/models.py · latihan tambahan",
+        "filename": "operasional/models.py · latihan tambahan",
+        "code": "catatan = models.TextField(blank=True, default=\"\")",
+        "language": "python",
+        "output": "",
+        "explanation": "Pada salinan proyek, tambahkan baris ini di dalam class Perangkat, bukan sebagai file tersendiri. Setelah itu jalankan makemigrations operasional dan tinjau file yang dihasilkan."
+      }
+    ],
+    "steps": [
+      "Lihat migration awal yang sudah disertakan pada proyek.",
+      "Jalankan showmigrations, migrate, lalu showmigrations lagi.",
+      "Pada salinan latihan, tambahkan field catatan, buat migration, baca operasi yang dihasilkan, kemudian terapkan."
+    ],
+    "practice": [
+      "Jelaskan apa yang akan terjadi jika model berubah tetapi migration belum diterapkan.",
+      "Tulis rencana singkat backup, penerapan perubahan, dan pemeriksaan setelah rilis."
+    ],
+    "warning": "Jangan menjalankan migration secara buta pada database penting. Pastikan target database benar, perubahan sudah ditinjau, dan ada cara pemulihan sebelum rilis.",
+    "check": "Mengapa file migration perlu ikut disimpan dalam Git?",
+    "answer": "Agar perubahan skema memiliki urutan yang dapat ditinjau dan diterapkan ulang pada lingkungan lain. Menyimpan models.py saja tidak menggantikan riwayat migration.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/migrations/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-admin",
+    "title": "Django Admin: kelola data dan pengguna",
+    "summary": "Daftarkan model, atur pencarian, dan pahami perbedaan staff dengan superuser.",
+    "analogy": "Admin seperti ruang pengelola gudang: berguna bagi petugas yang berwenang, tetapi bukan etalase semua pengunjung.",
+    "explain": [
+      "Django Admin menyediakan antarmuka pengelolaan model. App admin, middleware, URL, dan tabel autentikasi harus tersedia; proyek unduhan sudah menyiapkannya. Buat akun melalui createsuperuser lalu masuk ke /admin/ pada localhost.",
+      "Daftarkan model memakai decorator admin.register. List_display menentukan kolom daftar, search_fields menambah pencarian, dan list_filter menyediakan penyaring. Pengaturan ini membantu pekerjaan administrasi tanpa membuat halaman CRUD publik dari nol.",
+      "Is_staff mengizinkan akun memenuhi syarat masuk admin, tetapi user staff biasa tetap membutuhkan permission model yang sesuai. Superuser mempunyai kewenangan luas dan digunakan terbatas untuk administrasi. User aplikasi biasa tidak harus menjadi staff untuk membuka halaman yang disediakan aplikasi.",
+      "Pada proyek latihan, superuser dapat mengelola tiket lintas pengguna melalui admin. Halaman /tiket/ tetap dibatasi ke pemilik akun. Kebijakan admin dan halaman pengguna berbeda secara sengaja; jangan menyebut semua akses data otomatis mengikuti filter kepemilikan yang ada di view pengguna."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "admin.register",
+          "Mendaftarkan model ke admin"
+        ],
+        [
+          "list_display / search_fields",
+          "Kolom daftar / field pencarian"
+        ],
+        [
+          "is_staff",
+          "Syarat akses admin, tetap membutuhkan permission"
+        ],
+        [
+          "is_superuser",
+          "Kewenangan luas; jangan dipakai semua pengguna"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/admin.py",
+        "filename": "operasional/admin.py",
+        "code": "from django.contrib import admin\nfrom .models import Perangkat, Tiket\n\n\n@admin.register(Perangkat)\nclass PerangkatAdmin(admin.ModelAdmin):\n    list_display = ['kode', 'nama', 'lokasi', 'aktif']\n    search_fields = ['kode', 'nama', 'lokasi']\n    list_filter = ['aktif']\n\n\n@admin.register(Tiket)\nclass TiketAdmin(admin.ModelAdmin):\n    list_display = ['judul', 'pemilik', 'status', 'dibuat']\n    list_filter = ['status']\n    search_fields = ['judul']\n    readonly_fields = ['dibuat']\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Konfigurasi daftar dan pencarian pada dua model."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py createsuperuser",
+        "language": "bash",
+        "output": "",
+        "explanation": "Buat akun sendiri melalui prompt bila belum ada; jangan membuat ulang akun yang sama."
+      }
+    ],
+    "steps": [
+      "Masuk ke /admin/ menggunakan akun lokal yang Anda buat.",
+      "Tambahkan satu perangkat dan cocokkan hasilnya dengan query ORM.",
+      "Buat group Petugas Inventaris dengan permission perangkat, lalu buat user biasa dan masukkan ke group tersebut.",
+      "Coba user biasa pada /akun/login/; berikan is_staff hanya jika memang perlu akses admin."
+    ],
+    "practice": [
+      "Cari perangkat berdasarkan nama melalui admin.",
+      "Bandingkan user biasa tanpa permission, petugas dengan permission, dan superuser."
+    ],
+    "warning": "Jangan menjadikan semua user superuser agar error permission hilang. Berikan izin minimum sesuai tugas, dan jangan memakai data pelanggan nyata untuk latihan.",
+    "check": "Apakah is_staff sama dengan semua izin pengelolaan data?",
+    "answer": "Tidak. Staff boleh mengakses area admin sesuai syarat login, tetapi izin model tetap menentukan tindakan yang dapat dilakukan. Superuser memiliki kewenangan lebih luas.",
+    "source": "https://docs.djangoproject.com/en/5.2/ref/contrib/admin/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-form-crud",
+    "title": "ModelForm dan CRUD: validasi sebelum menyimpan",
+    "summary": "Bangun tambah, ubah, serta hapus dengan field eksplisit dan pola POST–redirect–GET.",
+    "analogy": "Formulir adalah meja pemeriksaan: hanya kolom yang disetujui diterima sebelum data masuk gudang.",
+    "explain": [
+      "ModelForm membentuk field formulir dari model. Gunakan daftar fields eksplisit agar field sensitif tidak ikut terbuka ketika model berkembang. TiketForm hanya menerima judul dan deskripsi; pemilik serta status ditetapkan melalui aturan server.",
+      "CreateView menampilkan form pada GET dan memprosesnya pada POST. Bila valid, data disimpan dan browser diarahkan ke success_url. Pola POST–redirect–GET mengurangi pengiriman ulang saat refresh halaman hasil, tetapi bukan jaminan idempotensi untuk semua request ganda.",
+      "UpdateView memuat object yang ada dan mengikat form ke object tersebut. DeleteView menampilkan konfirmasi pada GET dan melakukan penghapusan saat POST valid. CSRF token harus disertakan pada form internal untuk membantu mencegah request lintas situs yang tidak diinginkan.",
+      "Form menjalankan pembersihan input, pemeriksaan batas field, dan validasi model terkait. Clean_kode menormalkan kode perangkat menjadi huruf besar. Constraint database tetap diperlukan karena request bersamaan dapat lolos pemeriksaan awal sebelum salah satunya menyimpan. Aplikasi produksi perlu menangani konflik penyimpanan dengan pesan yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "fields eksplisit",
+          "Membatasi masukan yang boleh diubah"
+        ],
+        [
+          "GET / POST",
+          "Menampilkan form / memproses perubahan"
+        ],
+        [
+          "CSRF token",
+          "Perlindungan request perubahan berbasis cookie"
+        ],
+        [
+          "Redirect setelah POST",
+          "Memisahkan proses simpan dari halaman hasil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/forms.py",
+        "filename": "operasional/forms.py",
+        "code": "from django import forms\nfrom .models import Perangkat, Tiket\n\n\nclass PerangkatForm(forms.ModelForm):\n    class Meta:\n        model = Perangkat\n        fields = ['kode', 'nama', 'lokasi', 'aktif']\n\n    def clean_kode(self):\n        return self.cleaned_data['kode'].upper()\n\n\nclass TiketForm(forms.ModelForm):\n    class Meta:\n        model = Tiket\n        fields = ['judul', 'deskripsi']  # Pemilik dan status ditentukan server.\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Pemilik tiket dan status tidak dibuka sebagai input pengguna."
+      },
+      {
+        "label": "operasional/views.py · CRUD perangkat",
+        "filename": "operasional/views.py · CRUD perangkat",
+        "code": "from django.contrib.auth.decorators import login_required\n\nfrom django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin\n\nfrom django.db import transaction\n\nfrom django.http import HttpResponse\n\nfrom django.shortcuts import get_object_or_404, redirect\n\nfrom django.urls import reverse_lazy\n\nfrom django.views.decorators.http import require_POST\n\nfrom django.views.generic import CreateView, DeleteView, ListView, UpdateView\n\nfrom .forms import PerangkatForm, TiketForm\n\nfrom .models import Perangkat, Tiket\n\nclass PerangkatCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):\n    model = Perangkat\n    form_class = PerangkatForm\n    permission_required = 'operasional.add_perangkat'\n    template_name = 'operasional/form.html'\n    success_url = reverse_lazy('perangkat-list')\n\nclass PerangkatUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):\n    model = Perangkat\n    form_class = PerangkatForm\n    permission_required = 'operasional.change_perangkat'\n    template_name = 'operasional/form.html'\n    success_url = reverse_lazy('perangkat-list')\n\nclass PerangkatDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):\n    model = Perangkat\n    permission_required = 'operasional.delete_perangkat'\n    template_name = 'operasional/konfirmasi_hapus.html'\n    success_url = reverse_lazy('perangkat-list')\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Kutipan class CRUD; gunakan file lengkap pada proyek unduhan."
+      },
+      {
+        "label": "templates/operasional/form.html",
+        "filename": "templates/operasional/form.html",
+        "code": "{% extends 'base.html' %}{% block content %}\n<h1>Formulir data</h1><form method=\"post\">{% csrf_token %}{{ form.as_p }}<button type=\"submit\">Simpan</button></form>\n{% endblock %}\n",
+        "language": "html",
+        "output": "",
+        "explanation": "Form mengirim POST serta menyertakan CSRF token."
+      }
+    ],
+    "steps": [
+      "Masuk sebagai superuser lokal atau petugas dengan permission yang diperlukan.",
+      "Tambah perangkat dengan kode huruf kecil dan periksa hasil normalisasinya.",
+      "Coba kode duplikat serta judul tiket hanya spasi; baca pesan kesalahan.",
+      "Ubah perangkat lalu buka halaman konfirmasi hapus; pastikan GET belum menghapus data."
+    ],
+    "practice": [
+      "Tulis matriks uji input valid, kosong, terlalu panjang, dan duplikat.",
+      "Jelaskan mengapa pemilik tiket tidak boleh ditentukan dari hidden input pengguna."
+    ],
+    "warning": "Validasi form tidak menggantikan otorisasi dan constraint database. Jangan menonaktifkan CSRF hanya agar POST berhasil; perbaiki token serta konfigurasi request.",
+    "check": "Mengapa daftar fields eksplisit lebih aman daripada membuka semua field?",
+    "answer": "Field baru yang sensitif tidak otomatis dapat diubah pengguna. Server tetap menentukan pemilik serta status sesuai aturan aplikasi.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/forms/modelforms/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "django-login-izin",
+    "title": "Login, session, permission, dan kepemilikan data",
+    "summary": "Pisahkan identitas pengguna, izin tindakan, dan batas object yang boleh diakses.",
+    "analogy": "Kartu pegawai menunjukkan siapa Anda; izin ruangan menentukan tempat yang boleh dimasuki; label pemilik menentukan berkas yang boleh dibaca.",
+    "explain": [
+      "Authentication menjawab siapa pengguna; authorization menjawab tindakan dan data yang boleh diakses. LoginView memakai sistem autentikasi Django dan session. Jangan menyimpan password sebagai teks biasa atau membuat pemeriksaan password sendiri.",
+      "LoginRequiredMixin mengarahkan pengguna anonim ke halaman login. PermissionRequiredMixin memeriksa permission seperti operasional.change_perangkat. Pengguna yang sudah login tetapi tidak mempunyai izin dapat menerima 403. Urutan mixin dan view perlu mengikuti pola yang didukung Django.",
+      "Permission model bukan pemeriksaan kepemilikan object. TiketMilikSaya membatasi queryset melalui pemilik=request.user. Dengan pola ini, halaman edit tiket pengguna lain menghasilkan 404 karena object tidak berada dalam queryset yang boleh diakses.",
+      "Saat membuat tiket, server menetapkan form.instance.pemilik dari request.user. Jangan mempercayai ID pemilik kiriman pengguna, termasuk hidden field. Logout memakai form POST dengan CSRF. CSRF, login, permission, dan filter object saling melengkapi; tidak saling menggantikan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Authentication",
+          "Memeriksa identitas"
+        ],
+        [
+          "Permission",
+          "Izin melakukan tindakan"
+        ],
+        [
+          "Filter pemilik",
+          "Batas object untuk user saat ini"
+        ],
+        [
+          "403 / 404",
+          "Izin ditolak / object tidak ditemukan dalam lingkup akses"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/views.py · akses tiket",
+        "filename": "operasional/views.py · akses tiket",
+        "code": "from django.contrib.auth.decorators import login_required\n\nfrom django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin\n\nfrom django.db import transaction\n\nfrom django.http import HttpResponse\n\nfrom django.shortcuts import get_object_or_404, redirect\n\nfrom django.urls import reverse_lazy\n\nfrom django.views.decorators.http import require_POST\n\nfrom django.views.generic import CreateView, DeleteView, ListView, UpdateView\n\nfrom .forms import PerangkatForm, TiketForm\n\nfrom .models import Perangkat, Tiket\n\nclass TiketMilikSaya(LoginRequiredMixin):\n    model = Tiket\n\n    def get_queryset(self):\n        return super().get_queryset().filter(pemilik=self.request.user)\n\nclass TiketList(TiketMilikSaya, ListView):\n    template_name = 'operasional/tiket_list.html'\n    paginate_by = 20\n\nclass TiketCreate(LoginRequiredMixin, CreateView):\n    model = Tiket\n    form_class = TiketForm\n    template_name = 'operasional/form.html'\n    success_url = reverse_lazy('tiket-list')\n\n    def form_valid(self, form):\n        form.instance.pemilik = self.request.user\n        return super().form_valid(form)\n\nclass TiketUpdate(TiketMilikSaya, UpdateView):\n    form_class = TiketForm\n    template_name = 'operasional/form.html'\n    success_url = reverse_lazy('tiket-list')\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Kutipan ini dipakai bersama view generik dan form proyek."
+      },
+      {
+        "label": "templates/registration/login.html",
+        "filename": "templates/registration/login.html",
+        "code": "{% extends 'base.html' %}{% block content %}\n<h1>Masuk ke lab</h1><form method=\"post\">{% csrf_token %}{{ form.as_p }}<input type=\"hidden\" name=\"next\" value=\"{{ next }}\"><button type=\"submit\">Masuk</button></form>\n<p>Akun dibuat melalui createsuperuser atau Django Admin pada lab lokal Anda. Tidak ada pendaftaran publik.</p>\n{% endblock %}\n",
+        "language": "html",
+        "output": "",
+        "explanation": "Login memakai form bawaan Django. Logout POST tersedia di base.html."
+      }
+    ],
+    "steps": [
+      "Buat dua user latihan melalui admin tanpa menjadikan keduanya superuser.",
+      "Gunakan dua profil browser untuk membuat tiket milik masing-masing.",
+      "Coba buka URL edit tiket user lain dan pastikan respons 404.",
+      "Uji user tanpa permission perangkat dan cocokkan hasilnya dengan petugas inventaris."
+    ],
+    "practice": [
+      "Buat tabel peran pengunjung, user biasa, petugas inventaris, dan admin. Tentukan tindakan tiap peran.",
+      "Jelaskan kenapa menyembunyikan tombol edit saja tidak melindungi data pengguna lain."
+    ],
+    "warning": "Lab ini tidak menyediakan pendaftaran publik atau pembatasan percobaan login lengkap. Sebelum membuka login ke internet, rancang rate limiting, pemulihan akun, logging, dan operasi keamanan sesuai lingkungan.",
+    "check": "Apakah user yang sudah login boleh mengedit setiap tiket dengan mengganti angka pada URL?",
+    "answer": "Tidak. View membatasi queryset ke pemilik request.user. Mengetahui ID tiket tidak memberi hak akses; akses lintas pengguna harus ditolak dan diuji.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/auth/default/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "django-static",
+    "title": "Static files dan tampilan responsif Django",
+    "summary": "Hubungkan stylesheet melalui static tag dan bedakan aset aplikasi dengan unggahan pengguna.",
+    "analogy": "Static files seperti papan petunjuk kantor yang dibagikan sama kepada pengunjung; unggahan pengguna seperti berkas titipan yang butuh pengelolaan sendiri.",
+    "explain": [
+      "CSS, gambar aplikasi, dan JavaScript tetap merupakan berkas terpisah dari logika Python. Pada proyek, stylesheet berada di static/operasional/style.css. Namespace operasional mengurangi benturan nama ketika ada beberapa app.",
+      "Template memakai load static lalu tag static untuk menyusun alamat aset. STATIC_URL adalah awalan URL, STATICFILES_DIRS adalah lokasi sumber tambahan, dan STATIC_ROOT adalah lokasi keluaran collectstatic. Folder sumber dan keluaran harus berbeda.",
+      "Saat DEBUG aktif, runserver dengan staticfiles dapat melayani aset untuk pengembangan. Pada produksi, jalankan collectstatic lalu siapkan penyajian hasilnya melalui web server, CDN, atau layanan yang sesuai hosting. Collectstatic hanya mengumpulkan; ia tidak otomatis mengatur server publik.",
+      "File unggahan pengguna, biasa disebut media, berbeda dari static aplikasi. Lab ini tidak menyediakan upload. Jika menambahnya, perlu validasi jenis/ukuran, aturan akses, storage persisten, serta kebijakan penyajian agar unggahan tidak dianggap kode aplikasi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "STATIC_URL",
+          "Awalan URL aset"
+        ],
+        [
+          "STATICFILES_DIRS",
+          "Folder sumber aset"
+        ],
+        [
+          "STATIC_ROOT",
+          "Keluaran pengumpulan aset"
+        ],
+        [
+          "Media",
+          "Unggahan pengguna; bukan static aplikasi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "static/operasional/style.css",
+        "filename": "static/operasional/style.css",
+        "code": "*{box-sizing:border-box}body{margin:0;background:#f4f6f5;color:#203b34;font:16px/1.7 system-ui,sans-serif}header,main{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:12px;margin:20px auto}nav{display:flex;flex-wrap:wrap;gap:16px}a{color:#165b51}button,input,textarea{font:inherit;max-width:100%;padding:8px}label{display:block}button{background:#165b51;color:white;border:0;border-radius:6px;cursor:pointer}:focus-visible{outline:3px solid #b16b1b;outline-offset:3px}.errorlist{color:#9e2530}li{overflow-wrap:anywhere}@media(max-width:1000px){main{margin:16px}}\n",
+        "language": "css",
+        "output": "",
+        "explanation": "CSS ini dipakai melalui base.html dan tetap bekerja tanpa JavaScript."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py findstatic operasional/style.css\npython manage.py collectstatic --noinput",
+        "language": "bash",
+        "output": "",
+        "explanation": "Perintah pertama mencari sumber CSS. Perintah kedua menyalin aset ke staticfiles lokal; folder keluaran tidak perlu masuk Git."
+      }
+    ],
+    "steps": [
+      "Buka halaman tiket dan lihat URL stylesheet melalui DevTools Network.",
+      "Ubah warna pada stylesheet sumber lalu muat ulang halaman lokal.",
+      "Jalankan findstatic dan collectstatic; bedakan folder sumber dan keluaran."
+    ],
+    "practice": [
+      "Uji halaman form pada viewport sempit dan dengan keyboard.",
+      "Tuliskan perbedaan logo aplikasi dengan foto yang diunggah user dalam rancangan penyimpanan."
+    ],
+    "warning": "Jangan menyimpan secret, backup database, atau berkas konfigurasi pribadi dalam folder static yang akan disajikan publik.",
+    "check": "Apakah collectstatic saja membuat CSS tersedia pada semua hosting produksi?",
+    "answer": "Tidak. Hasil pengumpulan masih perlu disajikan oleh konfigurasi hosting yang sesuai. Pastikan URL dan storage keluaran cocok dengan layanan yang dipilih.",
+    "source": "https://docs.djangoproject.com/en/5.2/howto/static-files/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "django-pengujian",
+    "title": "Pengujian Django: alur berhasil dan akses yang ditolak",
+    "summary": "Gunakan TestCase, test client, serta database uji untuk membuktikan aturan aplikasi.",
+    "analogy": "Pengujian seperti daftar pemeriksaan sebelum alat dipakai: bukan hanya memastikan tombol hidup, tetapi juga memastikan tindakan terlarang ditolak.",
+    "explain": [
+      "Django TestCase menyiapkan database uji dan membantu mengisolasi perubahan antar test. Test client memanggil view tanpa menyalakan server browser. Gunakan data latihan yang dibuat oleh test; jangan mengarahkannya ke database produksi.",
+      "Periksa hasil bisnis, bukan hanya status 200. Contoh memastikan tiket baru dimiliki user yang login walaupun payload mengirim pemilik lain. Pengujian lain memastikan user B tidak dapat membaca atau mengubah tiket A.",
+      "Force_login berguna untuk mempersingkat test yang berfokus pada izin, tetapi tidak menguji password. Karena itu proyek juga memiliki test login dengan password salah dan valid. Client biasa tidak memaksa pemeriksaan CSRF; gunakan Client(enforce_csrf_checks=True) ketika menguji perlindungan tersebut.",
+      "Proyek menyertakan 25 test: validasi kosong/duplikat, CRUD, pagination, escaping template, isolasi pemilik, POST-only, CSRF, login, serta logout. Test bukan pengganti mencoba keyboard, membaca pesan kesalahan, atau memeriksa tampilan melalui browser."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "TestCase",
+          "Isolasi database uji"
+        ],
+        [
+          "Test client",
+          "Memanggil view tanpa server nyata"
+        ],
+        [
+          "force_login",
+          "Menyiapkan sesi untuk fokus pada otorisasi"
+        ],
+        [
+          "enforce_csrf_checks",
+          "Mengaktifkan pemeriksaan CSRF pada test client"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py test operasional",
+        "language": "bash",
+        "output": "25 test dijalankan; hasil yang diharapkan: OK. Waktu eksekusi dapat berbeda.",
+        "explanation": "Jalankan dari folder yang memuat manage.py, dengan virtual environment aktif."
+      },
+      {
+        "label": "operasional/tests.py · test kepemilikan",
+        "filename": "operasional/tests.py · test kepemilikan",
+        "code": "def test_other_owner_cannot_edit(self):\n    self.client.force_login(self.budi)\n    url = reverse(\"tiket-edit\", args=[self.tiket.pk])\n    self.assertEqual(self.client.get(url).status_code, 404)\n    self.assertEqual(self.client.post(url, {\"judul\": \"Diubah\", \"deskripsi\": \"Uji\"}).status_code, 404)\n    self.tiket.refresh_from_db()\n    self.assertEqual(self.tiket.judul, \"Link lab putus\")",
+        "language": "python",
+        "output": "",
+        "explanation": "Kutipan method dari AlurLabTest; fixture setUpTestData dan import tersedia dalam file lengkap."
+      }
+    ],
+    "steps": [
+      "Jalankan test dari folder manage.py dan pastikan hasil OK.",
+      "Baca setUpTestData lalu temukan data Ani dan Budi.",
+      "Pada salinan latihan, hilangkan filter pemilik lalu jalankan test untuk melihat kegagalan; pulihkan perubahan setelah memahami penyebabnya."
+    ],
+    "practice": [
+      "Tambahkan test judul tiket melebihi 120 karakter dan pastikan tidak tersimpan.",
+      "Tulis pemeriksaan browser yang belum tercakup oleh test client."
+    ],
+    "warning": "Jangan menganggap test client biasa sudah menguji CSRF. Jangan memakai force_login untuk mengklaim alur password sudah diuji.",
+    "check": "Mengapa test harus memeriksa database setelah request ditolak?",
+    "answer": "Agar terbukti bahwa request yang ditolak tidak diam-diam mengubah data. Status respons saja belum selalu cukup membuktikan aturan bisnis.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/testing/overview/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "django-deployment",
+    "title": "Deployment Django: konfigurasi, HTTPS, dan data persisten",
+    "summary": "Siapkan rilis dengan DEBUG nonaktif, secret terpisah, aset, migration, serta backup.",
+    "analogy": "Proyek lokal seperti toko latihan; membuka toko untuk umum memerlukan alamat, kunci, pencatatan, dan tempat penyimpanan yang benar.",
+    "explain": [
+      "Server Django membutuhkan runtime Python yang sesuai, server WSGI atau ASGI produksi, dan konfigurasi hosting. Runserver bukan server produksi. Jalur materi ini menjelaskan persiapan rilis; tidak memasang layanan hosting atau memigrasikan website belajar menjadi Django.",
+      "DEBUG harus false pada produksi agar detail kesalahan internal tidak ditampilkan ke publik. SECRET_KEY harus acak serta rahasia, disediakan melalui environment hosting. ALLOWED_HOSTS membatasi host yang diterima; hindari wildcard tanpa validasi host yang benar di lapisan lain.",
+      "Contoh config.production mewajibkan secret, daftar host, dan path SQLite absolut pada volume persisten. Ini contoh satu instance kecil; filesystem sementara pada hosting bukan tempat aman untuk data yang harus bertahan. Untuk konkurensi dan kebutuhan operasional lebih besar, rancang PostgreSQL serta driver dan koneksi sesuai dokumentasi.",
+      "Rilis juga memerlukan HTTPS, cookie secure, penyajian static hasil collectstatic, backup dan uji restore, pemantauan, serta pembatasan percobaan login. Jika memakai reverse proxy, pengaturan header HTTPS harus mengikuti proxy tepercaya yang benar. Salah konfigurasi dapat menimbulkan redirect loop atau kepercayaan pada header palsu.",
+      "Jalankan check --deploy dan tinjau hasilnya. Perintah ini membantu menemukan masalah konfigurasi, tetapi bukan sertifikasi bahwa aplikasi aman. Terapkan migration pada tahap rilis terencana dengan backup; jangan menjalankannya setiap request. Uji login, CRUD, permission, dan pemuatan aset pada URL hasil deployment."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "DEBUG=False",
+          "Menghindari tampilan detail debug publik"
+        ],
+        [
+          "Environment",
+          "Tempat konfigurasi/secret yang dikelola hosting"
+        ],
+        [
+          "Storage persisten",
+          "Data tetap ada setelah restart/deployment"
+        ],
+        [
+          "check --deploy",
+          "Pemeriksaan konfigurasi untuk ditinjau"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "config/production.py",
+        "filename": "config/production.py",
+        "code": "\"\"\"Contoh konfigurasi; membutuhkan hosting Python dan storage persisten.\"\"\"\nimport os\nfrom pathlib import Path\nfrom django.core.exceptions import ImproperlyConfigured\nfrom .settings import *  # noqa: F403\n\nDEBUG = False\nSECRET_KEY = os.environ['DJANGO_SECRET_KEY']\nif len(SECRET_KEY) < 50 or SECRET_KEY.startswith('django-insecure-'):\n    raise ImproperlyConfigured('Gunakan secret acak produksi minimal 50 karakter.')\nALLOWED_HOSTS = [h.strip() for h in os.environ['DJANGO_ALLOWED_HOSTS'].split(',') if h.strip()]\nif not ALLOWED_HOSTS or '*' in ALLOWED_HOSTS:\n    raise ImproperlyConfigured('Tentukan host produksi secara eksplisit.')\ndb_path = Path(os.environ['DJANGO_DB_PATH'])\nif not db_path.is_absolute():\n    raise ImproperlyConfigured('DJANGO_DB_PATH harus absolut dan berada pada volume persisten.')\nDATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': db_path}}\nSECURE_SSL_REDIRECT = True\nSESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True\nSECURE_HSTS_SECONDS = 3600\nSECURE_HSTS_INCLUDE_SUBDOMAINS = False\nSECURE_HSTS_PRELOAD = False\n# Jangan percaya header proxy sebelum proxy tepercaya dikonfigurasi oleh operator.\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Contoh membutuhkan environment produksi nyata; jangan memakai secret lokal publik. Operator harus menyiapkan volume persisten dan server HTTPS."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py check --deploy --settings=config.production\npython manage.py collectstatic --noinput --settings=config.production",
+        "language": "bash",
+        "output": "",
+        "explanation": "Jalankan setelah environment produksi disiapkan. Kedua perintah bukan perintah menjalankan server publik."
+      }
+    ],
+    "steps": [
+      "Baca config.settings dan config.production; catat perbedaan secret, debug, host, database, dan cookie.",
+      "Susun daftar kebutuhan hosting Python, database/storage persisten, static, HTTPS, serta backup.",
+      "Pada environment staging yang Anda siapkan, jalankan check --deploy dan selesaikan temuan yang relevan.",
+      "Setelah rilis sungguhan, uji ulang alur aplikasi pada URL publik dan verifikasi log tidak memuat rahasia."
+    ],
+    "practice": [
+      "Jelaskan risiko menyimpan SQLite pada filesystem deployment yang sementara.",
+      "Tulis rencana pemulihan bila migration gagal atau perubahan aplikasi perlu dibatalkan."
+    ],
+    "warning": "Jangan menyalin secret latihan ke produksi. Jangan mengaktifkan HSTS subdomain/preload tanpa menyiapkan seluruh domain terkait. Akun admin, data user, dan backup memerlukan pengelolaan operasional tersendiri.",
+    "check": "Apakah check --deploy tanpa temuan menjamin seluruh aplikasi aman?",
+    "answer": "Tidak. Pemeriksaan konfigurasi tidak menggantikan pengujian izin, validasi data, hardening login, backup, pemantauan, dan peninjauan aturan aplikasi.",
+    "source": "https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "django-kasus-inventaris",
+    "title": "Studi kasus Django: inventaris perangkat",
+    "summary": "Gabungkan model, admin, form, permission, pencarian, serta pagination untuk pengelolaan aset.",
+    "analogy": "Inventaris seperti buku gudang bersama: pembaca, pencatat, pengubah, dan penghapus mempunyai kewenangan berbeda.",
+    "explain": [
+      "Kebutuhan: petugas dapat mendata kode unik, nama, lokasi, dan keadaan aktif perangkat. Daftar dapat dicari dan dibagi per halaman. Hanya pengguna yang mendapat permission tertentu boleh membaca atau mengubah inventaris.",
+      "Rancangan: Perangkat menjadi model, PerangkatForm menangani input, dan view generik menangani daftar, tambah, ubah, serta hapus. Query nama memakai icontains dengan nilai parameter, sedangkan Meta.ordering memberi urutan stabil untuk pagination.",
+      "Atur group Pembaca Inventaris dengan view_perangkat dan Petugas Inventaris dengan izin sesuai tugas. Jangan memberi delete kepada semua petugas bila tidak diperlukan. Di UI, tautan berubah sesuai izin; pada server, mixin permission tetap menolak akses langsung yang tidak sah.",
+      "Kriteria selesai: kode duplikat ditolak form; kode dinormalisasi; user tanpa izin mendapat penolakan; perubahan valid tersimpan; GET hapus tidak mengubah data; POST hapus memerlukan permission dan CSRF; pencarian serta halaman kedua bekerja dengan data latihan yang cukup.",
+      "Batas versi awal: belum ada riwayat audit, impor massal, peminjaman, atau deteksi edit bersamaan. Aset penting sering lebih cocok dinonaktifkan atau diarsipkan daripada dihapus permanen. Gunakan data fiktif untuk mencoba operasi hapus pada lab ini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Data",
+          "Kode, nama, lokasi, aktif"
+        ],
+        [
+          "Izin",
+          "View, add, change, delete dipisahkan"
+        ],
+        [
+          "Daftar",
+          "Pencarian nama dan 20 item per halaman"
+        ],
+        [
+          "Batas",
+          "Belum ada audit dan pengelolaan konflik edit"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/views.py · daftar inventaris",
+        "filename": "operasional/views.py · daftar inventaris",
+        "code": "from django.contrib.auth.decorators import login_required\n\nfrom django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin\n\nfrom django.db import transaction\n\nfrom django.http import HttpResponse\n\nfrom django.shortcuts import get_object_or_404, redirect\n\nfrom django.urls import reverse_lazy\n\nfrom django.views.decorators.http import require_POST\n\nfrom django.views.generic import CreateView, DeleteView, ListView, UpdateView\n\nfrom .forms import PerangkatForm, TiketForm\n\nfrom .models import Perangkat, Tiket\n\nclass PerangkatList(LoginRequiredMixin, PermissionRequiredMixin, ListView):\n    model = Perangkat\n    permission_required = 'operasional.view_perangkat'\n    template_name = 'operasional/perangkat_list.html'\n    paginate_by = 20\n\n    def get_queryset(self):\n        query = self.request.GET.get('q', '').strip()[:100]\n        return super().get_queryset().filter(nama__icontains=query)\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Kutipan view daftar. Permission dan pagination tetap berjalan ketika pencarian digunakan."
+      },
+      {
+        "label": "templates/operasional/perangkat_list.html",
+        "filename": "templates/operasional/perangkat_list.html",
+        "code": "{% extends 'base.html' %}{% block content %}\n<h1>Inventaris perangkat</h1>\n<form method=\"get\"><label for=\"q\">Cari nama</label><input id=\"q\" name=\"q\" maxlength=\"100\" value=\"{{ request.GET.q }}\"><button type=\"submit\">Cari</button></form>\n{% if perms.operasional.add_perangkat %}<p><a href=\"{% url 'perangkat-add' %}\">Tambah perangkat</a></p>{% endif %}\n<ul>{% for item in object_list %}<li>{{ item.kode }} · {{ item.nama }} · {{ item.lokasi }} · {{ item.aktif|yesno:'Aktif,Nonaktif' }} {% if perms.operasional.change_perangkat %}<a href=\"{% url 'perangkat-edit' item.pk %}\">Ubah {{ item.kode }}</a>{% endif %} {% if perms.operasional.delete_perangkat %}<a href=\"{% url 'perangkat-delete' item.pk %}\">Hapus {{ item.kode }}</a>{% endif %}</li>{% empty %}<li>Belum ada perangkat yang sesuai.</li>{% endfor %}</ul>\n{% endblock %}\n",
+        "language": "html",
+        "output": "",
+        "explanation": "Tautan tindakan tampil sesuai permission; pemeriksaan utama tetap di view."
+      }
+    ],
+    "steps": [
+      "Siapkan proyek unduhan, migration, dan akun admin lokal.",
+      "Buat group pembaca serta petugas lalu berikan izin berbeda melalui admin.",
+      "Masuk sebagai setiap akun dan uji daftar, tambah, ubah, serta halaman konfirmasi hapus.",
+      "Tambahkan data latihan secukupnya atau gunakan test pagination untuk memeriksa pembagian halaman."
+    ],
+    "practice": [
+      "Tambahkan kebutuhan arsip perangkat dan jelaskan perbedaan arsip dengan penghapusan data.",
+      "Tulis matriks akses empat tindakan untuk pembaca dan petugas."
+    ],
+    "warning": "Form normalisasi tidak otomatis berlaku pada semua jalur ORM. Jika menambah impor atau API, gunakan aturan data yang konsisten dan tangani konflik constraint. Penghapusan contoh hanya untuk database latihan.",
+    "check": "Mengapa petugas dengan izin tambah belum tentu boleh menghapus?",
+    "answer": "Kedua tindakan memiliki dampak berbeda. Permission terpisah memungkinkan pembagian tugas serta pembatasan tindakan yang tidak diperlukan.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/auth/default/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 50
+  },
+  {
+    "slug": "django-kasus-tiket",
+    "title": "Studi kasus Django: tiket gangguan milik pengguna",
+    "summary": "Bangun tiket pribadi, penetapan pemilik oleh server, dan penyelesaian lewat POST.",
+    "analogy": "Setiap pelanggan mempunyai map pengaduan sendiri; mengetahui nomor map orang lain tidak memberikan hak membukanya.",
+    "explain": [
+      "Kebutuhan: user yang sudah login dapat membuat tiket, melihat daftar tiket sendiri, mengubah judul/deskripsi sendiri, serta menandainya selesai. Status awal selalu terbuka dan pemilik selalu akun yang sedang login.",
+      "TiketForm mengekspos hanya judul serta deskripsi. TiketCreate menetapkan pemilik dari request.user. TiketMilikSaya membatasi queryset untuk daftar dan edit, sehingga mengganti ID pada URL tidak membuka tiket pengguna lain.",
+      "Penyelesaian tiket memakai login_required dan require_POST. View memilih tiket dengan pk serta pemilik sekaligus. Update bersyarat hanya mengubah status terbuka menjadi selesai. Pengiriman ulang perintah selesai tidak membuka kembali tiket atau membuat tiket tambahan.",
+      "Transaction.atomic membungkus rangkaian operasi database, tetapi tidak otomatis menyelesaikan semua konflik bisnis. Pada contoh sederhana ini update status bersyarat membatasi transisi. Bila menambah penugasan teknisi, SLA, notifikasi, atau integrasi webhook, rancang status, izin, dan idempotensi yang lebih lengkap.",
+      "Kriteria selesai: payload pemilik/status palsu tidak dipercaya; tiket A tidak muncul untuk B; URL edit atau selesai milik orang lain menghasilkan 404; GET selesai ditolak; POST valid mengubah status; teks pengguna ditampilkan dengan escaping. Test proyek membuktikan alur tersebut memakai data latihan.",
+      "Batas versi awal: belum ada upload bukti, notifikasi, prioritas, peran teknisi, atau audit status. Admin lokal mempunyai jalur administrasi lintas pengguna melalui Django Admin. Jangan memakai lab ini sebagai helpdesk publik sebelum menambah kebutuhan operasional dan keamanan yang relevan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Penjelasan"
+      ],
+      "rows": [
+        [
+          "Pemilik",
+          "Ditetapkan request.user di server"
+        ],
+        [
+          "Daftar / edit",
+          "Queryset dibatasi ke pemilik"
+        ],
+        [
+          "Selesai",
+          "POST dengan CSRF dan update bersyarat"
+        ],
+        [
+          "Pengujian",
+          "Dua user, payload palsu, metode salah, dan ulang request"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/views.py · penyelesaian tiket",
+        "filename": "operasional/views.py · penyelesaian tiket",
+        "code": "from django.contrib.auth.decorators import login_required\n\nfrom django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin\n\nfrom django.db import transaction\n\nfrom django.http import HttpResponse\n\nfrom django.shortcuts import get_object_or_404, redirect\n\nfrom django.urls import reverse_lazy\n\nfrom django.views.decorators.http import require_POST\n\nfrom django.views.generic import CreateView, DeleteView, ListView, UpdateView\n\nfrom .forms import PerangkatForm, TiketForm\n\nfrom .models import Perangkat, Tiket\n\n@login_required\n@require_POST\ndef selesaikan_tiket(request, pk):\n    with transaction.atomic():\n        tiket = get_object_or_404(Tiket, pk=pk, pemilik=request.user)\n        Tiket.objects.filter(pk=tiket.pk, status=Tiket.Status.TERBUKA).update(status=Tiket.Status.SELESAI)\n    return redirect('tiket-list')\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Kutipan dari proyek. Transaksi dan update bersyarat bekerja pada database latihan."
+      },
+      {
+        "label": "operasional/urls.py",
+        "filename": "operasional/urls.py",
+        "code": "from django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path('perangkat/', views.PerangkatList.as_view(), name='perangkat-list'),\n    path('perangkat/tambah/', views.PerangkatCreate.as_view(), name='perangkat-add'),\n    path('perangkat/<int:pk>/ubah/', views.PerangkatUpdate.as_view(), name='perangkat-edit'),\n    path('perangkat/<int:pk>/hapus/', views.PerangkatDelete.as_view(), name='perangkat-delete'),\n    path('tiket/', views.TiketList.as_view(), name='tiket-list'),\n    path('tiket/tambah/', views.TiketCreate.as_view(), name='tiket-add'),\n    path('tiket/<int:pk>/ubah/', views.TiketUpdate.as_view(), name='tiket-edit'),\n    path('tiket/<int:pk>/selesai/', views.selesaikan_tiket, name='tiket-close'),\n]\n",
+        "language": "python",
+        "output": "",
+        "explanation": "Route untuk daftar, tambah, ubah, dan selesai memakai nama yang dirujuk template."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "code": "python manage.py test operasional\npython manage.py runserver 127.0.0.1:8000",
+        "language": "bash",
+        "output": "",
+        "explanation": "Jalankan test dahulu. Setelah lulus, jalankan server untuk uji manual dua profil browser."
+      }
+    ],
+    "steps": [
+      "Buat user Ani dan Budi dengan password lokal masing-masing melalui admin.",
+      "Masuk pada dua profil browser dan buat tiket yang mudah dibedakan.",
+      "Uji akses silang URL edit dan pastikan ditolak tanpa mengubah isi.",
+      "Selesaikan satu tiket, muat ulang, lalu jalankan pengujian otomatis untuk POST-only, CSRF, dan request berulang."
+    ],
+    "practice": [
+      "Rancang penambahan peran teknisi: tiket mana yang boleh dibaca dan siapa yang boleh mengubah status?",
+      "Buat diagram status terbuka, ditangani, selesai, serta aturan siapa yang boleh memindahkan status."
+    ],
+    "warning": "Jangan menganggap pk acak atau tombol tersembunyi sebagai keamanan. Setiap endpoint yang membaca atau mengubah tiket harus menerapkan kebijakan akses yang sama, termasuk endpoint baru yang ditambahkan kelak.",
+    "check": "Mengapa pemilik diperiksa lagi pada endpoint selesai walaupun daftar sudah difilter?",
+    "answer": "Endpoint dapat dipanggil langsung. Filter daftar hanya melindungi daftar; endpoint perubahan harus memeriksa hak aksesnya sendiri sebelum mengubah object.",
+    "source": "https://docs.djangoproject.com/en/5.2/topics/db/transactions/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 50
+  }
+]

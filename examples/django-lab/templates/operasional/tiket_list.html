@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Tiket saya</h1><p><a href="{% url 'tiket-add' %}">Tambah tiket</a></p>
+<ul>{% for item in object_list %}<li><h2>{{ item.judul }}</h2><p>{{ item.deskripsi }}</p><p>{{ item.get_status_display }}</p><a href="{% url 'tiket-edit' item.pk %}">Ubah tiket {{ item.pk }}</a>{% if item.status == 'terbuka' %}<form method="post" action="{% url 'tiket-close' item.pk %}">{% csrf_token %}<button type="submit">Selesaikan tiket {{ item.pk }}</button></form>{% endif %}</li>{% empty %}<li>Belum ada tiket milik Anda.</li>{% endfor %}</ul>
+{% endblock %}
