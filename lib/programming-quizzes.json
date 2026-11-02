@@ -7948,5 +7948,593 @@
       "answer": 0,
       "explanation": "Setiap jalur akses perlu menegakkan aturan object."
     }
+  ],
+  "python-desimal-uang": [
+    {
+      "question": "Sumber yang sesuai untuk Decimal pada contoh adalah ...",
+      "options": [
+        "String angka",
+        "Float hasil pembulatan tampilan",
+        "Warna input"
+      ],
+      "answer": 0,
+      "explanation": "String mempertahankan digit desimal sumber."
+    },
+    {
+      "question": "Is_finite berguna untuk ...",
+      "options": [
+        "Mengubah semua angka menjadi integer",
+        "Menolak NaN dan Infinity",
+        "Mengurutkan list"
+      ],
+      "answer": 1,
+      "explanation": "Nilai desimal khusus perlu diperiksa sebelum dipakai."
+    },
+    {
+      "question": "Kapan harga dibulatkan pada contoh?",
+      "options": [
+        "Hanya saat dicetak",
+        "Tidak pernah",
+        "Sebelum dikalikan jumlah"
+      ],
+      "answer": 2,
+      "explanation": "Aturan contoh membulatkan harga satuan dahulu."
+    },
+    {
+      "question": "Apakah Decimal otomatis menentukan aturan pajak?",
+      "options": [
+        "Tidak, aturan bisnis harus ditetapkan",
+        "Ya, mengikuti nama variabel",
+        "Ya, mengikuti CSS"
+      ],
+      "answer": 0,
+      "explanation": "Tipe angka tidak menentukan kebijakan transaksi."
+    }
+  ],
+  "python-cli-argparse": [
+    {
+      "question": "Bantuan bawaan argparse diakses melalui ...",
+      "options": [
+        "--help",
+        "--database",
+        "--css"
+      ],
+      "answer": 0,
+      "explanation": "Argparse menyediakan opsi bantuan standar."
+    },
+    {
+      "question": "Fungsi type pada add_argument digunakan untuk ...",
+      "options": [
+        "Membuat user admin",
+        "Mengonversi dan memeriksa nilai",
+        "Mengubah warna terminal"
+      ],
+      "answer": 1,
+      "explanation": "Fungsi dapat menghasilkan nilai atau menolak dengan ArgumentTypeError."
+    },
+    {
+      "question": "Argumen wajib yang hilang sebaiknya ...",
+      "options": [
+        "Dianggap selalu valid",
+        "Menghapus file program",
+        "Ditolak dengan pesan penggunaan"
+      ],
+      "answer": 2,
+      "explanation": "Pesan yang jelas membantu memperbaiki pemanggilan."
+    },
+    {
+      "question": "Mengapa token tidak ditaruh dalam argumen CLI?",
+      "options": [
+        "Bisa tercatat di riwayat atau daftar proses",
+        "Karena argparse tidak bisa membaca string",
+        "Karena semua argumen terenkripsi"
+      ],
+      "answer": 0,
+      "explanation": "Pilih jalur konfigurasi rahasia yang sesuai."
+    }
+  ],
+  "struktur-prefix-sum": [
+    {
+      "question": "Jumlah [l,r) dihitung dengan ...",
+      "options": [
+        "prefix[r] - prefix[l]",
+        "prefix[l] + prefix[r]",
+        "prefix[r-1] saja"
+      ],
+      "answer": 0,
+      "explanation": "Prefix menyimpan total sebelum tiap posisi."
+    },
+    {
+      "question": "Rentang [2,2) berisi ...",
+      "options": [
+        "Satu elemen indeks 2",
+        "Tidak ada elemen",
+        "Semua elemen"
+      ],
+      "answer": 1,
+      "explanation": "Batas kanan eksklusif membuat rentang ini kosong."
+    },
+    {
+      "question": "Biaya membangun prefix untuk n elemen adalah ...",
+      "options": [
+        "O(1) tanpa membaca data",
+        "O(n kuadrat) selalu",
+        "O(n)"
+      ],
+      "answer": 2,
+      "explanation": "Setiap elemen diproses sekali."
+    },
+    {
+      "question": "Setelah data berubah, prefix lama ...",
+      "options": [
+        "Dapat menjadi usang",
+        "Selalu otomatis berubah",
+        "Selalu menjadi kosong"
+      ],
+      "answer": 0,
+      "explanation": "Prefix adalah hasil prakomputasi, bukan tautan otomatis ke data."
+    }
+  ],
+  "struktur-sliding-window": [
+    {
+      "question": "Saat jendela bergeser satu langkah, total ...",
+      "options": [
+        "Ditambah nilai masuk dan dikurangi nilai keluar",
+        "Selalu dihitung dari 0 lagi",
+        "Selalu bertambah"
+      ],
+      "answer": 0,
+      "explanation": "Pekerjaan yang sama dipakai ulang."
+    },
+    {
+      "question": "Untuk semua angka negatif, nilai awal terbaik sebaiknya ...",
+      "options": [
+        "0",
+        "Total jendela pertama",
+        "Panjang data"
+      ],
+      "answer": 1,
+      "explanation": "Nilai awal harus mewakili kandidat yang sah."
+    },
+    {
+      "question": "K yang valid adalah ...",
+      "options": [
+        "Selalu 0",
+        "Boleh melebihi panjang data",
+        "1 sampai panjang data"
+      ],
+      "answer": 2,
+      "explanation": "Fungsi mencari tepat k elemen berurutan."
+    },
+    {
+      "question": "Bila dua jumlah sama, contoh memilih ...",
+      "options": [
+        "Jendela yang lebih awal",
+        "Jendela terakhir selalu",
+        "Indeks acak"
+      ],
+      "answer": 0,
+      "explanation": "Perbandingan > mempertahankan kandidat paling awal."
+    }
+  ],
+  "oop-protocol": [
+    {
+      "question": "Protocol mendukung kecocokan berdasarkan ...",
+      "options": [
+        "Struktur kemampuan",
+        "Warna nama class",
+        "Urutan file"
+      ],
+      "answer": 0,
+      "explanation": "Structural typing menilai anggota yang disyaratkan."
+    },
+    {
+      "question": "Implementasi wajib mewarisi Protocol secara eksplisit?",
+      "options": [
+        "Selalu",
+        "Tidak",
+        "Hanya saat memakai int"
+      ],
+      "answer": 1,
+      "explanation": "Kecocokan struktural tidak mewajibkan hubungan inheritance eksplisit."
+    },
+    {
+      "question": "Anotasi tipe saat runtime ...",
+      "options": [
+        "Selalu menolak tipe salah",
+        "Selalu mengubah string menjadi angka",
+        "Tidak otomatis menegakkan semua kontrak"
+      ],
+      "answer": 2,
+      "explanation": "Type hints dapat dipakai alat statis, tetapi bukan validator otomatis."
+    },
+    {
+      "question": "Kontrak baca sebaiknya menyebut ...",
+      "options": [
+        "Satuan, hasil, dan perilaku kegagalan",
+        "Hanya nama file",
+        "Password sensor"
+      ],
+      "answer": 0,
+      "explanation": "Kontrak perilaku lebih luas daripada kesamaan nama method."
+    }
+  ],
+  "oop-context-manager": [
+    {
+      "question": "Nilai setelah as berasal dari ...",
+      "options": [
+        "Return __enter__",
+        "Nama class selalu",
+        "Return print"
+      ],
+      "answer": 0,
+      "explanation": "Enter dapat mengembalikan object sumber daya yang berbeda."
+    },
+    {
+      "question": "Exit pada contoh mengembalikan False agar ...",
+      "options": [
+        "Semua error hilang",
+        "Exception diteruskan",
+        "Buffer tetap terbuka"
+      ],
+      "answer": 1,
+      "explanation": "Pembersihan tidak menutupi kegagalan."
+    },
+    {
+      "question": "With selalu berarti transaksi database?",
+      "options": [
+        "Selalu",
+        "Hanya saat memakai StringIO",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Maknanya mengikuti kontrak context manager."
+    },
+    {
+      "question": "Jika enter gagal sebelum berhasil, exit ...",
+      "options": [
+        "Tidak otomatis dipanggil oleh with",
+        "Selalu memperbaiki seluruh akuisisi",
+        "Mengubah error menjadi True"
+      ],
+      "answer": 0,
+      "explanation": "Pembersihan akuisisi parsial harus ditangani dengan tepat."
+    }
+  ],
+  "db-savepoint": [
+    {
+      "question": "Rollback to savepoint melakukan ...",
+      "options": [
+        "Mengembalikan keadaan ke titik savepoint",
+        "Selalu menutup koneksi",
+        "Selalu menghapus tabel"
+      ],
+      "answer": 0,
+      "explanation": "Transaksi luar tetap dapat berlanjut."
+    },
+    {
+      "question": "Release di dalam transaksi luar berarti ...",
+      "options": [
+        "Semua data pasti permanen",
+        "Savepoint ditutup, belum tentu commit permanen",
+        "Semua data dibuang"
+      ],
+      "answer": 1,
+      "explanation": "Batas commit tetap mengikuti transaksi luar."
+    },
+    {
+      "question": "Impor parsial tepat bila ...",
+      "options": [
+        "Selalu untuk transfer uang",
+        "Semua error disembunyikan",
+        "Aturan bisnis mengizinkannya"
+      ],
+      "answer": 2,
+      "explanation": "Hasil parsial perlu keputusan bisnis yang eksplisit."
+    },
+    {
+      "question": "Baris ditolak seharusnya ...",
+      "options": [
+        "Dilaporkan terpisah",
+        "Disebut berhasil tanpa catatan",
+        "Dihapus dari log tanpa penjelasan"
+      ],
+      "answer": 0,
+      "explanation": "Pelaporan menjaga hasil impor dapat dipahami."
+    }
+  ],
+  "db-snapshot-wal": [
+    {
+      "question": "Pembacaan A dalam transaksi yang sama setelah B commit melihat ...",
+      "options": [
+        "Snapshot A yang lama",
+        "Selalu data B terbaru",
+        "Angka acak"
+      ],
+      "answer": 0,
+      "explanation": "Mode WAL mempertahankan snapshot transaksi baca."
+    },
+    {
+      "question": "WAL mengizinkan berapa penulis SQLite sekaligus?",
+      "options": [
+        "Tidak terbatas",
+        "Satu",
+        "Selalu nol"
+      ],
+      "answer": 1,
+      "explanation": "WAL tidak mengubah SQLite menjadi sistem multiwriter tak terbatas."
+    },
+    {
+      "question": "Untuk melihat commit baru, contoh A ...",
+      "options": [
+        "Mengubah CSS",
+        "Menghapus file WAL manual",
+        "Mengakhiri transaksi lalu membaca lagi"
+      ],
+      "answer": 2,
+      "explanation": "Pembacaan baru dapat memakai snapshot yang lebih baru."
+    },
+    {
+      "question": "Transaksi baca lama dapat ...",
+      "options": [
+        "Menahan checkpoint dan memperbesar WAL",
+        "Menghapus semua data otomatis",
+        "Menggantikan backup"
+      ],
+      "answer": 0,
+      "explanation": "Pengelolaan durasi transaksi tetap diperlukan."
+    }
+  ],
+  "api-cache-etag": [
+    {
+      "question": "ETag terutama berfungsi sebagai ...",
+      "options": [
+        "Validator representasi",
+        "Password pengguna",
+        "Alamat database"
+      ],
+      "answer": 0,
+      "explanation": "Validator membantu memeriksa versi respons."
+    },
+    {
+      "question": "304 pada conditional GET berarti ...",
+      "options": [
+        "Selalu buat akun baru",
+        "Gunakan salinan badan yang sudah disimpan",
+        "Server mengirim JSON penuh lagi"
+      ],
+      "answer": 1,
+      "explanation": "Respons 304 tidak membawa badan representasi."
+    },
+    {
+      "question": "Private pada Cache-Control membatasi ...",
+      "options": [
+        "Semua pengguna agar menjadi admin",
+        "Panjang nama field",
+        "Penyimpanan oleh cache bersama"
+      ],
+      "answer": 2,
+      "explanation": "Private mengarahkan respons untuk cache pribadi."
+    },
+    {
+      "question": "Apakah ETag menggantikan otorisasi?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika hash cukup panjang"
+      ],
+      "answer": 0,
+      "explanation": "Validasi versi dan izin akses adalah kebutuhan berbeda."
+    }
+  ],
+  "api-pagination-cursor": [
+    {
+      "question": "Base64 memberikan ...",
+      "options": [
+        "Encoding, bukan enkripsi",
+        "Kerahasiaan lengkap",
+        "Hak akses admin"
+      ],
+      "answer": 0,
+      "explanation": "Payload base64 dapat dibaca kembali."
+    },
+    {
+      "question": "Tujuan mengambil limit+1 adalah ...",
+      "options": [
+        "Menggandakan item pertama",
+        "Mendeteksi adanya halaman berikutnya",
+        "Menghapus kebutuhan indeks"
+      ],
+      "answer": 1,
+      "explanation": "Item tambahan memberi tanda kelanjutan tanpa dikirim dalam halaman saat ini."
+    },
+    {
+      "question": "Next_cursor null menandakan ...",
+      "options": [
+        "Request pasti gagal",
+        "Semua data sudah dihapus",
+        "Tidak ada halaman berikutnya"
+      ],
+      "answer": 2,
+      "explanation": "Kontrak contoh memakai null sebagai akhir penelusuran."
+    },
+    {
+      "question": "HMAC cursor menggantikan izin pengguna?",
+      "options": [
+        "Tidak",
+        "Ya untuk semua tenant",
+        "Ya jika memakai SQLite"
+      ],
+      "answer": 0,
+      "explanation": "Otorisasi tetap dilakukan pada setiap request."
+    }
+  ],
+  "web-modul-javascript": [
+    {
+      "question": "Export dipakai untuk ...",
+      "options": [
+        "Menyediakan nilai bagi modul lain",
+        "Menyembunyikan password",
+        "Membuat tabel SQL"
+      ],
+      "answer": 0,
+      "explanation": "Ekspor menyatakan antarmuka modul."
+    },
+    {
+      "question": "Script modul HTML menggunakan ...",
+      "options": [
+        "type=\"python\"",
+        "type=\"module\"",
+        "method=\"migrate\""
+      ],
+      "answer": 1,
+      "explanation": "Browser perlu mengetahui bahwa file adalah ES module."
+    },
+    {
+      "question": "Pengujian fungsi lebih mudah bila fungsi ...",
+      "options": [
+        "Selalu mencari semua input sendiri",
+        "Selalu menulis localStorage",
+        "Menerima data tanpa bergantung pada DOM"
+      ],
+      "answer": 2,
+      "explanation": "Pemisahan efek samping membantu pengujian."
+    },
+    {
+      "question": "Modul gagal dimuat; hal pertama yang diperiksa adalah ...",
+      "options": [
+        "Path, status, MIME, dan Console",
+        "Jumlah tabel database",
+        "Akun admin Django"
+      ],
+      "answer": 0,
+      "explanation": "Pemuatan aset bisa gagal sebelum fungsi dijalankan."
+    }
+  ],
+  "web-url-parameter": [
+    {
+      "question": "URLSearchParams membantu ...",
+      "options": [
+        "Membaca dan menyusun query parameter",
+        "Mengenkripsi password",
+        "Menjalankan migration"
+      ],
+      "answer": 0,
+      "explanation": "API ini menangani parameter dan encoding URL."
+    },
+    {
+      "question": "ReplaceState pada contoh melakukan ...",
+      "options": [
+        "Selalu memanggil server",
+        "Mengganti entri riwayat tanpa reload",
+        "Membuat akun"
+      ],
+      "answer": 1,
+      "explanation": "UI tetap perlu diperbarui oleh aplikasi."
+    },
+    {
+      "question": "Mengapa reload memulihkan filter?",
+      "options": [
+        "CSS mengingat semua input",
+        "Browser otomatis membuat database",
+        "Script membaca q dari URL"
+      ],
+      "answer": 2,
+      "explanation": "Parameter menjadi sumber state awal tampilan."
+    },
+    {
+      "question": "Yang tidak boleh dimasukkan dalam URL adalah ...",
+      "options": [
+        "Password atau token rahasia",
+        "Filter publik nonrahasia",
+        "Nomor halaman publik"
+      ],
+      "answer": 0,
+      "explanation": "URL dapat tercatat dan dibagikan."
+    }
+  ],
+  "django-query-relasi": [
+    {
+      "question": "Select_related sesuai untuk ...",
+      "options": [
+        "ForeignKey atau OneToOne",
+        "Semua upload file",
+        "Semua relasi jamak tanpa pertimbangan"
+      ],
+      "answer": 0,
+      "explanation": "JOIN sesuai untuk relasi tunggal."
+    },
+    {
+      "question": "Prefetch_related bekerja dengan ...",
+      "options": [
+        "Selalu nol query",
+        "Query terpisah lalu menghubungkan hasil di Python",
+        "Menghapus foreign key"
+      ],
+      "answer": 1,
+      "explanation": "Prefetch cocok untuk kumpulan relasi yang diperlukan."
+    },
+    {
+      "question": "Ketika mengoptimalkan query, filter pemilik ...",
+      "options": [
+        "Dihapus agar cepat",
+        "Dipindahkan hanya ke CSS",
+        "Tetap dipertahankan"
+      ],
+      "answer": 2,
+      "explanation": "Optimasi tidak boleh melemahkan otorisasi."
+    },
+    {
+      "question": "Jumlah query sebaiknya ...",
+      "options": [
+        "Diukur pada operasi dan fixture yang jelas",
+        "Ditebak dari nama method",
+        "Selalu satu untuk seluruh website"
+      ],
+      "answer": 0,
+      "explanation": "Pengukuran perlu konteks hasil dan data."
+    }
+  ],
+  "django-management-command": [
+    {
+      "question": "Command custom diletakkan pada ...",
+      "options": [
+        "App/management/commands/",
+        "Folder CSS saja",
+        "Tabel database"
+      ],
+      "answer": 0,
+      "explanation": "Django menemukan command dari app yang terpasang."
+    },
+    {
+      "question": "Add_arguments berfungsi untuk ...",
+      "options": [
+        "Menjalankan template",
+        "Mendefinisikan opsi terminal",
+        "Menghapus akun"
+      ],
+      "answer": 1,
+      "explanation": "BaseCommand memakai parser opsi yang dideklarasikan."
+    },
+    {
+      "question": "Pemanggilan ulang seed pada contoh seharusnya ...",
+      "options": [
+        "Menghapus semua perangkat",
+        "Membuat password publik",
+        "Tidak menambah duplikat atau menimpa data lama"
+      ],
+      "answer": 2,
+      "explanation": "Perilaku pengulangan merupakan kontrak command."
+    },
+    {
+      "question": "Apakah DEBUG=True menjamin target aman?",
+      "options": [
+        "Tidak, target database tetap harus diperiksa",
+        "Ya, semua data otomatis fiktif",
+        "Ya, migration selalu memori"
+      ],
+      "answer": 0,
+      "explanation": "Konfigurasi debug berbeda dari identitas serta isi database."
+    }
   ]
 }

@@ -81,6 +81,8 @@
       "struktur-topological-sort",
       "struktur-union-find",
       "struktur-binary-search",
+      "struktur-prefix-sum",
+      "struktur-sliding-window",
       "struktur-insertion-sort",
       "struktur-sort-lanjutan",
       "struktur-priority-heap",
@@ -102,7 +104,9 @@
       "traceback-debugger",
       "file-teks-csv-json",
       "logging-aplikasi",
-      "konfigurasi-aplikasi"
+      "konfigurasi-aplikasi",
+      "python-desimal-uang",
+      "python-cli-argparse"
     ]
   },
   {
@@ -131,6 +135,7 @@
       "oop-inheritance",
       "oop-polymorphism",
       "oop-abstraksi",
+      "oop-protocol",
       "oop-komposisi",
       "oop-relasi-uml"
     ]
@@ -140,6 +145,7 @@
     "slugs": [
       "oop-jenis-method",
       "oop-dunder",
+      "oop-context-manager",
       "oop-dataclass",
       "oop-exception-khusus",
       "oop-json-objek",
@@ -238,7 +244,9 @@
     "title": "Basis Data · Operasional lanjutan",
     "slugs": [
       "db-konkurensi",
-      "db-optimasi-lanjutan"
+      "db-optimasi-lanjutan",
+      "db-savepoint",
+      "db-snapshot-wal"
     ]
   },
   {
@@ -320,7 +328,9 @@
     "slugs": [
       "api-idempotensi",
       "api-rate-limit",
-      "api-webhook-signature"
+      "api-webhook-signature",
+      "api-cache-etag",
+      "api-pagination-cursor"
     ]
   },
   {
@@ -351,6 +361,8 @@
     "slugs": [
       "web-javascript-dasar",
       "web-dom-event",
+      "web-modul-javascript",
+      "web-url-parameter",
       "web-formulir",
       "web-fetch-api"
     ]
@@ -393,6 +405,8 @@
       "django-login-izin",
       "django-static",
       "django-pengujian",
+      "django-query-relasi",
+      "django-management-command",
       "django-deployment"
     ]
   },

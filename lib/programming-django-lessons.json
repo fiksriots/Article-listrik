@@ -732,7 +732,7 @@
       "Django TestCase menyiapkan database uji dan membantu mengisolasi perubahan antar test. Test client memanggil view tanpa menyalakan server browser. Gunakan data latihan yang dibuat oleh test; jangan mengarahkannya ke database produksi.",
       "Periksa hasil bisnis, bukan hanya status 200. Contoh memastikan tiket baru dimiliki user yang login walaupun payload mengirim pemilik lain. Pengujian lain memastikan user B tidak dapat membaca atau mengubah tiket A.",
       "Force_login berguna untuk mempersingkat test yang berfokus pada izin, tetapi tidak menguji password. Karena itu proyek juga memiliki test login dengan password salah dan valid. Client biasa tidak memaksa pemeriksaan CSRF; gunakan Client(enforce_csrf_checks=True) ketika menguji perlindungan tersebut.",
-      "Proyek menyertakan 25 test: validasi kosong/duplikat, CRUD, pagination, escaping template, isolasi pemilik, POST-only, CSRF, login, serta logout. Test bukan pengganti mencoba keyboard, membaca pesan kesalahan, atau memeriksa tampilan melalui browser."
+      "Proyek menyertakan 32 test: validasi kosong/duplikat, CRUD, pagination, escaping template, isolasi pemilik, POST-only, CSRF, login, serta logout. Test bukan pengganti mencoba keyboard, membaca pesan kesalahan, atau memeriksa tampilan melalui browser."
     ],
     "table": {
       "headers": [
@@ -764,7 +764,7 @@
         "filename": "Terminal",
         "code": "python manage.py test operasional",
         "language": "bash",
-        "output": "25 test dijalankan; hasil yang diharapkan: OK. Waktu eksekusi dapat berbeda.",
+        "output": "32 test dijalankan; hasil yang diharapkan: OK. Waktu eksekusi dapat berbeda.",
         "explanation": "Jalankan dari folder yang memuat manage.py, dengan virtual environment aktif."
       },
       {

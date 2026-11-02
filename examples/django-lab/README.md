@@ -36,7 +36,7 @@ Logout memakai POST dan CSRF. GET halaman hapus hanya mengonfirmasi; POST mengha
 ## Struktur
 
 - `config/`: settings, URL utama, WSGI.
-- `operasional/`: model, ModelForm, view, URL, admin, migration, dan 25 pengujian.
+- `operasional/`: model, ModelForm, view, URL, admin, migration, dan 32 pengujian.
 - `templates/`: HTML server-side; autoescape tetap aktif.
 - `static/`: CSS melalui template tag static.
 
@@ -71,3 +71,9 @@ python manage.py collectstatic --noinput --settings=config.production
 Migration produksi adalah langkah rilis terencana dengan backup; bukan dijalankan per request. Gunakan server WSGI/ASGI produksi, bukan runserver. Jangan percaya header proxy sebelum proxy tepercaya dikonfigurasi sesuai hosting. HSTS subdomain/preload sengaja tidak diaktifkan; seluruh domain harus siap lebih dahulu.
 
 Dokumentasi: https://docs.djangoproject.com/en/5.2/
+
+## Pendalaman
+
+Pada database latihan lokal, `python manage.py seed_perangkat --latihan` menambah dua perangkat DEMO bila belum ada. Perintah ulang tidak menduplikasi atau menimpa data lama. Perintah menolak DEBUG=False dan tidak membuat akun. Selalu periksa target database; DEBUG=True sendiri tidak membuktikan isinya aman untuk latihan.
+
+`operasional/test_pendalaman.py` membandingkan N+1 dengan select_related, memeriksa prefetch_related, dan memastikan optimasi tidak menghilangkan filter pemilik.

@@ -11,11 +11,12 @@ from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 lessons = json.loads((ROOT / 'lib/programming-django-lessons.json').read_text())
+lessons += [l for l in json.loads((ROOT / 'lib/programming-supplement-lessons.json').read_text()) if l['slug'].startswith('django-')]
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
-assert len(lessons) == 14
+assert len(lessons) == 16
 slugs = [s for g in order if g['title'].startswith('Django ·') for s in g['slugs']]
-assert slugs == [l['slug'] for l in lessons]
+assert set(slugs) == {l['slug'] for l in lessons}
 assert len(slugs) == len(set(slugs))
 for lesson in lessons:
     assert len(lesson['explain']) >= 3 and len(lesson['steps']) >= 3 and len(lesson['practice']) >= 2
@@ -35,7 +36,7 @@ for lesson in lessons:
 with tempfile.TemporaryDirectory(prefix='django-course-') as temp:
     with ZipFile(ROOT / 'public/programming/lab/django/django-lab.zip') as z:
         names = z.namelist()
-        assert len(names) == len(set(names)) == 25
+        assert len(names) == len(set(names)) == 29
         for n in names:
             p = Path(n)
             assert n.startswith('django-lab/') and '..' not in p.parts and not p.is_absolute()
@@ -52,7 +53,7 @@ with tempfile.TemporaryDirectory(prefix='django-course-') as temp:
     run('makemigrations', '--check', '--dry-run')
     run('migrate', '--noinput')
     out = run('test', 'operasional', '--verbosity', '1')
-    assert 'Ran 25 tests' in out and 'OK' in out
+    assert 'Ran 32 tests' in out and 'OK' in out
     env = dict(os.environ, DJANGO_SECRET_KEY=secrets.token_urlsafe(64), DJANGO_ALLOWED_HOSTS='latihan.example.org', DJANGO_DB_PATH=str(project / 'staging.sqlite3'))
     run('shell', '--settings=config.production', '-c', 'from django.conf import settings; assert not settings.DEBUG; assert settings.SESSION_COOKIE_SECURE; assert settings.CSRF_COOKIE_SECURE; assert settings.ALLOWED_HOSTS == ["latihan.example.org"]', env=env)
-print('PASS: 14 ordered Django lessons / 56 questions, exact source-only ZIP, migrations, production settings and 25 behavioral tests from extracted download')
+print('PASS: 16 Django lessons / 64 questions, exact source-only ZIP, migrations, production settings and 32 behavioral tests from extracted download')

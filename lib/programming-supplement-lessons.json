@@ -1,0 +1,919 @@
+[
+  {
+    "slug": "python-desimal-uang",
+    "title": "Decimal dan aturan pembulatan uang",
+    "summary": "Bedakan representasi angka, satuan uang, serta waktu pembulatan sebelum menghitung total.",
+    "analogy": "Timbangan mempunyai ketelitian tertentu. Sebelum menjumlahkan harga, sepakati ketelitian dan kapan hasilnya dibulatkan.",
+    "explain": [
+      "Float menggunakan representasi biner, sehingga beberapa pecahan desimal seperti 0.1 tidak dapat diwakili tepat. Integer sesuai untuk rupiah utuh atau satuan terkecil yang memang tetap. Decimal membantu ketika aplikasi perlu pecahan desimal dan aturan pembulatan yang jelas.",
+      "Buat Decimal dari string sumber, misalnya Decimal(\"0.1\"), bukan dari float yang sudah membawa pendekatan biner. Decimal tetap memiliki context presisi dan tidak membuat semua perhitungan menjadi tanpa batas atau selalu tepat. Validasi juga NaN, Infinity, tanda, dan batas nilai.",
+      "Contoh menetapkan harga 0 sampai 1 miliar, paling banyak 40 karakter, jumlah 1 sampai 1000, serta pembulatan dua tempat desimal dengan ROUND_HALF_UP. Harga satuan dibulatkan lebih dahulu, lalu dikalikan jumlah. Karena itu 12.345 menjadi 12.35 dan dua unit menjadi 24.70; membulatkan hasil perkalian pada akhir dapat memberi hasil berbeda.",
+      "Dua tempat desimal dipakai untuk latihan pecahan, bukan aturan universal rupiah. Aplikasi nyata harus menentukan mata uang, satuan, pajak, diskon, urutan pembulatan, dan cara menyimpan angka. Jangan mengubah Decimal kembali ke float sebelum penyimpanan atau pengiriman bila ketelitian desimal perlu dipertahankan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Decimal dari string",
+          "Menghindari pendekatan float yang sudah terjadi"
+        ],
+        [
+          "quantize",
+          "Membentuk ketelitian desimal sesuai aturan"
+        ],
+        [
+          "is_finite",
+          "Menolak NaN dan Infinity"
+        ],
+        [
+          "Urutan pembulatan",
+          "Ditetapkan sebagai aturan bisnis"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "python_desimal.py",
+        "filename": "python_desimal.py",
+        "language": "python",
+        "code": "from decimal import Decimal, InvalidOperation, ROUND_HALF_UP\n\n\ndef nilai_uang(teks: str) -> Decimal:\n    if not isinstance(teks, str) or not 1 <= len(teks) <= 40:\n        raise ValueError('Gunakan teks angka dengan panjang 1..40.')\n    try:\n        nilai = Decimal(teks)\n        if not nilai.is_finite() or not Decimal('0') <= nilai <= Decimal('1000000000'):\n            raise ValueError('Nilai harus terbatas dan berada pada 0..1 miliar.')\n        return nilai.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)\n    except InvalidOperation as exc:\n        raise ValueError('Angka desimal tidak valid.') from exc\n\n\ndef total_baris(harga: str, jumlah: int) -> Decimal:\n    if type(jumlah) is not int or not 1 <= jumlah <= 1000:\n        raise ValueError('Jumlah harus integer 1..1000.')\n    return nilai_uang(harga) * jumlah\n\n\nif __name__ == '__main__':\n    print(Decimal('0.1') + Decimal('0.2'))\n    print(nilai_uang('12.345'))\n    print(total_baris('12.345', 2))\n",
+        "output": "0.3\n12.35\n24.70",
+        "explanation": "Simpan sebagai python_desimal.py. Seluruh contoh menggunakan pustaka standar; tidak perlu memasang paket tambahan."
+      }
+    ],
+    "steps": [
+      "Jalankan contoh dan cocokkan hasilnya dengan perhitungan tangan.",
+      "Coba nilai NaN, Infinity, angka negatif, serta teks bukan angka melalui fungsi pada salinan program.",
+      "Bandingkan pembulatan harga satuan sebelum dikalikan dengan pembulatan total pada akhir."
+    ],
+    "practice": [
+      "Tulis aturan hitung untuk harga rupiah utuh menggunakan integer.",
+      "Tambahkan pengujian batas jumlah 0, 1, 1000, 1001, serta bool True."
+    ],
+    "warning": "Jangan menebak aturan pembulatan transaksi nyata. Format tampilan dua angka di belakang koma tidak sama dengan memperbaiki nilai perhitungan yang sudah keliru.",
+    "check": "Mengapa Decimal(0.1) berbeda dari Decimal(\"0.1\")?",
+    "answer": "Argumen float sudah berupa pendekatan biner. String desimal menyatakan digit sumber secara langsung. Gunakan format sumber dan aturan presisi yang sesuai kebutuhan.",
+    "source": "https://docs.python.org/3.12/library/decimal.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "python-cli-argparse",
+    "title": "Program terminal dengan argparse",
+    "summary": "Terima argumen, sediakan bantuan, dan tolak masukan yang tidak sesuai tanpa membuat parser sendiri.",
+    "analogy": "Argumen terminal seperti kolom formulir: setiap pilihan mempunyai nama, jenis nilai, dan petunjuk penggunaan.",
+    "explain": [
+      "Program tidak harus selalu bertanya melalui input(). CLI menerima nilai dari argumen terminal, misalnya --nama Router --jumlah 3. Argparse dari pustaka standar menyediakan pembacaan argumen, pesan bantuan, serta penanganan penggunaan yang keliru.",
+      "Deklarasikan parameter wajib, default, dan fungsi konversi. Contoh jumlah_valid mengubah string menjadi integer lalu memeriksa rentang 1..100. Nama dibersihkan dengan strip; nama berisi spasi saja ditolak walaupun opsi --nama telah diberikan.",
+      "Fungsi main(argv=None) dapat menerima list argumen saat diuji. Ketika argv tidak diberikan, argparse membaca argumen proses. Guard __name__ mencegah program utama berjalan hanya karena file di-import oleh pengujian.",
+      "Argumen yang ditolak biasanya menghasilkan pesan pada stderr dan exit status 2. Pengguna bisa menjalankan --help untuk melihat penggunaan. Jangan menaruh password atau token pada argumen CLI karena dapat tercatat di riwayat shell atau daftar proses; gunakan mekanisme konfigurasi rahasia yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "--help",
+          "Bantuan penggunaan bawaan"
+        ],
+        [
+          "required / default",
+          "Opsi wajib / nilai ketika tidak diberikan"
+        ],
+        [
+          "ArgumentTypeError",
+          "Pesan konversi atau rentang yang salah"
+        ],
+        [
+          "main(argv)",
+          "Memisahkan pembacaan argumen dari logika uji"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "python_cli.py",
+        "filename": "python_cli.py",
+        "language": "python",
+        "code": "import argparse\n\n\ndef jumlah_valid(teks):\n    try:\n        nilai = int(teks)\n    except ValueError as exc:\n        raise argparse.ArgumentTypeError('Harus berupa integer.') from exc\n    if not 1 <= nilai <= 100:\n        raise argparse.ArgumentTypeError('Jumlah harus 1..100.')\n    return nilai\n\n\ndef buat_parser():\n    parser = argparse.ArgumentParser(description='Ringkasan perangkat latihan.')\n    parser.add_argument('--nama', required=True, help='Nama perangkat, bukan secret.')\n    parser.add_argument('--jumlah', type=jumlah_valid, default=1)\n    return parser\n\n\ndef main(argv=None):\n    args = buat_parser().parse_args(argv)\n    nama = args.nama.strip()\n    if not nama:\n        buat_parser().error('Nama tidak boleh kosong.')\n    print(f'{nama}: {args.jumlah} unit')\n\n\nif __name__ == '__main__':\n    main()\n",
+        "output": "Router lab: 3 unit",
+        "explanation": "Simpan sebagai python_cli.py. Jalankan: python python_cli.py --nama \"Router lab\" --jumlah 3. Tanpa argumen wajib, program memang menolak penggunaan."
+      }
+    ],
+    "steps": [
+      "Simpan file lalu jalankan python python_cli.py --help.",
+      "Jalankan dengan nama Router lab dan jumlah 3 sesuai petunjuk contoh.",
+      "Coba --jumlah 0, --jumlah abc, serta nama yang hanya berisi spasi; amati pesan dan status proses."
+    ],
+    "practice": [
+      "Tambahkan opsi --lokasi dengan default Lab.",
+      "Uji main dengan list argumen agar pengujian tidak bergantung pada terminal interaktif."
+    ],
+    "warning": "Argparse membantu parsing, bukan menegakkan semua aturan bisnis. Secret tidak cocok dikirim sebagai argumen yang mudah tercatat.",
+    "check": "Mengapa main menerima argv sebagai parameter opsional?",
+    "answer": "Agar test dapat memberikan argumen tertentu secara langsung. Pemakaian normal tetap membaca argumen terminal ketika argv bernilai None.",
+    "source": "https://docs.python.org/3.12/library/argparse.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "struktur-prefix-sum",
+    "title": "Prefix sum: jumlah rentang tanpa menjumlah ulang",
+    "summary": "Prakomputasi total kumulatif dan gunakan batas kiri inklusif, kanan eksklusif.",
+    "analogy": "Catatan meter kumulatif memungkinkan pemakaian suatu periode dihitung dari selisih dua angka meter.",
+    "explain": [
+      "Jika banyak pertanyaan meminta jumlah bagian array yang sama, menjumlah ulang setiap rentang membuang pekerjaan. Prefix sum menyimpan total sebelum setiap posisi sehingga pertanyaan rentang dapat dijawab dengan dua pembacaan dan satu pengurangan.",
+      "Untuk data sepanjang n, buat prefix sepanjang n+1 dengan nilai awal 0. Prefix[i] berarti jumlah data sebelum indeks i. Jumlah interval [kiri, kanan) adalah prefix[kanan] - prefix[kiri]. Batas kanan tidak ikut dijumlahkan, sehingga rentang kosong kiri==kanan menghasilkan 0.",
+      "Membangun prefix membutuhkan O(n) waktu dan O(n) ruang tambahan. Setiap query yang valid memerlukan O(1). Ini berguna untuk data relatif tetap dengan banyak query; jika data berubah, prefix lama tidak otomatis ikut berubah.",
+      "Contoh mendukung angka negatif dan data kosong. Fungsi jumlah_rentang mengasumsikan prefix dibentuk oleh buat_prefix dan memeriksa batas. Untuk pembaruan serta query berulang yang intensif, pelajari struktur lain seperti Fenwick tree setelah kebutuhan dasarnya dipahami."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "prefix[0]",
+          "0, total sebelum elemen pertama"
+        ],
+        [
+          "[l, r)",
+          "L termasuk, r tidak termasuk"
+        ],
+        [
+          "Prakomputasi",
+          "O(n) waktu serta ruang tambahan"
+        ],
+        [
+          "Query rentang",
+          "O(1) setelah prefix tersedia"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "struktur_prefix.py",
+        "filename": "struktur_prefix.py",
+        "language": "python",
+        "code": "def buat_prefix(data):\n    prefix = [0]\n    for nilai in data:\n        prefix.append(prefix[-1] + nilai)\n    return prefix\n\n\ndef jumlah_rentang(prefix, kiri, kanan):\n    # Prefix berasal dari buat_prefix; interval [kiri, kanan).\n    if type(kiri) is not int or type(kanan) is not int:\n        raise ValueError('Batas harus integer.')\n    if not 0 <= kiri <= kanan < len(prefix):\n        raise ValueError('Rentang di luar data.')\n    return prefix[kanan] - prefix[kiri]\n\n\nif __name__ == '__main__':\n    prefix = buat_prefix([4, 2, -1, 5])\n    print(prefix)\n    print(jumlah_rentang(prefix, 1, 4))\n    print(jumlah_rentang(prefix, 2, 2))\n",
+        "output": "[0, 4, 6, 5, 10]\n6\n0",
+        "explanation": "Jumlah indeks 1 sampai sebelum 4 adalah 2 + (-1) + 5 = 6."
+      }
+    ],
+    "steps": [
+      "Tuliskan prefix dari data contoh dengan tangan.",
+      "Jalankan query [1,4) dan [2,2), lalu cocokkan hasilnya.",
+      "Uji data kosong dengan query [0,0) serta rentang yang melewati batas."
+    ],
+    "practice": [
+      "Bandingkan hasil setiap rentang kecil dengan sum(data[l:r]).",
+      "Ubah satu elemen data setelah prefix dibuat dan jelaskan mengapa prefix perlu dibangun ulang."
+    ],
+    "warning": "Kesalahan paling umum adalah mencampur batas kanan inklusif dengan eksklusif. Nyatakan kontrak interval sebelum menulis rumus.",
+    "check": "Mengapa prefix memiliki satu elemen lebih banyak daripada data?",
+    "answer": "Nilai awal 0 mewakili total sebelum elemen pertama dan membuat rumus rentang dari indeks 0 maupun rentang kosong tetap seragam.",
+    "source": "https://docs.python.org/3.12/tutorial/datastructures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "struktur-sliding-window",
+    "title": "Sliding window: geser rentang dengan memperbarui total",
+    "summary": "Temukan jumlah terbesar dari k elemen berurutan tanpa menghitung ulang setiap jendela.",
+    "analogy": "Jendela kereta memperlihatkan beberapa objek sekaligus: saat bergeser, satu objek keluar dan satu objek baru masuk.",
+    "explain": [
+      "Untuk mencari jumlah maksimum dari tepat k elemen berurutan, cara langsung menghitung sum pada setiap posisi membutuhkan pekerjaan berulang. Sliding window mempertahankan total jendela saat ini, mengurangi elemen yang keluar, dan menambah elemen yang masuk.",
+      "Contoh menghitung jendela pertama dahulu. Setelah itu setiap pergeseran memakai total += data[kanan] - data[kanan-k]. Indeks awal jendela baru adalah kanan-k+1. Jika jumlah seri, contoh mempertahankan posisi paling awal karena hanya memperbarui saat jumlah benar-benar lebih besar.",
+      "Inisialisasikan hasil terbaik dari total jendela pertama, bukan 0. Bila semua angka negatif, jawaban yang benar juga dapat negatif. K harus integer 1 sampai panjang data; data kosong tidak mempunyai jendela berukuran positif.",
+      "Waktu perhitungan keseluruhan O(n). Total dan indeks memakai ruang tambahan tetap, tetapi contoh sum(data[:k]) membuat salinan awal O(k). Hindari salinan itu bila kebutuhan ruang ketat. Teknik jendela panjang tetap ini menerima angka negatif; aturan dua pointer untuk jendela panjang berubah tidak otomatis cocok untuk semua kondisi atau data negatif."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Keluar / masuk",
+          "Kurangi elemen lama, tambah elemen baru"
+        ],
+        [
+          "Ukuran jendela",
+          "Tetap k elemen"
+        ],
+        [
+          "Hasil seri",
+          "Pilih indeks awal paling kecil"
+        ],
+        [
+          "Angka negatif",
+          "Hasil terbaik tidak boleh diasumsikan mulai dari 0"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "struktur_window.py",
+        "filename": "struktur_window.py",
+        "language": "python",
+        "code": "def maksimum_jendela(data, k):\n    if type(k) is not int or not 1 <= k <= len(data):\n        raise ValueError('K harus 1..panjang data.')\n    total = sum(data[:k])\n    terbaik = total  # Bukan 0: semua jumlah bisa negatif.\n    posisi = 0\n    for kanan in range(k, len(data)):\n        total += data[kanan] - data[kanan - k]\n        if total > terbaik:\n            terbaik, posisi = total, kanan - k + 1\n    return posisi, terbaik\n\n\nif __name__ == '__main__':\n    print(maksimum_jendela([4, 2, -1, 5], 2))\n    print(maksimum_jendela([-5, -2, -4], 2))\n",
+        "output": "(0, 6)\n(1, -6)",
+        "explanation": "Hasil berbentuk (indeks awal, jumlah maksimum). Contoh kedua sengaja memakai seluruh nilai negatif."
+      }
+    ],
+    "steps": [
+      "Hitung seluruh jendela k=2 pada data contoh secara manual.",
+      "Telusuri perubahan total pada setiap pergeseran.",
+      "Coba k=1, k=panjang data, dan k di luar batas."
+    ],
+    "practice": [
+      "Bandingkan fungsi dengan solusi sum untuk seluruh jendela pada list kecil.",
+      "Ubah implementasi agar tidak membuat salinan awal data[:k], lalu pastikan hasil tetap sama."
+    ],
+    "warning": "Jangan menerapkan aturan jendela panjang berubah tanpa memeriksa sifat data dan syaratnya. Keberhasilan pada angka positif belum membuktikan kebenaran pada angka negatif.",
+    "check": "Mengapa hasil terbaik tidak diinisialisasi dengan 0?",
+    "answer": "Karena jumlah maksimum yang sah bisa negatif. Nilai awal harus berasal dari jendela yang benar-benar ada.",
+    "source": "https://docs.python.org/3.12/tutorial/controlflow.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-protocol",
+    "title": "Protocol: kontrak perilaku tanpa mewajibkan inheritance",
+    "summary": "Nyatakan kemampuan yang diperlukan dan bedakan type checking dari validasi runtime.",
+    "analogy": "Soket menentukan bentuk koneksi yang dibutuhkan tanpa mewajibkan semua alat berasal dari pabrik yang sama.",
+    "explain": [
+      "Protocol menyatakan anggota yang dibutuhkan oleh pemakai. Pada contoh, SumberSuhu menjanjikan method baca() yang menghasilkan angka. SensorLatihan dan SensorCadangan tidak perlu mewarisi SumberSuhu secara eksplisit selama strukturnya sesuai untuk pemeriksa tipe.",
+      "Ini disebut structural typing: kecocokan dilihat dari bentuk kemampuan, bukan hanya hubungan inheritance. Gunakan Protocol saat banyak implementasi harus memenuhi kontrak kecil tanpa dipaksa berbagi class induk. ABC tetap berguna jika memerlukan dasar class dan aturan abstrak melalui inheritance.",
+      "Anotasi Protocol tidak memaksa seluruh kontrak saat runtime. Pemeriksa tipe seperti mypy atau pyright dapat membantu pada tahap pengembangan, tetapi contoh berjalan dengan Python biasa. Fungsi laporan masih memvalidasi hasil baca agar bukan bool, bukan tipe yang keliru, dan bukan NaN atau Infinity.",
+      "Nama method yang sama belum menjamin maknanya benar. Dokumentasikan satuan suhu, perilaku kegagalan, serta efek samping yang diperbolehkan. Jangan memakai Protocol sebagai alasan menambah banyak antarmuka ketika fungsi sederhana sudah cukup."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Protocol",
+          "Kontrak kemampuan struktural"
+        ],
+        [
+          "Implementasi",
+          "Tidak wajib mewarisi Protocol secara eksplisit"
+        ],
+        [
+          "Type checker",
+          "Memeriksa kontrak secara statis"
+        ],
+        [
+          "Validasi runtime",
+          "Tetap diperlukan pada batas data yang tidak dipercaya"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "oop_protocol.py",
+        "filename": "oop_protocol.py",
+        "language": "python",
+        "code": "from typing import Protocol\nimport math\n\n\nclass SumberSuhu(Protocol):\n    def baca(self) -> float: ...\n\n\nclass SensorLatihan:\n    def baca(self) -> float:\n        return 28.5\n\n\nclass SensorCadangan:\n    def baca(self) -> float:\n        return 31.0\n\n\ndef laporan(sumber: SumberSuhu) -> str:\n    suhu = sumber.baca()\n    if isinstance(suhu, bool) or not isinstance(suhu, (int, float)) or not math.isfinite(suhu):\n        raise ValueError('Suhu harus angka terbatas.')\n    return f'Suhu: {suhu:.1f} C'\n\n\nif __name__ == '__main__':\n    print(laporan(SensorLatihan()))\n    print(laporan(SensorCadangan()))\n",
+        "output": "Suhu: 28.5 C\nSuhu: 31.0 C",
+        "explanation": "Dua implementasi memenuhi kemampuan baca tanpa class induk yang sama."
+      }
+    ],
+    "steps": [
+      "Temukan method yang menjadi kontrak SumberSuhu.",
+      "Jalankan dua implementasi dan cocokkan keluarannya.",
+      "Buat implementasi salah yang mengembalikan string; amati validasi runtime pada laporan."
+    ],
+    "practice": [
+      "Tambahkan implementasi ketiga yang membaca nilai latihan dari constructor.",
+      "Tuliskan kontrak satuan, error, dan efek samping untuk method baca."
+    ],
+    "warning": "Protocol biasa tidak boleh dianggap sebagai validator otomatis atau pemeriksaan isinstance yang lengkap. Bahkan runtime_checkable tidak memeriksa seluruh tipe dan makna hasil method.",
+    "check": "Mengapa laporan masih memeriksa hasil baca meskipun sudah memakai Protocol?",
+    "answer": "Anotasi tidak menegakkan tipe saat runtime, dan sumber data bisa salah. Validasi menjaga aturan nilai yang benar-benar dibutuhkan saat program berjalan.",
+    "source": "https://docs.python.org/3.12/library/typing.html#typing.Protocol",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "oop-context-manager",
+    "title": "Context manager: memastikan sumber daya dilepas",
+    "summary": "Pahami enter, exit, pembersihan, dan penerusan exception melalui with.",
+    "analogy": "Meminjam ruang kerja perlu prosedur masuk dan keluar; meja tetap dirapikan meskipun pekerjaan menemui kendala.",
+    "explain": [
+      "With membantu menyatakan siklus hidup sumber daya seperti file dan koneksi. Context manager memiliki __enter__ untuk menyiapkan penggunaan serta __exit__ untuk pembersihan ketika blok berakhir. Pada pola normal, exit dipanggil juga saat blok melempar exception.",
+      "Nilai return __enter__ menjadi variabel sesudah as; nilainya tidak harus sama dengan object manager. Contoh mengembalikan StringIO sehingga kode dalam blok dapat menulis catatan sementara. Exit menutup buffer dan mengembalikan False.",
+      "Return False atau None membuat exception tetap diteruskan. Return True dapat menekan exception; gunakan hanya jika kontraknya memang mengharuskan itu. Menutup sumber daya tidak sama dengan menganggap operasi berhasil, dan with tidak otomatis berarti transaksi database.",
+      "Contoh membuat satu instance manager untuk satu penggunaan dan menutup buffer walaupun terjadi ValueError. Ia bukan penyimpanan permanen. Jika enter sendiri gagal sebelum berhasil, exit tidak dipanggil oleh with; proses akuisisi yang kompleks perlu menangani pembersihan parsialnya sendiri."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "__enter__",
+          "Menyiapkan sumber daya dan nilai setelah as"
+        ],
+        [
+          "__exit__",
+          "Membersihkan ketika blok selesai"
+        ],
+        [
+          "Return False",
+          "Meneruskan exception"
+        ],
+        [
+          "Pembersihan",
+          "Bukan bukti transaksi berhasil"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "oop_context.py",
+        "filename": "oop_context.py",
+        "language": "python",
+        "code": "from io import StringIO\n\n\nclass CatatanSementara:\n    def __enter__(self):\n        self.buffer = StringIO()\n        return self.buffer\n\n    def __exit__(self, jenis_error, nilai_error, traceback):\n        self.buffer.close()\n        return False  # Error tetap diteruskan ke pemanggil.\n\n\nif __name__ == '__main__':\n    catatan = CatatanSementara()\n    try:\n        with catatan as buffer:\n            buffer.write('Mulai pemeriksaan')\n            print(buffer.getvalue())\n            raise ValueError('Sensor latihan gagal')\n    except ValueError:\n        print('Error ditangani pemanggil')\n    print('Buffer tertutup:', catatan.buffer.closed)\n",
+        "output": "Mulai pemeriksaan\nError ditangani pemanggil\nBuffer tertutup: True",
+        "explanation": "StringIO membuat demonstrasi tanpa file nyata. Jangan menggunakan buffer setelah ditutup."
+      }
+    ],
+    "steps": [
+      "Jalankan contoh lalu telusuri urutan enter, error, exit, dan except.",
+      "Hapus raise pada salinan latihan untuk memeriksa jalur berhasil.",
+      "Coba baca buffer sesudah blok dan amati bahwa sumber daya sudah ditutup."
+    ],
+    "practice": [
+      "Bandingkan pola with dengan try/finally untuk pembersihan yang sama.",
+      "Jelaskan akibat mengubah return False menjadi True pada exit."
+    ],
+    "warning": "Jangan menekan exception hanya agar program tampak berhasil. Dokumentasikan apakah manager dapat digunakan ulang atau hanya untuk satu blok.",
+    "check": "Mengapa exception masih tertangkap oleh except di luar with?",
+    "answer": "Exit membersihkan buffer lalu mengembalikan False. Exception tetap berjalan keluar blok sehingga pemanggil dapat menanganinya.",
+    "source": "https://docs.python.org/3.12/reference/datamodel.html#context-managers",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-savepoint",
+    "title": "Savepoint: membatalkan sebagian pekerjaan transaksi",
+    "summary": "Tangani baris impor yang ditolak sambil tetap menjaga batas transaksi luar.",
+    "analogy": "Savepoint seperti penanda draf: Anda dapat membatalkan bagian terakhir tanpa selalu membuang seluruh pekerjaan sebelumnya.",
+    "explain": [
+      "Transaksi luar menetapkan unit pekerjaan yang akan di-commit atau di-rollback. Savepoint menambah titik kembali di dalam unit tersebut. Pada SQLite, ROLLBACK TO mengembalikan keadaan ke titik itu tetapi tidak mengakhiri transaksi luar.",
+      "Contoh mengimpor tiga baris stok. Aturan latihan mengizinkan baris invalid ditolak satu per satu: SAVEPOINT dibuat sebelum insert, IntegrityError memicu ROLLBACK TO, lalu RELEASE menutup titik tersebut. Baris A dan C dipertahankan sementara B ditolak karena jumlah negatif.",
+      "RELEASE savepoint di dalam transaksi luar bukan commit permanen. Jika kesalahan tak terduga terjadi pada tingkat luar sebelum commit, seluruh perubahan transaksi luar dibatalkan. Daftar penolakan harus dilaporkan agar impor parsial tidak diklaim sukses penuh.",
+      "Gunakan pola ini hanya jika bisnis mengizinkan hasil parsial. Untuk transfer uang atau perubahan yang wajib berhasil bersama, kegagalan satu bagian bisa mengharuskan rollback keseluruhan. Nama savepoint pada contoh tetap dan berasal dari kode, bukan rangkaian string masukan pengguna."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "SAVEPOINT",
+          "Menandai titik kembali"
+        ],
+        [
+          "ROLLBACK TO",
+          "Membatalkan perubahan sesudah titik tersebut"
+        ],
+        [
+          "RELEASE",
+          "Menutup savepoint; bukan selalu commit transaksi luar"
+        ],
+        [
+          "Kebijakan impor",
+          "Hasil parsial harus disepakati dan dilaporkan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "db_savepoint.py",
+        "filename": "db_savepoint.py",
+        "language": "python",
+        "code": "import sqlite3\n\n\ndef impor_baris(con, data):\n    ditolak = []\n    con.execute('BEGIN')\n    try:\n        for kode, jumlah in data:\n            con.execute('SAVEPOINT satu_baris')\n            try:\n                con.execute('INSERT INTO stok VALUES (?, ?)', (kode, jumlah))\n            except sqlite3.IntegrityError:\n                con.execute('ROLLBACK TO satu_baris')\n                ditolak.append(kode)\n            finally:\n                con.execute('RELEASE satu_baris')\n        con.commit()\n    except Exception:\n        con.rollback()\n        raise\n    return ditolak\n\n\nif __name__ == '__main__':\n    con = sqlite3.connect(':memory:', isolation_level=None)\n    try:\n        con.execute('CREATE TABLE stok(kode TEXT PRIMARY KEY, jumlah INTEGER NOT NULL CHECK(jumlah >= 0))')\n        print('Ditolak:', impor_baris(con, [('A', 2), ('B', -1), ('C', 4)]))\n        print(con.execute('SELECT kode, jumlah FROM stok ORDER BY kode').fetchall())\n    finally:\n        con.close()\n",
+        "output": "Ditolak: ['B']\n[('A', 2), ('C', 4)]",
+        "explanation": "Program menggunakan SQLite memori baru dan menutup koneksinya setelah demo. Bukan koneksi produksi."
+      }
+    ],
+    "steps": [
+      "Jalankan contoh lalu identifikasi transaksi luar dan savepoint per baris.",
+      "Tambahkan satu kode duplikat dan cocokkan daftar yang ditolak.",
+      "Pada salinan latihan, tambahkan error tak terduga sebelum commit dan pastikan rollback luar membatalkan perubahan."
+    ],
+    "practice": [
+      "Bandingkan kebijakan impor parsial dengan semua-atau-tidak-sama-sekali.",
+      "Tulis laporan impor yang memisahkan diterima, ditolak, dan alasan penolakan."
+    ],
+    "warning": "Jangan menangkap semua exception lalu melanjutkan seolah tidak ada masalah. Contoh hanya menolak IntegrityError per baris; error lain membatalkan unit luar.",
+    "check": "Apakah RELEASE menjamin baris sudah permanen jika masih ada transaksi luar?",
+    "answer": "Tidak. Commit transaksi luar yang mengesahkan perubahan. Rollback luar masih dapat membatalkan perubahan yang savepoint-nya telah di-release.",
+    "source": "https://www.sqlite.org/lang_savepoint.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "db-snapshot-wal",
+    "title": "Snapshot SQLite WAL: pembacaan dalam transaksi",
+    "summary": "Amati pembaca yang tetap melihat snapshot lama setelah penulis lain melakukan commit.",
+    "analogy": "Membaca laporan seperti memotret papan data: perubahan setelah foto diambil tidak mengubah isi foto itu.",
+    "explain": [
+      "Prasyaratnya adalah dua koneksi terpisah ke database file yang sama. Dalam mode WAL, pembaca dapat terus memakai snapshot saat penulis lain mengesahkan perubahan. Snapshot pembacaan ditentukan ketika transaksi membaca data, bukan hanya karena BEGIN sudah ditulis.",
+      "Koneksi A memulai transaksi lalu membaca angka 10. Koneksi B mengubah angka menjadi 20 dan commit melalui autocommit. Pembacaan kedua A dalam transaksi yang sama tetap menghasilkan 10. Setelah A mengakhiri transaksi, pembacaan baru melihat 20.",
+      "WAL membantu pembaca dan penulis berjalan bersama, tetapi SQLite tetap mempunyai satu penulis pada satu waktu. Transaksi pembaca yang lama juga dapat menahan kemajuan checkpoint dan memperbesar WAL. Mode ini memerlukan karakteristik penyimpanan lokal yang sesuai, bukan solusi universal untuk filesystem jaringan.",
+      "Snapshot konsisten bukan berarti selalu paling baru. Jangan mengubah data berdasarkan pembacaan lama tanpa strategi konflik. Bila snapshot lama hendak ditingkatkan menjadi penulis sementara data sudah berubah, operasi dapat ditolak; aplikasi perlu mengulang unit pekerjaan dengan pembacaan yang sesuai, bukan terus mencoba satu UPDATE tanpa batas."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Dua koneksi",
+          "Berbagi file, bukan dua database memori terpisah"
+        ],
+        [
+          "Snapshot lama",
+          "Tetap berlaku selama transaksi baca yang sama"
+        ],
+        [
+          "Transaksi baru",
+          "Dapat melihat commit yang lebih baru"
+        ],
+        [
+          "WAL",
+          "Tetap satu penulis dan memiliki kebutuhan checkpoint"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "db_snapshot.py",
+        "filename": "db_snapshot.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nimport sqlite3\n\n\ndef demo():\n    with TemporaryDirectory() as folder:\n        path = str(Path(folder) / 'latihan.sqlite3')\n        a = sqlite3.connect(path, isolation_level=None, timeout=0)\n        b = sqlite3.connect(path, isolation_level=None, timeout=0)\n        try:\n            mode = a.execute('PRAGMA journal_mode=WAL').fetchone()[0]\n            if mode != 'wal':\n                raise RuntimeError('Latihan memerlukan mode WAL pada disk lokal.')\n            a.execute('CREATE TABLE nilai(id INTEGER PRIMARY KEY, angka INTEGER)')\n            a.execute('INSERT INTO nilai VALUES (1, 10)')\n            a.execute('BEGIN')\n            print('A awal:', a.execute('SELECT angka FROM nilai').fetchone()[0])\n            b.execute('UPDATE nilai SET angka=20 WHERE id=1')\n            print('A snapshot:', a.execute('SELECT angka FROM nilai').fetchone()[0])\n            a.execute('COMMIT')\n            print('A transaksi baru:', a.execute('SELECT angka FROM nilai').fetchone()[0])\n        finally:\n            a.close()\n            b.close()\n\n\nif __name__ == '__main__':\n    demo()\n",
+        "output": "A awal: 10\nA snapshot: 10\nA transaksi baru: 20",
+        "explanation": "Folder sementara menjaga demo terpisah dari data penting. Tidak ada thread atau jeda waktu yang dibutuhkan."
+      }
+    ],
+    "steps": [
+      "Jalankan demo dan cocokkan tiga pembacaan.",
+      "Tandai saat A mulai membaca serta saat transaksi A diakhiri.",
+      "Bandingkan kebutuhan membaca laporan konsisten dengan kebutuhan melihat data paling baru."
+    ],
+    "practice": [
+      "Tambahkan pembacaan B sesudah update untuk membandingkan keadaan kedua koneksi.",
+      "Tulis alasan transaksi baca panjang sebaiknya tidak dibiarkan terbuka tanpa kebutuhan."
+    ],
+    "warning": "Jangan menyalin hanya file utama database aktif untuk backup WAL. Gunakan prosedur backup engine yang benar dan uji pemulihan, sebagaimana materi backup sebelumnya.",
+    "check": "Mengapa pembacaan kedua A masih 10 meskipun B sudah commit?",
+    "answer": "A masih berada pada transaksi baca dengan snapshot yang sama. Setelah transaksi diakhiri dan pembacaan baru dilakukan, A dapat melihat nilai terbaru.",
+    "source": "https://www.sqlite.org/isolation.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "api-cache-etag",
+    "title": "ETag dan conditional GET: respons saat data belum berubah",
+    "summary": "Bandingkan versi representasi dan kirim 304 tanpa mengirim ulang badan yang sama.",
+    "analogy": "Nomor edisi buku membantu pembaca menanyakan apakah salinan yang dimilikinya masih sama dengan edisi di rak.",
+    "explain": [
+      "ETag adalah validator untuk suatu representasi respons. Client yang menyimpan respons dapat mengirim If-None-Match pada GET berikutnya. Jika validator cocok, server mengirim 304 tanpa badan; client memakai badan yang sudah disimpan.",
+      "Contoh menghasilkan JSON dengan urutan dan encoding tetap lalu menghitung SHA-256 atas byte respons tersebut. ETag dibungkus tanda kutip. Perubahan byte harus menghasilkan validator yang berbeda. Pada layanan nyata, compression, variasi bahasa, dan negosiasi representasi harus diperhitungkan agar validator sesuai representasi yang disajikan.",
+      "Untuk If-None-Match pada GET digunakan perbandingan lemah; W/ dengan hash yang sama diterima contoh. Bintang berarti ada representasi saat ini. Parser latihan dibatasi pada tag server berupa hash heksadesimal; ini bukan parser HTTP umum untuk seluruh kemungkinan tag.",
+      "Cache-Control private, max-age=0, must-revalidate mengarahkan cache pribadi untuk memvalidasi ulang sebelum memakai data yang sudah stale. Ini berbeda dari no-store yang melarang penyimpanan. ETag bukan autentikasi dan bukan izin menyimpan respons pribadi pada cache bersama.",
+      "Pasang FastAPI dan HTTPX di virtual environment latihan: python -m pip install fastapi httpx. TestClient menguji HTTP di dalam proses tanpa membuka port jaringan. Contoh hanya GET data latihan dan belum menerapkan If-Match untuk konflik penulisan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "ETag",
+          "Validator versi representasi"
+        ],
+        [
+          "If-None-Match",
+          "Validator yang dibawa client"
+        ],
+        [
+          "304",
+          "Gunakan badan cache; respons ini tanpa badan"
+        ],
+        [
+          "private / no-store",
+          "Cache pribadi / larangan penyimpanan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "api_etag.py",
+        "filename": "api_etag.py",
+        "language": "python",
+        "code": "import hashlib\nimport json\nfrom typing import Annotated\nfrom fastapi import FastAPI, Header, Response\nfrom fastapi.testclient import TestClient\n\n\ndef create_app():\n    app = FastAPI()\n\n    @app.get('/katalog')\n    def katalog(if_none_match: Annotated[str | None, Header()] = None):\n        body = json.dumps({'materi': ['Python', 'Web']}, ensure_ascii=False, separators=(',', ':')).encode()\n        etag = '\"' + hashlib.sha256(body).hexdigest() + '\"'\n        headers = {'ETag': etag, 'Cache-Control': 'private, max-age=0, must-revalidate'}\n        # Nilai ETag server ini hanya hash heksadesimal, tanpa koma.\n        cocok = if_none_match is not None and any(\n            item.strip() == '*' or item.strip().removeprefix('W/') == etag\n            for item in if_none_match.split(',')\n        )\n        if cocok:\n            return Response(status_code=304, headers=headers)\n        return Response(content=body, media_type='application/json', headers=headers)\n\n    return app\n\n\nif __name__ == '__main__':\n    with TestClient(create_app()) as client:\n        pertama = client.get('/katalog')\n        ulang = client.get('/katalog', headers={'If-None-Match': pertama.headers['etag']})\n        lemah = client.get('/katalog', headers={'If-None-Match': 'W/' + pertama.headers['etag']})\n        assert pertama.json() == {'materi': ['Python', 'Web']}\n        assert ulang.content == b''\n        assert lemah.status_code == 304\n        assert client.get('/katalog', headers={'If-None-Match': '\"lama\"'}).status_code == 200\n        print(pertama.status_code)\n        print(ulang.status_code)\n        print('Body 304 kosong:', not ulang.content)\n",
+        "output": "200\n304\nBody 304 kosong: True",
+        "explanation": "Jalankan sebagai program latihan setelah dependensi terpasang. create_app juga dapat dipakai oleh TestClient tanpa server publik."
+      }
+    ],
+    "steps": [
+      "Pasang dependensi dalam virtual environment lalu jalankan contoh.",
+      "Cocokkan respons awal 200 dengan respons ulang 304.",
+      "Ubah isi katalog pada salinan aplikasi dan pastikan validator lama tidak lagi cocok."
+    ],
+    "practice": [
+      "Tambahkan test If-None-Match dengan beberapa kandidat hash.",
+      "Jelaskan kapan memilih private revalidation dan kapan no-store lebih sesuai."
+    ],
+    "warning": "Jangan memakai ETag sebagai bukti identitas atau membuka cache bersama untuk data pengguna tanpa rancangan yang benar. Validator baca tidak otomatis mencegah konflik update.",
+    "check": "Mengapa badan respons 304 kosong?",
+    "answer": "Client sudah mempunyai salinan badan untuk validator tersebut. Server hanya menyatakan bahwa representasinya belum berubah sesuai kondisi request.",
+    "source": "https://www.rfc-editor.org/rfc/rfc9110.html#name-if-none-match",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "api-pagination-cursor",
+    "title": "Cursor pagination pada API: kontrak, batas, dan validasi",
+    "summary": "Buat penanda halaman bertanda tangan tanpa menyamakannya dengan snapshot atau token akses.",
+    "analogy": "Pembatas buku mencatat halaman terakhir yang dibaca; ia tidak memberi izin membuka buku yang tidak boleh diakses.",
+    "explain": [
+      "Cursor API membawa posisi terakhir untuk melanjutkan pembacaan. Contoh memakai data publik yang tetap dengan id naik, mengambil limit+1 item untuk mendeteksi kelanjutan, lalu mengembalikan items dan next_cursor. Null menandakan tidak ada halaman berikutnya.",
+      "Cursor memuat versi format dan id terakhir, lalu ditandatangani HMAC. Base64 hanya encoding, bukan enkripsi. Signature mencegah perubahan posisi tanpa kunci yang sesuai, tetapi tidak menggantikan validasi bentuk, batas panjang, izin pengguna, atau filter data.",
+      "Endpoint membatasi limit 1..3 dan panjang cursor 256 karakter. Cursor rusak ditolak dengan 400; query limit invalid ditolak oleh validasi FastAPI. Kunci minimal 32 byte dimasukkan melalui factory server. Nilai fixture yang tertulis di demo hanya untuk latihan, bukan secret produksi.",
+      "Contoh mempunyai satu dataset publik dan satu urutan tetap. Jika menambah filter, tenant, atau urutan, ikat identitas kontrak tersebut ke payload cursor dan tetap lakukan otorisasi pada setiap halaman. Jangan memakai cursor dari satu scope untuk membaca scope lain.",
+      "Pada database nyata, gunakan keyset query berindeks sesuai materi pagination Basis Data, bukan memindai seluruh list seperti dataset kecil ini. Cursor tidak otomatis memberikan snapshot: insert, penghapusan, dan perubahan kolom pengurutan selama penelusuran perlu kebijakan konsistensi yang jelas."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "limit+1",
+          "Mendeteksi apakah masih ada item berikutnya"
+        ],
+        [
+          "next_cursor null",
+          "Halaman terakhir"
+        ],
+        [
+          "HMAC",
+          "Memeriksa integritas, bukan enkripsi"
+        ],
+        [
+          "Scope cursor",
+          "Harus konsisten dengan filter, urutan, dan izin"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "api_cursor.py",
+        "filename": "api_cursor.py",
+        "language": "python",
+        "code": "import base64\nimport binascii\nimport hashlib\nimport hmac\nfrom typing import Annotated\nfrom fastapi import FastAPI, HTTPException, Query\nfrom fastapi.testclient import TestClient\n\nDATA = tuple({'id': i, 'nama': f'Materi {i}'} for i in range(1, 6))\n\n\ndef create_app(secret: bytes):\n    if not isinstance(secret, bytes) or len(secret) < 32:\n        raise ValueError('Kunci minimal 32 byte; konfigurasi server, bukan input client.')\n    app = FastAPI()\n\n    def encode(last_id):\n        payload = f'v1:{last_id}'.encode('ascii')\n        signature = hmac.digest(secret, payload, hashlib.sha256)\n        return base64.urlsafe_b64encode(payload + b'.' + signature).decode('ascii')\n\n    def decode(token):\n        try:\n            raw = base64.b64decode(token, altchars=b'-_', validate=True)\n            if len(raw) < 36 or raw[-33:-32] != b'.':\n                raise ValueError('Format')\n            payload, signature = raw[:-33], raw[-32:]\n            if not hmac.compare_digest(hmac.digest(secret, payload, hashlib.sha256), signature):\n                raise ValueError('Signature')\n            versi, angka = payload.decode('ascii').split(':')\n            if versi != 'v1' or not angka.isdecimal() or not 0 <= int(angka) <= 1000000000:\n                raise ValueError('Isi')\n            return int(angka)\n        except (ValueError, UnicodeError, binascii.Error):\n            raise HTTPException(status_code=400, detail='Cursor tidak valid') from None\n\n    @app.get('/materi')\n    def materi(limit: Annotated[int, Query(ge=1, le=3)] = 2,\n               cursor: Annotated[str | None, Query(max_length=256)] = None):\n        after = decode(cursor) if cursor is not None else 0\n        kandidat = [item for item in DATA if item['id'] > after][:limit + 1]\n        items = kandidat[:limit]\n        lanjut = encode(items[-1]['id']) if len(kandidat) > limit else None\n        return {'items': items, 'next_cursor': lanjut}\n\n    return app\n\n\nif __name__ == '__main__':\n    # Hanya fixture lokal. Server nyata membaca secret dari konfigurasi rahasia.\n    with TestClient(create_app(b'kunci-latihan-lokal-bukan-produksi-123456')) as client:\n        ids = []\n        cursor = None\n        while True:\n            params = {'limit': 2}\n            if cursor is not None:\n                params['cursor'] = cursor\n            data = client.get('/materi', params=params).json()\n            ids.extend(item['id'] for item in data['items'])\n            cursor = data['next_cursor']\n            if cursor is None:\n                break\n        assert client.get('/materi', params={'cursor': 'rusak'}).status_code == 400\n        assert client.get('/materi', params={'limit': 0}).status_code == 422\n        print(ids)\n        print('Cursor akhir:', cursor)\n",
+        "output": "[1, 2, 3, 4, 5]\nCursor akhir: None",
+        "explanation": "Pasang fastapi dan httpx pada virtual environment latihan. Demo membaca seluruh halaman serta memeriksa cursor rusak dan limit invalid."
+      }
+    ],
+    "steps": [
+      "Jalankan contoh dan pastikan semua id muncul tepat sekali.",
+      "Telusuri bagaimana limit+1 menentukan ada tidaknya halaman berikutnya.",
+      "Ubah satu karakter cursor pada test tambahan dan periksa respons 400."
+    ],
+    "practice": [
+      "Rancang payload cursor untuk filter status dan urutan waktu dengan id pemecah seri.",
+      "Jelaskan efek item yang dihapus di antara dua request halaman pada data live."
+    ],
+    "warning": "Jangan menaruh data rahasia pada cursor yang hanya di-base64. Signature tidak menyembunyikan isi dan tidak memberi hak akses terhadap data.",
+    "check": "Mengapa cursor bertanda tangan masih memerlukan pemeriksaan izin per request?",
+    "answer": "Signature hanya membuktikan integritas payload terhadap kunci server. Hak akses pengguna dapat berbeda atau berubah dan harus ditegakkan saat membaca data.",
+    "source": "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "web-modul-javascript",
+    "title": "Modul JavaScript: pisahkan logika dari DOM",
+    "summary": "Gunakan export dan import untuk membagi program browser menjadi file yang mudah dipahami.",
+    "analogy": "Laci alat yang diberi label memudahkan mengambil fungsi yang diperlukan tanpa menumpuk semua alat di meja yang sama.",
+    "explain": [
+      "Modul JavaScript membatasi ruang nama dan menyatakan fungsi yang diekspor. Contoh membagi ringkasan data pada web-modul-format.mjs dan interaksi DOM pada web-modul-app.mjs. File HTML memuat app dengan script type=module.",
+      "Import memakai path relatif yang benar, termasuk ekstensi file. Pada contoh, app mengimpor ./web-modul-format.mjs. Module browser berjalan dalam strict mode dan pemuatannya tidak sama dengan script biasa. Jalankan melalui HTTP localhost atau HTTPS; jangan mengandalkan file:// untuk aturan pemuatan modul.",
+      "Fungsi ringkasan hanya menerima nilai dan mengembalikan string. Ia tidak mencari elemen DOM sehingga lebih mudah diuji secara terpisah. App bertanggung jawab membaca input, menangani submit, serta menampilkan hasil atau kesalahan dengan textContent.",
+      "Native ES modules pada contoh tidak membutuhkan framework atau bundler. Server tetap harus menyajikan MIME JavaScript yang benar. Jika modul gagal dimuat, periksa URL, ekstensi, status HTTP, MIME, dan Console sebelum mengubah logika program."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "export",
+          "Menyatakan nilai yang dapat diimpor"
+        ],
+        [
+          "import",
+          "Mengambil ekspor melalui path modul"
+        ],
+        [
+          "type=module",
+          "Memuat JavaScript sebagai modul browser"
+        ],
+        [
+          "Pemisahan",
+          "Fungsi data terpisah dari interaksi DOM"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Modul JavaScript</title><style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}</style></head>\n<body><main><h1>Ringkasan inventaris</h1><p>Dua modul lokal membagi logika perhitungan dan interaksi DOM.</p>\n<form id=\"form\"><label for=\"nama\">Nama perangkat</label><input id=\"nama\" required maxlength=\"80\"><label for=\"jumlah\">Jumlah</label><input id=\"jumlah\" type=\"number\" min=\"1\" max=\"100\" step=\"1\" value=\"1\" required><p><button type=\"submit\">Buat ringkasan</button></p></form><p id=\"status\" role=\"status\"></p></main>\n<script type=\"module\" src=\"./web-modul-app.mjs\"></script>\n</body></html>\n",
+        "output": "Isian Router dan 3 menghasilkan Router: 3 unit.",
+        "explanation": "Simpan HTML sebagai index.html. Dua file .mjs di bawah harus berada pada folder yang sama."
+      },
+      {
+        "label": "web-modul-format.mjs",
+        "filename": "web-modul-format.mjs",
+        "language": "javascript",
+        "code": "export function ringkasan(nama, jumlah) {\n  const bersih = nama.trim();\n  if (!bersih || bersih.length > 80 || !Number.isInteger(jumlah) || jumlah < 1 || jumlah > 100) {\n    throw new Error('Nama 1–80 karakter dan jumlah 1–100 diperlukan.');\n  }\n  return `${bersih}: ${jumlah} unit`;\n}\n",
+        "output": "",
+        "explanation": "Fungsi murni: tidak membaca atau mengubah DOM."
+      },
+      {
+        "label": "web-modul-app.mjs",
+        "filename": "web-modul-app.mjs",
+        "language": "javascript",
+        "code": "import {ringkasan} from './web-modul-format.mjs';\nconst form = document.querySelector('#form');\nconst status = document.querySelector('#status');\nform.addEventListener('submit', event => {\n  event.preventDefault();\n  try {\n    status.textContent = ringkasan(document.querySelector('#nama').value,\n      Number(document.querySelector('#jumlah').value));\n  } catch (error) {\n    status.textContent = error.message;\n  }\n});\n",
+        "output": "",
+        "explanation": "App menghubungkan form dengan fungsi ringkasan."
+      }
+    ],
+    "steps": [
+      "Simpan ketiga file pada folder latihan yang sama dengan nama sesuai label.",
+      "Jalankan server berkas lokal lalu buka index.html, atau gunakan tautan contoh browser di artikel.",
+      "Kirim nama serta jumlah valid, lalu coba nama hanya spasi dan angka di luar batas."
+    ],
+    "practice": [
+      "Impor ringkasan ke modul pengujian kecil dan uji tanpa DOM.",
+      "Tambahkan fungsi format lokasi pada modul logika tanpa mencampur selector HTML ke dalamnya."
+    ],
+    "warning": "Modul browser tetap dapat dibaca pengguna. Memisahkan file tidak menyembunyikan secret dan bukan mekanisme keamanan.",
+    "check": "Mengapa fungsi ringkasan tidak menerima elemen input langsung?",
+    "answer": "Agar fungsi berfokus pada data, dapat dipakai ulang, dan mudah diuji. Pengambilan nilai input menjadi tanggung jawab modul DOM.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "web-url-parameter",
+    "title": "URLSearchParams: filter yang bertahan saat reload",
+    "summary": "Simpan state pencarian nonrahasia pada URL dan pulihkan antarmuka dari parameter.",
+    "analogy": "Alamat dengan penanda halaman membantu orang lain membuka rak yang sama tanpa mengulang langkah pencarian Anda.",
+    "explain": [
+      "URL dapat membawa query parameter seperti ?q=django. URLSearchParams membaca dan menyusun parameter dengan encoding yang tepat. Contoh mengambil nilai q, membatasi panjangnya, lalu menggunakan nilai tersebut untuk memfilter daftar materi latihan.",
+      "Pada submit, program membuat object URL dari alamat saat ini. SearchParams.set memperbarui q dan delete menghapusnya bila kosong. History.replaceState mengganti entri riwayat saat ini tanpa memuat dokumen baru. Ini bukan request ke server dan tidak membuat data pencarian tersimpan di database.",
+      "Saat halaman dimuat ulang, script membaca q lagi dan membangun tampilan yang sesuai. Teks hasil tetap dibuat dengan textContent. URL dianggap masukan yang perlu diperiksa; ia dapat diedit langsung dan tidak membuktikan identitas atau izin pengguna.",
+      "ReplaceState tidak membuat langkah Back untuk setiap filter. Jika ingin riwayat filter memakai pushState, tangani juga event popstate agar UI mengikuti Back/Forward. Jangan memasukkan password, token, atau data pribadi pada URL karena dapat masuk riwayat, log, atau tautan yang dibagikan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "searchParams.get",
+          "Membaca parameter"
+        ],
+        [
+          "set / delete",
+          "Mengubah atau menghapus parameter"
+        ],
+        [
+          "replaceState",
+          "Mengganti entri riwayat tanpa reload"
+        ],
+        [
+          "State URL",
+          "Cocok untuk filter nonrahasia yang dapat dibagikan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Filter melalui URL</title><style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}</style></head>\n<body><main><h1>Cari materi latihan</h1><p>URL menyimpan kata pencarian nonrahasia. Muat ulang untuk memulihkan filter.</p><form id=\"form\"><label for=\"q\">Kata pencarian</label><input id=\"q\" maxlength=\"80\"><p><button type=\"submit\">Terapkan filter</button></p></form><p id=\"status\" role=\"status\"></p><ul id=\"hasil\"></ul></main>\n<script type=\"module\">\nconst materi = ['Python dasar', 'Django template', 'HTML semantik', 'JavaScript DOM'];\nconst input = document.querySelector('#q');\nconst status = document.querySelector('#status');\nconst daftar = document.querySelector('#hasil');\nfunction tampilkan(kata) {\n  const hasil = materi.filter(nama => nama.toLowerCase().includes(kata.toLowerCase()));\n  daftar.replaceChildren();\n  for (const nama of hasil) {\n    const li = document.createElement('li');\n    li.textContent = nama;\n    daftar.append(li);\n  }\n  status.textContent = `${hasil.length} materi ditemukan.`;\n}\nconst awal = new URL(location.href).searchParams.get('q') ?? '';\ninput.value = awal.slice(0, 80);\ntampilkan(input.value);\ndocument.querySelector('#form').addEventListener('submit', event => {\n  event.preventDefault();\n  const kata = input.value.trim().slice(0, 80);\n  input.value = kata;\n  const url = new URL(location.href);\n  if (kata) url.searchParams.set('q', kata);\n  else url.searchParams.delete('q');\n  history.replaceState(null, '', url);\n  tampilkan(kata);\n});\n</script>\n</body></html>\n",
+        "output": "Filter django menampilkan Django template dan status 1 materi ditemukan. Parameter q muncul pada URL dan dipulihkan saat reload.",
+        "explanation": "Simpan sebagai index.html dan jalankan melalui HTTP lokal atau tautan contoh browser."
+      }
+    ],
+    "steps": [
+      "Buka contoh, isi django, lalu terapkan filter.",
+      "Periksa q pada URL lalu muat ulang halaman; input serta hasil harus tetap sesuai.",
+      "Kosongkan filter, terapkan, dan pastikan parameter q dihapus."
+    ],
+    "practice": [
+      "Coba pencarian dengan spasi atau simbol &, lalu amati encoding URL.",
+      "Rancang kebutuhan riwayat filter dan tentukan kapan replaceState atau pushState lebih tepat."
+    ],
+    "warning": "URL bukan tempat aman untuk secret. Pembatasan panjang dan filtering client juga bukan pengganti validasi serta izin pada endpoint server.",
+    "check": "Mengapa hasil pencarian tetap sama setelah reload walaupun tidak memakai localStorage?",
+    "answer": "Nilai filter ditulis pada URL. Saat dokumen dibuka kembali, script membaca parameter tersebut dan membangun ulang tampilan.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "django-query-relasi",
+    "title": "Optimasi query Django: N+1, select_related, dan prefetch_related",
+    "summary": "Ukur jumlah query sambil menjaga hasil serta batas kepemilikan tetap sama.",
+    "analogy": "Mengambil satu berkas lalu kembali ke gudang untuk setiap lampiran lebih lambat daripada menyiapkan kumpulan yang diperlukan sekaligus.",
+    "explain": [
+      "N+1 terjadi ketika satu query mengambil daftar lalu akses relasi memicu query tambahan per item. Misalnya membaca tiga tiket kemudian t.pemilik.username pada setiap tiket dapat menjalankan empat query. Jumlah query perlu diukur pada operasi nyata, bukan ditebak dari banyaknya baris kode.",
+      "Select_related cocok untuk relasi tunggal seperti ForeignKey dan OneToOne; data terkait diambil melalui JOIN. Prefetch_related mengambil relasi melalui query terpisah lalu menghubungkannya di Python, sesuai untuk relasi jamak seperti tiket_set milik user.",
+      "Optimasi tidak boleh menghapus filter otorisasi. Tetap mulai dari queryset yang membatasi pemilik atau scope yang diizinkan. Mengambil lebih banyak relasi juga menambah data yang dibaca; pilih berdasarkan kebutuhan tampilan dan ukur waktu serta memori bila skalanya besar.",
+      "Proyek unduhan kini menyediakan test_pendalaman.py. Fixture membuat tiga tiket pada satu user dan satu user tanpa tiket. Test membandingkan empat query dengan satu query, membuktikan prefetch dua query, serta memastikan filter user tanpa tiket tetap menghasilkan daftar kosong. Jumlah yang diharapkan ini khusus fixture tersebut, bukan angka universal setiap halaman."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "N+1",
+          "Query daftar diikuti query relasi per item"
+        ],
+        [
+          "select_related",
+          "JOIN untuk relasi tunggal"
+        ],
+        [
+          "prefetch_related",
+          "Query tambahan terencana untuk kumpulan relasi"
+        ],
+        [
+          "assertNumQueries",
+          "Memeriksa jumlah query pada blok tertentu"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "manage.py shell · query tiket",
+        "filename": "manage.py shell · query tiket",
+        "language": "python",
+        "code": "from operasional.models import Tiket\n# Filter pemilik harus tetap diterapkan pada view pengguna.\nquery = Tiket.objects.select_related('pemilik').order_by('pk')\nprint([(t.judul, t.pemilik.username) for t in query[:10]])",
+        "output": "",
+        "explanation": "Jalankan dalam manage.py shell pada database latihan yang Anda kelola, bukan view publik tanpa filter. Hasil mengikuti data latihan."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "language": "bash",
+        "code": "python manage.py test operasional.test_pendalaman.QueryRelasiTest",
+        "output": "Hasil yang diharapkan: 3 test, OK.",
+        "explanation": "Gunakan proyek unduhan terbaru. Tiga test query dijalankan pada database uji terpisah."
+      }
+    ],
+    "steps": [
+      "Unduh versi terbaru proyek Django dan baca test_pendalaman.py.",
+      "Jalankan tiga test QueryRelasiTest dan cocokkan hasil query yang dibandingkan.",
+      "Tandai relasi tunggal pemilik serta relasi balik jamak tiket_set."
+    ],
+    "practice": [
+      "Tambahkan tampilan nama pemilik pada salinan halaman admin latihan dan ukur query yang diperlukan.",
+      "Jelaskan mengapa filter pemilik tidak boleh dihapus demi mengurangi query."
+    ],
+    "warning": "Query lebih sedikit tidak otomatis berarti aplikasi paling cepat atau lebih aman. Pertahankan hasil, batas akses, dan ukuran data yang sesuai; gunakan profiling untuk kebutuhan sebenarnya.",
+    "check": "Mengapa prefetch cocok untuk tiket_set milik setiap user?",
+    "answer": "Satu user dapat mempunyai banyak tiket. Prefetch membaca kumpulan terkait secara terencana dan menghubungkannya tanpa satu query terpisah untuk tiap user.",
+    "source": "https://docs.djangoproject.com/en/5.2/ref/models/querysets/#select-related",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "django-management-command",
+    "title": "Management command: data latihan yang dapat dibuat ulang",
+    "summary": "Tambahkan perintah proyek dengan flag, transaksi, serta perilaku pengulangan yang jelas.",
+    "analogy": "Daftar persiapan laboratorium memudahkan menyiapkan alat yang sama tanpa menyalin langkah manual berulang kali.",
+    "explain": [
+      "Django menemukan command dari app terpasang melalui management/commands/nama.py. File mendefinisikan class Command turunan BaseCommand. Add_arguments mendeklarasikan opsi, sedangkan handle menjalankan pekerjaan dan menulis laporan melalui self.stdout.",
+      "Command seed_perangkat menambah dua perangkat dengan kode DEMO bila belum ada. Flag --latihan harus diberikan dan DEBUG harus aktif; operator tetap wajib memeriksa bahwa database target benar-benar latihan. Debug aktif saja tidak membuktikan isi database aman untuk percobaan.",
+      "Get_or_create memakai kode unik sebagai identitas. Pemanggilan ulang tidak menambah duplikat dan tidak menimpa nama/lokasi perangkat lama. Transaction.atomic menjaga dua pembuatan sebagai satu unit bila terjadi kesalahan tak terduga. Command tidak membuat akun, password, atau menghapus data.",
+      "Pengujian melalui call_command mencakup flag yang hilang, penolakan saat DEBUG false, dua pemanggilan tanpa duplikasi, serta pelestarian data lama. Pola command berguna juga untuk pekerjaan administrasi lain, tetapi operasi destruktif membutuhkan rancangan target, preview, pembatasan, audit, dan pemulihan tersendiri."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "BaseCommand",
+          "Dasar command app"
+        ],
+        [
+          "add_arguments / handle",
+          "Deklarasi opsi / pelaksanaan"
+        ],
+        [
+          "get_or_create",
+          "Buat bila identitas belum ada"
+        ],
+        [
+          "call_command",
+          "Menjalankan command dari Python atau test"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "operasional/management/commands/seed_perangkat.py",
+        "filename": "operasional/management/commands/seed_perangkat.py",
+        "language": "python",
+        "code": "from django.conf import settings\nfrom django.core.management.base import BaseCommand, CommandError\nfrom django.db import transaction\nfrom operasional.models import Perangkat\n\n\nclass Command(BaseCommand):\n    help = 'Membuat dua perangkat DEMO pada database latihan lokal; tidak menimpa data.'\n\n    def add_arguments(self, parser):\n        parser.add_argument('--latihan', action='store_true', help='Konfirmasi target database latihan.')\n\n    def handle(self, *args, **options):\n        if not settings.DEBUG or not options['latihan']:\n            raise CommandError('Hanya DEBUG lokal dengan --latihan pada database latihan.')\n        dibuat = 0\n        with transaction.atomic():\n            for kode, nama in [('DEMO-001', 'Router latihan'), ('DEMO-002', 'Switch latihan')]:\n                _, baru = Perangkat.objects.get_or_create(\n                    kode=kode, defaults={'nama': nama, 'lokasi': 'Lab', 'aktif': True})\n                dibuat += int(baru)\n        self.stdout.write(f'Dibuat: {dibuat}; data lama tidak ditimpa.')\n",
+        "output": "",
+        "explanation": "File ini sudah disertakan pada proyek unduhan terbaru, beserta __init__.py pada folder management dan commands."
+      },
+      {
+        "label": "Terminal",
+        "filename": "Terminal",
+        "language": "bash",
+        "code": "python manage.py seed_perangkat --latihan\npython manage.py seed_perangkat --latihan",
+        "output": "Pada database tanpa kode DEMO: pemanggilan pertama Dibuat: 2; pemanggilan kedua Dibuat: 0. Data lama tidak ditimpa.",
+        "explanation": "Jalankan hanya pada database latihan kosong dengan settings lokal. Jika data DEMO sudah ada, jumlah dibuat dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh proyek terbaru, pasang dependensi, dan jalankan migration pada database latihan.",
+      "Periksa settings dan target database sebelum menjalankan seed_perangkat --latihan.",
+      "Jalankan lagi, lalu pastikan jumlah perangkat DEMO tidak bertambah dan data lama tidak berubah.",
+      "Jalankan python manage.py test operasional.test_pendalaman.SeedCommandTest untuk memeriksa empat skenario."
+    ],
+    "practice": [
+      "Tambahkan satu test error tak terduga dan pastikan transaksi dibatalkan.",
+      "Rancang perintah ekspor baca-saja: tentukan opsi, batas data, serta cara melaporkan hasil tanpa mencetak secret."
+    ],
+    "warning": "Command memakai kredensial dan database sesuai settings proses. Flag latihan bukan mekanisme sandbox; operator harus memastikan target sebelum menulis data.",
+    "check": "Mengapa get_or_create tidak dipakai untuk menimpa semua nilai lama?",
+    "answer": "Tujuan command adalah menambah contoh yang belum ada. Mempertahankan data lama membuat pemanggilan ulang tidak merusak perubahan yang sudah dibuat pembaca.",
+    "source": "https://docs.djangoproject.com/en/5.2/howto/custom-management-commands/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  }
+]
