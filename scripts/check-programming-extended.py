@@ -20,13 +20,14 @@ databases = json.loads((ROOT / 'lib/programming-database-lessons.json').read_tex
 from programming_sql_runner import run_sql
 from programming_postgres_runner import run_postgres, postgres_dsn
 api = json.loads((ROOT / 'lib/programming-api-lessons.json').read_text())
+web = json.loads((ROOT / 'lib/programming-web-lessons.json').read_text())
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
-slugs = [item['slug'] for item in base + extra + structures + oop + databases + api]
+slugs = [item['slug'] for item in base + extra + structures + oop + databases + api + web]
 ordered = [slug for group in order for slug in group['slugs']]
-assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases + api)
+assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases + api + web)
 assert set(slugs) == set(ordered) == set(quizzes)
-for lesson in base + extra + structures + oop + databases + api:
+for lesson in base + extra + structures + oop + databases + api + web:
     assert len(lesson['explain']) >= 3
     assert all(len(row) == len(lesson['table']['headers']) for row in lesson['table']['rows'])
     if lesson['diagram']:
@@ -129,4 +130,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 163 ordered lessons, 652 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 175 ordered lessons, 700 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

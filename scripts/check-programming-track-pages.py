@@ -7,10 +7,11 @@ from html import unescape
 root = Path(__file__).resolve().parents[1]
 order = json.loads((root / 'lib/programming-order.json').read_text())
 tracks = [
+    ('web', [slug for group in order if group['title'].startswith('Web ·') for slug in group['slugs']]),
     ('backend-api', [slug for group in order if group['title'].startswith('Backend/API ·') for slug in group['slugs']]),
     ('basis-data', [slug for group in order if group['title'].startswith('Basis Data ·') for slug in group['slugs']]),
     ('oop', [slug for group in order if group['title'].startswith('OOP ·') for slug in group['slugs']]),
-    ('terstruktur', [slug for group in order if group['title'] != 'Struktur Data' and not group['title'].startswith('OOP ·') and not group['title'].startswith('Basis Data ·') and not group['title'].startswith('Backend/API ·') for slug in group['slugs']]),
+    ('terstruktur', [slug for group in order if group['title'] != 'Struktur Data' and not group['title'].startswith('OOP ·') and not group['title'].startswith('Basis Data ·') and not group['title'].startswith('Backend/API ·') and not group['title'].startswith('Web ·') for slug in group['slugs']]),
     ('struktur-data', [slug for group in order if group['title'] == 'Struktur Data' for slug in group['slugs']]),
 ]
 for track, slugs in tracks:
@@ -30,4 +31,4 @@ chooser = (root / '.next/server/app/programming.html').read_text()
 assert 'programming-track-terstruktur' in chooser and 'programming-track-struktur-data' in chooser
 assert 'programming-track-oop' in chooser and 'programming-track-basis-data' in chooser
 assert '<div class="net-catalog"' not in chooser
-print('PASS: all 163 rendered sidebars and previous/next links stay in the right path; selector has five paths')
+print('PASS: all 175 rendered sidebars and previous/next links stay in the right path; selector has six paths')

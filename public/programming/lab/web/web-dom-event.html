@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interaksi DOM yang aman</title>
+  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}
+</style>
+  
+</head>
+<body>
+<main><h1>Catatan lokal</h1>
+<form id="catatan"><label for="isi">Isi catatan</label><input id="isi" required maxlength="120"><p><button type="submit">Tampilkan catatan</button></p></form>
+<p id="pesan" role="status"></p><ul id="daftar"></ul></main>
+<script>
+const form = document.querySelector('#catatan');
+const input = document.querySelector('#isi');
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const teks = input.value.trim();
+  if (!teks) { input.focus(); return; }
+  const item = document.createElement('li');
+  item.textContent = teks; // Input diperlakukan sebagai teks, bukan HTML.
+  document.querySelector('#daftar').append(item);
+  document.querySelector('#pesan').textContent = 'Catatan ditambahkan untuk sesi halaman ini.';
+  form.reset();
+  input.focus();
+});
+</script>
+</body>
+</html>

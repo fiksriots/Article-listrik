@@ -1,0 +1,766 @@
+[
+  {
+    "slug": "web-cara-kerja",
+    "title": "Cara kerja web: browser, server, dan tiga bahasa",
+    "summary": "Kenali URL, request–response, HTML, CSS, dan JavaScript sebelum membuat halaman pertama.",
+    "analogy": "Bayangkan restoran: browser adalah tamu, URL adalah alamat restoran, server menerima pesanan, dan respons adalah hidangan yang dikirim kembali.",
+    "explain": [
+      "Saat membuka URL, browser mencari server tujuan dan mengirim permintaan HTTP. Server mengembalikan respons berisi status, header, dan isi, misalnya HTML. Browser membaca HTML dan bisa meminta berkas CSS, JavaScript, atau gambar yang dirujuk halaman. Satu halaman dapat membutuhkan banyak permintaan.",
+      "HTML memberi arti dan susunan isi: judul, paragraf, tautan, dan formulir. CSS mengatur warna, ukuran, serta tata letak. JavaScript menanggapi tindakan seperti klik dan dapat meminta data tambahan. Ketiganya berbeda dari Python; pada jalur ini kita memakai bahasa yang dijalankan browser.",
+      "Website statis dapat menyajikan berkas siap pakai tanpa membuat HTML baru untuk setiap permintaan. Halamannya tetap bisa interaktif melalui JavaScript dan memakai API. Website dinamis dapat menghasilkan respons dari data atau menjalankan aturan di server. Aplikasi sering menggabungkan kedua pendekatan.",
+      "Untuk mulai, siapkan editor teks dan browser. Simpan contoh sebagai index.html di folder latihan. Jika Python sudah tersedia, buka terminal di folder itu dan jalankan python -m http.server 8000 --bind 127.0.0.1, lalu buka http://127.0.0.1:8000. Hentikan dengan Ctrl+C. Ini server latihan lokal, bukan cara memublikasikan website ke internet."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "URL",
+          "Alamat sumber, misalnya https://contoh.test/belajar"
+        ],
+        [
+          "HTTP",
+          "Aturan pertukaran request dan response"
+        ],
+        [
+          "HTML / CSS / JavaScript",
+          "Struktur / tampilan / perilaku"
+        ],
+        [
+          "Client / server",
+          "Browser pengguna / penerima permintaan di jaringan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Tiga peran pada web</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n</style>\n  \n</head>\n<body>\n<header><a href=\"#isi\">Lewati ke isi</a></header>\n<main id=\"isi\">\n  <h1>HTML, CSS, dan JavaScript</h1>\n  <p>HTML memberi struktur. CSS mengatur tampilan. JavaScript merespons tindakan.</p>\n  <button id=\"sapa\" type=\"button\">Coba interaksi</button>\n  <p id=\"pesan\" role=\"status\">Belum ada tindakan.</p>\n</main>\n<script>\nconst tombol = document.querySelector('#sapa');\ntombol.addEventListener('click', () => {\n  document.querySelector('#pesan').textContent = 'Browser menjalankan JavaScript.';\n});\n</script>\n</body>\n</html>",
+        "output": "Halaman menampilkan penjelasan tiga bahasa. Setelah tombol diklik: Browser menjalankan JavaScript.",
+        "explanation": "HTML membentuk tombol, CSS memberi tampilan, dan addEventListener memasang perilaku klik. Anda belum perlu menghafal JavaScript; bagian itu dipelajari setelah dasar HTML dan CSS."
+      }
+    ],
+    "steps": [
+      "Buat folder web-latihan dan simpan index.html dari contoh.",
+      "Jalankan server lokal lalu buka alamatnya. Alternatifnya, gunakan tautan contoh browser di artikel ini.",
+      "Klik tombol, kemudian buka DevTools bagian Elements, Console, dan Network untuk melihat perbedaan isi, kode, serta permintaan."
+    ],
+    "practice": [
+      "Ubah judul HTML dan muat ulang halaman.",
+      "Ubah warna latar pada CSS, lalu ubah pesan saat tombol ditekan. Catat bahasa yang Anda ubah pada setiap langkah."
+    ],
+    "warning": "Jangan menyimpan password, token rahasia, atau kunci server di HTML dan JavaScript browser. Kode yang dikirim ke browser bisa dibaca pengguna. Server lokal ini hanya untuk folder latihan; jangan jalankan dari folder berisi data pribadi.",
+    "check": "Apakah halaman statis bisa mempunyai tombol interaktif dan mengambil data API?",
+    "answer": "Bisa. Statis menjelaskan cara berkas disajikan, bukan larangan memakai JavaScript. Namun operasi seperti memeriksa izin dan menyimpan data bersama memerlukan layanan server yang sesuai.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
+    "diagram": "web-fondasi",
+    "diagramAlt": "Browser memakai HTML untuk struktur, CSS untuk tampilan, dan JavaScript untuk interaksi. Data tambahan dapat diminta dari API.",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-html-semantik",
+    "title": "HTML semantik: susun isi yang bermakna",
+    "summary": "Bangun dokumen dengan heading, navigasi, tautan, daftar, dan bagian halaman yang jelas.",
+    "analogy": "HTML seperti kerangka buku: judul, bab, paragraf, dan daftar membantu pembaca menemukan isi.",
+    "explain": [
+      "Dokumen dimulai dengan <!doctype html>, lalu elemen html yang membungkus head dan body. Head memuat metadata seperti charset, judul tab, dan viewport. Body memuat isi yang terlihat. lang=\"id\" membantu alat pembaca mengenali bahasa Indonesia.",
+      "Gunakan h1 untuk judul utama halaman dan h2 untuk judul bagian. Pilih tingkat heading sesuai hubungan isi, bukan ukuran huruf. CSS nanti mengatur ukurannya. Paragraf memakai p, daftar tak berurutan memakai ul dan li, serta penekanan penting dapat memakai strong.",
+      "Elemen header, nav, main, section, dan footer menjelaskan peran bagian halaman. Gunakan satu main utama yang terlihat. Beri section judul yang menjelaskan isinya. Div tetap berguna sebagai wadah tata letak ketika tidak ada makna khusus yang dibutuhkan.",
+      "Tautan a dengan href dipakai untuk berpindah alamat atau menuju id bagian di halaman. Button dipakai untuk tindakan. Saat menambahkan gambar, tulis alt yang menyampaikan fungsi informasinya; gambar dekoratif memakai alt kosong. Jangan memakai gambar untuk menggantikan seluruh teks materi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "head / body",
+          "Metadata / isi dokumen"
+        ],
+        [
+          "h1 dan h2",
+          "Judul utama dan bagian di bawahnya"
+        ],
+        [
+          "a href / button",
+          "Berpindah tujuan / menjalankan tindakan"
+        ],
+        [
+          "id",
+          "Identitas unik untuk target tautan atau label"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Halaman layanan jaringan</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n</style>\n  \n</head>\n<body>\n<header>\n  <a href=\"#isi\">Lewati ke isi</a>\n  <nav aria-label=\"Navigasi halaman\"><a href=\"#layanan\">Layanan</a> · <a href=\"#kontak\">Kontak</a></nav>\n</header>\n<main id=\"isi\">\n  <h1>Layanan Jaringan</h1>\n  <section id=\"layanan\" aria-labelledby=\"judul-layanan\">\n    <h2 id=\"judul-layanan\">Yang dapat dibantu</h2>\n    <ul><li>Pengecekan LAN</li><li>Pendataan perangkat</li></ul>\n    <p><strong>Catatan:</strong> jadwal pekerjaan disepakati terlebih dahulu.</p>\n  </section>\n  <section id=\"kontak\"><h2>Kontak</h2><p>Hubungi petugas melalui kanal resmi organisasi.</p></section>\n</main>\n<footer><small>Halaman latihan HTML semantik.</small></footer>\n\n</body>\n</html>",
+        "output": "Halaman memiliki judul Layanan Jaringan, navigasi Layanan dan Kontak, dua bagian isi, serta footer.",
+        "explanation": "Tautan navigasi menuju id di dalam halaman. CSS dasar di contoh hanya membantu keterbacaan; struktur HTML tetap bermakna saat gaya dinonaktifkan."
+      }
+    ],
+    "steps": [
+      "Simpan contoh sebagai index.html dan buka melalui server lokal.",
+      "Klik tautan Layanan dan Kontak; cocokkan href dengan id tujuannya.",
+      "Baca urutan heading dari atas ke bawah tanpa melihat warna atau ukuran huruf."
+    ],
+    "practice": [
+      "Tambahkan bagian Tentang dengan h2 dan tautan navigasi menuju bagian tersebut.",
+      "Tambahkan gambar milik sendiri dan alt sesuai fungsi gambar, atau tulis rancangan alt sebelum menambah berkas."
+    ],
+    "warning": "Jangan memakai beberapa id yang sama. Tautan tanpa tujuan nyata dan div yang diberi perilaku klik tidak otomatis memiliki dukungan keyboard seperti tautan atau tombol asli.",
+    "check": "Mengapa tombol Simpan tidak sebaiknya dibuat sebagai tautan menuju #?",
+    "answer": "Simpan adalah tindakan, sehingga button memiliki makna dan perilaku keyboard yang tepat. Tautan digunakan ketika pengguna berpindah ke suatu tujuan.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-css-dasar",
+    "title": "CSS dasar: selector, cascade, dan box model",
+    "summary": "Atur tampilan kartu sambil memahami aturan CSS dan ruang setiap elemen.",
+    "analogy": "Isi kartu seperti barang dalam paket: padding menjadi bantalan, border menjadi kotak, dan margin menjadi jarak ke paket lain.",
+    "explain": [
+      "Aturan CSS terdiri dari selector dan deklarasi. Pada .kartu { padding: 24px; }, .kartu memilih elemen class=\"kartu\", padding adalah properti, dan 24px adalah nilainya. Class dapat digunakan berulang untuk komponen dengan tampilan serupa.",
+      "Setiap elemen memiliki content, padding, border, dan margin. Dengan box-sizing: border-box, lebar yang ditetapkan sudah mencakup padding dan border, tetapi tidak margin. Aturan ini membantu menghitung lebar kartu agar tidak meluap dari wadah.",
+      "Jika beberapa aturan mengenai elemen yang sama, browser memakai cascade. Untuk aturan penulis biasa pada lapisan yang sama, selector yang lebih spesifik menang; bila setara, aturan yang muncul belakangan menang. Jangan langsung menambah !important saat gaya tidak sesuai: lihat aturan yang aktif di panel Styles DevTools.",
+      "Gunakan ukuran yang mudah menyesuaikan: rem mengikuti ukuran font akar, persentase mengikuti konteks wadah, dan max-width membatasi lebar. Tinggi yang dipatok sering memotong teks panjang. Utamakan kontras teks yang jelas serta jarak baca yang nyaman."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          ".kartu",
+          "Memilih elemen dengan class kartu"
+        ],
+        [
+          "padding / margin",
+          "Jarak di dalam / di luar border"
+        ],
+        [
+          "border-box",
+          "Width mencakup content, padding, dan border"
+        ],
+        [
+          "max-width",
+          "Membatasi lebar sambil tetap dapat menyusut"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Kartu dengan box model</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n.kartu{width:min(100%,32rem);padding:24px;border:2px solid #b9b2d6;margin:24px 0;background:#f5f2fd;border-radius:14px}\n.kartu h2{margin-top:0}.kartu p{color:#475569}.kartu a:hover{text-decoration-thickness:3px}</style>\n  \n</head>\n<body>\n<main>\n  <h1>Mengenal box model</h1>\n  <article class=\"kartu\"><h2>Tiket jaringan</h2><p>Padding memberi jarak isi ke batas kartu. Margin memberi jarak ke elemen lain.</p><a href=\"#catatan\">Baca catatan</a></article>\n  <p id=\"catatan\">Lebar kartu sudah mencakup padding dan border karena border-box.</p>\n</main>\n\n</body>\n</html>",
+        "output": "Sebuah kartu putih dengan judul, paragraf, border, dan ruang di sekitarnya.",
+        "explanation": "Kartu menggunakan lebar yang dibatasi ukuran wadah. Ubah padding dan border satu per satu untuk melihat box model melalui DevTools."
+      }
+    ],
+    "steps": [
+      "Buka contoh lalu pilih elemen kartu melalui Inspect.",
+      "Amati ukuran content, padding, border, dan margin di panel box model.",
+      "Tambahkan aturan .kartu dengan warna berbeda di bawah aturan lama dan perhatikan cascade."
+    ],
+    "practice": [
+      "Buat class kartu-penting dengan border berbeda tanpa mengubah semua kartu.",
+      "Bandingkan kartu berlebar 300px dengan padding 20px dan border 2px saat memakai border-box dan content-box."
+    ],
+    "warning": "Pada content-box, width 300px dengan padding 20px di dua sisi serta border 2px di dua sisi menghasilkan lebar luar border 344px. Margin masih ditambahkan terpisah.",
+    "check": "Apakah width:300px dengan border-box dan margin:20px berarti seluruh ruang horizontal hanya 300px?",
+    "answer": "Tidak. Width mencakup content, padding, dan border. Margin kiri dan kanan tetap di luar lebar tersebut, sehingga total ruangnya menjadi 340px bila tidak ada aturan lain.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-layout-responsif",
+    "title": "Layout responsif dengan Flexbox, Grid, dan media query",
+    "summary": "Susun navigasi dan kartu agar tetap terbaca pada layar sempit.",
+    "analogy": "Rak buku dapat memiliki tiga kolom di ruang lebar dan satu kolom saat ruang menyempit; isi bukunya tetap sama.",
+    "explain": [
+      "Responsif berarti tata letak menyesuaikan ruang yang tersedia. Meta viewport membuat browser seluler memakai lebar perangkat sebagai acuan CSS. Hindari lebar halaman tetap yang lebih besar daripada layar.",
+      "Flexbox cocok untuk susunan satu dimensi, misalnya baris navigasi yang boleh membungkus. Grid cocok untuk baris dan kolom kartu. Pada contoh, grid-template-columns: repeat(3, minmax(0, 1fr)) membagi ruang menjadi tiga kolom dengan bagian yang sama.",
+      "Media query menerapkan aturan saat kondisi tertentu terpenuhi. Contoh @media (max-width:700px) mengubah grid menjadi satu kolom. Angka breakpoint dipilih saat isi mulai sulit dibaca, bukan untuk menghafal merek perangkat.",
+      "Uji dengan mempersempit viewport dan memperbesar teks. Navigasi harus tetap bisa dipakai, gambar tidak meluap, dan isi tidak terpotong. Gunakan max-width:100% untuk gambar dan pertimbangkan overflow-wrap untuk teks panjang. Hindari menyembunyikan konten penting demi membuat halaman terlihat rapi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "Flexbox",
+          "Susunan baris atau kolom, dapat membungkus"
+        ],
+        [
+          "Grid",
+          "Susunan dua dimensi"
+        ],
+        [
+          "1fr",
+          "Satu bagian dari ruang grid yang tersedia"
+        ],
+        [
+          "Media query",
+          "Aturan berdasarkan kondisi viewport"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Katalog responsif</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\nnav{display:flex;flex-wrap:wrap;gap:20px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.grid article{padding:20px;border:1px solid #d2d6df;border-radius:12px;min-width:0;overflow-wrap:anywhere}@media(max-width:700px){.grid{grid-template-columns:1fr}}</style>\n  \n</head>\n<body>\n<header><nav aria-label=\"Navigasi\"><a href=\"#materi\">Materi</a><a href=\"#catatan\">Catatan</a></nav></header>\n<main><h1>Katalog belajar</h1>\n<section id=\"materi\" class=\"grid\" aria-label=\"Daftar materi\">\n  <article><h2>HTML</h2><p>Susun isi dan makna halaman.</p></article>\n  <article><h2>CSS</h2><p>Atur tampilan dan tata letak.</p></article>\n  <article><h2>JavaScript</h2><p>Tambahkan perilaku interaktif.</p></article>\n</section><p id=\"catatan\">Perkecil jendela untuk mengamati susunan kolom.</p></main>\n\n</body>\n</html>",
+        "output": "Tiga kartu HTML, CSS, dan JavaScript tampil berjajar pada ruang lebar, lalu satu kolom pada viewport paling lebar 700px.",
+        "explanation": "Header memakai Flexbox dengan flex-wrap. Grid hanya mengatur tata letak; urutan bacanya tetap mengikuti HTML."
+      }
+    ],
+    "steps": [
+      "Buka contoh dan amati tiga kartu.",
+      "Aktifkan mode perangkat pada DevTools; uji lebar 375px, 700px, dan 1000px.",
+      "Perbesar teks atau zoom dan pastikan tautan serta judul tetap terbaca."
+    ],
+    "practice": [
+      "Ubah breakpoint menjadi 800px dan jelaskan perubahan yang terlihat.",
+      "Tambahkan kartu keempat dan uji teks judul yang sangat panjang."
+    ],
+    "warning": "Jangan mengandalkan hover sebagai satu-satunya cara membuka informasi. Layar sentuh dan pengguna keyboard tetap harus bisa memakai fitur utama.",
+    "check": "Mengapa halaman tetap bisa meluap meskipun sudah memakai media query?",
+    "answer": "Masih mungkin ada elemen dengan lebar tetap, kata panjang, atau gambar tanpa batas lebar. Periksa elemen penyebab overflow, bukan hanya menambah breakpoint.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-javascript-dasar",
+    "title": "JavaScript dasar untuk pengguna Python dan pemula",
+    "summary": "Pelajari variabel, tipe data, array, object, fungsi, dan perulangan sebelum mengubah halaman.",
+    "analogy": "Array adalah daftar tiket; setiap object adalah satu kartu tiket dengan nama kolom dan nilai.",
+    "explain": [
+      "JavaScript berjalan di browser dan juga dapat dijalankan melalui runtime lain seperti Node.js. Pada materi ini browser menjadi lingkungan utama. Buka DevTools bagian Console di halaman latihan milik sendiri untuk mencoba contoh. Jangan menempelkan kode dari sumber yang tidak dipercaya.",
+      "Gunakan const bila variabel tidak akan diberi nilai pengganti dan let bila nilainya perlu diganti. Const tidak membuat isi array atau object menjadi beku: property masih dapat berubah. String, number, boolean, null, dan undefined memiliki arti berbeda; null adalah nilai kosong yang disengaja, sedangkan undefined sering berarti belum diberi nilai.",
+      "Array menyimpan urutan item dan object menyimpan pasangan nama–nilai. Akses judul melalui item.judul dan status melalui item.selesai. Fungsi menerima parameter, menjalankan langkah, lalu return mengembalikan hasil. Arrow function item => !item.selesai adalah bentuk singkat fungsi untuk memeriksa item aktif.",
+      "Filter menghasilkan array baru berisi item yang lolos syarat tanpa menghapus item dari array asal. For...of membaca nilai setiap item. Gunakan === untuk perbandingan ketat agar konversi tipe tidak mengejutkan. JSON mirip penulisan object tetapi merupakan format teks dengan aturan tersendiri, misalnya nama property memakai tanda kutip ganda."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "const / let",
+          "Binding tetap / binding yang dapat diganti"
+        ],
+        [
+          "Array / object",
+          "Urutan item / pasangan property dan nilai"
+        ],
+        [
+          "filter",
+          "Membuat array baru dari item yang memenuhi syarat"
+        ],
+        [
+          "===",
+          "Membandingkan tanpa konversi tipe implisit"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "dasar.js",
+        "filename": "dasar.js",
+        "language": "javascript",
+        "code": "const tiket = [\n  {judul: 'Link A', selesai: false},\n  {judul: 'Link B', selesai: true},\n];\nfunction hitungAktif(items) {\n  return items.filter(item => !item.selesai).length;\n}\nconsole.log('Aktif:', hitungAktif(tiket));\nfor (const item of tiket) {\n  console.log(`${item.judul}: ${item.selesai ? 'selesai' : 'aktif'}`);\n}",
+        "output": "Aktif: 1\nLink A: aktif\nLink B: selesai",
+        "explanation": "Contoh memakai dua tiket. !item.selesai berarti status bukan selesai. Template literal dengan backtick menyisipkan nilai melalui ${...}."
+      }
+    ],
+    "steps": [
+      "Buka Console pada halaman contoh web milik sendiri.",
+      "Salin blok sekali dan cocokkan tiga baris keluaran; muat ulang halaman sebelum menjalankan deklarasi const yang sama lagi.",
+      "Jika Node.js sudah terpasang, alternatifnya simpan sebagai dasar.js dan jalankan node dasar.js. Node tidak menyediakan DOM browser."
+    ],
+    "practice": [
+      "Tambahkan tiket ketiga dengan selesai:false dan prediksi jumlah aktif sebelum menjalankan.",
+      "Buat fungsi hitungSelesai yang memakai filter dan menghasilkan jumlah tiket selesai."
+    ],
+    "warning": "Sintaks Python seperti True, def, dan indentasi sebagai pembatas blok tidak berlaku di JavaScript. JavaScript memakai true, function, dan kurung kurawal untuk blok.",
+    "check": "Apakah const tiket = [] melarang tiket.push(...)?",
+    "answer": "Tidak. Const melarang penggantian binding, misalnya tiket = arrayLain. Isi array masih dapat ditambah atau diubah. Untuk kebutuhan immutable diperlukan aturan atau teknik tambahan.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-dom-event",
+    "title": "DOM dan event: ubah halaman dengan aman",
+    "summary": "Hubungkan formulir dengan JavaScript dan tampilkan masukan sebagai teks.",
+    "analogy": "DOM seperti peta benda di ruangan: JavaScript dapat menemukan benda tertentu, menambah benda, atau mengganti isinya.",
+    "explain": [
+      "Setelah membaca HTML, browser membuat DOM, yaitu pohon object yang mewakili dokumen. Document.querySelector memilih elemen pertama yang cocok dengan selector. Simpan rujukannya dalam variabel agar kode mudah dibaca.",
+      "Event memberi tahu bahwa sesuatu terjadi, seperti klik atau pengiriman formulir. AddEventListener memasang fungsi yang akan dipanggil saat event datang. Dengarkan event submit pada form agar klik tombol maupun tombol Enter di input mengikuti alur yang sama.",
+      "Pada contoh, preventDefault mencegah form berpindah halaman karena kita sedang membuat daftar lokal. Nilai input dibersihkan dengan trim, diperiksa, lalu dimasukkan ke li baru menggunakan textContent. Append menempatkan li ke daftar. Form reset dan focus mengembalikan pengguna ke input.",
+      "TextContent memperlakukan masukan sebagai teks. Jangan memakai innerHTML untuk data pengguna yang belum ditangani dengan benar karena markup dapat ditafsirkan browser. Pengubahan DOM hanya mengubah tampilan saat ini; tanpa penyimpanan, hasil hilang saat halaman dimuat ulang."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "querySelector",
+          "Mencari satu elemen DOM"
+        ],
+        [
+          "addEventListener",
+          "Mendaftarkan penanganan event"
+        ],
+        [
+          "preventDefault",
+          "Mencegah tindakan bawaan event yang dapat dibatalkan"
+        ],
+        [
+          "textContent",
+          "Mengisi teks tanpa menafsirkan markup"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Interaksi DOM yang aman</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n</style>\n  \n</head>\n<body>\n<main><h1>Catatan lokal</h1>\n<form id=\"catatan\"><label for=\"isi\">Isi catatan</label><input id=\"isi\" required maxlength=\"120\"><p><button type=\"submit\">Tampilkan catatan</button></p></form>\n<p id=\"pesan\" role=\"status\"></p><ul id=\"daftar\"></ul></main>\n<script>\nconst form = document.querySelector('#catatan');\nconst input = document.querySelector('#isi');\nform.addEventListener('submit', (event) => {\n  event.preventDefault();\n  const teks = input.value.trim();\n  if (!teks) { input.focus(); return; }\n  const item = document.createElement('li');\n  item.textContent = teks; // Input diperlakukan sebagai teks, bukan HTML.\n  document.querySelector('#daftar').append(item);\n  document.querySelector('#pesan').textContent = 'Catatan ditambahkan untuk sesi halaman ini.';\n  form.reset();\n  input.focus();\n});\n</script>\n</body>\n</html>",
+        "output": "Setelah mengisi catatan dan mengirim formulir, satu item baru muncul di daftar. Input dikosongkan dan kembali mendapat fokus.",
+        "explanation": "Script berada sesudah isi HTML sehingga elemen yang dicari sudah tersedia. Bila script dipindah ke file terpisah di head, gunakan atribut defer untuk pola ini."
+      }
+    ],
+    "steps": [
+      "Buka contoh, isi catatan, lalu tekan Enter.",
+      "Tambahkan catatan <b>uji</b> dan pastikan tanda kurung tampil sebagai teks, bukan tulisan tebal.",
+      "Muat ulang halaman dan amati bahwa catatan belum disimpan."
+    ],
+    "practice": [
+      "Tampilkan jumlah catatan setelah item baru ditambahkan.",
+      "Tambahkan tombol hapus per catatan menggunakan createElement dan event listener."
+    ],
+    "warning": "Validasi browser hanya membantu pengalaman pengguna. Jika data nanti dikirim ke server, server tetap harus memvalidasi masukan dan memeriksa izin pengguna.",
+    "check": "Mengapa mendengarkan submit lebih tepat daripada hanya click pada tombol formulir?",
+    "answer": "Submit mewakili tindakan formulir, termasuk pengiriman lewat Enter. Handler click saja mudah melewatkan jalur interaksi lain.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-formulir",
+    "title": "Formulir dan validasi: label, input, dan umpan balik",
+    "summary": "Buat formulir yang jelas, mudah digunakan, dan memberi pesan ketika masukan belum sesuai.",
+    "analogy": "Formulir seperti lembar pendaftaran: label menjelaskan kolom, aturan mencegah isian keliru, dan tanda terima menjelaskan hasil.",
+    "explain": [
+      "Pasangkan label dengan input melalui for dan id yang sama. Placeholder dapat memberi contoh, tetapi bukan pengganti label karena menghilang saat pengguna mengetik. Gunakan type yang sesuai, misalnya email, dan name saat nilai akan disertakan dalam pengiriman form.",
+      "Required meminta nilai sebelum submit. Maxlength membatasi panjang input teks, dan type=email memberi pemeriksaan format dasar. Ini tidak membuktikan alamat email benar-benar ada. Select menyediakan pilihan yang jelas ketika nilai memang terbatas.",
+      "Contoh menangkap submit dan tidak mengirim data ke server. Pemeriksaan bawaan browser berjalan sebelum handler submit bila form belum valid. Setelah itu, trim menolak judul yang hanya berisi spasi. SetCustomValidity memberi pesan tambahan; pesan harus dikosongkan kembali saat input diperbaiki.",
+      "Berikan status yang membedakan berhasil divalidasi, sedang dikirim, berhasil disimpan, dan gagal. Role=status membantu pengumuman perubahan yang tidak mendesak. Jangan menyatakan data tersimpan di server bila contoh hanya menampilkan pesan di browser."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "label for / input id",
+          "Menghubungkan nama kolom dengan kontrol"
+        ],
+        [
+          "required",
+          "Nilai wajib diisi"
+        ],
+        [
+          "type=email",
+          "Pemeriksaan bentuk alamat email dasar"
+        ],
+        [
+          "setCustomValidity",
+          "Pesan kesalahan tambahan; string kosong menghapusnya"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Formulir tiket lokal</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n</style>\n  \n</head>\n<body>\n<main><h1>Simulasi formulir tiket</h1>\n<p>Demo memeriksa input di browser dan tidak mengirim tiket ke server.</p>\n<form id=\"tiket\">\n  <label for=\"judul\">Judul gangguan</label><input id=\"judul\" name=\"judul\" required maxlength=\"120\" autocomplete=\"off\">\n  <label for=\"email\">Email pelapor</label><input id=\"email\" name=\"email\" type=\"email\" required autocomplete=\"email\">\n  <label for=\"prioritas\">Prioritas</label><select id=\"prioritas\" name=\"prioritas\"><option value=\"normal\">Normal</option><option value=\"tinggi\">Tinggi</option></select>\n  <p><button type=\"submit\">Periksa input</button></p>\n</form><p id=\"hasil\" role=\"status\"></p></main>\n<script>\nconst form = document.querySelector('#tiket');\nform.addEventListener('submit', (event) => {\n  event.preventDefault(); // Demo lokal: tidak ada request POST.\n  const judul = form.elements.namedItem('judul');\n  if (!judul.value.trim()) {\n    judul.setCustomValidity('Judul tidak boleh hanya berisi spasi.');\n    judul.reportValidity();\n    return;\n  }\n  document.querySelector('#hasil').textContent = 'Input lolos pemeriksaan browser. Belum dikirim ke server.';\n});\ndocument.querySelector('#judul').addEventListener('input', (event) => {\n  event.target.setCustomValidity('');\n});\n</script>\n</body>\n</html>",
+        "output": "Formulir menolak isian kosong, email tidak sesuai format, dan judul hanya spasi. Isian valid menampilkan pesan yang menyatakan belum dikirim ke server.",
+        "explanation": "Button type=submit memicu submit form. Handler memakai preventDefault karena latihan ini tidak memiliki endpoint penyimpanan."
+      }
+    ],
+    "steps": [
+      "Coba submit tanpa mengisi form; lihat kolom yang ditandai browser.",
+      "Isi judul dengan spasi, email yang berbentuk valid, dan pilihan prioritas; perhatikan pesan tambahan.",
+      "Perbaiki judul lalu kirim lagi dan baca status lengkapnya."
+    ],
+    "practice": [
+      "Tambahkan kolom deskripsi dengan textarea dan label.",
+      "Tulis tiga contoh masukan salah beserta pesan yang membantu pengguna memperbaikinya."
+    ],
+    "warning": "Aturan HTML dan JavaScript dapat dilewati. Server harus mengulangi validasi, menerapkan izin akses, dan menangani data sesuai kebutuhan sebelum menyimpan.",
+    "check": "Apakah status “form valid” sama dengan “data sudah tersimpan”?",
+    "answer": "Tidak. Valid hanya berarti lolos pemeriksaan tertentu. Penyimpanan harus dikonfirmasi oleh proses penyimpanan yang benar, misalnya respons server setelah transaksi berhasil.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Constraint_validation",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-fetch-api",
+    "title": "Fetch API: muat data dan tangani kegagalan",
+    "summary": "Ambil katalog belajar publik dengan async/await, status loading, dan pemeriksaan respons.",
+    "analogy": "Meminta data seperti memesan buku: beri tahu bahwa pesanan berjalan, periksa jawaban, lalu tampilkan buku atau pesan kendalanya.",
+    "explain": [
+      "Fetch mengirim request dan menghasilkan Promise. Fungsi async dapat memakai await untuk menunggu hasil tanpa memblokir seluruh halaman. Pada contoh, tombol dinonaktifkan selama proses agar pengguna tidak memulai beberapa permintaan yang sama sekaligus.",
+      "Fetch tidak otomatis menganggap status HTTP 404 atau 500 sebagai Promise yang ditolak. Karena itu periksa response.ok sebelum membaca JSON. Response.json juga bersifat asynchronous dan dapat gagal bila isi bukan JSON valid. Setelah JSON dibaca, periksa bentuk datanya sebelum memakainya.",
+      "Contoh membaca endpoint publik https://article.fikss.site/api/learning-paths tanpa akun atau token. Endpoint menyediakan CORS untuk pembacaan dari origin lain sehingga contoh dapat dicoba dari server lokal. CORS ditentukan server; mode no-cors bukan jalan pintas untuk membaca respons yang diblokir.",
+      "AbortController membatalkan penantian setelah delapan detik. Catch menampilkan pesan yang dapat dipahami dan finally mengaktifkan tombol lagi serta membersihkan timer. Timeout tidak membuktikan server tidak pernah menerima permintaan; untuk operasi tulis diperlukan aturan tambahan seperti idempotensi.",
+      "Katalog yang tampil berasal dari data live, sehingga jumlah jalur dapat berubah ketika materi ditambahkan. Contoh hanya membaca daftar. Ia tidak membuat akun, tidak mengubah progres, dan tidak menulis ke database."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "await fetch",
+          "Menunggu respons HTTP"
+        ],
+        [
+          "response.ok",
+          "Benar untuk status HTTP 200–299"
+        ],
+        [
+          "await response.json()",
+          "Mengurai badan respons sebagai JSON"
+        ],
+        [
+          "AbortController",
+          "Membatalkan penantian request"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Membaca API direktori belajar</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n</style>\n  \n</head>\n<body>\n<main><h1>Jalur Learn Programming</h1>\n<p>Contoh membaca API publik situs belajar, termasuk dari server lokal.</p>\n<button id=\"muat\" type=\"button\">Muat jalur</button>\n<p id=\"status\" role=\"status\">Belum dimuat.</p><ul id=\"jalur\"></ul></main>\n<script>\nconst tombol = document.querySelector('#muat');\nconst status = document.querySelector('#status');\nconst daftar = document.querySelector('#jalur');\ntombol.addEventListener('click', async () => {\n  tombol.disabled = true;\n  daftar.replaceChildren();\n  status.textContent = 'Memuat…';\n  const controller = new AbortController();\n  const timer = setTimeout(() => controller.abort(), 8000);\n  try {\n    const response = await fetch('https://article.fikss.site/api/learning-paths', {signal: controller.signal});\n    if (!response.ok) throw new Error(`HTTP ${response.status}`);\n    const data = await response.json();\n    if (data.schemaVersion !== 1 || !Array.isArray(data.groups)) throw new Error('Kontrak tidak sesuai');\n    const group = data.groups.find(item => item.id === 'programming');\n    if (!group || !Array.isArray(group.categories) || group.categories.length > 100 ||\n        !group.categories.every(item => typeof item.name === 'string' && item.name.length <= 200)) {\n      throw new Error('Daftar tidak sesuai');\n    }\n    for (const category of group.categories) {\n      const item = document.createElement('li');\n      item.textContent = category.name;\n      daftar.append(item);\n    }\n    status.textContent = `${group.categories.length} jalur ditemukan.`;\n  } catch (error) {\n    status.textContent = error.name === 'AbortError' ? 'Waktu tunggu habis. Coba lagi.' : 'Data belum dapat dimuat. Coba lagi.';\n  } finally {\n    clearTimeout(timer);\n    tombol.disabled = false;\n  }\n});\n</script>\n</body>\n</html>",
+        "output": "Saat tombol ditekan, status pemuatan tampil. Jika respons valid, daftar jalur Learn Programming dan jumlahnya tampil. Jika gagal, pengguna mendapat pesan dan dapat mencoba lagi.",
+        "explanation": "Data diperiksa sebelum ditampilkan menggunakan textContent. Sumber adalah endpoint baca publik; tidak ada secret yang disertakan dalam kode browser."
+      }
+    ],
+    "steps": [
+      "Buka contoh, klik Muat jalur, lalu lihat permintaan di tab Network.",
+      "Cocokkan status HTTP, isi JSON, dan daftar pada halaman.",
+      "Di DevTools aktifkan Offline, ulangi pemuatan, lalu pulihkan jaringan dan coba lagi."
+    ],
+    "practice": [
+      "Tambahkan tampilan jumlah materi jika property lessonCount pada kontrak tersedia; periksa tipe sebelum menggunakannya.",
+      "Catat perbedaan kegagalan jaringan, HTTP 404, dan JSON yang bentuknya tidak sesuai."
+    ],
+    "warning": "Jangan menaruh token server dalam fetch di browser. CORS bukan mekanisme autentikasi. Bila kelak ada akses data pribadi, gunakan mekanisme sesi dan izin server yang benar.",
+    "check": "Mengapa try/catch saja belum cukup untuk menangani HTTP 404?",
+    "answer": "Fetch biasanya tetap menghasilkan Response pada HTTP 404. Pemeriksaan response.ok diperlukan agar aplikasi menganggap status tersebut sebagai kesalahan sebelum melanjutkan pengolahan data.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "web-aksesibilitas-debug",
+    "title": "Aksesibilitas, keamanan dasar, dan debugging web",
+    "summary": "Uji keyboard, status antarmuka, Console, dan Network agar halaman dapat digunakan serta diperbaiki.",
+    "analogy": "Pintu yang terlihat bagus tetap perlu pegangan dan jalur masuk yang jelas; antarmuka juga perlu jalur keyboard dan pesan yang bermakna.",
+    "explain": [
+      "Gunakan elemen bawaan yang tepat terlebih dahulu. Button sudah mendukung keyboard, fokus, dan makna tindakan. Label memberi nama pada input. Pastikan fokus terlihat, urutan Tab masuk akal, dan semua tindakan utama dapat dipakai tanpa mouse.",
+      "Pada contoh, tombol membuka penjelasan. Aria-expanded menyatakan apakah bagian terbuka, aria-controls mengacu pada id bagian, dan hidden mengatur visibilitasnya. Saat pengguna menekan tombol, JavaScript memperbarui keadaan visual serta atribut aksesibilitas bersama-sama.",
+      "Console membantu menemukan kesalahan sintaks dan runtime; klik lokasi file untuk mencari barisnya. Elements dan Styles membantu memeriksa DOM dan CSS aktif. Network membantu membaca request, status HTTP, respons, dan durasinya. Ulangi masalah dengan langkah yang sama sebelum mengubah kode.",
+      "Periksa kontras teks dan latar, ukuran teks, alt gambar, serta pesan kesalahan yang tidak hanya bergantung pada warna. Dari sisi keamanan, perlakukan data luar sebagai masukan yang perlu diperiksa, tampilkan teks dengan API yang sesuai, dan simpan rahasia di server. Atribut ARIA tidak menggantikan logika izin akses."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "Tab / Shift+Tab",
+          "Bergerak antar kontrol yang dapat difokuskan"
+        ],
+        [
+          "aria-expanded",
+          "Keadaan terbuka atau tertutup suatu kontrol"
+        ],
+        [
+          "Console / Network",
+          "Kesalahan kode / pertukaran request dan response"
+        ],
+        [
+          "hidden",
+          "Menyembunyikan bagian dari tampilan dan umumnya pohon aksesibilitas"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Kontrol yang dapat dipakai lewat keyboard</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n.skip{position:absolute;top:8px;left:8px;transform:translateY(-180%);background:white;padding:12px}.skip:focus{transform:none}</style>\n  \n</head>\n<body>\n<header><a class=\"skip\" href=\"#isi\">Lewati ke isi</a></header>\n<main id=\"isi\"><h1>Panel informasi</h1>\n<button id=\"buka\" type=\"button\" aria-expanded=\"false\" aria-controls=\"detail\">Tampilkan informasi</button>\n<section id=\"detail\" hidden><h2>Jadwal pemeliharaan</h2><p>Informasi contoh. Tidak ada perubahan pada perangkat nyata.</p></section>\n<p>Coba tombol Tab, Enter, dan Space. Amati fokus serta atribut melalui DevTools.</p></main>\n<script>\nconst tombol = document.querySelector('#buka');\nconst panel = document.querySelector('#detail');\ntombol.addEventListener('click', () => {\n  const terbuka = tombol.getAttribute('aria-expanded') === 'true';\n  tombol.setAttribute('aria-expanded', String(!terbuka));\n  panel.hidden = terbuka;\n  tombol.textContent = terbuka ? 'Tampilkan informasi' : 'Sembunyikan informasi';\n});\n</script>\n</body>\n</html>",
+        "output": "Tombol Tampilkan informasi membuka bagian detail dan mengubah aria-expanded menjadi true. Tekan lagi untuk menutupnya.",
+        "explanation": "Skip link muncul saat mendapat fokus. Tombol asli dapat diaktifkan dengan Enter atau Space tanpa menulis handler keyboard tambahan."
+      }
+    ],
+    "steps": [
+      "Gunakan Tab untuk mencapai tombol tanpa mouse. Tekan Enter, lalu Space untuk mencoba buka-tutup.",
+      "Periksa bahwa aria-expanded sesuai keadaan bagian detail di Elements.",
+      "Ubah selector script menjadi salah pada salinan lokal; baca kesalahan Console, lalu perbaiki kembali."
+    ],
+    "practice": [
+      "Tambahkan pesan ketika bagian dibuka tanpa mengganggu fokus pengguna.",
+      "Buat catatan pengujian: langkah, hasil yang diharapkan, hasil aktual, dan cara mengulang masalah."
+    ],
+    "warning": "Jangan menghapus outline fokus tanpa pengganti yang jelas. Mengisi banyak atribut ARIA tidak otomatis membuat elemen buatan setara tombol asli.",
+    "check": "Jika bagian detail terlihat tetapi aria-expanded masih false, apa masalahnya?",
+    "answer": "Keadaan visual dan informasi untuk teknologi bantu tidak sesuai. Perbarui atribut dan visibilitas dalam handler yang sama agar keduanya konsisten.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-publikasi",
+    "title": "Persiapan publikasi website statis",
+    "summary": "Rapikan berkas, uji tautan, simpan versi, dan pahami batas hosting statis sebelum online.",
+    "analogy": "Publikasi seperti mengirim buku ke rak umum: periksa isi dan alamat rujukannya sebelum orang lain mulai membaca.",
+    "explain": [
+      "Website HTML sederhana dapat dipublikasikan sebagai berkas statis. Siapkan folder berisi index.html, CSS, JavaScript, dan aset yang dirujuk. Build tidak wajib untuk HTML biasa; framework atau bundler tertentu menghasilkan folder keluaran yang harus dipilih sesuai dokumentasinya.",
+      "Pisahkan gaya ke style.css dan perilaku ke app.js bila proyek mulai membesar. Hubungkan CSS melalui link rel=stylesheet dan JavaScript melalui script src dengan defer. Periksa path relatif: ./style.css mengacu pada folder dokumen, sedangkan /style.css mengacu pada akar origin dan bisa salah bila situs dihosting di subpath.",
+      "Gunakan Git untuk mencatat perubahan. Sebelum commit, periksa file yang akan masuk dan hindari file rahasia, data pribadi, serta hasil sementara yang tidak perlu. Hosting statis dapat mengambil sumber dari repository atau menerima folder publik; ikuti dokumentasi penyedia yang dipilih dan gunakan HTTPS.",
+      "Sebelum membagikan URL, uji halaman utama, tautan dalam, ukuran layar berbeda, reload, Console, dan Network. Periksa bahwa aset tidak 404 dan formulir tidak mengaku menyimpan ke server tanpa backend. Hosting statis sendiri tidak menyediakan database bersama atau autentikasi.",
+      "Contoh di bawah adalah halaman pemeriksaan sederhana, bukan perintah untuk membuat akun hosting. Setelah berkas dipublikasikan lewat penyedia pilihan Anda, jalankan daftar pemeriksaan yang sama pada URL publik. Jika pembaruan belum terlihat, cocokkan versi deployment, path, dan cache sebelum mengubah materi lagi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "index.html",
+          "Halaman masuk pada banyak hosting statis"
+        ],
+        [
+          "Path relatif / path akar",
+          "Mengikuti folder dokumen / akar origin"
+        ],
+        [
+          "HTTPS",
+          "Melindungi transport data; bukan pengganti izin aplikasi"
+        ],
+        [
+          "Deployment",
+          "Versi berkas yang disajikan hosting"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Halaman siap publikasi</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n</style>\n  \n</head>\n<body>\n<main><h1>Halaman uji publikasi</h1>\n<p>Jika teks ini terlihat, dokumen index.html berhasil disajikan.</p>\n<ul><li>Periksa judul tab dan tampilan di ponsel.</li><li>Uji semua tautan serta Console dan Network.</li><li>Periksa alamat HTTPS dan jangan sertakan secret dalam berkas publik.</li></ul>\n<a href=\"#selesai\">Ke catatan akhir</a><p id=\"selesai\">Catat URL dan versi commit yang sudah diverifikasi.</p></main>\n\n</body>\n</html>",
+        "output": "Halaman pemeriksaan publikasi tampil dengan tautan menuju bagian daftar periksa. Semua isi disajikan sebagai HTML statis.",
+        "explanation": "Contoh ini tidak memasang layanan hosting dan tidak mengirim data. Gunakan untuk memeriksa bahwa berkas serta tautan dapat disajikan dengan benar."
+      }
+    ],
+    "steps": [
+      "Simpan contoh dan coba melalui server lokal.",
+      "Jika proyek memakai berkas terpisah, buka Network dan pastikan semuanya berhasil dimuat.",
+      "Pelajari jalur Learn Git di situs ini untuk pencatatan versi. Publikasikan folder latihan memakai hosting statis pilihan Anda sesuai dokumentasinya.",
+      "Buka URL publik melalui jendela baru; uji tautan, reload, dan tampilan sempit sebelum membagikannya."
+    ],
+    "practice": [
+      "Pindahkan CSS contoh ke style.css dan hubungkan dengan path relatif.",
+      "Buat checklist rilis yang memuat lima pemeriksaan dan catat hasilnya."
+    ],
+    "warning": "File .env bukan tempat aman jika ikut terunggah sebagai aset publik. Periksa isi folder publik dan repository sebelum mengunggah. Data pengguna bersama membutuhkan backend yang menegakkan aturan.",
+    "check": "Mengapa /style.css bisa gagal ketika website ditempatkan pada /proyek/?",
+    "answer": "Path berawalan / menunjuk akar origin, sehingga browser meminta /style.css, bukan /proyek/style.css. Path relatif ./style.css mengikuti folder dokumen; sesuaikan dengan struktur hosting.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Publishing_your_website",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 25
+  },
+  {
+    "slug": "web-kasus-portofolio",
+    "title": "Studi kasus: portofolio responsif satu halaman",
+    "summary": "Gabungkan HTML semantik dan CSS menjadi portofolio dengan tujuan serta kriteria uji yang jelas.",
+    "analogy": "Portofolio seperti etalase kecil: pengunjung perlu cepat mengetahui siapa Anda, apa yang dikerjakan, dan cara melanjutkan percakapan.",
+    "explain": [
+      "Kebutuhan: pengunjung dapat membaca profil singkat, melihat dua proyek, dan menemukan bagian kontak. Versi awal cukup satu halaman statis. Tidak ada akun, formulir pengiriman, atau database karena kebutuhan itu belum ada.",
+      "Rancang struktur sebelum warna: header berisi nama dan navigasi; main berisi Tentang, Proyek, dan Kontak; footer memberi penutup. Setiap bagian memiliki heading dan id unik. Deskripsi proyek menjelaskan masalah, solusi, dan hasil yang dapat diperiksa.",
+      "Gunakan Grid untuk dua kartu proyek pada layar lebar dan satu kolom pada layar sempit. Navigasi dapat membungkus. Hindari tinggi kartu tetap agar paragraf yang lebih panjang tidak terpotong. Contoh memakai teks saja agar tidak membutuhkan gambar atau layanan luar.",
+      "Kriteria selesai: semua tautan navigasi mencapai bagian yang benar, heading berurutan, keyboard dapat menjangkau tautan, dan pada lebar 375px tidak ada isi penting yang terpotong. Konten proyek harus jujur: contoh ini mendeskripsikan proyek latihan, bukan mengklaim layanan backend sudah aktif.",
+      "Langkah pengembangan berikutnya adalah mengganti identitas dan isi dengan milik sendiri, menambah tautan proyek yang memang tersedia, lalu menerapkan daftar periksa publikasi. Jika ingin menerima pesan, rancang backend atau layanan formulir terpisah dengan validasi serta aturan data yang jelas."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "Kebutuhan",
+          "Profil, dua proyek, dan kontak"
+        ],
+        [
+          "HTML",
+          "Heading, landmark, dan tautan bagian"
+        ],
+        [
+          "CSS",
+          "Grid responsif dan jarak baca"
+        ],
+        [
+          "Kriteria selesai",
+          "Tautan benar, keyboard berfungsi, isi tidak terpotong"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Portofolio mini</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\nnav{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px}section+section{margin-top:40px}.proyek{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.proyek article{padding:20px;border:1px solid #ccd3df;border-radius:12px}@media(max-width:650px){.proyek{grid-template-columns:1fr}}</style>\n  \n</head>\n<body>\n<header><a href=\"#isi\">Lewati ke isi</a><nav aria-label=\"Navigasi portofolio\"><a href=\"#tentang\">Tentang</a><a href=\"#proyek\">Proyek</a><a href=\"#kontak\">Kontak</a></nav></header>\n<main id=\"isi\">\n<section id=\"tentang\"><p>PORTOFOLIO LATIHAN</p><h1>Belajar membangun web yang berguna.</h1><p>Saya mempelajari dukungan TI, jaringan, dan pemrograman web melalui proyek kecil.</p></section>\n<section id=\"proyek\"><h2>Proyek latihan</h2><div class=\"proyek\">\n<article><h3>Inventaris perangkat</h3><p>Rancangan pendataan perangkat dan lokasi pemasangan.</p><a href=\"#catatan-proyek\">Lihat catatan proyek</a></article>\n<article><h3>Catatan gangguan</h3><p>Prototipe tampilan daftar pekerjaan yang mudah dibaca.</p><a href=\"#catatan-proyek\">Lihat catatan proyek</a></article>\n</div><p id=\"catatan-proyek\">Kedua kartu adalah contoh deskripsi, bukan aplikasi backend yang sudah berjalan.</p></section>\n<section id=\"kontak\"><h2>Kontak</h2><p>Tambahkan kanal kontak profesional yang memang ingin dipublikasikan.</p></section>\n</main><footer><small>Portofolio latihan · HTML dan CSS</small></footer>\n\n</body>\n</html>",
+        "output": "Portofolio menampilkan profil, dua kartu proyek, dan bagian kontak. Kartu menjadi satu kolom pada viewport sempit.",
+        "explanation": "Semua navigasi adalah tautan bagian yang benar-benar tersedia. Teks kontak masih petunjuk latihan; ganti dengan saluran publik yang memang Anda ingin bagikan."
+      }
+    ],
+    "steps": [
+      "Buka contoh dan uji semua tautan navigasi.",
+      "Ganti nama dan ringkasan profil tanpa mengubah id yang dituju navigasi.",
+      "Isi kartu dengan masalah, solusi, serta hasil proyek sendiri.",
+      "Uji keyboard, viewport 375px dan 1000px, lalu catat hasil terhadap kriteria selesai."
+    ],
+    "practice": [
+      "Tambahkan proyek ketiga dan pastikan grid masih rapi.",
+      "Tambahkan tautan repository nyata dengan teks deskriptif setelah repository tersebut tersedia."
+    ],
+    "warning": "Jangan memublikasikan nomor pribadi, alamat rumah, atau informasi orang lain tanpa kebutuhan dan izin yang sesuai. Gunakan saluran kontak yang memang ditujukan untuk publik.",
+    "check": "Apakah portofolio satu halaman ini perlu database sejak awal?",
+    "answer": "Tidak untuk kebutuhan membaca profil dan proyek statis. Database baru dipertimbangkan jika ada kebutuhan seperti akun, penyuntingan terpusat, atau data bersama yang berubah dari pengguna.",
+    "source": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "web-kasus-tugas",
+    "title": "Studi kasus: daftar tugas dengan localStorage",
+    "summary": "Bangun alur tambah, selesai, hapus, dan muat ulang dengan pemeriksaan data serta penanganan penyimpanan gagal.",
+    "analogy": "Daftar tugas lokal seperti catatan di meja sendiri: tersimpan di tempat itu, tetapi tidak otomatis muncul di meja perangkat lain.",
+    "explain": [
+      "Kebutuhan: pengguna dapat menambah judul tugas, mengubah status selesai, menghapus satu tugas, dan memuat ulang tanpa kehilangan tugas yang berhasil tersimpan. State berupa array object dengan id, judul, serta selesai. DOM dibuat ulang dari state agar tampilan mengikuti satu sumber data.",
+      "LocalStorage menyimpan pasangan key–value berupa string pada origin browser. JSON.stringify mengubah envelope {version:1,tasks:[...]} menjadi string; JSON.parse membaca kembali. Penyimpanan bersifat lokal untuk origin dan profil browser ini, bukan akun atau sinkronisasi lintas perangkat. Mode privat, penghapusan data situs, atau kebijakan browser dapat memengaruhinya.",
+      "Saat memuat, contoh memeriksa versi, tipe array, panjang maksimal 500 item, bentuk setiap object, dan keunikan id. Data storage tetap diperlakukan sebagai masukan. Jika data tidak terbaca atau bentuknya tidak dikenal, aplikasi memberi peringatan dan menonaktifkan penulisan agar data lama tidak tertimpa diam-diam.",
+      "Setiap perubahan memanggil render dan mencoba menyimpan. Jika penyimpanan ditolak atau kuota penuh, pengguna diberi tahu bahwa perubahan berikutnya hanya ada pada sesi ini. Judul ditampilkan dengan textContent, input dibatasi 120 karakter, dan id dibuat dengan crypto.randomUUID pada HTTPS atau localhost yang mendukungnya.",
+      "Kriteria uji: tambah dua tugas, tandai satu selesai, muat ulang, hapus satu, lalu muat ulang lagi. Tugas harus sesuai keadaan terakhir yang berhasil disimpan. Gunakan DevTools hanya pada key latihan fiks-web-lab-tugas-v1 bila menguji JSON rusak; jangan menyentuh penyimpanan progres pelajaran.",
+      "Contoh belum memiliki ekspor, akun, konflik perubahan antar tab, atau server. Bila dua tab menyunting bersamaan, penulisan terakhir dapat menimpa perubahan tab lain. Untuk versi lanjutan, rancang sinkronisasi event storage atau backend dan aturan konflik sebelum menyebut aplikasi dapat dipakai bersama."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Arti dan penggunaan"
+      ],
+      "rows": [
+        [
+          "State",
+          "Array tugas sebagai sumber tampilan"
+        ],
+        [
+          "JSON envelope",
+          "Version dan tasks untuk memeriksa format"
+        ],
+        [
+          "localStorage",
+          "String lokal per origin dan profil browser"
+        ],
+        [
+          "Gagal simpan",
+          "Beritahu pengguna dan lindungi data lama"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "index.html",
+        "filename": "index.html",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Daftar tugas dengan penyimpanan lokal</title>\n  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}\n#daftar{list-style:none;padding:0}#daftar li{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:12px 0}#daftar label{display:flex;align-items:center;gap:12px;margin:0;overflow-wrap:anywhere}#daftar input:checked+span{text-decoration:line-through}</style>\n  \n</head>\n<body>\n<main><h1>Daftar tugas belajar</h1>\n<p>Data hanya di browser dan origin ini, tanpa akun atau sinkronisasi antarperangkat.</p>\n<form id=\"form-tugas\"><label for=\"judul\">Tugas baru</label><input id=\"judul\" required maxlength=\"120\"><p><button type=\"submit\">Tambah tugas</button></p></form>\n<p id=\"status\" role=\"status\"></p><ul id=\"daftar\"></ul></main>\n<script>\nconst KEY = 'fiks-web-lab-tugas-v1';\nconst form = document.querySelector('#form-tugas');\nconst input = document.querySelector('#judul');\nconst daftar = document.querySelector('#daftar');\nconst status = document.querySelector('#status');\nlet tasks = [];\nlet bolehSimpan = true;\ntry {\n  const raw = localStorage.getItem(KEY);\n  if (raw !== null) {\n    const data = JSON.parse(raw);\n    if (data.version !== 1 || !Array.isArray(data.tasks) || data.tasks.length > 500 ||\n        !data.tasks.every(t => typeof t.id === 'string' && t.id.length <= 80 &&\n          typeof t.judul === 'string' && t.judul.trim().length > 0 && t.judul.length <= 120 && typeof t.selesai === 'boolean') ||\n        new Set(data.tasks.map(t => t.id)).size !== data.tasks.length) throw new Error('Data tidak sesuai');\n    tasks = data.tasks;\n  }\n} catch {\n  bolehSimpan = false; // Jangan menimpa data lama yang tidak dapat dibaca.\n  status.textContent = 'Penyimpanan tidak tersedia atau data tidak valid. Perubahan hanya untuk sesi ini.';\n}\nfunction simpan(pesan) {\n  if (bolehSimpan) {\n    try { localStorage.setItem(KEY, JSON.stringify({version: 1, tasks})); }\n    catch { bolehSimpan = false; }\n  }\n  status.textContent = bolehSimpan ? pesan : 'Perubahan hanya untuk sesi ini; penyimpanan bermasalah.';\n}\nfunction render() {\n  daftar.replaceChildren();\n  for (const task of tasks) {\n    const li = document.createElement('li');\n    const label = document.createElement('label');\n    const cek = document.createElement('input');\n    cek.type = 'checkbox';\n    cek.checked = task.selesai;\n    const teks = document.createElement('span');\n    teks.textContent = task.judul;\n    label.append(cek, teks);\n    cek.addEventListener('change', () => { task.selesai = cek.checked; simpan('Status tugas diperbarui.'); });\n    const hapus = document.createElement('button');\n    hapus.type = 'button';\n    hapus.textContent = 'Hapus';\n    hapus.setAttribute('aria-label', `Hapus tugas ${task.judul}`);\n    hapus.addEventListener('click', () => {\n      tasks = tasks.filter(t => t.id !== task.id);\n      render(); simpan('Tugas dihapus.'); input.focus();\n    });\n    li.append(label, hapus);\n    daftar.append(li);\n  }\n}\nform.addEventListener('submit', (event) => {\n  event.preventDefault();\n  const judul = input.value.trim();\n  if (!judul) { input.focus(); return; }\n  if (tasks.length >= 500) { status.textContent = 'Batas latihan 500 tugas. Selesaikan pengelolaan data terlebih dahulu.'; return; }\n  tasks.push({id: crypto.randomUUID(), judul, selesai: false});\n  render(); simpan('Tugas ditambahkan.'); form.reset(); input.focus();\n});\nrender();\n</script>\n</body>\n</html>",
+        "output": "Tugas dapat ditambah, ditandai selesai, dan dihapus. Setelah penyimpanan berhasil, muat ulang mempertahankan keadaan tugas. Kegagalan penyimpanan ditampilkan sebagai peringatan.",
+        "explanation": "Key latihan berbeda dari progres belajar situs. Aplikasi tidak mengirim tugas ke server. Checkbox memiliki label dan tombol hapus menyebut judul tugas agar kontrol dapat dibedakan."
+      }
+    ],
+    "steps": [
+      "Buka contoh melalui HTTPS situs ini atau server localhost, bukan mengandalkan perilaku file://.",
+      "Tambahkan dua tugas, tandai satu selesai, lalu muat ulang dan cocokkan keadaan.",
+      "Hapus satu tugas, muat ulang, dan pastikan hanya tugas yang benar yang dihapus.",
+      "Pada profil browser latihan terpisah, ubah hanya key fiks-web-lab-tugas-v1 menjadi JSON tidak valid. Muat ulang dan periksa peringatan tanpa menimpa data. Pulihkan key latihan melalui DevTools bila ingin mengulang."
+    ],
+    "practice": [
+      "Tambahkan filter Semua, Aktif, dan Selesai tanpa mengubah array sumber ketika memfilter tampilan.",
+      "Rancang fitur ekspor–impor JSON: tulis aturan validasi dan pesan kesalahan sebelum membuat kodenya."
+    ],
+    "warning": "Jangan menyimpan password, token, atau data sensitif di localStorage. Ini bukan cadangan andal, bukan database server, dan tidak menjamin konsistensi penyuntingan beberapa tab.",
+    "check": "Mengapa data rusak tidak langsung diganti dengan array kosong dan disimpan?",
+    "answer": "Tindakan itu dapat menghilangkan data yang masih mungkin dipulihkan. Lebih aman memberi pesan, menjaga data lama, dan meminta pemulihan yang disengaja. Contoh membolehkan latihan sesi ini tanpa menimpa storage yang tidak dikenal.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 50
+  }
+]

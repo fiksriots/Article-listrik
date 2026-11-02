@@ -336,5 +336,37 @@
       "api-proyek-tiket-aman",
       "api-kasus-alarm-bts"
     ]
+  },
+  {
+    "title": "Web · Fondasi halaman",
+    "slugs": [
+      "web-cara-kerja",
+      "web-html-semantik",
+      "web-css-dasar",
+      "web-layout-responsif"
+    ]
+  },
+  {
+    "title": "Web · Interaksi dan data",
+    "slugs": [
+      "web-javascript-dasar",
+      "web-dom-event",
+      "web-formulir",
+      "web-fetch-api"
+    ]
+  },
+  {
+    "title": "Web · Kualitas dan publikasi",
+    "slugs": [
+      "web-aksesibilitas-debug",
+      "web-publikasi"
+    ]
+  },
+  {
+    "title": "Web · Studi kasus",
+    "slugs": [
+      "web-kasus-portofolio",
+      "web-kasus-tugas"
+    ]
   }
 ]

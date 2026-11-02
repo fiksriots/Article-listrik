@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kontrol yang dapat dipakai lewat keyboard</title>
+  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}
+.skip{position:absolute;top:8px;left:8px;transform:translateY(-180%);background:white;padding:12px}.skip:focus{transform:none}</style>
+  
+</head>
+<body>
+<header><a class="skip" href="#isi">Lewati ke isi</a></header>
+<main id="isi"><h1>Panel informasi</h1>
+<button id="buka" type="button" aria-expanded="false" aria-controls="detail">Tampilkan informasi</button>
+<section id="detail" hidden><h2>Jadwal pemeliharaan</h2><p>Informasi contoh. Tidak ada perubahan pada perangkat nyata.</p></section>
+<p>Coba tombol Tab, Enter, dan Space. Amati fokus serta atribut melalui DevTools.</p></main>
+<script>
+const tombol = document.querySelector('#buka');
+const panel = document.querySelector('#detail');
+tombol.addEventListener('click', () => {
+  const terbuka = tombol.getAttribute('aria-expanded') === 'true';
+  tombol.setAttribute('aria-expanded', String(!terbuka));
+  panel.hidden = terbuka;
+  tombol.textContent = terbuka ? 'Tampilkan informasi' : 'Sembunyikan informasi';
+});
+</script>
+</body>
+</html>

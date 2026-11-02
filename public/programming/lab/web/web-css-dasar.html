@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kartu dengan box model</title>
+  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}
+.kartu{width:min(100%,32rem);padding:24px;border:2px solid #b9b2d6;margin:24px 0;background:#f5f2fd;border-radius:14px}
+.kartu h2{margin-top:0}.kartu p{color:#475569}.kartu a:hover{text-decoration-thickness:3px}</style>
+  
+</head>
+<body>
+<main>
+  <h1>Mengenal box model</h1>
+  <article class="kartu"><h2>Tiket jaringan</h2><p>Padding memberi jarak isi ke batas kartu. Margin memberi jarak ke elemen lain.</p><a href="#catatan">Baca catatan</a></article>
+  <p id="catatan">Lebar kartu sudah mencakup padding dan border karena border-box.</p>
+</main>
+
+</body>
+</html>

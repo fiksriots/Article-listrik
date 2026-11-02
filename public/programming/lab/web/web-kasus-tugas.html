@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daftar tugas dengan penyimpanan lokal</title>
+  <style>*{box-sizing:border-box}body{font:16px/1.65 system-ui,sans-serif;color:#243343;background:#f5f6fa;margin:0}main,header,footer{max-width:960px;margin:auto;padding:24px}main{background:white;border-radius:16px;margin:24px auto}h1,h2{line-height:1.25}a{color:#5143a6}button,input,select{font:inherit}button{background:#5143a6;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}input,select{padding:9px;border:1px solid #8993a1;border-radius:6px;max-width:100%}label{display:block;margin:14px 0 5px}:focus-visible{outline:3px solid #a05b15;outline-offset:3px}p[role=status]{min-height:1.65em}ul{padding-left:24px}@media(max-width:1000px){main{margin:16px}}
+#daftar{list-style:none;padding:0}#daftar li{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:12px 0}#daftar label{display:flex;align-items:center;gap:12px;margin:0;overflow-wrap:anywhere}#daftar input:checked+span{text-decoration:line-through}</style>
+  
+</head>
+<body>
+<main><h1>Daftar tugas belajar</h1>
+<p>Data hanya di browser dan origin ini, tanpa akun atau sinkronisasi antarperangkat.</p>
+<form id="form-tugas"><label for="judul">Tugas baru</label><input id="judul" required maxlength="120"><p><button type="submit">Tambah tugas</button></p></form>
+<p id="status" role="status"></p><ul id="daftar"></ul></main>
+<script>
+const KEY = 'fiks-web-lab-tugas-v1';
+const form = document.querySelector('#form-tugas');
+const input = document.querySelector('#judul');
+const daftar = document.querySelector('#daftar');
+const status = document.querySelector('#status');
+let tasks = [];
+let bolehSimpan = true;
+try {
+  const raw = localStorage.getItem(KEY);
+  if (raw !== null) {
+    const data = JSON.parse(raw);
+    if (data.version !== 1 || !Array.isArray(data.tasks) || data.tasks.length > 500 ||
+        !data.tasks.every(t => typeof t.id === 'string' && t.id.length <= 80 &&
+          typeof t.judul === 'string' && t.judul.trim().length > 0 && t.judul.length <= 120 && typeof t.selesai === 'boolean') ||
+        new Set(data.tasks.map(t => t.id)).size !== data.tasks.length) throw new Error('Data tidak sesuai');
+    tasks = data.tasks;
+  }
+} catch {
+  bolehSimpan = false; // Jangan menimpa data lama yang tidak dapat dibaca.
+  status.textContent = 'Penyimpanan tidak tersedia atau data tidak valid. Perubahan hanya untuk sesi ini.';
+}
+function simpan(pesan) {
+  if (bolehSimpan) {
+    try { localStorage.setItem(KEY, JSON.stringify({version: 1, tasks})); }
+    catch { bolehSimpan = false; }
+  }
+  status.textContent = bolehSimpan ? pesan : 'Perubahan hanya untuk sesi ini; penyimpanan bermasalah.';
+}
+function render() {
+  daftar.replaceChildren();
+  for (const task of tasks) {
+    const li = document.createElement('li');
+    const label = document.createElement('label');
+    const cek = document.createElement('input');
+    cek.type = 'checkbox';
+    cek.checked = task.selesai;
+    const teks = document.createElement('span');
+    teks.textContent = task.judul;
+    label.append(cek, teks);
+    cek.addEventListener('change', () => { task.selesai = cek.checked; simpan('Status tugas diperbarui.'); });
+    const hapus = document.createElement('button');
+    hapus.type = 'button';
+    hapus.textContent = 'Hapus';
+    hapus.setAttribute('aria-label', `Hapus tugas ${task.judul}`);
+    hapus.addEventListener('click', () => {
+      tasks = tasks.filter(t => t.id !== task.id);
+      render(); simpan('Tugas dihapus.'); input.focus();
+    });
+    li.append(label, hapus);
+    daftar.append(li);
+  }
+}
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const judul = input.value.trim();
+  if (!judul) { input.focus(); return; }
+  if (tasks.length >= 500) { status.textContent = 'Batas latihan 500 tugas. Selesaikan pengelolaan data terlebih dahulu.'; return; }
+  tasks.push({id: crypto.randomUUID(), judul, selesai: false});
+  render(); simpan('Tugas ditambahkan.'); form.reset(); input.focus();
+});
+render();
+</script>
+</body>
+</html>

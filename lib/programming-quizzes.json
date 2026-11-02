@@ -6856,5 +6856,509 @@
       "answer": 0,
       "explanation": "Memindahkan kerja blocking tidak mengubah aturan transaksi engine."
     }
+  ],
+  "web-cara-kerja": [
+    {
+      "question": "Bahasa untuk struktur judul dan paragraf adalah ...",
+      "options": [
+        "HTML",
+        "CSS",
+        "SQL"
+      ],
+      "answer": 0,
+      "explanation": "HTML memberi makna dan struktur dokumen."
+    },
+    {
+      "question": "Browser mengirim apa saat meminta halaman?",
+      "options": [
+        "Commit Git",
+        "Request HTTP",
+        "Tabel database"
+      ],
+      "answer": 1,
+      "explanation": "Server menerima request dan mengirim response."
+    },
+    {
+      "question": "Apa arti halaman statis?",
+      "options": [
+        "Tidak boleh memiliki JavaScript",
+        "Hanya dapat dibuka tanpa internet",
+        "Berkas dapat disajikan tanpa membuat HTML baru per permintaan"
+      ],
+      "answer": 2,
+      "explanation": "Halaman statis tetap dapat memiliki interaksi dan menggunakan API."
+    },
+    {
+      "question": "Di mana kunci rahasia server seharusnya disimpan?",
+      "options": [
+        "Di konfigurasi server yang terlindungi",
+        "Di file JavaScript publik",
+        "Di komentar HTML"
+      ],
+      "answer": 0,
+      "explanation": "Isi berkas yang dikirim ke browser dapat dibaca pengguna."
+    }
+  ],
+  "web-html-semantik": [
+    {
+      "question": "Elemen untuk isi utama halaman adalah ...",
+      "options": [
+        "main",
+        "head",
+        "meta"
+      ],
+      "answer": 0,
+      "explanation": "Main menandai isi utama yang khas untuk halaman."
+    },
+    {
+      "question": "Apa fungsi lang=\"id\"?",
+      "options": [
+        "Membuat semua id otomatis",
+        "Menandai bahasa dokumen",
+        "Menentukan alamat server"
+      ],
+      "answer": 1,
+      "explanation": "Atribut lang membantu alat bantu dan pemrosesan bahasa."
+    },
+    {
+      "question": "Tautan href=\"#kontak\" membutuhkan ...",
+      "options": [
+        "File Python kontak.py",
+        "Database bernama kontak",
+        "Elemen dengan id=\"kontak\""
+      ],
+      "answer": 2,
+      "explanation": "Fragmen URL mengacu pada id elemen."
+    },
+    {
+      "question": "Bagaimana memilih tingkat heading?",
+      "options": [
+        "Menurut hubungan dan urutan isi",
+        "Menurut warna yang diinginkan",
+        "Selalu memakai h6 agar kecil"
+      ],
+      "answer": 0,
+      "explanation": "Tingkat heading menyatakan hierarki; ukuran visual diatur CSS."
+    }
+  ],
+  "web-css-dasar": [
+    {
+      "question": "Selector .kartu memilih ...",
+      "options": [
+        "Elemen dengan class kartu",
+        "Elemen dengan id kartu saja",
+        "Semua paragraf"
+      ],
+      "answer": 0,
+      "explanation": "Awalan titik menandai selector class."
+    },
+    {
+      "question": "Jarak antara isi dan border disebut ...",
+      "options": [
+        "Margin",
+        "Padding",
+        "Viewport"
+      ],
+      "answer": 1,
+      "explanation": "Padding berada di dalam border."
+    },
+    {
+      "question": "Apa yang tidak termasuk width pada border-box?",
+      "options": [
+        "Padding",
+        "Border",
+        "Margin"
+      ],
+      "answer": 2,
+      "explanation": "Margin berada di luar ukuran border box."
+    },
+    {
+      "question": "Dua selector sama kuat menetapkan warna berbeda. Umumnya yang dipakai ...",
+      "options": [
+        "Aturan yang ditulis belakangan",
+        "Aturan dengan teks terpanjang",
+        "Aturan yang namanya alfabetis lebih dulu"
+      ],
+      "answer": 0,
+      "explanation": "Pada prioritas cascade yang sama, urutan sumber menjadi penentu."
+    }
+  ],
+  "web-layout-responsif": [
+    {
+      "question": "Pilihan yang cocok untuk baris dan kolom kartu adalah ...",
+      "options": [
+        "CSS Grid",
+        "SQL JOIN",
+        "localStorage"
+      ],
+      "answer": 0,
+      "explanation": "Grid dirancang untuk susunan dua dimensi."
+    },
+    {
+      "question": "Apa fungsi flex-wrap?",
+      "options": [
+        "Menyimpan isi navigasi",
+        "Mengizinkan item berpindah baris",
+        "Mengurutkan berdasarkan alfabet"
+      ],
+      "answer": 1,
+      "explanation": "Flex-wrap membantu susunan menyesuaikan ruang."
+    },
+    {
+      "question": "Kapan aturan max-width:700px pada media query berlaku?",
+      "options": [
+        "Hanya saat layar tepat 700px",
+        "Saat semua gambar berukuran 700px",
+        "Saat viewport paling lebar 700px"
+      ],
+      "answer": 2,
+      "explanation": "Max-width pada media query memeriksa lebar viewport."
+    },
+    {
+      "question": "Dasar memilih breakpoint sebaiknya ...",
+      "options": [
+        "Saat isi membutuhkan perubahan tata letak",
+        "Nama merek ponsel",
+        "Jumlah file Python"
+      ],
+      "answer": 0,
+      "explanation": "Breakpoint mengikuti kebutuhan konten dan ruang."
+    }
+  ],
+  "web-javascript-dasar": [
+    {
+      "question": "Variabel yang nilainya akan diganti sebaiknya memakai ...",
+      "options": [
+        "let",
+        "def",
+        "SELECT"
+      ],
+      "answer": 0,
+      "explanation": "Let mendeklarasikan binding yang dapat diberi nilai pengganti."
+    },
+    {
+      "question": "Apa hasil filter?",
+      "options": [
+        "Jumlah item secara otomatis",
+        "Array baru berisi item yang lolos syarat",
+        "Menghapus item asal dari database"
+      ],
+      "answer": 1,
+      "explanation": "Filter mengembalikan array; length dapat digunakan untuk menghitung hasilnya."
+    },
+    {
+      "question": "Perbandingan ketat JavaScript memakai ...",
+      "options": [
+        ":=",
+        "<>",
+        "==="
+      ],
+      "answer": 2,
+      "explanation": "=== membandingkan tanpa konversi tipe implisit."
+    },
+    {
+      "question": "Const pada sebuah array berarti ...",
+      "options": [
+        "Binding tidak boleh diganti, isi masih dapat berubah",
+        "Semua isi pasti tidak bisa berubah",
+        "Array hanya boleh berisi angka"
+      ],
+      "answer": 0,
+      "explanation": "Const mengatur binding, bukan membekukan seluruh isi object."
+    }
+  ],
+  "web-dom-event": [
+    {
+      "question": "DOM mewakili ...",
+      "options": [
+        "Struktur dokumen sebagai object",
+        "Salinan database server",
+        "Riwayat commit"
+      ],
+      "answer": 0,
+      "explanation": "JavaScript dapat membaca dan mengubah object dokumen melalui DOM."
+    },
+    {
+      "question": "Event yang cocok untuk pengiriman formulir adalah ...",
+      "options": [
+        "resize saja",
+        "submit",
+        "scroll saja"
+      ],
+      "answer": 1,
+      "explanation": "Submit menangani pengiriman formulir melalui berbagai cara interaksi."
+    },
+    {
+      "question": "Cara menampilkan masukan sebagai teks adalah ...",
+      "options": [
+        "innerHTML tanpa pemeriksaan",
+        "eval",
+        "textContent"
+      ],
+      "answer": 2,
+      "explanation": "TextContent tidak menafsirkan string sebagai markup HTML."
+    },
+    {
+      "question": "Tanpa penyimpanan, item DOM baru setelah reload akan ...",
+      "options": [
+        "Hilang dan halaman kembali ke kondisi awal",
+        "Otomatis tersimpan di server",
+        "Masuk ke akun Google"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan DOM tidak otomatis menjadi data persisten."
+    }
+  ],
+  "web-formulir": [
+    {
+      "question": "Pengganti label yang benar adalah ...",
+      "options": [
+        "Tetap gunakan label yang terlihat",
+        "Placeholder saja",
+        "Warna border saja"
+      ],
+      "answer": 0,
+      "explanation": "Label tetap tersedia saat pengguna mengetik dan dapat terhubung ke kontrol."
+    },
+    {
+      "question": "Type=email menjamin ...",
+      "options": [
+        "Email benar-benar dimiliki pengguna",
+        "Pemeriksaan bentuk dasar, bukan keberadaan alamat",
+        "Pesan sudah terkirim"
+      ],
+      "answer": 1,
+      "explanation": "Validasi format berbeda dari verifikasi kepemilikan alamat."
+    },
+    {
+      "question": "Cara menghapus pesan custom validity adalah ...",
+      "options": [
+        "Membuat ulang seluruh browser",
+        "Mengubah judul tab",
+        "setCustomValidity dengan string kosong"
+      ],
+      "answer": 2,
+      "explanation": "Pesan custom harus dikosongkan agar kontrol kembali valid."
+    },
+    {
+      "question": "Siapa yang wajib memvalidasi data pada aplikasi bersama?",
+      "options": [
+        "Server, selain bantuan validasi browser",
+        "Hanya CSS",
+        "Hanya pengguna"
+      ],
+      "answer": 0,
+      "explanation": "Browser dapat dimodifikasi; server harus menegakkan aturan datanya."
+    }
+  ],
+  "web-fetch-api": [
+    {
+      "question": "Fetch menerima HTTP 404. Apa yang perlu diperiksa?",
+      "options": [
+        "response.ok atau status",
+        "Warna tombol",
+        "Panjang nama file CSS"
+      ],
+      "answer": 0,
+      "explanation": "Respons HTTP error tidak otomatis membuat fetch menolak Promise."
+    },
+    {
+      "question": "Mengapa bentuk JSON perlu divalidasi?",
+      "options": [
+        "Semua JSON selalu array",
+        "JSON valid belum tentu sesuai kontrak aplikasi",
+        "JSON selalu menjalankan kode"
+      ],
+      "answer": 1,
+      "explanation": "Data dapat memiliki struktur atau tipe yang tidak diharapkan."
+    },
+    {
+      "question": "Siapa yang menetapkan izin CORS respons?",
+      "options": [
+        "CSS client",
+        "Nama variabel browser",
+        "Server sumber data"
+      ],
+      "answer": 2,
+      "explanation": "Browser menegakkan kebijakan berdasarkan header CORS dari server."
+    },
+    {
+      "question": "Finally berguna untuk ...",
+      "options": [
+        "Memulihkan keadaan UI baik sukses maupun gagal",
+        "Menjamin server selalu online",
+        "Membuat semua JSON valid"
+      ],
+      "answer": 0,
+      "explanation": "Finally menjalankan pembersihan seperti mengaktifkan tombol dan menghapus timer."
+    }
+  ],
+  "web-aksesibilitas-debug": [
+    {
+      "question": "Alat terbaik pertama untuk tombol aksi adalah ...",
+      "options": [
+        "Elemen button",
+        "Div tanpa keyboard handler",
+        "Gambar tanpa teks"
+      ],
+      "answer": 0,
+      "explanation": "Button sudah memiliki semantik dan perilaku keyboard bawaan."
+    },
+    {
+      "question": "Fokus keyboard sebaiknya ...",
+      "options": [
+        "Selalu disembunyikan",
+        "Terlihat jelas",
+        "Hanya ada pada mouse"
+      ],
+      "answer": 1,
+      "explanation": "Indikator fokus membantu pengguna mengetahui kontrol yang aktif."
+    },
+    {
+      "question": "Untuk memeriksa HTTP error gunakan ...",
+      "options": [
+        "Box model saja",
+        "Daftar font",
+        "Panel Network"
+      ],
+      "answer": 2,
+      "explanation": "Network menampilkan status dan isi respons permintaan."
+    },
+    {
+      "question": "Aria-expanded perlu sesuai dengan ...",
+      "options": [
+        "Keadaan terbuka atau tertutup yang nyata",
+        "Jumlah file dalam folder",
+        "Warna latar halaman"
+      ],
+      "answer": 0,
+      "explanation": "Atribut harus mencerminkan keadaan kontrol yang benar."
+    }
+  ],
+  "web-publikasi": [
+    {
+      "question": "HTML biasa tanpa bundler ...",
+      "options": [
+        "Dapat disajikan tanpa langkah build",
+        "Selalu membutuhkan database",
+        "Harus diubah menjadi Python"
+      ],
+      "answer": 0,
+      "explanation": "Server statis dapat langsung menyajikan berkas HTML dan aset."
+    },
+    {
+      "question": "Path /style.css mengacu pada ...",
+      "options": [
+        "Folder Python aktif",
+        "Akar origin",
+        "Database lokal"
+      ],
+      "answer": 1,
+      "explanation": "Awalan slash mengacu pada akar origin URL."
+    },
+    {
+      "question": "Sesudah publikasi, langkah yang tepat adalah ...",
+      "options": [
+        "Menganggap semua path pasti benar",
+        "Menyembunyikan semua error",
+        "Menguji URL publik dan asetnya"
+      ],
+      "answer": 2,
+      "explanation": "Lingkungan publik bisa memiliki path dan konfigurasi berbeda dari lokal."
+    },
+    {
+      "question": "Hosting statis saja menyediakan ...",
+      "options": [
+        "Penyajian berkas, bukan otomatis database bersama",
+        "Autentikasi semua pengguna",
+        "Sinkronisasi localStorage antar perangkat"
+      ],
+      "answer": 0,
+      "explanation": "Penyimpanan dan otorisasi bersama memerlukan layanan yang sesuai."
+    }
+  ],
+  "web-kasus-portofolio": [
+    {
+      "question": "Kebutuhan awal portofolio contoh adalah ...",
+      "options": [
+        "Menampilkan profil, proyek, dan kontak",
+        "Menyimpan password pengunjung",
+        "Memproses transaksi pembayaran"
+      ],
+      "answer": 0,
+      "explanation": "Pilih implementasi sesuai kebutuhan yang nyata."
+    },
+    {
+      "question": "Kartu proyek sebaiknya menjelaskan ...",
+      "options": [
+        "Hanya nama bahasa tanpa konteks",
+        "Masalah, solusi, dan hasil",
+        "Rahasia akses server"
+      ],
+      "answer": 1,
+      "explanation": "Deskripsi membantu pembaca menilai pekerjaan yang dilakukan."
+    },
+    {
+      "question": "Tautan #proyek harus menuju ...",
+      "options": [
+        "Server bernama proyek",
+        "Akun browser",
+        "Bagian dengan id proyek"
+      ],
+      "answer": 2,
+      "explanation": "Fragmen menuju id dalam dokumen."
+    },
+    {
+      "question": "Tanda layout responsif berhasil adalah ...",
+      "options": [
+        "Isi tetap terbaca dan dapat dipakai pada ruang sempit",
+        "Seluruh teks penting disembunyikan",
+        "Lebar selalu 1200px"
+      ],
+      "answer": 0,
+      "explanation": "Responsif mempertahankan fungsi serta keterbacaan."
+    }
+  ],
+  "web-kasus-tugas": [
+    {
+      "question": "Nilai yang disimpan localStorage berbentuk ...",
+      "options": [
+        "String",
+        "Object JavaScript hidup",
+        "Tabel SQL"
+      ],
+      "answer": 0,
+      "explanation": "Gunakan serialisasi seperti JSON untuk struktur data."
+    },
+    {
+      "question": "Mengapa data hasil JSON.parse perlu diperiksa?",
+      "options": [
+        "JSON.parse selalu menjalankan fungsi",
+        "JSON valid belum tentu punya skema tugas yang benar",
+        "Semua JSON pasti versi terbaru"
+      ],
+      "answer": 1,
+      "explanation": "Pemeriksaan struktur mencegah aplikasi memakai data tak sesuai kontrak."
+    },
+    {
+      "question": "Jika simpan ditolak browser, aplikasi sebaiknya ...",
+      "options": [
+        "Mengaku pasti tersimpan",
+        "Menghapus semua data situs",
+        "Memberi pesan bahwa perubahan belum persisten"
+      ],
+      "answer": 2,
+      "explanation": "Pengguna perlu mengetahui batas keadaan datanya."
+    },
+    {
+      "question": "Apakah tugas otomatis muncul pada perangkat lain?",
+      "options": [
+        "Tidak, contoh hanya menyimpan lokal",
+        "Ya, karena ada JSON",
+        "Ya, karena memakai CSS Grid"
+      ],
+      "answer": 0,
+      "explanation": "Sinkronisasi perangkat memerlukan mekanisme tambahan."
+    }
   ]
 }

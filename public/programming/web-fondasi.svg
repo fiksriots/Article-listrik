@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="480" viewBox="0 0 860 480" role="img" aria-labelledby="title desc">
+<title id="title">Fondasi halaman web</title><desc id="desc">HTML, CSS, dan JavaScript digabungkan browser. Browser dapat meminta data tambahan dari API.</desc>
+<rect width="860" height="480" rx="24" fill="#f3f4fb"/>
+<g font-family="system-ui,sans-serif" text-anchor="middle" fill="#25334b">
+<text x="430" y="48" font-size="22" font-weight="700">Satu halaman, tiga peran</text>
+<rect x="32" y="80" width="244" height="108" rx="16" fill="#ffedda"/>
+<rect x="308" y="80" width="244" height="108" rx="16" fill="#dfeefb"/>
+<rect x="584" y="80" width="244" height="108" rx="16" fill="#ede5ff"/>
+<text x="154" y="123" font-size="24" font-weight="700">HTML</text><text x="154" y="157" font-size="18">Struktur dan makna</text>
+<text x="430" y="123" font-size="24" font-weight="700">CSS</text><text x="430" y="157" font-size="18">Tampilan dan layout</text>
+<text x="706" y="123" font-size="24" font-weight="700">JavaScript</text><text x="706" y="157" font-size="18">Perilaku dan interaksi</text>
+<path d="M154 195V218H430V242M706 195V218H430M430 195V242" fill="none" stroke="#79799c" stroke-width="3"/>
+<rect x="252" y="244" width="356" height="86" rx="16" fill="#25334b"/>
+<text x="430" y="278" fill="white" font-size="23" font-weight="700">Browser</text><text x="430" y="309" fill="white" font-size="18">Menyusun dan menampilkan halaman</text>
+<path d="M405 337V375M455 375V337" stroke="#79799c" stroke-width="3"/>
+<path d="m399 367 6 8 6-8m38-22 6-8 6 8" fill="none" stroke="#79799c" stroke-width="3"/>
+<rect x="252" y="378" width="356" height="64" rx="14" fill="#dcefe6"/>
+<text x="430" y="405" font-size="20" font-weight="700">API di server</text><text x="430" y="430" font-size="16">Pilihan untuk membaca atau mengirim data</text>
+</g></svg>
