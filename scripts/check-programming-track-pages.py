@@ -34,4 +34,4 @@ chooser = (root / '.next/server/app/programming.html').read_text()
 assert 'programming-track-terstruktur' in chooser and 'programming-track-struktur-data' in chooser
 assert 'programming-track-oop' in chooser and 'programming-track-basis-data' in chooser
 assert '<div class="net-catalog"' not in chooser
-print('PASS: all 227 rendered sidebars and previous/next links stay in the right path; selector has nine paths')
+print('PASS: all 243 rendered sidebars and previous/next links stay in the right path; selector has nine paths')

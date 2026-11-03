@@ -426,19 +426,31 @@
     ]
   },
   {
-    "title": "Data Analysis · Pembersihan dan pengolahan",
+    "title": "Data Analysis · Kualitas dan pembersihan",
     "slugs": [
       "da-kualitas-data",
-      "da-filter-transformasi",
-      "da-agregasi",
-      "da-join-sql"
+      "da-teks-kategori",
+      "da-kontrak-kualitas",
+      "da-outlier-iqr"
     ]
   },
   {
-    "title": "Data Analysis · Visualisasi dan pelaporan",
+    "title": "Data Analysis · Pengolahan tabel dan sumber",
+    "slugs": [
+      "da-filter-transformasi",
+      "da-agregasi",
+      "da-reshape-pivot",
+      "da-join-sql",
+      "da-sql-pandas",
+      "da-excel-workbook"
+    ]
+  },
+  {
+    "title": "Data Analysis · Visualisasi dan waktu",
     "slugs": [
       "da-visualisasi",
       "da-waktu-kpi",
+      "da-window-tren",
       "da-laporan-reproduksi"
     ]
   },
@@ -446,7 +458,8 @@
     "title": "Data Analysis · Studi kasus",
     "slugs": [
       "da-kasus-penjualan",
-      "da-kasus-monitoring"
+      "da-kasus-monitoring",
+      "da-cohort-retensi"
     ]
   },
   {
@@ -455,6 +468,7 @@
       "ds-pengantar",
       "ds-statistik-probabilitas",
       "ds-sampling-bootstrap",
+      "ds-uji-hipotesis",
       "ds-eda-korelasi"
     ]
   },
@@ -462,16 +476,28 @@
     "title": "Data Science · Data dan evaluasi model",
     "slugs": [
       "ds-split-leakage",
+      "ds-split-waktu-group",
       "ds-pipeline",
+      "ds-feature-engineering",
       "ds-regresi",
-      "ds-klasifikasi"
+      "ds-klasifikasi",
+      "ds-kelas-imbalance"
     ]
   },
   {
-    "title": "Data Science · Pemilihan dan eksplorasi model",
+    "title": "Data Science · Pemilihan dan interpretasi",
     "slugs": [
       "ds-cross-validation",
+      "ds-pohon-ensemble",
+      "ds-learning-curve",
+      "ds-interpretasi-model",
       "ds-clustering"
+    ]
+  },
+  {
+    "title": "Data Science · Pemantauan model",
+    "slugs": [
+      "ds-monitoring-drift"
     ]
   },
   {

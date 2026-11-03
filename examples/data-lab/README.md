@@ -36,17 +36,20 @@ python da11_kasus_penjualan.py
 python da12_kasus_jaringan.py
 python ds11_kasus_durasi.py
 python ds12_kasus_risiko.py
-python -m unittest test_lab.py -v
+python -m unittest discover -p 'test*.py' -v
 ```
 
 Jalankan file lain sesuai label pada artikel. Lock memuat versi pengujian Python 3.12; requirements.txt hanya daftar paket utama jika ingin mencoba lingkungan lain. Pembaruan versi bisa mengubah angka pembulatan atau hasil model, sehingga uji ulang diperlukan. Tidak perlu Jupyter; bila memakai notebook, jalankan ulang dari awal dan sesuaikan path karena __file__ tidak tersedia di notebook.
 
 ## Isi
 
-- da01–da12: pertanyaan, NumPy, CSV, kualitas data, filter, agregasi, join, grafik, waktu/coverage, laporan, dan dua studi kasus.
-- ds01–ds12: definisi masalah, statistik, bootstrap, korelasi, split, pipeline, regresi, klasifikasi, validasi, clustering, dan dua studi kasus.
+- da01–da20: pertanyaan, NumPy, CSV, kualitas data, filter, agregasi, join, grafik, waktu/coverage, laporan, dan studi kasus.
+- ds01–ds20: definisi masalah, statistik, bootstrap, korelasi, split, pipeline, regresi, klasifikasi, validasi, clustering, dan studi kasus.
+- Pendalaman Data Analysis: normalisasi teks, reshape/pivot, SQL berparameter, workbook Excel, rolling trend, outlier IQR, kontrak kualitas, dan cohort retensi.
+- Pendalaman Data Science: permutation test, split kelompok/waktu, pemilihan ambang dari validation, rekayasa fitur, ensemble, permutation importance, learning curve, dan drift distribusi.
 - datasets/penjualan.csv: 8 baris fiktif; 1 duplikat identik, 2 invalid, 5 diterima. Omzet data diterima Rp1.960.000, bukan laba atau omzet lengkap semua transaksi.
 - datasets/monitoring.csv: dua perangkat fiktif dan empat jadwal polling per perangkat. Coverage serta proporsi up teramati tidak sama dengan durasi uptime atau SLA kontinu.
+- test_pendalaman.py: pengujian kasus batas dan aturan pendalaman.
 - test_lab.py: pengujian aturan data, indikator, pipeline, dan artefak.
 
 Script memakai lokasi __file__ untuk menemukan dataset. da11 memakai helper da04_kualitas.py, sehingga gunakan paket lengkap. Banyak contoh kecil menyimpan datanya langsung di kode agar dapat dibaca tanpa mengunduh sumber lain.

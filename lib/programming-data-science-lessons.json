@@ -192,6 +192,69 @@
     "minutes": 30
   },
   {
+    "slug": "ds-uji-hipotesis",
+    "title": "Uji hipotesis dan permutation test tanpa salah membaca p-value",
+    "summary": "Bandingkan dua kelompok sambil memeriksa desain, asumsi, ukuran efek, dan ketidakpastian.",
+    "analogy": "Perbedaan dua kelompok perlu dibandingkan dengan variasi yang mungkin muncul dalam rancangan pengamatan yang sama.",
+    "explain": [
+      "Uji hipotesis memakai statistik tertentu dan model hipotesis nol. Pada ilustrasi dua sampel independen ini, SciPy membandingkan data terhadap asumsi distribusi yang sama melalui pertukaran label kelompok. Desain harus mendukung independensi dan pertukaran label; tidak semua perbandingan observasional memenuhi syarat itu.",
+      "Statistik contoh adalah selisih mean A−B sebesar −3. Permutation test mengubah pembagian label dan menilai seberapa ekstrem statistik teramati terhadap distribusi nol. Untuk kombinasi sedikit, SciPy dapat menghitung seluruh permutasi unik daripada hanya sampel acak.",
+      "P-value bukan peluang bahwa hipotesis nol benar, bukan peluang hasil terjadi secara kebetulan tanpa konteks, dan bukan ukuran manfaat praktis. Laporkan arah serta besaran selisih bersama desain, jumlah sampel, dan ketidakpastian yang relevan.",
+      "Tentukan pertanyaan, metrik, serta rencana analisis sebelum melihat hasil. Banyak pengujian, pemilihan hasil menarik, dan penghentian percobaan berdasarkan p-value memerlukan penanganan khusus. Contoh fiktif tidak membuktikan dampak kebijakan atau penyebab perubahan layanan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Hipotesis nol",
+          "Model pembanding dengan asumsi tertentu"
+        ],
+        [
+          "Statistik",
+          "Selisih mean A−B"
+        ],
+        [
+          "P-value",
+          "Keekstreman hasil menurut model nol"
+        ],
+        [
+          "Ukuran efek",
+          "Besaran perubahan yang relevan secara praktis"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds13_hipotesis.py",
+        "filename": "ds13_hipotesis.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom scipy.stats import permutation_test\ndef uji_selisih(a,b):\n    a,b=np.asarray(a,dtype=float),np.asarray(b,dtype=float)\n    if a.ndim!=1 or b.ndim!=1 or min(len(a),len(b))<2 or not np.isfinite(a).all() or not np.isfinite(b).all():\n        raise ValueError('Dua sampel finite, masing-masing minimal dua observasi.')\n    return permutation_test((a,b),lambda x,y:np.mean(x)-np.mean(y),\n        permutation_type='independent',vectorized=False,alternative='two-sided',n_resamples=999,rng=np.random.default_rng(42))\nif __name__=='__main__':\n    hasil=uji_selisih([10,11,12,13,14,15],[13,14,15,16,17,18])\n    print('Selisih mean A-B:',round(float(hasil.statistic),2))\n    print('P-value ilustrasi:',round(float(hasil.pvalue),3))\n    print('Desain kelompok harus mendukung asumsi pertukaran label.')\n",
+        "output": "Selisih mean A-B: -3.0\nP-value ilustrasi: 0.035\nDesain kelompok harus mendukung asumsi pertukaran label.",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds13_hipotesis.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan selisih mean dengan dua sampel sebelum membaca p-value."
+    ],
+    "practice": [
+      "Ubah kedua kelompok menjadi data sama lalu bandingkan hasilnya.",
+      "Tulis rencana eksperimen yang membedakan randomisasi kelompok dari pemilihan data yang mudah diambil."
+    ],
+    "warning": "Jangan menyatakan p-value sebagai peluang hipotesis benar atau bukti sebab-akibat. Hasil hanya bermakna bersama rancangan dan asumsi yang sesuai.",
+    "check": "Apakah p-value kecil berarti selisihnya pasti besar dan penting?",
+    "answer": "Tidak. Besaran efek serta kepentingan praktis harus dinilai terpisah dari keekstreman statistik menurut model nol.",
+    "source": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.permutation_test.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "ds-eda-korelasi",
     "title": "EDA, korelasi, dan batas sebab-akibat",
     "summary": "Eksplorasi distribusi serta hubungan tanpa menafsirkan asosiasi sebagai penyebab.",
@@ -320,6 +383,69 @@
     "minutes": 30
   },
   {
+    "slug": "ds-split-waktu-group",
+    "title": "Split berbasis waktu dan kelompok: hindari entitas bocor",
+    "summary": "Gunakan GroupKFold serta TimeSeriesSplit untuk situasi penggunaan yang berbeda.",
+    "analogy": "Ujian pada pelanggan yang sama dan ujian pada pelanggan baru menjawab pertanyaan yang berbeda.",
+    "explain": [
+      "Random split per baris dapat menempatkan pengamatan perangkat atau pelanggan yang sama pada kedua sisi. Jika tujuan penggunaan adalah perangkat baru, pemisahan harus mengikuti group identitas, bukan hanya nomor baris.",
+      "GroupKFold menjaga kelompok train dan validation tidak tumpang tindih pada tiap fold. Ia tidak otomatis menjaga urutan waktu. Identitas group perlu ditetapkan menurut risiko kebocoran: pelanggan, BTS, lokasi, atau sumber lain yang relevan.",
+      "TimeSeriesSplit memakai urutan baris agar train berada sebelum validation. Data harus diurutkan sesuai waktu dahulu. Gap menyisihkan sejumlah observasi di antaranya; nilai 1 pada contoh hanya ilustrasi, bukan aturan universal untuk semua horizon target.",
+      "Jika target memakai informasi jendela masa depan, pemisahan perlu mempertimbangkan overlap label, keterlambatan data, serta horizon penggunaan. Group dan waktu dapat sama-sama penting, sehingga kadang diperlukan rancangan pembagian khusus di luar dua contoh splitter ini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "GroupKFold",
+          "Memisahkan identitas kelompok"
+        ],
+        [
+          "TimeSeriesSplit",
+          "Train mendahului validation pada urutan data"
+        ],
+        [
+          "gap",
+          "Jarak observasi sesuai kebutuhan horizon"
+        ],
+        [
+          "Tujuan evaluasi",
+          "Entitas baru dan masa depan berbeda"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds14_split_kelompok.py",
+        "filename": "ds14_split_kelompok.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.model_selection import GroupKFold,TimeSeriesSplit\nif __name__=='__main__':\n    X=np.arange(18).reshape(-1,1);grup=np.repeat(np.arange(6),3)\n    for i,(train,val) in enumerate(GroupKFold(n_splits=3).split(X,groups=grup),1):\n        print(f'Group fold {i}: terpisah',set(grup[train]).isdisjoint(grup[val]))\n    for i,(train,val) in enumerate(TimeSeriesSplit(n_splits=3,gap=1).split(np.arange(12)),1):\n        print(f'Time fold {i}: train terakhir {train[-1]}, validasi pertama {val[0]}')\n",
+        "output": "Group fold 1: terpisah True\nGroup fold 2: terpisah True\nGroup fold 3: terpisah True\nTime fold 1: train terakhir 1, validasi pertama 3\nTime fold 2: train terakhir 4, validasi pertama 6\nTime fold 3: train terakhir 7, validasi pertama 9",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds14_split_kelompok.py lalu cocokkan hasilnya dengan contoh.",
+      "Periksa tidak ada group bersama dan urutan batas tiap fold waktu."
+    ],
+    "practice": [
+      "Tentukan group untuk prediksi pada pelanggan baru yang punya banyak tiket.",
+      "Rancang gap bila satu label memakai kejadian dalam tiga interval berikutnya."
+    ],
+    "warning": "Gap dihitung dalam observasi, bukan otomatis jam. Data dengan interval tidak teratur dan label bertumpang tindih memerlukan pemeriksaan tambahan.",
+    "check": "Apakah GroupKFold otomatis membuat validation berada di masa depan?",
+    "answer": "Tidak. Ia menjaga pemisahan group, bukan kronologi. Pilih atau gabungkan pembagian sesuai tujuan evaluasi.",
+    "source": "https://scikit-learn.org/stable/modules/cross_validation.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "ds-pipeline",
     "title": "Preprocessing dengan Pipeline dan ColumnTransformer",
     "summary": "Gabungkan imputasi, scaling, encoding, dan model dalam proses yang dapat divalidasi.",
@@ -382,6 +508,69 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 30
+  },
+  {
+    "slug": "ds-feature-engineering",
+    "title": "Feature engineering di dalam Pipeline",
+    "summary": "Buat rasio yang tersedia saat prediksi sambil menjaga kontrak input dan pemisahan data.",
+    "analogy": "Jumlah pekerjaan yang sama mempunyai beban berbeda bila dibagi kepada jumlah petugas yang berbeda.",
+    "explain": [
+      "Feature engineering menyatakan informasi domain dalam bentuk yang dapat dipakai model. Contoh menambah beban_per_teknisi dari antrean awal dibagi teknisi tersedia. Kedua nilai harus diketahui pada waktu prediksi, bukan diambil dari hasil penyelesaian nanti.",
+      "FunctionTransformer menempatkan fungsi penambahan fitur di dalam Pipeline. Contoh membuat salinan DataFrame, memeriksa bilangan finite, antrean nonnegatif, serta teknisi minimal satu sebelum membagi. Input asli tidak dimodifikasi.",
+      "Fitur baru kemudian melewati scaling dan encoding bersama kolom lain sebelum Ridge. Fungsi per baris ini tidak mempelajari statistik global. Transformasi yang belajar dari data tetap harus di-fit hanya pada bagian train tiap fold.",
+      "Rasio baru tidak otomatis menambah informasi kausal atau meningkatkan skor. Uji manfaatnya melalui validation dan periksa perubahan kontrak di data baru. Untuk fitur rolling atau agregasi kelompok, pastikan jendela serta data sumber benar-benar tersedia sebelum waktu prediksi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Fitur domain",
+          "Representasi masukan yang relevan"
+        ],
+        [
+          "FunctionTransformer",
+          "Transformasi di dalam Pipeline"
+        ],
+        [
+          "Rasio",
+          "Penyebut valid dan satuan jelas"
+        ],
+        [
+          "Ketersediaan",
+          "Tidak memakai informasi masa depan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds16_fitur.py",
+        "filename": "ds16_fitur.py",
+        "language": "python",
+        "code": "import numpy as np\nimport pandas as pd\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.preprocessing import FunctionTransformer,StandardScaler,OneHotEncoder\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.linear_model import Ridge\ndef tambah_fitur(data):\n    data=data.copy()\n    if not np.isfinite(data[['antrean','teknisi']]).all().all() or (data['antrean']<0).any() or (data['teknisi']<1).any():\n        raise ValueError('Antrean nonnegatif dan teknisi minimal satu, semuanya finite.')\n    data['beban_per_teknisi']=data['antrean']/data['teknisi']\n    return data\ndef buat_model():\n    olah=ColumnTransformer([('num',StandardScaler(),['antrean','teknisi','beban_per_teknisi']),('kat',OneHotEncoder(handle_unknown='ignore',sparse_output=False),['jenis'])])\n    return Pipeline([('fitur',FunctionTransformer(tambah_fitur,validate=False)),('olah',olah),('model',Ridge())])\nif __name__=='__main__':\n    train=pd.DataFrame({'antrean':[2,4,6,8],'teknisi':[1,2,2,4],'jenis':['radio','kabel','radio','kabel']})\n    test=pd.DataFrame({'antrean':[10],'teknisi':[2],'jenis':['fiber']})\n    model=buat_model().fit(train,[20,25,35,30])\n    print('Beban test:',tambah_fitur(test)['beban_per_teknisi'].tolist())\n    print('Bentuk prediksi:',model.predict(test).shape)\n    print('Kolom sumber tetap:',test.columns.tolist())\n",
+        "output": "Beban test: [5.0]\nBentuk prediksi: (1,)\nKolom sumber tetap: ['antrean', 'teknisi', 'jenis']",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds16_fitur.py lalu cocokkan hasilnya dengan contoh.",
+      "Periksa hasil beban 10/2 serta kolom sumber yang tetap sama."
+    ],
+    "practice": [
+      "Uji teknisi nol, antrean negatif, dan nilai Infinity.",
+      "Bandingkan model dengan dan tanpa fitur rasio melalui validation pada dataset latihan yang lebih besar."
+    ],
+    "warning": "Fitur hasil analisis setelah kejadian tidak sah untuk prediksi sebelum kejadian. Pipeline tidak otomatis memperbaiki ketidakcocokan waktu informasi.",
+    "check": "Mengapa jumlah teknisi harus diperiksa sebelum pembagian?",
+    "answer": "Penyebut nol atau nilai tidak valid membuat rasio tidak bermakna. Pemeriksaan nilai merupakan bagian dari kontrak fitur.",
+    "source": "https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.FunctionTransformer.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   },
   {
     "slug": "ds-regresi",
@@ -512,6 +701,69 @@
     "minutes": 30
   },
   {
+    "slug": "ds-kelas-imbalance",
+    "title": "Kelas tidak seimbang, average precision, dan pemilihan ambang",
+    "summary": "Pilih ambang pada validation dan baca hasil test tanpa hanya mengandalkan accuracy.",
+    "analogy": "Alarm untuk kejadian langka perlu menimbang berapa banyak kejadian ditemukan dan berapa banyak alarm keliru yang harus diperiksa.",
+    "explain": [
+      "Pada kelas tidak seimbang, menebak kelas mayoritas dapat memberi accuracy tinggi tetapi gagal menemukan kejadian penting. Baca prevalence, confusion matrix, precision, recall, dan metrik yang sesuai biaya kesalahan.",
+      "Average precision merangkum precision terhadap pertambahan recall dari ranking skor; ia bukan precision pada satu ambang. Nilainya dipengaruhi komposisi data, sehingga tidak dibandingkan sembarangan antar dataset dengan prevalence berbeda.",
+      "Contoh memakai skor fiktif terpisah untuk validation dan test. Ambang dipilih dari 0,3, 0,5, 0,7 berdasarkan F1 validation; bila seri, aturan contoh memilih ambang lebih tinggi. Setelah dipilih, ambang dibekukan untuk menghitung matriks test.",
+      "F1 bukan keputusan terbaik untuk semua operasi. Kapasitas teknisi, biaya FP/FN, kebutuhan recall minimum, serta kalibrasi skor perlu ditinjau. Bila memakai class_weight atau resampling, tentukan melalui train/validation; resampling tidak boleh dilakukan sebelum split sehingga duplikat atau informasi bocor ke validation/test."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Prevalence",
+          "Proporsi kelas positif"
+        ],
+        [
+          "Average precision",
+          "Ringkasan ranking precision–recall"
+        ],
+        [
+          "Ambang",
+          "Dipilih pada validation menurut aturan"
+        ],
+        [
+          "Test",
+          "Dinilai setelah keputusan dikunci"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds15_imbalance.py",
+        "filename": "ds15_imbalance.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.metrics import f1_score,confusion_matrix,average_precision_score\ndef pilih_ambang(aktual,skor):\n    return max([.3,.5,.7],key=lambda t:(f1_score(aktual,np.asarray(skor)>=t,zero_division=0),t))\nif __name__=='__main__':\n    yval=np.array([0,0,0,0,0,0,0,1,1,1]);pval=np.array([.1,.2,.3,.1,.2,.4,.5,.4,.6,.8])\n    ambang=pilih_ambang(yval,pval)\n    # Skor fiktif pada set test terpisah, dipakai setelah ambang dipilih.\n    ytest=np.array([0,0,0,0,1,1]);ptest=np.array([.1,.2,.6,.1,.4,.9])\n    print('Ambang dari validation:',ambang)\n    print('Matriks test:',confusion_matrix(ytest,ptest>=ambang,labels=[0,1]).tolist())\n    print('Average precision test:',round(average_precision_score(ytest,ptest),3))\n",
+        "output": "Ambang dari validation: 0.5\nMatriks test: [[3, 1], [1, 1]]\nAverage precision test: 0.833",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds15_imbalance.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan ambang terpilih dengan F1 tiga kandidat pada validation."
+    ],
+    "practice": [
+      "Bandingkan accuracy model dengan prediksi selalu negatif pada test contoh.",
+      "Rancang aturan ambang untuk kapasitas maksimal sejumlah alarm per hari tanpa melihat test akhir."
+    ],
+    "warning": "Jangan menganggap average precision sebagai akurasi atau peluang model terkalibrasi. Kontrak metrik dan prevalence harus jelas.",
+    "check": "Mengapa test tidak ikut dipakai untuk memilih ambang?",
+    "answer": "Pemilihan ambang adalah keputusan pengembangan. Menggunakannya dari test membuat test tidak lagi independen untuk evaluasi akhir.",
+    "source": "https://scikit-learn.org/stable/modules/model_evaluation.html#precision-recall-f-measure-metrics",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "ds-cross-validation",
     "title": "Cross-validation dan pencarian hyperparameter",
     "summary": "Pilih konfigurasi menggunakan data pengembangan sambil menjaga test akhir.",
@@ -576,6 +828,195 @@
     "minutes": 30
   },
   {
+    "slug": "ds-pohon-ensemble",
+    "title": "Decision tree dan random forest: bandingkan, jangan menebak",
+    "summary": "Kenali pohon keputusan dan ensemble sambil memilih model melalui cross-validation.",
+    "analogy": "Satu pohon keputusan mengikuti urutan pertanyaan; sekumpulan pohon menggabungkan banyak perkiraan untuk mengurangi ketergantungan pada satu pohon.",
+    "explain": [
+      "DecisionTreeRegressor membagi ruang fitur melalui aturan bercabang. Pohon yang terlalu dalam dapat menghafal data. Max_depth dan min_samples_leaf membantu mengatur kompleksitas, tetapi nilainya perlu dievaluasi sesuai data.",
+      "RandomForestRegressor menggabungkan beberapa pohon yang dilatih dengan variasi sampel dan fitur. Ensemble dapat membantu generalisasi, tetapi memerlukan sumber daya lebih besar dan tidak otomatis mengalahkan baseline atau model sederhana.",
+      "Contoh membandingkan baseline median, tree, dan forest pada data regresi sintetis nonlinier. Semua kandidat mendapat fold CV dan metrik MAE yang sama pada train. Model dengan MAE CV terkecil dipilih lalu di-fit ulang sebelum test akhir diperiksa sekali.",
+      "Tree tidak memerlukan scaling untuk aturan pemisahan seperti pada contoh, tetapi missing, kategori, input tidak valid, serta leakage tetap perlu ditangani. Pada data waktu atau berkelompok, ubah splitter agar sesuai situasi penggunaan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Tree",
+          "Aturan pemisahan bercabang"
+        ],
+        [
+          "Forest",
+          "Gabungan banyak pohon"
+        ],
+        [
+          "Kompleksitas",
+          "Kedalaman dan ukuran daun"
+        ],
+        [
+          "Pemilihan",
+          "CV pada train, bukan lomba skor test"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds17_ensemble.py",
+        "filename": "ds17_ensemble.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split,KFold,cross_val_score\nfrom sklearn.tree import DecisionTreeRegressor\nfrom sklearn.ensemble import RandomForestRegressor\nfrom sklearn.dummy import DummyRegressor\nfrom sklearn.base import clone\nfrom sklearn.metrics import mean_absolute_error\nif __name__=='__main__':\n    X,y=make_regression(n_samples=140,n_features=4,n_informative=3,noise=5,random_state=42)\n    y=y+20*X[:,0]**2\n    a,b,c,d=train_test_split(X,y,test_size=.2,random_state=42)\n    calon={'baseline':DummyRegressor(strategy='median'),'tree':DecisionTreeRegressor(max_depth=3,random_state=42),\n           'forest':RandomForestRegressor(n_estimators=50,max_depth=5,min_samples_leaf=3,random_state=42,n_jobs=1)}\n    cv=KFold(n_splits=3,shuffle=True,random_state=42)\n    skor={n:-cross_val_score(m,a,c,cv=cv,scoring='neg_mean_absolute_error',n_jobs=1).mean() for n,m in calon.items()}\n    terbaik=min(skor,key=skor.get)\n    print('MAE CV:',{n:round(float(v),2) for n,v in skor.items()})\n    model=clone(calon[terbaik]).fit(a,c)\n    print('Terpilih dari CV:',terbaik)\n    print('MAE test akhir:',round(mean_absolute_error(d,model.predict(b)),2))\n",
+        "output": "MAE CV: {'baseline': 77.61, 'tree': 51.69, 'forest': 30.56}\nTerpilih dari CV: forest\nMAE test akhir: 18.05",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds17_ensemble.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan kandidat terpilih dengan MAE CV terkecil, bukan hasil test."
+    ],
+    "practice": [
+      "Ubah max_depth pada salinan kandidat dan amati trade-off validasi.",
+      "Bandingkan kebutuhan waktu/ukuran model tanpa menganggap angka benchmark satu mesin sebagai hukum umum."
+    ],
+    "warning": "Jangan memilih algoritma karena namanya lebih canggih. Data, validasi, baseline, serta biaya operasi menentukan keputusan yang masuk akal.",
+    "check": "Mengapa model di-fit ulang pada seluruh train setelah dipilih dari CV?",
+    "answer": "Konfigurasi sudah dipilih pada proses validation. Fit ulang memanfaatkan data pengembangan untuk model akhir sebelum test yang terpisah diperiksa.",
+    "source": "https://scikit-learn.org/stable/modules/ensemble.html#forest",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "ds-learning-curve",
+    "title": "Learning curve: membaca error latihan dan validasi",
+    "summary": "Bandingkan kinerja saat jumlah data latihan berubah untuk menilai masalah generalisasi.",
+    "analogy": "Murid yang menghafal latihan belum tentu menguasai soal baru; bandingkan keduanya pada ukuran latihan yang berbeda.",
+    "explain": [
+      "Learning curve mengukur skor train dan validation pada beberapa ukuran bagian train. Contoh memakai decision tree tanpa batas kedalaman pada data sintetis, tiga fold, serta ukuran 30%, 60%, dan 100% dari bagian train per fold.",
+      "Pohon dapat mencapai MAE train nol sambil tetap mempunyai error validation cukup besar. Selisih ini membantu mengenali kecenderungan overfitting, tetapi bukan diagnosis tunggal yang cukup untuk seluruh masalah model.",
+      "Pada ilustrasi, validation error turun saat data bertambah. Kurva tidak selalu monoton; pemilihan sampel, noise, dan variasi fold dapat menghasilkan perubahan naik-turun. Tambahkan interpretasi variasi serta kebutuhan data domain pada analisis sebenarnya.",
+      "Learning curve merupakan alat pengembangan. Gunakan hasilnya untuk merencanakan pengumpulan data, pembatasan kompleksitas, atau perbaikan fitur melalui validation. Jangan mengubah model berulang dari test akhir lalu menganggap evaluasinya masih independen."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Ukuran train",
+          "Jumlah observasi latihan per fold"
+        ],
+        [
+          "Error train",
+          "Kecocokan pada data latihan"
+        ],
+        [
+          "Error validation",
+          "Kemampuan pada bagian terpisah"
+        ],
+        [
+          "Gap",
+          "Petunjuk generalisasi yang perlu konteks"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds19_learning_curve.py",
+        "filename": "ds19_learning_curve.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.datasets import make_regression\nfrom sklearn.model_selection import KFold,learning_curve\nfrom sklearn.tree import DecisionTreeRegressor\nif __name__=='__main__':\n    X,y=make_regression(n_samples=120,n_features=4,noise=15,random_state=42)\n    ukuran,train,val=learning_curve(DecisionTreeRegressor(random_state=42),X,y,\n        cv=KFold(n_splits=3,shuffle=True,random_state=42),train_sizes=[.3,.6,1.],\n        scoring='neg_mean_absolute_error',shuffle=True,random_state=42,n_jobs=1)\n    print('Ukuran train per fold:',ukuran.tolist())\n    print('MAE train:',np.round(np.abs(train.mean(axis=1)),2).tolist())\n    print('MAE validasi:',np.round(-val.mean(axis=1),2).tolist())\n",
+        "output": "Ukuran train per fold: [24, 48, 80]\nMAE train: [0.0, 0.0, 0.0]\nMAE validasi: [44.45, 40.68, 38.28]",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds19_learning_curve.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan ukuran 24, 48, dan 80 dengan bagian train tiap fold."
+    ],
+    "practice": [
+      "Batasi max_depth menjadi tiga dan bandingkan gap train/validation.",
+      "Jelaskan mengapa menambah data belum tentu menyelesaikan fitur yang membocorkan target."
+    ],
+    "warning": "Error train nol bukan tanda model siap dipakai. Evaluasi data terpisah serta skenario penggunaan tetap diperlukan.",
+    "check": "Mengapa MAE train nol dapat berdampingan dengan error validation besar?",
+    "answer": "Model dapat menghafal contoh latihan tanpa menangkap pola yang cukup stabil untuk observasi baru.",
+    "source": "https://scikit-learn.org/stable/modules/learning_curve.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "ds-interpretasi-model",
+    "title": "Permutation importance: fitur penting bagi model, bukan penyebab",
+    "summary": "Ukur perubahan skor saat satu fitur diacak dan baca keterbatasan interpretasinya.",
+    "analogy": "Jika satu petunjuk diacak lalu tebakan memburuk, model mungkin bergantung pada petunjuk itu; hal tersebut belum membuktikan petunjuk menyebabkan kejadian.",
+    "explain": [
+      "Permutation importance mengacak satu kolom lalu membandingkan skor dengan keadaan awal pada dataset evaluasi. Penurunan skor menggambarkan ketergantungan model pada fitur tersebut untuk data dan metrik yang dipilih.",
+      "Contoh memakai data sintetis dengan satu fitur informatif dan dua fitur tambahan. Model fit pada train, sedangkan importance dihitung pada validation terpisah. Data ini digunakan untuk pemeriksaan pengembangan, bukan diklaim sebagai test akhir yang tidak pernah disentuh.",
+      "N_repeats membantu melihat variasi karena pengacakan. Dengan scorer negatif MAE, penurunan skor positif berarti error memburuk ketika fitur diacak. Nilai kecil atau negatif tidak otomatis membuktikan fitur tidak pernah berguna; variasi, kualitas model, dan korelasi antar fitur memengaruhinya.",
+      "Fitur berkorelasi dapat saling menggantikan sehingga importance individual terlihat kecil. Importance bukan koefisien sebab-akibat dan tidak memberi izin mengubah variabel operasional untuk mengejar hasil tertentu tanpa rancangan kausal yang sesuai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Permutation",
+          "Mengacak satu kolom pada data evaluasi"
+        ],
+        [
+          "Penurunan skor",
+          "Ketergantungan model terhadap fitur"
+        ],
+        [
+          "n_repeats",
+          "Mengukur variasi pengacakan"
+        ],
+        [
+          "Keterbatasan",
+          "Korelasi, kualitas model, dan konteks data"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds18_importance.py",
+        "filename": "ds18_importance.py",
+        "language": "python",
+        "code": "from sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestRegressor\nfrom sklearn.inspection import permutation_importance\ndef ukur():\n    X,y=make_regression(n_samples=120,n_features=3,n_informative=1,shuffle=False,noise=5,random_state=42)\n    a,b,c,d=train_test_split(X,y,test_size=.25,random_state=42)\n    model=RandomForestRegressor(n_estimators=50,min_samples_leaf=2,random_state=42,n_jobs=1).fit(a,c)\n    return permutation_importance(model,b,d,n_repeats=5,random_state=42,scoring='neg_mean_absolute_error',n_jobs=1)\nif __name__=='__main__':\n    hasil=ukur()\n    print('Penurunan skor mean:',[round(float(v),2) for v in hasil.importances_mean])\n    print('Fitur teratas:',int(hasil.importances_mean.argmax()))\n    print('Importance bukan bukti sebab-akibat.')\n",
+        "output": "Penurunan skor mean: [61.86, 0.12, 0.1]\nFitur teratas: 0\nImportance bukan bukti sebab-akibat.",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds18_importance.py lalu cocokkan hasilnya dengan contoh.",
+      "Temukan fitur nol sebagai sumber informasi yang dibuat oleh generator."
+    ],
+    "practice": [
+      "Naikkan noise atau tambahkan fitur yang berkorelasi lalu bandingkan interpretasinya.",
+      "Tuliskan perbedaan kalimat fitur penting bagi model dengan fitur menyebabkan gangguan."
+    ],
+    "warning": "Interpretasi model yang tidak cukup baik dapat menyesatkan. Periksa mutu prediksi dan data evaluasi sebelum memberi makna pada ranking fitur.",
+    "check": "Apakah importance tinggi membuktikan fitur menyebabkan target?",
+    "answer": "Tidak. Ia menjelaskan ketergantungan prediksi model pada data tertentu, bukan efek intervensi terhadap kejadian nyata.",
+    "source": "https://scikit-learn.org/stable/modules/permutation_importance.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "ds-clustering",
     "title": "Clustering dan scaling: kelompok tanpa label jawaban",
     "summary": "Gunakan KMeans pada data sintetis sambil memahami skala dan arti label kelompok.",
@@ -638,6 +1079,69 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 30
+  },
+  {
+    "slug": "ds-monitoring-drift",
+    "title": "Monitoring model dan perubahan distribusi data",
+    "summary": "Pisahkan data drift, missing, dan kinerja prediksi sebelum memutuskan pembaruan model.",
+    "analogy": "Perubahan bahan baku perlu diperiksa sebelum menyimpulkan mesin rusak atau langsung mengganti resep.",
+    "explain": [
+      "Distribusi fitur dapat berubah setelah model digunakan. Monitoring perlu mencatat kontrak input, missing, rentang, serta komposisi data. Jika label aktual tersedia dengan jeda, kinerja prediksi juga perlu dinilai setelah label matang dan dapat dihubungkan dengan prediksi yang tepat.",
+      "Contoh membandingkan histogram beban 0..100 dengan batas bin tetap [0,25,50,100]. Jarak dihitung sebagai setengah jumlah selisih absolut proporsi bin, bernilai 0 sampai 1. Ini ringkasan total variation pada histogram yang dipilih, bukan uji universal seluruh distribusi.",
+      "Missing dibandingkan terpisah agar peningkatan data hilang tidak tersembunyi oleh histogram nilai valid. Contoh menolak nilai di luar kontrak daripada membuangnya diam-diam. Pemilihan bin dan ukuran sampel memengaruhi sensitivitas ringkasan.",
+      "Perubahan fitur tidak otomatis berarti accuracy menurun; tanpa label baru, klaim itu belum dapat dibuktikan. Tetapkan proses pemeriksaan, baseline monitoring, aturan alarm, dan evaluasi model baru sebelum rilis. Jangan melatih ulang otomatis hanya karena satu indikator melewati angka contoh."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Data drift",
+          "Perubahan distribusi masukan"
+        ],
+        [
+          "Missing rate",
+          "Proporsi masukan yang tidak tersedia"
+        ],
+        [
+          "Jarak histogram",
+          "Ringkasan berdasarkan bin tetap"
+        ],
+        [
+          "Kinerja model",
+          "Memerlukan label dan evaluasi yang sesuai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds20_drift.py",
+        "filename": "ds20_drift.py",
+        "language": "python",
+        "code": "import numpy as np\ndef profil(nilai):\n    data=np.asarray(nilai,dtype=float)\n    if data.ndim!=1 or not len(data):raise ValueError('Butuh array satu dimensi tidak kosong.')\n    valid=data[~np.isnan(data)]\n    if not len(valid) or not np.isfinite(valid).all() or (valid<0).any() or (valid>100).any():\n        raise ValueError('Beban valid berada pada 0..100 dan minimal satu nilai tersedia.')\n    count,_=np.histogram(valid,bins=[0,25,50,100])\n    return count/count.sum(),float(np.isnan(data).mean())\ndef bandingkan(acuan,baru):\n    a,ma=profil(acuan);b,mb=profil(baru)\n    return float(np.abs(a-b).sum()/2),ma,mb\nif __name__=='__main__':\n    jarak,lama,baru=bandingkan([10,20,30,40,50,np.nan],[60,70,80,90,np.nan,np.nan])\n    print('Jarak distribusi histogram:',round(jarak,3))\n    print('Missing acuan/baru:',round(lama,3),round(baru,3))\n    print('Tanpa label baru, penurunan akurasi belum dapat disimpulkan.')\n",
+        "output": "Jarak distribusi histogram: 0.8\nMissing acuan/baru: 0.167 0.333\nTanpa label baru, penurunan akurasi belum dapat disimpulkan.",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python ds20_drift.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan perubahan proporsi bin serta missing acuan dan data baru."
+    ],
+    "practice": [
+      "Bandingkan dataset dengan dirinya sendiri dan pastikan jaraknya nol.",
+      "Rancang catatan prediksi yang dapat dipasangkan dengan label aktual tanpa menyimpan identitas yang tidak diperlukan."
+    ],
+    "warning": "Angka 0,8 pada contoh bukan ambang alarm universal. Monitoring dan retraining memerlukan kebijakan domain, ukuran sampel, serta verifikasi kinerja.",
+    "check": "Mengapa drift fitur saja belum membuktikan accuracy menurun?",
+    "answer": "Distribusi input berubah belum menunjukkan apakah prediksi terhadap target menjadi salah. Label baru diperlukan untuk menilai kinerja tersebut.",
+    "source": "https://numpy.org/doc/stable/reference/generated/numpy.histogram.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   },
   {
     "slug": "ds-kasus-durasi",

@@ -9544,5 +9544,677 @@
       "answer": 0,
       "explanation": "Kelayakan operasi memerlukan validasi dan pengelolaan tersendiri."
     }
+  ],
+  "da-teks-kategori": [
+    {
+      "question": "Strip membersihkan ...",
+      "options": [
+        "Spasi pada tepi teks",
+        "Semua makna kategori",
+        "Semua missing"
+      ],
+      "answer": 0,
+      "explanation": "Strip tidak menggantikan kamus alias."
+    },
+    {
+      "question": "Kategori belum dikenal berarti ...",
+      "options": [
+        "Selalu sama dengan missing",
+        "Ada nilai sumber tetapi tidak terpetakan",
+        "Pasti Surabaya"
+      ],
+      "answer": 1,
+      "explanation": "Kelengkapan dan kosakata merupakan masalah berbeda."
+    },
+    {
+      "question": "Alias sebaiknya berasal dari ...",
+      "options": [
+        "Tebakan kategori terpopuler",
+        "Nomor baris",
+        "Kamus yang disepakati"
+      ],
+      "answer": 2,
+      "explanation": "Pemetaan harus dapat ditelusuri."
+    },
+    {
+      "question": "Casefold wajib diterapkan pada semua ID?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Hanya saat CSV besar"
+      ],
+      "answer": 0,
+      "explanation": "Kepekaan huruf mengikuti kontrak identitas."
+    }
+  ],
+  "da-reshape-pivot": [
+    {
+      "question": "Melt mengubah kolom pengukuran menjadi ...",
+      "options": [
+        "Baris bentuk long",
+        "Akun pengguna",
+        "SQL index"
+      ],
+      "answer": 0,
+      "explanation": "Id_vars tetap menjaga identitas observasi."
+    },
+    {
+      "question": "Pivot memerlukan ...",
+      "options": [
+        "Semua key ganda",
+        "Keunikan pasangan key keluaran",
+        "Semua angka nol"
+      ],
+      "answer": 1,
+      "explanation": "Setiap sel harus menunjuk satu nilai."
+    },
+    {
+      "question": "Aggfunc pada pivot_table sebaiknya ...",
+      "options": [
+        "Selalu mean tanpa memeriksa",
+        "Dipilih berdasarkan warna",
+        "Dipilih sesuai makna data"
+      ],
+      "answer": 2,
+      "explanation": "Agregasi mengubah interpretasi hasil."
+    },
+    {
+      "question": "Sel kosong hasil reshape otomatis berarti nol?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika memakai pandas"
+      ],
+      "answer": 0,
+      "explanation": "Tidak ada pengukuran berbeda dari nilai nol."
+    }
+  ],
+  "da-sql-pandas": [
+    {
+      "question": "Params digunakan untuk ...",
+      "options": [
+        "Nilai query",
+        "Nama tabel sembarang",
+        "Seluruh potongan SQL mentah"
+      ],
+      "answer": 0,
+      "explanation": "Nilai tidak dirangkai langsung ke struktur SQL."
+    },
+    {
+      "question": "Placeholder ? pada contoh mengikuti ...",
+      "options": [
+        "Semua database tanpa perbedaan",
+        "Driver SQLite",
+        "Nama kolom pandas"
+      ],
+      "answer": 1,
+      "explanation": "Sintaks parameter dapat berbeda antar driver."
+    },
+    {
+      "question": "Closing pada koneksi berfungsi ...",
+      "options": [
+        "Membuat backup otomatis",
+        "Menghapus semua transaksi",
+        "Menutup sumber daya setelah selesai"
+      ],
+      "answer": 2,
+      "explanation": "Siklus hidup koneksi perlu jelas."
+    },
+    {
+      "question": "Untuk mengurangi data yang dipindahkan, dapat ...",
+      "options": [
+        "Memfilter dan mengagregasi di SQL",
+        "Selalu SELECT semua tabel",
+        "Menyalin secret ke CSV"
+      ],
+      "answer": 0,
+      "explanation": "Ambil data sesuai kebutuhan analisis."
+    }
+  ],
+  "da-excel-workbook": [
+    {
+      "question": "Engine .xlsx yang dipakai contoh adalah ...",
+      "options": [
+        "openpyxl",
+        "SQLite",
+        "FastAPI"
+      ],
+      "answer": 0,
+      "explanation": "Dependensinya disediakan dalam paket latihan."
+    },
+    {
+      "question": "Sheet sebaiknya dipilih melalui ...",
+      "options": [
+        "Tebakan urutan selalu",
+        "Nama yang dinyatakan",
+        "Warna tab saja"
+      ],
+      "answer": 1,
+      "explanation": "Nama eksplisit memperjelas sumber tabel."
+    },
+    {
+      "question": "Format angka 000 sama dengan ID teks 001?",
+      "options": [
+        "Selalu",
+        "Jika diwarnai",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Format tampilan tidak sama dengan tipe serta nilai tersimpan."
+    },
+    {
+      "question": "BytesIO membantu contoh ...",
+      "options": [
+        "Berjalan dengan workbook dalam memori",
+        "Mengakses akun pengguna",
+        "Menyimpan password"
+      ],
+      "answer": 0,
+      "explanation": "Tidak ada dokumen pengguna yang diperlukan."
+    }
+  ],
+  "da-window-tren": [
+    {
+      "question": "Window=3 selalu berarti tiga hari?",
+      "options": [
+        "Tidak, berarti tiga observasi",
+        "Selalu",
+        "Jika nilai numeric"
+      ],
+      "answer": 0,
+      "explanation": "Jendela jumlah baris berbeda dari interval waktu."
+    },
+    {
+      "question": "Shift(1) membantu memakai ...",
+      "options": [
+        "Target masa depan otomatis",
+        "Observasi sebelumnya",
+        "Semua perangkat sekaligus"
+      ],
+      "answer": 1,
+      "explanation": "Ketersediaan informasi perlu sesuai waktu prediksi."
+    },
+    {
+      "question": "Min_periods menentukan ...",
+      "options": [
+        "Jumlah model",
+        "Jumlah sheet",
+        "Minimum observasi untuk hasil"
+      ],
+      "answer": 2,
+      "explanation": "Riwayat yang belum cukup tetap missing."
+    },
+    {
+      "question": "Rolling per perangkat perlu ...",
+      "options": [
+        "Pemisahan kelompok dan urutan waktu",
+        "Mencampur semua perangkat",
+        "Menghapus timestamp"
+      ],
+      "answer": 0,
+      "explanation": "Batas kelompok menjaga makna pengamatan."
+    }
+  ],
+  "da-outlier-iqr": [
+    {
+      "question": "IQR dihitung sebagai ...",
+      "options": [
+        "Q3 dikurangi Q1",
+        "Mean ditambah median",
+        "Nilai maksimum saja"
+      ],
+      "answer": 0,
+      "explanation": "IQR mengukur rentang tengah distribusi."
+    },
+    {
+      "question": "Nilai outlier sebaiknya ...",
+      "options": [
+        "Selalu dihapus",
+        "Ditinjau bersama konteks",
+        "Selalu diubah menjadi mean"
+      ],
+      "answer": 1,
+      "explanation": "Penandaan bukan bukti kesalahan."
+    },
+    {
+      "question": "Data kecil membuat kuartil ...",
+      "options": [
+        "Selalu tepat untuk populasi",
+        "Tidak perlu metode",
+        "Dapat berubah cukup banyak oleh satu nilai"
+      ],
+      "answer": 2,
+      "explanation": "Ketidakstabilan ringkasan perlu dipahami."
+    },
+    {
+      "question": "Aturan outlier untuk model dipelajari dari ...",
+      "options": [
+        "Train sesuai proses validasi",
+        "Semua test akhir dahulu",
+        "Target masa depan"
+      ],
+      "answer": 0,
+      "explanation": "Batas pemodelan tetap harus mencegah leakage."
+    }
+  ],
+  "da-kontrak-kualitas": [
+    {
+      "question": "Kontrak data menjelaskan ...",
+      "options": [
+        "Syarat kolom, nilai, satuan, dan identitas",
+        "Warna semua grafik",
+        "Nama akun browser"
+      ],
+      "answer": 0,
+      "explanation": "Aturan perlu dinyatakan sebelum pemeriksaan."
+    },
+    {
+      "question": "RTT missing saat down pada contoh ...",
+      "options": [
+        "Selalu kesalahan",
+        "Diizinkan sesuai kebijakan latihan",
+        "Selalu RTT nol"
+      ],
+      "answer": 1,
+      "explanation": "Aturan dapat bergantung pada status."
+    },
+    {
+      "question": "Counter pelanggaran boleh langsung dijumlah menjadi baris rusak?",
+      "options": [
+        "Selalu",
+        "Jika jumlahnya kecil",
+        "Tidak selalu karena dapat tumpang tindih"
+      ],
+      "answer": 2,
+      "explanation": "Satu baris bisa melanggar beberapa aturan."
+    },
+    {
+      "question": "Profil kualitas mengubah sumber?",
+      "options": [
+        "Tidak pada contoh ini",
+        "Selalu menghapus baris",
+        "Selalu menimpa ID"
+      ],
+      "answer": 0,
+      "explanation": "Pemeriksaan dipisahkan dari keputusan perbaikan."
+    }
+  ],
+  "da-cohort-retensi": [
+    {
+      "question": "Penyebut retensi contoh adalah ...",
+      "options": [
+        "Jumlah user pada cohort awal",
+        "Jumlah event seluruh cohort",
+        "Jumlah warna heatmap"
+      ],
+      "answer": 0,
+      "explanation": "Penyebut tetap menjaga perbandingan antar umur."
+    },
+    {
+      "question": "Event ganda user-bulan sebaiknya ...",
+      "options": [
+        "Selalu menambah retensi",
+        "Dihitung satu user aktif",
+        "Menjadi user baru"
+      ],
+      "answer": 1,
+      "explanation": "Retensi menggunakan user unik, bukan jumlah event."
+    },
+    {
+      "question": "Periode masa depan yang belum teramati diisi ...",
+      "options": [
+        "Nol otomatis",
+        "Seratus persen otomatis",
+        "Missing dengan keterangan"
+      ],
+      "answer": 2,
+      "explanation": "Belum teramati berbeda dari aktivitas nol."
+    },
+    {
+      "question": "Join aktivitas ke master user sebaiknya memeriksa ...",
+      "options": [
+        "Keunikan serta kecocokan ID",
+        "Warna kota",
+        "Ukuran font"
+      ],
+      "answer": 0,
+      "explanation": "Relasi yang salah dapat merusak penyebut dan hitungan."
+    }
+  ],
+  "ds-uji-hipotesis": [
+    {
+      "question": "P-value adalah ...",
+      "options": [
+        "Ukuran keekstreman menurut model nol",
+        "Peluang hipotesis nol benar",
+        "Ukuran keuntungan bisnis"
+      ],
+      "answer": 0,
+      "explanation": "Penafsiran bergantung model serta asumsi pengujian."
+    },
+    {
+      "question": "Permutation test independen membutuhkan ...",
+      "options": [
+        "Semua data diacak tanpa konteks",
+        "Desain yang mendukung pertukaran label",
+        "Korelasi sempurna"
+      ],
+      "answer": 1,
+      "explanation": "Asumsi tidak otomatis dipenuhi oleh dua kolom angka."
+    },
+    {
+      "question": "Ukuran efek perlu dilaporkan karena ...",
+      "options": [
+        "Semua p-value sama",
+        "Semua efek bersifat kausal",
+        "Penting secara praktis berbeda dari p-value"
+      ],
+      "answer": 2,
+      "explanation": "Besaran dan ketidakpastian memberi konteks hasil."
+    },
+    {
+      "question": "Banyak mencoba uji lalu hanya memilih hasil menarik dapat ...",
+      "options": [
+        "Membiasakan kesimpulan",
+        "Menjamin kebenaran",
+        "Menghapus kebutuhan rencana"
+      ],
+      "answer": 0,
+      "explanation": "Proses pemilihan analisis ikut memengaruhi interpretasi."
+    }
+  ],
+  "ds-split-waktu-group": [
+    {
+      "question": "GroupKFold melindungi pemisahan ...",
+      "options": [
+        "Identitas kelompok",
+        "Urutan warna",
+        "Semua waktu otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Group yang sama tidak berada pada kedua sisi fold."
+    },
+    {
+      "question": "Sebelum TimeSeriesSplit, data harus ...",
+      "options": [
+        "Selalu diacak",
+        "Diurutkan sesuai waktu",
+        "Dihapus timestamp-nya"
+      ],
+      "answer": 1,
+      "explanation": "Splitter memakai urutan baris yang diberikan."
+    },
+    {
+      "question": "Gap=1 berarti ...",
+      "options": [
+        "Satu jam selalu",
+        "Tidak ada kebocoran apa pun",
+        "Satu observasi dipisahkan pada batas"
+      ],
+      "answer": 2,
+      "explanation": "Jarak observasi perlu ditafsirkan sesuai jadwal data."
+    },
+    {
+      "question": "Evaluasi entitas baru dan masa depan ...",
+      "options": [
+        "Dapat membutuhkan rancangan berbeda",
+        "Selalu identik",
+        "Cukup dengan seed tetap"
+      ],
+      "answer": 0,
+      "explanation": "Tujuan penggunaan menentukan pembagian."
+    }
+  ],
+  "ds-kelas-imbalance": [
+    {
+      "question": "Average precision merangkum ...",
+      "options": [
+        "Ranking precision–recall",
+        "Precision satu ambang saja",
+        "Accuracy semua kelompok"
+      ],
+      "answer": 0,
+      "explanation": "AP berbeda dari metrik label pada ambang tetap."
+    },
+    {
+      "question": "Ambang dipilih dari ...",
+      "options": [
+        "Test akhir berulang",
+        "Validation",
+        "Nama file"
+      ],
+      "answer": 1,
+      "explanation": "Aturan keputusan tidak dipilih dari hasil akhir."
+    },
+    {
+      "question": "Resampling seharusnya dilakukan ...",
+      "options": [
+        "Sebelum split seluruh data",
+        "Pada test agar skor tinggi",
+        "Di dalam proses latihan tiap fold yang relevan"
+      ],
+      "answer": 2,
+      "explanation": "Data sintetis atau duplikat tidak boleh bocor ke validation."
+    },
+    {
+      "question": "Accuracy saja cukup pada kejadian langka?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika modelnya besar"
+      ],
+      "answer": 0,
+      "explanation": "Periksa jenis kesalahan serta prevalence."
+    }
+  ],
+  "ds-feature-engineering": [
+    {
+      "question": "Feature engineering sebaiknya memakai ...",
+      "options": [
+        "Informasi tersedia saat prediksi",
+        "Hasil akhir masa depan",
+        "Label test"
+      ],
+      "answer": 0,
+      "explanation": "Ketersediaan waktu menentukan validitas fitur."
+    },
+    {
+      "question": "FunctionTransformer membantu ...",
+      "options": [
+        "Membuktikan sebab-akibat",
+        "Menempatkan transformasi dalam Pipeline",
+        "Menghapus kebutuhan validasi"
+      ],
+      "answer": 1,
+      "explanation": "Urutan transformasi menjadi bagian proses model."
+    },
+    {
+      "question": "Rasio dengan teknisi nol seharusnya ...",
+      "options": [
+        "Dihitung tanpa pemeriksaan",
+        "Dianggap selalu nol",
+        "Ditolak atau ditangani sesuai aturan eksplisit"
+      ],
+      "answer": 2,
+      "explanation": "Penyebut harus mempunyai makna yang sah."
+    },
+    {
+      "question": "Fitur tambahan pasti menaikkan kinerja?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika namanya panjang"
+      ],
+      "answer": 0,
+      "explanation": "Manfaat harus diuji melalui validation."
+    }
+  ],
+  "ds-pohon-ensemble": [
+    {
+      "question": "Decision tree yang sangat dalam berisiko ...",
+      "options": [
+        "Overfitting",
+        "Tidak pernah belajar",
+        "Selalu paling akurat"
+      ],
+      "answer": 0,
+      "explanation": "Kompleksitas perlu dikendalikan dan dievaluasi."
+    },
+    {
+      "question": "Random forest menggabungkan ...",
+      "options": [
+        "Banyak tabel SQL selalu",
+        "Banyak pohon",
+        "Semua label test"
+      ],
+      "answer": 1,
+      "explanation": "Variasi pohon membantu ensemble."
+    },
+    {
+      "question": "Pemilihan kandidat dilakukan dari ...",
+      "options": [
+        "Test akhir berulang",
+        "Jumlah huruf model",
+        "Skor CV pada train"
+      ],
+      "answer": 2,
+      "explanation": "Test disimpan sampai keputusan dipilih."
+    },
+    {
+      "question": "Forest pasti mengalahkan baseline?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika n_estimators positif"
+      ],
+      "answer": 0,
+      "explanation": "Keunggulan perlu dibuktikan pada evaluasi yang benar."
+    }
+  ],
+  "ds-interpretasi-model": [
+    {
+      "question": "Permutation importance bekerja dengan ...",
+      "options": [
+        "Mengacak fitur dan mengukur perubahan skor",
+        "Mengubah target menjadi fitur",
+        "Membaca pikiran model"
+      ],
+      "answer": 0,
+      "explanation": "Maknanya bergantung model, data, dan metrik."
+    },
+    {
+      "question": "N_repeats membantu melihat ...",
+      "options": [
+        "Jumlah user",
+        "Variasi hasil pengacakan",
+        "Jumlah sheet Excel"
+      ],
+      "answer": 1,
+      "explanation": "Satu hasil acak belum menunjukkan kestabilan."
+    },
+    {
+      "question": "Fitur berkorelasi dapat membuat importance individual ...",
+      "options": [
+        "Pasti bernilai satu",
+        "Selalu kausal",
+        "Sulit ditafsirkan karena saling menggantikan"
+      ],
+      "answer": 2,
+      "explanation": "Pengaruh bersama tidak selalu terlihat pada pengacakan satu kolom."
+    },
+    {
+      "question": "Importance adalah bukti sebab-akibat?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika ranking pertama"
+      ],
+      "answer": 0,
+      "explanation": "Prediksi dan kausalitas merupakan pertanyaan berbeda."
+    }
+  ],
+  "ds-learning-curve": [
+    {
+      "question": "Learning curve membandingkan skor menurut ...",
+      "options": [
+        "Ukuran data latihan",
+        "Warna plot",
+        "Panjang nama file"
+      ],
+      "answer": 0,
+      "explanation": "Bagian validation tetap dipisahkan dalam fold."
+    },
+    {
+      "question": "Train error nol membuktikan generalisasi baik?",
+      "options": [
+        "Selalu",
+        "Tidak",
+        "Jika modelnya tree"
+      ],
+      "answer": 1,
+      "explanation": "Hafalan dan kemampuan pada data baru berbeda."
+    },
+    {
+      "question": "Kurva validation selalu turun monoton?",
+      "options": [
+        "Selalu",
+        "Hanya jika seed tetap",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Variasi sampel serta noise dapat mengubah bentuk kurva."
+    },
+    {
+      "question": "Hasil learning curve dipakai terutama untuk ...",
+      "options": [
+        "Keputusan pengembangan",
+        "Mengubah test menjadi train diam-diam",
+        "Menjamin kinerja produksi"
+      ],
+      "answer": 0,
+      "explanation": "Rencana perbaikan tetap perlu validasi."
+    }
+  ],
+  "ds-monitoring-drift": [
+    {
+      "question": "Data drift berarti ...",
+      "options": [
+        "Distribusi masukan berubah",
+        "Accuracy pasti turun",
+        "Semua label salah"
+      ],
+      "answer": 0,
+      "explanation": "Perubahan masukan dan kinerja adalah hal berbeda."
+    },
+    {
+      "question": "Missing dilaporkan terpisah karena ...",
+      "options": [
+        "Semua missing sama dengan nol",
+        "Histogram nilai valid dapat menyembunyikannya",
+        "Bin otomatis menghitung semua missing"
+      ],
+      "answer": 1,
+      "explanation": "Kelengkapan input harus tetap terlihat."
+    },
+    {
+      "question": "Menilai accuracy baru membutuhkan ...",
+      "options": [
+        "Warna dashboard",
+        "Ukuran model saja",
+        "Label aktual yang sesuai"
+      ],
+      "answer": 2,
+      "explanation": "Tanpa target aktual, kesalahan belum dapat dihitung."
+    },
+    {
+      "question": "Drift seharusnya langsung memicu retraining tanpa pemeriksaan?",
+      "options": [
+        "Tidak",
+        "Selalu",
+        "Jika jaraknya positif"
+      ],
+      "answer": 0,
+      "explanation": "Evaluasi serta proses rilis tetap diperlukan."
+    }
   ]
 }

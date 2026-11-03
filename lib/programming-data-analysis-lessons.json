@@ -256,6 +256,195 @@
     "minutes": 30
   },
   {
+    "slug": "da-teks-kategori",
+    "title": "Membersihkan teks dan kategori tanpa kehilangan makna",
+    "summary": "Normalisasi Unicode, spasi, alias, serta pemisahan kategori kosong dan belum dikenal.",
+    "analogy": "Alamat kota dapat ditulis dengan singkatan berbeda; kamus membantu menyamakan alamat tanpa menebak kota yang belum dikenal.",
+    "explain": [
+      "Teks kategori sering berbeda karena spasi, kapitalisasi, Unicode, atau singkatan. Contoh menggunakan dtype string pandas, normalisasi NFKC, strip, dan casefold untuk nama kota latihan. Aturan ini hanya diterapkan pada kolom kategori yang disepakati, bukan otomatis pada semua nama atau kode identitas.",
+      "Kamus alias memetakan sby dan surabaya ke label surabaya. Nilai yang tidak ada di kamus dicatat sebagai belum dikenal. Nilai kosong dipisahkan dari kategori asing agar masalah kelengkapan dan masalah kosakata tidak tercampur.",
+      "Jangan mengubah missing menjadi string biasa seperti \"nan\" melalui konversi yang tidak tepat. StringDtype mempertahankan penanda missing. Hasil mapping yang kosong bisa berarti sumber missing atau kategori tidak dikenal, sehingga status sumber tetap perlu diperiksa.",
+      "Simpan aturan dan versi kamus pada proses analisis. Kamus yang berubah dapat mengubah perbandingan laporan antar periode. Normalisasi membantu konsistensi, tetapi penggabungan kategori yang keliru dapat menghilangkan perbedaan bisnis penting."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "NFKC / strip",
+          "Normalisasi bentuk Unicode / spasi tepi"
+        ],
+        [
+          "casefold",
+          "Penyamaan huruf untuk kategori yang memang tidak peka kapital"
+        ],
+        [
+          "Alias",
+          "Pemetaan yang dinyatakan melalui kamus"
+        ],
+        [
+          "Missing / asing",
+          "Tidak ada nilai / ada nilai tetapi belum dikenali"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da13_teks.py",
+        "filename": "da13_teks.py",
+        "language": "python",
+        "code": "import pandas as pd\ndef normalisasi_kota(nilai):\n    asal=pd.Series(nilai,dtype='string')\n    bersih=asal.str.normalize('NFKC').str.strip().str.casefold()\n    bersih=bersih.mask(bersih.eq(''),pd.NA)\n    kamus={'sby':'surabaya','surabaya':'surabaya','malang':'malang'}\n    kota=bersih.map(kamus).astype('string')\n    belum_dikenal=bersih.notna() & kota.isna()\n    return kota,bersih.loc[belum_dikenal].tolist(),int(bersih.isna().sum())\nif __name__=='__main__':\n    kota,asing,kosong=normalisasi_kota([' Surabaya ','SBY','MALANG',None,'Kota Baru'])\n    print('Surabaya:',int(kota.eq('surabaya').sum()))\n    print('Belum dikenal:',asing)\n    print('Kosong:',kosong)\n",
+        "output": "Surabaya: 2\nBelum dikenal: ['kota baru']\nKosong: 1",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da13_teks.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan dua nilai Surabaya serta kategori kota baru yang dicatat terpisah."
+    ],
+    "practice": [
+      "Tambahkan alias yang sudah disepakati tanpa mengubah kategori asing secara acak.",
+      "Coba string kosong dan spasi; pastikan tidak dihitung sebagai nama kota baru."
+    ],
+    "warning": "Normalisasi bukan izin mengubah identitas sembarangan. Simpan sumber dan jangan menggabungkan kode yang artinya berbeda hanya karena bentuknya mirip.",
+    "check": "Mengapa kategori asing tidak langsung diisi nama kota yang paling sering muncul?",
+    "answer": "Pengisian itu akan mengarang informasi dan membiasakan hasil. Catat kategori asing untuk peninjauan atau pembaruan kamus yang sah.",
+    "source": "https://pandas.pydata.org/docs/user_guide/text.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "da-kontrak-kualitas",
+    "title": "Kontrak data dan laporan kualitas yang dapat diuji",
+    "summary": "Nyatakan kolom, aturan, serta jumlah pelanggaran tanpa menyembunyikannya dalam satu skor.",
+    "analogy": "Kontrak penerimaan menjelaskan syarat barang; laporan pemeriksaan menunjukkan aturan mana yang belum terpenuhi.",
+    "explain": [
+      "Kontrak data menyatakan kolom wajib, identitas, tipe, satuan, nilai yang diizinkan, dan aturan bersyarat. Contoh monitoring memerlukan ID, status up/down, serta RTT; RTT wajib tersedia saat up, tetapi boleh missing saat down sesuai kebijakan latihan.",
+      "Profil kualitas menghitung pelanggaran per aturan: ID kosong, baris dengan ID ganda, status asing, RTT invalid, dan RTT yang wajib tetapi kosong. Baris ID ganda menghitung baris yang terlibat, bukan jumlah key unik yang ganda.",
+      "Satu baris dapat melanggar lebih dari satu aturan, sehingga angka pelanggaran tidak boleh langsung dijumlahkan sebagai jumlah baris rusak. Hindari satu skor kualitas yang menghilangkan perbedaan masalah kritis dan masalah ringan.",
+      "Tetapkan tindakan untuk tiap aturan: hentikan proses, karantina, beri peringatan, atau teruskan dengan batas laporan. Profil tidak mengubah sumber. Otomatiskan pengujian kontrak agar perubahan format sumber terdeteksi sebelum hasil analisis dipakai."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Kontrak",
+          "Aturan data yang disepakati"
+        ],
+        [
+          "Bersyarat",
+          "Kewajiban nilai mengikuti keadaan"
+        ],
+        [
+          "Pelanggaran per aturan",
+          "Dapat tumpang tindih pada baris yang sama"
+        ],
+        [
+          "Tindakan",
+          "Stop, karantina, peringatan, atau lanjut terkontrol"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da19_kontrak.py",
+        "filename": "da19_kontrak.py",
+        "language": "python",
+        "code": "import numpy as np\nimport pandas as pd\ndef profil_kualitas(data):\n    if not {'id','status','rtt_ms'}<=set(data.columns):\n        raise ValueError('Kolom wajib: id, status, rtt_ms.')\n    identitas=data['id'].astype('string').str.strip()\n    rtt=pd.to_numeric(data['rtt_ms'],errors='coerce')\n    invalid=data['rtt_ms'].notna() & (rtt.isna() | ~np.isfinite(rtt) | (rtt<0))\n    return {'baris':len(data),\n            'id_kosong':int((identitas.isna()|identitas.eq('')).sum()),\n            'baris_id_ganda':int(identitas.duplicated(keep=False).sum()),\n            'status_asing':int((~data['status'].isin(['up','down'])).sum()),\n            'rtt_invalid':int(invalid.sum()),\n            'rtt_wajib_kosong':int((data['status'].eq('up') & data['rtt_ms'].isna()).sum())}\nif __name__=='__main__':\n    data=pd.DataFrame({'id':['A','B','B','C'],'status':['up','down','up','up'],'rtt_ms':[20,None,-3,None]})\n    for aturan,jumlah in profil_kualitas(data).items():print(aturan+':',jumlah)\n",
+        "output": "baris: 4\nid_kosong: 0\nbaris_id_ganda: 2\nstatus_asing: 0\nrtt_invalid: 1\nrtt_wajib_kosong: 1",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da19_kontrak.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan setiap counter dengan baris sumber yang memicunya."
+    ],
+    "practice": [
+      "Tambahkan aturan satuan atau batas wajar untuk RTT menurut kebutuhan latihan.",
+      "Tentukan pelanggaran mana yang harus menghentikan proses dan mana yang dapat ditinjau."
+    ],
+    "warning": "Lolos skema belum membuktikan semua fakta benar. Kontrak membantu mendeteksi masalah yang dinyatakan, bukan menggantikan pemahaman proses pengumpulan.",
+    "check": "Mengapa jumlah pelanggaran per aturan tidak sama dengan jumlah baris bermasalah?",
+    "answer": "Satu baris dapat mempunyai ID ganda sekaligus RTT invalid. Counter berbeda dapat merujuk baris yang sama.",
+    "source": "https://pandas.pydata.org/docs/user_guide/missing_data.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "da-outlier-iqr",
+    "title": "Outlier dengan IQR: tandai, periksa, jangan langsung hapus",
+    "summary": "Gunakan kuartil sebagai alat peninjauan sambil mempertahankan konteks dan data mentah.",
+    "analogy": "Lampu indikator memberi tahu ada sesuatu yang perlu diperiksa; ia tidak membuktikan bahwa barang harus dibuang.",
+    "explain": [
+      "IQR adalah selisih kuartil ketiga dan pertama. Aturan ilustrasi menandai nilai di bawah Q1−1,5×IQR atau di atas Q3+1,5×IQR. Contoh enam nilai menandai 60 untuk peninjauan, tanpa menghapusnya dari sumber.",
+      "Kuartil adalah ringkasan sampel dan dapat bergantung pada metode interpolasi. Pada data kecil, batas bisa berubah cukup besar ketika satu observasi berubah. Nilai missing tidak dipakai menghitung kuartil dan tetap perlu dilaporkan secara terpisah.",
+      "Outlier bisa merupakan kesalahan alat, perbedaan kelompok, atau kejadian penting yang memang nyata. Pisahkan perangkat atau periode yang mempunyai skala berbeda bila itu sesuai domain. Ambang statistik tidak menggantikan pemeriksaan sebab teknis.",
+      "Untuk pemodelan, aturan outlier yang dipelajari harus mengikuti batas train/validation. Menggunakan seluruh data sebelum split dapat membocorkan informasi. Perlakuan seperti clipping atau penghapusan perlu alasan, dokumentasi, serta evaluasi dampaknya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "IQR",
+          "Q3 dikurangi Q1"
+        ],
+        [
+          "Batas ilustrasi",
+          "Q1−1,5×IQR sampai Q3+1,5×IQR"
+        ],
+        [
+          "Penandaan",
+          "Permintaan peninjauan, bukan vonis kesalahan"
+        ],
+        [
+          "Data mentah",
+          "Tetap dipertahankan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da18_outlier.py",
+        "filename": "da18_outlier.py",
+        "language": "python",
+        "code": "import numpy as np\nimport pandas as pd\ndef tandai_iqr(nilai):\n    data=pd.Series(nilai,dtype=float)\n    valid=data.dropna()\n    if len(valid)<4 or not np.isfinite(valid).all():\n        raise ValueError('Butuh minimal empat nilai finite untuk ilustrasi IQR.')\n    q1,q3=valid.quantile([.25,.75]);iqr=q3-q1\n    bawah,atas=q1-1.5*iqr,q3+1.5*iqr\n    tanda=data.notna() & ((data<bawah)|(data>atas))\n    return float(bawah),float(atas),tanda\nif __name__=='__main__':\n    data=[10,11,12,13,14,60]\n    bawah,atas,tanda=tandai_iqr(data)\n    print('Batas:',bawah,atas)\n    print('Perlu ditinjau:',pd.Series(data).loc[tanda].tolist())\n    print('Baris sumber tetap:',len(data))\n",
+        "output": "Batas: 7.5 17.5\nPerlu ditinjau: [60]\nBaris sumber tetap: 6",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da18_outlier.py lalu cocokkan hasilnya dengan contoh.",
+      "Telusuri batas 7,5 sampai 17,5 dan nilai yang ditandai."
+    ],
+    "practice": [
+      "Coba seluruh nilai sama untuk melihat IQR nol.",
+      "Tulis dua penjelasan sah untuk RTT yang jauh lebih tinggi daripada pengukuran lain."
+    ],
+    "warning": "Jangan menghapus puncak gangguan hanya karena ia terlihat ekstrem. Kejadian ekstrem dapat menjadi informasi utama yang sedang dicari.",
+    "check": "Apakah nilai yang ditandai IQR pasti salah?",
+    "answer": "Tidak. Aturan hanya menandai posisi relatif terhadap distribusi sampel. Validitas perlu diperiksa dari sumber serta konteksnya.",
+    "source": "https://pandas.pydata.org/docs/reference/api/pandas.Series.quantile.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "da-filter-transformasi",
     "title": "Memilih dan mentransformasi data dengan loc",
     "summary": "Gunakan mask, operator kondisi, kolom turunan, dan salinan yang jelas.",
@@ -384,6 +573,69 @@
     "minutes": 30
   },
   {
+    "slug": "da-reshape-pivot",
+    "title": "Melt, pivot, dan pivot table: ubah bentuk tabel",
+    "summary": "Bedakan bentuk long dan wide serta validasi keunikan sebelum membentuk ulang data.",
+    "analogy": "Data yang sama dapat ditulis sebagai tabel kalender atau daftar kejadian; bentuknya berubah, tetapi maknanya perlu tetap sama.",
+    "explain": [
+      "Format wide menyimpan pengukuran beberapa perangkat dalam kolom terpisah. Format long menyimpan nama perangkat dan nilai sebagai kolom, sehingga mudah dipakai untuk groupby, grafik, serta penambahan perangkat baru.",
+      "Melt mengubah kolom pengukuran menjadi baris sambil mempertahankan id_vars. Pivot melakukan kebalikan ketika kombinasi index dan columns menunjuk satu nilai saja. Contoh mempertahankan waktu, perangkat, serta rtt_ms selama perubahan bentuk.",
+      "Pivot menolak pasangan key ganda karena tidak tahu nilai mana yang harus dipilih. Pivot_table dapat mengagregasi duplikat, tetapi aggfunc perlu dinyatakan sesuai kebutuhan. Memakai mean hanya agar error hilang dapat menutupi duplikasi yang seharusnya diperbaiki.",
+      "Periksa tipe, nama kolom, urutan, dan jumlah observasi sesudah reshape. Sel missing pada wide dapat menandakan tidak ada pengukuran. Jangan mengisinya nol tanpa memahami makna serta proses pengumpulan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Wide",
+          "Perangkat menjadi kolom"
+        ],
+        [
+          "Long",
+          "Perangkat dan nilai menjadi kolom data"
+        ],
+        [
+          "pivot",
+          "Membutuhkan key keluaran unik"
+        ],
+        [
+          "pivot_table",
+          "Memerlukan keputusan agregasi yang benar"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da14_reshape.py",
+        "filename": "da14_reshape.py",
+        "language": "python",
+        "code": "import pandas as pd\nif __name__=='__main__':\n    lebar=pd.DataFrame({'waktu':['2026-10-01','2026-10-02'],'A':[20,25],'B':[35,40]})\n    panjang=lebar.melt(id_vars='waktu',var_name='perangkat',value_name='rtt_ms')\n    pulih=panjang.pivot(index='waktu',columns='perangkat',values='rtt_ms').reset_index()\n    pulih.columns.name=None\n    print('Baris long:',len(panjang))\n    print('Pulih sama:',pulih.equals(lebar))\n    try:\n        pd.concat([panjang,panjang.iloc[[0]]]).pivot(index='waktu',columns='perangkat',values='rtt_ms')\n    except ValueError:\n        print('Key ganda terdeteksi sebelum pivot')\n",
+        "output": "Baris long: 4\nPulih sama: True\nKey ganda terdeteksi sebelum pivot",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da14_reshape.py lalu cocokkan hasilnya dengan contoh.",
+      "Telusuri empat pengukuran long lalu cocokkan tabel yang dipulihkan."
+    ],
+    "practice": [
+      "Tambahkan perangkat C pada tabel wide lalu ulangi melt.",
+      "Buat dua nilai untuk satu pasangan waktu–perangkat dan jelaskan keputusan yang diperlukan."
+    ],
+    "warning": "Pivot table bukan perbaikan universal untuk key duplikat. Tetapkan apakah baris itu kejadian sah, agregasi yang diinginkan, atau duplikasi keliru.",
+    "check": "Mengapa pivot menolak kombinasi waktu–perangkat yang muncul dua kali?",
+    "answer": "Satu sel keluaran hanya dapat memuat satu nilai. Tanpa aturan agregasi atau resolusi konflik, pemilihan nilai menjadi ambigu.",
+    "source": "https://pandas.pydata.org/docs/user_guide/reshaping.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "da-join-sql",
     "title": "Menggabungkan data: key, join, dan kardinalitas",
     "summary": "Periksa relasi tabel agar merge tidak menggandakan baris atau menyembunyikan data yang tidak cocok.",
@@ -446,6 +698,132 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 30
+  },
+  {
+    "slug": "da-sql-pandas",
+    "title": "Mengambil data SQL ke pandas dengan parameter",
+    "summary": "Ringkas data di database dan baca hasilnya tanpa merangkai nilai masukan menjadi SQL.",
+    "analogy": "Database menyaring arsip di tempat penyimpanannya; pandas menerima tabel hasil yang memang diperlukan.",
+    "explain": [
+      "Read_sql_query membaca hasil query menjadi DataFrame. Anda dapat memilih kolom, memfilter, dan mengagregasi di SQL sebelum memuat data agar pemindahan tidak berlebihan. Contoh memakai SQLite memori yang baru, bukan database kerja.",
+      "Nilai lokasi dikirim melalui params dan placeholder ?. Ini memisahkan nilai dari struktur SQL. Placeholder bergantung pada driver database, sehingga sintaks SQLite tidak selalu sama dengan PostgreSQL.",
+      "Nama tabel atau kolom tidak dapat diperlakukan seperti nilai parameter biasa. Jika struktur query perlu dinamis, gunakan pilihan yang diizinkan atau mekanisme identitas yang tepat. Jangan menerima potongan SQL dari input yang belum dipercaya.",
+      "Contextlib.closing menutup koneksi setelah digunakan. With con pada sqlite3 terutama mengelola transaksi, bukan otomatis menutup koneksi. Untuk dataset besar, pertimbangkan query terbatas atau chunksize dengan agregasi antar chunk yang benar."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "read_sql_query",
+          "Hasil SQL menjadi DataFrame"
+        ],
+        [
+          "params",
+          "Memasok nilai tanpa merangkai SQL"
+        ],
+        [
+          "Placeholder",
+          "Mengikuti driver database"
+        ],
+        [
+          "closing",
+          "Melepas koneksi setelah selesai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da15_sql.py",
+        "filename": "da15_sql.py",
+        "language": "python",
+        "code": "from contextlib import closing\nimport sqlite3\nimport pandas as pd\ndef cari_lokasi(nama):\n    with closing(sqlite3.connect(':memory:')) as con:\n        data=pd.DataFrame({'lokasi':['A','A','B'],'menit':[10,30,15]})\n        data.to_sql('tiket',con,index=False)\n        return pd.read_sql_query('SELECT lokasi, COUNT(*) AS jumlah, AVG(menit) AS rerata FROM tiket WHERE lokasi=? GROUP BY lokasi',con,params=(nama,))\nif __name__=='__main__':\n    hasil=cari_lokasi('A')\n    print('Jumlah tiket A:',int(hasil.loc[0,'jumlah']))\n    print('Rerata menit:',float(hasil.loc[0,'rerata']))\n    print('Input mirip SQL tetap nilai:',cari_lokasi(\"A' OR 1=1 --\").empty)\n",
+        "output": "Jumlah tiket A: 2\nRerata menit: 20.0\nInput mirip SQL tetap nilai: True",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da15_sql.py lalu cocokkan hasilnya dengan contoh.",
+      "Coba string yang menyerupai SQL dan pastikan ia tetap diperlakukan sebagai nilai."
+    ],
+    "practice": [
+      "Tambahkan filter durasi minimum melalui parameter kedua.",
+      "Bandingkan total yang dihitung SQL dengan groupby pandas pada data fiktif sama."
+    ],
+    "warning": "Gunakan database latihan terpisah. Jangan menaruh kredensial database atau mengekspor tabel pelanggan dalam notebook publik.",
+    "check": "Apakah params dapat digunakan langsung untuk menerima nama tabel sembarang?",
+    "answer": "Tidak. Parameter nilai berbeda dari identifier SQL. Struktur query perlu pilihan yang diizinkan atau pembentukan identifier yang sesuai driver.",
+    "source": "https://pandas.pydata.org/docs/reference/api/pandas.read_sql_query.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "da-excel-workbook",
+    "title": "Excel multi-sheet: membaca, menulis, dan menjaga tipe",
+    "summary": "Gunakan workbook fiktif, sheet eksplisit, serta ID teks yang mempertahankan nol di depan.",
+    "analogy": "Buku kerja mempunyai beberapa lembar dengan peran berbeda; membaca lembar pertama saja belum tentu sesuai tujuan.",
+    "explain": [
+      "Pandas dapat membaca dan menulis workbook Excel melalui engine seperti openpyxl untuk .xlsx. Contoh membuat workbook di memori dengan BytesIO, sehingga tidak memerlukan file milik pengguna dan tidak menimpa dokumen yang ada.",
+      "ExcelWriter menulis dua sheet: Transaksi dan Metadata. ExcelFile membantu memeriksa nama sheet, lalu read_excel memilih Transaksi secara eksplisit. Jangan mengandalkan posisi sheet apabila workbook dapat diubah oleh orang lain.",
+      "ID 001 dan 002 disimpan sebagai teks serta dibaca dengan dtype string. Tampilan angka dengan format 000 di Excel berbeda dari nilai teks 001; nol yang sudah hilang dari sumber numerik tidak dapat dipulihkan hanya dengan membaca tipe string.",
+      "Format warna, mata uang, atau sel gabungan bukan pengganti struktur data yang konsisten. Pada file kerja nyata, periksa header, tipe, tanggal, formula, missing, serta metadata. Data waktu berzona sering perlu disimpan sebagai teks ISO atau dikonversi dengan kebijakan timezone yang didokumentasikan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "ExcelWriter",
+          "Menulis beberapa sheet dalam satu workbook"
+        ],
+        [
+          "ExcelFile",
+          "Memeriksa sheet dan membaca yang diperlukan"
+        ],
+        [
+          "ID string",
+          "Menjaga kode teks, termasuk nol depan"
+        ],
+        [
+          "BytesIO",
+          "Workbook latihan di memori"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da16_excel.py",
+        "filename": "da16_excel.py",
+        "language": "python",
+        "code": "from io import BytesIO\nimport pandas as pd\ndef contoh_workbook():\n    buffer=BytesIO()\n    data=pd.DataFrame({'id':['001','002'],'jumlah':[1,2]})\n    with pd.ExcelWriter(buffer,engine='openpyxl') as writer:\n        data.to_excel(writer,sheet_name='Transaksi',index=False)\n        pd.DataFrame({'catatan':['Data fiktif; ID adalah teks.']}).to_excel(writer,sheet_name='Metadata',index=False)\n    buffer.seek(0)\n    with pd.ExcelFile(buffer,engine='openpyxl') as book:\n        sheets=book.sheet_names\n        hasil=pd.read_excel(book,sheet_name='Transaksi',dtype={'id':'string'})\n    return sheets,hasil\nif __name__=='__main__':\n    sheets,data=contoh_workbook()\n    print('Sheet:',sheets)\n    print('ID:',data['id'].tolist())\n    print('Total jumlah:',int(data['jumlah'].sum()))\n",
+        "output": "Sheet: ['Transaksi', 'Metadata']\nID: ['001', '002']\nTotal jumlah: 3",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da16_excel.py lalu cocokkan hasilnya dengan contoh.",
+      "Pastikan openpyxl terpasang melalui lock terbaru atau sel persiapan Colab."
+    ],
+    "practice": [
+      "Tambahkan satu sheet ringkasan dan baca namanya secara eksplisit.",
+      "Bandingkan ID teks 001 dengan angka 1 yang hanya diberi format tampilan 000."
+    ],
+    "warning": "Periksa file dan sumbernya sebelum mengolah workbook nyata. Jangan menaruh data sensitif atau formula dari input tak dipercaya ke laporan yang akan dibagikan tanpa peninjauan.",
+    "check": "Mengapa membaca angka 1 sebagai string tidak otomatis mengembalikan ID 001?",
+    "answer": "Nol depan mungkin hanya format tampilan atau sudah hilang saat nilai disimpan. Kontrak identitas harus dijaga sejak sumber data.",
+    "source": "https://pandas.pydata.org/docs/reference/api/pandas.read_excel.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   },
   {
     "slug": "da-visualisasi",
@@ -574,6 +952,69 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 30
+  },
+  {
+    "slug": "da-window-tren",
+    "title": "Rolling mean, lag, dan urutan waktu",
+    "summary": "Bedakan ringkasan yang memasukkan nilai saat ini dengan fitur yang hanya memakai masa lalu.",
+    "analogy": "Rata-rata tiga pengamatan sebelumnya tidak boleh diam-diam memasukkan pengamatan yang belum tersedia saat keputusan dibuat.",
+    "explain": [
+      "Rolling menghitung statistik pada jendela yang bergerak. Window=3 berarti tiga observasi, bukan otomatis tiga hari. Pada data tidak teratur, jendela berbasis waktu seperti 3D mempunyai makna berbeda dan memerlukan index waktu yang benar.",
+      "Sortir dan periksa urutan serta keunikan waktu sebelum menghitung lag. Shift(1) memindahkan nilai sehingga baris saat ini dapat memakai observasi sebelumnya. Untuk fitur per perangkat, operasi harus dipisahkan menurut kelompok agar nilai perangkat lain tidak tercampur.",
+      "Contoh shift(1).rolling(3,min_periods=3) memakai tiga pengamatan sebelumnya. Tiga baris awal belum mempunyai cukup riwayat, sehingga tetap missing. Rolling tanpa shift memasukkan nilai saat ini dan memberi hasil akhir berbeda.",
+      "Apakah nilai saat ini sah sebagai fitur bergantung pada waktu prediksi dan target. Prediksi kejadian berikutnya dapat memakai pengamatan saat ini bila sudah tersedia, sedangkan memprediksi pengamatan yang sama tidak boleh memakainya sebagai bocoran target. Nyatakan kontraknya sebelum memilih formula."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "window=3",
+          "Tiga observasi"
+        ],
+        [
+          "shift(1)",
+          "Nilai observasi sebelumnya"
+        ],
+        [
+          "min_periods",
+          "Jumlah minimum pengamatan sebelum hasil tersedia"
+        ],
+        [
+          "Waktu prediksi",
+          "Menentukan informasi yang boleh digunakan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da17_rolling.py",
+        "filename": "da17_rolling.py",
+        "language": "python",
+        "code": "import pandas as pd\nif __name__=='__main__':\n    data=pd.Series([10.,20.,30.,100.,50.],index=pd.date_range('2026-10-01',periods=5,freq='D'))\n    lalu=data.shift(1).rolling(window=3,min_periods=3).mean()\n    print('Rerata tiga observasi sebelumnya:',[None if pd.isna(x) else float(x) for x in lalu])\n    print('Rerata berjalan terakhir:',float(data.rolling(3,min_periods=3).mean().iloc[-1]))\n    print('Urutan waktu:',data.index.is_monotonic_increasing)\n",
+        "output": "Rerata tiga observasi sebelumnya: [None, None, None, 20.0, 50.0]\nRerata berjalan terakhir: 60.0\nUrutan waktu: True",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da17_rolling.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan mean 20 dan 50 dengan tiga observasi yang benar-benar tersedia sebelumnya."
+    ],
+    "practice": [
+      "Ubah index menjadi tidak teratur dan bandingkan window 3 dengan 3D.",
+      "Rancang rolling per perangkat agar tidak mencampur pengukuran antar perangkat."
+    ],
+    "warning": "Jangan mengisi awal rolling yang belum cukup data dengan angka yang terlihat nyaman tanpa kebijakan. Jaga urutan dan batas waktu informasi.",
+    "check": "Mengapa mean tiga observasi sebelumnya diawali tiga nilai missing?",
+    "answer": "Shift mengeluarkan nilai saat ini, lalu min_periods=3 mengharuskan tiga observasi masa lalu yang benar-benar tersedia.",
+    "source": "https://pandas.pydata.org/docs/user_guide/window.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   },
   {
     "slug": "da-laporan-reproduksi",
@@ -766,5 +1207,68 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 45
+  },
+  {
+    "slug": "da-cohort-retensi",
+    "title": "Studi kasus: cohort dan retensi pelanggan fiktif",
+    "summary": "Gunakan penyebut cohort tetap dan bedakan periode belum teramati dari aktivitas nol.",
+    "analogy": "Angkatan siswa dibandingkan pada umur belajar yang sama; angkatan yang baru masuk belum mempunyai hasil bulan ketiga.",
+    "explain": [
+      "Cohort mengelompokkan entitas menurut kejadian awal, misalnya bulan daftar. Retensi latihan adalah jumlah user unik yang aktif pada suatu bulan umur dibagi jumlah user dalam cohort awal. Aktivitas berulang user yang sama pada bulan yang sama tidak dihitung ganda.",
+      "Master user harus mempunyai ID unik. Aktivitas dihubungkan dengan many-to-one join, lalu diperiksa agar tidak berasal dari user tidak dikenal, sebelum bulan daftar, atau setelah cutoff laporan. Definisi aktif dan cakupan observasi perlu disepakati dahulu.",
+      "Contoh berhenti pada Maret 2026. Cohort Januari dapat diamati sampai umur dua bulan; cohort Februari baru sampai umur satu; Maret hanya umur nol. Sel di luar rentang observasi tetap missing, bukan nol. Nol hanya digunakan pada bulan yang sudah tercakup dan diasumsikan pengumpulan aktivitasnya lengkap.",
+      "Cohort Januari berisi dua user dengan retensi 100%, 50%, lalu 0% pada contoh. Ini bukan penilaian churn pelanggan nyata, tidak memperhitungkan semua definisi pembatalan, dan tidak menyatakan alasan penurunan. Tampilkan ukuran cohort serta keterbatasan observasi bersama persentase."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Cohort",
+          "Kelompok berdasarkan bulan daftar"
+        ],
+        [
+          "Penyebut",
+          "Jumlah user cohort awal"
+        ],
+        [
+          "Unit aktif",
+          "User unik per bulan"
+        ],
+        [
+          "Belum teramati",
+          "Bukan angka nol"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "da20_cohort.py",
+        "filename": "da20_cohort.py",
+        "language": "python",
+        "code": "import pandas as pd\ndef retensi(users,events,akhir='2026-03'):\n    users,events=users.copy(),events.copy()\n    if users.empty or not {'id','daftar'}<=set(users.columns) or not {'id','bulan'}<=set(events.columns):\n        raise ValueError('Master user tidak kosong dan kolom harus lengkap.')\n    users['id']=users['id'].astype('string').str.strip()\n    events['id']=events['id'].astype('string').str.strip()\n    if users['id'].eq('').any() or events['id'].eq('').any():\n        raise ValueError('ID tidak boleh kosong.')\n    if users['id'].isna().any() or users['id'].duplicated().any() or events['id'].isna().any():\n        raise ValueError('ID user wajib unik dan terisi.')\n    users['cohort']=pd.PeriodIndex(users['daftar'],freq='M')\n    events['bulan']=pd.PeriodIndex(events['bulan'],freq='M')\n    batas=pd.Period(akhir,freq='M')\n    if users['cohort'].isna().any() or (users['cohort']>batas).any() or events['bulan'].isna().any():\n        raise ValueError('Cohort atau bulan tidak sesuai.')\n    joined=events.merge(users[['id','cohort']],on='id',how='left',validate='many_to_one',indicator=True)\n    if joined['_merge'].ne('both').any() or (joined['bulan']<joined['cohort']).any() or (joined['bulan']>batas).any():\n        raise ValueError('Aktivitas tanpa user, sebelum daftar, atau setelah cutoff.')\n    aktif=joined.drop_duplicates(['id','bulan'])\n    hasil=[]\n    for cohort,grup in users.groupby('cohort',sort=True):\n        ukuran=len(grup)\n        for umur,bulan in enumerate(pd.period_range(cohort,batas,freq='M')):\n            jumlah=aktif.loc[aktif['cohort'].eq(cohort)&aktif['bulan'].eq(bulan),'id'].nunique()\n            hasil.append({'cohort':str(cohort),'umur':umur,'retensi':jumlah/ukuran})\n    return pd.DataFrame(hasil).pivot(index='cohort',columns='umur',values='retensi')\nif __name__=='__main__':\n    users=pd.DataFrame({'id':['A','B','C','D'],'daftar':['2026-01','2026-01','2026-02','2026-03']})\n    events=pd.DataFrame({'id':['A','A','A','B','C','C','D'],'bulan':['2026-01','2026-01','2026-02','2026-01','2026-02','2026-03','2026-03']})\n    tabel=retensi(users,events)\n    for cohort,row in tabel.iterrows():\n        print(cohort+':', ['belum teramati' if pd.isna(v) else round(float(v),2) for v in row])\n",
+        "output": "2026-01: [1.0, 0.5, 0.0]\n2026-02: [1.0, 1.0, 'belum teramati']\n2026-03: [1.0, 'belum teramati', 'belum teramati']",
+        "explanation": "Jalankan file ini dari paket data-lab terbaru dengan Python 3.12 dan dependensi requirements.lock.txt, atau gunakan notebook Colab pada artikel. Contoh memakai data fiktif/sintetis; nilai pembulatan mengikuti versi pustaka yang diuji."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh paket data-lab terbaru dan ikuti README.",
+      "Jalankan python da20_cohort.py lalu cocokkan hasilnya dengan contoh.",
+      "Cocokkan sel yang dapat diamati dengan cutoff Maret pada hasil."
+    ],
+    "practice": [
+      "Tambahkan duplikat aktivitas dan pastikan retensi tidak bertambah.",
+      "Ubah cutoff menjadi Februari. Saring master user dan aktivitas sesuai cutoff lebih dahulu, lalu jelaskan cohort serta periode yang boleh masuk laporan."
+    ],
+    "warning": "Nol hanya bermakna bila periode pengumpulan memang lengkap. Catatan aktivitas yang hilang dapat menyerupai penurunan retensi tanpa menunjukkan perilaku pelanggan sebenarnya.",
+    "check": "Mengapa sel umur dua bulan cohort Februari tidak diisi nol?",
+    "answer": "Pada cutoff Maret, umur dua bulan belum terjadi untuk cohort Februari. Ketiadaan kesempatan observasi berbeda dari tidak ada user aktif.",
+    "source": "https://pandas.pydata.org/docs/user_guide/timeseries.html",
+    "diagram": "data-cohort-retensi",
+    "diagramAlt": "Cohort fiktif menurut bulan daftar dan umur dalam bulan. Sel masa depan ditandai belum teramati, bukan nol.",
+    "stage": 0,
+    "minutes": 35
   }
 ]

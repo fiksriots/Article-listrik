@@ -40,7 +40,7 @@ def generate():
                           'Data seluruhnya fiktif/sintetis. File sesi bersifat sementara; unduh hasil yang ingin disimpan. '
                           'Jika sesi direset, jalankan ulang semua sel. Versi paket Colab dapat membuat hasil numerik sedikit berbeda dari artikel.\n'),
                      cell('markdown', '## 1. Siapkan pustaka\nSel ini memasang paket yang belum tersedia. Jika Colab meminta restart sesi setelah pemasangan, restart lalu jalankan lagi dari atas.\n'),
-                     cell('code', '%pip install -q "numpy>=1.26" "pandas>=2.2" "matplotlib>=3.8" "scikit-learn>=1.4"\n'),
+                     cell('code', '%pip install -q "numpy>=1.26" "pandas>=2.2" "matplotlib>=3.8" "scikit-learn>=1.4" "scipy>=1.15" "openpyxl>=3.1.5"\n'),
                      cell('markdown', '## 2. Siapkan data latihan\nSel ini membuat dua CSV contoh dan helper pembersihan data pada folder sesi.\n'),
                      cell('code', setup)]
             for block in lesson['blocks']:
@@ -66,7 +66,7 @@ def generate():
             for i, item in enumerate(cells):
                 item['id'] = f'cell-{i:02d}'
             (TARGET / (lesson['slug'] + '.ipynb')).write_text(json.dumps(notebook, ensure_ascii=False, indent=1) + '\n')
-    print('Generated 24 self-contained Colab notebooks')
+    print('Generated 40 self-contained Colab notebooks')
 
 
 if __name__ == '__main__':
