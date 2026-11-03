@@ -6,6 +6,17 @@ Materi:
 
 Seluruh data bersifat FIKTIF/SINTETIS. Tidak ada akses router, data pelanggan, layanan berbayar, atau API luar. Paket ini merupakan latihan, bukan sistem penilaian SLA atau pengendali perangkat.
 
+## Praktik di Google Colab (tanpa instalasi lokal)
+
+Setiap artikel menyediakan tombol **Praktik di Google Colab** yang membuka notebook sesuai materi.
+
+- [Mulai Data Analysis](https://colab.research.google.com/github/fiksriots/Article-listrik/blob/main/examples/colab/da-pengantar.ipynb)
+- [Mulai Data Science](https://colab.research.google.com/github/fiksriots/Article-listrik/blob/main/examples/colab/ds-pengantar.ipynb)
+
+Simpan salinan di Drive, lalu jalankan sel dari atas ke bawah. Notebook menyertakan dataset dan helper, sehingga tidak perlu mengunduh atau mengekstrak ZIP. Grafik ditampilkan di notebook; file hasil bisa diunduh dari panel Files. Sesi bersifat sementara: jika direset, jalankan ulang persiapan. Versi pustaka Colab dapat berbeda dari lock lokal dan angka numerik bisa sedikit berubah. CPU cukup untuk seluruh latihan.
+
+Notebook dibuat ulang dari artikel dan sumber lab dengan `python scripts/generate-data-colab.py` dari akar repositori. Notebook berada di `examples/colab`, terpisah dari paket ZIP lokal.
+
 ## Menjalankan
 
 Gunakan Python 3.12. Buka terminal pada folder data-lab hasil ekstraksi.
