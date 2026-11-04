@@ -563,7 +563,8 @@
     "title": "Pengujian & Debugging · Diagnosis dan logging",
     "slugs": [
       "uji-debugging",
-      "uji-logging"
+      "uji-logging",
+      "uji-regresi-log"
     ]
   },
   {
@@ -572,7 +573,8 @@
       "proyek-lingkungan",
       "proyek-packaging",
       "proyek-filesystem",
-      "proyek-proses"
+      "proyek-proses",
+      "otomasi-cli-dry-run"
     ]
   },
   {
@@ -602,7 +604,8 @@
     "slugs": [
       "delivery-docker",
       "delivery-ci",
-      "delivery-rilis"
+      "delivery-rilis",
+      "delivery-pemulihan-sqlite"
     ]
   },
   {

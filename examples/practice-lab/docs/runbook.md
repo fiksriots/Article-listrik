@@ -18,3 +18,7 @@ examples/p07_jadwal.py menghitung jadwal 08:00 UTC berikutnya dan ledger idempot
 ```
 
 Buat folder output dahulu. Cegah job bertumpuk dengan mekanisme locking yang sesuai platform sebelum penggunaan berulang. Ledger contoh hanya mendeteksi kunci/payload yang sama pada SQLite, bukan mengunci semua efek eksternal. Windows Task Scheduler mempunyai konfigurasi berbeda.
+
+## Latihan pemulihan SQLite
+
+Jalankan python examples/r09_pemulihan.py. Database dan backup dibuat pada folder sementara; backup menyimpan total 2, database aktif kemudian menjadi 99, dan pemulihan ke file baru tetap 2. Periksa struktur dengan PRAGMA integrity_check sekaligus isi laporan. Helper menolak file tujuan yang sudah ada. Latihan tidak memindahkan trafik atau menimpa database aktif. Rencana pemulihan nyata juga perlu menguji akses, versi aplikasi, cakupan kehilangan data, waktu pemulihan, dan prosedur pergantian yang sesuai lingkungan.

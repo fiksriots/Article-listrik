@@ -37,6 +37,14 @@ Contoh pada examples membuat direktori sementara dan membersihkannya. Perintah b
 
 Materi terkait di Learn Programming: Pemrograman Terstruktur, Basis Data, Backend/API, Pemrograman Web, serta Pemrograman Jaringan. Jalur Learn Git tetap menjadi rujukan commit, branch, dan pull request.
 
+## Pendalaman
+
+- tests/test_t09_regresi_log.py: regression test dan assertion log dengan caplog.
+- examples/p09_cli.py: --dry-run memvalidasi dan menghitung tanpa membuat folder keluaran, database, atau JSON. Opsi ini masih membaca sumber, dan belum menguji izin tulis atau ruang disk.
+- examples/r09_pemulihan.py: backup SQLite dan pemulihan ke file baru; file tujuan yang sudah ada ditolak. Database aktif tetap.
+
+Uji seluruh paket dengan python -m pytest -q. Sebelum menulis laporan, tambahkan --dry-run pada perintah build-report untuk memeriksa rencana. Sesudahnya, jalankan mode tulis tanpa opsi itu dan verifikasi hasil. Helper backup dipakai pada file lab sendiri tanpa penulis bersamaan; timeout koneksi bukan deadline keseluruhan backup. Integrity check perlu dilengkapi pencocokan isi dan kontrak aplikasi.
+
 ## Membangun wheel
 
 ```sh

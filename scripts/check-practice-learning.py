@@ -14,9 +14,9 @@ ROOT=Path(__file__).resolve().parents[1]
 lessons=json.loads((ROOT/'lib/programming-practice-lessons.json').read_text())
 quizzes=json.loads((ROOT/'lib/programming-quizzes.json').read_text())
 order=json.loads((ROOT/'lib/programming-order.json').read_text())
-assert len(lessons)==24
-for prefix,start in [('Pengujian & Debugging ·',0),('Proyek & Otomasi ·',8),('Rekayasa & Deployment ·',16)]:
-    assert [l['slug'] for l in lessons[start:start+8]]==[s for g in order if g['title'].startswith(prefix) for s in g['slugs']]
+assert len(lessons)==27
+for prefix,start in [('Pengujian & Debugging ·',0),('Proyek & Otomasi ·',9),('Rekayasa & Deployment ·',18)]:
+    assert [l['slug'] for l in lessons[start:start+9]]==[s for g in order if g['title'].startswith(prefix) for s in g['slugs']]
 for l in lessons:
     assert len(l['explain'])>=4 and len(l['practice'])>=2 and l['warning'] and l['check'] and l['answer']
     assert all(len(row)==len(l['table']['headers']) for row in l['table']['rows'])
@@ -28,7 +28,7 @@ for l in lessons:
     if l['diagram']:ET.parse(ROOT/'public/programming'/(l['diagram']+'.svg'))
 with tempfile.TemporaryDirectory() as folder:
     with ZipFile(ROOT/'public/programming/lab/practice/practice-lab.zip') as archive:
-        names=archive.namelist();assert len(names)==len(set(names))==39
+        names=archive.namelist();assert len(names)==len(set(names))==45
         for name in names:
             p=Path(name)
             assert name.startswith('practice-lab/') and not p.is_absolute() and '..' not in p.parts
@@ -50,11 +50,11 @@ with tempfile.TemporaryDirectory() as folder:
     with ThreadPoolExecutor(max_workers=4) as pool:list(pool.map(check,lessons))
     result=subprocess.run([sys.executable,'-m','pytest','-q'],cwd=project,env=env,text=True,capture_output=True,timeout=30)
     assert result.returncode==0,result.stdout+result.stderr
-    assert '34 passed' in result.stdout
+    assert '43 passed' in result.stdout
     metadata=tomllib.loads((project/'pyproject.toml').read_text())
     assert metadata['project']['version']=='0.1.0'
     assert metadata['project']['scripts']['praktik-layanan']=='praktik_layanan.cli:main'
     docker=(project/'Dockerfile').read_text();assert 'USER 10001:10001' in docker and '--host' in docker
     workflow=(project/'.github/workflows/lab.yml').read_text();assert 'python -m pytest -q' in workflow and 'docker build' in workflow
-print('PASS: 24 ordered lessons / 96 questions; 39-file ZIP; 16 exact Python example outputs; 34 pytest cases; package metadata and 3 diagrams')
+print('PASS: 27 ordered lessons / 108 questions; 45-file ZIP; 18 exact Python example outputs; 43 pytest cases; package metadata and 4 diagrams')
 print('Docker and GitHub Actions configurations supplied; no container build or cloud workflow execution claimed by this check.')

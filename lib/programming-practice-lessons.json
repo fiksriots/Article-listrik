@@ -512,6 +512,70 @@
     "minutes": 30
   },
   {
+    "slug": "uji-regresi-log",
+    "title": "Regression test dan pengujian log dengan caplog",
+    "summary": "Jaga kasus bug yang sudah diperbaiki sekaligus uji informasi log yang penting.",
+    "analogy": "Setelah memperbaiki pintu, uji lagi kondisi yang dulu membuatnya macet dan pastikan catatan kejadian tetap jelas.",
+    "explain": [
+      "Regression test mengabadikan kasus yang sebelumnya menghasilkan perilaku salah. Pada lab, masukan kosong harus mempertahankan rasio None. Jika suatu perubahan kelak mengubahnya menjadi nol, test harus memberi sinyal meskipun program tidak memicu exception.",
+      "Fixture caplog merekam LogRecord selama test. Contoh mengatur level INFO untuk logger tertentu lalu memeriksa nama peristiwa, level, dan field total. Ini lebih tahan perubahan format daripada mengunci test pada timestamp atau spasi seluruh baris log.",
+      "Fungsi ringkas_tercatat tetap menggunakan aturan ringkas. Masukan invalid menimbulkan warning ringkasan_invalid dan ValueError diteruskan. Ia tidak mencatat ringkasan_selesai pada jalur gagal, sehingga observabilitas tidak menyamarkan kegagalan menjadi sukses.",
+      "Test ketiga memastikan nama layanan fiktif tidak ikut masuk record. Contoh menyimpan tahap dan hitungan, bukan seluruh rows. Menjaga privasi log memerlukan peninjauan seluruh jalur aplikasi; satu test ini hanya memeriksa lingkup fungsi lab."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Batas yang perlu dipahami"
+      ],
+      "rows": [
+        [
+          "Regression test",
+          "Kasus lama harus tetap sesuai kontrak"
+        ],
+        [
+          "caplog",
+          "Merekam record logger selama test"
+        ],
+        [
+          "Assertion log",
+          "Peristiwa, level, dan field bermakna"
+        ],
+        [
+          "Minimisasi",
+          "Input lengkap tidak dicatat"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t09_regresi_log.py",
+        "filename": "tests/test_t09_regresi_log.py",
+        "language": "python",
+        "code": "import logging\nimport pytest\nfrom praktik_layanan.observasi import ringkas_tercatat\n\ndef test_regresi_kosong_bukan_nol(caplog):\n    logger=logging.getLogger('uji-regresi')\n    with caplog.at_level(logging.INFO,logger=logger.name):\n        result=ringkas_tercatat([],logger)\n    assert result['rasio_ok'] is None\n    record=caplog.records[-1]\n    assert record.getMessage()=='ringkasan_selesai'\n    assert record.total==0\n\ndef test_invalid_tidak_dicatat_sebagai_sukses(caplog):\n    logger=logging.getLogger('uji-invalid')\n    with caplog.at_level(logging.INFO,logger=logger.name):\n        with pytest.raises(ValueError):\n            ringkas_tercatat([{'layanan':'lab','hasil':'asing'}],logger)\n    assert [(r.levelno,r.getMessage()) for r in caplog.records]==[(logging.WARNING,'ringkasan_invalid')]\n\ndef test_nama_sumber_tidak_bocor_ke_record(caplog):\n    logger=logging.getLogger('uji-minim-data')\n    with caplog.at_level(logging.INFO,logger=logger.name):\n        ringkas_tercatat([{'layanan':'contoh-identitas-fiktif','hasil':'ok'}],logger)\n    assert 'contoh-identitas-fiktif' not in str([r.__dict__ for r in caplog.records])\n",
+        "output": "3 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t09_regresi_log.py -q dari paket practice-lab terbaru yang telah diinstal editable sesuai README. Gunakan paket lengkap untuk helper bersama. Contoh pytest menampilkan inti jumlah test lulus; durasi dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak practice-lab terbaru pada folder latihan tersendiri.",
+      "Gunakan virtual environment dan jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t09_regresi_log.py -q",
+      "Jalankan python -m pytest -q untuk memeriksa kasus normal, kasus gagal, dan perlindungan data."
+    ],
+    "practice": [
+      "Tambahkan kasus satu observasi refused dan periksa total pada record.",
+      "Ubah formatter logger pada salinan lab lalu jelaskan mengapa test semantik tetap relevan."
+    ],
+    "warning": "Jangan memasukkan data pelanggan atau secret ke fixture. Test satu logger tidak membuktikan semua jalur log aplikasi bebas data sensitif.",
+    "check": "Mengapa memeriksa field record lebih berguna daripada timestamp lengkap?",
+    "answer": "Field yang dijanjikan merupakan perilaku observabilitas; timestamp dan format tampilan dapat berubah tanpa merusak kontrak.",
+    "source": "https://docs.pytest.org/en/stable/how-to/logging.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
     "slug": "proyek-lingkungan",
     "title": "Virtual environment, dependensi, dan konfigurasi",
     "summary": "Pisahkan lingkungan proyek dan validasi konfigurasi di awal.",
@@ -766,6 +830,70 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 40
+  },
+  {
+    "slug": "otomasi-cli-dry-run",
+    "title": "CLI yang andal: dry-run, exit code, dan validasi",
+    "summary": "Periksa rencana laporan tanpa menulis database atau file keluaran.",
+    "analogy": "Memeriksa daftar pekerjaan sebelum dikerjakan membantu menemukan masalah, tetapi belum membuktikan alat tulis atau ruang penyimpanannya cukup.",
+    "explain": [
+      "CLI yang baik mempunyai argumen jelas, bantuan, exit code, serta aturan efek samping. Opsi --dry-run pada build-report memvalidasi konfigurasi dan path, membaca CSV, lalu menghitung ringkasan tanpa menulis database, JSON, atau folder keluarannya.",
+      "Logika rencanakan dipakai bersama oleh mode simulasi dan mode tulis. Ini mengurangi perbedaan aturan antara rencana dan eksekusi. Hasil dry-run memuat dry_run true dan ringkasan, sedangkan perilaku keluaran mode tulis lama tetap dipertahankan.",
+      "Contoh menjalankan CLI sebagai proses anak dengan list argumen dan timeout. Exit code nol menunjukkan simulasi selesai sesuai kontrak. Header salah, konfigurasi invalid, atau path source dan output sama tetap menghasilkan exit code dua; dry-run tidak berarti mengabaikan validasi.",
+      "Dry-run masih membaca sumber. Ia belum menguji izin tulis, ruang disk, perubahan sumber sesudah pemeriksaan, atau kegagalan commit saat eksekusi nyata. Periksa hasilnya, lalu jalankan mode tulis dan verifikasi keluarannya; jangan memperlakukannya sebagai jaminan semua efek nanti berhasil."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Batas yang perlu dipahami"
+      ],
+      "rows": [
+        [
+          "--dry-run",
+          "Baca dan hitung tanpa keluaran persisten"
+        ],
+        [
+          "Exit code 0",
+          "Rencana valid menurut pemeriksaan"
+        ],
+        [
+          "Exit code 2",
+          "Masukan atau konfigurasi gagal"
+        ],
+        [
+          "Batas simulasi",
+          "Tidak menjamin kesiapan penulisan nyata"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p09_cli.py",
+        "filename": "examples/p09_cli.py",
+        "language": "python",
+        "code": "import json\nfrom pathlib import Path\nimport subprocess\nimport sys\nfrom tempfile import TemporaryDirectory\n\nwith TemporaryDirectory() as work:\n    root=Path(work);source=root/'input.csv'\n    source.write_text('layanan,hasil\\na,ok\\nb,timeout\\n',encoding='utf-8')\n    db=root/'belum-dibuat'/'laporan.sqlite';output=root/'belum-dibuat'/'hasil.json'\n    command=[sys.executable,'-m','praktik_layanan.cli','build-report',\n             '--input',str(source),'--db',str(db),'--output',str(output),'--dry-run']\n    result=subprocess.run(command,capture_output=True,text=True,timeout=5,check=True)\n    data=json.loads(result.stdout)\n    print('Exit code:',result.returncode)\n    print('Mode dry-run:',data['dry_run'])\n    print('Total rencana:',data['ringkasan']['total'])\n    print('Folder keluaran dibuat:',output.parent.exists())\n",
+        "output": "Exit code: 0\nMode dry-run: True\nTotal rencana: 2\nFolder keluaran dibuat: False",
+        "explanation": "Jalankan python examples/p09_cli.py dari paket practice-lab terbaru yang telah diinstal editable sesuai README. Gunakan paket lengkap untuk helper bersama. Contoh pytest menampilkan inti jumlah test lulus; durasi dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak practice-lab terbaru pada folder latihan tersendiri.",
+      "Gunakan virtual environment dan jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p09_cli.py",
+      "Jalankan python -m pytest -q untuk memeriksa kasus normal, kasus gagal, dan perlindungan data."
+    ],
+    "practice": [
+      "Jalankan contoh dengan header CSV salah dan periksa exit code.",
+      "Bandingkan stdout mode dry-run dengan mode tulis pada direktori latihan baru."
+    ],
+    "warning": "Mode simulasi belum membuktikan disk dan izin tulis memadai. Sumber juga dapat berubah sesudah diperiksa.",
+    "check": "Apakah dry-run menjamin eksekusi mode tulis akan berhasil?",
+    "answer": "Tidak. Ia memeriksa rencana dan data saat dibaca, sedangkan efek tulis serta keadaan berikutnya belum diuji.",
+    "source": "https://docs.python.org/3.12/library/argparse.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
   },
   {
     "slug": "otomasi-csv",
@@ -1406,6 +1534,70 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 30
+  },
+  {
+    "slug": "delivery-pemulihan-sqlite",
+    "title": "Latihan backup SQLite dan pemulihan yang diverifikasi",
+    "summary": "Buat backup, pulihkan ke file baru, dan bandingkan isi tanpa menimpa database aktif.",
+    "analogy": "Salinan buku lama diuji pada buku baru dahulu; buku yang sedang dipakai tidak langsung dihapus atau ditimpa.",
+    "explain": [
+      "Backup yang tersedia belum membuktikan data dapat dipulihkan. Latihan membuat database fiktif dengan total dua, menyalinnya memakai Connection.backup, lalu mengubah database aktif menjadi total 99. Pemulihan dilakukan dari backup ke path baru.",
+      "Helper membuka sumber baca-saja dan memesan tujuan baru secara eksklusif. Tujuan yang sudah ada ditolak. Bila proses gagal, file tujuan yang baru dibuat dibersihkan. Seluruh koneksi ditutup sebelum direktori latihan selesai, dan database aktif tidak diganti oleh program.",
+      "PRAGMA integrity_check memeriksa struktur SQLite. Pemeriksaan itu dilengkapi pembacaan laporan dan pencocokan total dua agar isi pemulihan juga sesuai harapan. File yang strukturnya sehat masih dapat memuat data yang salah atau terlalu lama.",
+      "Perubahan sesudah backup tidak ikut kembali: contoh tetap mempertahankan 99 pada database aktif dan dua pada hasil pemulihan. Latihan memakai file milik sendiri tanpa penulis bersamaan. Pada penggunaan nyata, rancang target kehilangan data, waktu pemulihan, kompatibilitas aplikasi, akses backup, dan prosedur perpindahan terpisah."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Batas yang perlu dipahami"
+      ],
+      "rows": [
+        [
+          "Backup API",
+          "Salinan melalui SQLite, bukan tebakan file"
+        ],
+        [
+          "Tujuan baru",
+          "File yang sudah ada ditolak"
+        ],
+        [
+          "Integrity check",
+          "Struktur, bukan semua makna data"
+        ],
+        [
+          "Verifikasi isi",
+          "Laporan sesuai keadaan saat backup"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r09_pemulihan.py",
+        "filename": "examples/r09_pemulihan.py",
+        "language": "python",
+        "code": "from contextlib import closing\nfrom pathlib import Path\nimport sqlite3\nfrom tempfile import TemporaryDirectory\nfrom praktik_layanan.backup import salin_database\nfrom praktik_layanan.store import siapkan,simpan,baca\n\nwith TemporaryDirectory() as work:\n    root=Path(work);active=root/'aktif.sqlite'\n    with closing(sqlite3.connect(active)) as conn:\n        siapkan(conn)\n        with conn:simpan(conn,'terbaru',{'total':2})\n    snapshot=salin_database(active,root/'backup.sqlite')\n    # Simulasikan data aktif berubah sesudah backup.\n    with closing(sqlite3.connect(active)) as conn:\n        with conn:simpan(conn,'terbaru',{'total':99})\n    restored=salin_database(snapshot,root/'pulih.sqlite')\n    with closing(sqlite3.connect(restored)) as conn:\n        print('Total dipulihkan:',baca(conn)['total'])\n        print('Integrity check:',conn.execute('PRAGMA integrity_check').fetchone()[0])\n    with closing(sqlite3.connect(active)) as conn:\n        print('Database aktif tetap:',baca(conn)['total'])\n    print('Pemulihan diverifikasi pada file baru, belum mengganti database aktif')\n",
+        "output": "Total dipulihkan: 2\nIntegrity check: ok\nDatabase aktif tetap: 99\nPemulihan diverifikasi pada file baru, belum mengganti database aktif",
+        "explanation": "Jalankan python examples/r09_pemulihan.py dari paket practice-lab terbaru yang telah diinstal editable sesuai README. Gunakan paket lengkap untuk helper bersama. Contoh pytest menampilkan inti jumlah test lulus; durasi dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak practice-lab terbaru pada folder latihan tersendiri.",
+      "Gunakan virtual environment dan jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r09_pemulihan.py",
+      "Jalankan python -m pytest -q untuk memeriksa kasus normal, kasus gagal, dan perlindungan data."
+    ],
+    "practice": [
+      "Ubah nilai sebelum dan sesudah backup, lalu prediksi hasil pemulihannya.",
+      "Coba tujuan yang sudah ada dan pastikan isinya tidak diganti."
+    ],
+    "warning": "Contoh tidak mengganti database aktif dan bukan prosedur pemulihan produksi lengkap. Batas timeout koneksi bukan deadline keseluruhan backup.",
+    "check": "Mengapa integrity_check saja belum cukup?",
+    "answer": "Karena struktur yang sehat tidak menjamin backup berisi versi data, isi laporan, serta kontrak aplikasi yang diperlukan.",
+    "source": "https://docs.python.org/3.12/library/sqlite3.html",
+    "diagram": "practice-restore",
+    "diagramAlt": "Backup menyimpan total dua; database aktif kemudian berubah menjadi 99. Pemulihan ke file baru kembali menghasilkan dua tanpa mengganti database aktif.",
+    "stage": 0,
+    "minutes": 35
   },
   {
     "slug": "akhir-proyek-data",
