@@ -10888,5 +10888,1013 @@
       "answer": 0,
       "explanation": "Server lab tidak mencakup kebutuhan produksi."
     }
+  ],
+  "uji-kontrak": [
+    {
+      "question": "Yang dihitung total pada proyek adalah ...",
+      "options": [
+        "Observasi",
+        "Layanan unik saja",
+        "Port TCP"
+      ],
+      "answer": 0,
+      "explanation": "Kontrak menetapkan unit analisis sebagai satu baris diterima."
+    },
+    {
+      "question": "Rasio untuk masukan kosong adalah ...",
+      "options": [
+        "1 selalu",
+        "None",
+        "0 selalu"
+      ],
+      "answer": 1,
+      "explanation": "Penyebut kosong dibedakan dari proporsi nol."
+    },
+    {
+      "question": "Harapan test sebaiknya berasal dari ...",
+      "options": [
+        "Keluaran kode tanpa ditinjau",
+        "Nama file",
+        "Kontrak kebutuhan"
+      ],
+      "answer": 2,
+      "explanation": "Test perlu acuan perilaku yang independen."
+    },
+    {
+      "question": "Test hijau membuktikan ...",
+      "options": [
+        "Kasus yang diuji lulus",
+        "Semua bug sudah tidak ada",
+        "Semua kebutuhan pengguna selesai"
+      ],
+      "answer": 0,
+      "explanation": "Cakupan test selalu terbatas pada kasusnya."
+    }
+  ],
+  "uji-unit": [
+    {
+      "question": "Pola AAA berurutan ...",
+      "options": [
+        "Siapkan, jalankan, periksa",
+        "Deploy, commit, hapus",
+        "Mock, deploy, restart"
+      ],
+      "answer": 0,
+      "explanation": "Arrange–Act–Assert memisahkan tahapan test."
+    },
+    {
+      "question": "Perintah yang memakai interpreter lingkungan aktif adalah ...",
+      "options": [
+        "python test tanpa nama",
+        "python -m pytest",
+        "Nama folder tests saja"
+      ],
+      "answer": 1,
+      "explanation": "Pemanggilan modul mengikuti interpreter Python tersebut."
+    },
+    {
+      "question": "Test input tetap memeriksa ...",
+      "options": [
+        "Koneksi internet",
+        "Versi database",
+        "Fungsi tidak memutasi masukan"
+      ],
+      "answer": 2,
+      "explanation": "Efek samping juga bagian kontrak."
+    },
+    {
+      "question": "Unit test paling sesuai untuk ...",
+      "options": [
+        "Aturan kecil yang terisolasi",
+        "Seluruh browser dan database sekaligus",
+        "SLA bulanan"
+      ],
+      "answer": 0,
+      "explanation": "Alur lintas lapisan diuji sebagai integrasi atau end-to-end."
+    }
+  ],
+  "uji-fixture": [
+    {
+      "question": "Scope fixture default adalah ...",
+      "options": [
+        "function",
+        "session selalu",
+        "global process"
+      ],
+      "answer": 0,
+      "explanation": "Fixture dibuat per pemanggilan test secara default."
+    },
+    {
+      "question": "Tiga parameter pada contoh menghasilkan ...",
+      "options": [
+        "Tiga koneksi luar",
+        "Tiga kasus test",
+        "Satu hasil tanpa variasi"
+      ],
+      "answer": 1,
+      "explanation": "Pytest melaporkan setiap variasi sebagai kasus."
+    },
+    {
+      "question": "Resource yang dibuka fixture sebaiknya ...",
+      "options": [
+        "Dibiarkan sampai OS penuh",
+        "Dipakai semua test tanpa aturan",
+        "Ditutup pada teardown"
+      ],
+      "answer": 2,
+      "explanation": "Pembersihan perlu berjalan meskipun test gagal."
+    },
+    {
+      "question": "Test bergantung urutan test lain menandakan ...",
+      "options": [
+        "Isolasi perlu diperbaiki",
+        "Cakupan pasti tinggi",
+        "Fixture selalu benar"
+      ],
+      "answer": 0,
+      "explanation": "Setiap test seharusnya punya kebutuhan yang jelas."
+    }
+  ],
+  "uji-batas": [
+    {
+      "question": "pytest.raises digunakan untuk ...",
+      "options": [
+        "Memeriksa exception yang diharapkan",
+        "Mengabaikan semua error",
+        "Menjalankan deployment"
+      ],
+      "answer": 0,
+      "explanation": "Kegagalan yang disepakati adalah perilaku yang dapat diuji."
+    },
+    {
+      "question": "Konfigurasi 0 pada lab ...",
+      "options": [
+        "Mematikan validasi",
+        "Ditolak",
+        "Otomatis menjadi 1000"
+      ],
+      "answer": 1,
+      "explanation": "Rentang yang disepakati dimulai dari 1."
+    },
+    {
+      "question": "Kasus valid di batas perlu diuji karena ...",
+      "options": [
+        "Semua input pasti invalid",
+        "Agar test lebih lama",
+        "Batas dapat salah ditolak"
+      ],
+      "answer": 2,
+      "explanation": "Uji kedua sisi batas kontrak."
+    },
+    {
+      "question": "Menangkap seluruh Exception dapat ...",
+      "options": [
+        "Menyamarkan penyebab yang salah",
+        "Menjamin kode benar",
+        "Menggantikan kontrak"
+      ],
+      "answer": 0,
+      "explanation": "Exception yang terlalu umum dapat membuat test lulus palsu."
+    }
+  ],
+  "uji-mock": [
+    {
+      "question": "Fungsi fetch diberikan lewat parameter supaya ...",
+      "options": [
+        "Dependency dapat dikendalikan",
+        "Semua error hilang",
+        "Tidak perlu integrasi"
+      ],
+      "answer": 0,
+      "explanation": "Injection membantu isolasi pengujian."
+    },
+    {
+      "question": "Timeout pada contoh harus ...",
+      "options": [
+        "Menghapus data",
+        "Diteruskan sebagai error",
+        "Diubah menjadi ok"
+      ],
+      "answer": 1,
+      "explanation": "Kegagalan tidak boleh disamarkan menjadi sehat."
+    },
+    {
+      "question": "Mock yang hanya memberi data ideal ...",
+      "options": [
+        "Membuktikan jaringan stabil",
+        "Menggantikan server produksi",
+        "Perlu ditambah kasus gagal"
+      ],
+      "answer": 2,
+      "explanation": "Cakupannya terbatas pada skenario simulasi."
+    },
+    {
+      "question": "Setelah unit mock, langkah yang berguna adalah ...",
+      "options": [
+        "Uji adapter nyata secara lokal",
+        "Menghapus validasi",
+        "Menambah mock tanpa tujuan"
+      ],
+      "answer": 0,
+      "explanation": "Integrasi membuktikan sambungan antarbagian."
+    }
+  ],
+  "uji-integrasi": [
+    {
+      "question": "Persistensi yang lebih kuat diuji dengan ...",
+      "options": [
+        "Membuka koneksi baru",
+        "Membaca variabel input saja",
+        "Mock semua SQL"
+      ],
+      "answer": 0,
+      "explanation": "Data harus tetap tersedia sesudah penutupan."
+    },
+    {
+      "question": "with conn pada SQLite terutama mengelola ...",
+      "options": [
+        "Deployment",
+        "Transaksi",
+        "Penutupan koneksi otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Close perlu diatur terpisah."
+    },
+    {
+      "question": "Exception sebelum commit pada contoh menghasilkan ...",
+      "options": [
+        "Commit otomatis semua baris",
+        "Database produksi terhapus",
+        "Rollback"
+      ],
+      "answer": 2,
+      "explanation": "Transaksi gagal dibatalkan."
+    },
+    {
+      "question": "SQL parameter berguna untuk ...",
+      "options": [
+        "Memperlakukan masukan sebagai nilai",
+        "Mengganti semua constraint",
+        "Membuat PostgreSQL sama dengan SQLite"
+      ],
+      "answer": 0,
+      "explanation": "Nilai tidak dirangkai ke teks kueri."
+    }
+  ],
+  "uji-debugging": [
+    {
+      "question": "Langkah awal saat membaca traceback adalah ...",
+      "options": [
+        "Kenali jenis error dan frame relevan",
+        "Hapus semua exception",
+        "Ubah kode acak"
+      ],
+      "answer": 0,
+      "explanation": "Diagnosis perlu bukti lokasi dan kondisi."
+    },
+    {
+      "question": "Total nol menurut kontrak menghasilkan ...",
+      "options": [
+        "Selalu nol tanpa penjelasan",
+        "None",
+        "Selalu 100 persen"
+      ],
+      "answer": 1,
+      "explanation": "Tidak ada observasi dibedakan dari rasio nol."
+    },
+    {
+      "question": "Perintah debugger n berarti ...",
+      "options": [
+        "Buka koneksi baru",
+        "Hapus variabel",
+        "Langkah berikut pada alur saat ini"
+      ],
+      "answer": 2,
+      "explanation": "n melakukan next."
+    },
+    {
+      "question": "Regression test menjaga ...",
+      "options": [
+        "Bug yang diperbaiki tidak kembali",
+        "Semua bug dunia hilang",
+        "Server terus menyala"
+      ],
+      "answer": 0,
+      "explanation": "Kasus reproduksi menjadi penjaga perilaku."
+    }
+  ],
+  "uji-logging": [
+    {
+      "question": "Kolom yang berguna untuk korelasi adalah ...",
+      "options": [
+        "ID job",
+        "Password",
+        "Seluruh token"
+      ],
+      "answer": 0,
+      "explanation": "Identitas job menghubungkan kejadian terkait."
+    },
+    {
+      "question": "Data yang perlu dihindari pada log mentah adalah ...",
+      "options": [
+        "Nama tahap",
+        "Token akses",
+        "Jumlah baris diterima"
+      ],
+      "answer": 1,
+      "explanation": "Rahasia tidak diperlukan untuk diagnosis umum."
+    },
+    {
+      "question": "Jam monotonic cocok untuk ...",
+      "options": [
+        "Menulis tanggal kalender lokal",
+        "Mengganti timezone",
+        "Mengukur durasi"
+      ],
+      "answer": 2,
+      "explanation": "Selang tidak terpengaruh perubahan jam dinding."
+    },
+    {
+      "question": "Test log sebaiknya memeriksa ...",
+      "options": [
+        "Informasi penting yang dijanjikan",
+        "Setiap spasi kosmetik tanpa alasan",
+        "Semua log pihak ketiga"
+      ],
+      "answer": 0,
+      "explanation": "Periksa perilaku yang bernilai bagi diagnosis."
+    }
+  ],
+  "proyek-lingkungan": [
+    {
+      "question": "Virtual environment sebaiknya ...",
+      "options": [
+        "Dapat dibuat ulang",
+        "Dimasukkan seluruhnya ke Git",
+        "Dipakai bersama semua proyek tanpa aturan"
+      ],
+      "answer": 0,
+      "explanation": "Sumber dan metadata lebih tepat disimpan daripada lingkungan runtime."
+    },
+    {
+      "question": "python -m pip mengikuti ...",
+      "options": [
+        "Nama folder saja",
+        "Interpreter Python yang dipanggil",
+        "Browser aktif"
+      ],
+      "answer": 1,
+      "explanation": "Modul pip dijalankan oleh interpreter tersebut."
+    },
+    {
+      "question": "File .env otomatis dimuat Python?",
+      "options": [
+        "Ya selalu",
+        "Hanya pada SQLite",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Pemuatan .env perlu mekanisme eksplisit."
+    },
+    {
+      "question": "Pin pytest saja berarti ...",
+      "options": [
+        "Belum lock penuh transitif",
+        "Semua platform identik",
+        "Tidak perlu mencatat Python"
+      ],
+      "answer": 0,
+      "explanation": "Reproduksi juga bergantung dependency lain dan platform."
+    }
+  ],
+  "proyek-packaging": [
+    {
+      "question": "Nama import paket lab adalah ...",
+      "options": [
+        "praktik_layanan",
+        "praktik-layanan-lab",
+        "pyproject"
+      ],
+      "answer": 0,
+      "explanation": "Tanda hubung nama distribusi tidak dipakai pada import Python."
+    },
+    {
+      "question": "Pyproject menyatakan ...",
+      "options": [
+        "Isi seluruh database",
+        "Metadata dan build backend",
+        "Semua rahasia produksi"
+      ],
+      "answer": 1,
+      "explanation": "Konfigurasi proyek berbeda dari data runtime."
+    },
+    {
+      "question": "Editable terutama digunakan untuk ...",
+      "options": [
+        "Menjamin semua artefak rilis sama",
+        "Mengganti seluruh test",
+        "Pengembangan dari source"
+      ],
+      "answer": 2,
+      "explanation": "Perubahan source langsung digunakan."
+    },
+    {
+      "question": "Wheel perlu diuji karena ...",
+      "options": [
+        "Isi distribusi dapat berbeda dari checkout",
+        "Selalu memuat semua file Git",
+        "Pasti menjalankan Docker"
+      ],
+      "answer": 0,
+      "explanation": "Distribusi harus memuat kebutuhan runtime yang benar."
+    }
+  ],
+  "proyek-filesystem": [
+    {
+      "question": "Path relatif bergantung pada ...",
+      "options": [
+        "Working directory",
+        "Nama interpreter saja",
+        "Nomor port"
+      ],
+      "answer": 0,
+      "explanation": "Lokasi proses menjadi titik acuannya."
+    },
+    {
+      "question": "Perintah pwd menunjukkan ...",
+      "options": [
+        "Isi SQLite",
+        "Direktori kerja shell",
+        "Password pengguna"
+      ],
+      "answer": 1,
+      "explanation": "Pwd membantu mengenali posisi shell."
+    },
+    {
+      "question": "Mengatasi permission sebaiknya dimulai dari ...",
+      "options": [
+        "chmod 777 semua folder",
+        "Menyalin secret ke tempat publik",
+        "Pemilik proses dan akses yang diperlukan"
+      ],
+      "answer": 2,
+      "explanation": "Hak akses perlu sesuai operasi yang dimaksud."
+    },
+    {
+      "question": "Direktori sementara berguna untuk ...",
+      "options": [
+        "Latihan yang dibersihkan setelah selesai",
+        "Backup permanen",
+        "Penyimpanan rahasia publik"
+      ],
+      "answer": 0,
+      "explanation": "Artefak yang diperlukan permanen harus disimpan terpisah."
+    }
+  ],
+  "proyek-proses": [
+    {
+      "question": "Exit code nol biasanya berarti ...",
+      "options": [
+        "Sukses",
+        "Proses pasti masih berjalan",
+        "Output selalu kosong"
+      ],
+      "answer": 0,
+      "explanation": "Konvensi status tidak menggantikan validasi hasil aplikasi."
+    },
+    {
+      "question": "check=True dengan exit code nonnol memicu ...",
+      "options": [
+        "HTTPError",
+        "CalledProcessError",
+        "Commit Git"
+      ],
+      "answer": 1,
+      "explanation": "Subprocess melaporkan kegagalan proses."
+    },
+    {
+      "question": "List argumen berguna untuk ...",
+      "options": [
+        "Mengizinkan semua opsi tanpa validasi",
+        "Menghapus kebutuhan timeout",
+        "Memisahkan program dan parameter"
+      ],
+      "answer": 2,
+      "explanation": "Argumen tidak dirangkai sebagai teks shell."
+    },
+    {
+      "question": "Environment job terjadwal ...",
+      "options": [
+        "Dapat berbeda dari shell interaktif",
+        "Selalu sama persis",
+        "Tidak membutuhkan path"
+      ],
+      "answer": 0,
+      "explanation": "Dokumentasikan interpreter dan konfigurasi yang diperlukan."
+    }
+  ],
+  "otomasi-csv": [
+    {
+      "question": "Baris dengan hasil asing pada lab ...",
+      "options": [
+        "Ditolak dan dihitung",
+        "Diubah diam-diam menjadi ok",
+        "Menghapus file sumber"
+      ],
+      "answer": 0,
+      "explanation": "Penolakan tidak boleh disembunyikan."
+    },
+    {
+      "question": "Header salah berarti ...",
+      "options": [
+        "Selalu lanjut tanpa catatan",
+        "Proses gagal",
+        "Semua kolom ditebak"
+      ],
+      "answer": 1,
+      "explanation": "Skema file adalah dasar interpretasi."
+    },
+    {
+      "question": "Mode sumber pada contoh adalah ...",
+      "options": [
+        "Ditulis ulang otomatis",
+        "Dikirim ke router",
+        "Baca-saja"
+      ],
+      "answer": 2,
+      "explanation": "Source dipertahankan untuk penelusuran."
+    },
+    {
+      "question": "Nomor baris penolakan berguna untuk ...",
+      "options": [
+        "Menelusuri data bermasalah",
+        "Menghitung SLA otomatis",
+        "Mengganti semua validasi"
+      ],
+      "answer": 0,
+      "explanation": "Catatan harus cukup untuk diagnosis tanpa menyembunyikan error."
+    }
+  ],
+  "otomasi-laporan": [
+    {
+      "question": "Pipeline melarang output sama dengan source agar ...",
+      "options": [
+        "Sumber tidak tertimpa",
+        "Test berjalan lebih lambat",
+        "Port tetap sama"
+      ],
+      "answer": 0,
+      "explanation": "Path diperiksa sebelum efek penyimpanan."
+    },
+    {
+      "question": "os.replace pada contoh memperbarui ...",
+      "options": [
+        "Semua folder produksi",
+        "Satu file tujuan",
+        "File dan SQLite serentak"
+      ],
+      "answer": 1,
+      "explanation": "Atomic replace mempunyai lingkup resource terbatas."
+    },
+    {
+      "question": "Gagal menulis JSON setelah commit SQLite dapat ...",
+      "options": [
+        "Membatalkan semua commit otomatis",
+        "Menghapus semua data sumber",
+        "Membuat keluaran tidak selaras"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada transaksi bersama kedua resource."
+    },
+    {
+      "question": "Setelah pemulihan, periksa ...",
+      "options": [
+        "JSON dan database",
+        "Hanya pesan sukses terminal",
+        "Jumlah ikon dashboard"
+      ],
+      "answer": 0,
+      "explanation": "Keadaan kedua keluaran perlu dikonfirmasi."
+    }
+  ],
+  "otomasi-jadwal": [
+    {
+      "question": "Waktu jadwal contoh menggunakan ...",
+      "options": [
+        "UTC eksplisit",
+        "Timezone yang ditebak",
+        "Semua timezone sekaligus"
+      ],
+      "answer": 0,
+      "explanation": "Datetime acuan memakai timezone.utc."
+    },
+    {
+      "question": "Program contoh memasang cron?",
+      "options": [
+        "Hanya di Windows",
+        "Tidak",
+        "Ya otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Ia hanya menghitung jadwal dan ledger."
+    },
+    {
+      "question": "Payload sama dengan kunci sama menghasilkan ...",
+      "options": [
+        "Dua efek luar pasti aman",
+        "Semua proses dikunci",
+        "Catatan tidak digandakan"
+      ],
+      "answer": 2,
+      "explanation": "Lingkup jaminan hanya ledger SQLite tersebut."
+    },
+    {
+      "question": "Agar job tidak bertumpuk, perlu memikirkan ...",
+      "options": [
+        "Koordinasi atau locking",
+        "Menghapus timezone",
+        "Retry tak terbatas"
+      ],
+      "answer": 0,
+      "explanation": "Idempotensi catatan dan penguncian eksekusi berbeda."
+    }
+  ],
+  "otomasi-api": [
+    {
+      "question": "API contoh dihubungi melalui ...",
+      "options": [
+        "Loopback",
+        "Router BTS operasional",
+        "API pelanggan publik"
+      ],
+      "answer": 0,
+      "explanation": "Server dibuat lokal untuk latihan."
+    },
+    {
+      "question": "HTTP 200 perlu dilanjutkan dengan ...",
+      "options": [
+        "Hapus batas ukuran",
+        "Validasi isi yang digunakan",
+        "Anggap semua angka benar"
+      ],
+      "answer": 1,
+      "explanation": "Transport sukses berbeda dari validitas data."
+    },
+    {
+      "question": "JSON yang terparse otomatis sesuai skema?",
+      "options": [
+        "Ya",
+        "Jika portnya 8000",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Struktur dan tipe tetap harus diperiksa."
+    },
+    {
+      "question": "Retry operasi tulis perlu mempertimbangkan ...",
+      "options": [
+        "Idempotensi dan efek pengulangan",
+        "Hanya warna tombol",
+        "Tidak perlu batas"
+      ],
+      "answer": 0,
+      "explanation": "Permintaan yang timeout bisa sudah diproses."
+    }
+  ],
+  "rekayasa-kebutuhan": [
+    {
+      "question": "Acceptance criteria yang baik ...",
+      "options": [
+        "Dapat diperiksa",
+        "Hanya berbunyi harus bagus",
+        "Selalu nama library"
+      ],
+      "answer": 0,
+      "explanation": "Kriteria perlu mempunyai hasil yang teramati."
+    },
+    {
+      "question": "Kapasitas dan pemulihan termasuk ...",
+      "options": [
+        "Skema warna saja",
+        "Kebutuhan operasional",
+        "Nama variabel"
+      ],
+      "answer": 1,
+      "explanation": "Aplikasi perlu dipikirkan saat dijalankan."
+    },
+    {
+      "question": "Lab mengklaim SLA produksi?",
+      "options": [
+        "Ya",
+        "Jika test hijau",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Unit analisisnya observasi CSV fiktif."
+    },
+    {
+      "question": "Perubahan kontrak sebaiknya ...",
+      "options": [
+        "Dibahas sebelum implementasi terkait",
+        "Disembunyikan dari test",
+        "Diabaikan dokumentasi"
+      ],
+      "answer": 0,
+      "explanation": "Kode, test, dan dokumentasi perlu tetap selaras."
+    }
+  ],
+  "rekayasa-modul": [
+    {
+      "question": "Core pada lab bergantung langsung pada HTTP?",
+      "options": [
+        "Tidak",
+        "Ya selalu",
+        "Hanya saat import"
+      ],
+      "answer": 0,
+      "explanation": "Aturan dipisah dari adapter web."
+    },
+    {
+      "question": "Mengubah format CSV terutama menyentuh ...",
+      "options": [
+        "Nomor port",
+        "Adapter file",
+        "Seluruh modul tanpa alasan"
+      ],
+      "answer": 1,
+      "explanation": "Batas tanggung jawab membantu membatasi perubahan."
+    },
+    {
+      "question": "Refactor menjaga ...",
+      "options": [
+        "Jumlah file selalu sama",
+        "Semua implementasi lama",
+        "Perilaku yang disepakati"
+      ],
+      "answer": 2,
+      "explanation": "Struktur boleh berubah selama kontrak dijaga."
+    },
+    {
+      "question": "Memecah kode menjadi banyak file ...",
+      "options": [
+        "Perlu alasan tanggung jawab",
+        "Pasti selalu lebih baik",
+        "Menghapus kebutuhan test"
+      ],
+      "answer": 0,
+      "explanation": "Pemisahan yang berlebihan dapat memperumit pemahaman."
+    }
+  ],
+  "rekayasa-review": [
+    {
+      "question": "README perlu menjelaskan ...",
+      "options": [
+        "Persiapan dan batas penggunaan",
+        "Hanya nama penulis",
+        "Seluruh secret"
+      ],
+      "answer": 0,
+      "explanation": "Pembaca perlu dapat menjalankan serta menilai hasil."
+    },
+    {
+      "question": "Type hint otomatis memvalidasi semua input?",
+      "options": [
+        "Hanya pada Linux",
+        "Tidak",
+        "Ya"
+      ],
+      "answer": 1,
+      "explanation": "Anotasi berbeda dari pemeriksaan runtime."
+    },
+    {
+      "question": "Review bernilai memeriksa ...",
+      "options": [
+        "Spasi saja",
+        "Warna terminal saja",
+        "Kontrak, kasus batas, efek, dan test"
+      ],
+      "answer": 2,
+      "explanation": "Review perlu menilai perilaku dan dampak."
+    },
+    {
+      "question": "Runbook membantu ...",
+      "options": [
+        "Diagnosis dan pemulihan",
+        "Menggantikan semua backup",
+        "Menghapus kebutuhan observasi"
+      ],
+      "answer": 0,
+      "explanation": "Prosedur operasional perlu dapat diikuti."
+    }
+  ],
+  "delivery-docker": [
+    {
+      "question": "EXPOSE otomatis membuka port host?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Hanya untuk Python"
+      ],
+      "answer": 0,
+      "explanation": "Publish port ditentukan saat menjalankan container."
+    },
+    {
+      "question": "Database lab disimpan di ...",
+      "options": [
+        "Environment variable panjang",
+        "Mount runtime terpisah",
+        "Source image berisi pelanggan"
+      ],
+      "answer": 1,
+      "explanation": "Kode dan data runtime mempunyai siklus berbeda."
+    },
+    {
+      "question": "Tag image dasar dapat berubah sehingga ...",
+      "options": [
+        "Tidak perlu pengujian",
+        "Semua build selalu identik",
+        "Digest aktual perlu dicatat"
+      ],
+      "answer": 2,
+      "explanation": "Tag bergerak tidak menjamin artefak yang sama."
+    },
+    {
+      "question": "Dockerfile tersedia berarti ...",
+      "options": [
+        "Konfigurasi build tersedia",
+        "Container pasti sudah sehat",
+        "Semua deployment selesai"
+      ],
+      "answer": 0,
+      "explanation": "Build dan runtime tetap perlu diverifikasi."
+    }
+  ],
+  "delivery-ci": [
+    {
+      "question": "Lokasi workflow aktif adalah ...",
+      "options": [
+        ".github/workflows di akar repo",
+        "Folder unduhan sembarang",
+        "Semua YAML dalam ZIP"
+      ],
+      "answer": 0,
+      "explanation": "GitHub membaca lokasi workflow yang ditentukan."
+    },
+    {
+      "question": "CI contoh langsung deploy publik?",
+      "options": [
+        "Jika pytest ditemukan",
+        "Tidak",
+        "Ya"
+      ],
+      "answer": 1,
+      "explanation": "Workflow hanya memeriksa dan membangun."
+    },
+    {
+      "question": "Run yang hijau perlu dicocokkan dengan ...",
+      "options": [
+        "Warna logo",
+        "Nama browser",
+        "Commit yang diuji"
+      ],
+      "answer": 2,
+      "explanation": "Bukti berlaku untuk versi source tertentu."
+    },
+    {
+      "question": "docker build sukses membuktikan ...",
+      "options": [
+        "Image dapat dibangun pada run itu",
+        "Semua alur runtime sehat",
+        "Database sudah terisi"
+      ],
+      "answer": 0,
+      "explanation": "Build dan runtime mempunyai pemeriksaan berbeda."
+    }
+  ],
+  "delivery-rilis": [
+    {
+      "question": "Hash pada contoh adalah hash ...",
+      "options": [
+        "Manifest JSON",
+        "Image Docker yang berjalan",
+        "Semua database produksi"
+      ],
+      "answer": 0,
+      "explanation": "Kode hanya menghitung isi manifest contoh."
+    },
+    {
+      "question": "Staging dipakai untuk ...",
+      "options": [
+        "Menyimpan secret publik",
+        "Memeriksa kandidat sebelum digunakan",
+        "Menghapus semua test"
+      ],
+      "answer": 1,
+      "explanation": "Kandidat perlu bukti pada lingkungan yang sesuai."
+    },
+    {
+      "question": "Rollback kode otomatis membalik migrasi?",
+      "options": [
+        "Ya selalu",
+        "Hanya pada SQLite",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Pemulihan data membutuhkan rancangan sendiri."
+    },
+    {
+      "question": "Sesudah rilis sebaiknya ...",
+      "options": [
+        "Pantau hasil dan error",
+        "Berhenti pada build sukses",
+        "Hapus artefak lama sebelum yakin"
+      ],
+      "answer": 0,
+      "explanation": "Observasi runtime melengkapi pemeriksaan sebelum rilis."
+    }
+  ],
+  "akhir-proyek-data": [
+    {
+      "question": "Jumlah observasi diterima dataset proyek adalah ...",
+      "options": [
+        "4",
+        "5",
+        "2"
+      ],
+      "answer": 0,
+      "explanation": "Satu dari lima baris memiliki hasil asing."
+    },
+    {
+      "question": "Rasio ok yang benar adalah ...",
+      "options": [
+        "0.4 dari data diterima",
+        "0.5",
+        "1"
+      ],
+      "answer": 1,
+      "explanation": "Dua ok dibagi empat observasi diterima."
+    },
+    {
+      "question": "Verifikasi database memakai ...",
+      "options": [
+        "Hanya variabel hasil",
+        "Nama file saja",
+        "Koneksi baru"
+      ],
+      "answer": 2,
+      "explanation": "Persistensi perlu diperiksa dari resource tersimpan."
+    },
+    {
+      "question": "Pengembangan indikator harus menjaga ...",
+      "options": [
+        "Definisi dan unit analisis",
+        "Semua angka selalu naik",
+        "Jumlah warna grafik"
+      ],
+      "answer": 0,
+      "explanation": "Makna indikator lebih penting daripada banyaknya angka."
+    }
+  ],
+  "akhir-proyek-dashboard": [
+    {
+      "question": "Data API berasal dari ...",
+      "options": [
+        "SQLite tersimpan",
+        "Angka acak pada halaman",
+        "Router pelanggan"
+      ],
+      "answer": 0,
+      "explanation": "API membaca laporan yang dibangun pipeline."
+    },
+    {
+      "question": "Database belum tersedia menghasilkan ...",
+      "options": [
+        "Pembuatan database kosong otomatis",
+        "503",
+        "200 dengan angka nol palsu"
+      ],
+      "answer": 1,
+      "explanation": "Resource tidak tersedia dilaporkan eksplisit."
+    },
+    {
+      "question": "textContent digunakan agar ...",
+      "options": [
+        "Semua HTML masukan dieksekusi",
+        "Koneksi otomatis terenkripsi",
+        "Data ditampilkan sebagai teks"
+      ],
+      "answer": 2,
+      "explanation": "Cara menampilkan data berbeda dari mengeksekusi markup."
+    },
+    {
+      "question": "Pemeriksaan alur proyek meliputi ...",
+      "options": [
+        "Sumber, database, API, dan halaman",
+        "Hanya warna tombol",
+        "Hanya build image"
+      ],
+      "answer": 0,
+      "explanation": "Bagian yang berbeda dapat gagal secara terpisah."
+    }
   ]
 }

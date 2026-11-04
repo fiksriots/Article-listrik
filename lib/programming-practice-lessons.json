@@ -1,0 +1,1538 @@
+[
+  {
+    "slug": "uji-kontrak",
+    "title": "Mulai dari perilaku yang ingin dibuktikan",
+    "summary": "Tentukan kontrak dan kasus penerimaan sebelum menulis test.",
+    "analogy": "Memeriksa pesanan dimulai dari apa yang disepakati, bukan dari cara koki menyusun alat.",
+    "explain": [
+      "Pengujian membandingkan perilaku program dengan harapan yang jelas. Pada proyek ini, satu baris adalah satu observasi layanan. Dua baris milik layanan yang sama tetap dua observasi, bukan otomatis duplikat yang harus dihapus.",
+      "Kontrak ringkas menetapkan hasil ok, timeout, dan refused, total observasi, serta rasio ok. Masukan kosong menghasilkan rasio None karena tidak ada penyebut. Keputusan ini ditulis sebelum test supaya angka nol tidak menyamarkan ketiadaan pengamatan.",
+      "Tiga test contoh memeriksa satu perilaku masing-masing. Nama test menjelaskan situasi dan harapan; assert memakai hasil yang dapat diamati. Tidak perlu menguji nama variabel internal atau urutan baris kode yang bebas berubah.",
+      "Simpan kriteria penerimaan pada docs/kebutuhan.md. Ketika kebutuhan berubah, bahas kontraknya dahulu, lalu perbarui implementasi dan test yang relevan. Test hijau hanya bermakna terhadap perilaku yang benar-benar dicakup."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Kontrak",
+          "Perilaku yang disepakati"
+        ],
+        [
+          "Unit analisis",
+          "Satu observasi CSV"
+        ],
+        [
+          "Masukan kosong",
+          "Rasio None"
+        ],
+        [
+          "Assert",
+          "Bandingkan hasil dan harapan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t01_kontrak.py",
+        "filename": "tests/test_t01_kontrak.py",
+        "language": "python",
+        "code": "from praktik_layanan.core import ringkas\n\ndef test_total_observasi_bukan_layanan_unik():\n    rows=[{'layanan':'a','hasil':'ok'},{'layanan':'a','hasil':'timeout'}]\n    assert ringkas(rows)['total']==2\n\ndef test_rasio_sampel():\n    rows=[{'layanan':'a','hasil':'ok'},{'layanan':'b','hasil':'refused'}]\n    assert ringkas(rows)['rasio_ok']==.5\n\ndef test_tidak_ada_observasi():\n    assert ringkas([])['rasio_ok'] is None\n",
+        "output": "3 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t01_kontrak.py -q dari paket practice-lab yang sudah diinstal editable sesuai README. Contoh keluaran menampilkan jumlah test yang lulus; durasi dan format progress dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t01_kontrak.py -q",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan kasus tiga observasi untuk satu layanan.",
+      "Tulis harapan untuk layanan tanpa nama sebelum menjalankan kode."
+    ],
+    "warning": "Rasio observasi bukan SLA atau uptime kontinu. Jangan menulis harapan hanya dengan menyalin hasil program yang belum ditinjau.",
+    "check": "Mengapa kasus kosong tidak menghasilkan rasio nol?",
+    "answer": "Karena tidak ada observasi untuk menentukan proporsi; nol menyiratkan hasil pengamatan yang berbeda.",
+    "source": "https://docs.pytest.org/en/stable/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-unit",
+    "title": "Unit test dengan pytest dan pola Arrange–Act–Assert",
+    "summary": "Uji aturan murni tanpa membuka file, jaringan, atau database.",
+    "analogy": "Menguji kalkulator tidak perlu menyalakan seluruh kantor.",
+    "explain": [
+      "Unit test memeriksa bagian kecil perilaku. Fungsi ringkas menerima data dan mengembalikan hasil tanpa I/O sehingga mudah diuji. Siapkan input, panggil fungsi, lalu periksa hasil; pola ini sering disebut Arrange–Act–Assert.",
+      "Contoh pertama menguji seluruh kategori dengan hasil yang dihitung manual. Contoh kedua memastikan data input tidak diubah. Dua perilaku itu berbeda dan sama-sama berguna bagi pemakai fungsi.",
+      "pytest menemukan fungsi test pada file bernama test_*.py. Jalankan melalui python -m pytest agar interpreter yang digunakan sesuai lingkungan aktif. Assertion yang gagal menampilkan nilai pembanding untuk membantu diagnosis.",
+      "Pisahkan aturan bisnis dari adapter file atau database. Unit test harus cepat dan dapat diulang; integrasi diuji pada lapisan berikutnya. Menambah mock ke semua fungsi justru dapat membuat test terlalu terikat pada implementasi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Arrange",
+          "Siapkan data"
+        ],
+        [
+          "Act",
+          "Panggil perilaku"
+        ],
+        [
+          "Assert",
+          "Periksa harapan"
+        ],
+        [
+          "Unit murni",
+          "Tidak bergantung I/O"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t02_unit.py",
+        "filename": "tests/test_t02_unit.py",
+        "language": "python",
+        "code": "from praktik_layanan.core import ringkas\n\ndef test_semua_jenis_hasil():\n    rows=[{'layanan':'a','hasil':x} for x in ['ok','ok','timeout','refused']]\n    assert ringkas(rows)=={'total':4,'ok':2,'timeout':1,'refused':1,'rasio_ok':.5}\n\ndef test_input_tetap():\n    rows=[{'layanan':'a','hasil':'ok'}]\n    ringkas(rows)\n    assert rows==[{'layanan':'a','hasil':'ok'}]\n",
+        "output": "2 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t02_unit.py -q dari paket practice-lab yang sudah diinstal editable sesuai README. Contoh keluaran menampilkan jumlah test yang lulus; durasi dan format progress dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t02_unit.py -q",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan kasus seluruh observasi refused.",
+      "Ubah jumlah observasi ok dan hitung harapan secara manual."
+    ],
+    "warning": "Jangan menganggap unit test menggantikan integrasi dan pemeriksaan alur pengguna.",
+    "check": "Apa keuntungan fungsi tanpa I/O untuk unit test?",
+    "answer": "Input dan hasilnya mudah dikendalikan sehingga pengujian tidak bergantung layanan luar.",
+    "source": "https://docs.pytest.org/en/stable/",
+    "diagram": "practice-testing",
+    "diagramAlt": "Unit, integrasi, dan alur pengguna menguji lapisan berbeda terhadap kontrak yang sama.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-fixture",
+    "title": "Fixture dan parametrization tanpa test berulang",
+    "summary": "Siapkan data bersama dan variasikan kasus dengan jelas.",
+    "analogy": "Bahan dasar yang sama dapat disiapkan ulang untuk beberapa pemeriksaan tanpa berbagi piring kotor.",
+    "explain": [
+      "Fixture pytest menyiapkan kebutuhan test dan diberikan lewat nama parameter. Scope default adalah function: setiap pemanggilan test memperoleh persiapan baru. Ini membantu mencegah satu kasus mengubah keadaan kasus berikutnya.",
+      "Parametrize menjalankan satu pola test pada beberapa data. Contoh menguji total, ok, dan timeout dengan fixture observasi yang sama bentuknya. Ketiganya tetap menjadi kasus terpisah dalam laporan pytest.",
+      "Gunakan fixture untuk persiapan yang bermakna, bukan membungkus setiap konstanta. Fixture resource seperti koneksi dapat memakai yield dan finally agar ditutup setelah test, termasuk ketika assertion gagal.",
+      "Terlalu banyak parameter dapat menyembunyikan alasan sebuah kasus ada. Beri nama kasus atau ID yang mudah dibaca saat variasinya membesar. Jangan membuat test hanya lulus jika dieksekusi sesudah test lain."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Fixture",
+          "Persiapan kebutuhan test"
+        ],
+        [
+          "Scope function",
+          "Isolasi per pemanggilan"
+        ],
+        [
+          "Parametrize",
+          "Variasi kasus terpisah"
+        ],
+        [
+          "Teardown",
+          "Membersihkan resource"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t03_fixture.py",
+        "filename": "tests/test_t03_fixture.py",
+        "language": "python",
+        "code": "import pytest\nfrom praktik_layanan.core import ringkas\n\n@pytest.fixture\ndef observasi():\n    return [{'layanan':'lab','hasil':'ok'},{'layanan':'lab','hasil':'timeout'}]\n\n@pytest.mark.parametrize('kolom,harapan',[('total',2),('ok',1),('timeout',1)])\ndef test_ringkasan(observasi,kolom,harapan):\n    assert ringkas(observasi)[kolom]==harapan\n",
+        "output": "3 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t03_fixture.py -q dari paket practice-lab yang sudah diinstal editable sesuai README. Contoh keluaran menampilkan jumlah test yang lulus; durasi dan format progress dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t03_fixture.py -q",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambah parameter refused dengan harapan nol.",
+      "Jelaskan kapan fixture koneksi perlu yield dan penutupan."
+    ],
+    "warning": "Fixture mutable berscope luas dapat menimbulkan ketergantungan antartest.",
+    "check": "Mengapa scope function membantu isolasi?",
+    "answer": "Persiapan baru mengurangi keadaan yang bocor dari kasus sebelumnya.",
+    "source": "https://docs.pytest.org/en/stable/how-to/fixtures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-batas",
+    "title": "Kasus batas, input invalid, dan pytest.raises",
+    "summary": "Periksa kegagalan yang diharapkan, bukan hanya jalur berhasil.",
+    "analogy": "Pintu perlu diuji saat kunci benar dan saat kuncinya salah.",
+    "explain": [
+      "Input nyata tidak selalu sesuai contoh ideal. Tentukan apa yang diterima dan ditolak: nama layanan kosong, hasil asing, kolom tambahan, serta konfigurasi di luar rentang. Penolakan harus mempunyai jenis error yang konsisten.",
+      "pytest.raises menyatakan bahwa blok tertentu harus memicu exception. Letakkan hanya tindakan yang memang diharapkan gagal dalam blok itu. Test yang sekadar menangkap semua exception dapat menyembunyikan bug pada persiapan.",
+      "Konfigurasi LAB_MAX_ROWS menerima teks angka bulat ASCII 1 sampai 10000. Contoh menguji nol, angka terlalu besar, negatif, pecahan, dan teks boolean. Batas ditetapkan oleh kebutuhan lab, bukan angka universal untuk semua aplikasi.",
+      "Pasangkan kasus invalid dengan kasus valid pada batas bawah dan atas. Periksa juga efek kegagalan: apakah sumber tetap dan apakah keluaran lama masih utuh? Pengujian efek tersebut ada pada test_project.py."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Kasus batas",
+          "Nilai di dekat batas kontrak"
+        ],
+        [
+          "raises",
+          "Exception memang diharapkan"
+        ],
+        [
+          "Invalid",
+          "Ditolak dengan alasan jelas"
+        ],
+        [
+          "Efek gagal",
+          "Tidak merusak data sebelumnya"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t04_batas.py",
+        "filename": "tests/test_t04_batas.py",
+        "language": "python",
+        "code": "import pytest\nfrom praktik_layanan.core import ringkas,konfigurasi\n\n@pytest.mark.parametrize('row',[{},None,{'layanan':'','hasil':'ok'},{'layanan':'a','hasil':'asing'},{'layanan':'a','hasil':'ok','rahasia':'x'}])\ndef test_input_invalid(row):\n    with pytest.raises(ValueError):ringkas([row])\n\n@pytest.mark.parametrize('raw',['0','10001','-1','1.5','True'])\ndef test_konfigurasi_invalid(raw):\n    with pytest.raises(ValueError):konfigurasi({'LAB_MAX_ROWS':raw})\n",
+        "output": "10 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t04_batas.py -q dari paket practice-lab yang sudah diinstal editable sesuai README. Contoh keluaran menampilkan jumlah test yang lulus; durasi dan format progress dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t04_batas.py -q",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan test LAB_MAX_ROWS 1 dan 10000.",
+      "Tentukan kapan kolom tambahan perlu ditolak atau diterima menurut kontrak."
+    ],
+    "warning": "Menangkap Exception secara umum bukan bukti validasi sudah tepat.",
+    "check": "Mengapa blok raises sebaiknya sempit?",
+    "answer": "Agar test tidak lulus karena kesalahan persiapan yang berbeda dari tindakan yang dimaksud.",
+    "source": "https://docs.pytest.org/en/stable/how-to/assert.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-mock",
+    "title": "Mock, dependency injection, dan batas pengujian",
+    "summary": "Simulasikan I/O sambil tetap memeriksa kontrak respons.",
+    "analogy": "Latihan petugas memakai simulasi jawaban telepon, tetapi prosedur petugas tetap diperiksa.",
+    "explain": [
+      "Dependency injection memberikan ketergantungan melalui parameter. baca_status menerima fungsi fetch sehingga test dapat mengatur respons atau error tanpa koneksi luar. Kode inti tetap memeriksa struktur dan nilai respons.",
+      "Mock pada contoh mengembalikan status ok atau memicu TimeoutError. Test juga memeriksa panggilan satu kali tanpa argumen. Pengulangan otomatis tidak diasumsikan aman; kontrak fungsi ini memang satu percobaan.",
+      "Mock yang selalu mengembalikan data sempurna dapat memberi rasa aman palsu. Sertakan respons invalid dan error transport. Setelah unit test, tambahkan integrasi terhadap adapter atau server lokal untuk membuktikan sisi I/O yang sesungguhnya.",
+      "Pilih batas mock pada dependency eksternal atau sumber waktu yang sulit dikendalikan. Hindari memalsukan seluruh fungsi internal sehingga test hanya membuktikan konfigurasi mock. Timeout tidak diubah diam-diam menjadi status sehat."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Injection",
+          "Dependency lewat parameter"
+        ],
+        [
+          "Mock",
+          "Perilaku dependency terkendali"
+        ],
+        [
+          "Kontrak respons",
+          "Tetap diperiksa"
+        ],
+        [
+          "Integrasi",
+          "Menguji adapter sungguhan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t05_mock.py",
+        "filename": "tests/test_t05_mock.py",
+        "language": "python",
+        "code": "from unittest.mock import Mock\nimport pytest\nfrom praktik_layanan.core import baca_status\n\ndef test_respons_tanpa_koneksi():\n    fetch=Mock(return_value={'status':'ok'})\n    assert baca_status(fetch)=='ok'\n    fetch.assert_called_once_with()\n\ndef test_error_transport_tidak_diubah_jadi_sehat():\n    fetch=Mock(side_effect=TimeoutError('batas tunggu'))\n    with pytest.raises(TimeoutError):baca_status(fetch)\n\ndef test_mock_tetap_menguji_kontrak():\n    with pytest.raises(ValueError):baca_status(Mock(return_value={'status':'asing'}))\n",
+        "output": "3 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t05_mock.py -q dari paket practice-lab yang sudah diinstal editable sesuai README. Contoh keluaran menampilkan jumlah test yang lulus; durasi dan format progress dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t05_mock.py -q",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan respons gangguan yang valid.",
+      "Tulis integrasi lokal yang diperlukan setelah tiga unit test ini."
+    ],
+    "warning": "Mock tidak membuktikan jaringan atau layanan nyata dapat dihubungi.",
+    "check": "Apa yang belum dibuktikan oleh test Mock(return_value=...)?",
+    "answer": "Perilaku transport dan adapter nyata di luar batas mock.",
+    "source": "https://docs.python.org/3.12/library/unittest.mock.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-integrasi",
+    "title": "Integration test SQLite, tmp_path, dan rollback",
+    "summary": "Buktikan persistensi serta transaksi dengan database latihan.",
+    "analogy": "Memeriksa mesin kasir dan laci penyimpanannya bersama berbeda dari menguji kalkulator saja.",
+    "explain": [
+      "Integration test memeriksa kerja sama bagian nyata. Contoh memakai SQLite lokal, parameter SQL, penutupan koneksi, serta pembacaan kembali. tmp_path memberi direktori terpisah untuk setiap test.",
+      "Persistensi diuji dengan menulis, menutup koneksi, lalu membuka koneksi baru. Membaca melalui koneksi yang sama saja belum membuktikan perilaku setelah penutupan. contextlib.closing menutup koneksi; context manager koneksi SQLite sendiri mengelola transaksi, bukan otomatis close.",
+      "Test rollback sengaja memicu RuntimeError sebelum commit. Baris yang ditulis pada transaksi itu tidak boleh tersimpan. Test lain memastikan teks yang mirip SQL tetap diperlakukan sebagai nilai lewat parameter.",
+      "SQLite bukan tiruan sempurna PostgreSQL. Jika produksi memakai database lain, perilaku dialek, migrasi, constraint, dan konkurensi perlu diuji pada mesin yang sesuai. Jalur Basis Data membahas konsep tersebut lebih mendalam."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "tmp_path",
+          "Folder terisolasi"
+        ],
+        [
+          "Persistensi",
+          "Baca setelah koneksi baru"
+        ],
+        [
+          "Rollback",
+          "Batalkan transaksi gagal"
+        ],
+        [
+          "Parameter SQL",
+          "Pisahkan kueri dan nilai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "tests/test_t06_integrasi.py",
+        "filename": "tests/test_t06_integrasi.py",
+        "language": "python",
+        "code": "from contextlib import closing\nimport sqlite3\nimport pytest\nfrom praktik_layanan.store import siapkan,simpan,baca\n\ndef test_persistensi_setelah_koneksi_ditutup(tmp_path):\n    db=tmp_path/'uji.sqlite'\n    with closing(sqlite3.connect(db)) as conn:\n        siapkan(conn)\n        with conn:simpan(conn,'terbaru',{'total':2})\n    with closing(sqlite3.connect(db)) as conn:\n        assert baca(conn)=={'total':2}\n\ndef test_rollback_transaksi():\n    with closing(sqlite3.connect(':memory:')) as conn:\n        siapkan(conn)\n        with pytest.raises(RuntimeError):\n            with conn:\n                simpan(conn,'terbaru',{'total':9})\n                raise RuntimeError('gagal sebelum commit')\n        assert baca(conn) is None\n\ndef test_parameter_sql():\n    with closing(sqlite3.connect(':memory:')) as conn:\n        siapkan(conn)\n        with conn:simpan(conn,\"x' OR 1=1 --\",{'total':1})\n        assert baca(conn) is None\n        assert baca(conn,\"x' OR 1=1 --\")=={'total':1}\n",
+        "output": "3 passed",
+        "explanation": "Jalankan python -m pytest tests/test_t06_integrasi.py -q dari paket practice-lab yang sudah diinstal editable sesuai README. Contoh keluaran menampilkan jumlah test yang lulus; durasi dan format progress dapat berbeda."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python -m pytest tests/test_t06_integrasi.py -q",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan test memperbarui laporan bernama sama.",
+      "Jelaskan beda commit, rollback, dan close."
+    ],
+    "warning": "Test SQLite tidak otomatis membuktikan kompatibilitas PostgreSQL.",
+    "check": "Mengapa memakai closing selain with conn?",
+    "answer": "with conn mengelola commit atau rollback, sedangkan closing memastikan koneksi benar-benar ditutup.",
+    "source": "https://docs.python.org/3.12/library/sqlite3.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-debugging",
+    "title": "Membaca traceback dan memakai debugger",
+    "summary": "Cari lokasi serta penyebab bug sebelum mengubah kode.",
+    "analogy": "Menelusuri jejak kejadian membantu menemukan penyebab, bukan sekadar menutup bunyi alarm.",
+    "explain": [
+      "Traceback menunjukkan rangkaian pemanggilan sampai exception terjadi. Mulai dari jenis error dan frame yang relevan, lalu periksa nilai input serta kontrak. Pada contoh, rasio_lama membagi nol karena total observasi kosong.",
+      "Program menangkap ZeroDivisionError untuk menampilkan jenis dan nama fungsi secara stabil. Perbaikan rasio_baru mengikuti kontrak: total nol menghasilkan None. Mengganti hasil menjadi nol tanpa diskusi kebutuhan dapat menyembunyikan makna yang salah.",
+      "Pada sesi interaktif, breakpoint membuka debugger. Perintah p melihat nilai, n melangkah pada fungsi yang sama, s masuk ke pemanggilan, c melanjutkan, dan q keluar. Coba pada komputer latihan, lalu hapus breakpoint sebelum CI atau rilis.",
+      "Buat reproduksi kecil, tambahkan regression test untuk perilaku yang diperbaiki, lalu jalankan test terkait. Jangan menyebarkan traceback yang memuat rahasia, path sensitif, atau data pelanggan ke tempat publik."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Traceback",
+          "Jejak pemanggilan error"
+        ],
+        [
+          "Reproduksi",
+          "Kasus kecil yang memicu bug"
+        ],
+        [
+          "Breakpoint",
+          "Berhenti pada sesi interaktif"
+        ],
+        [
+          "Regression test",
+          "Menjaga perbaikan tetap berlaku"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/t07_debug.py",
+        "filename": "examples/t07_debug.py",
+        "language": "python",
+        "code": "import traceback\n\ndef rasio_lama(ok,total):\n    return ok/total\n\ndef rasio_baru(ok,total):\n    return ok/total if total else None\n\nif __name__=='__main__':\n    try:\n        rasio_lama(0,0)\n    except ZeroDivisionError as exc:\n        frame=traceback.extract_tb(exc.__traceback__)[-1]\n        print('Jenis:',type(exc).__name__)\n        print('Fungsi:',frame.name)\n    print('Kontrak kosong:',rasio_baru(0,0))\n# Untuk sesi interaktif saja, tambahkan breakpoint() sebelum pemanggilan.\n# Gunakan p nama_variabel, n, s, c, dan q pada pdb; jangan sisakan di CI.\n",
+        "output": "Jenis: ZeroDivisionError\nFungsi: rasio_lama\nKontrak kosong: None",
+        "explanation": "Jalankan python examples/t07_debug.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/t07_debug.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan test total nol untuk rasio_baru.",
+      "Gunakan breakpoint pada salinan contoh dan lihat ok serta total."
+    ],
+    "warning": "Contoh rasio_lama sengaja memperlihatkan bug. Jangan meninggalkan breakpoint pada pekerjaan otomatis.",
+    "check": "Mengapa perbaikan harus diikuti test?",
+    "answer": "Agar kasus yang sebelumnya gagal tetap terjaga saat kode berubah.",
+    "source": "https://docs.python.org/3.12/library/pdb.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "uji-logging",
+    "title": "Logging terstruktur dan diagnosis yang dapat ditindaklanjuti",
+    "summary": "Catat tahap, hasil, dan korelasi tanpa menyebarkan rahasia.",
+    "analogy": "Buku kerja berisi kejadian yang relevan, bukan semua percakapan yang kebetulan terdengar.",
+    "explain": [
+      "Logging membantu menelusuri kejadian ketika program berjalan. Pilih informasi yang diperlukan: identitas job, tahap, jumlah diterima, dan jumlah ditolak. Contoh memakai JSON satu baris agar dapat diproses alat lain.",
+      "Logger tidak meneruskan pesan ke root logger supaya contoh tidak tercetak ganda. StreamHandler diarahkan ke memori untuk memperlihatkan format keluaran. Aplikasi nyata dapat memakai handler yang sesuai lingkungan dan kebijakan penyimpanan.",
+      "Level log membedakan detail pengembangan, informasi biasa, peringatan, dan error. Pada kegagalan, tuliskan tahap yang diketahui serta korelasi; jangan langsung menyimpulkan perangkat mati dari satu timeout.",
+      "Jangan menyimpan password, token, atau seluruh payload sensitif. Catatan waktu perlu zona yang jelas; durasi lebih tepat diukur dengan jam monotonic. Uji log penting dengan caplog tanpa mengunci test ke format kosmetik yang tidak diperlukan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "JSON log",
+          "Struktur yang dapat dibaca mesin"
+        ],
+        [
+          "Korelasi",
+          "Menghubungkan catatan job"
+        ],
+        [
+          "Level",
+          "Arti tingkat kejadian"
+        ],
+        [
+          "Redaksi",
+          "Menghapus informasi rahasia"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/t08_logging.py",
+        "filename": "examples/t08_logging.py",
+        "language": "python",
+        "code": "import io,json,logging\nstream=io.StringIO()\nlogger=logging.getLogger('praktik-lab')\nlogger.handlers.clear();logger.propagate=False;logger.setLevel(logging.INFO)\nhandler=logging.StreamHandler(stream)\nhandler.setFormatter(logging.Formatter('%(message)s'));logger.addHandler(handler)\nlogger.info(json.dumps({'job':'laporan-lab','tahap':'validasi','diterima':4,'ditolak':1}))\nprint(stream.getvalue().strip())\n",
+        "output": "{\"job\": \"laporan-lab\", \"tahap\": \"validasi\", \"diterima\": 4, \"ditolak\": 1}",
+        "explanation": "Jalankan python examples/t08_logging.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/t08_logging.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan kolom durasi dengan sumber waktu yang tepat.",
+      "Rancang log untuk CSV salah header tanpa mencetak seluruh file."
+    ],
+    "warning": "Banyak log tidak selalu lebih berguna; batasi isi dan aksesnya sesuai kebutuhan.",
+    "check": "Apa bedanya fakta log dengan dugaan penyebab?",
+    "answer": "Fakta mencatat tahap dan hasil yang diamati; penyebab perlu bukti lanjutan.",
+    "source": "https://docs.python.org/3.12/library/logging.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "proyek-lingkungan",
+    "title": "Virtual environment, dependensi, dan konfigurasi",
+    "summary": "Pisahkan lingkungan proyek dan validasi konfigurasi di awal.",
+    "analogy": "Setiap proyek mempunyai kotak alat sendiri agar alat pekerjaan lain tidak ikut berubah.",
+    "explain": [
+      "Virtual environment memisahkan interpreter dan pemasangan paket proyek. Buat .venv, aktifkan sesuai sistem operasi, lalu gunakan python -m pip. Lingkungan virtual dapat dibuat ulang; jangan memasukkannya ke Git atau ZIP sumber.",
+      "Runtime lab memakai pustaka bawaan Python, sedangkan pytest adalah dependensi pengembangan. Instalasi editable dari pyproject membuat perubahan src langsung terbaca oleh contoh. Versi pytest dipilih eksplisit, tetapi itu belum menjadi lock penuh semua dependensi transitif lintas platform.",
+      "Konfigurasi terpisah dari aturan bisnis. Contoh meneruskan mapping environment ke konfigurasi, lalu memvalidasi LAB_MAX_ROWS sebelum pekerjaan dimulai. Nilai invalid ditolak agar proses tidak bekerja dengan asumsi yang diam-diam salah.",
+      "Catat versi Python dan dependensi saat membandingkan hasil. Secret tidak boleh ditulis pada source atau log. File .env yang diabaikan Git bukan otomatis dibaca oleh Python; perlu pemuat eksplisit bila desain aplikasi menggunakannya."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          ".venv",
+          "Lingkungan per proyek"
+        ],
+        [
+          "Dev dependency",
+          "Paket pengujian/pengembangan"
+        ],
+        [
+          "Konfigurasi",
+          "Nilai yang divalidasi sebelum kerja"
+        ],
+        [
+          "Lock penuh",
+          "Mencakup dependensi transitif yang relevan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p01_lingkungan.py",
+        "filename": "examples/p01_lingkungan.py",
+        "language": "python",
+        "code": "from praktik_layanan.core import konfigurasi\nprint('Batas default:',konfigurasi({}))\nprint('Batas konfigurasi:',konfigurasi({'LAB_MAX_ROWS':'50'}))\ntry:\n    konfigurasi({'LAB_MAX_ROWS':'0'})\nexcept ValueError:\n    print('Konfigurasi invalid ditolak sebelum pekerjaan dimulai')\n",
+        "output": "Batas default: 1000\nBatas konfigurasi: 50\nKonfigurasi invalid ditolak sebelum pekerjaan dimulai",
+        "explanation": "Jalankan python examples/p01_lingkungan.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p01_lingkungan.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Uji konfigurasi 1, 10000, dan teks kosong.",
+      "Periksa python -m pip --version pada lingkungan yang diaktifkan."
+    ],
+    "warning": "Mengabaikan .env di Git tidak otomatis membuat isinya aman atau termuat oleh program.",
+    "check": "Mengapa konfigurasi divalidasi sebelum membaca sumber?",
+    "answer": "Agar pekerjaan gagal awal dengan alasan yang jelas, sebelum melakukan efek I/O.",
+    "source": "https://docs.python.org/3.12/library/venv.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "proyek-packaging",
+    "title": "Struktur src, pyproject, wheel, dan CLI",
+    "summary": "Buat proyek yang dapat diinstal, bukan kumpulan file yang harus disalin manual.",
+    "analogy": "Paket rapi mempunyai label, isi, dan petunjuk penggunaan yang jelas.",
+    "explain": [
+      "Struktur src memisahkan paket aplikasi dari tests, examples, dan data latihan. pyproject menyatakan nama distribusi, versi, kebutuhan Python, build backend, dependensi, serta entry point CLI. Metadata ini menjadi acuan instalasi.",
+      "Nama distribusi praktik-layanan-lab berbeda dari nama import praktik_layanan. importlib.metadata membaca versi distribusi yang terpasang. Jalankan contoh setelah instalasi editable supaya metadata dan import dapat ditemukan dari direktori lain.",
+      "Wheel adalah artefak distribusi Python. Gunakan python -m pip wheel . --no-deps --wheel-dir dist dari akar lab. Perintah ini dapat memerlukan paket build backend; simpan catatan lingkungan dan verifikasi artefak sebelum dibagikan.",
+      "Editable cocok untuk pengembangan, sedangkan instalasi wheel membantu memeriksa apa yang benar-benar didistribusikan. Paket tidak otomatis menyertakan dataset, konfigurasi, atau secret di luar src; atur kebutuhan runtime secara eksplisit."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "src",
+          "Kode import aplikasi"
+        ],
+        [
+          "pyproject",
+          "Metadata dan konfigurasi build"
+        ],
+        [
+          "Editable",
+          "Source dipakai saat pengembangan"
+        ],
+        [
+          "Wheel",
+          "Artefak distribusi Python"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p02_package.py",
+        "filename": "examples/p02_package.py",
+        "language": "python",
+        "code": "from importlib.metadata import version\nfrom praktik_layanan.core import ringkas\nprint('Versi distribusi:',version('praktik-layanan-lab'))\nprint('Nama import: praktik_layanan')\nprint('Ringkasan kosong:',ringkas([])['total'])\n# Distribusi memakai tanda hubung; import Python memakai underscore.\n",
+        "output": "Versi distribusi: 0.1.0\nNama import: praktik_layanan\nRingkasan kosong: 0",
+        "explanation": "Jalankan python examples/p02_package.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p02_package.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Bangun wheel lalu periksa nama dan versinya.",
+      "Bandingkan nama distribusi, nama import, dan entry point CLI."
+    ],
+    "warning": "Wheel bukan salinan seluruh folder proyek. Jangan menganggap dataset dan konfigurasi ikut tanpa pengaturan.",
+    "check": "Mengapa paket diuji dari direktori lain?",
+    "answer": "Untuk memastikan import tidak hanya berhasil karena kebetulan direktori source menjadi working directory.",
+    "source": "https://packaging.python.org/en/latest/tutorials/packaging-projects/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "proyek-filesystem",
+    "title": "Linux: folder, path, dan permission untuk programmer",
+    "summary": "Pahami working directory serta akses file sebelum membuat otomasi.",
+    "analogy": "Alamat relatif seperti petunjuk dari posisi sekarang; alamat absolut tidak bergantung tempat berangkat.",
+    "explain": [
+      "Pada Linux, program bekerja dengan direktori saat ini, path, pemilik, dan permission. Perintah pwd menunjukkan posisi, ls -l membantu melihat metadata, dan cd mengubah posisi shell. Contoh Python memakai Path agar operasi file mudah dibaca.",
+      "Direktori sementara dibuat khusus untuk latihan lalu dibersihkan saat selesai. resolve dan is_relative_to pada contoh memeriksa lokasi hasil yang baru dibuat sendiri. Ini bukan mekanisme sandbox untuk path yang dapat diubah pihak lain secara bersamaan.",
+      "Permission baca, tulis, dan eksekusi mempunyai arti berbeda pada file dan direktori. Direktori memerlukan izin penelusuran untuk mengakses isi. Jangan menyelesaikan semua masalah akses dengan chmod 777; pahami pemilik proses dan kebutuhan minimum file yang dipakai.",
+      "Catat asumsi working directory pada dokumentasi. Untuk job terjadwal, path absolut sering lebih jelas. Windows mempunyai model permission berbeda, meskipun banyak operasi pathlib tetap dapat digunakan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "pwd",
+          "Working directory shell"
+        ],
+        [
+          "Path relatif",
+          "Ditafsirkan dari posisi saat ini"
+        ],
+        [
+          "Permission",
+          "Hak operasi pada file/direktori"
+        ],
+        [
+          "Direktori sementara",
+          "Ruang latihan terisolasi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p03_filesystem.py",
+        "filename": "examples/p03_filesystem.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nwith TemporaryDirectory() as work:\n    folder=Path(work)/'hasil';folder.mkdir()\n    file=folder/'laporan.txt';file.write_text('data fiktif\\n',encoding='utf-8')\n    print('Nama:',file.name)\n    print('Isi:',file.read_text(encoding='utf-8').strip())\n    print('Dalam folder latihan:',file.resolve().is_relative_to(Path(work).resolve()))\n",
+        "output": "Nama: laporan.txt\nIsi: data fiktif\nDalam folder latihan: True",
+        "explanation": "Jalankan python examples/p03_filesystem.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p03_filesystem.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Di terminal Linux, bandingkan pwd dan ls -l pada folder lab.",
+      "Jelaskan mengapa program berhasil dari satu folder tetapi gagal dari folder lain."
+    ],
+    "warning": "Pemeriksaan resolve pada contoh bukan pengganti sandbox untuk input file tidak dipercaya.",
+    "check": "Mengapa working directory penting untuk path relatif?",
+    "answer": "Path relatif dihitung dari direktori proses, bukan selalu dari lokasi file Python.",
+    "source": "https://docs.python.org/3.12/library/pathlib.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "proyek-proses",
+    "title": "Terminal, proses, exit code, dan subprocess",
+    "summary": "Jalankan pekerjaan tambahan dengan argumen serta batas waktu yang jelas.",
+    "analogy": "Memberi instruksi terpisah lebih jelas daripada merangkai satu kalimat yang dapat disalahartikan petugas.",
+    "explain": [
+      "Shell menjalankan program sebagai proses dengan argumen, environment, stdin, stdout, stderr, dan exit code. Secara konvensi exit code nol menunjukkan sukses. Pesan error dapat muncul di stderr meskipun stdout kosong.",
+      "subprocess.run pada contoh menerima list argumen dan memakai interpreter saat ini. capture_output serta text memudahkan pembacaan hasil, timeout membatasi waktu tunggu, dan check=True memicu CalledProcessError ketika proses mengembalikan kode nonnol.",
+      "Hindari shell=True untuk masukan yang tidak memerlukan fitur shell. Penggabungan teks masukan menjadi perintah dapat mengubah arti eksekusi. List argumen tetap membutuhkan validasi pilihan program dan opsi; ia bukan izin untuk menjalankan source sembarang.",
+      "Environment job otomatis bisa berbeda dari terminal interaktif. Pakai path interpreter yang jelas, tetapkan konfigurasi yang diperlukan, dan catat exit code. Pelajari ps serta pengelolaan proses pada lab Linux sebelum menjalankan pekerjaan terus-menerus."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Argumen",
+          "Parameter proses"
+        ],
+        [
+          "Stdout/stderr",
+          "Keluaran biasa dan diagnostik"
+        ],
+        [
+          "Exit code",
+          "Status penyelesaian"
+        ],
+        [
+          "Timeout",
+          "Batas tunggu proses"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p04_proses.py",
+        "filename": "examples/p04_proses.py",
+        "language": "python",
+        "code": "import subprocess,sys\nresult=subprocess.run([sys.executable,'-c','print(\"pekerjaan selesai\")'],capture_output=True,text=True,timeout=2,check=True)\nprint('Exit code:',result.returncode)\nprint('Stdout:',result.stdout.strip())\n# Argumen berupa list, tanpa shell=True atau interpolasi perintah masukan.\n",
+        "output": "Exit code: 0\nStdout: pekerjaan selesai",
+        "explanation": "Jalankan python examples/p04_proses.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p04_proses.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Ubah kode anak agar keluar dengan status 2 dan tangani CalledProcessError.",
+      "Bandingkan stdout dan stderr dengan perintah anak yang sesuai."
+    ],
+    "warning": "List argumen membantu memisahkan parameter, tetapi tidak membuat semua program atau opsi menjadi aman.",
+    "check": "Apa akibat check=True pada proses yang gagal?",
+    "answer": "subprocess memicu CalledProcessError sehingga kegagalan dapat ditangani eksplisit.",
+    "source": "https://docs.python.org/3.12/library/subprocess.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "otomasi-csv",
+    "title": "Otomasi file dan CSV dengan karantina baris invalid",
+    "summary": "Baca data berurutan, batasi ukuran pekerjaan, dan catat penolakan.",
+    "analogy": "Petugas memisahkan formulir bermasalah agar tidak menyelinap ke rekap yang diterima.",
+    "explain": [
+      "Otomasi yang berguna membutuhkan aturan masukan yang jelas. CSV lab harus mempunyai header layanan,hasil dalam urutan tersebut. Baris dibaca berurutan dan dibatasi agar pekerjaan tidak menerima jumlah yang tak terkendali.",
+      "baca_csv memisahkan baris diterima dan nomor baris ditolak. Spasi tepi dibersihkan lalu aturan ringkas diperiksa. Kolom kurang, kolom berlebih, nama kosong, atau hasil asing tidak masuk rekap diterima.",
+      "Kesalahan header dan batas jumlah baris menghentikan pekerjaan. Ini berbeda dari kesalahan satu baris yang dapat dikarantina. Kontrak harus menjelaskan kapan proses boleh melanjutkan dan kapan hasil keseluruhan tidak dapat dipercaya.",
+      "File sumber dibuka baca-saja. Jangan memperbaiki data sumber diam-diam; simpan aturan, jumlah ditolak, dan asal data. Dataset contoh bersifat fiktif dan tidak mewakili catatan pelanggan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Header",
+          "Skema file"
+        ],
+        [
+          "Karantina",
+          "Baris invalid dipisahkan"
+        ],
+        [
+          "Batas pekerjaan",
+          "Jumlah maksimum baris"
+        ],
+        [
+          "Sumber",
+          "Tidak ditimpa"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p05_csv.py",
+        "filename": "examples/p05_csv.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom praktik_layanan.io import baca_csv\nwith TemporaryDirectory() as work:\n    source=Path(work)/'input.csv'\n    source.write_text('layanan,hasil\\na,ok\\nb,asing\\nc,timeout\\n',encoding='utf-8')\n    accepted,rejected=baca_csv(source)\n    print('Diterima:',len(accepted))\n    print('Nomor baris ditolak:',rejected)\n    print('Sumber tetap:',len(source.read_text().splitlines()),'baris')\n",
+        "output": "Diterima: 2\nNomor baris ditolak: [3]\nSumber tetap: 4 baris",
+        "explanation": "Jalankan python examples/p05_csv.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p05_csv.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tambahkan baris kolom berlebih dan lihat nomor penolakannya.",
+      "Ubah header lalu bandingkan error file dengan penolakan satu baris."
+    ],
+    "warning": "Jumlah baris diterima saja tidak cukup; tampilkan juga penolakan dan cakupan sumber.",
+    "check": "Mengapa salah header menghentikan proses?",
+    "answer": "Karena struktur seluruh file tidak sesuai kontrak sehingga pengertian kolom tidak dapat diasumsikan.",
+    "source": "https://docs.python.org/3.12/library/csv.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "otomasi-laporan",
+    "title": "Pipeline laporan, SQLite, dan penggantian file atomik",
+    "summary": "Satukan proses sambil memahami batas transaksi antarresource.",
+    "analogy": "Dua buku catatan perlu dikoordinasikan; memperbarui satu buku tidak otomatis memperbarui buku lainnya.",
+    "explain": [
+      "Pipeline menghubungkan baca CSV, validasi, ringkasan, penyimpanan SQLite, dan penulisan JSON. Aturan inti tetap dipisah dari I/O. Sebelum bekerja, source, database, dan output harus menunjuk tiga path yang berbeda.",
+      "SQLite menyimpan ringkasan bernama terbaru dalam transaksi. JSON ditulis ke file sementara pada direktori tujuan, ditutup, lalu diganti dengan os.replace. Ini menghindari pembaca melihat file JSON yang baru tertulis sebagian pada filesystem yang mendukung penggantian tersebut.",
+      "SQLite dan file JSON bukan satu transaksi bersama. Jika file gagal ditulis setelah commit database, keduanya dapat tidak selaras. Contoh mendokumentasikan kondisi ini dan mempunyai test kegagalan; jangan menyebutnya transaksi end-to-end atomik.",
+      "Jalankan ulang dari sumber yang sama setelah masalah diperiksa, lalu verifikasi kedua keluaran. Untuk sistem lebih besar, pertimbangkan satu sumber kebenaran dan penerbitan artefak setelah commit dengan mekanisme yang sesuai kebutuhan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Pipeline",
+          "Urutan proses terarah"
+        ],
+        [
+          "Transaksi SQLite",
+          "Satu resource database"
+        ],
+        [
+          "Replace atomik",
+          "Mengganti satu file lengkap"
+        ],
+        [
+          "Lintas resource",
+          "Memerlukan koordinasi tambahan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p06_laporan.py",
+        "filename": "examples/p06_laporan.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom praktik_layanan.pipeline import buat_laporan\nwith TemporaryDirectory() as work:\n    folder=Path(work);source=folder/'input.csv'\n    source.write_text('layanan,hasil\\na,ok\\nb,timeout\\n',encoding='utf-8')\n    result=buat_laporan(source,folder/'laporan.sqlite',folder/'ringkasan.json')\n    print('Ringkasan:',result)\n    print('Dua keluaran:',(folder/'laporan.sqlite').exists(),(folder/'ringkasan.json').exists())\n",
+        "output": "Ringkasan: {'total': 2, 'ok': 1, 'timeout': 1, 'refused': 0, 'rasio_ok': 0.5, 'ditolak': 0}\nDua keluaran: True True",
+        "explanation": "Jalankan python examples/p06_laporan.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p06_laporan.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Bandingkan JSON dan SQLite sesudah pipeline berhasil.",
+      "Baca test_dua_resource_tidak_diklaim_satu_transaksi dan jelaskan kondisi gagalnya."
+    ],
+    "warning": "Penggantian satu file secara atomik tidak membuat file dan database menjadi satu transaksi.",
+    "check": "Apa yang dapat terjadi jika penulisan JSON gagal setelah commit SQLite?",
+    "answer": "Database sudah berisi hasil baru sementara JSON masih lama atau belum tersedia.",
+    "source": "https://docs.python.org/3.12/library/os.html",
+    "diagram": "practice-proyek",
+    "diagramAlt": "CSV diproses menjadi ringkasan lalu disimpan ke SQLite dan JSON sebagai dua resource yang berbeda.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "otomasi-jadwal",
+    "title": "Penjadwalan, timezone, idempotensi, dan job bertumpuk",
+    "summary": "Rancang pekerjaan berulang tanpa menganggap retry selalu aman.",
+    "analogy": "Nomor kuitansi mencegah pencatatan yang sama dua kali, tetapi tidak otomatis mencegah dua petugas menjalankan pekerjaan bersamaan.",
+    "explain": [
+      "Jadwal memerlukan timezone dan aturan saat pekerjaan terlambat atau terlewat. Contoh menghitung 08:00 UTC berikutnya dari waktu acuan tetap. Ia tidak memasang cron, tidak menunggu sampai jadwal, dan tidak menjalankan daemon.",
+      "Ledger SQLite memakai kunci unik serta hash payload. Kunci dan payload yang sama tidak ditambahkan lagi; kunci sama dengan payload berbeda ditolak. Ini contoh idempotensi pencatatan lokal, bukan bukti efek API eksternal hanya terjadi sekali.",
+      "Job bertumpuk, retry, dan proses mati di tengah pekerjaan memerlukan rancangan tambahan. Lock, status pekerjaan, batas retry, dan transaksi perlu sesuai platform. Menandai job selesai sebelum efek eksternal terjadi juga dapat menyembunyikan pekerjaan yang belum selesai.",
+      "Contoh template cron ada pada runbook. Ganti path absolut, pastikan timezone daemon, lingkungan Python, izin, dan log. Windows Task Scheduler mempunyai pengaturan berbeda. Uji satu pekerjaan manual sebelum mengaktifkan jadwal berulang."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Timezone",
+          "Acuan waktu jadwal"
+        ],
+        [
+          "Kunci unik",
+          "Identitas pekerjaan"
+        ],
+        [
+          "Idempotensi ledger",
+          "Tidak menggandakan catatan sama"
+        ],
+        [
+          "Lock",
+          "Koordinasi pekerjaan yang bertumpuk"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p07_jadwal.py",
+        "filename": "examples/p07_jadwal.py",
+        "language": "python",
+        "code": "from contextlib import closing\nfrom datetime import datetime,timedelta,timezone\nimport sqlite3\nfrom praktik_layanan.store import siapkan,catat_job\nsekarang=datetime(2026,11,4,9,tzinfo=timezone.utc)\nberikut=sekarang.replace(hour=8,minute=0,second=0,microsecond=0)\nif berikut<=sekarang:berikut+=timedelta(days=1)\nprint('Jadwal berikut UTC:',berikut.isoformat())\nwith closing(sqlite3.connect(':memory:')) as conn:\n    siapkan(conn)\n    print('Catatan pertama:',catat_job(conn,'laporan-2026-11-04',{'total':4}))\n    print('Ulangan payload sama:',catat_job(conn,'laporan-2026-11-04',{'total':4}))\n# Ini perhitungan jadwal dan ledger, belum menjalankan daemon scheduler.\n",
+        "output": "Jadwal berikut UTC: 2026-11-05T08:00:00+00:00\nCatatan pertama: True\nUlangan payload sama: False",
+        "explanation": "Jalankan python examples/p07_jadwal.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p07_jadwal.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Uji konflik kunci yang sama dengan payload berbeda.",
+      "Tulis kebijakan jika pekerjaan harian belum selesai saat jadwal berikutnya datang."
+    ],
+    "warning": "Ledger lokal bukan jaminan exactly-once untuk efek eksternal. Perhitungan jadwal pada demo belum mengaktifkan scheduler.",
+    "check": "Mengapa kunci sama dengan payload berbeda ditolak?",
+    "answer": "Karena identitas pekerjaan yang sama tidak boleh diam-diam dipakai untuk isi yang berbeda.",
+    "source": "https://docs.python.org/3.12/library/datetime.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "otomasi-api",
+    "title": "Client API lokal dan validasi respons",
+    "summary": "Otomatiskan pembacaan API dengan timeout serta batas ukuran.",
+    "analogy": "Surat yang berhasil sampai tetap perlu dibaca dan diperiksa isinya.",
+    "explain": [
+      "Otomasi API memerlukan endpoint, metode, status, header, body, serta kontrak. Contoh membuat laporan, menyalakan server loopback sementara, lalu membaca GET /api/ringkasan. Tidak ada layanan internet atau perangkat operasional yang dihubungi.",
+      "Client menggunakan timeout serta pembacaan maksimal batas ditambah satu byte untuk mendeteksi body berlebihan. JSON di-parse dan tipe total diperiksa. Pada aplikasi umum, validasi seluruh kolom yang digunakan, bukan hanya bahwa JSON dapat dibaca.",
+      "HTTP 200 menunjukkan permintaan dijawab berhasil menurut server, tetapi bukan bukti data masuk akal atau semua kebutuhan terpenuhi. Kegagalan transport, status error, JSON rusak, dan skema salah harus dibedakan.",
+      "Untuk API nyata, tambahkan pengelolaan kredensial, HTTPS, kebijakan redirect, rate limit, serta retry yang sesuai idempotensi. Jalur Backend/API dan Pemrograman Jaringan menyediakan dasar sebelum memperluas client ini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Timeout",
+          "Batas tunggu operasi"
+        ],
+        [
+          "Batas body",
+          "Mencegah respons tak terkendali"
+        ],
+        [
+          "Skema",
+          "Tipe dan kolom yang digunakan"
+        ],
+        [
+          "Loopback",
+          "Layanan latihan lokal"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/p08_api.py",
+        "filename": "examples/p08_api.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom threading import Thread\nfrom urllib.request import build_opener,ProxyHandler\nimport json\nfrom praktik_layanan.pipeline import buat_laporan\nfrom praktik_layanan.web import buat_server\nwith TemporaryDirectory() as work:\n    folder=Path(work);source=folder/'input.csv'\n    source.write_text('layanan,hasil\\na,ok\\n',encoding='utf-8')\n    buat_laporan(source,folder/'db.sqlite',folder/'hasil.json')\n    with buat_server(folder/'db.sqlite') as server:\n        worker=Thread(target=server.serve_forever,kwargs={'poll_interval':.02});worker.start()\n        try:\n            url='http://127.0.0.1:'+str(server.server_port)+'/api/ringkasan'\n            opener=build_opener(ProxyHandler({}))\n            with opener.open(url,timeout=2) as response:\n                raw=response.read(4097)\n                if len(raw)>4096:raise ValueError('Respons terlalu besar.')\n                data=json.loads(raw)\n                if type(data.get('total')) is not int:raise ValueError('Skema total salah.')\n                print('HTTP:',response.status)\n                print('Total dari API:',data['total'])\n        finally:server.shutdown();worker.join(timeout=3)\n",
+        "output": "HTTP: 200\nTotal dari API: 1",
+        "explanation": "Jalankan python examples/p08_api.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/p08_api.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Rancang validasi untuk total, ok, timeout, refused, dan rasio_ok.",
+      "Jelaskan tindakan jika API memberi 503 daripada menganggap datanya nol."
+    ],
+    "warning": "JSON valid dan HTTP 200 belum membuktikan data sesuai kontrak.",
+    "check": "Mengapa body dibaca sampai 4097 ketika batasnya 4096?",
+    "answer": "Satu byte tambahan membantu mendeteksi respons yang melampaui batas.",
+    "source": "https://docs.python.org/3.12/library/urllib.request.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "rekayasa-kebutuhan",
+    "title": "Kebutuhan, batas lingkup, dan acceptance criteria",
+    "summary": "Ubah tujuan umum menjadi perilaku yang dapat diperiksa.",
+    "analogy": "Sebelum membangun rumah, sepakati ruang yang dibutuhkan dan cara memeriksa hasilnya.",
+    "explain": [
+      "Kebutuhan menjelaskan masalah pengguna dan hasil yang diinginkan. Pada lab, tujuannya membuat ringkasan observasi fiktif yang dapat ditelusuri ke CSV serta dibaca melalui API dan dashboard lokal. Ini bukan sistem monitoring produksi.",
+      "Acceptance criteria memberi contoh hasil terukur. Dua observasi, satu ok dan satu timeout, menghasilkan total dua serta rasio 0,5. Kasus kosong, penolakan baris, error database, dan path tidak tersedia juga perlu ditetapkan.",
+      "Pisahkan kebutuhan fungsional dari kebutuhan operasional seperti kapasitas, pemulihan, akses, dan observabilitas. Lab mendokumentasikan batas autentikasi, TLS, serta server produksi agar pembaca tahu keputusan yang belum dirancang.",
+      "Diskusikan perubahan kontrak sebelum menambah fitur. Kriteria pada docs/kebutuhan.md menjadi dasar review dan pengujian. Checklist contoh membantu memulai, tetapi bukan pengganti percakapan dengan pengguna serta evaluasi alur nyata."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Masalah",
+          "Kebutuhan pengguna"
+        ],
+        [
+          "Acceptance",
+          "Hasil yang dapat diperiksa"
+        ],
+        [
+          "Lingkup",
+          "Apa yang dicakup proyek"
+        ],
+        [
+          "Batas",
+          "Keputusan yang belum dirancang"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r01_kebutuhan.py",
+        "filename": "examples/r01_kebutuhan.py",
+        "language": "python",
+        "code": "from praktik_layanan.core import ringkas\nrows=[{'layanan':'a','hasil':'ok'},{'layanan':'b','hasil':'timeout'}]\nresult=ringkas(rows)\nkriteria={'total_observasi':result['total']==2,'rasio_sampel':result['rasio_ok']==.5,'tanpa_klaim_sla':'sla' not in result}\nfor nama,lulus in kriteria.items():print(nama+':',lulus)\n# Kriteria ini contoh acceptance terukur, bukan pengganti diskusi kebutuhan.\n",
+        "output": "total_observasi: True\nrasio_sampel: True\ntanpa_klaim_sla: True",
+        "explanation": "Jalankan python examples/r01_kebutuhan.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r01_kebutuhan.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tulis kriteria untuk CSV seluruhnya invalid.",
+      "Tambahkan kebutuhan operasional yang diperlukan bila aplikasi dipakai beberapa pengguna."
+    ],
+    "warning": "Checklist lulus tidak otomatis berarti semua kebutuhan pengguna sudah dipenuhi.",
+    "check": "Mengapa batas lingkup perlu tertulis?",
+    "answer": "Agar orang tidak menganggap kemampuan yang belum dirancang sebagai bagian dari hasil yang sudah tersedia.",
+    "source": "https://docs.python.org/3.12/library/unittest.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "rekayasa-modul",
+    "title": "Modularisasi, pemisahan tanggung jawab, dan refactoring",
+    "summary": "Pisahkan aturan dari I/O sambil menjaga perilaku.",
+    "analogy": "Bagian perhitungan dapat diganti tanpa harus membongkar pintu masuk dan lemari penyimpanan sekaligus.",
+    "explain": [
+      "Pemisahan tanggung jawab membuat perubahan lebih mudah ditinjau. core.py berisi aturan, io.py membaca/menulis file, store.py menangani SQLite, pipeline.py mengoordinasikan langkah, dan web.py menyajikan hasil.",
+      "Contoh memperlihatkan core dapat dijalankan tanpa database atau server. Dependency diarahkan agar aturan tidak bergantung adapter. Pemisahan ini memudahkan unit test dan integrasi yang mempunyai tujuan berbeda.",
+      "Refactoring mengubah struktur sambil mempertahankan perilaku yang disepakati. Lindungi perilaku dengan test sebelum memindahkan fungsi. Memecah setiap baris menjadi modul baru belum tentu memperbaiki desain.",
+      "Cari alasan perubahan dan batas ketergantungan yang nyata. Jika format CSV berubah, adapter file terutama yang diperiksa; bila kontrak rasio berubah, core serta pemakainya perlu ditinjau. Jangan mengubah kontrak diam-diam sambil menyebutnya refactor."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Core",
+          "Aturan murni"
+        ],
+        [
+          "Adapter",
+          "I/O dan teknologi luar"
+        ],
+        [
+          "Pipeline",
+          "Koordinasi langkah"
+        ],
+        [
+          "Refactor",
+          "Struktur berubah, perilaku dijaga"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r02_modular.py",
+        "filename": "examples/r02_modular.py",
+        "language": "python",
+        "code": "from praktik_layanan.core import ringkas\n# Core dapat diuji tanpa file, database, atau server.\nrows=[{'layanan':'a','hasil':'refused'}]\nprint('Aturan murni:',ringkas(rows))\nprint('Adapter terpisah: io.py, store.py, web.py')\n",
+        "output": "Aturan murni: {'total': 1, 'ok': 0, 'timeout': 0, 'refused': 1, 'rasio_ok': 0.0}\nAdapter terpisah: io.py, store.py, web.py",
+        "explanation": "Jalankan python examples/r02_modular.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r02_modular.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Telusuri fungsi yang berubah jika CSV menjadi TSV.",
+      "Pisahkan perubahan kontrak dari pemindahan kode dalam catatan review."
+    ],
+    "warning": "Banyak file tidak otomatis berarti desain baik. Batas modul harus membantu memahami perubahan.",
+    "check": "Apa pembeda refactor dari perubahan fitur?",
+    "answer": "Refactor mempertahankan perilaku yang disepakati, sedangkan perubahan fitur dapat mengubah kontrak.",
+    "source": "https://docs.python.org/3.12/tutorial/modules.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "rekayasa-review",
+    "title": "Dokumentasi, type hint, dan code review",
+    "summary": "Bantu orang lain menjalankan, menilai, dan merawat proyek.",
+    "analogy": "Petunjuk yang baik menjelaskan cara memakai alat dan batasnya, bukan hanya bentuk pegangannya.",
+    "explain": [
+      "Dokumentasi proyek perlu menjelaskan tujuan, persiapan, perintah, masukan, keluaran, dan batas kesimpulan. README lab menyambungkan contoh yang terpisah dengan paket bersama serta perintah dashboard yang tetap berjalan.",
+      "Docstring menjelaskan kontrak fungsi pada tempat penggunaan. Type hint dapat membantu pembaca dan alat pemeriksa, tetapi Python tidak otomatis menolak seluruh tipe salah hanya karena anotasi ditulis. Validasi runtime tetap diperlukan pada batas masukan.",
+      "Review perubahan memeriksa kebutuhan, kasus batas, efek I/O, penanganan error, pembersihan resource, dan bukti test. Bahas keterbacaan yang berdampak; jangan menghabiskan review hanya pada pilihan nama atau spasi.",
+      "Catat alasan keputusan serta cara pemulihan pada runbook. Jalur Learn Git menjelaskan branch dan pull request; gunakan jalur itu untuk alur kolaborasi, lalu terapkan checklist review proyek di sini."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "README",
+          "Cara menggunakan proyek"
+        ],
+        [
+          "Docstring",
+          "Kontrak fungsi"
+        ],
+        [
+          "Type hint",
+          "Bantuan analisis, bukan validasi otomatis"
+        ],
+        [
+          "Review",
+          "Menilai perilaku, risiko, dan bukti"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r03_dokumentasi.py",
+        "filename": "examples/r03_dokumentasi.py",
+        "language": "python",
+        "code": "from praktik_layanan.core import ringkas\nprint('Kontrak:',ringkas.__doc__)\nprint('Contoh kosong:',ringkas([]))\nprint('Review: kontrak, kasus batas, bukti pengujian, dan rencana pemulihan')\n",
+        "output": "Kontrak: Hitung observasi ok/timeout/refused; kosong menghasilkan rasio None.\nContoh kosong: {'total': 0, 'ok': 0, 'timeout': 0, 'refused': 0, 'rasio_ok': None}\nReview: kontrak, kasus batas, bukti pengujian, dan rencana pemulihan",
+        "explanation": "Jalankan python examples/r03_dokumentasi.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r03_dokumentasi.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tulis deskripsi perubahan yang menjelaskan masalah, hasil, dan pengujian.",
+      "Pilih satu test gagal lalu tambahkan langkah diagnosis pada runbook."
+    ],
+    "warning": "Dokumentasi yang tidak mengikuti kode dapat menyesatkan. Perbarui saat kontrak atau cara menjalankan berubah.",
+    "check": "Apakah type hint menggantikan validasi runtime?",
+    "answer": "Tidak. Masukan dari file atau jaringan tetap perlu diperiksa sesuai kontrak.",
+    "source": "https://docs.python.org/3.12/library/typing.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "delivery-docker",
+    "title": "Docker dasar: image, container, port, dan data runtime",
+    "summary": "Siapkan container lab tanpa mencampur kode, secret, dan database.",
+    "analogy": "Image seperti resep kemasan, container seperti proses yang memakai resep, dan volume seperti rak data terpisah.",
+    "explain": [
+      "Dockerfile menyatakan image dasar, lokasi kerja, kode yang disalin, pengguna proses, dan perintah awal. Image adalah artefak; container adalah instance yang berjalan. EXPOSE mendokumentasikan port, bukan otomatis memublikasikannya pada host.",
+      "Lab menyalin src dan berjalan sebagai UID 10001. Database tidak dimasukkan ke image; folder hasil dipasang baca-saja melalui bind mount. Host memublikasikan 127.0.0.1:8080 ke port 8000 container, sedangkan server di dalam container bind 0.0.0.0.",
+      "Ikuti perintah Docker pada README setelah membuat laporan lokal. Pengguna container perlu izin baca yang sesuai pada folder dan file. .dockerignore membantu mengurangi build context, tetapi bukan pengganti pengelolaan rahasia serta pemeriksaan isi artefak.",
+      "Docker perlu tersedia pada komputer latihan dan dapat mengambil image dasar. Tag python:3.12-slim dapat bergerak; catat digest aktual untuk rilis berulang. Server stdlib ini hanya lab dan belum mencakup kesiapan produksi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Image",
+          "Artefak berisi kode/runtime"
+        ],
+        [
+          "Container",
+          "Proses dari image"
+        ],
+        [
+          "Publish port",
+          "Pemetaan port host"
+        ],
+        [
+          "Bind mount",
+          "Data runtime di luar image"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "Dockerfile",
+        "filename": "Dockerfile",
+        "language": "dockerfile",
+        "code": "# Lab lokal baca-saja; tag bergerak, catat digest aktual untuk rilis yang diulang.\nFROM python:3.12-slim\nENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app/src\nWORKDIR /app\nCOPY src/ ./src/\nUSER 10001:10001\nEXPOSE 8000\nCMD [\"python\", \"-m\", \"praktik_layanan.cli\", \"serve\", \"--db\", \"/data/laporan.sqlite\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n",
+        "output": "",
+        "explanation": "Simpan sebagai Dockerfile di akar practice-lab. Ikuti README untuk build, persiapan laporan, bind mount baca-saja, serta menjalankan container lokal. Konfigurasi ini perlu diuji pada lingkungan Docker; file saja belum membuktikan image dan runtime berhasil."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "docker build -t praktik-layanan:0.1.0 .",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Jelaskan beda EXPOSE dengan opsi -p pada docker run.",
+      "Periksa mengapa database dipasang baca-saja dan tidak disalin ke image."
+    ],
+    "warning": "Berkas Dockerfile belum membuktikan image berhasil dibangun. Docker build dan runtime harus diuji pada lingkungan Docker.",
+    "check": "Mengapa port host dibatasi ke 127.0.0.1?",
+    "answer": "Agar publikasi port lab tetap lokal pada komputer host, sesuai tujuan latihan.",
+    "source": "https://docs.docker.com/guides/python/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "delivery-ci",
+    "title": "CI dengan GitHub Actions dan pemeriksaan artefak",
+    "summary": "Jalankan pemeriksaan otomatis pada commit yang tepat.",
+    "analogy": "Pintu pemeriksaan otomatis memeriksa paket sebelum dikirim, tetapi tidak langsung mengirimnya ke pelanggan.",
+    "explain": [
+      "Continuous integration menjalankan pemeriksaan ketika kode berubah. Workflow contoh melakukan checkout, menyiapkan Python 3.12, menginstal paket, menjalankan pytest, membuat wheel, dan membangun image Docker pada runner.",
+      "YAML harus berada pada .github/workflows di akar repositori lab sendiri. Berkas dalam ZIP atau subfolder examples situs ini tidak otomatis menjadi workflow aktif. Ikuti README untuk memindahkan proyek lab sebagai akar repositori terpisah.",
+      "Permission contents read mencukupi untuk contoh yang tidak memublikasikan artefak. Timeout job membatasi pekerjaan. Tidak ada push registry atau deployment otomatis, sehingga CI perlu dibedakan dari proses rilis dan persetujuan lingkungan.",
+      "Periksa log run yang terkait commit, bukan hanya keberadaan file konfigurasi. Test hijau, wheel berhasil, dan docker build berhasil belum membuktikan runtime serta alur pengguna sehat. Verifikasi staging tetap diperlukan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Trigger",
+          "Kejadian pemicu workflow"
+        ],
+        [
+          "Runner",
+          "Lingkungan eksekusi"
+        ],
+        [
+          "CI",
+          "Pemeriksaan integrasi"
+        ],
+        [
+          "Rilis",
+          "Memindahkan versi terverifikasi ke penggunaan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": ".github/workflows/lab.yml",
+        "filename": ".github/workflows/lab.yml",
+        "language": "yaml",
+        "code": "name: Uji proyek lab\non: [push, pull_request, workflow_dispatch]\npermissions:\n  contents: read\njobs:\n  python:\n    runs-on: ubuntu-latest\n    timeout-minutes: 10\n    steps:\n      - uses: actions/checkout@v6\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.12'\n      - run: python -m pip install -e \".[dev]\"\n      - run: python -m pytest -q\n      - run: python -m pip wheel . --no-deps --wheel-dir dist\n      - run: docker build -t praktik-layanan:ci .\n",
+        "output": "",
+        "explanation": "Workflow berada di .github/workflows/lab.yml ketika practice-lab menjadi akar repositori lab sendiri. Ikuti README dan periksa run yang sesuai commit. Berkas YAML dalam ZIP tidak otomatis menjalankan Actions."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "Periksa workflow, lalu ikuti README untuk repositori lab.",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Tentukan letak YAML yang benar jika lab menjadi repo sendiri.",
+      "Jelaskan pemeriksaan runtime yang belum dicakup docker build."
+    ],
+    "warning": "Konfigurasi workflow tidak sama dengan run yang lulus. Paket ini tidak otomatis menjalankan Actions pada akun pembaca.",
+    "check": "Mengapa status run harus dicocokkan dengan commit?",
+    "answer": "Agar bukti pemeriksaan benar-benar berlaku pada source yang hendak dirilis.",
+    "source": "https://docs.github.com/en/actions/tutorials/build-and-test-code/python",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "delivery-rilis",
+    "title": "Staging, versi artefak, pemantauan, dan rollback",
+    "summary": "Rilis versi yang dapat ditelusuri dan siapkan cara kembali.",
+    "analogy": "Menyimpan kuitansi paket membantu mengetahui barang mana yang dipakai ketika penggantian diperlukan.",
+    "explain": [
+      "Rilis perlu menghubungkan commit, versi aplikasi, konfigurasi, kontrak data, dan artefak. Contoh membuat manifest kecil lalu menghitung hash untuk menjelaskan identitas isi. Hash tersebut bukan digest image Docker.",
+      "Staging memberi kesempatan memeriksa versi kandidat dengan data dan konfigurasi latihan sebelum digunakan. Periksa halaman, API, error, dan kesesuaian data. Keberhasilan satu endpoint saja belum menunjukkan seluruh kriteria penerimaan terpenuhi.",
+      "Rollout memindahkan penggunaan ke versi kandidat dengan mekanisme yang sesuai lingkungan. Lab mendokumentasikan langkah tersebut, tetapi tidak menyertakan load balancer atau script perpindahan trafik. Pantau hasil sesudah rilis, bukan berhenti pada pesan build sukses.",
+      "Rollback aplikasi mengembalikan artefak versi sebelumnya. Itu tidak otomatis membalik migrasi atau memulihkan database; kompatibilitas dan pemulihan data perlu rancangan tersendiri. Simpan runbook yang dapat diikuti dan uji prosedurnya pada lab."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Manifest",
+          "Identitas versi dan kontrak"
+        ],
+        [
+          "Staging",
+          "Pemeriksaan kandidat"
+        ],
+        [
+          "Rollout",
+          "Perpindahan penggunaan versi"
+        ],
+        [
+          "Rollback",
+          "Kembali ke artefak sebelumnya"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r06_rilis.py",
+        "filename": "examples/r06_rilis.py",
+        "language": "python",
+        "code": "import hashlib,json\nrilis={'versi':'0.1.0','python':'3.12','kontrak':'ringkasan-v1'}\ndigest=hashlib.sha256(json.dumps(rilis,sort_keys=True).encode()).hexdigest()\nprint('Versi:',rilis['versi'])\nprint('Digest manifest:',digest[:12])\nprint('Urutan: uji staging, periksa API, rilis, pantau, pulihkan jika perlu')\n# Digest ini milik manifest contoh, bukan digest image Docker.\n",
+        "output": "Versi: 0.1.0\nDigest manifest: 22f8c1fed973\nUrutan: uji staging, periksa API, rilis, pantau, pulihkan jika perlu",
+        "explanation": "Jalankan python examples/r06_rilis.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r06_rilis.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Susun daftar bukti yang diperlukan sebelum rilis proyek lab.",
+      "Jelaskan risiko versi lama membaca skema database yang baru berubah."
+    ],
+    "warning": "Rollback kode tidak otomatis memulihkan data. Hash manifest contoh bukan digest container.",
+    "check": "Mengapa pemulihan database perlu dibahas terpisah?",
+    "answer": "Karena data dapat berubah permanen dan versi aplikasi lama belum tentu sesuai dengan skema baru.",
+    "source": "https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "akhir-proyek-data",
+    "title": "Proyek akhir bagian 1: CSV → aturan → SQLite → JSON",
+    "summary": "Gabungkan modul dan pengujian menjadi alur data yang dapat ditelusuri.",
+    "analogy": "Setiap angka dalam laporan perlu dapat ditelusuri kembali ke formulir sumber dan aturan yang dipakai.",
+    "explain": [
+      "Bagian pertama proyek akhir menggabungkan aturan Python, pembacaan file, validasi, transaksi database, dan artefak laporan. Dataset fiktif berisi lima observasi, termasuk satu hasil asing yang ditolak.",
+      "Dari empat observasi diterima, dua ok, satu timeout, dan satu refused. Rasio sampel menjadi 0,5. Program membuka koneksi baru setelah pipeline selesai untuk mencocokkan hasil yang tersimpan; bukan hanya memeriksa variabel di memori.",
+      "Jalankan unit dan integration test sebelum memperluas proyek. Periksa sumber tidak berubah, jumlah penolakan terlihat, output path berbeda, dan kegagalan file ditangani menurut batas transaksi yang didokumentasikan.",
+      "Tugas pengembangan adalah menambah indikator yang punya definisi jelas tanpa mengubah unit analisis diam-diam. Selanjutnya, sajikan database melalui API dan dashboard pada bagian kedua. Gunakan jalur Basis Data serta Data Analysis untuk pendalaman yang relevan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Masukan",
+          "CSV fiktif lima observasi"
+        ],
+        [
+          "Diterima/ditolak",
+          "Empat dan satu"
+        ],
+        [
+          "Rasio ok",
+          "Dua dibagi empat"
+        ],
+        [
+          "Verifikasi",
+          "Baca kembali dari database"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r07_proyek_data.py",
+        "filename": "examples/r07_proyek_data.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom contextlib import closing\nimport sqlite3\nfrom praktik_layanan.pipeline import buat_laporan\nfrom praktik_layanan.store import baca\nwith TemporaryDirectory() as work:\n    folder=Path(work);source=folder/'layanan.csv'\n    source.write_text('layanan,hasil\\na,ok\\nb,timeout\\na,ok\\nc,refused\\nd,asing\\n',encoding='utf-8')\n    result=buat_laporan(source,folder/'laporan.sqlite',folder/'hasil.json')\n    with closing(sqlite3.connect(folder/'laporan.sqlite')) as conn:\n        persisted=baca(conn)\n    print('Diterima/ditolak:',result['total'],result['ditolak'])\n    print('Rasio sampel:',result['rasio_ok'])\n    print('Database sesuai:',persisted==result)\n",
+        "output": "Diterima/ditolak: 4 1\nRasio sampel: 0.5\nDatabase sesuai: True",
+        "explanation": "Jalankan python examples/r07_proyek_data.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r07_proyek_data.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Jalankan build-report persisten melalui README dan bandingkan JSON/SQLite.",
+      "Tambahkan kasus semua baris ditolak lalu jelaskan rasio dan jumlah penolakan."
+    ],
+    "warning": "Proporsi sampel ini bukan SLA atau uptime kontinu. Satu indikator perlu definisi serta cakupan pengamatan.",
+    "check": "Mengapa hasil dibaca lagi dari koneksi database baru?",
+    "answer": "Untuk memeriksa persistensi dan kesesuaian hasil tersimpan, bukan hanya perhitungan di memori.",
+    "source": "https://docs.python.org/3.12/library/sqlite3.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 40
+  },
+  {
+    "slug": "akhir-proyek-dashboard",
+    "title": "Proyek akhir bagian 2: API, dashboard, pengujian, dan delivery",
+    "summary": "Sajikan data tersimpan dan periksa alur dari sumber sampai respons.",
+    "analogy": "Etalase yang rapi perlu menampilkan barang dari gudang yang benar, bukan sekadar label sukses.",
+    "explain": [
+      "Bagian kedua memakai laporan SQLite sebagai sumber API GET /api/ringkasan. Halaman HTML lokal membaca endpoint tersebut dengan Fetch dan menampilkan hasil memakai textContent. Data tidak dimasukkan melalui innerHTML.",
+      "Contoh otomatis membuka server sementara, membaca halaman, lalu memastikan API sama dengan ringkasan database. Untuk berinteraksi di browser, gunakan perintah serve pada README; contoh script sendiri menutup server ketika selesai.",
+      "API memakai koneksi SQLite baca-saja per permintaan. Database belum tersedia menghasilkan 503 tanpa membuat file baru, path lain menghasilkan 404, dan tidak ada endpoint tulis. Test meliputi alur data serta error, tetapi pemeriksaan kegunaan dan tampilan tetap dilakukan pada browser pembaca.",
+      "Lengkapi proyek dengan README, kriteria penerimaan, bukti pytest, wheel, serta rencana Docker/CI dan rilis dari materi sebelumnya. Server stdlib ini tetap lab lokal; autentikasi, TLS, kapasitas, observabilitas, dan pengelolaan layanan produksi memerlukan tahap lanjut."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dalam praktik"
+      ],
+      "rows": [
+        [
+          "Sumber API",
+          "SQLite baca-saja"
+        ],
+        [
+          "Halaman",
+          "HTML dan Fetch lokal"
+        ],
+        [
+          "503",
+          "Laporan belum tersedia"
+        ],
+        [
+          "Delivery",
+          "Artefak dan bukti versi yang sesuai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "examples/r08_dashboard.py",
+        "filename": "examples/r08_dashboard.py",
+        "language": "python",
+        "code": "from pathlib import Path\nfrom tempfile import TemporaryDirectory\nfrom threading import Thread\nfrom urllib.request import build_opener,ProxyHandler\nimport json\nfrom praktik_layanan.pipeline import buat_laporan\nfrom praktik_layanan.web import buat_server\nwith TemporaryDirectory() as work:\n    folder=Path(work);source=folder/'input.csv'\n    source.write_text('layanan,hasil\\na,ok\\nb,refused\\n',encoding='utf-8')\n    expected=buat_laporan(source,folder/'db.sqlite',folder/'hasil.json')\n    with buat_server(folder/'db.sqlite') as server:\n        worker=Thread(target=server.serve_forever,kwargs={'poll_interval':.02});worker.start()\n        opener=build_opener(ProxyHandler({}));root='http://127.0.0.1:'+str(server.server_port)\n        try:\n            with opener.open(root+'/',timeout=2) as response:\n                html=response.read().decode('utf-8')\n                print('Halaman:',response.status,'Dashboard Layanan Fiktif' in html)\n            with opener.open(root+'/api/ringkasan',timeout=2) as response:\n                print('API sesuai database:',json.load(response)==expected)\n        finally:server.shutdown();worker.join(timeout=3)\n# Untuk membuka dashboard yang tetap hidup di browser, ikuti perintah serve di README.\n",
+        "output": "Halaman: 200 True\nAPI sesuai database: True",
+        "explanation": "Jalankan python examples/r08_dashboard.py dari paket practice-lab yang sudah diinstal editable sesuai README. Gunakan seluruh paket agar import praktik_layanan tersedia. Contoh memakai data fiktif dan direktori latihan sementara."
+      }
+    ],
+    "steps": [
+      "Unduh paket practice-lab lengkap dan ekstrak pada folder latihan tersendiri.",
+      "Gunakan Python 3.12 atau lebih baru, buat virtual environment, lalu jalankan python -m pip install -e \".[dev]\" dari folder practice-lab.",
+      "python examples/r08_dashboard.py",
+      "Cocokkan hasil dengan kontrak, lalu kerjakan latihan tanpa mengubah data operasional."
+    ],
+    "practice": [
+      "Jalankan serve, buka halaman dan API pada browser komputer sendiri.",
+      "Coba database tidak tersedia lalu cocokkan status error dan isi runbook."
+    ],
+    "warning": "Contoh belum menjadi server produksi. Docker atau CI yang dikonfigurasi tetap perlu dijalankan dan diperiksa pada lingkungan yang sesuai.",
+    "check": "Mengapa halaman dan API sama-sama diperiksa?",
+    "answer": "HTML dapat tersedia sementara sumber data API gagal; keduanya bagian berbeda dari alur pengguna.",
+    "source": "https://docs.python.org/3.12/library/http.server.html",
+    "diagram": "practice-delivery",
+    "diagramAlt": "Source diperiksa CI menjadi artefak, diuji pada staging, lalu dirilis dengan pemantauan serta rencana pemulihan.",
+    "stage": 0,
+    "minutes": 40
+  }
+]

@@ -79,3 +79,6 @@
 .programming-track-pemrograman-jaringan{background:#edf4f3}
 
 @media(min-width:1001px) and (max-width:1150px){.programming-header-menu .academy-nav-links{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}}
+
+.programming-track-pengujian-debugging{background:#eff3fa}.programming-track-proyek-otomasi{background:#edf5ef}.programming-track-rekayasa-deployment{background:#f5f0e8}
+@media(min-width:1001px){.programming-header-menu .academy-nav-links{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:stretch;gap:4px}.programming-header-menu .academy-nav-links a{white-space:normal;text-align:center;padding:8px 6px;min-height:44px}}

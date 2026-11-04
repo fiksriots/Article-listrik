@@ -542,5 +542,74 @@
       "netprog-kasus-monitor",
       "netprog-kasus-status"
     ]
+  },
+  {
+    "title": "Pengujian & Debugging · Kontrak dan unit test",
+    "slugs": [
+      "uji-kontrak",
+      "uji-unit",
+      "uji-fixture",
+      "uji-batas"
+    ]
+  },
+  {
+    "title": "Pengujian & Debugging · Isolasi dan integrasi",
+    "slugs": [
+      "uji-mock",
+      "uji-integrasi"
+    ]
+  },
+  {
+    "title": "Pengujian & Debugging · Diagnosis dan logging",
+    "slugs": [
+      "uji-debugging",
+      "uji-logging"
+    ]
+  },
+  {
+    "title": "Proyek & Otomasi · Lingkungan dan Linux",
+    "slugs": [
+      "proyek-lingkungan",
+      "proyek-packaging",
+      "proyek-filesystem",
+      "proyek-proses"
+    ]
+  },
+  {
+    "title": "Proyek & Otomasi · Otomasi data",
+    "slugs": [
+      "otomasi-csv",
+      "otomasi-laporan"
+    ]
+  },
+  {
+    "title": "Proyek & Otomasi · Jadwal dan API",
+    "slugs": [
+      "otomasi-jadwal",
+      "otomasi-api"
+    ]
+  },
+  {
+    "title": "Rekayasa & Deployment · Rancangan dan kolaborasi",
+    "slugs": [
+      "rekayasa-kebutuhan",
+      "rekayasa-modul",
+      "rekayasa-review"
+    ]
+  },
+  {
+    "title": "Rekayasa & Deployment · Build dan rilis",
+    "slugs": [
+      "delivery-docker",
+      "delivery-ci",
+      "delivery-rilis"
+    ]
+  },
+  {
+    "title": "Rekayasa & Deployment · Proyek akhir terpadu",
+    "slugs": [
+      "akhir-proyek-data",
+      "akhir-proyek-dashboard"
+    ]
   }
 ]
