@@ -57,7 +57,7 @@ Untuk mencoba manual:
 python lab_web.py --port 8020
 ```
 
-Buka http://127.0.0.1:8020. Kirim nama layanan ASCII yang valid (huruf, angka, tanda hubung/garis bawah/titik; maksimum 40 karakter) dan hasil ok/gagal. API maksimum 20 baris. Server menolak format, ukuran, dan jumlah data yang melampaui batas.
+Buka http://127.0.0.1:8020. Kirim nama layanan ASCII yang valid (huruf, angka, spasi, tanda hubung, atau garis bawah; maksimum 40 karakter) dan hasil ok/timeout/refused. API maksimum 20 baris. Server menolak format, ukuran, dan jumlah data yang melampaui batas.
 
 Untuk menjalankan suite browser, pasang Node.js yang didukung Playwright serta Python pada PATH, hentikan server manual agar port 8020 kosong, lalu:
 
