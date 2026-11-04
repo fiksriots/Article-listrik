@@ -506,5 +506,41 @@
       "ds-kasus-durasi",
       "ds-kasus-risiko"
     ]
+  },
+  {
+    "title": "Pemrograman Jaringan · Fondasi dan representasi data",
+    "slugs": [
+      "netprog-pengantar",
+      "netprog-alamat-ip",
+      "netprog-dns",
+      "netprog-bytes"
+    ]
+  },
+  {
+    "title": "Pemrograman Jaringan · Socket dan protokol",
+    "slugs": [
+      "netprog-tcp",
+      "netprog-framing",
+      "netprog-udp",
+      "netprog-timeout",
+      "netprog-json"
+    ]
+  },
+  {
+    "title": "Pemrograman Jaringan · Aplikasi dan konkurensi",
+    "slugs": [
+      "netprog-http",
+      "netprog-tls",
+      "netprog-konkurensi",
+      "netprog-asyncio",
+      "netprog-logging"
+    ]
+  },
+  {
+    "title": "Pemrograman Jaringan · Studi kasus",
+    "slugs": [
+      "netprog-kasus-monitor",
+      "netprog-kasus-status"
+    ]
   }
 ]

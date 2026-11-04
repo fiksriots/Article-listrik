@@ -1,0 +1,1026 @@
+[
+  {
+    "slug": "netprog-pengantar",
+    "title": "Pemrograman jaringan: client, server, dan endpoint",
+    "summary": "Pahami apa yang dilakukan program saat bertukar data melalui jaringan.",
+    "analogy": "Alamat IP seperti alamat gedung, port seperti loket, dan protokol aplikasi seperti aturan percakapan di loket itu.",
+    "explain": [
+      "Pemrograman jaringan membuat program bertukar data dengan program lain. Client memulai percakapan, sedangkan server menunggu permintaan. Keduanya bisa berada pada komputer yang sama. Peran ini berbeda dari menentukan router, VLAN, atau jalur paket, tetapi tetap membutuhkan pemahaman dasar jaringan.",
+      "Untuk koneksi IP, alamat menentukan tujuan dan port membantu sistem operasi menyerahkan data ke socket yang sesuai. Jenis transport juga penting: TCP dan UDP memakai ruang port yang terpisah. Angka port saja tidak menjamin aplikasi yang berjalan benar-benar sesuai dugaan.",
+      "Loopback IPv4 127.0.0.1 dan IPv6 ::1 kembali ke komputer sendiri. Semua latihan jaringan pada jalur ini memakai loopback IPv4. Server mengikat alamat lokal dengan bind; client menghubungi alamat tujuan. Port 0 pada bind meminta sistem operasi memilih port kosong, lalu getsockname membaca pilihan tersebut.",
+      "Pelajari variabel, fungsi, bytes, exception, with, dan import terlebih dahulu. Contoh pertama hanya mengenali endpoint; materi berikutnya benar-benar membuka socket lokal. Program dijalankan di Python komputer latihan, sedangkan website menampilkan materi dan tes pemahaman."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Client",
+          "Memulai permintaan"
+        ],
+        [
+          "Server",
+          "Menunggu dan melayani"
+        ],
+        [
+          "Endpoint lab",
+          "Alamat loopback dan port"
+        ],
+        [
+          "Protokol aplikasi",
+          "Aturan isi pesan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np01_endpoint.py",
+        "filename": "np01_endpoint.py",
+        "language": "python",
+        "code": "# Endpoint adalah pasangan alamat dan port untuk transport yang dipilih.\nserver = ('127.0.0.1', 50501)\ntransport = 'TCP'\nprint('Alamat:', server[0])\nprint('Port:', server[1])\nprint('Transport:', transport)\nprint('Loopback: hanya komputer sendiri')\n",
+        "output": "Alamat: 127.0.0.1\nPort: 50501\nTransport: TCP\nLoopback: hanya komputer sendiri",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np01_endpoint.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Gambar dua program pada satu komputer dan beri label alamat serta port.",
+      "Jelaskan mengapa server pada laptop A tidak dihubungi memakai 127.0.0.1 dari laptop B."
+    ],
+    "warning": "127.0.0.1 selalu menunjuk komputer yang menjalankan program tersebut. Jangan menggantinya dengan alamat perangkat operasional saat mengikuti lab awal.",
+    "check": "Apakah client dan server wajib menggunakan dua komputer?",
+    "answer": "Tidak. Keduanya dapat berjalan sebagai proses berbeda, atau bagian latihan yang terpisah pada satu komputer.",
+    "source": "https://docs.python.org/3.12/library/socket.html",
+    "diagram": "netprog-alur",
+    "diagramAlt": "Client dan server loopback berkomunikasi melalui TCP atau UDP. Alamat, port, byte, dan aturan pesan mempunyai peran berbeda.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-alamat-ip",
+    "title": "Alamat IPv4/IPv6, subnet, dan validasi port",
+    "summary": "Validasi masukan sebelum membuat koneksi dan bedakan alamat dari jangkauan layanan.",
+    "analogy": "Memeriksa format alamat tujuan seperti memeriksa penulisan alamat sebelum mengirim paket; itu belum membuktikan penerimanya ada.",
+    "explain": [
+      "Modul ipaddress mengubah teks menjadi objek alamat dan jaringan. ip_address menerima IPv4 atau IPv6 yang valid; teks salah memicu ValueError. Ini lebih jelas daripada memecah alamat dengan titik secara manual, terutama karena IPv6 mempunyai aturan penulisan berbeda.",
+      "Port tujuan pada latihan harus integer 1 sampai 65535. Boolean sengaja ditolak meskipun Python memperlakukan bool sebagai turunan int. Batas ini untuk tujuan koneksi; port 0 tetap berguna ketika server meminta port dinamis melalui bind.",
+      "Pemeriksaan apakah alamat berada dalam subnet hanya operasi matematika. Hasil True tidak menunjukkan rute tersedia, firewall mengizinkan, atau aplikasi mendengarkan. IPv4 192.0.2.0/24 pada contoh adalah jaringan dokumentasi, bukan target koneksi.",
+      "::1 adalah loopback IPv6. Bentuk tuple socket IPv6 berbeda dari IPv4 pada beberapa operasi dan perlu family yang sesuai. Materi ini mengenali keduanya, sementara praktik socket berikut memakai AF_INET agar pengantar tetap konsisten."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "ip_address",
+          "Validasi dan representasi IP"
+        ],
+        [
+          "ip_network",
+          "Representasi prefix"
+        ],
+        [
+          "Port tujuan",
+          "Integer 1..65535 pada lab"
+        ],
+        [
+          "Keanggotaan subnet",
+          "Bukan uji konektivitas"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np02_ip.py",
+        "filename": "np02_ip.py",
+        "language": "python",
+        "code": "from ipaddress import ip_address, ip_network\n\ndef validasi_endpoint(alamat, port):\n    ip = ip_address(alamat)\n    if isinstance(port, bool) or not isinstance(port, int) or not 1 <= port <= 65535:\n        raise ValueError('Port tujuan wajib integer 1..65535.')\n    return str(ip), port\n\nif __name__ == '__main__':\n    print('IPv4:', validasi_endpoint('127.0.0.1', 50501))\n    print('IPv6:', validasi_endpoint('::1', 50501))\n    print('Dalam subnet:', ip_address('192.0.2.10') in ip_network('192.0.2.0/24'))\n",
+        "output": "IPv4: ('127.0.0.1', 50501)\nIPv6: ('::1', 50501)\nDalam subnet: True",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np02_ip.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Coba alamat salah seperti 999.1.1.1 dan tangani ValueError.",
+      "Uji port 0, 65536, True, dan 50501; jelaskan hasilnya."
+    ],
+    "warning": "Format alamat valid tidak membuktikan target boleh diakses atau layanannya tersedia.",
+    "check": "Mengapa fungsi menolak True sebagai port?",
+    "answer": "Karena boolean bukan masukan port yang dimaksud, meskipun isinstance(True, int) bernilai True.",
+    "source": "https://docs.python.org/3.12/library/ipaddress.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-dns",
+    "title": "Resolusi nama dengan getaddrinfo",
+    "summary": "Bedakan mencari alamat tujuan dari menguji koneksi ke layanan.",
+    "analogy": "Buku kontak memberi beberapa nomor yang dapat dicoba; menemukan nomor belum berarti panggilan dijawab.",
+    "explain": [
+      "Nama domain memudahkan manusia menyebut layanan. Resolver sistem dapat menggunakan konfigurasi lokal, hosts, cache, dan DNS untuk memperoleh alamat. socket.getaddrinfo menyediakan kandidat beserta family, jenis socket, protokol, dan alamat tujuan.",
+      "Satu nama bisa mempunyai beberapa alamat IPv4 atau IPv6. Program perlu memilih atau mencoba kandidat sesuai kebutuhannya. Jangan menganggap urutan dan jumlah kandidat selalu sama di setiap komputer atau waktu.",
+      "Contoh menggunakan alamat numerik dan AI_NUMERICHOST agar dapat berjalan tanpa DNS internet. Ini mengenalkan bentuk hasil getaddrinfo, bukan demonstrasi kueri DNS ke server publik. Untuk nama domain lab milik sendiri, hapus flag tersebut dan tangani socket.gaierror.",
+      "Resolusi berhasil tidak membuktikan port terbuka atau HTTP berhasil. Timeout koneksi juga tidak selalu membatasi lama resolusi nama oleh resolver sistem. Saat membuat alat operasional, rancang batas waktu keseluruhan dan catat tahap yang gagal secara terpisah."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Resolver",
+          "Mencari kandidat alamat"
+        ],
+        [
+          "getaddrinfo",
+          "API resolusi untuk socket"
+        ],
+        [
+          "gaierror",
+          "Kegagalan resolusi alamat"
+        ],
+        [
+          "AI_NUMERICHOST",
+          "Hanya menerima alamat numerik"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np03_resolusi.py",
+        "filename": "np03_resolusi.py",
+        "language": "python",
+        "code": "import socket\n# AI_NUMERICHOST memastikan contoh ini tidak bergantung pada DNS luar.\nhasil = socket.getaddrinfo('127.0.0.1', 50501,\n    family=socket.AF_INET, type=socket.SOCK_STREAM, flags=socket.AI_NUMERICHOST)\nalamat = sorted({item[4][0] for item in hasil})\nprint('Alamat kandidat:', alamat)\nprint('Resolusi bukan pemeriksaan layanan')\n# Untuk nama domain lab sendiri, hapus AI_NUMERICHOST dan tangani socket.gaierror.\n",
+        "output": "Alamat kandidat: ['127.0.0.1']\nResolusi bukan pemeriksaan layanan",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np03_resolusi.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Lihat family dan sockaddr pada setiap item hasil contoh.",
+      "Tulis urutan pemeriksaan: resolusi, koneksi TCP, lalu respons aplikasi."
+    ],
+    "warning": "Jangan menafsirkan hasil resolusi sebagai bukti layanan sehat. Contoh numerik tidak melakukan kueri DNS luar.",
+    "check": "Mengapa hasil getaddrinfo berupa beberapa kandidat?",
+    "answer": "Satu nama atau layanan dapat mempunyai beberapa alamat dan family yang sesuai.",
+    "source": "https://docs.python.org/3.12/library/socket.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-bytes",
+    "title": "Teks, bytes, UTF-8, dan potongan data",
+    "summary": "Pahami mengapa byte yang diterima belum selalu dapat langsung di-decode.",
+    "analogy": "Satu huruf dapat ditulis dengan beberapa potongan tinta; memotong di tengahnya menghasilkan bagian yang belum lengkap.",
+    "explain": [
+      "Socket mengirim dan menerima bytes. Python str berisi teks Unicode. encode mengubah teks ke bytes dengan encoding tertentu, sedangkan decode mengubah bytes kembali menjadi teks. Kedua sisi harus menyepakati encoding, misalnya UTF-8.",
+      "Jumlah karakter tidak selalu sama dengan jumlah byte. Pada Suhu 27°C, karakter derajat membutuhkan dua byte UTF-8. Panjang frame jaringan harus dihitung dari bytes yang benar-benar dikirim, bukan dari len teks sebelum encoding.",
+      "Potongan recv dapat berakhir di tengah karakter multibyte. Jangan melakukan decode mandiri pada setiap potongan lalu menganggapnya selalu lengkap. Rangkai pesan utuh sebelum decode, atau gunakan incremental decoder seperti contoh.",
+      "final=True memberi tahu decoder bahwa tidak ada byte lanjutan. UTF-8 tidak valid atau terpotong dapat memicu UnicodeDecodeError. Menyembunyikan error dengan errors=ignore dapat mengubah makna pesan; putuskan aturan penolakan pada protokol aplikasi."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "str",
+          "Teks Unicode"
+        ],
+        [
+          "bytes",
+          "Data yang dikirim socket"
+        ],
+        [
+          "UTF-8",
+          "Encoding yang disepakati"
+        ],
+        [
+          "Decoder bertahap",
+          "Menyimpan byte karakter yang belum lengkap"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np04_bytes.py",
+        "filename": "np04_bytes.py",
+        "language": "python",
+        "code": "import codecs\npesan = 'Suhu 27°C'\ndata = pesan.encode('utf-8')\nprint('Karakter:', len(pesan))\nprint('Byte:', len(data))\n# Potong tepat di tengah encoding dua byte karakter derajat.\nbatas = data.index(b'\\xc2') + 1\ndecoder = codecs.getincrementaldecoder('utf-8')()\nbagian1 = decoder.decode(data[:batas], final=False)\nbagian2 = decoder.decode(data[batas:], final=True)\nprint('Pulih:', bagian1 + bagian2)\n",
+        "output": "Karakter: 9\nByte: 10\nPulih: Suhu 27°C",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np04_bytes.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Bandingkan len teks dan len hasil encode untuk nama beraksen.",
+      "Potong data pada posisi lain dan pastikan incremental decoder mengembalikan pesan sama."
+    ],
+    "warning": "Batas recv bukan batas karakter atau pesan. Jangan mengabaikan byte invalid tanpa aturan yang jelas.",
+    "check": "Mengapa panjang frame dihitung setelah encode?",
+    "answer": "Karena protokol mengirim jumlah byte; satu karakter dapat memerlukan lebih dari satu byte.",
+    "source": "https://docs.python.org/3.12/library/codecs.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-tcp",
+    "title": "Socket TCP: bind, listen, accept, dan client echo",
+    "summary": "Buat server dan client lokal, kirim data, lalu tutup koneksi dengan jelas.",
+    "analogy": "Server seperti loket yang membuka antrean, menerima satu pengunjung, lalu melayani percakapan pada meja khusus.",
+    "explain": [
+      "Urutan server TCP dasar adalah socket, bind, listen, lalu accept. bind memilih alamat lokal. listen mengaktifkan penerimaan koneksi. accept mengembalikan socket koneksi baru dan alamat peer; listener tetap berbeda dari socket percakapan.",
+      "Client memakai create_connection dengan timeout lalu sendall. sendall berusaha mengirim seluruh bytes atau memicu exception, tetapi tidak membuktikan aplikasi di seberang sudah memproses pesan. recv mengembalikan sebagian data yang tersedia, bukan selalu seluruh pesan.",
+      "Contoh menjalankan server pada satu worker dan client pada alur utama. Port dipilih OS setelah bind ke 127.0.0.1:0. Client mengirim teks lalu shutdown(SHUT_WR), yang mengakhiri sisi kirim tanpa melarang penerimaan balasan. Kedua sisi membaca sampai recv menghasilkan b kosong.",
+      "Batas total 4096 byte dan timeout menjaga demo tetap terbatas. with menutup socket walaupun ada error. Demo melayani satu koneksi dan memakai EOF sebagai penanda akhir kiriman; untuk beberapa pesan pada satu koneksi, lanjutkan ke materi framing."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "bind/listen",
+          "Menyiapkan listener"
+        ],
+        [
+          "accept",
+          "Mendapat socket koneksi baru"
+        ],
+        [
+          "sendall",
+          "Mengirim seluruh buffer atau error"
+        ],
+        [
+          "recv = b kosong",
+          "Akhir aliran dari peer"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np05_tcp.py",
+        "filename": "np05_tcp.py",
+        "language": "python",
+        "code": "import socket\nfrom concurrent.futures import ThreadPoolExecutor\n\ndef layani(listener):\n    conn, _ = listener.accept()\n    with conn:\n        conn.settimeout(2)\n        total = 0\n        while True:\n            chunk = conn.recv(1024)\n            if not chunk:\n                break\n            total += len(chunk)\n            if total > 4096:\n                raise ValueError('Pesan lab terlalu besar.')\n            conn.sendall(chunk)\n\nif __name__ == '__main__':\n    # Server dan client dibuat dalam satu program supaya latihan mudah diulang.\n    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:\n        listener.settimeout(2)\n        listener.bind(('127.0.0.1', 0))  # OS memilih port kosong.\n        listener.listen(1)\n        with ThreadPoolExecutor(max_workers=1) as pool:\n            tugas = pool.submit(layani, listener)\n            with socket.create_connection(listener.getsockname(), timeout=2) as client:\n                client.sendall('Halo jaringan'.encode('utf-8'))\n                client.shutdown(socket.SHUT_WR)\n                hasil = bytearray()\n                while True:\n                    chunk = client.recv(1024)\n                    if not chunk:\n                        break\n                    hasil.extend(chunk)\n                    if len(hasil) > 4096:\n                        raise ValueError('Respons terlalu besar.')\n            tugas.result(timeout=3)\n    print('Balasan:', hasil.decode('utf-8'))\n",
+        "output": "Balasan: Halo jaringan",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np05_tcp.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Ubah pesan menjadi teks beraksen dan pastikan echo tetap sama.",
+      "Tandai baris milik server dan client; rancang pemisahan menjadi dua file untuk dua terminal."
+    ],
+    "warning": "TCP memberi aliran byte terurut, bukan batas pesan. Contoh satu koneksi ini belum menjadi server produksi.",
+    "check": "Mengapa socket hasil accept berbeda dari listener?",
+    "answer": "Listener menerima koneksi baru; socket hasil accept khusus bertukar data dengan peer yang sudah terhubung.",
+    "source": "https://docs.python.org/3.12/howto/sockets.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-framing",
+    "title": "Framing TCP dan pembacaan pesan lengkap",
+    "summary": "Gunakan header panjang agar dua pesan tetap dapat dipisahkan walau recv terpotong.",
+    "analogy": "Dua surat dalam satu kantong perlu amplop masing-masing; ukuran potongan kantong yang dibuka bukan ukuran surat.",
+    "explain": [
+      "TCP mengalirkan byte. Dua send dapat terbaca sebagai satu potongan, atau satu send terbagi menjadi beberapa recv. Aplikasi perlu framing: misalnya delimiter, panjang tetap, atau header panjang. Protokol latihan menggunakan empat byte panjang diikuti payload.",
+      "Helper send_frame mengemas panjang sebagai unsigned integer empat byte dengan urutan network byte order melalui struct !I. recv_exact mengulang recv sampai jumlah byte cukup. Koneksi yang berakhir terlalu cepat menghasilkan EOFError, bukan pesan yang dianggap lengkap.",
+      "recv_frame membaca header dahulu, menolak panjang lebih dari 4096, lalu membaca payload sesuai panjangnya. Ukuran dibatasi sebelum alokasi payload besar. Timeout tetap diperlukan: header kecil yang valid tidak menjamin peer akan mengirim seluruh payload.",
+      "Contoh mengirim dua frame bergantian pada satu koneksi. lab_common.py disertakan dalam ZIP dan harus berada di folder yang sama. Frame kosong diperbolehkan oleh lapisan framing ini, sementara protokol JSON di atasnya dapat menolak payload kosong."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Header",
+          "Empat byte panjang payload"
+        ],
+        [
+          "!I",
+          "Unsigned integer network byte order"
+        ],
+        [
+          "recv_exact",
+          "Mengumpulkan byte sampai cukup"
+        ],
+        [
+          "4096",
+          "Batas payload lab dalam byte"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np06_framing.py",
+        "filename": "np06_framing.py",
+        "language": "python",
+        "code": "import socket\nfrom lab_common import local_server, recv_frame, send_frame\n\ndef echo(conn):\n    for _ in range(2):\n        send_frame(conn, recv_frame(conn))\n\nif __name__ == '__main__':\n    with local_server(echo) as alamat:\n        with socket.create_connection(alamat, timeout=2) as client:\n            for pesan in ['satu', 'dua']:\n                send_frame(client, pesan.encode('utf-8'))\n                print('Frame:', recv_frame(client).decode('utf-8'))\n",
+        "output": "Frame: satu\nFrame: dua",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np06_framing.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Baca helper recv_exact di lab_common.py dan jelaskan kondisi EOF.",
+      "Jalankan test_lab.py untuk mencoba header/payload yang terfragmentasi dan frame berlebihan."
+    ],
+    "warning": "Satu recv tidak sama dengan satu pesan. Periksa panjang dan timeout sebelum mempercayai isi frame.",
+    "check": "Apa yang dilakukan jika peer menutup koneksi di tengah payload?",
+    "answer": "Pembacaan gagal dengan EOFError; payload terpotong tidak boleh diproses sebagai pesan lengkap.",
+    "source": "https://docs.python.org/3.12/library/struct.html",
+    "diagram": "netprog-framing",
+    "diagramAlt": "Satu aliran TCP berisi dua pesan berawalan panjang. Potongan recv dapat memotong header atau payload dan harus dirangkai kembali.",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-udp",
+    "title": "Socket UDP: datagram, alamat pengirim, dan timeout",
+    "summary": "Kirim satu datagram lokal serta pahami batas jaminannya.",
+    "analogy": "UDP seperti kartu pos terpisah: alamat dan isi dikirim per kiriman, tetapi balasan tidak dijamin tiba.",
+    "explain": [
+      "UDP memakai SOCK_DGRAM. Server bind ke alamat lokal lalu recvfrom; fungsi itu mengembalikan payload dan alamat pengirim. Balasan dikirim dengan sendto ke alamat tersebut. Tidak ada accept seperti pada server TCP.",
+      "Batas datagram dipertahankan, tetapi UDP tidak menjamin pengiriman, urutan, atau pencegahan duplikasi. Aplikasi yang membutuhkannya harus merancang mekanisme sendiri atau memilih transport yang sesuai. Jangan menyimpulkan UDP selalu lebih cepat atau lebih baik untuk semua kebutuhan.",
+      "Contoh mengirim halo lalu menerima HALO. Pesan dibatasi 100 byte dengan buffer penerimaan 1024 byte; desain lab sengaja kecil. Datagram yang terlalu besar untuk buffer penerima dapat terpotong, sehingga protokol perlu menentukan ukuran maksimum yang sesuai.",
+      "Client memeriksa alamat sumber balasan terhadap endpoint server lab. Itu pemeriksaan kecocokan, bukan autentikasi kriptografis. Timeout membatasi waktu tunggu. Bila tidak ada balasan, kemungkinan termasuk kehilangan datagram, firewall, aplikasi diam, atau target salah."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "sendto",
+          "Kirim payload ke alamat"
+        ],
+        [
+          "recvfrom",
+          "Terima payload dan asal"
+        ],
+        [
+          "Datagram",
+          "Satu unit pesan UDP"
+        ],
+        [
+          "Timeout",
+          "Akhir waktu tunggu aplikasi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np07_udp.py",
+        "filename": "np07_udp.py",
+        "language": "python",
+        "code": "import socket\nfrom concurrent.futures import ThreadPoolExecutor\n\ndef layani(server):\n    data, asal = server.recvfrom(1024)\n    if len(data) > 100:\n        raise ValueError('Batas pesan lab 100 byte.')\n    server.sendto(data.upper(), asal)\n\nif __name__ == '__main__':\n    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server:\n        server.bind(('127.0.0.1', 0))\n        server.settimeout(2)\n        with ThreadPoolExecutor(max_workers=1) as pool:\n            tugas = pool.submit(layani, server)\n            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client:\n                client.settimeout(2)\n                client.sendto(b'halo', server.getsockname())\n                data, asal = client.recvfrom(1024)\n                assert asal == server.getsockname()\n            tugas.result(timeout=3)\n    print('Datagram balasan:', data.decode('ascii'))\n    print('Keberhasilan sekali bukan jaminan pengiriman berikutnya')\n",
+        "output": "Datagram balasan: HALO\nKeberhasilan sekali bukan jaminan pengiriman berikutnya",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np07_udp.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Bandingkan urutan fungsi UDP dan TCP pada dua contoh.",
+      "Tulis kebutuhan tambahan jika pesan harus punya nomor urut dan deteksi duplikasi."
+    ],
+    "warning": "Pemeriksaan alamat pengirim bukan bukti identitas yang kuat. Keberhasilan echo lokal tidak menguji kehilangan paket di jaringan nyata.",
+    "check": "Mengapa server UDP tidak memakai accept?",
+    "answer": "UDP mengirim datagram tanpa membentuk koneksi TCP; alamat sumber tersedia bersama datagram pada recvfrom.",
+    "source": "https://docs.python.org/3.12/library/socket.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-timeout",
+    "title": "Timeout, EOF, penolakan koneksi, dan pembersihan",
+    "summary": "Bedakan tahap kegagalan sebelum menentukan tindakan berikutnya.",
+    "analogy": "Telepon tidak dijawab berbeda dengan nomor menolak panggilan atau percakapan yang sengaja diakhiri.",
+    "explain": [
+      "Kegagalan jaringan harus dibaca menurut tahapnya: resolusi, koneksi, pengiriman, penerimaan, atau protokol aplikasi. ConnectionRefusedError biasanya berarti percobaan TCP ditolak. TimeoutError berarti operasi tidak selesai dalam waktu yang ditetapkan. Keduanya tidak memberi diagnosis tunggal seluruh jaringan.",
+      "Contoh memakai server yang sudah menerima koneksi tetapi belum mengirim data. Client dapat terhubung, lalu batas waktu baca 0,1 detik tercapai. Ini menunjukkan layanan dapat menerima koneksi namun tidak memberikan respons aplikasi tepat waktu.",
+      "Event menyinkronkan akhir demonstrasi; server tidak dibiarkan menunggu selamanya. finally memberi sinyal meskipun client gagal, dan helper menutup listener. Timeout pada operasi socket bukan otomatis deadline keseluruhan serangkaian recv; aplikasi perlu anggaran waktu total untuk protokol yang lebih kompleks.",
+      "Jangan langsung mengulang tanpa batas. Retry sebaiknya terbatas dan mempertimbangkan apakah operasi aman diulang. Untuk perintah yang mengubah keadaan, timeout sesudah pengiriman dapat berarti permintaan sudah diproses tetapi balasannya belum diterima."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Refused",
+          "Koneksi TCP ditolak"
+        ],
+        [
+          "Timeout",
+          "Operasi melewati batas tunggu"
+        ],
+        [
+          "EOF",
+          "Peer mengakhiri aliran"
+        ],
+        [
+          "finally/with",
+          "Membersihkan resource pada semua jalur"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np08_timeout.py",
+        "filename": "np08_timeout.py",
+        "language": "python",
+        "code": "import socket\nfrom threading import Event\nfrom lab_common import local_server\nselesai = Event()\n\ndef diam(conn):\n    # Server sudah menerima koneksi, tetapi menunggu client selesai.\n    if not selesai.wait(timeout=2):\n        raise TimeoutError('Demo tidak menyelesaikan sinkronisasi.')\n\nif __name__ == '__main__':\n    with local_server(diam) as alamat:\n        try:\n            with socket.create_connection(alamat, timeout=1) as client:\n                client.settimeout(.1)\n                try:\n                    client.recv(16)\n                except TimeoutError:\n                    print('Batas waktu baca tercapai')\n        finally:\n            selesai.set()\n    print('Timeout tidak sama dengan bukti perangkat mati')\n",
+        "output": "Batas waktu baca tercapai\nTimeout tidak sama dengan bukti perangkat mati",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np08_timeout.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Ubah batas waktu baca dan jelaskan mengapa hasil tetap timeout saat server diam.",
+      "Buat tabel tindakan lanjutan untuk resolusi gagal, refused, timeout, dan JSON invalid."
+    ],
+    "warning": "Timeout tidak membuktikan perangkat mati. Retry operasi yang mengubah data membutuhkan rancangan idempotensi.",
+    "check": "Apakah connect berhasil menjamin aplikasi memberi jawaban?",
+    "answer": "Tidak. Koneksi transport dapat berhasil sementara aplikasi diam atau lambat.",
+    "source": "https://docs.python.org/3.12/library/socket.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-json",
+    "title": "Protokol aplikasi JSON dan validasi pesan",
+    "summary": "Sepakati aksi, ID permintaan, serta bentuk data yang boleh diterima.",
+    "analogy": "Kedua petugas memahami bahasa yang sama, tetapi tetap memeriksa formulir sebelum menjalankan permintaan.",
+    "explain": [
+      "JSON menyatakan struktur data, tetapi tidak menentukan arti operasi aplikasi. Protokol contoh mensyaratkan objek dengan tepat dua kolom: id dan aksi. Aksi yang diperbolehkan hanya ping dan balasannya pong dengan ID yang sama.",
+      "Payload bytes di-decode sebagai UTF-8, lalu json.loads menghasilkan objek Python. Hasilnya bisa list, angka, atau null, sehingga harus diperiksa sebagai dict sebelum mengakses kolom. ID harus benar-benar int dalam rentang yang ditetapkan; boolean ditolak.",
+      "Fungsi proses pada contoh memvalidasi pesan tanpa membuka koneksi. Pemisahan ini memudahkan pengujian. Ketika digabung dengan TCP, kirim bytes JSON melalui framing yang telah dipelajari, bukan menganggap satu recv berisi satu objek lengkap.",
+      "ID membantu memasangkan jawaban dengan permintaan, tetapi bukan password, tanda tangan, atau bukti hak akses. JSON yang valid juga bukan berarti isinya benar dan berwenang. Jangan menjalankan teks masukan sebagai kode, perintah shell, atau deserialisasi pickle yang tidak dipercaya."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Encoding",
+          "UTF-8 sebelum parsing"
+        ],
+        [
+          "Skema",
+          "id dan aksi wajib sesuai"
+        ],
+        [
+          "ID",
+          "Korelasi permintaan dan jawaban"
+        ],
+        [
+          "Validasi",
+          "Memeriksa struktur dan nilai"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np09_json.py",
+        "filename": "np09_json.py",
+        "language": "python",
+        "code": "import json\n\ndef proses(payload):\n    if len(payload) > 4096:\n        raise ValueError('Pesan terlalu besar.')\n    pesan = json.loads(payload.decode('utf-8'))\n    if not isinstance(pesan, dict) or set(pesan) != {'id', 'aksi'}:\n        raise ValueError('Kolom wajib tepat id dan aksi.')\n    if type(pesan['id']) is not int or not 1 <= pesan['id'] <= 9999 or pesan['aksi'] != 'ping':\n        raise ValueError('ID atau aksi tidak valid.')\n    return {'id': pesan['id'], 'hasil': 'pong'}\n\nif __name__ == '__main__':\n    payload = json.dumps({'id': 7, 'aksi': 'ping'}).encode('utf-8')\n    print('Balasan:', proses(payload))\n    try:\n        proses(b'{\"id\":true,\"aksi\":\"ping\"}')\n    except ValueError:\n        print('ID boolean ditolak')\n",
+        "output": "Balasan: {'id': 7, 'hasil': 'pong'}\nID boolean ditolak",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np09_json.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Uji payload berupa list, JSON rusak, ID boolean, dan aksi yang tidak didukung.",
+      "Jelaskan perbedaan validasi format dengan autentikasi."
+    ],
+    "warning": "ID permintaan tidak mengautentikasi pengguna. Terapkan validasi sebelum memproses aksi.",
+    "check": "Mengapa json.loads saja belum cukup?",
+    "answer": "Parser menerima berbagai struktur dan nilai; aplikasi masih harus memeriksa skema serta aksi yang diperbolehkan.",
+    "source": "https://docs.python.org/3.12/library/json.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-http",
+    "title": "HTTP client Python: status, JSON, dan ukuran respons",
+    "summary": "Pakai server HTTP lokal untuk membedakan transport dari hasil aplikasi.",
+    "analogy": "Jaringan mengantarkan surat, sedangkan status HTTP menjelaskan hasil permintaan di loket tujuan.",
+    "explain": [
+      "HTTP berada di atas transport dan mempunyai metode, path, header, status, serta body. Library HTTP menangani detail protokol yang tidak perlu ditulis ulang dengan socket mentah untuk penggunaan biasa. Contoh membuat endpoint lokal GET /status yang mengembalikan JSON.",
+      "BaseHTTPRequestHandler membentuk status dan header Content-Type serta Content-Length. Client urllib membaca respons dengan timeout. Endpoint /status menghasilkan 200, sedangkan path yang tidak tersedia menghasilkan 404. HTTPError pada 404 tetap menunjukkan bahwa server HTTP berhasil memberikan jawaban.",
+      "Pembacaan body dibatasi 4097 byte untuk mendeteksi respons yang melewati batas 4096. Pada aplikasi umum, validasi juga Content-Type dan skema JSON, tangani redirect, serta rancang batas waktu keseluruhan. Proxy lingkungan dinonaktifkan hanya pada client lab loopback ini.",
+      "ThreadingHTTPServer dipakai untuk latihan lokal dan ditutup pada finally. http.server tidak disiapkan sebagai server produksi. Untuk membuat API aplikasi lebih lanjut, pelajari jalur Backend/API; jangan menganggap contoh kecil ini mencakup autentikasi, izin, dan deployment."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "200",
+          "Permintaan endpoint berhasil"
+        ],
+        [
+          "404",
+          "Resource tidak ditemukan"
+        ],
+        [
+          "Content-Type",
+          "Jenis representasi body"
+        ],
+        [
+          "HTTPError",
+          "Respons HTTP dengan status error"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np10_http.py",
+        "filename": "np10_http.py",
+        "language": "python",
+        "code": "import json\nfrom http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\nfrom threading import Thread\nfrom urllib.request import build_opener, ProxyHandler\nfrom urllib.error import HTTPError\n\nclass Handler(BaseHTTPRequestHandler):\n    def do_GET(self):\n        status = 200 if self.path == '/status' else 404\n        body = json.dumps({'status': 'ok'} if status == 200 else {'error': 'tidak ditemukan'}).encode('utf-8')\n        self.send_response(status)\n        self.send_header('Content-Type', 'application/json; charset=utf-8')\n        self.send_header('Content-Length', str(len(body)))\n        self.end_headers()\n        self.wfile.write(body)\n    def log_message(self, format, *args):\n        pass  # Hindari access log bervariasi pada contoh.\n\nif __name__ == '__main__':\n    with ThreadingHTTPServer(('127.0.0.1', 0), Handler) as server:\n        thread = Thread(target=server.serve_forever, kwargs={'poll_interval': .02})\n        thread.start()\n        # Tidak menggunakan proxy lingkungan untuk server loopback ini.\n        opener = build_opener(ProxyHandler({}))\n        root = 'http://127.0.0.1:' + str(server.server_port)\n        try:\n            with opener.open(root + '/status', timeout=2) as response:\n                body = response.read(4097)\n                if len(body) > 4096:\n                    raise ValueError('Respons terlalu besar.')\n                print('HTTP:', response.status, json.loads(body)['status'])\n            try:\n                opener.open(root + '/hilang', timeout=2)\n            except HTTPError as exc:\n                with exc:\n                    print('HTTP error:', exc.code)\n        finally:\n            server.shutdown()\n            thread.join(timeout=3)\n",
+        "output": "HTTP: 200 ok\nHTTP error: 404",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np10_http.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Tambahkan path baca-saja /versi pada server lokal dan uji responsnya.",
+      "Jelaskan mengapa 404 bukan sama dengan TCP refused."
+    ],
+    "warning": "http.server hanya digunakan untuk lab lokal pada materi ini, bukan deployment layanan publik.",
+    "check": "Apa bedanya HTTP 404 dan koneksi TCP ditolak?",
+    "answer": "404 adalah jawaban dari aplikasi HTTP; refused terjadi saat percobaan koneksi TCP ditolak.",
+    "source": "https://docs.python.org/3.12/library/urllib.request.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-tls",
+    "title": "TLS, HTTPS, dan verifikasi identitas server",
+    "summary": "Kenali konteks TLS sebelum menghubungkan aplikasi ke layanan HTTPS.",
+    "analogy": "Amplop terkunci melindungi isi, tetapi alamat dan identitas penerimanya tetap perlu diperiksa.",
+    "explain": [
+      "TCP sendiri tidak mengenkripsi isi aplikasi. TLS menambahkan perlindungan pada koneksi, termasuk pemeriksaan sertifikat peer sesuai konteks yang digunakan. HTTPS adalah HTTP melalui TLS. Pengguna masih perlu menentukan layanan tujuan dan hak akses aplikasi dengan benar.",
+      "ssl.create_default_context membuat konteks client dengan verifikasi sertifikat dan pemeriksaan hostname. Contoh memastikan CERT_REQUIRED dan check_hostname tetap aktif serta menetapkan minimum TLS 1.2. Kebijakan organisasi dapat lebih ketat dan perlu mengikuti kebutuhan serta pembaruan platform.",
+      "Contoh hanya memeriksa konfigurasi lokal. Tidak ada handshake, unduhan sertifikat, atau koneksi internet pada program ini. Untuk praktik HTTPS ke layanan lab milik sendiri, gunakan nama domain yang cocok dengan sertifikat, trust store yang sesuai, dan timeout melalui library HTTP.",
+      "Jika lab menggunakan CA internal, tambahkan CA yang benar melalui load_verify_locations sesuai pengelolaan organisasi. Jangan menyelesaikan error sertifikat dengan mematikan verifikasi. Periksa hostname, waktu komputer, rantai kepercayaan, dan masa berlaku sertifikat terlebih dahulu."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "TLS",
+          "Perlindungan koneksi dan pemeriksaan peer"
+        ],
+        [
+          "CERT_REQUIRED",
+          "Sertifikat harus diverifikasi"
+        ],
+        [
+          "check_hostname",
+          "Nama tujuan cocok dengan sertifikat"
+        ],
+        [
+          "Trust store",
+          "CA yang dipercaya client"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np11_tls.py",
+        "filename": "np11_tls.py",
+        "language": "python",
+        "code": "import ssl\n\ndef konteks_tls():\n    context = ssl.create_default_context()\n    context.minimum_version = ssl.TLSVersion.TLSv1_2\n    return context\n\nif __name__ == '__main__':\n    context = konteks_tls()\n    print('Verifikasi sertifikat:', context.verify_mode == ssl.CERT_REQUIRED)\n    print('Pemeriksaan hostname:', context.check_hostname)\n    print('Minimum TLS 1.2:', context.minimum_version == ssl.TLSVersion.TLSv1_2)\n    print('Demo konfigurasi; belum melakukan handshake TLS')\n# Saat koneksi HTTPS ke layanan milik sendiri, berikan context ini ke urlopen.\n# Gunakan nama domain yang cocok dengan sertifikat, serta timeout.\n",
+        "output": "Verifikasi sertifikat: True\nPemeriksaan hostname: True\nMinimum TLS 1.2: True\nDemo konfigurasi; belum melakukan handshake TLS",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np11_tls.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Jelaskan perbedaan demonstrasi konfigurasi dengan handshake yang benar-benar diuji.",
+      "Susun daftar pemeriksaan saat nama domain tidak cocok dengan sertifikat lab."
+    ],
+    "warning": "Program ini belum menguji handshake TLS. Jangan menonaktifkan verifikasi sertifikat atau hostname untuk menyembunyikan error.",
+    "check": "Apakah mengaktifkan TLS otomatis memberi hak akses aplikasi?",
+    "answer": "Tidak. TLS dan pemeriksaan server berbeda dari autentikasi pengguna serta izin setiap operasi.",
+    "source": "https://docs.python.org/3.12/library/ssl.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-konkurensi",
+    "title": "Konkurensi terbatas dengan ThreadPoolExecutor",
+    "summary": "Jalankan beberapa pekerjaan I/O tanpa membuat thread tanpa batas.",
+    "analogy": "Dua petugas dapat melayani beberapa tugas bergantian; jumlah petugas tetap dibatasi sesuai kapasitas.",
+    "explain": [
+      "Pekerjaan jaringan sering menunggu I/O. ThreadPoolExecutor memungkinkan beberapa pekerjaan berjalan bersamaan dengan jumlah worker yang ditentukan. Ini membantu throughput pada beban tertentu, tetapi tidak menjamin setiap permintaan menjadi lebih cepat.",
+      "Contoh mengirim tiga permintaan echo ke satu endpoint loopback dengan maksimal dua worker. Masing-masing pekerjaan membuat dan menutup socket sendiri. Hindari berbagi satu socket antar worker tanpa aturan, karena pengiriman dan penerimaan dapat saling tercampur.",
+      "pool.map mengembalikan hasil sesuai urutan input, bukan urutan selesai. Pekerjaan di lapangan dapat selesai dengan waktu berbeda. Jika memakai as_completed untuk segera menampilkan hasil, simpan identitas tugas agar hasil tetap dikaitkan dengan endpoint yang tepat.",
+      "Jumlah pekerjaan pada demo juga dibatasi tiga. max_workers membatasi worker, tetapi bukan otomatis batas seluruh antrean jika aplikasi memasukkan jutaan target. Untuk alat nyata, batasi daftar yang diizinkan, antrean, timeout, dan tingkat permintaan."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "max_workers",
+          "Batas worker aktif"
+        ],
+        [
+          "map",
+          "Hasil dalam urutan input"
+        ],
+        [
+          "Socket per tugas",
+          "Memisahkan percakapan"
+        ],
+        [
+          "Backpressure",
+          "Membatasi pekerjaan yang menumpuk"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np12_concurrent.py",
+        "filename": "np12_concurrent.py",
+        "language": "python",
+        "code": "from concurrent.futures import ThreadPoolExecutor\nimport socket\nfrom lab_common import local_server, send_frame, recv_frame\n\ndef echo(conn):\n    send_frame(conn, recv_frame(conn))\n\ndef satu_pekerjaan(item):\n    nomor, alamat = item\n    with socket.create_connection(alamat, timeout=2) as client:\n        send_frame(client, str(nomor).encode('ascii'))\n        return recv_frame(client).decode('ascii')\n\nif __name__ == '__main__':\n    with local_server(echo) as alamat:\n        pekerjaan = [(n, alamat) for n in range(1, 4)]\n        with ThreadPoolExecutor(max_workers=2) as pool:\n            hasil = list(pool.map(satu_pekerjaan, pekerjaan))\n    print('Hasil sesuai urutan input:', hasil)\n    print('Pekerjaan: 3; worker maksimal: 2')\n",
+        "output": "Hasil sesuai urutan input: ['1', '2', '3']\nPekerjaan: 3; worker maksimal: 2",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np12_concurrent.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Ubah max_workers menjadi satu dan cocokkan isi serta urutan hasil.",
+      "Jelaskan mengapa satu socket bersama tidak aman untuk permintaan tanpa korelasi."
+    ],
+    "warning": "Batas worker saja tidak membatasi antrean yang tak terbatas. Gunakan daftar endpoint yang ditentukan.",
+    "check": "Mengapa urutan hasil tidak menunjukkan urutan tugas selesai?",
+    "answer": "pool.map mempertahankan urutan input meskipun pekerja selesai pada waktu berbeda.",
+    "source": "https://docs.python.org/3.12/library/concurrent.futures.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-asyncio",
+    "title": "Asyncio streams: beberapa client tanpa thread per koneksi",
+    "summary": "Gunakan await, framing baris, timeout, serta penutupan stream.",
+    "analogy": "Satu petugas dapat mengerjakan hal lain saat menunggu jawaban, selama pekerjaan itu mau menyerahkan giliran.",
+    "explain": [
+      "Asyncio memakai event loop dan coroutine. await memberi kesempatan tugas lain berjalan ketika operasi menunggu. Ini konkurensi untuk I/O, bukan janji pekerjaan CPU menjadi paralel. Fungsi blocking seperti time.sleep tidak boleh diletakkan sembarangan pada event loop.",
+      "Contoh start_server menerima koneksi lokal, lalu open_connection membuat tiga client. asyncio.gather menjalankannya bersama dan menyimpan hasil sesuai urutan coroutine masukan. Server dan client memakai satu baris ASCII berakhiran newline sebagai framing.",
+      "wait_for membatasi waktu tunggu, stream diberi limit, dan server menolak baris di atas 100 byte. writer.write mengantrekan bytes; await drain membantu mengikuti tekanan buffer. close dan wait_closed menyelesaikan penutupan stream pada finally.",
+      "Server menelusuri task handler yang masih aktif supaya demo dapat menyelesaikannya saat shutdown. Data lab sengaja kecil dan valid. Sistem umum tetap memerlukan penanganan baris terlalu panjang, error handler, pembatalan task, batas koneksi, serta kebijakan deadline yang lebih lengkap."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "await",
+          "Menyerahkan giliran saat menunggu"
+        ],
+        [
+          "readline",
+          "Framing newline"
+        ],
+        [
+          "drain",
+          "Mengikuti tekanan buffer tulis"
+        ],
+        [
+          "wait_closed",
+          "Menunggu penutupan stream"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np13_asyncio.py",
+        "filename": "np13_asyncio.py",
+        "language": "python",
+        "code": "import asyncio\n\nasync def echo(reader, writer):\n    try:\n        data = await asyncio.wait_for(reader.readline(), timeout=2)\n        if not data.endswith(b'\\n') or len(data) > 100:\n            raise ValueError('Butuh satu baris maksimal 100 byte.')\n        writer.write(data)\n        await writer.drain()\n    finally:\n        writer.close()\n        await writer.wait_closed()\n\nasync def main():\n    pending = set()\n    async def tracked(reader, writer):\n        task = asyncio.current_task()\n        pending.add(task)\n        try:\n            await echo(reader, writer)\n        finally:\n            pending.discard(task)\n    server = await asyncio.start_server(tracked, '127.0.0.1', 0, limit=100)\n    alamat = server.sockets[0].getsockname()\n    async def client(nomor):\n        reader, writer = await asyncio.wait_for(asyncio.open_connection(*alamat, limit=100), 2)\n        try:\n            writer.write(f'pesan-{nomor}\\n'.encode('ascii'))\n            await writer.drain()\n            return (await asyncio.wait_for(reader.readline(), 2)).decode('ascii').strip()\n        finally:\n            writer.close()\n            await writer.wait_closed()\n    async with server:\n        hasil = await asyncio.gather(*(client(n) for n in range(1, 4)))\n    if pending:\n        await asyncio.gather(*list(pending))\n    return hasil\n\nif __name__ == '__main__':\n    print('Balasan async:', asyncio.run(main()))\n",
+        "output": "Balasan async: ['pesan-1', 'pesan-2', 'pesan-3']",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np13_asyncio.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Ubah isi pesan tanpa menghilangkan newline dan cocokkan balasan.",
+      "Jelaskan mengapa pekerjaan CPU panjang dapat menghambat semua coroutine."
+    ],
+    "warning": "Jangan mengganti operasi async dengan fungsi blocking pada event loop. Demo bukan server yang sudah dibatasi untuk beban produksi.",
+    "check": "Mengapa write diikuti await drain?",
+    "answer": "write dapat mengantrekan data; drain memberi kesempatan menunggu ketika buffer memerlukan backpressure.",
+    "source": "https://docs.python.org/3.12/library/asyncio-stream.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-logging",
+    "title": "Logging dan troubleshooting per tahap",
+    "summary": "Catat hasil yang bisa ditindaklanjuti tanpa memberi diagnosis berlebihan.",
+    "analogy": "Catatan lokasi kejadian lebih membantu daripada satu label gagal untuk semua jenis masalah.",
+    "explain": [
+      "Log yang berguna menyebut layanan, percobaan, tahap, hasil, serta waktu yang relevan. Contoh memusatkan perhatian pada hasil timeout, refused, dan EOF menggunakan error buatan. Ini latihan klasifikasi dan format log, bukan pengukuran koneksi baru.",
+      "Logging JSON memudahkan pengolahan oleh alat lain. Pada contoh, nomor percobaan dan nama layanan cukup untuk menghubungkan catatan. Sistem operasional juga dapat mencatat timestamp berzona dan durasi dari jam monotonic agar perubahan jam dinding tidak merusak pengukuran selang.",
+      "Hindari menulis token, password, atau seluruh payload sensitif ke log. Nama layanan yang stabil sering lebih berguna untuk laporan daripada menyebarkan semua detail endpoint. Tetapkan pengelolaan akses serta masa simpan sesuai kebutuhan pekerjaan.",
+      "Troubleshooting dimulai dari tahap yang diketahui gagal. Gagal resolusi diperiksa pada resolver/nama; refused pada listener dan jalur penolakan; timeout pada jalur, batas tunggu, serta aplikasi; JSON invalid pada kontrak pesan. Catatan harus membedakan observasi dari dugaan penyebab."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "timeout",
+          "Operasi tidak selesai dalam batas"
+        ],
+        [
+          "refused",
+          "Percobaan koneksi ditolak"
+        ],
+        [
+          "eof",
+          "Aliran berakhir"
+        ],
+        [
+          "Korelasi",
+          "Menghubungkan catatan dan percobaan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np14_logging.py",
+        "filename": "np14_logging.py",
+        "language": "python",
+        "code": "import io\nimport json\nimport logging\n\ndef klasifikasi(exc):\n    if isinstance(exc, TimeoutError):\n        return 'timeout'\n    if isinstance(exc, ConnectionRefusedError):\n        return 'refused'\n    if isinstance(exc, EOFError):\n        return 'eof'\n    return 'error_lain'\n\nif __name__ == '__main__':\n    stream = io.StringIO()\n    logger = logging.getLogger('lab-jaringan')\n    logger.handlers.clear()\n    logger.propagate = False\n    logger.setLevel(logging.INFO)\n    handler = logging.StreamHandler(stream)\n    handler.setFormatter(logging.Formatter('%(message)s'))\n    logger.addHandler(handler)\n    for percobaan, exc in enumerate([TimeoutError(), ConnectionRefusedError(), EOFError()], 1):\n        logger.info(json.dumps({'layanan': 'lab-A', 'percobaan': percobaan, 'hasil': klasifikasi(exc)}))\n    print(stream.getvalue().strip())\n",
+        "output": "{\"layanan\": \"lab-A\", \"percobaan\": 1, \"hasil\": \"timeout\"}\n{\"layanan\": \"lab-A\", \"percobaan\": 2, \"hasil\": \"refused\"}\n{\"layanan\": \"lab-A\", \"percobaan\": 3, \"hasil\": \"eof\"}",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np14_logging.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Tambahkan kolom tahap pada setiap log contoh.",
+      "Rancang log HTTP 404 yang tidak diberi label perangkat mati."
+    ],
+    "warning": "Pesan error adalah bukti suatu tahap, bukan diagnosis tunggal seluruh jaringan. Jangan memasukkan rahasia ke log.",
+    "check": "Mengapa kata gagal saja kurang berguna?",
+    "answer": "Kata itu tidak menunjukkan tahap, jenis error, atau pemeriksaan lanjutan yang sesuai.",
+    "source": "https://docs.python.org/3.12/library/logging.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 30
+  },
+  {
+    "slug": "netprog-kasus-monitor",
+    "title": "Studi kasus: pemeriksa layanan TCP dan laporan CSV",
+    "summary": "Bangun pemeriksaan endpoint yang ditentukan, simpan hasil, dan jelaskan batasnya.",
+    "analogy": "Petugas memeriksa dua loket yang ada di daftar, lalu mencatat apakah pintunya menerima kedatangan.",
+    "explain": [
+      "Tujuan proyek adalah memeriksa apakah koneksi TCP ke endpoint lab berhasil pada saat percobaan. Dua fixture dibuat lokal: listener aktif dan port yang dipesan tetapi tidak listen. Tidak ada pemindaian rentang alamat atau akses router operasional.",
+      "Fungsi periksa menerima nama layanan dan endpoint yang ditentukan. Alamat dibatasi ke loopback, koneksi diberi timeout, dan hasil memisahkan tcp_terhubung dari error. ThreadPoolExecutor dua worker menjalankan dua pemeriksaan, sementara map menjaga urutan laporan.",
+      "Keberhasilan TCP hanya menunjukkan koneksi transport diterima. Ini belum memeriksa isi respons, login, database, internet pelanggan, ping ICMP, atau kualitas RF. Refused juga tidak otomatis berarti seluruh perangkat mati. Untuk pemeriksaan aplikasi, lanjutkan ke kontrak respons HTTP atau protokol status.",
+      "Laporan ditulis ke hasil-latihan/cek-layanan.csv. Menjalankan ulang memperbarui file tersebut; simpan salinan bila ingin membandingkan percobaan. Untuk monitoring berulang, rancang interval, timestamp, durasi, batas histori, dan definisi indikator; satu sampel bukan SLA atau persentase uptime."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Target",
+          "Dua endpoint loopback eksplisit"
+        ],
+        [
+          "Hasil TCP",
+          "Transport menerima atau gagal"
+        ],
+        [
+          "CSV",
+          "Layanan dan hasil percobaan"
+        ],
+        [
+          "Batas kesimpulan",
+          "Bukan ping, RF, atau SLA"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np15_monitor.py",
+        "filename": "np15_monitor.py",
+        "language": "python",
+        "code": "import csv\nimport socket\nfrom pathlib import Path\nfrom concurrent.futures import ThreadPoolExecutor\nfrom lab_common import local_server\nfrom np14_logging import klasifikasi\n\ndef periksa(item):\n    nama, alamat = item\n    if alamat[0] != '127.0.0.1':\n        raise ValueError('Lab hanya menerima endpoint loopback yang ditentukan.')\n    try:\n        with socket.create_connection(alamat, timeout=1):\n            hasil = 'tcp_terhubung'\n    except OSError as exc:\n        hasil = klasifikasi(exc)\n    return {'layanan': nama, 'hasil': hasil}\n\nif __name__ == '__main__':\n    with local_server(lambda conn: None) as aktif, socket.socket() as tanpa_listener:\n        tanpa_listener.bind(('127.0.0.1', 0))\n        # Port kedua dipesan tetapi tidak listen: fixture penolakan lokal.\n        endpoint = [('lab-aktif', aktif), ('lab-tutup', tanpa_listener.getsockname())]\n        with ThreadPoolExecutor(max_workers=2) as pool:\n            hasil = list(pool.map(periksa, endpoint))\n    folder = Path('hasil-latihan')\n    folder.mkdir(exist_ok=True)\n    with (folder / 'cek-layanan.csv').open('w', newline='', encoding='utf-8') as file:\n        writer = csv.DictWriter(file, fieldnames=['layanan', 'hasil'])\n        writer.writeheader()\n        writer.writerows(hasil)\n    for row in hasil:\n        print(row['layanan'] + ':', row['hasil'])\n    print('Laporan: hasil-latihan/cek-layanan.csv')\n",
+        "output": "lab-aktif: tcp_terhubung\nlab-tutup: refused\nLaporan: hasil-latihan/cek-layanan.csv",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np15_monitor.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Buka CSV hasil dan cocokkan dua barisnya dengan terminal.",
+      "Rancang kolom timestamp dan pemeriksaan HTTP yang diperlukan agar laporan lebih informatif."
+    ],
+    "warning": "TCP terhubung bukan bukti layanan aplikasi sehat atau internet pelanggan normal. Latihan tidak mengukur SLA.",
+    "check": "Mengapa hasil tcp_terhubung tidak diberi label internet normal?",
+    "answer": "Karena hanya koneksi transport ke satu endpoint yang diperiksa; banyak lapisan layanan belum diuji.",
+    "source": "https://docs.python.org/3.12/library/socket.html",
+    "diagram": "netprog-monitoring",
+    "diagramAlt": "Target yang ditentukan diperiksa dengan koneksi TCP berbatas waktu, dikelompokkan hasilnya, lalu dicatat ke CSV. Hasil bukan pengukuran SLA.",
+    "stage": 0,
+    "minutes": 45
+  },
+  {
+    "slug": "netprog-kasus-status",
+    "title": "Studi kasus: layanan status perangkat fiktif melalui TCP JSON",
+    "summary": "Gabungkan framing, validasi, korelasi ID, dan respons baca-saja.",
+    "analogy": "Client mengirim formulir permintaan status, server memeriksa isinya, lalu mengembalikan catatan yang sesuai.",
+    "explain": [
+      "Proyek kedua membuat layanan baca-saja untuk BTS-LAB dengan data fiktif status up dan RTT 12 ms. Tidak ada komunikasi ke perangkat BTS. Data berada pada dictionary agar fokus pembelajaran tetap pada kontrak dan transport.",
+      "Client mengirim JSON yang mempunyai tepat id, aksi, dan perangkat di dalam frame panjang. Server memvalidasi bentuk, rentang ID, aksi status, serta tipe nama perangkat. Nama yang tidak dikenal menghasilkan ok False dan data null; format tidak valid memperoleh error terstruktur.",
+      "Framing ditangani lab_common.py dengan batas 4096 byte dan timeout socket. Setelah menerima balasan, client mencocokkan ID terhadap permintaan. Pada pengembangan lebih lanjut, client juga perlu memvalidasi seluruh skema respons sebelum menggunakannya dalam keputusan.",
+      "Layanan demo menerima satu permintaan per koneksi dan tidak mempunyai autentikasi atau TLS. Tetap gunakan loopback. Sebelum merancang layanan nyata, pelajari autentikasi, otorisasi, enkripsi, deadline keseluruhan, batas koneksi, audit, dan evaluasi data sumber. Jangan memasukkan perintah perubahan konfigurasi ke protokol latihan ini."
+    ],
+    "table": {
+      "headers": [
+        "Istilah",
+        "Arti dalam latihan"
+      ],
+      "rows": [
+        [
+          "Framing",
+          "Header panjang dan payload JSON"
+        ],
+        [
+          "Validasi",
+          "Skema, ID, aksi, tipe"
+        ],
+        [
+          "Korelasi",
+          "ID respons sama dengan request"
+        ],
+        [
+          "Data",
+          "Fiktif dan hanya dibaca"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "np16_status.py",
+        "filename": "np16_status.py",
+        "language": "python",
+        "code": "import json\nimport socket\nfrom lab_common import local_server, send_frame, recv_frame\n\nPERANGKAT = {'BTS-LAB': {'status': 'up', 'rtt_ms': 12}}\n\ndef jawab(payload):\n    request = json.loads(payload.decode('utf-8'))\n    if not isinstance(request, dict) or set(request) != {'id', 'aksi', 'perangkat'}:\n        raise ValueError('Skema permintaan tidak sesuai.')\n    if type(request['id']) is not int or not 1 <= request['id'] <= 9999:\n        raise ValueError('ID wajib integer 1..9999.')\n    if request['aksi'] != 'status' or not isinstance(request['perangkat'], str):\n        raise ValueError('Hanya aksi status dengan nama perangkat teks.')\n    data = PERANGKAT.get(request['perangkat'])\n    return {'id': request['id'], 'ok': data is not None, 'data': data}\n\ndef layani(conn):\n    payload = recv_frame(conn)\n    try:\n        response = jawab(payload)\n    except (ValueError, UnicodeError):\n        response = {'ok': False, 'error': 'permintaan_invalid'}\n    send_frame(conn, json.dumps(response).encode('utf-8'))\n\nif __name__ == '__main__':\n    with local_server(layani) as alamat:\n        with socket.create_connection(alamat, timeout=2) as client:\n            request = {'id': 21, 'aksi': 'status', 'perangkat': 'BTS-LAB'}\n            send_frame(client, json.dumps(request).encode('utf-8'))\n            response = json.loads(recv_frame(client).decode('utf-8'))\n            if response.get('id') != request['id']:\n                raise ValueError('ID balasan tidak cocok.')\n    print('Balasan:', response)\n    print('Data fiktif; layanan hanya membaca status')\n",
+        "output": "Balasan: {'id': 21, 'ok': True, 'data': {'status': 'up', 'rtt_ms': 12}}\nData fiktif; layanan hanya membaca status",
+        "explanation": "Gunakan Python 3.12 atau lebih baru. Ekstrak paket lengkap dan jalankan dari folder network-programming-lab; beberapa contoh mengimpor lab_common.py. Seluruh endpoint latihan berada di loopback. Keluaran ini berasal dari contoh yang diuji, bukan pengukuran jaringan operasional."
+      }
+    ],
+    "steps": [
+      "Unduh dan ekstrak paket network-programming-lab dari halaman jalur.",
+      "Buka terminal di folder hasil ekstraksi. Tidak ada dependensi pip tambahan.",
+      "Jalankan python np16_status.py, lalu cocokkan keluaran dengan penjelasan.",
+      "Ubah satu bagian sesuai latihan, jalankan ulang, dan catat alasan perubahan hasil."
+    ],
+    "practice": [
+      "Minta perangkat TIDAK-ADA dan pastikan ok False dengan ID yang sesuai.",
+      "Kirim aksi selain status lalu periksa respons error tanpa menjalankan perintah apa pun."
+    ],
+    "warning": "Demo tidak mempunyai autentikasi atau TLS dan hanya boleh digunakan sebagai lab loopback. Angka RTT adalah data fiktif, bukan pengukuran.",
+    "check": "Mengapa ID respons tetap perlu diperiksa?",
+    "answer": "Agar client tidak memasangkan jawaban dengan permintaan yang salah; ID tetap bukan bukti autentikasi.",
+    "source": "https://docs.python.org/3.12/library/json.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 45
+  }
+]

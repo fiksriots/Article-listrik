@@ -10216,5 +10216,677 @@
       "answer": 0,
       "explanation": "Evaluasi serta proses rilis tetap diperlukan."
     }
+  ],
+  "netprog-pengantar": [
+    {
+      "question": "Siapa yang memulai koneksi pada pola client–server contoh?",
+      "options": [
+        "Client",
+        "Router",
+        "Nomor port"
+      ],
+      "answer": 0,
+      "explanation": "Client menghubungi endpoint server."
+    },
+    {
+      "question": "127.0.0.1 pada laptop B menunjuk ke mana?",
+      "options": [
+        "Semua komputer di LAN",
+        "Laptop B sendiri",
+        "Laptop A yang menjalankan server"
+      ],
+      "answer": 1,
+      "explanation": "Loopback selalu kembali ke host setempat."
+    },
+    {
+      "question": "Port 0 pada bind berarti ...",
+      "options": [
+        "Semua port dibuka",
+        "Server tidak membutuhkan port",
+        "OS memilih port kosong"
+      ],
+      "answer": 2,
+      "explanation": "Port dinamis dapat dibaca dengan getsockname."
+    },
+    {
+      "question": "Apa yang harus disepakati selain alamat dan port?",
+      "options": [
+        "Transport dan aturan pesan",
+        "Nama merek komputer",
+        "Resolusi layar"
+      ],
+      "answer": 0,
+      "explanation": "Kedua sisi harus memahami transport dan protokol aplikasi."
+    }
+  ],
+  "netprog-alamat-ip": [
+    {
+      "question": "Apa arti hasil True pada pemeriksaan subnet?",
+      "options": [
+        "Alamat berada dalam prefix",
+        "Layanan TCP aktif",
+        "Gateway sudah benar"
+      ],
+      "answer": 0,
+      "explanation": "Operasi ipaddress tidak mengirim paket."
+    },
+    {
+      "question": "Port tujuan mana yang valid menurut fungsi?",
+      "options": [
+        "True",
+        "50501",
+        "65536"
+      ],
+      "answer": 1,
+      "explanation": "Fungsi mensyaratkan integer 1..65535 dan menolak bool."
+    },
+    {
+      "question": "Teks alamat IP tidak valid ditangani dengan ...",
+      "options": [
+        "Menganggapnya loopback",
+        "Menambah titik otomatis",
+        "ValueError"
+      ],
+      "answer": 2,
+      "explanation": "ip_address menolak format yang tidak sah."
+    },
+    {
+      "question": "Alamat loopback IPv6 adalah ...",
+      "options": [
+        "::1",
+        "0.0.0.0",
+        "192.0.2.1"
+      ],
+      "answer": 0,
+      "explanation": "::1 kembali ke host IPv6 setempat."
+    }
+  ],
+  "netprog-dns": [
+    {
+      "question": "Resolusi nama yang berhasil membuktikan ...",
+      "options": [
+        "Ada kandidat alamat",
+        "HTTP pasti 200",
+        "Semua port terbuka"
+      ],
+      "answer": 0,
+      "explanation": "Tahap koneksi dan aplikasi masih perlu diperiksa."
+    },
+    {
+      "question": "Kegagalan resolusi socket umumnya ditangani sebagai ...",
+      "options": [
+        "EOFError",
+        "socket.gaierror",
+        "JSONDecodeError"
+      ],
+      "answer": 1,
+      "explanation": "gaierror mengacu pada pencarian alamat."
+    },
+    {
+      "question": "Flag AI_NUMERICHOST pada contoh berarti ...",
+      "options": [
+        "Paksa kueri DNS publik",
+        "Pilih server DNS tercepat",
+        "Masukan harus alamat numerik"
+      ],
+      "answer": 2,
+      "explanation": "Contoh ini tidak bergantung pada DNS luar."
+    },
+    {
+      "question": "Satu domain mempunyai IPv4 dan IPv6. Program sebaiknya ...",
+      "options": [
+        "Mempertimbangkan kandidat yang sesuai",
+        "Selalu menghapus semua IPv6",
+        "Mengubah nama menjadi port"
+      ],
+      "answer": 0,
+      "explanation": "getaddrinfo membawa family dan alamat yang dapat digunakan."
+    }
+  ],
+  "netprog-bytes": [
+    {
+      "question": "Socket menerima data sebagai ...",
+      "options": [
+        "bytes",
+        "str otomatis",
+        "DataFrame"
+      ],
+      "answer": 0,
+      "explanation": "Aplikasi yang menentukan decoding teksnya."
+    },
+    {
+      "question": "Satu karakter UTF-8 selalu satu byte?",
+      "options": [
+        "Hanya pada TCP",
+        "Tidak",
+        "Ya"
+      ],
+      "answer": 1,
+      "explanation": "UTF-8 memakai panjang encoding yang bervariasi."
+    },
+    {
+      "question": "Potongan berakhir di tengah karakter. Pilihan yang tepat ...",
+      "options": [
+        "Buang byte terakhir",
+        "Tambah spasi sebelum decode",
+        "Rangkai atau gunakan incremental decoder"
+      ],
+      "answer": 2,
+      "explanation": "Byte yang belum lengkap perlu ditunggu."
+    },
+    {
+      "question": "Panjang payload untuk header dihitung dari ...",
+      "options": [
+        "len hasil encode",
+        "len nama file",
+        "Jumlah kata"
+      ],
+      "answer": 0,
+      "explanation": "Header panjang mengukur byte payload."
+    }
+  ],
+  "netprog-tcp": [
+    {
+      "question": "Data percakapan server dikirim melalui ...",
+      "options": [
+        "Socket hasil accept",
+        "Nomor port sebagai string",
+        "Listener sebelum listen"
+      ],
+      "answer": 0,
+      "explanation": "accept menghasilkan socket koneksi."
+    },
+    {
+      "question": "sendall berhasil berarti ...",
+      "options": [
+        "Data pasti disimpan database",
+        "Buffer dikirim tanpa error yang dilaporkan",
+        "Aplikasi peer pasti selesai memproses"
+      ],
+      "answer": 1,
+      "explanation": "Konfirmasi pemrosesan perlu protokol aplikasi."
+    },
+    {
+      "question": "recv mengembalikan b kosong pada TCP berarti ...",
+      "options": [
+        "Belum ada data sesaat",
+        "Pesan selalu salah",
+        "Peer mengakhiri aliran kirim"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada data lagi pada arah tersebut."
+    },
+    {
+      "question": "Mengapa client memakai shutdown(SHUT_WR)?",
+      "options": [
+        "Menandai akhir kiriman sambil tetap menerima",
+        "Menutup semua socket server",
+        "Mematikan sistem operasi"
+      ],
+      "answer": 0,
+      "explanation": "Half-close memungkinkan membaca balasan sesudah kiriman selesai."
+    }
+  ],
+  "netprog-framing": [
+    {
+      "question": "Dua send TCP dapat ...",
+      "options": [
+        "Bergabung atau terpecah saat recv",
+        "Selalu menjadi dua recv",
+        "Selalu menjadi dua koneksi"
+      ],
+      "answer": 0,
+      "explanation": "Batas kiriman tidak dipertahankan oleh TCP."
+    },
+    {
+      "question": "Header menyatakan 9000 byte pada lab. Tindakan yang benar ...",
+      "options": [
+        "Anggap 9000 karakter",
+        "Tolak sebelum membaca payload besar",
+        "Alokasikan tanpa batas"
+      ],
+      "answer": 1,
+      "explanation": "Batas frame ditetapkan 4096 byte."
+    },
+    {
+      "question": "recv_exact diperlukan karena ...",
+      "options": [
+        "TCP mengembalikan dictionary",
+        "Socket tidak dapat memakai loop",
+        "recv boleh memberi byte lebih sedikit"
+      ],
+      "answer": 2,
+      "explanation": "Loop mengumpulkan byte sampai panjang terpenuhi."
+    },
+    {
+      "question": "Header panjang memakai satuan ...",
+      "options": [
+        "Byte payload",
+        "Jumlah kata",
+        "Nomor koneksi"
+      ],
+      "answer": 0,
+      "explanation": "Panjang dihitung dari bytes yang dikirim."
+    }
+  ],
+  "netprog-udp": [
+    {
+      "question": "Jenis socket UDP adalah ...",
+      "options": [
+        "SOCK_DGRAM",
+        "SOCK_STREAM",
+        "SOCK_HTTP"
+      ],
+      "answer": 0,
+      "explanation": "Datagram berbeda dari aliran TCP."
+    },
+    {
+      "question": "UDP menjamin urutan kiriman?",
+      "options": [
+        "Hanya jika port besar",
+        "Tidak",
+        "Ya tanpa syarat"
+      ],
+      "answer": 1,
+      "explanation": "Protokol aplikasi perlu menangani kebutuhan urutan."
+    },
+    {
+      "question": "recvfrom mengembalikan ...",
+      "options": [
+        "Hanya status HTTP",
+        "Socket listener baru",
+        "Payload dan alamat pengirim"
+      ],
+      "answer": 2,
+      "explanation": "Alamat pengirim dipakai untuk balasan."
+    },
+    {
+      "question": "Balasan UDP tidak tiba. Kesimpulan yang tepat ...",
+      "options": [
+        "Perlu pemeriksaan lebih lanjut",
+        "Perangkat pasti mati",
+        "DNS pasti rusak"
+      ],
+      "answer": 0,
+      "explanation": "Beberapa tahap dapat menyebabkan tidak ada balasan."
+    }
+  ],
+  "netprog-timeout": [
+    {
+      "question": "Client terhubung tetapi recv timeout. Artinya ...",
+      "options": [
+        "Belum ada hasil baca dalam batas waktu",
+        "Server pasti tidak punya listrik",
+        "DNS pasti tidak ada"
+      ],
+      "answer": 0,
+      "explanation": "Koneksi dan respons aplikasi adalah tahap berbeda."
+    },
+    {
+      "question": "Agar resource ditutup ketika ada exception, gunakan ...",
+      "options": [
+        "Mengabaikan semua error",
+        "with dan finally",
+        "Loop tanpa akhir"
+      ],
+      "answer": 1,
+      "explanation": "Pembersihan perlu tetap berjalan pada jalur gagal."
+    },
+    {
+      "question": "Retry tanpa batas sebaiknya ...",
+      "options": [
+        "Dipakai untuk semua operasi",
+        "Mengganti timeout",
+        "Dihindari"
+      ],
+      "answer": 2,
+      "explanation": "Retry perlu batas dan pertimbangan efek pengulangan."
+    },
+    {
+      "question": "Timeout setiap recv berarti deadline seluruh pesan?",
+      "options": [
+        "Tidak otomatis",
+        "Ya selalu",
+        "Hanya pada UDP"
+      ],
+      "answer": 0,
+      "explanation": "Peer dapat mengirim sedikit demi sedikit sebelum timeout tiap operasi."
+    }
+  ],
+  "netprog-json": [
+    {
+      "question": "JSON valid otomatis sesuai protokol?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Asalkan memakai UTF-8"
+      ],
+      "answer": 0,
+      "explanation": "Aplikasi tetap harus memeriksa struktur dan makna."
+    },
+    {
+      "question": "ID pada protokol contoh dipakai untuk ...",
+      "options": [
+        "Memberi hak admin",
+        "Memasangkan balasan",
+        "Mengenkripsi pesan"
+      ],
+      "answer": 1,
+      "explanation": "Korelasi berbeda dari autentikasi."
+    },
+    {
+      "question": "Payload JSON berupa list pada contoh harus ...",
+      "options": [
+        "Dianggap dict otomatis",
+        "Dijalankan sebagai kode",
+        "Ditolak"
+      ],
+      "answer": 2,
+      "explanation": "Skema mensyaratkan objek."
+    },
+    {
+      "question": "Mengapa ID True ditolak?",
+      "options": [
+        "Protokol meminta integer sebenarnya",
+        "True tidak valid dalam Python",
+        "TCP menolak boolean"
+      ],
+      "answer": 0,
+      "explanation": "JSON boolean berbeda dari ID numerik yang disepakati."
+    }
+  ],
+  "netprog-http": [
+    {
+      "question": "Respons 404 membuktikan ...",
+      "options": [
+        "Server HTTP memberikan respons error",
+        "Tidak ada koneksi jaringan sama sekali",
+        "DNS selalu gagal"
+      ],
+      "answer": 0,
+      "explanation": "Status HTTP sudah berada pada lapisan aplikasi."
+    },
+    {
+      "question": "Content-Length mengukur ...",
+      "options": [
+        "Nomor port",
+        "Byte body",
+        "Jumlah karakter URL"
+      ],
+      "answer": 1,
+      "explanation": "Header ini menyatakan panjang representasi yang dikirim."
+    },
+    {
+      "question": "Mengapa body dibaca sampai batas+1?",
+      "options": [
+        "Membuat semua file lengkap",
+        "Mengganti validasi JSON",
+        "Mendeteksi respons melewati batas"
+      ],
+      "answer": 2,
+      "explanation": "Satu byte tambahan menunjukkan batas telah terlampaui."
+    },
+    {
+      "question": "Server HTTP contoh cocok untuk ...",
+      "options": [
+        "Latihan loopback",
+        "Produksi publik tanpa perubahan",
+        "Penyimpanan password pengguna"
+      ],
+      "answer": 0,
+      "explanation": "Dokumentasi http.server tidak merekomendasikannya untuk produksi."
+    }
+  ],
+  "netprog-tls": [
+    {
+      "question": "TCP sendiri mengenkripsi isi aplikasi?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Hanya pada port 443"
+      ],
+      "answer": 0,
+      "explanation": "Nomor port tidak otomatis mengaktifkan TLS."
+    },
+    {
+      "question": "check_hostname memeriksa ...",
+      "options": [
+        "Jumlah koneksi aktif",
+        "Kecocokan nama tujuan dan sertifikat",
+        "Kecepatan DNS"
+      ],
+      "answer": 1,
+      "explanation": "Nama tujuan harus sesuai identitas pada sertifikat."
+    },
+    {
+      "question": "Error sertifikat sebaiknya ditangani dengan ...",
+      "options": [
+        "Mematikan semua verifikasi",
+        "Mengubah HTTPS menjadi HTTP",
+        "Memeriksa penyebab dan trust yang benar"
+      ],
+      "answer": 2,
+      "explanation": "Verifikasi perlu dipertahankan."
+    },
+    {
+      "question": "Apa yang dibuktikan program TLS contoh?",
+      "options": [
+        "Konfigurasi konteks lokal",
+        "Handshake server publik berhasil",
+        "Semua CA terpercaya selamanya"
+      ],
+      "answer": 0,
+      "explanation": "Contoh tidak membuka koneksi jaringan."
+    }
+  ],
+  "netprog-konkurensi": [
+    {
+      "question": "max_workers=2 berarti ...",
+      "options": [
+        "Maksimal dua worker",
+        "Hanya dua tugas boleh dibuat selamanya",
+        "Semua tugas selesai bersamaan"
+      ],
+      "answer": 0,
+      "explanation": "Jumlah worker dan panjang antrean berbeda."
+    },
+    {
+      "question": "pool.map mengembalikan hasil menurut ...",
+      "options": [
+        "Selalu urutan selesai",
+        "Urutan input",
+        "Urutan IP numerik"
+      ],
+      "answer": 1,
+      "explanation": "Map mempertahankan korespondensi dengan input."
+    },
+    {
+      "question": "Setiap tugas contoh mempunyai ...",
+      "options": [
+        "Satu socket global bersama",
+        "Port server baru yang ditebak",
+        "Socket sendiri"
+      ],
+      "answer": 2,
+      "explanation": "Socket terpisah mencegah campuran percakapan."
+    },
+    {
+      "question": "Menambah worker selalu mempercepat?",
+      "options": [
+        "Tidak",
+        "Ya tanpa batas",
+        "Hanya di IPv6"
+      ],
+      "answer": 0,
+      "explanation": "Kapasitas server dan batas sistem juga memengaruhi hasil."
+    }
+  ],
+  "netprog-asyncio": [
+    {
+      "question": "Asyncio terutama membantu saat ...",
+      "options": [
+        "Banyak pekerjaan menunggu I/O",
+        "Semua tugas CPU harus paralel otomatis",
+        "Tidak ada operasi tunggu"
+      ],
+      "answer": 0,
+      "explanation": "Coroutine cocok untuk I/O yang mendukung await."
+    },
+    {
+      "question": "Penanda akhir pesan pada contoh adalah ...",
+      "options": [
+        "Spasi pertama",
+        "Newline",
+        "Batas satu recv"
+      ],
+      "answer": 1,
+      "explanation": "readline mengandalkan delimiter newline."
+    },
+    {
+      "question": "writer.drain berguna untuk ...",
+      "options": [
+        "Menghapus semua data penerima",
+        "Mengganti verifikasi TLS",
+        "Backpressure buffer tulis"
+      ],
+      "answer": 2,
+      "explanation": "Drain menunggu saat buffer membutuhkan ruang."
+    },
+    {
+      "question": "Fungsi blocking panjang pada event loop dapat ...",
+      "options": [
+        "Menghambat coroutine lain",
+        "Membuat thread baru otomatis",
+        "Mengaktifkan TLS"
+      ],
+      "answer": 0,
+      "explanation": "Event loop perlu mendapatkan giliran kembali."
+    }
+  ],
+  "netprog-logging": [
+    {
+      "question": "Log contoh berasal dari ...",
+      "options": [
+        "Error buatan untuk latihan",
+        "Pengukuran internet langsung",
+        "Polling router operasional"
+      ],
+      "answer": 0,
+      "explanation": "Program menguji klasifikasi, bukan membuka koneksi."
+    },
+    {
+      "question": "Data mana sebaiknya tidak dicatat mentah?",
+      "options": [
+        "Nomor percobaan",
+        "Token akses",
+        "ID layanan lab"
+      ],
+      "answer": 1,
+      "explanation": "Rahasia perlu dilindungi dari log."
+    },
+    {
+      "question": "Mengukur durasi sebaiknya menggunakan ...",
+      "options": [
+        "Selisih tanggal yang diketik",
+        "Nomor port",
+        "Jam monotonic"
+      ],
+      "answer": 2,
+      "explanation": "Jam monotonic cocok untuk selang waktu."
+    },
+    {
+      "question": "Observasi timeout sebaiknya ditulis sebagai ...",
+      "options": [
+        "Operasi melewati batas tunggu",
+        "BTS pasti padam",
+        "Semua pelanggan terputus"
+      ],
+      "answer": 0,
+      "explanation": "Log harus memisahkan hasil pengamatan dari dugaan."
+    }
+  ],
+  "netprog-kasus-monitor": [
+    {
+      "question": "Alat contoh memeriksa ...",
+      "options": [
+        "Dua endpoint loopback yang ditentukan",
+        "Semua port internet",
+        "Kualitas sinyal RF"
+      ],
+      "answer": 0,
+      "explanation": "Daftar target eksplisit dan terbatas."
+    },
+    {
+      "question": "tcp_terhubung berarti ...",
+      "options": [
+        "SLA satu bulan terpenuhi",
+        "Koneksi TCP berhasil pada percobaan",
+        "Semua fungsi aplikasi sehat"
+      ],
+      "answer": 1,
+      "explanation": "Hasil transport tidak mencakup seluruh aplikasi."
+    },
+    {
+      "question": "File hasil disimpan sebagai ...",
+      "options": [
+        "Konfigurasi router",
+        "Database pelanggan",
+        "CSV di hasil-latihan"
+      ],
+      "answer": 2,
+      "explanation": "CSV berisi layanan dan hasil pemeriksaan."
+    },
+    {
+      "question": "Satu hasil refused cukup untuk menghitung uptime bulanan?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Asalkan portnya 443"
+      ],
+      "answer": 0,
+      "explanation": "Perlu cakupan observasi dan definisi indikator yang benar."
+    }
+  ],
+  "netprog-kasus-status": [
+    {
+      "question": "RTT 12 ms pada proyek berasal dari ...",
+      "options": [
+        "Dictionary data fiktif",
+        "Pengukuran BTS langsung",
+        "Ping pelanggan"
+      ],
+      "answer": 0,
+      "explanation": "Server hanya membaca data contoh."
+    },
+    {
+      "question": "Nama perangkat tidak dikenal menghasilkan ...",
+      "options": [
+        "Eksekusi shell",
+        "ok False dan data null",
+        "Konfigurasi perangkat baru"
+      ],
+      "answer": 1,
+      "explanation": "Respons tetap terstruktur tanpa mengubah perangkat."
+    },
+    {
+      "question": "Apa peran header panjang sebelum JSON?",
+      "options": [
+        "Mengenkripsi JSON",
+        "Mengautentikasi client",
+        "Memisahkan pesan pada aliran TCP"
+      ],
+      "answer": 2,
+      "explanation": "Framing dan keamanan identitas adalah hal berbeda."
+    },
+    {
+      "question": "Sebelum memakai layanan nyata, yang diperlukan antara lain ...",
+      "options": [
+        "Autentikasi, izin, TLS, dan batas resource",
+        "Cukup mengganti IP loopback",
+        "Menghapus semua timeout"
+      ],
+      "answer": 0,
+      "explanation": "Server lab tidak mencakup kebutuhan produksi."
+    }
   ]
 }
