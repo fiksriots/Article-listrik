@@ -1270,5 +1270,194 @@
     "diagramAlt": "",
     "stage": 0,
     "minutes": 45
+  },
+  {
+    "slug": "ds-time-series",
+    "title": "Time series: baseline musiman dan evaluasi walk-forward",
+    "summary": "Bedakan forecast satu langkah berulang dari forecast banyak langkah sekaligus.",
+    "analogy": "Menebak besok dengan informasi hari ini berbeda dari menebak dua minggu penuh tanpa menerima pengamatan baru.",
+    "explain": [
+      "Deret waktu membutuhkan urutan dan ketersediaan informasi yang jelas. Contoh membandingkan baseline nilai sebelumnya dengan nilai tujuh langkah sebelumnya pada deret fiktif bermusim mingguan dan tren kecil.",
+      "Evaluasi dimulai pada indeks 28 dan menghasilkan 14 prediksi satu langkah. Pada tiap langkah, observasi yang lebih awal dianggap sudah tersedia. Karena itu penggunaan nilai aktual dari bagian evaluasi sebelumnya adalah sah untuk skenario ini, tetapi bukan untuk satu forecast 14 langkah dari satu titik awal.",
+      "MAE dihitung pada periode yang sama untuk kedua baseline. Pada data ini lag tujuh lebih baik, tetapi itu tidak membuktikan pola musiman serupa selalu ada. Pemilihan lag dan model harus memakai pengembangan yang sesuai, bukan mengulang evaluasi akhir sampai skor menarik.",
+      "Tetapkan horizon, frekuensi, data hilang, revisi label, dan waktu fitur tersedia sebelum membuat model. Lanjutkan ke split berbasis waktu yang sudah ada; jangan merandomisasi deret tanpa alasan penggunaan yang dapat dipertanggungjawabkan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Horizon",
+          "Jarak waktu prediksi"
+        ],
+        [
+          "Lag",
+          "Nilai dari waktu sebelumnya"
+        ],
+        [
+          "Walk-forward",
+          "Evaluasi maju dengan informasi yang tersedia"
+        ],
+        [
+          "MAE",
+          "Perbandingan pada periode yang sama"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds21_time_series.py",
+        "filename": "ds21_time_series.py",
+        "language": "python",
+        "code": "import numpy as np\n\ndef walk_forward(values,start,lag):\n    values=np.asarray(values,dtype=float)\n    if values.ndim!=1 or not np.isfinite(values).all() or type(lag) is not int or lag<1 or not lag<=start<len(values):\n        raise ValueError('Deret finite; start dan lag harus sesuai.')\n    # Forecast satu langkah. Observasi sebelumnya sudah tersedia pada setiap langkah.\n    predicted=np.array([values[t-lag] for t in range(start,len(values))])\n    return predicted,float(np.abs(values[start:]-predicted).mean())\n\nif __name__=='__main__':\n    weekly=np.array([10,12,14,16,18,15,11],dtype=float)\n    series=np.tile(weekly,6)+np.arange(42)*.2\n    _,mae1=walk_forward(series,start=28,lag=1)\n    _,mae7=walk_forward(series,start=28,lag=7)\n    print('MAE lag 1:',round(mae1,3))\n    print('MAE lag 7:',round(mae7,3))\n    print('14 evaluasi satu langkah, bukan satu forecast 14 langkah')\n",
+        "output": "MAE lag 1: 2.314\nMAE lag 7: 1.4\n14 evaluasi satu langkah, bukan satu forecast 14 langkah",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh data-lab terbaru.",
+      "Gunakan Python 3.12 dan dependensi yang diuji pada requirements.lock.txt.",
+      "Jalankan python ds21_time_series.py dan cocokkan hasilnya."
+    ],
+    "practice": [
+      "Ubah pola musiman lalu bandingkan kedua baseline.",
+      "Rancang prediksi 14 langkah dari satu titik dan jelaskan observasi mana yang belum tersedia."
+    ],
+    "warning": "Hasil contoh berlaku untuk skenario satu langkah berulang. Ia tidak membuktikan forecast multi-step dari satu titik.",
+    "check": "Mengapa nilai aktual evaluasi sebelumnya boleh dipakai di sini?",
+    "answer": "Karena setiap prediksi dilakukan pada waktu berikutnya setelah pengamatan sebelumnya diasumsikan sudah tersedia.",
+    "source": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "ds-pca",
+    "title": "PCA dan scaling tanpa kebocoran data test",
+    "summary": "Ringkas dimensi dengan varians train sambil menjaga batas interpretasi.",
+    "analogy": "Melihat benda dari beberapa sudut dapat merangkum bentuknya, tetapi sudut paling lebar belum tentu menonjolkan ciri yang dibutuhkan.",
+    "explain": [
+      "PCA membentuk komponen sebagai kombinasi linear fitur untuk merangkum variasi data. Ia bukan pemilihan dua kolom asli. Hasil transformasi dua dimensi dapat membantu eksplorasi atau menjadi bagian pipeline model.",
+      "Contoh memasang StandardScaler sebelum PCA dan melakukan fit hanya pada train. Test hanya ditransformasi dengan parameter yang telah dipelajari. Scaling perlu dipertimbangkan karena satuan dan rentang fitur memengaruhi dominasi varians.",
+      "Explained variance ratio menjelaskan proporsi varians train pada komponen yang dipilih, bukan akurasi terhadap target. Komponen dengan variasi terbesar belum tentu paling berguna untuk prediksi, interpretasi domain, atau keadilan model.",
+      "Jumlah komponen dipilih sesuai kebutuhan dan evaluasi pada data pengembangan. Jika PCA dimasukkan pada supervised pipeline, fit seluruh preprocessing di dalam fold yang benar. Tanda komponen dan angka kecil dapat berubah menurut implementasi serta sifat data."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Komponen",
+          "Kombinasi linear fitur"
+        ],
+        [
+          "Scaling",
+          "Mengatur skala sebelum PCA"
+        ],
+        [
+          "Fit train",
+          "Parameter tidak dipelajari dari test"
+        ],
+        [
+          "Varians",
+          "Bukan ukuran akurasi target"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds22_pca.py",
+        "filename": "ds22_pca.py",
+        "language": "python",
+        "code": "import numpy as np\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef model_pca(train):\n    train=np.asarray(train,dtype=float)\n    if train.ndim!=2 or min(train.shape)<2 or not np.isfinite(train).all():\n        raise ValueError('Matriks finite, minimal dua sampel dan fitur.')\n    return make_pipeline(StandardScaler(),PCA(n_components=2,svd_solver='full')).fit(train)\n\nif __name__=='__main__':\n    train=np.array([[1,10,2],[2,18,5],[3,31,5],[4,39,9],[5,48,10],[6,62,11]],dtype=float)\n    test=np.array([[7,70,14],[8,80,17]],dtype=float)\n    model=model_pca(train)\n    reduced=model.transform(test)\n    print('Bentuk hasil test:',reduced.shape)\n    print('Rasio varians train:',np.round(model[-1].explained_variance_ratio_,4).tolist())\n    print('Mean scaler hanya train:',np.round(model[0].mean_,3).tolist())\n    print('Varians besar bukan jaminan fitur terbaik untuk target')\n",
+        "output": "Bentuk hasil test: (2, 2)\nRasio varians train: [0.9824, 0.0173]\nMean scaler hanya train: [3.5, 34.667, 7.0]\nVarians besar bukan jaminan fitur terbaik untuk target",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh data-lab terbaru.",
+      "Gunakan Python 3.12 dan dependensi yang diuji pada requirements.lock.txt.",
+      "Jalankan python ds22_pca.py dan cocokkan hasilnya."
+    ],
+    "practice": [
+      "Bandingkan hasil dengan dan tanpa scaling pada data latihan.",
+      "Periksa mean scaler sebelum dan sesudah transform test ekstrem."
+    ],
+    "warning": "Varians besar bukan bukti sebab-akibat atau jaminan kinerja prediksi. Jangan fit preprocessing menggunakan test.",
+    "check": "Mengapa PCA termasuk langkah yang harus dipelajari dari train?",
+    "answer": "Karena arah komponennya ditentukan oleh pola data; memakai test membocorkan informasi evaluasi.",
+    "source": "https://scikit-learn.org/stable/modules/decomposition.html#pca",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "ds-model-eksperimen",
+    "title": "Penyimpanan model dan catatan eksperimen yang dapat ditelusuri",
+    "summary": "Simpan pipeline, kontrak fitur, versi, dan keputusan pemilihan model.",
+    "analogy": "Resep yang disimpan perlu disertai bahan, ukuran, versi alat, dan alasan memilihnya agar dapat diperiksa kembali.",
+    "explain": [
+      "Contoh menjalankan tiga konfigurasi Ridge pada train, memilih alpha dari MAE validation, kemudian fit ulang pada train dan validation. Test akhir tetap disimpan untuk evaluasi terakhir, bukan dasar memilih konfigurasi.",
+      "Pipeline menyimpan preprocessing bersama model. Manifest mencatat urutan fitur, seed, jumlah baris, versi scikit-learn, hasil validation, alpha terpilih, dan hash file. Catatan ini membantu penelusuran, tetapi belum merupakan sistem tracking eksperimen terdistribusi.",
+      "Program hanya memuat file joblib yang baru dibuatnya sendiri pada folder latihan. Format berbasis pickle dapat mengeksekusi kode saat dimuat; jangan memuat model dari sumber tidak dipercaya. Hash mendeteksi perbedaan byte terhadap acuan, bukan membuktikan bahwa sumber acuan dapat dipercaya.",
+      "Sesudah memuat, prediksi dibandingkan dengan pipeline sebelum disimpan. Kompatibilitas lingkungan dan versi tetap penting; menyimpan model tidak menjamin perilaku lintas versi. Pada notebook, file sesi sementara perlu diunduh sebelum sesi direset."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Validation",
+          "Memilih konfigurasi"
+        ],
+        [
+          "Pipeline",
+          "Preprocessing dan model bersama"
+        ],
+        [
+          "Manifest",
+          "Kontrak, versi, dan jejak keputusan"
+        ],
+        [
+          "Hash",
+          "Integritas terhadap acuan, bukan autentikasi sumber"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "ds23_model_eksperimen.py",
+        "filename": "ds23_model_eksperimen.py",
+        "language": "python",
+        "code": "import hashlib\nimport json\nfrom pathlib import Path\nimport joblib\nimport numpy as np\nfrom sklearn import __version__ as sklearn_version\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import Ridge\nfrom sklearn.metrics import mean_absolute_error\n\ndef bangun(folder):\n    folder=Path(folder);folder.mkdir(parents=True,exist_ok=True)\n    rng=np.random.default_rng(42)\n    features=rng.normal(size=(80,2));target=5*features[:,0]-2*features[:,1]+rng.normal(scale=.2,size=80)\n    train,validation,test=slice(0,48),slice(48,64),slice(64,80)\n    experiments=[]\n    for alpha in [.1,1.,10.]:\n        model=make_pipeline(StandardScaler(),Ridge(alpha=alpha)).fit(features[train],target[train])\n        experiments.append({'alpha':alpha,'mae_validation':float(mean_absolute_error(target[validation],model.predict(features[validation])))})\n    best=min(experiments,key=lambda row:row['mae_validation'])['alpha']\n    final=make_pipeline(StandardScaler(),Ridge(alpha=best)).fit(features[:64],target[:64])\n    expected=final.predict(features[test])\n    path=folder/'model-lab.joblib'\n    # Hanya file model yang baru dibuat oleh program sendiri ini yang dimuat.\n    joblib.dump(final,path)\n    digest=hashlib.sha256(path.read_bytes()).hexdigest()\n    manifest={'seed':42,'fit_rows':64,'test_rows':16,'features':['fitur_a','fitur_b'],\n              'sklearn':sklearn_version,'sha256':digest,'experiments':experiments,'selected_alpha':best}\n    (folder/'manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')\n    if hashlib.sha256(path.read_bytes()).hexdigest()!=manifest['sha256']:raise ValueError('Artefak berubah.')\n    loaded=joblib.load(path)\n    same=bool(np.allclose(expected,loaded.predict(features[test])))\n    return manifest,same,float(mean_absolute_error(target[test],expected))\n\nif __name__=='__main__':\n    manifest,same,mae=bangun('hasil-latihan')\n    print('Eksperimen:',len(manifest['experiments']))\n    print('Alpha dipilih dari validation:',manifest['selected_alpha'])\n    print('Prediksi sesudah muat sama:',same)\n    print('MAE test akhir:',round(mae,4))\n    print('Model lokal buatan sendiri; hash bukan bukti kepercayaan sumber')\n",
+        "output": "Eksperimen: 3\nAlpha dipilih dari validation: 0.1\nPrediksi sesudah muat sama: True\nMAE test akhir: 0.1835\nModel lokal buatan sendiri; hash bukan bukti kepercayaan sumber",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Buka notebook Colab artikel ini atau unduh data-lab terbaru.",
+      "Gunakan Python 3.12 dan dependensi yang diuji pada requirements.lock.txt.",
+      "Jalankan python ds23_model_eksperimen.py dan cocokkan hasilnya."
+    ],
+    "practice": [
+      "Baca manifest dan cocokkan alpha dengan MAE validation terkecil.",
+      "Jelaskan cara membedakan sumber tepercaya dari file yang hanya mempunyai hash cocok."
+    ],
+    "warning": "Hanya muat artefak buatan sendiri atau sumber yang benar-benar dipercaya. Hash dan ekstensi joblib bukan jaminan keamanan.",
+    "check": "Mengapa preprocessing disimpan bersama model?",
+    "answer": "Agar transformasi yang dipelajari saat pengembangan tidak berbeda ketika prediksi digunakan kembali.",
+    "source": "https://scikit-learn.org/stable/model_persistence.html",
+    "diagram": "advanced-model",
+    "diagramAlt": "Train untuk fitting, validation untuk pemilihan, test untuk evaluasi akhir; artefak model disertai kontrak, versi, dan catatan eksperimen.",
+    "stage": 0,
+    "minutes": 35
   }
 ]

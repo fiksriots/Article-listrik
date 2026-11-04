@@ -614,5 +614,58 @@
       "akhir-proyek-data",
       "akhir-proyek-dashboard"
     ]
+  },
+  {
+    "title": "Pemrograman Jaringan · Otomasi dan inventaris",
+    "slugs": [
+      "lanjut-ssh",
+      "lanjut-api-status",
+      "lanjut-snmp"
+    ]
+  },
+  {
+    "title": "Python Lanjutan · Fungsi dan tipe",
+    "slugs": [
+      "lanjut-closure",
+      "lanjut-decorator",
+      "lanjut-generics"
+    ]
+  },
+  {
+    "title": "Struktur Data · Strategi algoritma",
+    "slugs": [
+      "lanjut-greedy",
+      "lanjut-backtracking",
+      "lanjut-dp"
+    ]
+  },
+  {
+    "title": "Pengujian & Debugging · Pengujian browser",
+    "slugs": [
+      "lanjut-browser-form",
+      "lanjut-browser-api"
+    ]
+  },
+  {
+    "title": "Rekayasa & Deployment · Kinerja aplikasi",
+    "slugs": [
+      "lanjut-profiling",
+      "lanjut-beban-lokal"
+    ]
+  },
+  {
+    "title": "Proyek & Otomasi · Cache dan antrean",
+    "slugs": [
+      "lanjut-cache",
+      "lanjut-antrean"
+    ]
+  },
+  {
+    "title": "Data Science · Pendalaman dan reproduksi",
+    "slugs": [
+      "ds-time-series",
+      "ds-pca",
+      "ds-model-eksperimen"
+    ]
   }
 ]

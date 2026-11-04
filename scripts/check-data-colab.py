@@ -32,5 +32,5 @@ def check(lesson):
 
 with ThreadPoolExecutor(max_workers=4) as pool:
     results = list(pool.map(check, lessons))
-assert len(results) == 40
-print('PASS: all 40 notebooks validate and run in clean folders; article code and expected output match')
+assert len(results) == 43
+print('PASS: all 43 notebooks validate and run in clean folders; article code and expected output match')

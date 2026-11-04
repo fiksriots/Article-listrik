@@ -15,7 +15,7 @@ analysis=json.loads((ROOT/'lib/programming-data-analysis-lessons.json').read_tex
 science=json.loads((ROOT/'lib/programming-data-science-lessons.json').read_text())
 quizzes=json.loads((ROOT/'lib/programming-quizzes.json').read_text())
 order=json.loads((ROOT/'lib/programming-order.json').read_text())
-assert len(analysis)==len(science)==20
+assert len(analysis)==20 and len(science)==23
 for prefix,lessons in [('Data Analysis ·',analysis),('Data Science ·',science)]:
     assert [l['slug'] for l in lessons]==[s for g in order if g['title'].startswith(prefix) for s in g['slugs']]
 for l in analysis+science:
@@ -33,7 +33,7 @@ for l in analysis+science:
 
 with tempfile.TemporaryDirectory(prefix='data-learning-') as temp:
     with ZipFile(ROOT/'public/programming/lab/data/data-lab.zip') as z:
-        assert len(z.namelist())==len(set(z.namelist()))==48
+        assert len(z.namelist())==len(set(z.namelist()))==52
         for n in z.namelist():
             p=Path(n);assert not p.is_absolute() and '..' not in p.parts and n.startswith('data-lab/')
             assert not any(x in {'.venv','__pycache__','hasil-latihan'} for x in p.parts) and p.suffix!='.pyc'
@@ -51,5 +51,5 @@ with tempfile.TemporaryDirectory(prefix='data-learning-') as temp:
     env=dict(os.environ,OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1',MPLCONFIGDIR=temp+'/test-mpl')
     result=subprocess.run([sys.executable,'-m','unittest','discover','-p','test*.py','-v'],cwd=project,env=env,capture_output=True,text=True,timeout=60)
     assert result.returncode==0,result.stdout+result.stderr
-    assert 'Ran 26 tests' in result.stderr and 'OK' in result.stderr
-print('PASS: 40 ordered lessons / 160 questions; 48-file source ZIP; all extracted programs match outputs; 26 independent data/model/artifact tests; diagrams parse')
+    assert 'Ran 31 tests' in result.stderr and 'OK' in result.stderr
+print('PASS: 43 ordered lessons / 172 questions; 52-file source ZIP; all extracted programs match outputs; 31 independent data/model/artifact tests; diagrams parse')

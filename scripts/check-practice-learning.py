@@ -16,7 +16,7 @@ quizzes=json.loads((ROOT/'lib/programming-quizzes.json').read_text())
 order=json.loads((ROOT/'lib/programming-order.json').read_text())
 assert len(lessons)==27
 for prefix,start in [('Pengujian & Debugging ·',0),('Proyek & Otomasi ·',9),('Rekayasa & Deployment ·',18)]:
-    assert [l['slug'] for l in lessons[start:start+9]]==[s for g in order if g['title'].startswith(prefix) for s in g['slugs']]
+    assert [l['slug'] for l in lessons[start:start+9]]==[s for g in order if g['title'].startswith(prefix) for s in g['slugs'] if s in {l['slug'] for l in lessons}]
 for l in lessons:
     assert len(l['explain'])>=4 and len(l['practice'])>=2 and l['warning'] and l['check'] and l['answer']
     assert all(len(row)==len(l['table']['headers']) for row in l['table']['rows'])

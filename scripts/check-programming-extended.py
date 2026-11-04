@@ -23,16 +23,17 @@ api = json.loads((ROOT / 'lib/programming-api-lessons.json').read_text())
 web = json.loads((ROOT / 'lib/programming-web-lessons.json').read_text())
 django = json.loads((ROOT / 'lib/programming-django-lessons.json').read_text())
 supplements = json.loads((ROOT / 'lib/programming-supplement-lessons.json').read_text())
+advanced = json.loads((ROOT / 'lib/programming-advanced-lessons.json').read_text())
 practice = json.loads((ROOT / 'lib/programming-practice-lessons.json').read_text())
 networking = json.loads((ROOT / 'lib/programming-network-lessons.json').read_text())
 analytics = json.loads((ROOT / 'lib/programming-data-analysis-lessons.json').read_text()) + json.loads((ROOT / 'lib/programming-data-science-lessons.json').read_text())
 order = json.loads((ROOT / 'lib/programming-order.json').read_text())
 quizzes = json.loads((ROOT / 'lib/programming-quizzes.json').read_text())
-slugs = [item['slug'] for item in base + extra + structures + oop + databases + api + web + django + supplements + analytics + networking + practice]
+slugs = [item['slug'] for item in base + extra + structures + oop + databases + api + web + django + supplements + analytics + networking + practice + advanced]
 ordered = [slug for group in order for slug in group['slugs']]
-assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases + api + web + django + supplements + analytics + networking + practice)
+assert len(slugs) == len(set(slugs)) == len(ordered) == len(base + extra + structures + oop + databases + api + web + django + supplements + analytics + networking + practice + advanced)
 assert set(slugs) == set(ordered) == set(quizzes)
-for lesson in base + extra + structures + oop + databases + api + web + django + supplements + analytics + networking + practice:
+for lesson in base + extra + structures + oop + databases + api + web + django + supplements + analytics + networking + practice + advanced:
     assert len(lesson['explain']) >= 3
     assert all(len(row) == len(lesson['table']['headers']) for row in lesson['table']['rows'])
     if lesson['diagram']:
@@ -135,4 +136,4 @@ with tempfile.TemporaryDirectory() as temp:
         assert 'File lama tidak ditimpa' in output.getvalue()
         assert location.read_text() == bad
 
-print('PASS: 286 ordered lessons, 1144 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')
+print('PASS: 304 ordered lessons, 1216 questions, extended example outputs, module files, student boundaries, JSON persistence and invalid-file preservation')

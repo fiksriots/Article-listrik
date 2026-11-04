@@ -1,0 +1,963 @@
+[
+  {
+    "slug": "lanjut-ssh",
+    "title": "Otomasi SSH baca-saja: host key, perintah tetap, dan inventaris",
+    "summary": "Pisahkan simulasi adapter dari koneksi SSH lab yang memverifikasi identitas host.",
+    "analogy": "Memeriksa kartu identitas penerima dilakukan sebelum menyerahkan permintaan, bukan sesudah jawabannya datang.",
+    "explain": [
+      "SSH dapat dipakai membaca identitas sistem pada VM lab. Contoh memisahkan fungsi pembaca dari fungsi koneksi. Demo default menggunakan SSHSimulasi; ia tidak membuka koneksi atau mengakses router. Fungsi hubungkan_lab tersedia untuk OpenSSH lab yang disiapkan sendiri.",
+      "Connector hanya menerima alamat loopback dan memuat known_hosts yang sudah diverifikasi. RejectPolicy menolak host key yang tidak dikenal. Jangan mengganti pemeriksaan ini dengan menerima semua key atau mempercayai hasil pemindaian key tanpa pembandingan fingerprint yang benar.",
+      "Perintah uname -s bersifat tetap dan sesuai Linux, bukan semua vendor perangkat. Respons dibatasi, exit status diperiksa, dan stream serta client ditutup. Jangan menggabungkan masukan pengguna menjadi perintah shell. Timeout tiap tahap bukan otomatis deadline keseluruhan operasi.",
+      "Untuk koneksi nyata, pasang Paramiko sesuai README, siapkan VM/SSH server lokal, akun baca-saja, private key milik sendiri, serta file host key terverifikasi. Test adapter dengan simulasi tidak membuktikan autentikasi atau koneksi perangkat nyata berhasil."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Host key",
+          "Identitas server yang harus diverifikasi"
+        ],
+        [
+          "RejectPolicy",
+          "Host tidak dikenal ditolak"
+        ],
+        [
+          "Perintah tetap",
+          "Tidak dirangkai dari input"
+        ],
+        [
+          "Demo default",
+          "Transport tiruan tanpa SSH nyata"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a01_ssh.py",
+        "filename": "a01_ssh.py",
+        "language": "python",
+        "code": "from io import BytesIO\n\ndef baca_identitas(client):\n    # Perintah tetap untuk VM Linux lab; bukan perintah universal semua router.\n    stdin,stdout,stderr=client.exec_command('uname -s',timeout=3)\n    try:\n        raw=stdout.read(257);error=stderr.read(257)\n        if len(raw)>256 or error:raise ValueError('Respons SSH tidak sesuai batas lab.')\n        if stdout.channel.recv_exit_status()!=0:raise ValueError('Perintah gagal.')\n        return raw.decode('utf-8').strip()\n    finally:\n        stdin.close();stdout.close();stderr.close()\n\ndef hubungkan_lab(host,port,username,key_filename,known_hosts):\n    if host not in {'127.0.0.1','::1'} or type(port) is not int or not 1<=port<=65535:\n        raise ValueError('Hanya endpoint loopback lab yang ditentukan.')\n    import paramiko  # Dependensi opsional, diperlukan saat koneksi nyata.\n    with paramiko.SSHClient() as client:\n        client.load_host_keys(known_hosts)\n        client.set_missing_host_key_policy(paramiko.RejectPolicy())\n        client.connect(hostname=host,port=port,username=username,key_filename=key_filename,\n                       allow_agent=False,look_for_keys=False,timeout=3,banner_timeout=3,auth_timeout=3)\n        return baca_identitas(client)\n\nclass SSHSimulasi:\n    def exec_command(self,command,timeout):\n        assert command=='uname -s' and timeout==3\n        output=BytesIO(b'Linux\\n')\n        output.channel=type('Channel',(),{'recv_exit_status':lambda self:0})()\n        return BytesIO(),output,BytesIO()\n\nif __name__=='__main__':\n    print('Identitas simulasi:',baca_identitas(SSHSimulasi()))\n    print('Tidak membuka koneksi SSH; host key lab nyata wajib diverifikasi')\n",
+        "output": "Identitas simulasi: Linux\nTidak membuka koneksi SSH; host key lab nyata wajib diverifikasi",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a01_ssh.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Telusuri penutupan client dan stream saat perintah gagal.",
+      "Susun persiapan VM lab dan pembandingan fingerprint sebelum mencoba connector."
+    ],
+    "warning": "Demo tidak membuka SSH. Connector nyata tetap memerlukan lingkungan dan kredensial lab sendiri; jangan menonaktifkan verifikasi host.",
+    "check": "Mengapa key yang belum dikenal tidak langsung diterima?",
+    "answer": "Tanpa verifikasi, client belum mempunyai bukti bahwa server itu adalah host yang dimaksud.",
+    "source": "https://docs.paramiko.org/en/stable/api/client.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-api-status",
+    "title": "Inventaris melalui API lokal dan validasi respons",
+    "summary": "Baca data melalui HTTP nyata sambil memeriksa ukuran, tipe, dan skema.",
+    "analogy": "Sampul surat berhasil diterima belum membuktikan formulir di dalamnya lengkap.",
+    "explain": [
+      "API dapat menyajikan inventaris tanpa memerlukan perintah shell pada perangkat. Contoh menyalakan server HTTP loopback, membaca GET /api/observasi, dan menutup server setelah selesai. Koneksi HTTP benar-benar terjadi, tetapi data hanya memori lab, bukan monitoring lapangan.",
+      "Client memeriksa Content-Type JSON, membatasi body, lalu memvalidasi struktur serta nilai penting. ID harus integer positif, nama layanan teks terisi, dan hasil berasal dari kategori yang disepakati. JSON yang dapat di-parse belum otomatis sesuai kebutuhan.",
+      "Timeout membatasi operasi tunggu dan proxy lingkungan dinonaktifkan khusus untuk loopback. Aplikasi umum juga perlu kebijakan autentikasi, HTTPS, redirect, pagination, dan retry. Jangan menganggap status 200 membuktikan seluruh inventaris lengkap atau terbaru.",
+      "Jalankan server lab melalui lab_web.py untuk mencoba formulir serta API bersama. Mode publik demo formulir adalah simulasi memori browser; berbeda dari server Python lokal yang menyediakan HTTP API. Kedua mode diberi label agar bukti pengujiannya tidak tertukar."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "HTTP lokal",
+          "Koneksi benar-benar dijalankan"
+        ],
+        [
+          "Skema",
+          "Kolom dan tipe yang digunakan"
+        ],
+        [
+          "Batas body",
+          "4096 byte pada client contoh"
+        ],
+        [
+          "Data lab",
+          "Memori sementara"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a02_api.py",
+        "filename": "a02_api.py",
+        "language": "python",
+        "code": "import json\nfrom urllib.request import build_opener,ProxyHandler\nfrom lab_web import server_lab\n\ndef baca_api(root):\n    opener=build_opener(ProxyHandler({}))\n    with opener.open(root+'/api/observasi',timeout=2) as response:\n        if response.headers.get_content_type()!='application/json':raise ValueError('Butuh JSON.')\n        raw=response.read(4097)\n        if len(raw)>4096:raise ValueError('Respons melebihi batas.')\n        data=json.loads(raw)\n        if not isinstance(data,list) or any(not isinstance(x,dict) or set(x)!={'id','layanan','hasil'} for x in data):\n            raise ValueError('Skema daftar tidak sesuai.')\n        if any(type(x['id']) is not int or x['id']<1 or not isinstance(x['layanan'],str) or not x['layanan'].strip() or len(x['layanan'])>40 or x['hasil'] not in ('ok','timeout','refused') for x in data):raise ValueError('Nilai respons tidak sesuai.')\n        return data\n\nif __name__=='__main__':\n    with server_lab() as root:\n        print('Observasi dari API lokal:',len(baca_api(root)))\n    print('Koneksi HTTP benar-benar terjadi pada loopback')\n",
+        "output": "Observasi dari API lokal: 0\nKoneksi HTTP benar-benar terjadi pada loopback",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a02_api.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Tambahkan observasi lewat formulir lokal lalu baca kembali API.",
+      "Jelaskan beda daftar kosong dengan respons yang gagal dibaca."
+    ],
+    "warning": "Server dan data ini hanya lab lokal. Daftar kosong tidak boleh dipakai untuk menyimpulkan semua perangkat hilang.",
+    "check": "Mengapa Content-Type dan skema sama-sama diperiksa?",
+    "answer": "Content-Type menjelaskan representasi, sedangkan skema memeriksa isi yang akan dipakai.",
+    "source": "https://docs.python.org/3.12/library/urllib.request.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-snmp",
+    "title": "SNMP: OID, tipe varbind, counter, dan batas interpretasi",
+    "summary": "Olah respons SNMP yang telah didekode sebelum merancang polling perangkat.",
+    "analogy": "Label kolom dan satuan angka harus dibaca sebelum menghitung perubahan meter.",
+    "explain": [
+      "SNMP menyatakan objek melalui OID dan nilai bertipe. Contoh memakai varbind fiktif yang sudah didekode untuk sysName serta ifOperStatus. Tidak ada pengiriman GET atau WALK, agent SNMP, atau autentikasi jaringan pada program ini.",
+      "Program memeriksa OID ganda dan tipe nilai. ifOperStatus tidak hanya mempunyai up dan down; nilai lain tetap ditandai lainnya. Indeks interface pada OID contoh adalah satu dan tidak boleh diasumsikan selalu menunjuk interface fisik yang sama di semua perangkat.",
+      "Counter32 dapat kembali ke awal setelah mencapai batas. Delta modulo pada contoh mengasumsikan maksimum satu wrap dan tidak ada reset tersembunyi. Uptime yang menurun membuat hasil ditahan sebagai None; itu perlu pemeriksaan karena restart, wrap uptime, atau kontinuitas data dapat berbeda.",
+      "Untuk polling nyata, pelajari MIB vendor, indeks, interval, discontinuity indicator, pengamanan akses, dan konfigurasi SNMP yang sesuai lingkungan. Berlatihlah pada agent milik sendiri. Menyebut angka counter sebagai kecepatan memerlukan interval, satuan, dan asumsi yang dapat dibuktikan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "OID",
+          "Identitas objek, termasuk indeks"
+        ],
+        [
+          "Varbind",
+          "OID dan nilai bertipe"
+        ],
+        [
+          "Counter32",
+          "Nilai berputar pada batas 32 bit"
+        ],
+        [
+          "Delta",
+          "Memerlukan kontinuitas dan asumsi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a03_snmp.py",
+        "filename": "a03_snmp.py",
+        "language": "python",
+        "code": "# Varbind yang SUDAH didekode; bukan implementasi paket SNMP atau polling langsung.\nSYSNAME='1.3.6.1.2.1.1.5.0'\nOPER='1.3.6.1.2.1.2.2.1.8.1'\n\ndef ringkas_varbind(varbinds):\n    mapping={row['oid']:row for row in varbinds}\n    if len(mapping)!=len(varbinds):raise ValueError('OID ganda perlu ditinjau.')\n    name,status=mapping[SYSNAME],mapping[OPER]\n    if name['type']!='OctetString' or not isinstance(name['value'],str):raise ValueError('Tipe sysName salah.')\n    if status['type']!='Integer' or type(status['value']) is not int:raise ValueError('Tipe status salah.')\n    return {'nama':name['value'],'status':{1:'up',2:'down'}.get(status['value'],'lainnya')}\n\ndef delta_counter32(before,after,uptime_before,uptime_after):\n    if any(type(x) is not int or not 0<=x<2**32 for x in [before,after,uptime_before,uptime_after]):raise ValueError('Butuh Counter32.')\n    if uptime_after<uptime_before:return None\n    return (after-before)%(2**32)  # Asumsi maksimum satu wrap dan tidak ada reset tersembunyi.\n\nif __name__=='__main__':\n    rows=[{'oid':SYSNAME,'type':'OctetString','value':'BTS-LAB'},{'oid':OPER,'type':'Integer','value':1}]\n    print('Varbind fiktif:',ringkas_varbind(rows))\n    print('Delta dengan asumsi satu wrap:',delta_counter32(2**32-6,4,100,110))\n    print('Uptime turun, delta:',delta_counter32(10,20,100,5))\n    print('Tidak mengirim SNMP GET atau WALK')\n",
+        "output": "Varbind fiktif: {'nama': 'BTS-LAB', 'status': 'up'}\nDelta dengan asumsi satu wrap: 10\nUptime turun, delta: None\nTidak mengirim SNMP GET atau WALK",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a03_snmp.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Ubah status menjadi nilai lain dan jelaskan mengapa tidak dipaksa menjadi down.",
+      "Tulis kondisi yang membuat delta counter tidak dapat disimpulkan."
+    ],
+    "warning": "Contoh hanya mengolah varbind tiruan. Ia bukan implementasi SNMP client dan belum menguji polling atau keamanan agent.",
+    "check": "Mengapa penurunan counter tidak otomatis berarti penggunaan negatif?",
+    "answer": "Counter dapat wrap atau reset; kontinuitas serta periode pengamatan harus diperiksa.",
+    "source": "https://www.rfc-editor.org/rfc/rfc2578.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-closure",
+    "title": "Closure, fungsi sebagai nilai, dan late binding",
+    "summary": "Buat fungsi yang membawa konteks tanpa terjebak variabel loop.",
+    "analogy": "Setiap petugas dapat membawa batas pemeriksaan sendiri, bukan terus membaca papan yang sedang berubah.",
+    "explain": [
+      "Fungsi Python dapat diberikan sebagai argumen atau dikembalikan sebagai hasil. Closure memungkinkan fungsi dalam memakai variabel dari lingkup pembuatnya. pembuat_batas mengembalikan pemeriksa yang memakai minimum tertentu.",
+      "Variabel bebas pada closure dicari menurut aturan binding, bukan selalu disalin sebagai foto nilai saat definisi. Pola lambda dalam loop sering membuat semua fungsi membaca nilai loop terakhir. Contoh memakai parameter default n=n untuk menyimpan nilai tiap iterasi.",
+      "Parameter default dievaluasi ketika fungsi didefinisikan. Teknik ini berguna untuk nilai sederhana, tetapi default mutable seperti list dapat berbagi keadaan antar pemanggilan. Bedakan penangkapan konteks, default argumen, dan perubahan state yang memang dimaksud.",
+      "Gunakan closure ketika konteks kecil membuat fungsi lebih jelas. Bila keadaan, operasi, atau lifecycle semakin kompleks, objek dapat lebih mudah dipahami dan diuji. Pengujian perlu memastikan fungsi dari dua konteks tidak saling memengaruhi."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Closure",
+          "Fungsi memakai konteks lingkup luar"
+        ],
+        [
+          "Late binding",
+          "Nilai bebas dibaca saat digunakan"
+        ],
+        [
+          "Default argumen",
+          "Dievaluasi saat definisi"
+        ],
+        [
+          "Isolasi",
+          "Konteks berbeda diuji terpisah"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a04_closure.py",
+        "filename": "a04_closure.py",
+        "language": "python",
+        "code": "def pembuat_batas(minimum):\n    def memenuhi(nilai):\n        return nilai>=minimum\n    return memenuhi\n\ndef pengali_benar():\n    return [lambda x,n=n:x*n for n in range(3)]\n\nif __name__=='__main__':\n    lulus=pembuat_batas(75)\n    print('74/75:',lulus(74),lulus(75))\n    print('Binding tiap iterasi:',[fungsi(10) for fungsi in pengali_benar()])\n",
+        "output": "74/75: False True\nBinding tiap iterasi: [0, 10, 20]",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a04_closure.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Buat dua pemeriksa batas dan uji nilai yang sama.",
+      "Hilangkan n=n pada salinan contoh lalu jelaskan hasilnya."
+    ],
+    "warning": "Closure bukan salinan otomatis semua nilai. Default mutable juga dapat berbagi state yang tidak dimaksud.",
+    "check": "Mengapa n=n memperbaiki contoh loop?",
+    "answer": "Parameter default masing-masing fungsi menyimpan nilai n pada saat fungsi tersebut dibuat.",
+    "source": "https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-decorator",
+    "title": "Decorator dengan wraps, argumen, hasil, dan exception",
+    "summary": "Tambahkan perilaku pembungkus tanpa merusak kontrak fungsi.",
+    "analogy": "Loket pencatat kunjungan menambah catatan tanpa mengganti hasil pekerjaan petugas utama.",
+    "explain": [
+      "Decorator menerima fungsi lalu mengembalikan fungsi pengganti. Sintaks @hitung_panggilan setara dengan membungkus fungsi yang baru didefinisikan. Wrapper meneruskan args dan kwargs, serta mengembalikan hasil fungsi asal.",
+      "functools.wraps mempertahankan metadata penting dan menyediakan __wrapped__ untuk mengakses fungsi asal. Ini membantu dokumentasi serta introspeksi. Mempertahankan nama bukan berarti seluruh semantik fungsi otomatis terjaga.",
+      "Counter contoh bertambah pada setiap percobaan panggilan, termasuk jika fungsi asal gagal. Itu keputusan kontrak, bukan satu-satunya cara menghitung. Exception diteruskan; wrapper tidak menyembunyikannya sebagai hasil sukses.",
+      "Decorator yang mengelola retry, cache, atau transaksi memerlukan aturan tambahan. Jangan mengulang operasi yang berefek samping tanpa memikirkan idempotensi. Counter sederhana ini juga belum dirancang untuk penghitungan lintas thread atau proses."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Decorator",
+          "Fungsi pembungkus"
+        ],
+        [
+          "wraps",
+          "Mempertahankan metadata yang relevan"
+        ],
+        [
+          "Return",
+          "Hasil fungsi asal diteruskan"
+        ],
+        [
+          "Counter",
+          "Menghitung percobaan menurut kontrak"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a05_decorator.py",
+        "filename": "a05_decorator.py",
+        "language": "python",
+        "code": "from functools import wraps\n\ndef hitung_panggilan(function):\n    @wraps(function)\n    def wrapper(*args,**kwargs):\n        wrapper.calls+=1\n        return function(*args,**kwargs)\n    wrapper.calls=0\n    return wrapper\n\n@hitung_panggilan\ndef tambah(a:int,b:int)->int:\n    \"\"\"Jumlah dua bilangan.\"\"\"\n    return a+b\n\nif __name__=='__main__':\n    print('Hasil:',tambah(2,b=3))\n    print('Panggilan:',tambah.calls)\n    print('Nama dipertahankan:',tambah.__name__)\n    print('Fungsi asli:',tambah.__wrapped__(1,2))\n",
+        "output": "Hasil: 5\nPanggilan: 1\nNama dipertahankan: tambah\nFungsi asli: 3",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a05_decorator.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Uji fungsi yang melempar exception lalu periksa penghitungnya.",
+      "Bandingkan nama fungsi dengan dan tanpa wraps."
+    ],
+    "warning": "Decorator dapat mengubah perilaku penting. Contoh counter belum menjadi metrik lintas proses atau pengaman konkurensi.",
+    "check": "Mengapa return di wrapper diperlukan?",
+    "answer": "Tanpanya, hasil fungsi asal dapat hilang dan pemanggil menerima None.",
+    "source": "https://docs.python.org/3.12/library/functools.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-generics",
+    "title": "Generics dan pemeriksaan tipe statis dengan mypy",
+    "summary": "Pertahankan hubungan tipe input dan output, lalu uji kesalahan tipe secara terpisah.",
+    "analogy": "Label kotak dapat menunjukkan jenis barang yang keluar tanpa memaksa semua kotak berisi jenis yang sama.",
+    "explain": [
+      "Generic menyatakan hubungan tipe yang berlaku pada banyak pemakaian. Sequence[T] ke T pada fungsi pertama berarti tipe hasil mengikuti elemen urutan. Ini lebih informatif daripada memakai Any untuk semua masukan dan hasil.",
+      "TypeVar pada contoh bekerja dengan integer maupun teks. Pemeriksa tipe membantu menemukan pemakaian yang tidak sesuai sebelum runtime. Anotasi sendiri tidak membuat Python menolak semua nilai salah; aturan kosong tetap diperiksa dengan ValueError.",
+      "Jalankan mypy pada a06_typing.py sesuai README. Fixture bad_types.py sengaja menugaskan hasil teks ke variabel integer dan diharapkan gagal pemeriksaan. Pastikan error itu tentang tipe, bukan import yang belum ditemukan; mypy.ini menyatakan lokasi modul.",
+      "Periksa tipe pada batas antarmodul tanpa mengabaikan validasi data dari file atau jaringan. Tambahkan pemeriksaan bertahap pada proyek lama. Static check yang lulus tidak menggantikan unit, integrasi, dan pemeriksaan alur pengguna."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "TypeVar",
+          "Hubungan tipe yang konsisten"
+        ],
+        [
+          "Sequence[T] → T",
+          "Hasil mengikuti elemen"
+        ],
+        [
+          "mypy",
+          "Pemeriksaan statis"
+        ],
+        [
+          "Validasi runtime",
+          "Tetap diperlukan"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a06_typing.py",
+        "filename": "a06_typing.py",
+        "language": "python",
+        "code": "from typing import Sequence,TypeVar\nT=TypeVar('T')\n\ndef pertama(items:Sequence[T])->T:\n    if not items:raise ValueError('Urutan kosong.')\n    return items[0]\n\nif __name__=='__main__':\n    print('Integer:',pertama([3,4]))\n    print('Teks:',pertama(['radio','kabel']))\n    print('Anotasi tidak menggantikan validasi runtime')\n",
+        "output": "Integer: 3\nTeks: radio\nAnotasi tidak menggantikan validasi runtime",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a06_typing.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Jalankan pemeriksaan file baik dan fixture salah, lalu bedakan exit code.",
+      "Tambahkan pemanggilan dengan tuple float dan periksa tipe hasil."
+    ],
+    "warning": "Fixture bad_types.py sengaja salah untuk demonstrasi. Jangan menganggap error import sebagai bukti pemeriksaan tipe yang benar.",
+    "check": "Mengapa TypeVar lebih berguna daripada Any pada contoh ini?",
+    "answer": "TypeVar mempertahankan hubungan tipe elemen masukan dan hasil.",
+    "source": "https://mypy.readthedocs.io/en/stable/generics.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-greedy",
+    "title": "Greedy: kapan pilihan lokal dapat dipercaya",
+    "summary": "Kenali counterexample sebelum menganggap strategi sederhana selalu optimal.",
+    "analogy": "Mengambil pecahan terbesar terlebih dahulu terlihat hemat, tetapi susunan pecahan tertentu dapat membuatnya boros.",
+    "explain": [
+      "Greedy mengambil pilihan lokal yang terlihat terbaik lalu melanjutkan tanpa meninjau seluruh alternatif. Strategi ini dapat efisien, tetapi optimalitas bergantung struktur masalah. Tidak cukup membuktikannya dengan beberapa contoh yang kebetulan berhasil.",
+      "Pada pecahan 1, 3, 4 untuk target 6, pilihan terbesar memberi 4+1+1, sedangkan 3+3 hanya dua koin. Contoh ini membantah klaim bahwa greedy terbesar selalu menghasilkan jumlah koin minimum pada semua pecahan.",
+      "Fungsi memvalidasi koin positif dan target nonnegatif. None menyatakan target tidak terjangkau oleh langkah greedy, bukan bukti bahwa semua kemungkinan solusi tidak ada. Pada sistem pecahan lain, strategi dapat perlu diganti.",
+      "Cari sifat yang mendukung bukti, misalnya pertukaran solusi atau substruktur yang sesuai. Jika belum ada bukti, bandingkan dengan oracle kecil dan pendekatan lain. Materi dynamic programming berikutnya menangani jumlah minimum pada kontrak koin tak terbatas."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Pilihan lokal",
+          "Keputusan terbaik saat itu"
+        ],
+        [
+          "Optimal global",
+          "Terbaik di antara solusi lengkap"
+        ],
+        [
+          "Counterexample",
+          "Satu kasus membantah klaim umum"
+        ],
+        [
+          "Bukti",
+          "Alasan strategi berlaku pada struktur tertentu"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a07_greedy.py",
+        "filename": "a07_greedy.py",
+        "language": "python",
+        "code": "def greedy(koin,target):\n    if type(target) is not int or target<0 or not koin or any(type(x) is not int or x<=0 for x in koin):\n        raise ValueError('Koin positif dan target integer nonnegatif.')\n    hasil=[];sisa=target\n    for nilai in sorted(set(koin),reverse=True):\n        jumlah,sisa=divmod(sisa,nilai)\n        hasil.extend([nilai]*jumlah)\n    return hasil if sisa==0 else None\n\nif __name__=='__main__':\n    print('Greedy [1,3,4] untuk 6:',greedy([1,3,4],6))\n    print('Solusi lebih sedikit:',[3,3])\n    print('Pilihan lokal terbesar tidak selalu optimal global')\n",
+        "output": "Greedy [1,3,4] untuk 6: [4, 1, 1]\nSolusi lebih sedikit: [3, 3]\nPilihan lokal terbesar tidak selalu optimal global",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a07_greedy.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Cari target lain saat greedy lebih buruk dari solusi terbaik.",
+      "Bedakan gagal menemukan solusi dengan membuktikan tidak ada solusi."
+    ],
+    "warning": "Jangan menggeneralisasi greedy hanya karena bekerja pada pecahan uang yang sering ditemui.",
+    "check": "Apa yang dibuktikan contoh target enam?",
+    "answer": "Greedy pecahan terbesar tidak selalu optimal untuk semua himpunan pecahan.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/",
+    "diagram": "advanced-algoritma",
+    "diagramAlt": "Pemilihan greedy dibandingkan dengan backtracking dan dynamic programming berdasarkan struktur masalah, batas eksplorasi, dan bukti optimalitas.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-backtracking",
+    "title": "Backtracking: pilih, telusuri, dan batalkan",
+    "summary": "Jelajahi kemungkinan dengan batas serta pruning yang sesuai asumsi.",
+    "analogy": "Mencoba susunan barang dilakukan sambil mengembalikan pilihan terakhir ketika cabang itu tidak cocok.",
+    "explain": [
+      "Backtracking membangun pilihan bertahap, menelusuri cabang, lalu mengembalikan keadaan sebelum mencoba cabang lain. Pada contoh, setiap indeks angka dipakai paling banyak sekali untuk mencari subset berjumlah target.",
+      "Append sebelum rekursi dan pop sesudahnya menjaga pilihan saat ini. Ketika solusi ditemukan, salinan list disimpan agar perubahan cabang berikutnya tidak mengubah solusi yang sudah dicatat.",
+      "Pruning total lebih besar dari target valid karena semua angka positif. Jika angka negatif diizinkan, cabang yang melampaui target masih mungkin kembali turun, sehingga aturan potong itu perlu ditinjau. Kontrak input tidak boleh diubah diam-diam.",
+      "Jumlah cabang dapat tumbuh eksponensial. Lab membatasi 16 elemen untuk menjaga eksplorasi kecil. Nilai sama pada indeks berbeda tetap dianggap pilihan indeks berbeda; deduplikasi solusi nilai memerlukan aturan tambahan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Pilih",
+          "Tambah keputusan sementara"
+        ],
+        [
+          "Telusuri",
+          "Masuk cabang berikut"
+        ],
+        [
+          "Batalkan",
+          "Kembalikan keadaan"
+        ],
+        [
+          "Pruning",
+          "Potong cabang menurut asumsi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a08_backtracking.py",
+        "filename": "a08_backtracking.py",
+        "language": "python",
+        "code": "def pilih_jumlah(values,target):\n    if type(target) is not int or target<0 or any(type(x) is not int or x<=0 for x in values):\n        raise ValueError('Bilangan positif dan target nonnegatif.')\n    if len(values)>16:raise ValueError('Batas eksplorasi lab 16 elemen.')\n    hasil=[]\n    def cari(index,total,pilihan):\n        if total==target:\n            hasil.append(pilihan.copy());return\n        if total>target or index==len(values):return\n        pilihan.append(values[index]);cari(index+1,total+values[index],pilihan);pilihan.pop()\n        cari(index+1,total,pilihan)\n    cari(0,0,[])\n    return hasil\n\nif __name__=='__main__':\n    print('Subset untuk 5:',pilih_jumlah([2,3,5],5))\n    print('Input dipakai paling banyak sekali per indeks')\n",
+        "output": "Subset untuk 5: [[2, 3], [5]]\nInput dipakai paling banyak sekali per indeks",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a08_backtracking.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Bandingkan hasil dengan kombinasi brute force pada input kecil.",
+      "Jelaskan mengapa angka negatif merusak pruning yang dipakai."
+    ],
+    "warning": "Batas kecil bukan jaminan backtracking efisien pada semua masalah. Perubahan asumsi input dapat membatalkan pruning.",
+    "check": "Mengapa solusi disimpan dengan copy?",
+    "answer": "Agar list solusi tidak ikut berubah ketika pilihan sementara dimodifikasi.",
+    "source": "https://docs.python.org/3.12/library/itertools.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-dp",
+    "title": "Dynamic programming: state, transisi, dan kasus dasar",
+    "summary": "Hitung jumlah koin minimum dengan hasil submasalah yang disimpan.",
+    "analogy": "Hasil hitungan kecil dicatat agar tidak perlu dihitung ulang setiap menyusun total yang lebih besar.",
+    "explain": [
+      "Dynamic programming menyelesaikan state melalui hasil submasalah. Pada contoh, dp[t] adalah jumlah koin minimum untuk total t, dengan koin yang boleh digunakan berulang. Ini kontrak berbeda dari subset satu kali per indeks.",
+      "Kasus dasar dp[0]=0 menyatakan target nol tidak membutuhkan koin. Untuk total lain, kandidat berasal dari dp[total-koin]+1 yang terjangkau. Minimum kandidat dipilih; None tetap dipakai untuk total yang belum dapat dicapai.",
+      "Dengan m pecahan dan target T, pendekatan tabel ini memakai pekerjaan sekitar O(T×m) serta memori O(T). Batas nilai target memengaruhi biaya, sehingga ukuran input tidak cukup dibaca dari jumlah digit target saja.",
+      "Bandingkan dengan greedy pada 1, 3, 4 untuk enam: DP memperoleh dua. Uji juga target nol, target tidak terjangkau, dan input invalid. Cocokkan hasil dengan pencarian brute force atau BFS kecil sebagai oracle independen."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "State",
+          "Minimum koin untuk satu total"
+        ],
+        [
+          "Transisi",
+          "Dari total dikurangi satu koin"
+        ],
+        [
+          "Kasus dasar",
+          "dp[0]=0"
+        ],
+        [
+          "None",
+          "Total tidak terjangkau"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a09_dp.py",
+        "filename": "a09_dp.py",
+        "language": "python",
+        "code": "def minimum_koin(koin,target):\n    if type(target) is not int or not 0<=target<=10000 or not koin or any(type(x) is not int or x<=0 for x in koin):\n        raise ValueError('Koin positif, target 0..10000.')\n    dp=[None]*(target+1);dp[0]=0\n    for total in range(1,target+1):\n        kandidat=[dp[total-k]+1 for k in set(koin) if k<=total and dp[total-k] is not None]\n        dp[total]=min(kandidat) if kandidat else None\n    return dp[target]\n\nif __name__=='__main__':\n    print('Minimum untuk 6:',minimum_koin([1,3,4],6))\n    print('Tidak terjangkau:',minimum_koin([4],6))\n    print('Target nol:',minimum_koin([1,3,4],0))\n",
+        "output": "Minimum untuk 6: 2\nTidak terjangkau: None\nTarget nol: 0",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a09_dp.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Uji pecahan 4 dan 6 untuk target tujuh.",
+      "Bandingkan DP dengan BFS pada target kecil."
+    ],
+    "warning": "Algoritma ini mengizinkan koin berulang. Untuk stok terbatas, state atau transisi harus diubah.",
+    "check": "Mengapa dp nol diinisialisasi nol?",
+    "answer": "Karena total nol dapat dicapai tanpa mengambil koin dan menjadi dasar transisi.",
+    "source": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-browser-form",
+    "title": "Pengujian browser: formulir, validasi, dan navigasi",
+    "summary": "Gunakan locator semantik serta assertion yang menunggu keadaan yang dibutuhkan.",
+    "analogy": "Pemeriksaan dilakukan dari kursi pengguna: mengisi formulir, menekan tombol, dan melihat hasil yang benar-benar tampil.",
+    "explain": [
+      "Pengujian browser memeriksa interaksi yang tidak tercakup oleh unit test fungsi. Contoh Playwright mengisi nama layanan, memilih hasil, mengirim formulir, lalu membuka bagian daftar. Locator memakai label serta role yang sejalan dengan aksesibilitas.",
+      "Input spasi ditolak oleh validasi aplikasi, kemudian input sah menghasilkan pesan Data tersimpan dan satu baris yang cocok. Assertion menunggu keadaan yang dimaksud; hindari jeda waktu tetap sebagai pengganti bukti bahwa halaman siap.",
+      "Konfigurasi lab menjalankan server Python pada loopback port 8020, satu worker, dan tanpa retry otomatis. Tutup proses lain yang memakai port itu; reuseExistingServer false menghindari test tanpa sengaja memakai server yang salah.",
+      "Demo formulir yang dapat dibuka dari artikel memakai memori tab tanpa API. Runner Playwright pada paket memakai mode API server lokal. Pemeriksaan demo simulasi tidak membuktikan integrasi backend; baca label mode dan ikuti panduan untuk menjalankan seluruh suite sendiri."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Locator semantik",
+          "Role dan label"
+        ],
+        [
+          "Assertion",
+          "Keadaan teramati yang diharapkan"
+        ],
+        [
+          "Mode simulasi",
+          "Memori tab tanpa server data"
+        ],
+        [
+          "Mode API lokal",
+          "Halaman berkomunikasi dengan server Python"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "e2e/form.spec.cjs",
+        "filename": "e2e/form.spec.cjs",
+        "language": "javascript",
+        "code": "const {test,expect}=require('@playwright/test');\ntest('validasi, simpan, dan navigasi laporan',async({page})=>{\n await page.goto('/');\n await page.getByLabel('Nama layanan').fill('   ');\n await page.getByRole('button',{name:'Simpan observasi'}).click();\n await expect(page.getByRole('status')).toContainText('Nama layanan wajib');\n await page.getByLabel('Nama layanan').fill('BTS-LAB-Form');\n await page.getByLabel('Hasil',{exact:true}).selectOption('ok');\n await page.getByRole('button',{name:'Simpan observasi'}).click();\n await expect(page.getByRole('status')).toHaveText('Data tersimpan.');\n await page.getByRole('link',{name:'Daftar laporan',exact:true}).click();\n await expect(page).toHaveURL(/#daftar$/);\n await expect(page.getByRole('listitem').filter({hasText:'BTS-LAB-Form · ok'})).toHaveCount(1);\n});\n",
+        "output": "",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan npm install, npx playwright install chromium, lalu npm run test:e2e sesuai README.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Jalankan suite pada komputer dengan Node, Python, dan browser Playwright.",
+      "Bandingkan data setelah reload pada demo simulasi dan selama server API lokal tetap berjalan."
+    ],
+    "warning": "Kode suite disertakan, tetapi keberadaan berkas bukan bukti runner sudah lulus. Mode simulasi dan API mempunyai batas pembuktian berbeda.",
+    "check": "Mengapa tidak memakai sleep sebagai pemeriksaan halaman siap?",
+    "answer": "Jeda tidak membuktikan keadaan yang diperlukan; assertion harus menunggu hasil yang relevan.",
+    "source": "https://playwright.dev/docs/writing-tests",
+    "diagram": "advanced-browser",
+    "diagramAlt": "Pemeriksaan browser terhubung ke halaman, API lokal, dan data memori; mock respons gagal hanya membuktikan perilaku pada batas yang disimulasikan.",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-browser-api",
+    "title": "Pengujian API ke UI dan simulasi respons gagal",
+    "summary": "Pisahkan integrasi nyata dari mock pada satu batas transport.",
+    "analogy": "Mengetes etalase dengan barang gudang nyata berbeda dari mencoba tampilan ketika gudangnya memberi kabar gagal.",
+    "explain": [
+      "Test pertama mengirim request invalid lalu valid ke API lokal dan memeriksa status 400 serta 201. Halaman kemudian memuat data dan menampilkan observasi yang dibuat lewat API. Ini menghubungkan lapisan request dan UI dalam lingkungan lab.",
+      "Test kedua mengintersep hanya POST ke endpoint observasi dan memberikan respons 503 tiruan. Tujuannya memeriksa pesan gagal dan mempertahankan input, bukan membuktikan backend benar-benar menghasilkan 503 pada kondisi tertentu.",
+      "Jangan memberi label sukses sebelum hasil yang diperlukan diterima. Test juga perlu membedakan data tersimpan tetapi refresh daftar gagal, respons transport terputus, dan penolakan validasi. Contoh tidak menjanjikan idempotensi penulisan; pengulangan perlu rancangan lanjutan.",
+      "Backend lab menyimpan paling banyak 20 observasi dalam memori proses dan memvalidasi body serta ukuran. Ia tidak menyediakan autentikasi atau penyimpanan produksi. Test transport Python pada paket dapat dijalankan tanpa browser, sedangkan suite Playwright memerlukan instalasi browser tersendiri."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Request fixture",
+          "HTTP pada server lab"
+        ],
+        [
+          "Mock 503",
+          "Bukti perilaku UI pada respons tiruan"
+        ],
+        [
+          "Input dipertahankan",
+          "Pengguna dapat memperbaiki atau mencoba lagi"
+        ],
+        [
+          "Lingkup",
+          "Memori sementara, bukan aplikasi produksi"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "e2e/api.spec.cjs",
+        "filename": "e2e/api.spec.cjs",
+        "language": "javascript",
+        "code": "const {test,expect}=require('@playwright/test');\ntest('data API lokal terlihat pada halaman',async({request,page})=>{\n const invalid=await request.post('/api/observasi',{data:{layanan:'',hasil:'ok'}});\n expect(invalid.status()).toBe(400);\n const created=await request.post('/api/observasi',{data:{layanan:'BTS-LAB-API',hasil:'timeout'}});\n expect(created.status()).toBe(201);\n const row=await created.json();expect(row.layanan).toBe('BTS-LAB-API');\n await page.goto('/');await page.getByRole('button',{name:'Muat laporan'}).click();\n await expect(page.getByRole('listitem').filter({hasText:'BTS-LAB-API · timeout'})).toHaveCount(1);\n});\ntest('respons gagal tidak ditampilkan sebagai sukses',async({page})=>{\n await page.route('**/api/observasi',route=>route.request().method()==='POST'\n  ?route.fulfill({status:503,contentType:'application/json',body:'{\"error\":\"latihan\"}'})\n  :route.continue());\n await page.goto('/');await page.getByLabel('Nama layanan').fill('BTS-LAB-Gagal');\n await page.getByRole('button',{name:'Simpan observasi'}).click();\n await expect(page.getByRole('status')).toContainText('Belum dapat menyimpan');\n await expect(page.getByLabel('Nama layanan')).toHaveValue('BTS-LAB-Gagal');\n});\n",
+        "output": "",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan npm install, npx playwright install chromium, lalu npm run test:e2e sesuai README.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Bedakan assertion yang memeriksa API nyata dengan yang memeriksa mock.",
+      "Rancang kasus simpan berhasil tetapi muat ulang daftar gagal."
+    ],
+    "warning": "Mock respons gagal tidak membuktikan backend mengalami kegagalan yang sama. Retry penulisan tanpa idempotensi dapat menggandakan data.",
+    "check": "Apa yang dibuktikan oleh intersepsi respons 503?",
+    "answer": "Perilaku halaman ketika menerima respons itu pada batas yang disimulasikan, bukan penyebab atau perilaku backend nyata.",
+    "source": "https://playwright.dev/docs/api-testing",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-profiling",
+    "title": "Profiling CPU dan alokasi memori Python",
+    "summary": "Cari sumber biaya dengan pengukuran sebelum mengoptimalkan.",
+    "analogy": "Cari bagian perjalanan yang paling lama sebelum mengganti kendaraan yang belum tentu menjadi penyebabnya.",
+    "explain": [
+      "Profiling membantu menemukan bagian program yang memakai waktu atau alokasi. cProfile mencatat pemanggilan fungsi, sedangkan tracemalloc mengamati alokasi Python yang ditelusurinya. Keduanya tidak sama dengan seluruh ukuran memori proses atau kapasitas layanan.",
+      "Contoh menjalankan perhitungan tetap, menyimpan profil.prof, dan memeriksa checksum hasil. Buka artefak dengan python -m pstats hasil-latihan/profil.prof; gunakan sort cumulative dan stats untuk menelusuri biaya kumulatif.",
+      "Profiler menambah overhead, dan hasil dipengaruhi versi, perangkat, serta beban lain. Bandingkan workload yang sama dan periksa hasil fungsional tetap. Mempercepat bagian kecil yang jarang dijalankan belum tentu memperbaiki pengalaman pengguna.",
+      "Gunakan pengukuran untuk membentuk hipotesis, ubah satu hal yang relevan, lalu ukur ulang. Untuk I/O, amati waktu tunggu dan batas sumber eksternal. Jangan menganggap peak alokasi Python sebagai bukti semua penggunaan memori sudah tercatat."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "cProfile",
+          "Pemanggilan dan biaya fungsi"
+        ],
+        [
+          "Cumulative",
+          "Biaya fungsi beserta pemanggilannya"
+        ],
+        [
+          "tracemalloc",
+          "Alokasi Python yang ditelusuri"
+        ],
+        [
+          "Checksum",
+          "Perilaku tetap diperiksa"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a12_profile.py",
+        "filename": "a12_profile.py",
+        "language": "python",
+        "code": "import cProfile,pstats,tracemalloc\nfrom pathlib import Path\n\ndef olah(n):\n    return sum(x*x for x in range(n))\n\nif __name__=='__main__':\n    folder=Path('hasil-latihan');folder.mkdir(exist_ok=True)\n    profiler=cProfile.Profile();tracemalloc.start()\n    result=profiler.runcall(olah,10000)\n    _,peak=tracemalloc.get_traced_memory();tracemalloc.stop()\n    profiler.dump_stats(folder/'profil.prof')\n    stats=pstats.Stats(profiler)\n    print('Checksum:',result)\n    print('Ada panggilan tercatat:',stats.total_calls>0)\n    print('Peak alokasi Python teramati:',peak>0)\n    print('Profil: hasil-latihan/profil.prof')\n",
+        "output": "Checksum: 333283335000\nAda panggilan tercatat: True\nPeak alokasi Python teramati: True\nProfil: hasil-latihan/profil.prof",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a12_profile.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Buka profil di pstats dan urutkan cumulative.",
+      "Bandingkan profil workload kecil dan lebih besar tanpa mengubah definisi hasil."
+    ],
+    "warning": "Angka profiler bergantung lingkungan dan mengandung overhead. Tracemalloc tidak mengukur seluruh RSS proses.",
+    "check": "Mengapa checksum tetap diperiksa saat optimasi?",
+    "answer": "Optimasi yang mengubah hasil yang disepakati bukan perbaikan kinerja yang setara.",
+    "source": "https://docs.python.org/3.12/library/profile.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-beban-lokal",
+    "title": "Uji beban kecil: konkurensi, latensi, dan persentil",
+    "summary": "Ukur request lab secara terbatas tanpa mengklaim kapasitas produksi.",
+    "analogy": "Waktu tunggu beberapa pengunjung di loket latihan belum menggambarkan antrean seluruh kota.",
+    "explain": [
+      "Uji beban memerlukan tujuan, workload, batas, serta indikator yang jelas. Contoh mengirim tepat 12 GET ke server yang dibuat sendiri pada loopback dengan maksimal tiga worker. Fungsi pemeriksaan menolak host di luar endpoint loopback lab.",
+      "Latensi diukur memakai perf_counter, lalu p50 dan p95 dihitung dengan nearest-rank. Untuk 12 sampel, p95 berada pada nilai teratas, sehingga satu pengamatan mempunyai pengaruh besar. Nyatakan metode persentil serta jumlah sampel.",
+      "Maksimal tiga worker adalah batas konkurensi, bukan laju request per detik yang tetap. Workload ini tidak mempunyai pola kedatangan produksi, variasi payload besar, warm-up terukur, atau bukti ketahanan jangka panjang.",
+      "Angka akan berubah tiap eksekusi. Catat tingkat gagal bersama latensi dan jangan mengabaikan request gagal saat menilai layanan. Uji hanya lingkungan yang dikelola dan diizinkan; contoh tidak menerima daftar target internet atau subnet."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Konkurensi",
+          "Pekerjaan bersamaan"
+        ],
+        [
+          "Latensi",
+          "Selang per request"
+        ],
+        [
+          "Nearest-rank",
+          "Metode persentil yang dinyatakan"
+        ],
+        [
+          "Sampel kecil",
+          "Batas interpretasi besar"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a13_load.py",
+        "filename": "a13_load.py",
+        "language": "python",
+        "code": "from concurrent.futures import ThreadPoolExecutor\nfrom time import perf_counter\nfrom urllib.request import build_opener,ProxyHandler\nfrom lab_web import server_lab\n\ndef ukur(url):\n    from urllib.parse import urlsplit\n    parts=urlsplit(url)\n    if parts.scheme!='http' or parts.hostname!='127.0.0.1' or parts.username or parts.password or parts.path!='/api/observasi':raise ValueError('Hanya endpoint loopback lab.')\n    start=perf_counter()\n    opener=build_opener(ProxyHandler({}))\n    with opener.open(url,timeout=2) as response:\n        response.read(4096)\n        status=response.status\n    return status,(perf_counter()-start)*1000\n\ndef nearest_rank(data,p):\n    from math import ceil\n    if not data or not 0<p<=1:raise ValueError('Data tidak kosong dan p pada (0,1].')\n    return sorted(data)[ceil(len(data)*p)-1]\n\nif __name__=='__main__':\n    # Tepat 12 GET, maksimal 3 worker, hanya server yang dibuat oleh demo.\n    with server_lab() as root,ThreadPoolExecutor(max_workers=3) as pool:\n        results=list(pool.map(ukur,[root+'/api/observasi']*12))\n    delays=[value for _,value in results]\n    print('Permintaan/berhasil:',len(results),sum(status==200 for status,_ in results))\n    print('p50_ms:',round(nearest_rank(delays,.5),3))\n    print('p95_ms:',round(nearest_rank(delays,.95),3))\n    print('Sampel lokal kecil, bukan kapasitas produksi')\n",
+        "output": "Permintaan/berhasil: 12 12\np50_ms: 4.508\np95_ms: 7.021\nSampel lokal kecil, bukan kapasitas produksi",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi.",
+        "measurement": true
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a13_load.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Jelaskan posisi p95 pada 12 sampel menggunakan nearest-rank.",
+      "Bandingkan satu dan tiga worker tanpa menggeneralisasi ke produksi."
+    ],
+    "warning": "Contoh lokal kecil bukan sertifikasi kapasitas. Jangan mengarahkan beban ke layanan pihak lain.",
+    "check": "Mengapa jumlah worker tidak sama dengan request per detik?",
+    "answer": "Worker membatasi pekerjaan bersamaan, sedangkan laju juga dipengaruhi durasi dan pola pengiriman.",
+    "source": "https://docs.python.org/3.12/library/time.html#time.perf_counter",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-cache",
+    "title": "Cache TTL, invalidasi, dan kapasitas terbatas",
+    "summary": "Bedakan cache miss, data kedaluwarsa, serta sumber kebenaran.",
+    "analogy": "Catatan sementara mempercepat jawaban, tetapi harus dibuang saat usianya lewat atau sumber berubah.",
+    "explain": [
+      "Cache menyimpan hasil yang dapat dipakai ulang, bukan menggantikan sumber kebenaran. Contoh memakai TTL dan OrderedDict dengan kapasitas dua. Saat kapasitas penuh, entri yang paling lama tidak dipakai dikeluarkan menurut urutan akses.",
+      "Clock disuntikkan agar kedaluwarsa dapat diuji tanpa sleep. Tepat pada batas waktu, entri dianggap kedaluwarsa. None dipakai sebagai cache miss sehingga contoh menolak penyimpanan None sebagai nilai agar maknanya tidak ambigu.",
+      "TTL membatasi usia, tetapi tidak menjamin data tetap benar sepanjang TTL. Ketika sumber berubah, invalidasi eksplisit atau strategi pembaruan diperlukan. Cache key juga harus mempertimbangkan parameter dan lingkup akses yang relevan.",
+      "Cache ini hanya memori satu proses dan belum thread-safe. Restart menghilangkan isinya; beberapa worker tidak otomatis berbagi cache. Redis atau penyimpanan terdistribusi memerlukan rancangan konsistensi, akses, dan pengujian yang berbeda."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "TTL",
+          "Usia maksimum menurut clock"
+        ],
+        [
+          "Miss",
+          "Nilai perlu diambil dari sumber"
+        ],
+        [
+          "Invalidasi",
+          "Membuang entri yang tidak layak"
+        ],
+        [
+          "Kapasitas",
+          "Batas jumlah entri"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a14_cache.py",
+        "filename": "a14_cache.py",
+        "language": "python",
+        "code": "from collections import OrderedDict\nfrom time import monotonic\nimport math\n\nclass CacheTTL:\n    def __init__(self,capacity=2,clock=monotonic):\n        if type(capacity) is not int or capacity<1:raise ValueError('Kapasitas positif.')\n        self.capacity=capacity;self.clock=clock;self.data=OrderedDict()\n    def put(self,key,value,ttl):\n        if not isinstance(ttl,(int,float)) or isinstance(ttl,bool) or not math.isfinite(ttl) or ttl<=0:raise ValueError('TTL finite positif.')\n        if value is None:raise ValueError('None dipakai sebagai tanda cache miss.')\n        now=self.clock()\n        for old in list(self.data):\n            if self.data[old][0]<=now:self.data.pop(old)\n        self.data[key]=(now+ttl,value);self.data.move_to_end(key)\n        while len(self.data)>self.capacity:self.data.popitem(last=False)\n    def get(self,key):\n        if key not in self.data:return None\n        end,value=self.data[key]\n        if end<=self.clock():self.data.pop(key);return None\n        self.data.move_to_end(key);return value\n    def invalidate(self,key):self.data.pop(key,None)\n\nif __name__=='__main__':\n    now=[0.0];cache=CacheTTL(clock=lambda:now[0])\n    cache.put('status','up',ttl=5)\n    print('Sebelum kedaluwarsa:',cache.get('status'))\n    now[0]=5\n    print('Tepat batas TTL:',cache.get('status'))\n    cache.put('status','down',ttl=5);cache.invalidate('status')\n    print('Sesudah invalidasi:',cache.get('status'))\n",
+        "output": "Sebelum kedaluwarsa: up\nTepat batas TTL: None\nSesudah invalidasi: None",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a14_cache.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Uji akses entri tepat sebelum dan saat batas TTL.",
+      "Rancang key untuk laporan dengan dua parameter filter berbeda."
+    ],
+    "warning": "TTL bukan jaminan kebenaran selama interval. Cache memori demo tidak dibagikan antarp​​roses dan belum thread-safe.",
+    "check": "Mengapa memakai clock yang dapat disuntikkan?",
+    "answer": "Supaya batas kedaluwarsa dapat diuji deterministik tanpa menunggu waktu nyata.",
+    "source": "https://docs.python.org/3.12/library/collections.html#collections.OrderedDict",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  },
+  {
+    "slug": "lanjut-antrean",
+    "title": "Antrean worker, retry terbatas, dan dead letter",
+    "summary": "Kelola pekerjaan gagal tanpa mengulang semua error tanpa batas.",
+    "analogy": "Tugas yang perlu dicoba lagi dibedakan dari formulir rusak yang harus diperbaiki terlebih dahulu.",
+    "explain": [
+      "Antrean memisahkan penerimaan pekerjaan dan eksekusi worker. Contoh Queue mempunyai kapasitas dua, satu worker, dan maksimal 20 ID unik. Producer dapat menunggu ketika antrean penuh; ini bentuk backpressure sederhana.",
+      "RetryableError menandai error yang boleh dicoba ulang sampai batas percobaan. Error lain langsung masuk dead letter pada contoh. Semua pekerjaan memakai task_done pada finally agar join dapat mengamati penyelesaian yang semestinya.",
+      "Dead letter menyimpan ID, jumlah percobaan, dan jenis error untuk peninjauan. Itu bukan izin mengirim ulang secara otomatis tanpa memperbaiki penyebab. Handler yang mempunyai efek eksternal memerlukan idempotensi, timeout I/O, serta kebijakan backoff.",
+      "Queue memori ini bukan broker persisten: proses mati dapat kehilangan antrean atau hasil. Callback juga harus selesai agar worker tidak macet. Sistem andal memerlukan acknowledgement, penyimpanan, shutdown, penguncian, dan recovery yang sesuai kebutuhan."
+    ],
+    "table": {
+      "headers": [
+        "Konsep",
+        "Makna dan batas"
+      ],
+      "rows": [
+        [
+          "Worker",
+          "Menjalankan pekerjaan"
+        ],
+        [
+          "Retry terbatas",
+          "Hanya error yang diizinkan"
+        ],
+        [
+          "Dead letter",
+          "Pekerjaan perlu ditinjau"
+        ],
+        [
+          "Backpressure",
+          "Producer menunggu kapasitas"
+        ]
+      ]
+    },
+    "blocks": [
+      {
+        "label": "a15_queue.py",
+        "filename": "a15_queue.py",
+        "language": "python",
+        "code": "from queue import Queue\nfrom threading import Thread\n\nclass RetryableError(Exception):pass\n\ndef kerjakan(tasks,handler,max_attempts=2):\n    if type(max_attempts) is not int or not 1<=max_attempts<=3:raise ValueError('Percobaan 1..3.')\n    if len(tasks)>20 or any(not isinstance(t,str) or not t for t in tasks) or len(set(tasks))!=len(tasks):\n        raise ValueError('Maksimal 20 ID unik terisi.')\n    queue=Queue(maxsize=2);success=[];dead=[]\n    def worker():\n        while True:\n            task=queue.get()\n            try:\n                if task is None:return\n                for attempt in range(1,max_attempts+1):\n                    try:\n                        handler(task);success.append(task);break\n                    except Exception as exc:\n                        if not isinstance(exc,RetryableError) or attempt==max_attempts:\n                            dead.append({'id':task,'attempts':attempt,'error':type(exc).__name__});break\n            finally:queue.task_done()\n    thread=Thread(target=worker);thread.start()\n    for task in tasks:queue.put(task)\n    queue.put(None);queue.join();thread.join()\n    return success,dead\n\nif __name__=='__main__':\n    attempts={}\n    def handler(task):\n        attempts[task]=attempts.get(task,0)+1\n        if task=='ulang' and attempts[task]==1:raise RetryableError()\n        if task=='rusak':raise ValueError('data invalid')\n    success,dead=kerjakan(['baik','ulang','rusak'],handler)\n    print('Selesai:',success)\n    print('Dead letter:',dead)\n    print('Percobaan ulang:',attempts['ulang'])\n    print('Antrean memori; bukan broker persisten')\n",
+        "output": "Selesai: ['baik', 'ulang']\nDead letter: [{'id': 'rusak', 'attempts': 1, 'error': 'ValueError'}]\nPercobaan ulang: 2\nAntrean memori; bukan broker persisten",
+        "explanation": "Gunakan paket lab lengkap sesuai panduan di halaman jalur. Contoh lokal memakai data fiktif. Ikuti perbedaan simulasi, koneksi nyata, dan pengukuran yang dijelaskan pada materi."
+      }
+    ],
+    "steps": [
+      "Unduh advanced-programming-lab lengkap dan buka terminal pada folder hasil ekstraksi.",
+      "Gunakan Python 3.12 atau lebih baru. Contoh inti memakai pustaka bawaan; mypy dan Paramiko mengikuti requirements opsional.",
+      "Jalankan python a15_queue.py.",
+      "Kerjakan latihan pada lingkungan lokal milik sendiri, lalu baca batas kesimpulannya."
+    ],
+    "practice": [
+      "Uji RetryableError yang selalu gagal dan periksa jumlah percobaan.",
+      "Jelaskan apa yang belum dijamin jika proses berhenti sesudah efek eksternal tetapi sebelum pencatatan sukses."
+    ],
+    "warning": "Antrean memori bukan jaminan durability atau exactly-once. Handler perlu batas operasi dan rancangan idempotensi.",
+    "check": "Mengapa ValueError contoh tidak dicoba berulang?",
+    "answer": "Data invalid tidak menjadi valid hanya karena diulang; kebijakan contoh membedakannya dari error sementara.",
+    "source": "https://docs.python.org/3.12/library/queue.html",
+    "diagram": "",
+    "diagramAlt": "",
+    "stage": 0,
+    "minutes": 35
+  }
+]

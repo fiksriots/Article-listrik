@@ -7,9 +7,9 @@ const {programmingLessons,dataStructureCatalog}=require('../lib/programming-cour
 const {learningTracks}=require('../lib/learning-progress-catalog.ts');
 const {progressSummary}=require('../lib/learning-progress-types.ts');
 assert.deepEqual(programmingTracks.map(t=>t.id),['terstruktur','struktur-data','oop','basis-data','backend-api','pemrograman-jaringan','web','django','data-analysis','data-science','pengujian-debugging','proyek-otomasi','rekayasa-deployment']);
-assert.deepEqual(programmingTracks.map(t=>t.lessons.length),[35,38,31,46,23,16,14,16,20,20,9,9,9]);
+assert.deepEqual(programmingTracks.map(t=>t.lessons.length),[38,41,31,46,23,19,14,16,20,23,11,11,11]);
 const slugs=programmingTracks.flatMap(t=>t.lessons.map(l=>l.slug));
-assert.equal(new Set(slugs).size,286);
+assert.equal(new Set(slugs).size,304);
 assert.deepEqual([...slugs].sort(),programmingLessons.map(l=>l.slug).sort());
 for(const track of programmingTracks){
  assert.ok(fs.existsSync('app'+track.href+'/page.tsx'));
@@ -25,8 +25,8 @@ assert.deepEqual(groups.map(g=>g.title),['Pemrograman Terstruktur','Struktur Dat
 const saved={'programming/struktur-stack':{completed:true,dirty:false,revision:'existing'}};
 assert.equal(progressSummary('programming',groups[0].lessons,saved).done,0);
 assert.equal(progressSummary('programming',groups[1].lessons,saved).done,1);
-assert.equal(progressSummary('programming',groups[1].lessons,saved).total,38);
-console.log('PASS: separate 35/38/31/46/23/16/14/16/20/20/9/9/9 curricula, complete coverage without duplicates, valid overview routes and retained progress keys');
+assert.equal(progressSummary('programming',groups[1].lessons,saved).total,41);
+console.log('PASS: separate 38/41/31/46/23/19/14/16/20/23/11/11/11 curricula, complete coverage without duplicates, valid overview routes and retained progress keys');
 
 assert.equal(progressSummary('programming',groups[2].lessons,saved).done,0);
 

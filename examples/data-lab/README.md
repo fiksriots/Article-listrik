@@ -44,7 +44,7 @@ Jalankan file lain sesuai label pada artikel. Lock memuat versi pengujian Python
 ## Isi
 
 - da01–da20: pertanyaan, NumPy, CSV, kualitas data, filter, agregasi, join, grafik, waktu/coverage, laporan, dan studi kasus.
-- ds01–ds20: definisi masalah, statistik, bootstrap, korelasi, split, pipeline, regresi, klasifikasi, validasi, clustering, dan studi kasus.
+- ds01–ds23: definisi masalah, statistik, bootstrap, korelasi, split, pipeline, regresi, klasifikasi, validasi, clustering, dan studi kasus.
 - Pendalaman Data Analysis: normalisasi teks, reshape/pivot, SQL berparameter, workbook Excel, rolling trend, outlier IQR, kontrak kualitas, dan cohort retensi.
 - Pendalaman Data Science: permutation test, split kelompok/waktu, pemilihan ambang dari validation, rekayasa fitur, ensemble, permutation importance, learning curve, dan drift distribusi.
 - datasets/penjualan.csv: 8 baris fiktif; 1 duplikat identik, 2 invalid, 5 diterima. Omzet data diterima Rp1.960.000, bukan laba atau omzet lengkap semua transaksi.
@@ -63,3 +63,9 @@ Regresi dan klasifikasi memakai data sintetis dengan seed. Tidak ada target atau
 Studi kasus memakai holdout bagian akhir dari data sintetis independen. Ini bukan pembuktian ketepatan temporal pada jaringan nyata. Data waktu, perangkat berulang, perubahan distribusi, dan label lapangan memerlukan rancangan split serta evaluasi tersendiri. Model risiko masih membuat banyak FP/FN; skor tidak diuji kalibrasinya dan tidak boleh diperlakukan sebagai peluang lapangan yang terjamin.
 
 Untuk bootstrap sederhana, observasi diasumsikan independen dan cukup mewakili. Metode percentile kecil ini menjelaskan mekanisme, bukan resep inferensi universal. Clustering tidak menghasilkan diagnosis bawaan.
+
+## Pendalaman Data Science
+
+ds21_time_series.py membandingkan lag 1 dan lag 7 dengan 14 evaluasi walk-forward satu langkah. Nilai aktual masa lalu tersedia sebelum prediksi berikutnya; ini bukan prediksi 14 langkah sekaligus. ds22_pca.py memasang scaler dan PCA hanya pada train, lalu mentransformasikan test. Varians besar tidak menjamin fitur terbaik untuk target.
+
+ds23_model_eksperimen.py memilih alpha lewat validation, refit pada train+validation, lalu mengevaluasi test sekali. Artefak dan manifest ditulis ke hasil-latihan/. Muat hanya model buatan sendiri atau sumber yang benar-benar tepercaya: joblib/pickle dapat menjalankan kode saat dimuat. SHA-256 membantu pemeriksaan integritas, bukan membuktikan sumber aman. Catat urutan fitur, seed, versi pustaka, pembagian data, dan hasil eksperimen. Lingkungan berbeda dapat mengubah kompatibilitas artefak. test_data_lanjut.py menambah lima pengujian.

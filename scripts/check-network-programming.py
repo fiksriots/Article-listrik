@@ -13,7 +13,7 @@ lessons=json.loads((ROOT/'lib/programming-network-lessons.json').read_text())
 order=json.loads((ROOT/'lib/programming-order.json').read_text())
 quizzes=json.loads((ROOT/'lib/programming-quizzes.json').read_text())
 assert len(lessons)==16
-assert [l['slug'] for l in lessons]==[s for g in order if g['title'].startswith('Pemrograman Jaringan ·') for s in g['slugs']]
+assert [l['slug'] for l in lessons]==[s for g in order if g['title'].startswith('Pemrograman Jaringan ·') for s in g['slugs'] if s in {l['slug'] for l in lessons}]
 for lesson in lessons:
     assert len(lesson['explain'])>=4 and len(lesson['practice'])>=2
     assert lesson['warning'] and lesson['check'] and lesson['answer']

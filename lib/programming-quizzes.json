@@ -12022,5 +12022,761 @@
       "answer": 0,
       "explanation": "Usia backup memengaruhi keadaan yang dapat dipulihkan."
     }
+  ],
+  "lanjut-ssh": [
+    {
+      "question": "Demo default membuka koneksi SSH nyata?",
+      "options": [
+        "Tidak",
+        "Ya ke semua router",
+        "Ya ke host internet"
+      ],
+      "answer": 0,
+      "explanation": "Demo menggunakan SSHSimulasi."
+    },
+    {
+      "question": "Host key tidak dikenal sebaiknya ...",
+      "options": [
+        "Diabaikan jika password benar",
+        "Ditolak sampai diverifikasi",
+        "Diterima otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Identitas server diperiksa terpisah dari akun pengguna."
+    },
+    {
+      "question": "uname -s pada contoh berlaku untuk ...",
+      "options": [
+        "Semua router tanpa pengecualian",
+        "Semua server SNMP",
+        "VM Linux lab"
+      ],
+      "answer": 2,
+      "explanation": "Perintah bergantung sistem operasi."
+    },
+    {
+      "question": "Lulus test adapter membuktikan ...",
+      "options": [
+        "Perilaku pada simulasi yang diuji",
+        "Koneksi perangkat nyata berhasil",
+        "Host key produksi sudah benar"
+      ],
+      "answer": 0,
+      "explanation": "Integrasi nyata perlu pemeriksaan pada lingkungannya."
+    }
+  ],
+  "lanjut-api-status": [
+    {
+      "question": "Koneksi contoh menggunakan ...",
+      "options": [
+        "HTTP loopback nyata",
+        "SSH produksi",
+        "SNMP publik"
+      ],
+      "answer": 0,
+      "explanation": "Server dibuat pada komputer latihan."
+    },
+    {
+      "question": "JSON valid otomatis memenuhi kontrak?",
+      "options": [
+        "Jika status 200",
+        "Tidak",
+        "Ya"
+      ],
+      "answer": 1,
+      "explanation": "Tipe, kolom, dan nilai tetap diperiksa."
+    },
+    {
+      "question": "Data server bertahan setelah proses berhenti?",
+      "options": [
+        "Ya selamanya",
+        "Disimpan di router",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Server memakai memori sementara."
+    },
+    {
+      "question": "Daftar kosong berarti ...",
+      "options": [
+        "Belum ada observasi pada lab itu",
+        "Semua BTS mati",
+        "Semua kredensial gagal"
+      ],
+      "answer": 0,
+      "explanation": "Makna hasil perlu sesuai sumber dan lingkup pemeriksaan."
+    }
+  ],
+  "lanjut-snmp": [
+    {
+      "question": "Program contoh mengirim SNMP GET?",
+      "options": [
+        "Tidak",
+        "Ya otomatis",
+        "Hanya saat counter turun"
+      ],
+      "answer": 0,
+      "explanation": "Masukan sudah berupa varbind yang didekode."
+    },
+    {
+      "question": "Indeks interface 1 berarti ...",
+      "options": [
+        "Selalu interface yang paling cepat",
+        "Indeks pada contoh yang perlu dipetakan",
+        "Port WAN di semua perangkat"
+      ],
+      "answer": 1,
+      "explanation": "Pemetaan indeks perlu diperiksa per perangkat."
+    },
+    {
+      "question": "Delta modulo aman disimpulkan hanya jika ...",
+      "options": [
+        "Semua counter dianggap sama",
+        "Uptime diabaikan",
+        "Asumsi wrap dan kontinuitas terpenuhi"
+      ],
+      "answer": 2,
+      "explanation": "Beberapa wrap atau reset dapat membuat interpretasi salah."
+    },
+    {
+      "question": "Counter menjadi laju perlu ...",
+      "options": [
+        "Interval dan satuan yang tepat",
+        "Nama file saja",
+        "Warna grafik"
+      ],
+      "answer": 0,
+      "explanation": "Selisih counter tidak sama dengan laju tanpa pembagi waktu."
+    }
+  ],
+  "lanjut-closure": [
+    {
+      "question": "Closure memungkinkan fungsi ...",
+      "options": [
+        "Menggunakan konteks lingkup luar",
+        "Mengabaikan scope",
+        "Menjalankan jaringan otomatis"
+      ],
+      "answer": 0,
+      "explanation": "Fungsi dapat membawa kebutuhan konteks kecil."
+    },
+    {
+      "question": "Lambda dalam loop tanpa pengikatan dapat ...",
+      "options": [
+        "Tidak pernah bisa dipanggil",
+        "Membaca nilai loop terakhir",
+        "Selalu menyalin nilai saat dibuat"
+      ],
+      "answer": 1,
+      "explanation": "Variabel bebas mempunyai perilaku late binding."
+    },
+    {
+      "question": "Default argumen dievaluasi ...",
+      "options": [
+        "Setiap iterasi pemanggilan selalu",
+        "Saat Python dihapus",
+        "Saat definisi fungsi"
+      ],
+      "answer": 2,
+      "explanation": "Default mutable dapat bertahan antar pemanggilan."
+    },
+    {
+      "question": "Pilihan closure atau class sebaiknya berdasarkan ...",
+      "options": [
+        "Kejelasan keadaan dan operasi",
+        "Selalu jumlah baris paling sedikit",
+        "Warna editor"
+      ],
+      "answer": 0,
+      "explanation": "Bentuk kode perlu membantu pembaca dan pengujian."
+    }
+  ],
+  "lanjut-decorator": [
+    {
+      "question": "Decorator pada dasarnya ...",
+      "options": [
+        "Menerima fungsi dan mengembalikan pengganti",
+        "Selalu menjalankan proses baru",
+        "Hanya mengubah warna sintaks"
+      ],
+      "answer": 0,
+      "explanation": "Sintaks @ adalah bentuk ringkas pembungkusan."
+    },
+    {
+      "question": "wraps membantu menjaga ...",
+      "options": [
+        "Koneksi database",
+        "Metadata dan akses __wrapped__",
+        "Semua efek samping otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Metadata berbeda dari jaminan semantik lengkap."
+    },
+    {
+      "question": "Wrapper tanpa return hasil akan ...",
+      "options": [
+        "Selalu lebih cepat",
+        "Menambah validasi tipe",
+        "Kehilangan hasil yang diharapkan"
+      ],
+      "answer": 2,
+      "explanation": "Kontrak hasil perlu diteruskan."
+    },
+    {
+      "question": "Counter contoh naik pada exception?",
+      "options": [
+        "Ya, menghitung percobaan",
+        "Tidak pernah",
+        "Hanya di Linux"
+      ],
+      "answer": 0,
+      "explanation": "Penghitung ditambah sebelum fungsi asal dipanggil."
+    }
+  ],
+  "lanjut-generics": [
+    {
+      "question": "Hasil pertama pada Sequence[str] bertipe ...",
+      "options": [
+        "str",
+        "int selalu",
+        "Any wajib"
+      ],
+      "answer": 0,
+      "explanation": "Generic menjaga hubungan input dan output."
+    },
+    {
+      "question": "Type hint otomatis memvalidasi masukan jaringan?",
+      "options": [
+        "Hanya pada list",
+        "Tidak",
+        "Ya"
+      ],
+      "answer": 1,
+      "explanation": "Data luar tetap perlu pemeriksaan runtime."
+    },
+    {
+      "question": "Fixture salah seharusnya gagal karena ...",
+      "options": [
+        "Import hilang",
+        "Server tidak menyala",
+        "Tipe hasil tidak sesuai variabel"
+      ],
+      "answer": 2,
+      "explanation": "Mypy harus menemukan modul agar diagnosis tipenya bermakna."
+    },
+    {
+      "question": "Static check menggantikan semua test?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Jika tanpa Any"
+      ],
+      "answer": 0,
+      "explanation": "Perilaku dan integrasi perlu diuji terpisah."
+    }
+  ],
+  "lanjut-greedy": [
+    {
+      "question": "Greedy memilih berdasarkan ...",
+      "options": [
+        "Keuntungan lokal saat itu",
+        "Semua solusi lengkap selalu",
+        "Hasil test akhir"
+      ],
+      "answer": 0,
+      "explanation": "Keputusan lokal tidak otomatis optimal global."
+    },
+    {
+      "question": "Greedy contoh untuk enam memakai ...",
+      "options": [
+        "Satu koin",
+        "Tiga koin",
+        "Dua koin"
+      ],
+      "answer": 1,
+      "explanation": "4+1+1 kalah dari 3+3."
+    },
+    {
+      "question": "Satu counterexample cukup untuk ...",
+      "options": [
+        "Membuktikan semua greedy salah",
+        "Menghapus kebutuhan validasi",
+        "Membantah klaim selalu optimal"
+      ],
+      "answer": 2,
+      "explanation": "Klaim universal gugur pada satu kasus yang sah."
+    },
+    {
+      "question": "Sebelum memakai greedy untuk masalah baru, periksa ...",
+      "options": [
+        "Struktur masalah dan alasan optimalitas",
+        "Hanya nama algoritma",
+        "Jumlah warna output"
+      ],
+      "answer": 0,
+      "explanation": "Strategi perlu sesuai kontrak serta sifat masalah."
+    }
+  ],
+  "lanjut-backtracking": [
+    {
+      "question": "Setelah menelusuri cabang, pop dipakai untuk ...",
+      "options": [
+        "Mengembalikan pilihan sementara",
+        "Menghapus semua solusi",
+        "Mematikan rekursi"
+      ],
+      "answer": 0,
+      "explanation": "Keadaan harus kembali sebelum cabang lain."
+    },
+    {
+      "question": "Pruning total melewati target bergantung pada ...",
+      "options": [
+        "Urutan nama fungsi",
+        "Semua angka positif",
+        "Adanya angka negatif"
+      ],
+      "answer": 1,
+      "explanation": "Angka negatif dapat menurunkan total lagi."
+    },
+    {
+      "question": "Menyimpan list tanpa copy berisiko ...",
+      "options": [
+        "Semua solusi makin cepat",
+        "Input menjadi tuple",
+        "Solusi ikut berubah"
+      ],
+      "answer": 2,
+      "explanation": "Referensi mutable perlu diperhatikan."
+    },
+    {
+      "question": "Setiap indeks pada contoh boleh dipakai ...",
+      "options": [
+        "Paling banyak sekali",
+        "Tanpa batas",
+        "Hanya jika terakhir"
+      ],
+      "answer": 0,
+      "explanation": "Masalah subset berbeda dari koin tak terbatas."
+    }
+  ],
+  "lanjut-dp": [
+    {
+      "question": "dp[t] menyimpan ...",
+      "options": [
+        "Jumlah koin minimum untuk total t",
+        "Seluruh file log",
+        "Indeks terakhir selalu"
+      ],
+      "answer": 0,
+      "explanation": "State mempunyai arti yang spesifik."
+    },
+    {
+      "question": "dp[0] bernilai ...",
+      "options": [
+        "1",
+        "0",
+        "None"
+      ],
+      "answer": 1,
+      "explanation": "Tidak ada koin diperlukan untuk target nol."
+    },
+    {
+      "question": "None pada hasil berarti ...",
+      "options": [
+        "Program pasti salah",
+        "Solusinya nol koin",
+        "Target tidak terjangkau menurut kontrak"
+      ],
+      "answer": 2,
+      "explanation": "Keadaan tidak terjangkau berbeda dari target nol."
+    },
+    {
+      "question": "Stok koin terbatas membutuhkan ...",
+      "options": [
+        "Rancangan state atau transisi lain",
+        "Kode sama tanpa perubahan asumsi",
+        "Menghapus kasus dasar"
+      ],
+      "answer": 0,
+      "explanation": "Ketersediaan koin menjadi bagian kontrak masalah."
+    }
+  ],
+  "lanjut-browser-form": [
+    {
+      "question": "Locator yang dipakai terutama berdasarkan ...",
+      "options": [
+        "Role dan label",
+        "Koordinat tetap",
+        "Urutan semua div"
+      ],
+      "answer": 0,
+      "explanation": "Semantik membantu keterbacaan dan ketahanan test."
+    },
+    {
+      "question": "Jeda tetap membuktikan halaman siap?",
+      "options": [
+        "Jika cukup lama",
+        "Tidak",
+        "Ya"
+      ],
+      "answer": 1,
+      "explanation": "Keadaan yang diperlukan perlu diamati langsung."
+    },
+    {
+      "question": "Demo publik menyimpan data di ...",
+      "options": [
+        "Database produksi",
+        "Router",
+        "Memori tab"
+      ],
+      "answer": 2,
+      "explanation": "Label simulasi menjelaskan lingkupnya."
+    },
+    {
+      "question": "Suite paket menggunakan ...",
+      "options": [
+        "Server API Python lokal",
+        "Semua layanan publik",
+        "SSH operasional"
+      ],
+      "answer": 0,
+      "explanation": "Konfigurasi membuat lingkungan lab sendiri."
+    }
+  ],
+  "lanjut-browser-api": [
+    {
+      "question": "Request test pertama menuju ...",
+      "options": [
+        "API loopback lab",
+        "Semua server internet",
+        "File CSV langsung"
+      ],
+      "answer": 0,
+      "explanation": "Server lokal benar-benar menjawab request."
+    },
+    {
+      "question": "Mock 503 membuktikan ...",
+      "options": [
+        "Database pasti penuh",
+        "Respons UI pada skenario tiruan",
+        "Backend produksi sedang gagal"
+      ],
+      "answer": 1,
+      "explanation": "Batas mock perlu dinyatakan jelas."
+    },
+    {
+      "question": "Input dipertahankan saat gagal supaya ...",
+      "options": [
+        "Semua data pasti tersimpan",
+        "Validasi hilang",
+        "Pengguna tidak kehilangan isian"
+      ],
+      "answer": 2,
+      "explanation": "Tidak ada pesan sukses palsu pada jalur gagal."
+    },
+    {
+      "question": "Retry POST tanpa rancangan tambahan dapat ...",
+      "options": [
+        "Menggandakan efek",
+        "Selalu aman",
+        "Menghapus semua observasi"
+      ],
+      "answer": 0,
+      "explanation": "Idempotensi penulisan perlu disepakati."
+    }
+  ],
+  "lanjut-profiling": [
+    {
+      "question": "Profiling membantu ...",
+      "options": [
+        "Mencari sumber biaya nyata",
+        "Menjamin semua kode cepat",
+        "Menggantikan kebutuhan test"
+      ],
+      "answer": 0,
+      "explanation": "Hipotesis optimasi perlu pengukuran."
+    },
+    {
+      "question": "Tracemalloc mengukur ...",
+      "options": [
+        "Semua memori native tanpa batas",
+        "Alokasi Python yang ditelusuri",
+        "Seluruh RAM sistem"
+      ],
+      "answer": 1,
+      "explanation": "Cakupan alat perlu dipahami."
+    },
+    {
+      "question": "Profiler dapat ...",
+      "options": [
+        "Selalu tanpa pengaruh",
+        "Menghapus semua bottleneck",
+        "Menambah overhead"
+      ],
+      "answer": 2,
+      "explanation": "Pengukuran juga memengaruhi eksekusi."
+    },
+    {
+      "question": "Saat membandingkan optimasi, pertahankan ...",
+      "options": [
+        "Workload dan hasil yang setara",
+        "Hanya nama file",
+        "Jumlah komentar"
+      ],
+      "answer": 0,
+      "explanation": "Perbandingan perlu kondisi serta kontrak yang sebanding."
+    }
+  ],
+  "lanjut-beban-lokal": [
+    {
+      "question": "Jumlah request demo adalah ...",
+      "options": [
+        "12",
+        "Tak terbatas",
+        "Seluruh port"
+      ],
+      "answer": 0,
+      "explanation": "Workload ditetapkan kecil dan eksplisit."
+    },
+    {
+      "question": "Tiga worker berarti ...",
+      "options": [
+        "Tiga server produksi",
+        "Konkurensi maksimal tiga",
+        "Tiga request per detik tetap"
+      ],
+      "answer": 1,
+      "explanation": "Konkurensi berbeda dari rate."
+    },
+    {
+      "question": "p95 dari 12 sampel nearest-rank adalah ...",
+      "options": [
+        "Mean semua sampel",
+        "Sampel pertama selalu",
+        "Sampel terbesar"
+      ],
+      "answer": 2,
+      "explanation": "Ceil dari 12 kali 0,95 adalah 12."
+    },
+    {
+      "question": "Angka demo membuktikan kapasitas produksi?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Jika semua status 200"
+      ],
+      "answer": 0,
+      "explanation": "Lingkungan dan workload terlalu terbatas untuk klaim tersebut."
+    }
+  ],
+  "lanjut-cache": [
+    {
+      "question": "TTL menjamin data benar sampai habis?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Hanya jika memakai dictionary"
+      ],
+      "answer": 0,
+      "explanation": "Sumber dapat berubah sebelum TTL habis."
+    },
+    {
+      "question": "Pada batas TTL contoh, entri ...",
+      "options": [
+        "Menjadi sumber kebenaran",
+        "Kedaluwarsa",
+        "Diperpanjang otomatis"
+      ],
+      "answer": 1,
+      "explanation": "Perbandingan batas ditetapkan eksplisit."
+    },
+    {
+      "question": "Clock yang disuntikkan membantu ...",
+      "options": [
+        "Membuat data selalu baru",
+        "Membagikan cache ke semua worker",
+        "Test deterministik"
+      ],
+      "answer": 2,
+      "explanation": "Tidak perlu sleep untuk mencoba waktu kedaluwarsa."
+    },
+    {
+      "question": "Cache proses ini persisten setelah restart?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Selama key sama"
+      ],
+      "answer": 0,
+      "explanation": "Memori proses berbeda dari penyimpanan persisten."
+    }
+  ],
+  "lanjut-antrean": [
+    {
+      "question": "Retry pada contoh diberikan untuk ...",
+      "options": [
+        "RetryableError",
+        "Semua exception tanpa batas",
+        "Hanya error sintaks"
+      ],
+      "answer": 0,
+      "explanation": "Kebijakan retry harus eksplisit."
+    },
+    {
+      "question": "Dead letter dipakai untuk ...",
+      "options": [
+        "Menjamin pengulangan aman",
+        "Peninjauan pekerjaan gagal",
+        "Menyembunyikan kegagalan"
+      ],
+      "answer": 1,
+      "explanation": "Penyebab dan dampak perlu diperiksa sebelum mengirim ulang."
+    },
+    {
+      "question": "Queue penuh membuat producer ...",
+      "options": [
+        "Selalu membuang diam-diam",
+        "Membuka broker internet",
+        "Dapat menunggu kapasitas"
+      ],
+      "answer": 2,
+      "explanation": "Backpressure membantu membatasi pekerjaan menumpuk."
+    },
+    {
+      "question": "Proses mati pada antrean memori dapat ...",
+      "options": [
+        "Menghilangkan pekerjaan",
+        "Menjamin semua efek sekali saja",
+        "Menjadikan data persisten"
+      ],
+      "answer": 0,
+      "explanation": "Durability memerlukan rancangan penyimpanan lain."
+    }
+  ],
+  "ds-time-series": [
+    {
+      "question": "Contoh melakukan ...",
+      "options": [
+        "14 evaluasi satu langkah",
+        "Satu forecast 14 langkah tanpa data baru",
+        "Random split seluruh waktu"
+      ],
+      "answer": 0,
+      "explanation": "Skenario informasi harus disebut jelas."
+    },
+    {
+      "question": "Lag tujuh berarti ...",
+      "options": [
+        "Nomor fitur selalu tujuh",
+        "Nilai tujuh langkah sebelumnya",
+        "Rata-rata semua masa depan"
+      ],
+      "answer": 1,
+      "explanation": "Lag dibaca menurut frekuensi deret."
+    },
+    {
+      "question": "Baseline terbaik pada contoh otomatis terbaik di semua data?",
+      "options": [
+        "Ya",
+        "Jika memakai NumPy",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Pola dan kebutuhan data dapat berbeda."
+    },
+    {
+      "question": "Sebelum memilih model waktu, tetapkan ...",
+      "options": [
+        "Horizon dan waktu informasi tersedia",
+        "Hanya nama algoritma",
+        "Warna kurva"
+      ],
+      "answer": 0,
+      "explanation": "Desain evaluasi mengikuti skenario penggunaan."
+    }
+  ],
+  "ds-pca": [
+    {
+      "question": "PCA memilih dua kolom asli?",
+      "options": [
+        "Tidak",
+        "Ya",
+        "Hanya pada array"
+      ],
+      "answer": 0,
+      "explanation": "Komponen merupakan kombinasi linear fitur."
+    },
+    {
+      "question": "Scaler contoh dipelajari dari ...",
+      "options": [
+        "Test saja",
+        "Train saja",
+        "Train dan test digabung"
+      ],
+      "answer": 1,
+      "explanation": "Test hanya ditransformasi dengan parameter train."
+    },
+    {
+      "question": "Explained variance ratio sama dengan akurasi?",
+      "options": [
+        "Ya",
+        "Jika jumlah komponen dua",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Varians fitur tidak sama dengan kinerja terhadap target."
+    },
+    {
+      "question": "Jumlah komponen sebaiknya ditentukan melalui ...",
+      "options": [
+        "Kebutuhan dan evaluasi pengembangan",
+        "Mengoptimalkan test berulang",
+        "Jumlah warna grafik"
+      ],
+      "answer": 0,
+      "explanation": "Pemilihan harus menjaga batas evaluasi akhir."
+    }
+  ],
+  "ds-model-eksperimen": [
+    {
+      "question": "Alpha dipilih berdasarkan ...",
+      "options": [
+        "MAE validation",
+        "MAE test akhir berulang",
+        "Nama file"
+      ],
+      "answer": 0,
+      "explanation": "Test akhir dijaga dari keputusan pemilihan."
+    },
+    {
+      "question": "Pipeline disimpan agar ...",
+      "options": [
+        "Tidak perlu kontrak fitur",
+        "Preprocessing dan model tetap sesuai",
+        "Semua versi pasti kompatibel"
+      ],
+      "answer": 1,
+      "explanation": "Transformasi yang berbeda dapat mengubah prediksi."
+    },
+    {
+      "question": "Hash cocok membuktikan sumber pasti aman?",
+      "options": [
+        "Ya",
+        "Jika file berekstensi joblib",
+        "Tidak"
+      ],
+      "answer": 2,
+      "explanation": "Integritas byte dan kepercayaan sumber berbeda."
+    },
+    {
+      "question": "File joblib contoh yang dimuat berasal dari ...",
+      "options": [
+        "Program sendiri pada latihan yang sama",
+        "Unduhan model acak",
+        "Lampiran tidak dikenal"
+      ],
+      "answer": 0,
+      "explanation": "Pemuatan artefak tidak dipercaya mempunyai risiko eksekusi kode."
+    }
   ]
 }

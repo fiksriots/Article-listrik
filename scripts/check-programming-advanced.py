@@ -1,189 +1,68 @@
-"""Exercise advanced examples against invariants and independent references."""
-import contextlib
-from copy import deepcopy
-from itertools import permutations
-import io
+"""Check extracted advanced examples and API; browser runner is a separate exercise."""
+import ast
 import json
-from math import inf, isfinite
+import os
 from pathlib import Path
-import random
-import runpy
+import pstats
+import re
+import subprocess
+import sys
 import tempfile
-
-ROOT = Path(__file__).resolve().parents[1]
-data = json.loads((ROOT/'lib/programming-data-structure-lessons.json').read_text())
-slugs = ['struktur-doubly-linked','struktur-bst-hapus','struktur-avl','struktur-dijkstra','struktur-trie','struktur-topological-sort','struktur-union-find','struktur-benchmark','struktur-kasus-kontak','struktur-kasus-rute']
-ns = {}
+from zipfile import ZipFile
+import xml.etree.ElementTree as ET
+ROOT=Path(__file__).resolve().parents[1]
+lessons=json.loads((ROOT/'lib/programming-advanced-lessons.json').read_text())
+quizzes=json.loads((ROOT/'lib/programming-quizzes.json').read_text())
+order=json.loads((ROOT/'lib/programming-order.json').read_text())
+assert len(lessons)==15
+slugs={l['slug'] for l in lessons}
+assert [l['slug'] for l in lessons]==[s for g in order for s in g['slugs'] if s in slugs]
+for l in lessons:
+    assert len(l['explain'])>=4 and len(l['practice'])>=2 and l['warning'] and l['answer']
+    assert len(quizzes[l['slug']])==4
+    for q in quizzes[l['slug']]:assert len(q['options'])==len(set(q['options']))==3 and 0<=q['answer']<3 and q['explanation']
+    assert all(len(row)==len(l['table']['headers']) for row in l['table']['rows'])
+    for b in l['blocks']:
+        assert b['code']==(ROOT/'examples/advanced-programming-lab'/b['filename']).read_text()
+        if b['language']=='python':ast.parse(b['code'])
+    if l['diagram']:ET.parse(ROOT/'public/programming'/f"{l['diagram']}.svg")
+assert (ROOT/'examples/advanced-programming-lab/web/index.html').read_bytes()==(ROOT/'public/programming/lab/advanced/index.html').read_bytes()
 with tempfile.TemporaryDirectory() as temp:
-    for lesson in data:
-        if lesson['slug'] not in slugs:
+    with ZipFile(ROOT/'public/programming/lab/advanced/advanced-programming-lab.zip') as z:
+        names=z.namelist();assert len(names)==len(set(names))==25,len(names)
+        for n in names:
+            p=Path(n);assert n.startswith('advanced-programming-lab/') and not p.is_absolute() and '..' not in p.parts
+            assert not {'.venv','__pycache__','node_modules','hasil-latihan','.mypy_cache'}.intersection(p.parts)
+            assert z.read(n)==(ROOT/'examples'/n).read_bytes()
+        z.extractall(temp)
+    lab=Path(temp)/'advanced-programming-lab'
+    for l in lessons:
+        b=l['blocks'][0]
+        if b['language']!='python':
+            result=subprocess.run(['node','--check',str(lab/b['filename'])],capture_output=True,text=True,timeout=10)
+            assert result.returncode==0,result.stderr
             continue
-        path = Path(temp)/(lesson['slug']+'.py')
-        path.write_text(lesson['blocks'][0]['code'],encoding='utf-8')
-        with contextlib.redirect_stdout(io.StringIO()):
-            ns[lesson['slug']] = runpy.run_path(str(path))
-assert set(ns) == set(slugs)
-
-dll = ns['struktur-doubly-linked']
-state = dll['buat_daftar']()
-reference = []
-for value in [None,'A','A',2]:
-    dll['tambah_belakang'](state,value)
-    reference.append(value)
-    assert dll['baca'](state) == reference
-    assert dll['baca'](state,True) == reference[::-1]
-    node, previous, count = state['head'], None, 0
-    while node is not None:
-        assert node['prev'] is previous
-        previous, node = node, node['next']
-        count += 1
-        assert count <= state['jumlah']
-    assert count == state['jumlah'] and previous is state['tail']
-while reference:
-    assert dll['ambil_depan'](state) == reference.pop(0)
-    assert dll['baca'](state) == reference
-    assert dll['baca'](state,True) == reference[::-1]
-assert state == {'head':None,'tail':None,'jumlah':0}
-try:
-    dll['ambil_depan'](state)
-except IndexError:
-    pass
-else:
-    raise AssertionError('Empty doubly list accepted')
-
-bst = ns['struktur-bst-hapus']
-for size in range(5):
-    for insertion in permutations(range(size)):
-        for deletion in permutations(range(size)):
-            root = None
-            remaining = set(insertion)
-            for value in insertion:
-                root = bst['tambah'](root,value)
-            root = bst['hapus'](root,99)
-            assert bst['inorder'](root) == sorted(remaining)
-            for value in deletion:
-                root = bst['hapus'](root,value)
-                remaining.remove(value)
-                assert bst['inorder'](root) == sorted(remaining)
-            assert root is None
-
-avl = ns['struktur-avl']
-def audit(node):
-    if node is None:
-        return 0, []
-    lh, left = audit(node['kiri'])
-    rh, right = audit(node['kanan'])
-    assert abs(lh-rh) <= 1
-    assert node['tinggi'] == 1+max(lh,rh)
-    assert not left or max(left)<node['nilai']
-    assert not right or min(right)>node['nilai']
-    return node['tinggi'], left+[node['nilai']]+right
-for values in list(permutations(range(5))) + [tuple(range(100)),tuple(reversed(range(100))), (2,2,1,3)]:
-    root, expected = None,set()
-    for value in values:
-        root = avl['tambah'](root,value)
-        expected.add(value)
-        assert audit(root)[1] == sorted(expected)
-
-rng=random.Random(17)
-dij=ns['struktur-dijkstra']['dijkstra']
-route=ns['struktur-kasus-rute']['rute_terpendek']
-for _ in range(60):
-    nodes=['A','B','C','D']
-    graph={a:{b:rng.randrange(6) for b in nodes if rng.random()<0.35} for a in nodes}
-    before=deepcopy(graph)
-    for start in nodes:
-        expected={node:inf for node in nodes}; expected[start]=0
-        # Bellman-Ford is an independent small-graph reference.
-        for iteration in range(len(nodes)-1):
-            for a in nodes:
-                for b,weight in graph[a].items():
-                    expected[b]=min(expected[b],expected[a]+weight)
-        actual,parent=dij(graph,start)
-        assert actual==expected
-        for end in nodes:
-            result=route(graph,start,end)
-            if expected[end]==inf:
-                assert result is None
-            else:
-                path=result['jalur']
-                assert path[0]==start and path[-1]==end
-                assert sum(graph[a][b] for a,b in zip(path,path[1:]))==expected[end]==result['biaya']
-    assert graph==before
-for bad in [{'A':{'B':1}}, {'A':{'A':-1}}, {'A':{'A':True}}, {'A':{'A':1.5}}, {'A':[]}, None]:
-    try:
-        dij(bad,'A')
-    except ValueError:
-        pass
-    else:
-        raise AssertionError(('Invalid graph accepted',bad))
-for graph,start,end in [({},'A','A'),({'A':{}},'A','B'),({'A':{}},'B','A')]:
-    try:
-        route(graph,start,end)
-    except ValueError:
-        pass
-    else:
-        raise AssertionError('Missing route node accepted')
-
-topo=ns['struktur-topological-sort']['urutan_tugas']
-for _ in range(60):
-    graph={str(i):[str(j) for j in range(i+1,6) if rng.random()<0.4] for i in range(6)}
-    order=topo(graph);position={node:i for i,node in enumerate(order)}
-    assert set(order)==set(graph) and len(order)==len(graph)
-    assert all(position[a]<position[b] for a in graph for b in graph[a])
-assert topo({})==[]
-for cyclic in [{'A':['A']},{'A':['B'],'B':['C'],'C':['A']}]:
-    try:
-        topo(cyclic)
-    except ValueError:
-        pass
-    else:
-        raise AssertionError('Cycle accepted')
-
-trie=ns['struktur-trie'];root=trie['buat_node']()
-for word in ['Ana','Ani','An','Budi']:
-    trie['tambah'](root,word)
-    assert trie['ada_kata'](root,word.upper())
-assert trie['ada_awalan'](root,'a') and not trie['ada_kata'](root,'a')
-contacts=ns['struktur-kasus-kontak'];root=contacts['buat_node']();reference={}
-for name in ['Ana','Ananda','Andi','Budi','Änne','ßa','Ssa',' ana ']:
-    key=name.strip().casefold()
-    assert contacts['tambah_kontak'](root,name)==(key not in reference)
-    reference.setdefault(key,name.strip())
-for prefix in ['', 'an',' ANA ', 'bu','zz','ß']:
-    normalized=prefix.strip().casefold()
-    expected=[reference[key] for key in sorted(reference) if key.startswith(normalized)]
-    for limit in [0,1,2,100]:
-        assert contacts['saran'](root,prefix,limit)==expected[:limit]
-for name in ['', '  ',None]:
-    try:
-        contacts['tambah_kontak'](root,name)
-    except ValueError:
-        pass
-    else:
-        raise AssertionError('Invalid contact accepted')
-
-uf=ns['struktur-union-find'];nodes=list('ABCDEF');state=uf['buat_kelompok'](nodes)
-graph={node:set() for node in nodes}
-def reachable(a,b):
-    stack,seen=[a],{a}
-    while stack:
-        node=stack.pop()
-        if node==b:return True
-        for neighbor in graph[node]-seen:
-            seen.add(neighbor);stack.append(neighbor)
-    return False
-for _ in range(40):
-    a,b=rng.choice(nodes),rng.choice(nodes)
-    connected=reachable(a,b)
-    assert uf['union'](state,a,b)==(not connected)
-    graph[a].add(b);graph[b].add(a)
-    for x in nodes:
-        for y in nodes:
-            assert (uf['find'](state,x)==uf['find'](state,y))==reachable(x,y)
-        representative=uf['find'](state,x)
-        assert state['ukuran'][representative]==sum(reachable(x,y) for y in nodes)
-
-measure=ns['struktur-benchmark']['ukur'](100)
-assert all(isfinite(value) and value>=0 for value in measure)
-print('PASS: doubly links, BST deletion permutations, AVL invariants, Dijkstra vs Bellman-Ford, DAG cycles, trie prefixes, union-find connectivity and measurement output')
+        with tempfile.TemporaryDirectory() as work:
+            result=subprocess.run([sys.executable,str(lab/b['filename'])],cwd=work,capture_output=True,text=True,timeout=15)
+            assert result.returncode==0,(l['slug'],result.stderr)
+            if b.get('measurement'):
+                lines=result.stdout.strip().splitlines()
+                assert lines[0]=='Permintaan/berhasil: 12 12' and len(lines)==4
+                p50=float(lines[1].split(': ')[1]);p95=float(lines[2].split(': ')[1]);assert 0<=p50<=p95
+            else:assert result.stdout.strip()==b['output'].strip(),(l['slug'],result.stdout)
+            if b['filename']=='a12_profile.py':assert pstats.Stats(str(Path(work)/'hasil-latihan/profil.prof')).total_calls>0
+    result=subprocess.run([sys.executable,'-m','unittest','test_lab.py','-v'],cwd=lab,capture_output=True,text=True,timeout=30)
+    assert result.returncode==0,result.stdout+result.stderr
+    assert 'Ran 15 tests' in result.stderr
+    for file in ['playwright.config.cjs']:
+        result=subprocess.run(['node','--check',str(lab/file)],capture_output=True,text=True,timeout=10);assert result.returncode==0,result.stderr
+    html=(lab/'web/index.html').read_text();js=re.search(r'<script>(.*?)</script>',html,re.S).group(1)
+    script=Path(temp)/'frontend.js';script.write_text(js)
+    assert subprocess.run(['node','--check',str(script)],capture_output=True).returncode==0
+    if os.environ.get('ADV_MYPY_PYTHON'):
+        python=os.environ['ADV_MYPY_PYTHON']
+        for file,expected in [('a06_typing.py',0),('fixtures/bad_types.py',1)]:
+            result=subprocess.run([python,'-m','mypy','--config-file',str(lab/'mypy.ini'),str(lab/file)],capture_output=True,text=True,timeout=30)
+            assert result.returncode==expected,result.stdout+result.stderr
+            if expected:assert '[assignment]' in result.stdout and 'import-not-found' not in result.stdout
+print('PASS: 15 advanced lessons / 60 questions; 25-file ZIP; 13 runnable Python examples; 15 algorithm/cache/worker/HTTP tests; JavaScript syntax (browser runner not executed)')

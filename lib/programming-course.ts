@@ -11,12 +11,13 @@ import analysis from './programming-data-analysis-lessons.json';
 import science from './programming-data-science-lessons.json';
 import networking from './programming-network-lessons.json';
 import practice from './programming-practice-lessons.json';
+import advanced from './programming-advanced-lessons.json';
 import order from './programming-order.json';
 
 export const programmingStages = order.map(group => group.title);
 type ProgrammingBlock = {label:string; code:string; output:string; explanation:string; language?:string; filename?:string; inputs?:string[]; measurement?:boolean; requiresPostgres?:boolean};
 type ProgrammingLesson = Omit<(typeof data)[number], 'blocks'> & {blocks:ProgrammingBlock[]};
-const allLessons:ProgrammingLesson[] = [...data, ...extended, ...structures, ...oop, ...databases, ...api, ...web, ...django, ...supplements, ...analysis, ...science, ...networking, ...practice];
+const allLessons:ProgrammingLesson[] = [...data, ...extended, ...structures, ...oop, ...databases, ...api, ...web, ...django, ...supplements, ...analysis, ...science, ...networking, ...practice, ...advanced];
 // One order drives the catalogue, previous/next links, search and progress.
 // Existing lesson slugs remain stable so completed marks are retained.
 export const programmingLessons = order.flatMap((group, stage) => group.slugs.map(slug => {
@@ -26,5 +27,5 @@ export const programmingLessons = order.flatMap((group, stage) => group.slugs.ma
 }));
 // Send catalogue metadata, rather than full lesson text, to client components.
 export const programmingCatalog = programmingLessons.map(({slug,title,summary,stage,minutes}) => ({slug,title,summary,stage,minutes}));
-const structureSlugs = new Set(order.filter(group => group.title === 'Struktur Data').flatMap(group => group.slugs));
+const structureSlugs = new Set(order.filter(group => (group.title === 'Struktur Data' || group.title.startsWith('Struktur Data ·'))).flatMap(group => group.slugs));
 export const dataStructureCatalog = programmingCatalog.filter(lesson => structureSlugs.has(lesson.slug));

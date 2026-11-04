@@ -66,7 +66,7 @@ def generate():
             for i, item in enumerate(cells):
                 item['id'] = f'cell-{i:02d}'
             (TARGET / (lesson['slug'] + '.ipynb')).write_text(json.dumps(notebook, ensure_ascii=False, indent=1) + '\n')
-    print('Generated 40 self-contained Colab notebooks')
+    print('Generated 43 self-contained Colab notebooks')
 
 
 if __name__ == '__main__':
