@@ -1,3 +1,4 @@
+import StudyGuide from '@/components/programming/study-guide';
 import AdvancedPracticeNote from '@/components/programming/advanced-practice-note';
 import Link from 'next/link';
 import Catalog from '@/components/programming/academy';
@@ -18,7 +19,7 @@ export default function Page() {
     <aside className="net-track-note"><strong>Studi kasus Struktur Data</strong><p><Link href="/programming/struktur-kasus-kurung">Pemeriksa pasangan tanda kurung dengan stack →</Link></p><p><Link href="/programming/struktur-kasus-prioritas">Penjadwal tugas berdasarkan prioritas →</Link></p></aside>
     <aside className="net-track-note"><strong>Studi kasus lanjutan</strong><p><Link href="/programming/struktur-kasus-kontak">Pencarian kontak berdasarkan awalan →</Link></p><p><Link href="/programming/struktur-kasus-rute">Pencarian rute termurah dengan Dijkstra →</Link></p></aside>
     <aside className="net-track-note"><strong>Pendalaman materi</strong><p><Link href="/programming/struktur-prefix-sum">Prefix sum →</Link> · <Link href="/programming/struktur-sliding-window">Sliding window →</Link></p><p>Ikuti posisi materi pada kurikulum setelah memahami prasyaratnya. Setiap tambahan dilengkapi contoh, latihan, dan tes pemahaman.</p></aside>
-    <AdvancedPracticeNote id="struktur-data"/><section id="kurikulum"><header className="iot-section-title"><p className="net-eyebrow">BELAJAR BERTAHAP</p><h2>Dari kebutuhan sederhana ke hubungan data.</h2><p>Ikuti urutan berikut. Materi memakai dictionary untuk memperkenalkan node tanpa mengharuskanmu mempelajari kelas terlebih dahulu. Daftar dan progres di halaman ini khusus untuk jalur Struktur Data.</p></header><Catalog items={items} stages={track.stages} label={track.title} homeHref={track.href} placeholder="Stack, tree, graph, heap…"/></section>
+    <AdvancedPracticeNote id="struktur-data"/><StudyGuide id="struktur-data"/><section id="kurikulum"><header className="iot-section-title"><p className="net-eyebrow">BELAJAR BERTAHAP</p><h2>Dari kebutuhan sederhana ke hubungan data.</h2><p>Ikuti urutan berikut. Materi memakai dictionary untuk memperkenalkan node tanpa mengharuskanmu mempelajari kelas terlebih dahulu. Daftar dan progres di halaman ini khusus untuk jalur Struktur Data.</p></header><Catalog items={items} stages={track.stages} label={track.title} homeHref={track.href} placeholder="Stack, tree, graph, heap…"/></section>
     <p><Link className="net-back" href="/programming">← Kembali ke Learn Programming</Link></p>
   </main>;
 }

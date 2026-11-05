@@ -1,0 +1,606 @@
+{
+  "pemrograman-terstruktur": {
+    "walk": [
+      "Baca contoh pertama sebagai dua tindakan: tampilkan sapaan, kemudian tampilkan kalimat belajar. Komputer menjalankan instruksi, bukan memahami niat penulis; urutan yang kamu tulis menentukan urutan hasilnya.",
+      "Sebelum menambahkan kode, tentukan masukan, proses, dan keluaran. Untuk menghitung biaya, masukannya harga serta jumlah, prosesnya perkalian, dan keluarannya total. Pembagian ini membantu memilih variabel yang dibutuhkan."
+    ],
+    "question": "Algoritma berbunyi: tampilkan total, lalu hitung harga × jumlah. Bagian mana yang perlu diperbaiki?",
+    "answer": "Hitung total terlebih dahulu, baru tampilkan. Program harus mempunyai hasil perhitungan sebelum hasil tersebut digunakan. Misalnya harga 10000 dan jumlah 3 menghasilkan total 30000."
+  },
+  "menjalankan-python": {
+    "walk": [
+      "Ada tiga tempat yang sering tertukar: terminal untuk perintah seperti python latihan.py, editor untuk isi file latihan.py, dan prompt >>> untuk mencoba ekspresi Python secara langsung. Ketika menyalin contoh program, tanda >>> tidak ikut dimasukkan ke file.",
+      "Simpan perubahan sebelum menjalankan ulang. Jika isi file sudah diubah tetapi hasil tetap lama, periksa apakah file yang dijalankan berada di folder yang sama dengan file yang diedit. Nama latihan.py dan latihan.py.txt juga berbeda."
+    ],
+    "question": "Terminal menyatakan tidak dapat membuka latihan.py. Apa yang diperiksa sebelum memasang ulang Python?",
+    "answer": "Periksa folder terminal, nama file beserta ekstensi, dan apakah file sudah disimpan. Python mungkin sudah bekerja; pesan itu dapat terjadi karena berkas yang diminta tidak berada pada lokasi tersebut.",
+    "diagram": {
+      "name": "belajar-menjalankan-python",
+      "alt": "Simpan latihan.py di editor, jalankan python latihan.py di terminal pada foldernya, lalu baca keluaran Halo."
+    }
+  },
+  "variabel-tipe-data": {
+    "walk": [
+      "Pada harga = 10000, tanda = memberi nama pada nilai. Pada total = harga * jumlah, Python membaca nilai harga dan jumlah terlebih dahulu, menghitung hasilnya, lalu mengaitkannya dengan nama total. Mengubah harga sesudahnya tidak otomatis menghitung ulang total.",
+      "Teks \"3\" dan angka 3 terlihat mirip saat dicetak, tetapi perilakunya berbeda. \"3\" + \"2\" menghasilkan teks \"32\", sedangkan 3 + 2 menghasilkan angka 5. Pilih tipe berdasarkan operasi yang ingin dilakukan."
+    ],
+    "question": "harga = 10000; jumlah = 2; total = harga * jumlah; jumlah = 3. Berapa total sekarang?",
+    "answer": "total tetap 20000 karena dihitung ketika jumlah masih 2. Untuk memperoleh 30000, jalankan kembali total = harga * jumlah setelah jumlah berubah."
+  },
+  "input-output-operator": {
+    "walk": [
+      "input() berhenti menunggu ketikan dan mengembalikan teks. int() mengubah teks bilangan bulat menjadi int; konversi dapat gagal bila pengguna mengetik tiga atau 3.5. Karena itu, membaca masukan dan memeriksa kebenarannya adalah dua langkah yang berbeda.",
+      "Gunakan kurung untuk memperjelas perhitungan. Pada (harga * jumlah) - diskon, subtotal dihitung dahulu. Saat membagi, / menghasilkan pembagian biasa, // membagi dengan pembulatan ke bawah, dan % menghasilkan sisa; ketiganya memiliki tujuan berbeda."
+    ],
+    "question": "Ada 17 barang, setiap kotak memuat 5. Berapa kotak penuh dan berapa sisa barang?",
+    "answer": "17 // 5 menghasilkan 3 kotak penuh dan 17 % 5 menghasilkan sisa 2. Nilai 17 / 5 adalah 3.4, yang bukan jumlah kotak penuh."
+  },
+  "percabangan-logika": {
+    "walk": [
+      "Dalam satu rangkaian if–elif–else, Python memeriksa kondisi dari atas. Ketika satu kondisi benar, bloknya dijalankan dan cabang lain pada rangkaian itu dilewati. Urutan kondisi penting ketika rentangnya saling mencakup.",
+      "Bedakan = untuk penugasan dan == untuk perbandingan. Untuk batas kelulusan, nilai >= 75 memasukkan 75 ke kelompok lulus; nilai > 75 tidak memasukkannya. Coba angka tepat di bawah, pada, dan di atas batas."
+    ],
+    "question": "Batas lulus adalah minimal 75. Apa hasil untuk nilai 74, 75, dan 76?",
+    "answer": "74 belum lulus, 75 lulus, dan 76 lulus. Ketiga kasus memeriksa apakah tanda >= dan batas 75 sudah sesuai kebutuhan."
+  },
+  "perulangan-for": {
+    "walk": [
+      "Variabel pada for menerima satu elemen setiap putaran. Pada for harga in daftar_harga, harga bukan seluruh list; ia berisi harga yang sedang diproses. Setelah isi blok selesai, perulangan berlanjut ke elemen berikutnya.",
+      "range(1, 4) menghasilkan 1, 2, 3: batas akhir tidak ikut. Untuk menampilkan nomor urut 1 sampai 3, gunakan batas akhir 4. List kosong membuat blok for tidak dijalankan satu kali pun."
+    ],
+    "question": "Berapa kali blok for i in range(2, 8, 2) berjalan dan nilai apa yang diterima i?",
+    "answer": "Tiga kali, dengan i bernilai 2, 4, dan 6. Langkah 2 menambah dua setiap putaran, dan batas 8 tidak ikut.",
+    "diagram": {
+      "name": "belajar-perulangan-for",
+      "alt": "Tiga putaran menambahkan harga 10000, 15000, dan 5000 ke total awal 0; total berturut-turut 10000, 25000, 30000."
+    }
+  },
+  "perulangan-while": {
+    "walk": [
+      "while memeriksa kondisi sebelum menjalankan blok, termasuk pada putaran pertama. Jika kondisi awal sudah salah, blok tidak dijalankan. Jika benar, perubahan nilai dalam blok harus membuat alur dapat mencapai kondisi berhenti atau break.",
+      "Saat menelusuri penghitung, tulis urutan: nilai sebelum kondisi, hasil pemeriksaan, tindakan, nilai baru. Perhatikan apakah penambahan penghitung ditempatkan sebelum atau sesudah print karena hasil yang terlihat dapat berbeda."
+    ],
+    "question": "Mulai hitung = 1. Selama hitung <= 3, tampilkan hitung lalu tambah 1. Nilai apa yang tampil dan kapan berhenti?",
+    "answer": "Yang tampil adalah 1, 2, 3. Sesudah putaran ketiga, hitung menjadi 4. Pemeriksaan 4 <= 3 salah, sehingga tidak ada putaran keempat."
+  },
+  "list-kumpulan-data": {
+    "walk": [
+      "List menyimpan urutan. Untuk [\"A\", \"B\", \"C\"], indeks 0 menunjuk A dan indeks 2 menunjuk C. len() memberi jumlah elemen, bukan indeks terakhir; untuk list tiga elemen, indeks terakhir adalah 2.",
+      "append menambahkan satu elemen di bagian akhir dan mengubah list yang sama. Jika ingin menyimpan hasil beberapa input, buat list sebelum perulangan lalu tambahkan tiap input ke list tersebut. Membuat list baru di dalam setiap putaran membuang kumpulan sebelumnya."
+    ],
+    "question": "Isi nama = [\"A\", \"B\"], lalu nama.append(\"C\"). Berapa len(nama) dan nilai nama[1]?",
+    "answer": "Panjangnya 3 dan nama[1] bernilai B. Penambahan C tidak menggeser A dan B karena C ditempatkan di akhir.",
+    "diagram": {
+      "name": "belajar-list-kumpulan-data",
+      "alt": "List tiga nama memiliki Araya pada indeks 0, Keputih pada 1, dan Petra pada 2; panjang list adalah 3."
+    }
+  },
+  "fungsi-parameter-return": {
+    "walk": [
+      "Definisi def menyiapkan fungsi; isi fungsi baru dijalankan ketika fungsi dipanggil. Parameter adalah nama masukan dalam definisi, sedangkan argumen adalah nilai yang diberikan saat pemanggilan.",
+      "return mengirim nilai kembali ke pemanggil sehingga dapat dipakai dalam perhitungan lanjutan. print hanya menampilkan. Fungsi yang berakhir tanpa return eksplisit mengembalikan None, walaupun di dalamnya ada print."
+    ],
+    "question": "Fungsi menampilkan 20 dengan print tetapi tidak memakai return. Jika hasil = fungsi(), apakah hasil berisi 20?",
+    "answer": "Tidak. hasil berisi None. Agar 20 dapat disimpan dan digunakan kembali, fungsi perlu mengembalikannya dengan return 20; pemanggil dapat mencetak hasil secara terpisah.",
+    "diagram": {
+      "name": "belajar-fungsi-parameter-return",
+      "alt": "Pemanggil memberi argumen 3 dan 4; parameter a dan b menerima nilai itu, return a * b mengembalikan 12 yang disimpan sebagai hasil."
+    }
+  },
+  "algoritma-pseudocode": {
+    "walk": [
+      "Pseudocode memakai bahasa sederhana untuk menyatakan keputusan dan urutan. Tulis aturan yang cukup jelas untuk dicoba dengan data, misalnya jika subtotal minimal 100000, diskon 10%; selain itu, diskon 0.",
+      "Sebelum menulis sintaks Python, uji rancangan menggunakan tiga input kecil. Jika hasil manual belum bisa ditentukan, perjelas aturan lebih dahulu. Kode yang rapi tetap akan memberi hasil salah bila aturan awalnya keliru."
+    ],
+    "question": "Aturan menyebut diskon untuk belanja besar. Informasi apa yang belum cukup untuk membuat program?",
+    "answer": "Batas belanja besar, besarnya diskon, apakah batas ikut, dan cara pembulatan belum jelas. Contoh aturan terukur: subtotal >= 100000 mendapat diskon 10%, dibulatkan sesuai kebijakan rupiah yang ditetapkan."
+  },
+  "kesalahan-validasi": {
+    "walk": [
+      "Pisahkan kesalahan sintaks, kegagalan saat program berjalan, dan kesalahan logika. Kurung yang belum ditutup dapat menghalangi program dimulai; int(\"abc\") dapat memicu ValueError; total yang direset setiap putaran dapat menghasilkan angka salah tanpa exception.",
+      "Tangkap exception yang memang dapat ditangani pada lokasi itu. Setelah konversi berhasil, periksa aturan nilai secara terpisah: angka -2 sah sebagai int, tetapi mungkin tidak sah sebagai jumlah barang."
+    ],
+    "question": "Mengapa input \"-2\" belum tentu diterima meskipun int(\"-2\") berhasil?",
+    "answer": "Konversi hanya memeriksa bentuk bilangan bulat. Aturan jumlah minimal 1 memerlukan pemeriksaan tambahan; -2 ditolak karena melanggar kebutuhan, bukan karena gagal dikonversi."
+  },
+  "proyek-kasir-sederhana": {
+    "walk": [
+      "Pecah proyek menjadi aturan yang dapat dihitung sendiri: subtotal menjumlahkan harga, diskon mengikuti batas, dan total bayar mengurangi diskon dari subtotal. Jangan menggabungkan semuanya sebelum setiap aturan dipahami.",
+      "Contoh ini memakai harga dalam rupiah bulat dan kebijakan diskon latihan. Untuk aturan pecahan, pajak, atau pembulatan yang berbeda, tetapkan kebijakannya terlebih dahulu dan lanjutkan ke materi Decimal; hindari menebak pembulatan dari tampilan angka."
+    ],
+    "question": "Batas diskon 10% adalah subtotal minimal 100000. Berapa total bayar untuk 99999, 100000, dan 105000?",
+    "answer": "99999 belum mendapat diskon sehingga tetap 99999. Untuk 100000, diskon 10000 dan total 90000. Untuk 105000, diskon 10500 dan total 94500. Kasus tepat pada batas membantu menemukan kesalahan tanda perbandingan."
+  },
+  "flowchart-program": {
+    "walk": [
+      "Ikuti panah dengan satu contoh nilai, bukan membaca seluruh gambar sekaligus. Pada keputusan nilai >= 75, nilai 80 mengikuti cabang Ya, sedangkan 70 mengikuti Tidak. Setelah masing-masing proses, periksa ke mana panah berikutnya menuju.",
+      "Percabangan harus mempunyai jalur yang jelas untuk hasil kondisi. Perulangan perlu panah kembali ke pemeriksaan serta jalan keluar. Gunakan simbol untuk menonjolkan logika, bukan sekadar mempercantik urutan tulisan."
+    ],
+    "question": "Pada diagram perulangan, mengapa perlu jalur keluar dari keputusan?",
+    "answer": "Tanpa jalur keluar, rancangan tidak menunjukkan kapan proses selesai. Kondisi yang salah harus membawa alur keluar, sementara kondisi benar menjalankan blok lalu kembali diperiksa."
+  },
+  "penelusuran-program": {
+    "walk": [
+      "Gunakan tabel kecil berisi putaran, angka saat ini, total sebelum, dan total sesudah. Untuk angka 2, 4, 6 dengan total awal 0, pasangan total sebelum–sesudah adalah 0–2, 2–6, dan 6–12.",
+      "Tabel penelusuran menjelaskan penyebab hasil. Jika keluaran berbeda, cari putaran pertama ketika nilai aktual menyimpang dari catatan; periksa operasi serta indentasi pada titik itu."
+    ],
+    "question": "Apa yang terjadi jika total = 0 diletakkan di awal setiap putaran untuk angka 2, 4, 6?",
+    "answer": "Total selalu kembali ke nol sebelum ditambah. Hasil sesudah setiap putaran menjadi 2, 4, lalu 6; hasil terakhir 6, bukan jumlah keseluruhan 12.",
+    "diagram": {
+      "name": "belajar-penelusuran-program",
+      "alt": "Total awal 0 ditambah 2 menjadi 2, ditambah 4 menjadi 6, lalu ditambah 6 menjadi 12."
+    }
+  },
+  "percabangan-bertingkat": {
+    "walk": [
+      "Bacalah if di dalam if sebagai pertanyaan lanjutan. Pertanyaan apakah belanja mencapai batas hanya ditanyakan setelah diketahui pembeli adalah anggota. Pembeli bukan anggota mengikuti jalur luar yang berbeda.",
+      "Coba semua kombinasi yang bermakna: anggota dengan belanja di bawah batas, anggota tepat di batas, dan bukan anggota. Jangan hanya mengganti jumlah belanja sementara status anggota selalu sama."
+    ],
+    "question": "Aturan latihan memberi anggota 20% mulai 200000 dan 10% di bawahnya; bukan anggota 0%. Berapa diskon anggota yang belanja 150000?",
+    "answer": "Diskonnya 10% × 150000 = 15000. Kondisi anggota benar, lalu kondisi belanja minimal 200000 salah, sehingga dipilih cabang anggota di bawah batas."
+  },
+  "break-continue-menu": {
+    "walk": [
+      "break menghentikan perulangan terdekat. continue melewati sisa instruksi pada putaran saat ini lalu kembali ke putaran berikutnya. Keduanya bukan perintah untuk mengakhiri seluruh program dalam semua keadaan.",
+      "Pada menu while, pilihan keluar biasanya memakai break. Masukan invalid dapat diberi pesan lalu continue agar menu ditampilkan lagi. Pastikan pembaruan penghitung tidak terlewati oleh continue pada perulangan berbasis penghitung."
+    ],
+    "question": "Untuk angka 1, 2, 3: jika angka 2 memicu continue sebelum print, apa yang tampil? Bagaimana jika memakai break?",
+    "answer": "Dengan continue, yang tampil 1 dan 3 karena putaran untuk 2 dilewati. Dengan break, hanya 1 yang tampil karena perulangan berakhir ketika mencapai 2."
+  },
+  "perulangan-bertingkat": {
+    "walk": [
+      "Untuk setiap satu putaran luar, perulangan dalam dimulai lagi dari awal. Bila luar memproses dua rak dan dalam memproses tiga slot per rak, terdapat enam pasangan rak–slot.",
+      "Bedakan jumlah pasangan dari jumlah elemen asli. Membandingkan setiap anggota list A dengan setiap anggota list B membuat len(A) × len(B) pekerjaan; jika kedua list bertambah dua kali, jumlah pasangan menjadi empat kali."
+    ],
+    "question": "Loop luar berisi A dan B, loop dalam berisi 1, 2, 3. Tuliskan urutan pasangan yang diproses.",
+    "answer": "A1, A2, A3, lalu B1, B2, B3. Loop dalam menyelesaikan ketiga slot untuk A sebelum loop luar berpindah ke B.",
+    "diagram": {
+      "name": "belajar-perulangan-bertingkat",
+      "alt": "Loop luar memproses rak A lalu B; loop dalam memproses slot 1, 2, 3. Urutannya A1, A2, A3, B1, B2, B3."
+    }
+  },
+  "pengolahan-teks": {
+    "walk": [
+      "str bersifat immutable: operasi seperti strip() dan lower() menghasilkan teks baru. Jika ingin memakai hasilnya, simpan atau teruskan nilai yang dikembalikan. Pemanggilan nama.strip() saja tidak mengubah variabel nama.",
+      "Pembersihan teks harus sesuai makna data. Menghapus spasi di tepi nama sering berguna; menghapus semua spasi dapat merusak nama lengkap. Jangan mengubah isi password atau kode yang peka huruf hanya demi menyamakan tampilan."
+    ],
+    "question": "teks = \"  BTS Araya  \". Apa hasil teks.strip().lower() dan apakah teks awal berubah?",
+    "answer": "Hasil ekspresi adalah \"bts araya\". Variabel teks tetap berisi teks awal kecuali hasil itu ditugaskan kembali, misalnya teks = teks.strip().lower()."
+  },
+  "list-lanjutan": {
+    "walk": [
+      "Slice memakai batas awal yang ikut dan batas akhir yang tidak ikut. Pada data = [10, 20, 30, 40], data[1:3] menghasilkan [20, 30]. Operasi itu membuat list baru berisi referensi elemen yang dipilih.",
+      "Saat menyaring banyak elemen, buat hasil baru atau iterasikan salinan sesuai kebutuhan. Menghapus elemen dari list yang sama ketika sedang ditelusuri dapat menggeser indeks dan membuat elemen berikutnya terlewat."
+    ],
+    "question": "Dari [10, 20, 30, 40], apa perbedaan data[1] dan data[1:2]?",
+    "answer": "data[1] adalah angka 20; data[1:2] adalah list [20]. Slice tetap menghasilkan list walaupun hanya mengambil satu elemen.",
+    "diagram": {
+      "name": "belajar-list-lanjutan",
+      "alt": "Slice data[1:3] mengambil indeks 1 dan 2 dari list [10, 20, 30, 40], menghasilkan [20, 30]."
+    }
+  },
+  "tuple-dictionary": {
+    "walk": [
+      "Tuple cocok untuk kumpulan posisi yang maknanya tetap, misalnya pasangan koordinat. Dictionary memberi nama pada setiap nilai, misalnya {\"nama\": \"BTS-LAB\", \"status\": \"up\"}; pembaca tidak harus mengingat posisi setiap atribut.",
+      "Mengakses data[\"status\"] memerlukan key tersebut ada dan dapat memicu KeyError bila hilang. data.get(\"status\") dapat mengembalikan None, tetapi pilihan ini harus sesuai kontrak: key hilang mungkin perlu ditolak, bukan disamarkan."
+    ],
+    "question": "Apa perbedaan dictionary tanpa key status dengan dictionary {\"status\": None}?",
+    "answer": "Pada yang pertama key status tidak ada, sedangkan pada yang kedua key ada dengan nilai None. Gunakan pemeriksaan \"status\" in data bila perbedaan itu penting; get saja dapat memberi None untuk keduanya."
+  },
+  "algoritma-statistik-dasar": {
+    "walk": [
+      "Rata-rata diperoleh dengan jumlah seluruh nilai dibagi banyak nilai. Untuk 60, 75, dan 90, jumlahnya 225 dan banyaknya 3 sehingga rata-ratanya 75. Tulis dua angka itu terlebih dahulu agar penyebut tidak tertukar.",
+      "List kosong tidak mempunyai nilai minimum, maksimum, atau rata-rata biasa. Tentukan perilaku sesuai kebutuhan: tolak dengan pesan, atau kembalikan penanda tidak tersedia. Mengembalikan 0 dapat disalahartikan sebagai hasil pengamatan bernilai nol."
+    ],
+    "question": "Nilai [0, 100] mempunyai rata-rata 50. Mengapa ini berbeda dengan tidak ada nilai sama sekali?",
+    "answer": "Rata-rata 50 berasal dari dua pengamatan yang sah. Data kosong tidak mempunyai penyebut, sehingga tidak ada rata-rata yang dapat dihitung; keduanya tidak boleh disamakan."
+  },
+  "pencarian-linear": {
+    "walk": [
+      "Pencarian linear memeriksa satu elemen setiap langkah sampai cocok atau data habis. Elemen pertama langsung cocok membutuhkan satu pemeriksaan; elemen terakhir atau data yang tidak cocok dapat membutuhkan pemeriksaan seluruh list.",
+      "Tentukan apa yang dikembalikan ketika tidak ditemukan. Jika memakai -1 sebagai penanda, periksa hasilnya sebelum menggunakannya sebagai indeks karena data[-1] pada Python justru mengakses elemen terakhir."
+    ],
+    "question": "Pada [\"Araya\", \"Keputih\", \"Petra\"], berapa pemeriksaan untuk mencari Keputih dan Gubeng?",
+    "answer": "Keputih membutuhkan dua pemeriksaan. Gubeng membutuhkan tiga karena seluruh elemen diperiksa tanpa kecocokan. Hasil tidak ditemukan perlu ditangani secara eksplisit."
+  },
+  "fungsi-lanjutan": {
+    "walk": [
+      "Nilai default membantu pemanggil melewati argumen yang sering sama. Namun, default yang bisa berubah seperti list dibuat ketika definisi fungsi dijalankan, bukan dibuat ulang untuk setiap pemanggilan. Gunakan None lalu buat list di dalam fungsi bila tiap pemanggilan membutuhkan kumpulan baru.",
+      "Keyword argument menyebutkan nama parameter sehingga maksud pemanggilan lebih jelas. Jangan menukar posisi nilai ketika dua parameter memiliki tipe yang sama tetapi arti berbeda, seperti harga dan jumlah."
+    ],
+    "question": "Mengapa def tambah(item, data=[]) dapat membuat hasil pemanggilan berikutnya membawa data sebelumnya?",
+    "answer": "List default dipakai kembali antar pemanggilan. Pola data=None lalu if data is None: data = [] membuat list baru ketika pemanggil tidak menyediakan data sendiri."
+  },
+  "modul-import": {
+    "walk": [
+      "Modul adalah file Python yang dapat menyediakan fungsi bagi file lain. Ketika di-import pertama kali dalam proses biasa, perintah pada tingkat atas modul dijalankan. Karena itu, contoh demo sebaiknya dipisahkan dari fungsi yang ingin dipakai ulang.",
+      "Blok if __name__ == \"__main__\": menjalankan demo ketika file dipanggil sebagai program. Saat file yang sama di-import, blok itu dilewati. Struktur ini membuat fungsi lebih mudah diuji tanpa otomatis meminta input."
+    ],
+    "question": "Sebuah modul berisi fungsi hitung dan input() pada tingkat atas. Apa yang dapat terjadi saat modul di-import oleh test?",
+    "answer": "input() dapat ikut dijalankan sehingga test menunggu ketikan. Pindahkan alur interaktif ke fungsi main dan panggil melalui penjaga __name__ agar import hanya menyiapkan fungsi."
+  },
+  "file-teks-csv-json": {
+    "walk": [
+      "Path relatif dihitung dari folder kerja proses, yang belum tentu sama dengan folder berkas program. Ketika file tidak ditemukan, periksa lokasi terminal dan lokasi file yang sebenarnya sebelum mengubah kode pembaca.",
+      "CSV menyimpan data dalam baris dan kolom; JSON dapat menyimpan objek serta list bersarang. Keduanya tetap perlu validasi isi. Angka pada CSV biasanya dibaca sebagai teks lebih dahulu dan perlu dikonversi sesuai aturan."
+    ],
+    "question": "Mengapa nilai \"15000\" yang dibaca dari CSV belum langsung dijumlahkan sebagai rupiah?",
+    "answer": "Pembaca CSV menghasilkan teks. Validasi dan ubah menjadi angka yang sesuai terlebih dahulu, lalu jumlahkan. Jika langsung digabung sebagai teks, \"15000\" + \"5000\" menghasilkan \"150005000\"."
+  },
+  "struktur-kompleksitas": {
+    "walk": [
+      "Bayangkan n sebagai jumlah data, bukan nilai angka terbesar. Loop satu kali melewati n elemen mempunyai pekerjaan yang tumbuh sebanding dengan n. Dua loop bersarang yang masing-masing melewati seluruh n dapat menghasilkan n × n pasangan.",
+      "Big O merangkum pertumbuhan, sementara pengukuran waktu dipengaruhi komputer, ukuran kecil, dan implementasi. Algoritma O(n log n) tidak otomatis lebih cepat pada setiap input kecil; gunakan kebutuhan dan bukti pengukuran yang sesuai."
+    ],
+    "question": "Jika setiap data dibandingkan dengan setiap data lain, berapa pasangan saat n berubah dari 10 menjadi 20?",
+    "answer": "Dari 10 × 10 = 100 menjadi 20 × 20 = 400 pasangan. Jumlah input dua kali tetapi pasangan empat kali; ini menggambarkan pertumbuhan kuadratik."
+  },
+  "struktur-stack": {
+    "walk": [
+      "Anggap bagian akhir list sebagai puncak stack. append menaruh elemen di puncak dan pop tanpa indeks mengambil elemen dari puncak yang sama. Elemen yang baru masuk menjadi yang pertama keluar.",
+      "Untuk undo, simpan tindakan yang dapat dibalik lalu ambil tindakan terakhir. Stack hanya mengatur urutan; cara membatalkan tindakan tetap harus dirancang. Periksa kondisi kosong sebelum pop bila kosong bukan error yang diharapkan."
+    ],
+    "question": "Masukkan A, B, C ke stack, lalu lakukan pop dua kali. Apa yang diambil dan apa sisanya?",
+    "answer": "Yang diambil C lalu B. Sisanya [A]. Ini urutan LIFO: last in, first out, atau terakhir masuk, pertama keluar."
+  },
+  "struktur-queue": {
+    "walk": [
+      "Queue menambah di belakang dan mengambil dari depan. Pada collections.deque, append menambahkan di belakang dan popleft mengambil dari depan sehingga operasi pelayanan mengikuti urutan kedatangan.",
+      "Antrean berprioritas berbeda dari queue biasa: prioritas dapat mengalahkan waktu kedatangan. Tentukan lebih dahulu apakah semua pekerjaan setara atau membutuhkan aturan prioritas dan pemecah seri."
+    ],
+    "question": "Antrean A, B, C dilayani satu kali, lalu D masuk. Bagaimana isi antrean dan siapa berikutnya?",
+    "answer": "A keluar, kemudian D ditambahkan di belakang sehingga antrean menjadi B, C, D. B dilayani berikutnya."
+  },
+  "struktur-binary-search": {
+    "walk": [
+      "Binary search memerlukan data terurut menurut kunci yang sama dengan perbandingan pencarian. Bandingkan target dengan elemen tengah, lalu buang separuh rentang yang pasti tidak mungkin memuat target.",
+      "Catat batas kiri dan kanan setelah setiap langkah. Jika target lebih kecil dari elemen tengah, batas kanan bergerak ke sebelum tengah; jika lebih besar, batas kiri bergerak ke sesudah tengah pada varian batas inklusif. Pengecilan rentang memastikan proses berhenti."
+    ],
+    "question": "Pada [10, 20, 30, 40, 50], target 40. Dengan indeks tengah dibulatkan ke bawah, elemen apa yang diperiksa?",
+    "answer": "Pertama 30 pada indeks 2. Target lebih besar sehingga sisa rentang indeks 3–4. Titik tengah berikutnya indeks 3 berisi 40, lalu pencarian selesai."
+  },
+  "oop-class-object": {
+    "walk": [
+      "Nama class menyatakan jenis, sedangkan variabel objek menunjuk instance tertentu. Membuat dua objek membutuhkan dua pemanggilan pembuat objek; menulis b = a hanya memberi nama kedua pada objek yang sama.",
+      "Gunakan contoh kecil untuk memeriksa identitas: ubah atribut melalui a, lalu baca melalui b. Bila b = a, perubahan terlihat dari keduanya karena keduanya merujuk objek yang sama."
+    ],
+    "question": "Setelah b = a, apakah b menjadi salinan objek a yang dapat diubah secara terpisah?",
+    "answer": "Tidak. a dan b merujuk objek yang sama. Buat instance lain atau gunakan strategi salinan yang sesuai; salinan dangkal juga masih dapat berbagi objek bersarang.",
+    "diagram": {
+      "name": "belajar-oop-class-object",
+      "alt": "Class Perangkat menjadi definisi dua instance terpisah: A bernama Araya berstatus up dan B bernama Keputih berstatus down. Penugasan b = a bukan membuat instance baru."
+    }
+  },
+  "oop-init-self": {
+    "walk": [
+      "Ketika perangkat.ubah_status(\"up\") dipanggil sebagai instance method biasa, Python memberikan perangkat sebagai self. Parameter lain menerima nilai yang ditulis pemanggil, yaitu \"up\".",
+      "__init__ menyiapkan keadaan awal instance yang baru dibuat. Nama parameter seperti nama hanya lokal bagi method; self.nama menyimpan atribut pada instance agar dapat dibaca method lain sesudah __init__ selesai."
+    ],
+    "question": "Apa perbedaan nama = \"Araya\" dan self.nama = \"Araya\" di dalam __init__?",
+    "answer": "nama adalah variabel lokal pada method, sedangkan self.nama adalah atribut instance. Atribut dapat dibaca lagi melalui objek setelah inisialisasi selesai."
+  },
+  "oop-komposisi": {
+    "walk": [
+      "Pada komposisi, suatu objek menerima objek lain untuk membantu tugasnya. Misalnya layanan laporan menerima repository; layanan mengatur proses, repository menyimpan dan membaca data.",
+      "Hubungan ini memudahkan pengujian karena repository dapat diganti implementasi latihan. Tetap tetapkan kontrak method yang dibutuhkan supaya pengganti mempunyai perilaku yang sejalan, bukan hanya nama method yang sama."
+    ],
+    "question": "Mengapa layanan laporan sebaiknya tidak menulis SQL di setiap method perhitungannya?",
+    "answer": "Perhitungan dan penyimpanan memiliki alasan perubahan yang berbeda. Repository dapat memusatkan akses data, sementara layanan tetap fokus pada aturan laporan dan lebih mudah diuji dengan data kecil."
+  },
+  "db-join": {
+    "walk": [
+      "Baca JOIN sebagai pencocokan baris menurut kondisi ON. Untuk satu pelanggan dengan dua tiket, pelanggan itu dapat muncul dua kali pada hasil karena ada dua pasangan yang cocok. JOIN tidak otomatis menghilangkan pengulangan.",
+      "LEFT JOIN mempertahankan baris kiri yang tidak mempunyai pasangan, dengan kolom kanan bernilai NULL. Filter tabel kanan di WHERE dapat menghapus baris tanpa pasangan; pikirkan apakah kondisi seharusnya menjadi bagian ON."
+    ],
+    "question": "Pelanggan A memiliki dua tiket, B tidak punya. Berapa baris LEFT JOIN pelanggan ke tiket sebelum agregasi?",
+    "answer": "Tiga baris: dua pasangan untuk A dan satu baris B dengan kolom tiket NULL. Untuk menghitung tiket per pelanggan, hitung kolom id tiket, bukan COUNT(*) pada hasil LEFT JOIN.",
+    "diagram": {
+      "name": "belajar-db-join",
+      "alt": "Dua pelanggan Ana dan Budi; Ana memiliki tiket 101 dan 102. LEFT JOIN menghasilkan Ana–101, Ana–102, dan Budi–NULL. Hitungan tiket Budi adalah nol."
+    }
+  },
+  "db-transaksi": {
+    "walk": [
+      "Transaksi menyatukan operasi yang secara bisnis harus berhasil bersama. Misalnya pengurangan stok dan pencatatan pengeluaran barang: jika pencatatan gagal, perubahan stok perlu dibatalkan sesuai kontrak.",
+      "commit menegaskan perubahan transaksi; rollback membatalkan perubahan yang belum di-commit. Menulis dua pernyataan SQL berurutan saja belum menjelaskan batas transaksi—periksa cara koneksi dan driver mengelolanya."
+    ],
+    "question": "Stok berhasil dikurangi, tetapi pencatatan mutasi gagal sebelum commit dalam transaksi yang sama. Apa tindakan yang diharapkan?",
+    "answer": "Rollback sehingga pengurangan stok tidak tersimpan tanpa catatan mutasi. Setelah itu, tangani kegagalan dan periksa keadaan; jangan mengirim pesan sukses sebelum transaksi berhasil.",
+    "diagram": {
+      "name": "belajar-db-transaksi",
+      "alt": "Dalam transaksi yang sama, pengurangan stok dan pencatatan mutasi diselesaikan dengan commit bila berhasil; bila salah satunya gagal sebelum commit, rollback membatalkan perubahan."
+    }
+  },
+  "db-parameter": {
+    "walk": [
+      "Kueri berparameter memisahkan struktur SQL dari nilai data. Placeholder menandai tempat driver memasukkan nilai dengan mekanisme yang benar. Jangan memasukkan tanda kutip sendiri di sekitar placeholder sebagai pengganti parameter.",
+      "Parameter nilai bukan cara memilih nama tabel atau kolom. Jika nama kolom dapat dipilih pengguna, petakan pilihan yang diizinkan ke nama yang sudah ditentukan aplikasi."
+    ],
+    "question": "Pencarian menerima nama O'Neil. Mengapa penggabungan teks SQL rawan bermasalah?",
+    "answer": "Tanda petik pada nama dapat mengubah struktur SQL yang dirangkai. Berikan nama sebagai parameter sehingga diperlakukan sebagai nilai, tanpa menyusun ulang struktur pernyataan dari masukan."
+  },
+  "api-http-json": {
+    "walk": [
+      "Pisahkan empat pertanyaan: metode apa, path mana, data apa, dan respons apa. GET /tiket/7 meminta detail; JSON dalam body adalah bentuk data, bukan metode HTTP dan bukan database itu sendiri.",
+      "Status dan body dibaca bersama. Respons 404 tetap merupakan jawaban HTTP; kegagalan koneksi terjadi sebelum jawaban aplikasi diterima. Client perlu membedakan keduanya agar pesan dan keputusan retry tepat."
+    ],
+    "question": "Server menjawab 404 dengan JSON berisi pesan tidak ditemukan. Apakah ini berarti client tidak berhasil terhubung ke server HTTP?",
+    "answer": "Tidak. Client menerima respons HTTP yang menyatakan sumber daya tidak ditemukan. Ini berbeda dari koneksi ditolak atau waktu tunggu habis tanpa respons."
+  },
+  "api-validasi-error": {
+    "walk": [
+      "Periksa bentuk data sebelum menjalankan aturan: apakah body berupa objek, kolom yang diwajibkan ada, dan tipe nilainya sesuai? Setelah itu, periksa makna seperti panjang judul atau nilai jumlah minimal.",
+      "Pesan error sebaiknya membantu client memperbaiki input melalui kolom dan alasan yang jelas. Detail internal seperti connection string atau traceback tidak perlu dikirim kepada pemanggil."
+    ],
+    "question": "Mengapa jumlah = -1 dapat lolos pemeriksaan tipe integer tetapi tetap ditolak API?",
+    "answer": "Tipe integer hanya menyatakan bentuk data. Jika kontraknya jumlah minimal 1, nilai -1 melanggar batas bisnis dan harus ditolak sebelum perubahan data dilakukan."
+  },
+  "api-pengujian": {
+    "walk": [
+      "Mulai dari satu endpoint dan tulis harapan yang dapat diamati: status, kolom response, serta efek pada data. Pengujian yang hanya memastikan request tidak menimbulkan exception dapat melewatkan isi yang salah.",
+      "Pasangkan kasus sukses dengan kasus gagal yang penting. Setelah request invalid, periksa pula bahwa jumlah data tidak bertambah. Pada pengujian izin, gunakan dua identitas agar kepemilikan benar-benar diuji."
+    ],
+    "question": "Request judul kosong menghasilkan error yang benar, tetapi database bertambah satu tiket. Apakah pengujian seharusnya lulus?",
+    "answer": "Tidak. Kontrak kegagalan juga mencakup tidak adanya perubahan yang tidak sah. Assert status saja belum cukup; periksa efek database atau keadaan yang relevan."
+  },
+  "netprog-bytes": {
+    "walk": [
+      "Tulisan yang terlihat di layar adalah karakter; jaringan membawa byte. Huruf ASCII umumnya satu byte UTF-8, tetapi karakter lain dapat memakai beberapa byte. Karena itu, hitung panjang payload setelah encode.",
+      "Jika satu karakter terbelah di dua hasil recv, potongan pertama belum bisa di-decode sendiri secara lengkap. Rangkai bytes sesuai framing lalu decode, atau gunakan decoder incremental yang menjaga sisa byte."
+    ],
+    "question": "Teks \"27°C\" terdiri dari 4 karakter. Berapa byte ketika di-encode UTF-8?",
+    "answer": "5 byte: 2, 7, dan C masing-masing satu byte, sedangkan ° dua byte. Panjang frame adalah len(teks.encode(\"utf-8\")), bukan selalu len(teks).",
+    "diagram": {
+      "name": "belajar-netprog-bytes",
+      "alt": "Teks 27°C mempunyai empat karakter. Encoding UTF-8 menghasilkan byte heksadesimal 32, 37, C2 B0, 43, sehingga panjang payload lima byte."
+    }
+  },
+  "netprog-framing": {
+    "walk": [
+      "Header panjang adalah janji jumlah byte berikutnya, bukan jaminan seluruhnya tiba dalam satu recv. Fungsi pembaca perlu menambah potongan ke buffer sampai panjang yang diminta terpenuhi.",
+      "Periksa batas panjang sebelum menerima payload besar. Jika koneksi berakhir saat buffer belum lengkap, tandai pesan terpotong; jangan memproses potongan JSON seolah-olah merupakan pesan sah."
+    ],
+    "question": "Header menyatakan 10 byte. recv pertama memberi 4 byte dan kedua 6 byte. Berapa pesan yang diterima?",
+    "answer": "Satu payload 10 byte, yang kebetulan datang dalam dua potongan. Jumlah panggilan recv tidak menentukan jumlah pesan aplikasi."
+  },
+  "netprog-timeout": {
+    "walk": [
+      "Catat operasi yang sedang berlangsung ketika timeout terjadi. Timeout saat connect berbeda dari timeout menunggu body balasan; informasi ini membantu memilih pemeriksaan berikutnya.",
+      "Bila setiap recv mempunyai timeout 3 detik, beberapa recv berurutan dapat menghabiskan lebih dari 3 detik total. Deadline keseluruhan perlu dihitung terpisah, biasanya menggunakan jam monotonic untuk selang waktu."
+    ],
+    "question": "Client timeout sesudah mengirim permintaan tulis. Apakah aman menyimpulkan server belum melakukan perubahan?",
+    "answer": "Tidak. Server mungkin sudah memproses permintaan, tetapi balasan terlambat atau hilang. Periksa kontrak operasi dan mekanisme idempotensi sebelum mengirim ulang."
+  },
+  "web-css-dasar": {
+    "walk": [
+      "Pilih satu elemen di DevTools dan lihat aturan mana yang benar-benar berlaku. Selector menentukan elemen sasaran; property menentukan bagian yang diubah, seperti color; value menentukan nilainya.",
+      "Ukuran elemen berkaitan dengan content, padding, border, dan margin. Dengan box-sizing: border-box, width mencakup content, padding, dan border. Margin tetap berada di luar kotak tersebut."
+    ],
+    "question": "Elemen memiliki width 200px, padding 10px di kedua sisi dan border 1px, tanpa border-box. Berapa lebar kotak hingga border?",
+    "answer": "222px: content 200 + padding 20 + border 2. Dengan border-box dan width yang sama, lebar hingga border tetap 200px; ruang content menjadi lebih kecil.",
+    "diagram": {
+      "name": "belajar-web-css-dasar",
+      "alt": "Kotak content dikelilingi padding, border, lalu margin. Dengan content-box, width 200px ditambah padding dua kali 10px dan border dua kali 1px menghasilkan 222px; border-box memasukkannya ke dalam 200px."
+    }
+  },
+  "web-dom-event": {
+    "walk": [
+      "querySelector mencari elemen pada DOM saat perintah dijalankan. Jika elemen belum ada atau selector salah, hasilnya null sehingga pemanggilan method berikutnya dapat gagal. Baca Console untuk mengetahui objek mana yang tidak ditemukan.",
+      "addEventListener menyiapkan fungsi yang dipanggil ketika event terjadi. Fungsi tersebut tidak harus langsung dijalankan saat halaman dibuka. textContent mengisi teks tanpa menafsirkan input sebagai markup HTML."
+    ],
+    "question": "Mengapa tombol sudah terlihat tetapi handler klik tidak berjalan ketika JavaScript gagal lebih awal?",
+    "answer": "Browser dapat menampilkan HTML walaupun eksekusi script berhenti pada error. Periksa error pertama di Console, selector, dan urutan pemuatan script sebelum menyimpulkan tombol rusak.",
+    "diagram": {
+      "name": "belajar-web-dom-event",
+      "alt": "Pada pohon DOM, document memuat main, lalu main memuat button dengan id simpan dan paragraf dengan id status. Handler klik dapat memperbarui textContent paragraf status."
+    }
+  },
+  "web-formulir": {
+    "walk": [
+      "Pada demo, required dan type=email membantu pemeriksaan browser. Handler juga memeriksa judul yang hanya berisi spasi karena string yang tidak kosong belum tentu judul yang bermakna.",
+      "event.preventDefault() menghentikan pengiriman bawaan pada alur demo. Pesan input lolos menunjukkan hasil validasi lokal; tanpa fetch atau pengiriman form, belum ada tiket yang tersimpan di server."
+    ],
+    "question": "Demo menampilkan input lolos pemeriksaan browser. Apakah tiket sudah tersimpan?",
+    "answer": "Belum. Demo ini tidak mengirim request pembuatan tiket. Penyimpanan memerlukan endpoint server, pemeriksaan server, dan konfirmasi hasil penyimpanan."
+  },
+  "django-url-view": {
+    "walk": [
+      "URLconf menentukan view yang dipanggil berdasarkan path. View menerima request dan parameter dari URL, lalu harus mengembalikan response. Template hanya salah satu cara menyusun isi response.",
+      "Nama pola URL membantu membangun tautan tanpa menulis path berulang. Gunakan reverse atau tag url sesuai konteks agar perubahan path tidak mengharuskan mengganti semua tautan secara manual."
+    ],
+    "question": "Path detail memuat angka ID perangkat. Apakah menemukan pola URL yang cocok sudah membuktikan perangkat tersebut ada?",
+    "answer": "Belum. Pola hanya mengekstrak ID dan memilih view. View masih perlu mengambil perangkat yang sesuai, memeriksa akses, dan memberi respons tidak ditemukan bila tidak tersedia bagi pengguna itu.",
+    "diagram": {
+      "name": "belajar-django-url-view",
+      "alt": "URLconf mencocokkan path dan memilih view; view memeriksa akses serta mengambil data melalui ORM; template dirender menjadi response HTML. ID pada URL belum membuktikan data tersedia atau boleh diakses."
+    }
+  },
+  "django-model-orm": {
+    "walk": [
+      "Model mendefinisikan struktur data dan perilaku terkait, tetapi mengubah file model saja belum mengubah skema database. Perubahan perlu dibuat sebagai migration lalu diterapkan pada database target.",
+      "QuerySet menyatakan kueri yang dapat dirangkai dan umumnya baru dievaluasi ketika hasilnya dibutuhkan. Perhatikan akses relasi di perulangan karena dapat memicu banyak kueri tambahan; materi query relasi membahas cara memeriksanya."
+    ],
+    "question": "Setelah menambahkan kolom pada model, aplikasi memberi error kolom belum ada. Langkah apa yang diperiksa?",
+    "answer": "Periksa apakah migration sudah dibuat dan diterapkan ke database yang benar. Gunakan makemigrations, showmigrations, dan migrate sesuai alur lab; jangan langsung menghapus database untuk menghilangkan pesan."
+  },
+  "django-login-izin": {
+    "walk": [
+      "Login menjawab siapa pengguna. Permission dan filter kepemilikan menjawab data serta tindakan mana yang boleh diakses. Kedua pemeriksaan harus ada pada server walaupun tampilan menyembunyikan tombol tertentu.",
+      "Saat mencari tiket milik pengguna, batasi QuerySet berdasarkan pemilik sebelum mengambil ID yang diminta. Ini menghindari akses lintas akun hanya dengan mengganti angka pada URL."
+    ],
+    "question": "Pengguna A mengganti URL menjadi ID tiket B. Mengapa mengecek login saja belum cukup?",
+    "answer": "A memang sudah terautentikasi, tetapi belum berhak membaca tiket B. View perlu memeriksa kepemilikan atau permission yang sesuai sebelum memberikan data.",
+    "diagram": {
+      "name": "belajar-django-login-izin",
+      "alt": "Ana yang sudah login dapat mengakses tiket 101 miliknya, tetapi tidak tiket 102 milik Budi. Pengguna yang belum login perlu login. Server harus memeriksa identitas dan kepemilikan."
+    }
+  },
+  "da-kualitas-data": {
+    "walk": [
+      "Mulai dengan arti satu baris, jumlah baris, tipe kolom, dan nilai yang hilang. Tuliskan aturan sebelum membersihkan: jumlah harus numerik, tanggal harus dapat dibaca, dan identitas harus sesuai kebutuhan.",
+      "Simpan jumlah baris yang diterima dan ditolak beserta alasan. Menghapus baris invalid tanpa catatan membuat laporan sulit diperiksa; mengisi semua nilai hilang dengan nol dapat mengubah makna."
+    ],
+    "question": "Kolom durasi kosong berarti belum diukur. Mengapa mengisinya dengan 0 dapat menyesatkan rata-rata?",
+    "answer": "Nol berarti ada pengukuran berdurasi nol, sedangkan kosong berarti tidak tersedia. Mengisinya dengan nol menambah penyebut dan menurunkan rata-rata tanpa bukti pengamatan."
+  },
+  "da-agregasi": {
+    "walk": [
+      "Sebelum groupby, tulis apa yang menjadi kelompok dan apa yang dirangkum. Total rupiah per kategori menjumlahkan nominal, sedangkan jumlah transaksi menghitung baris yang memenuhi definisi transaksi.",
+      "Periksa arti count dan size: count menghitung nilai non-missing pada kolom yang dipilih, sedangkan size menghitung baris per kelompok. Pilihan ini berpengaruh bila sebagian nominal kosong."
+    ],
+    "question": "Satu kelompok berisi nominal [10000, kosong, 20000]. Berapa jumlah baris dan berapa nominal terisi?",
+    "answer": "Ada 3 baris dan 2 nominal terisi. Penjumlahan nominal yang tersedia 30000 harus disertai penjelasan satu nilai belum tersedia bila itu relevan terhadap laporan.",
+    "diagram": {
+      "name": "belajar-da-agregasi",
+      "alt": "Tiga baris memiliki nominal 10000, kosong, dan 20000: jumlah baris tiga, nominal terisi dua, dan jumlah nilai yang tersedia 30000. Nilai kosong belum membuktikan nominalnya nol."
+    }
+  },
+  "da-join-sql": {
+    "walk": [
+      "Periksa keunikan kunci pada kedua tabel sebelum merge. Jika satu kode muncul dua kali di kiri dan tiga kali di kanan, penggabungan dapat menghasilkan enam pasangan untuk kode tersebut.",
+      "Gunakan pemeriksaan kardinalitas sesuai kebutuhan dan cocokkan total sebelum–sesudah merge. Penggabungan yang berjalan tanpa error sintaks belum membuktikan angka laporan tetap benar."
+    ],
+    "question": "Tabel transaksi memuat 2 baris kode A dan tabel referensi tanpa sengaja memuat 3 baris kode A. Berapa pasangan setelah join?",
+    "answer": "Enam pasangan. Nilai transaksi dapat terhitung tiga kali jika langsung dijumlahkan; benahi kunci referensi atau aturan penggabungan sebelum membuat laporan."
+  },
+  "ds-split-leakage": {
+    "walk": [
+      "Tentukan kapan prediksi dibuat, lalu tanyakan apakah setiap fitur sudah tersedia pada waktu itu. Kolom hasil akhir dapat sangat akurat memprediksi target karena membawa jawaban, bukan karena model memahami pola yang dapat digunakan.",
+      "Transformasi yang belajar dari data juga mengikuti batas split. Imputasi dengan median seluruh data memberi training informasi dari test; fit transformasi pada training lalu gunakan transformasi yang sama untuk data lain."
+    ],
+    "question": "Model memprediksi durasi tiket ketika tiket masuk. Bolehkah waktu selesai dipakai sebagai fitur?",
+    "answer": "Tidak, karena waktu selesai belum diketahui ketika prediksi dibuat dan langsung berkaitan dengan target durasi. Memakainya menyebabkan leakage dan evaluasi yang tidak menggambarkan pemakaian sebenarnya."
+  },
+  "ds-pipeline": {
+    "walk": [
+      "Pipeline menyusun transformasi dan model dalam urutan yang dapat dipanggil bersama. Saat fit pada training, tahap awal mempelajari transformasi dan tahap akhir mempelajari model; saat predict, parameter yang sudah dipelajari digunakan kembali.",
+      "Memasukkan preprocessing ke pipeline membantu cross-validation mempelajari transformasi hanya pada bagian training setiap fold. Pipeline tetap tidak memperbaiki fitur yang sudah mengandung informasi masa depan; rancangan data harus benar terlebih dahulu."
+    ],
+    "question": "Mengapa scaler yang di-fit sebelum cross-validation dapat memberi evaluasi terlalu optimistis?",
+    "answer": "Scaler sudah belajar statistik dari data yang nantinya menjadi bagian validasi. Letakkan scaler dalam pipeline agar di-fit ulang hanya pada training di setiap fold.",
+    "diagram": {
+      "name": "belajar-ds-pipeline",
+      "alt": "Transformasi dan model di-fit pada training. Data test ditransformasi menggunakan parameter tersimpan lalu diprediksi dan dievaluasi. Pada cross-validation, pipeline di-fit ulang pada training masing-masing fold."
+    }
+  },
+  "ds-kelas-imbalance": {
+    "walk": [
+      "Hitung sebaran kelas sebelum memilih metrik. Jika 99 dari 100 observasi berkelas normal, model yang selalu menjawab normal memperoleh akurasi 99% tetapi tidak menemukan satu pun kasus gangguan.",
+      "Precision membahas seberapa banyak prediksi positif yang benar; recall membahas seberapa banyak positif sebenarnya yang ditemukan. Pilih ambang dengan mempertimbangkan biaya salah alarm dan gangguan terlewat, menggunakan data validasi."
+    ],
+    "question": "Ada 10 gangguan nyata. Model menandai 8 positif; 6 benar gangguan. Berapa precision dan recall?",
+    "answer": "Precision 6/8 = 75%, recall 6/10 = 60%. Dua prediksi adalah alarm palsu, sementara empat gangguan tidak ditemukan.",
+    "diagram": {
+      "name": "belajar-ds-kelas-imbalance",
+      "alt": "Dari sepuluh gangguan nyata, enam terdeteksi dan empat terlewat. Dari delapan prediksi gangguan, enam benar dan dua alarm palsu. Precision 75 persen dan recall 60 persen; jumlah normal yang benar tidak ditentukan oleh contoh ini."
+    }
+  },
+  "uji-unit": {
+    "walk": [
+      "Arrange menyiapkan masukan, Act memanggil perilaku yang diuji, dan Assert memeriksa hasil. Nama test sebaiknya menyatakan situasi serta harapan, sehingga kegagalan lebih mudah dimengerti.",
+      "Hitung harapan dari aturan kebutuhan, bukan dengan memanggil fungsi produksi yang sama sekali lagi. Jika perhitungan harapan mengulang bug implementasi, test dapat lulus walaupun perilakunya salah."
+    ],
+    "question": "Untuk input dua ok dan satu timeout, apa harapan rasio_ok yang dihitung tanpa memanggil ringkas?",
+    "answer": "Jumlah ok adalah 2 dan total observasi 3, sehingga rasio 2/3. Bila membandingkan float hasil komputasi berbeda, gunakan toleransi yang sesuai, misalnya pytest.approx untuk kasus tersebut."
+  },
+  "uji-fixture": {
+    "walk": [
+      "Fixture menyiapkan kondisi yang dibutuhkan test dan dapat membersihkannya setelah selesai. Pilih cakupan agar perubahan satu test tidak bocor ke test lain, terutama bila fixture berisi list atau database yang dapat diubah.",
+      "Parametrization cocok untuk satu aturan dengan beberapa kombinasi input–hasil. Satu kasus gagal tetap harus menampilkan input yang menyebabkan masalah; jangan menyembunyikan semua kombinasi di dalam loop tanpa identitas kasus."
+    ],
+    "question": "Tiga test mengubah list fixture yang sama. Mengapa urutan menjalankan test bisa memengaruhi hasil?",
+    "answer": "Keadaan yang diubah test sebelumnya dapat dipakai test berikutnya. Siapkan data baru per test atau atur pembersihan serta scope fixture sesuai kebutuhan agar test mandiri.",
+    "diagram": {
+      "name": "belajar-uji-fixture",
+      "alt": "Tiga test masing-masing menerima data baru dan memeriksa perubahannya sendiri. Data yang dimutasi test A tidak boleh tanpa sengaja dipakai sebagai keadaan awal test B."
+    }
+  },
+  "uji-debugging": {
+    "walk": [
+      "Baca baris terakhir traceback untuk jenis dan pesan exception, lalu telusuri frame kode milikmu. Baris yang gagal menunjukkan lokasi gejala; nilai salah dapat berasal dari pemanggil beberapa langkah sebelumnya.",
+      "Buat input sekecil mungkin yang masih memicu masalah. Periksa variabel sebelum operasi gagal, tulis harapan yang benar, kemudian simpan kasus itu sebagai test agar perbaikan dapat diperiksa ulang."
+    ],
+    "question": "Pembagian gagal karena list kosong. Mengapa mengganti penyebut menjadi 1 belum tentu perbaikan yang benar?",
+    "answer": "Perubahan itu menyembunyikan ketidaktersediaan data dan menciptakan arti hasil yang belum disepakati. Tentukan kontrak untuk input kosong, misalnya menolak atau memberi None, lalu uji perilakunya."
+  },
+  "proyek-lingkungan": {
+    "walk": [
+      "Virtual environment memisahkan paket proyek dari proyek lain. Gunakan python -m pip agar pemasangan mengikuti interpreter Python yang sedang dipakai, lalu periksa interpreter bila import belum ditemukan.",
+      "Dependensi dan konfigurasi berbeda: daftar dependensi menyatakan paket yang dibutuhkan, sedangkan konfigurasi menyatakan nilai untuk lingkungan tertentu, seperti folder output. Rahasia runtime tidak dimasukkan ke kode contoh atau Git."
+    ],
+    "question": "pip menyatakan paket sudah ada, tetapi python program.py gagal import. Apa yang perlu dibandingkan?",
+    "answer": "Bandingkan interpreter dan environment untuk pip serta python. Jalankan python -m pip show nama_paket dari interpreter yang sama, dan pastikan terminal menggunakan virtual environment proyek."
+  },
+  "otomasi-csv": {
+    "walk": [
+      "Pisahkan error tingkat file dari error tingkat baris. Header yang tidak sesuai dapat membuat seluruh file tidak dapat ditafsirkan, sedangkan satu nilai salah dapat dikarantina bila kontrak impor memang mengizinkan baris lain diteruskan.",
+      "Catat nomor baris dan alasan penolakan tanpa menghilangkan data sumber. Laporan akhir harus memperlihatkan jumlah dibaca, diterima, serta ditolak agar operator dapat merekonsiliasi hasil."
+    ],
+    "question": "Dari 10 baris, 2 ditolak. Informasi apa yang perlu ada agar laporan 8 baris valid dapat dipercaya?",
+    "answer": "Definisi valid, jumlah total 10, jumlah diterima 8, jumlah ditolak 2, serta identitas baris dan alasan penolakannya. Tentukan juga apakah proses dianggap sukses sebagian atau gagal menurut kontrak impor.",
+    "diagram": {
+      "name": "belajar-otomasi-csv",
+      "alt": "Dari sepuluh baris sumber, delapan diterima dan dua ditolak. Baris ditolak perlu nomor dan alasan. Kontrak contoh mengizinkan penerusan baris valid; file sumber tetap dapat ditelusuri."
+    }
+  },
+  "otomasi-jadwal": {
+    "walk": [
+      "Penjadwal hanya memicu proses pada waktu tertentu; program tetap harus menangani input, error, dan hasil. Tentukan zona waktu secara tertulis agar jadwal tidak berubah arti ketika pindah server.",
+      "Pikirkan pemanggilan ulang dan job bertumpuk secara terpisah. Kunci proses dapat membatasi dua job bersamaan, sedangkan idempotensi mencegah input yang sama menghasilkan efek ganda pada pemanggilan berikutnya."
+    ],
+    "question": "Job berjalan tiap 5 menit tetapi memerlukan 8 menit. Masalah apa yang dapat muncul?",
+    "answer": "Pemanggilan berikutnya dapat dimulai sebelum proses lama selesai. Tetapkan aturan seperti melewati jadwal ketika masih berjalan atau memakai antrean terkontrol, lalu catat keputusan itu dalam log."
+  },
+  "rekayasa-kebutuhan": {
+    "walk": [
+      "Ubah kebutuhan umum menjadi perilaku yang bisa dicoba. Kalimat laporan harus benar belum memberi contoh; nyatakan bahwa tiga observasi ok, timeout, ok menghasilkan total 3 dan rasio_ok 2/3.",
+      "Catat juga kondisi gagal dan hal di luar lingkup. Untuk latihan monitoring, hasil ringkasan observasi tidak otomatis menjadi SLA. Batas ini menentukan label pada dashboard serta test yang perlu ditulis."
+    ],
+    "question": "Ubah kebutuhan impor tidak boleh menggandakan data menjadi kriteria yang dapat diuji.",
+    "answer": "Impor file latihan tertentu, catat jumlah baris tersimpan, lalu impor kembali file yang sama dengan identitas impor yang sama. Jumlah data dan hasil ringkasan tidak bertambah; perilaku konflik mengikuti kontrak yang ditetapkan."
+  },
+  "delivery-docker": {
+    "walk": [
+      "Dockerfile adalah petunjuk membangun image. Image menjadi dasar container yang berjalan. Konfigurasi environment, port yang dipetakan, dan volume menentukan cara container dipakai pada lingkungan tertentu.",
+      "Data yang harus bertahan tidak cukup diasumsikan aman di filesystem sementara container. Gunakan penyimpanan runtime yang direncanakan, lalu uji penggantian container serta proses backup–restore pada data latihan."
+    ],
+    "question": "Mengapa image versi lama yang berhasil dijalankan belum tentu memulihkan seluruh aplikasi setelah rilis gagal?",
+    "answer": "Database atau file runtime mungkin sudah berubah dan tidak berada di dalam image. Pemulihan perlu mencakup kompatibilitas skema, konfigurasi, data, serta artefak aplikasi.",
+    "diagram": {
+      "name": "belajar-delivery-docker",
+      "alt": "Kode dan Dockerfile digunakan untuk build image versi tertentu. Container menjalankan proses dari image dengan konfigurasi runtime; data persisten memerlukan penyimpanan runtime yang direncanakan."
+    }
+  },
+  "delivery-ci": {
+    "walk": [
+      "Workflow mendefinisikan langkah otomatis pada pemicu tertentu. Pastikan ia memasang dependensi dan menjalankan pemeriksaan dari folder yang benar; file konfigurasi yang tersimpan belum membuktikan workflow pernah berhasil.",
+      "Artefak yang diuji sebaiknya dapat diidentifikasi dengan jelas melalui versi atau commit. Jika rilis membangun ulang dengan kondisi berbeda, hasilnya bisa berbeda dari artefak yang sebelumnya lolos pengujian."
+    ],
+    "question": "Workflow hanya menjalankan perintah build dan belum memeriksa perilaku impor. Apakah status hijau membuktikan impor CSV benar?",
+    "answer": "Belum. Status hijau membuktikan langkah yang tercantum berhasil. Tambahkan pemeriksaan perilaku impor yang relevan; jangan menarik kesimpulan untuk pekerjaan yang tidak dijalankan."
+  },
+  "lanjut-closure": {
+    "walk": [
+      "Closure adalah fungsi yang tetap dapat mengakses nama dari lingkup luar tempat ia didefinisikan. Periksa apakah yang dibaca adalah nilai saat fungsi dibuat atau nama yang nilainya dapat berubah sebelum fungsi dipanggil.",
+      "Pada loop pembuat fungsi, beberapa fungsi dapat membaca nama loop yang sama sesudah loop berakhir. Ikat nilai yang dimaksud secara eksplisit, misalnya melalui parameter default yang dibuat tiap iterasi, bila setiap fungsi harus mengingat angka berbeda."
+    ],
+    "question": "Mengapa [lambda: i for i in range(3)] dapat menghasilkan tiga fungsi yang sama-sama mengembalikan 2?",
+    "answer": "Setiap lambda membaca nama i ketika dipanggil, dan setelah loop i bernilai 2. Bentuk lambda i=i: i mengikat nilai default pada saat tiap fungsi dibuat sehingga hasilnya 0, 1, 2."
+  },
+  "lanjut-cache": {
+    "walk": [
+      "Cache menyimpan hasil untuk dipakai ulang. Cache hit berarti hasil masih tersedia dan memenuhi aturan kesegaran; miss berarti aplikasi perlu mengambil atau menghitung ulang dari sumber.",
+      "TTL membatasi masa simpan, bukan menjamin data selalu mutakhir. Jika sumber berubah sebelum TTL habis, hasil cache bisa tertinggal. Tentukan kapan cache dibatalkan dan data mana yang tidak boleh dipakai lintas pengguna."
+    ],
+    "question": "TTL 60 detik, tetapi sumber berubah sesudah 10 detik. Apakah hasil cache pasti sudah mengikuti perubahan?",
+    "answer": "Tidak. Hasil lama dapat tetap dipakai sampai TTL berakhir kecuali ada invalidasi atau mekanisme pembaruan lain. Pilih kebijakan berdasarkan kebutuhan kesegaran dan identitas kunci cache."
+  },
+  "lanjut-antrean": {
+    "walk": [
+      "Produsen memasukkan pekerjaan, worker mengambil dan memprosesnya. Antrean membantu mengatur laju serta memisahkan waktu penerimaan pekerjaan dari waktu penyelesaian; diterima antrean belum berarti selesai diproses.",
+      "Retry perlu dibatasi dan hanya dipakai untuk kegagalan yang masuk akal dicoba lagi. Pekerjaan yang tetap gagal dapat dipindah ke dead letter untuk ditinjau; efek pemrosesan juga perlu dirancang agar pengulangan tidak menggandakan hasil."
+    ],
+    "question": "Satu pekerjaan gagal tiga kali lalu masuk dead letter. Apa arti keadaan itu bagi pemanggil?",
+    "answer": "Pekerjaan belum berhasil, walaupun sebelumnya sudah diterima antrean. Status perlu dapat ditelusuri; dead letter menyimpan kasus untuk penanganan berikutnya, bukan menandainya sebagai sukses."
+  }
+}
