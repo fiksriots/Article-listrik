@@ -1,0 +1,574 @@
+{
+  "terstruktur": {
+    "bekal": "Belum pernah menulis kode juga boleh. Siapkan editor teks, Python, dan folder khusus latihan. Terminal adalah tempat mengetik perintah; editor adalah tempat menyimpan isi program.",
+    "tujuan": [
+      "Menerjemahkan kebutuhan menjadi masukan, proses, dan keluaran.",
+      "Menelusuri perubahan nilai saat program memilih, mengulang, dan memanggil fungsi.",
+      "Membuat program kecil yang menolak masukan salah dan menyimpan hasil."
+    ],
+    "istilah": [
+      {
+        "term": "Variabel",
+        "meaning": "Nama yang merujuk pada sebuah nilai. harga = 10000 memberi nama harga pada angka 10000."
+      },
+      {
+        "term": "Tipe data",
+        "meaning": "Jenis nilai, seperti teks (str), bilangan bulat (int), atau benar/salah (bool)."
+      },
+      {
+        "term": "Kondisi",
+        "meaning": "Ekspresi yang diperiksa sebagai benar atau salah untuk menentukan alur."
+      },
+      {
+        "term": "Iterasi",
+        "meaning": "Satu putaran perulangan. Tiga barang dapat diproses dalam tiga iterasi."
+      },
+      {
+        "term": "Fungsi",
+        "meaning": "Sekumpulan instruksi bernama yang dapat menerima masukan dan mengembalikan hasil."
+      }
+    ],
+    "kasus": "Kasir menerima harga tiga barang: 10000, 15000, dan 5000 rupiah. Kita ingin menghitung total tanpa mengetik penjumlahan yang berbeda untuk setiap jumlah barang.",
+    "alur": [
+      "Masukan: list harga [10000, 15000, 5000]. Tetapkan total awal 0.",
+      "Ulangi untuk setiap harga: total baru adalah total lama ditambah harga saat ini. Nilainya menjadi 10000, 25000, lalu 30000.",
+      "Keluaran: total 30000. Jika list kosong, total tetap 0; aturan diskon dipisahkan agar mudah diperiksa."
+    ],
+    "tugas": [
+      "Tulis algoritmanya dengan kalimat biasa sebelum membuat kode.",
+      "Buat fungsi penghitung total, lalu coba list kosong dan satu barang.",
+      "Tambahkan pemeriksaan harga negatif dan jelaskan pilihan perilakunya."
+    ],
+    "hasil": "Kamu dapat menjelaskan mengapa total diletakkan sebelum perulangan, menunjukkan hasil tiga kasus, dan membedakan return dari print.",
+    "salah": "Program tidak cukup dinilai dari satu hasil yang benar. Coba nilai pada batas aturan, masukan kosong, dan masukan yang jenisnya salah.",
+    "link": "/programming/proyek-kasir-sederhana"
+  },
+  "struktur-data": {
+    "bekal": "Pahami list, dictionary, fungsi, perulangan, dan exception Python. Kamu dapat memulai tanpa class; node pada beberapa contoh diperkenalkan melalui dictionary.",
+    "tujuan": [
+      "Memilih bentuk penyimpanan berdasarkan operasi yang paling sering dilakukan.",
+      "Menggambar perubahan isi struktur setelah penambahan dan penghapusan.",
+      "Menguji hasil algoritma sekaligus memahami biaya waktu dan memorinya."
+    ],
+    "istilah": [
+      {
+        "term": "Elemen",
+        "meaning": "Satu nilai yang disimpan dalam kumpulan data."
+      },
+      {
+        "term": "Indeks",
+        "meaning": "Posisi elemen; list Python dimulai pada indeks 0."
+      },
+      {
+        "term": "Node",
+        "meaning": "Satu simpul yang menyimpan data dan hubungan ke simpul lain."
+      },
+      {
+        "term": "Big O",
+        "meaning": "Cara menyatakan pertumbuhan biaya ketika ukuran input bertambah, bukan angka detik."
+      },
+      {
+        "term": "Invariant",
+        "meaning": "Aturan yang harus tetap benar setelah struktur diubah, misalnya setiap elemen heap mengikuti aturan prioritas."
+      }
+    ],
+    "kasus": "Tiga laporan A, B, dan C masuk berurutan. Petugas ingin melayani laporan yang paling dahulu masuk.",
+    "alur": [
+      "Masukan: A, lalu B, lalu C. Tambahkan masing-masing ke ujung antrean.",
+      "Gunakan queue: ambil dari depan sehingga A dikerjakan pertama. Setelah A selesai, antrean berisi B dan C.",
+      "Jika mengambil dari ujung yang sama dengan tempat menambah, hasilnya C lebih dahulu; itu perilaku stack."
+    ],
+    "tugas": [
+      "Gambar antrean setelah setiap operasi sebelum menjalankan kode.",
+      "Gunakan deque dan uji tiga penambahan serta dua pengambilan.",
+      "Tentukan hasil ketika antrean kosong; tambahkan pemeriksaan atau exception yang jelas."
+    ],
+    "hasil": "Urutan pelayanan A lalu B terbukti, dan kamu dapat menjelaskan kapan stack, queue, set, atau dictionary lebih sesuai.",
+    "salah": "Struktur yang cepat untuk satu operasi belum tentu terbaik untuk semuanya. Binary search memerlukan data terurut; mengurutkan ulang pada setiap pencarian juga memiliki biaya.",
+    "link": "/programming/struktur-pemilihan"
+  },
+  "oop": {
+    "bekal": "Pahami variabel, fungsi, list/dictionary, import, dan exception. Struktur Data bukan prasyarat untuk mulai mengenal objek.",
+    "tujuan": [
+      "Membedakan class sebagai definisi dengan object sebagai hasil pembuatannya.",
+      "Menentukan data milik tiap objek dan operasi yang boleh mengubahnya.",
+      "Memisahkan tanggung jawab melalui komposisi, lalu menguji perilaku objek."
+    ],
+    "istilah": [
+      {
+        "term": "Class",
+        "meaning": "Definisi data dan perilaku untuk suatu jenis objek."
+      },
+      {
+        "term": "Instance",
+        "meaning": "Objek tertentu yang dibuat dari class, misalnya perangkat bernama BTS-LAB."
+      },
+      {
+        "term": "Atribut",
+        "meaning": "Data yang dapat diakses melalui objek, seperti perangkat.nama."
+      },
+      {
+        "term": "Method",
+        "meaning": "Fungsi pada class yang dipanggil melalui objek atau class sesuai jenisnya."
+      },
+      {
+        "term": "Komposisi",
+        "meaning": "Menggabungkan objek dengan menyimpan atau memakai objek lain, misalnya layanan tiket memakai repository."
+      }
+    ],
+    "kasus": "Dua perangkat latihan mempunyai nama dan status masing-masing. Mengubah status perangkat A seharusnya tidak mengubah perangkat B.",
+    "alur": [
+      "Buat dua instance dari class yang sama dan isi atribut instance melalui __init__.",
+      "Panggil method perubahan status pada A. Method memvalidasi nilai sebelum menyimpannya pada self.",
+      "Periksa A dan B secara terpisah. Keduanya memakai definisi class yang sama, tetapi menyimpan keadaan masing-masing."
+    ],
+    "tugas": [
+      "Tulis tiga tanggung jawab objek perangkat dengan bahasa biasa.",
+      "Buat dua objek, ubah salah satunya, lalu periksa yang lain.",
+      "Tambahkan pengujian status invalid dan pastikan keadaan lama tidak berubah."
+    ],
+    "hasil": "Kamu dapat menjelaskan arti self pada pemanggilan method dan membuktikan bahwa data dua instance tidak saling tertukar.",
+    "salah": "List yang bisa diubah dan disimpan sebagai atribut class dapat dipakai bersama semua instance. Data yang harus terpisah biasanya dibuat pada instance; inheritance dipilih karena hubungan perilaku, bukan sekadar ingin mengurangi baris kode.",
+    "link": "/programming/oop-kasus-inventaris"
+  },
+  "basis-data": {
+    "bekal": "Mulai dari memahami baris, kolom, dan kebutuhan data. Integrasi Python membutuhkan fungsi, exception, dan penggunaan paket. Gunakan database latihan terpisah.",
+    "tujuan": [
+      "Merancang tabel, kunci, dan hubungan dari kebutuhan sederhana.",
+      "Membaca serta mengubah data melalui SQL dengan aturan integritas.",
+      "Menjalankan transaksi, kueri berparameter, dan latihan backup yang hasil pemulihannya diperiksa."
+    ],
+    "istilah": [
+      {
+        "term": "Tabel",
+        "meaning": "Kumpulan baris dengan kolom yang didefinisikan."
+      },
+      {
+        "term": "Primary key",
+        "meaning": "Kolom atau gabungan kolom yang mengidentifikasi satu baris secara unik."
+      },
+      {
+        "term": "Foreign key",
+        "meaning": "Aturan yang menghubungkan nilai pada suatu tabel ke kunci pada tabel lain."
+      },
+      {
+        "term": "JOIN",
+        "meaning": "Operasi menggabungkan baris berdasarkan kondisi hubungan."
+      },
+      {
+        "term": "Transaksi",
+        "meaning": "Sekumpulan operasi yang diselesaikan bersama melalui commit atau dibatalkan melalui rollback."
+      }
+    ],
+    "kasus": "Satu pelanggan dapat mempunyai banyak tiket. Nama pelanggan tidak perlu disalin ulang sebagai identitas utama pada setiap tiket.",
+    "alur": [
+      "Simpan pelanggan dengan id unik. Simpan tiket dengan id tiket dan pelanggan_id yang merujuk pelanggan.",
+      "JOIN menggabungkan tiket dengan pelanggan melalui nilai id, bukan berdasarkan kebetulan urutan baris.",
+      "Jika satu pelanggan memiliki dua tiket, hasil JOIN dapat memuat dua baris pelanggan itu. Hitung sesuai unit yang dibutuhkan: pelanggan atau tiket."
+    ],
+    "tugas": [
+      "Gambar dua tabel dan tandai kunci hubungan.",
+      "Masukkan dua pelanggan; buat dua tiket untuk pelanggan pertama dan nol tiket untuk yang kedua.",
+      "Bandingkan INNER JOIN dan LEFT JOIN, lalu periksa hitungan tiket termasuk pelanggan tanpa tiket."
+    ],
+    "hasil": "Hasil kueri cocok dengan data awal: dua tiket milik pelanggan pertama dan nol milik pelanggan kedua. Kamu dapat menjelaskan baris NULL pada LEFT JOIN.",
+    "salah": "Tanpa ORDER BY, urutan hasil tidak dijamin. Gunakan parameter untuk nilai input; transaksi dan backup perlu dipahami sebelum mengubah banyak data.",
+    "link": "/programming/db-kasus-tiket"
+  },
+  "backend-api": {
+    "bekal": "Pahami fungsi, dictionary, exception, paket Python, HTTP dasar, dan kueri database sebelum proyek lengkap. Server lab berjalan di komputer sendiri.",
+    "tujuan": [
+      "Memisahkan request, validasi, aturan aplikasi, penyimpanan, dan response.",
+      "Menentukan status HTTP serta bentuk JSON untuk berhasil dan gagal.",
+      "Menguji izin akses, perubahan data, dan perilaku ketika permintaan diulang."
+    ],
+    "istilah": [
+      {
+        "term": "Endpoint",
+        "meaning": "Tujuan operasi yang ditentukan oleh metode HTTP dan path, misalnya GET /tiket."
+      },
+      {
+        "term": "Request",
+        "meaning": "Permintaan client: metode, URL, header, dan bila perlu body."
+      },
+      {
+        "term": "Response",
+        "meaning": "Jawaban server: status, header, dan bila perlu body."
+      },
+      {
+        "term": "Autentikasi",
+        "meaning": "Memeriksa identitas pemanggil."
+      },
+      {
+        "term": "Otorisasi",
+        "meaning": "Memeriksa apakah identitas tersebut boleh melakukan tindakan pada data tertentu."
+      }
+    ],
+    "kasus": "Client meminta membuat tiket berjudul Link lab putus. Server harus memeriksa input, menentukan pemilik, menyimpan data, dan mengembalikan hasil.",
+    "alur": [
+      "Request masuk sebagai JSON. Server memeriksa bentuk dan nilai sebelum menjalankan aturan aplikasi.",
+      "Identitas berasal dari mekanisme autentikasi yang dipercaya. Hak akses diperiksa pada server, termasuk kepemilikan data.",
+      "Setelah penyimpanan berhasil, response mengirim id tiket dan status yang sesuai. Kegagalan validasi tidak boleh diam-diam membuat tiket."
+    ],
+    "tugas": [
+      "Tulis contoh request dan response sebelum membuat endpoint.",
+      "Uji input valid, judul kosong, tiket tidak ditemukan, dan akses milik pengguna lain.",
+      "Bandingkan keadaan database sebelum dan sesudah request gagal."
+    ],
+    "hasil": "Tes memeriksa status, bentuk respons, dan perubahan data. Kamu dapat menjelaskan mengapa login berhasil belum berarti boleh membaca semua tiket.",
+    "salah": "HTTP 200 tidak otomatis membuktikan seluruh proses benar. Timeout juga tidak memastikan server belum menyimpan data; pertimbangkan kontrak idempotensi sebelum mengulang operasi tulis.",
+    "link": "/programming/api-proyek-tiket-aman"
+  },
+  "pemrograman-jaringan": {
+    "bekal": "Pahami fungsi, bytes, exception, with, dan import Python; kenali IP, port, TCP, serta UDP. Demo memakai loopback sehingga tidak membutuhkan router nyata.",
+    "tujuan": [
+      "Membedakan alamat endpoint, koneksi transport, dan respons aplikasi.",
+      "Mengirim serta menerima byte dengan aturan pembatas pesan yang jelas.",
+      "Membatasi waktu tunggu dan menafsirkan hasil pemeriksaan tanpa menarik kesimpulan berlebihan."
+    ],
+    "istilah": [
+      {
+        "term": "Endpoint",
+        "meaning": "Alamat tujuan komunikasi: misalnya IP, port, dan jenis transport."
+      },
+      {
+        "term": "Socket",
+        "meaning": "Objek yang dipakai aplikasi untuk berkomunikasi melalui sistem operasi."
+      },
+      {
+        "term": "Bytes",
+        "meaning": "Urutan nilai byte yang dikirim; teks perlu encoding sebelum dikirim."
+      },
+      {
+        "term": "Framing",
+        "meaning": "Aturan untuk menentukan awal, panjang, atau akhir sebuah pesan."
+      },
+      {
+        "term": "Timeout",
+        "meaning": "Batas waktu tunggu suatu operasi; bukan diagnosis pasti bahwa perangkat mati."
+      }
+    ],
+    "kasus": "Client mengirim dua pesan JSON ke server TCP lokal. Server perlu mengetahui di mana pesan pertama berakhir dan pesan kedua dimulai.",
+    "alur": [
+      "Ubah tiap pesan menjadi bytes UTF-8 dan hitung panjang bytes-nya.",
+      "Kirim header panjang diikuti payload. Penerima membaca header lengkap, memeriksa batas, lalu mengumpulkan payload sepanjang itu.",
+      "Setelah pesan lengkap, decode dan validasi JSON. Satu recv dapat membawa sebagian pesan atau beberapa bagian sekaligus."
+    ],
+    "tugas": [
+      "Gambar dua frame berurutan beserta panjangnya.",
+      "Jalankan contoh framing dari paket network-programming-lab.",
+      "Telusuri kasus koneksi berakhir di tengah header dan payload melampaui batas."
+    ],
+    "hasil": "Dua pesan terbaca terpisah dan data terpotong ditolak. Kamu dapat menjelaskan perbedaan TCP terhubung, HTTP berhasil, dan isi aplikasi valid.",
+    "salah": "sendall selesai tidak membuktikan aplikasi tujuan sudah memproses data. Jangan mengartikan timeout sebagai kepastian seluruh perangkat mati.",
+    "link": "/programming/netprog-kasus-status"
+  },
+  "web": {
+    "bekal": "Mulai tanpa Python juga boleh. Siapkan editor dan browser. HTML menyusun isi, CSS mengatur tampilan, dan JavaScript menambahkan perilaku.",
+    "tujuan": [
+      "Membuat halaman dengan struktur yang bermakna dan nyaman dibaca di layar kecil.",
+      "Menghubungkan tindakan pengguna ke perubahan tampilan melalui DOM dan event.",
+      "Memeriksa formulir, kegagalan request, navigasi keyboard, dan penyimpanan lokal."
+    ],
+    "istilah": [
+      {
+        "term": "HTML",
+        "meaning": "Bahasa markup untuk struktur dokumen, seperti judul, paragraf, label, dan tombol."
+      },
+      {
+        "term": "CSS",
+        "meaning": "Aturan untuk warna, jarak, ukuran, dan tata letak."
+      },
+      {
+        "term": "DOM",
+        "meaning": "Representasi dokumen sebagai objek yang dapat dibaca dan diubah JavaScript."
+      },
+      {
+        "term": "Event",
+        "meaning": "Kejadian seperti klik, input, atau pengiriman formulir."
+      },
+      {
+        "term": "Origin",
+        "meaning": "Gabungan skema, host, dan port; menjadi batas bagi banyak aturan browser termasuk penyimpanan lokal."
+      }
+    ],
+    "kasus": "Formulir tiket mempunyai judul dan email. Saat tombol diklik, browser memeriksa input dan menampilkan pesan yang dapat dibaca pengguna.",
+    "alur": [
+      "HTML menyediakan label, input, dan tombol. CSS mengatur jarak serta tanda fokus yang terlihat.",
+      "Handler submit membaca nilai, memeriksa judul yang hanya berisi spasi, lalu memperbarui teks status.",
+      "Pada demo validasi, pesan berhasil berarti input lolos pemeriksaan browser. Pengiriman dan penyimpanan server memerlukan request serta pemeriksaan server tersendiri."
+    ],
+    "tugas": [
+      "Buka contoh formulir dan coba input valid, kosong, serta judul berisi spasi.",
+      "Gunakan Tab untuk menjangkau semua kontrol; periksa label dan fokusnya.",
+      "Buka daftar tugas, tambah satu tugas, lalu muat ulang untuk memeriksa localStorage."
+    ],
+    "hasil": "Halaman dapat dipakai dengan keyboard, pesan hasil terlihat, dan kamu mengetahui data mana yang hanya ada di browser.",
+    "salah": "Mengubah DOM tidak otomatis menyimpan data. Validasi browser dapat dilewati sehingga server tetap harus memeriksa permintaan yang diterimanya.",
+    "link": "/programming/web-kasus-tugas"
+  },
+  "django": {
+    "bekal": "Pahami fungsi, class dasar, import, database, HTML, dan formulir. Mulai dari lab Django lengkap supaya struktur file dan migration konsisten.",
+    "tujuan": [
+      "Mengikuti request dari URL ke view, model, template, lalu response.",
+      "Membuat formulir yang memvalidasi data dan membatasi akses berdasarkan pengguna.",
+      "Menguji perilaku aplikasi sebelum menyiapkan konfigurasi produksi."
+    ],
+    "istilah": [
+      {
+        "term": "Project",
+        "meaning": "Konfigurasi dan susunan utama website Django."
+      },
+      {
+        "term": "App",
+        "meaning": "Bagian fungsional di dalam project, misalnya pengelolaan inventaris."
+      },
+      {
+        "term": "View",
+        "meaning": "Fungsi atau class yang menerima request dan menghasilkan response."
+      },
+      {
+        "term": "ORM",
+        "meaning": "Cara mengakses data melalui objek Python yang diterjemahkan menjadi operasi database."
+      },
+      {
+        "term": "Migration",
+        "meaning": "Catatan perubahan skema yang diterapkan ke database; berbeda dari isi data pengguna."
+      }
+    ],
+    "kasus": "Pengguna membuka daftar perangkat. URL perlu memilih view, view mengambil data yang diizinkan, dan template mengubahnya menjadi halaman.",
+    "alur": [
+      "URL /perangkat/ dipetakan ke view daftar. View memeriksa login dan permission sesuai aturan lab.",
+      "QuerySet mengambil baris; template mengulang perangkat dan menampilkan atributnya sebagai HTML.",
+      "Request POST untuk menambah atau mengubah data melewati validasi formulir. Data yang tidak valid ditampilkan kembali bersama pesan kesalahan."
+    ],
+    "tugas": [
+      "Ikuti instalasi, migrate, dan pembuatan akun pada README lab.",
+      "Coba inventaris dengan akun berizin, lalu akun tanpa izin.",
+      "Untuk tiket, gunakan dua akun berbeda dan uji URL detail milik akun lain."
+    ],
+    "hasil": "Daftar, formulir, dan aturan akses berjalan; tes membuktikan pengguna tidak dapat membaca tiket orang lain hanya dengan mengganti ID.",
+    "salah": "Menyembunyikan tombol bukan pengamanan akses. Permission harus diperiksa pada view; is_staff untuk admin juga berbeda dari permission inventaris biasa.",
+    "link": "/programming/django-kasus-tiket"
+  },
+  "data-analysis": {
+    "bekal": "Pahami dasar Python, list/dictionary, fungsi, dan file. Gunakan data-lab beserta folder datasets, atau notebook Colab yang disediakan di tiap materi.",
+    "tujuan": [
+      "Menentukan pertanyaan dan unit analisis sebelum membersihkan data.",
+      "Memeriksa tipe, data kosong, duplikasi, serta hubungan antar tabel.",
+      "Menyajikan angka dan grafik yang dapat ditelusuri kembali ke data sumber."
+    ],
+    "istilah": [
+      {
+        "term": "Observasi",
+        "meaning": "Satu unit pengamatan, misalnya satu transaksi atau satu sampel pemeriksaan layanan."
+      },
+      {
+        "term": "DataFrame",
+        "meaning": "Tabel berlabel pada pandas yang terdiri atas baris dan kolom."
+      },
+      {
+        "term": "Missing value",
+        "meaning": "Nilai yang tidak tersedia; tidak otomatis berarti nol."
+      },
+      {
+        "term": "Agregasi",
+        "meaning": "Merangkum beberapa baris menjadi ukuran seperti jumlah atau rata-rata."
+      },
+      {
+        "term": "KPI",
+        "meaning": "Indikator yang definisi, satuan, periode, dan penyebutnya harus jelas."
+      }
+    ],
+    "kasus": "Tiga observasi layanan memiliki hasil ok, timeout, dan ok. Kita ingin menghitung proporsi observasi yang berhasil.",
+    "alur": [
+      "Tetapkan satu baris sebagai satu observasi. Jumlah baris yang valid adalah 3, bukan jumlah nama layanan unik.",
+      "Hitung hasil ok sebanyak 2. Rasio menjadi 2/3, sekitar 66,7%. Simpan jumlah pembilang dan penyebut bersama hasilnya.",
+      "Sebut indikator sebagai rasio observasi ok pada sampel. Tiga pengamatan belum mewakili uptime kontinu atau SLA."
+    ],
+    "tugas": [
+      "Catat arti satu baris pada CSV sebelum memakai groupby.",
+      "Hitung ringkasan kecil secara manual dan cocokkan dengan pandas.",
+      "Coba data kosong dan hasil invalid; tulis bagaimana keduanya memengaruhi penyebut."
+    ],
+    "hasil": "Laporan menjelaskan jumlah data, aturan pembersihan, satuan, dan batas kesimpulan. Total sesudah join diperiksa agar tidak terhitung ganda.",
+    "salah": "Jangan menghapus duplikat hanya karena nama layanan sama. Dua baris mungkin pengamatan sah pada waktu berbeda; tentukan kunci dan kebutuhan analisis terlebih dahulu.",
+    "link": "/programming/da-kasus-monitoring"
+  },
+  "data-science": {
+    "bekal": "Pahami pengolahan tabel, grafik, rata-rata, proporsi, dan dasar statistik. Jalur Data Analysis membantu; Django dan pemrograman web tidak menjadi prasyarat.",
+    "tujuan": [
+      "Merumuskan target prediksi dan waktu tersedianya setiap fitur.",
+      "Memisahkan data sebelum mempelajari transformasi dan melatih model.",
+      "Membandingkan baseline, memilih metrik yang sesuai, serta menjelaskan batas hasil."
+    ],
+    "istilah": [
+      {
+        "term": "Fitur",
+        "meaning": "Informasi masukan yang tersedia ketika prediksi dibuat."
+      },
+      {
+        "term": "Target",
+        "meaning": "Nilai atau kelas yang ingin diprediksi."
+      },
+      {
+        "term": "Training set",
+        "meaning": "Data yang dipakai untuk mempelajari parameter model dan transformasi."
+      },
+      {
+        "term": "Test set",
+        "meaning": "Data yang disisihkan untuk evaluasi akhir setelah keputusan model ditetapkan."
+      },
+      {
+        "term": "Data leakage",
+        "meaning": "Informasi yang seharusnya belum tersedia ikut memengaruhi pelatihan atau pemilihan model."
+      }
+    ],
+    "kasus": "Model memperkirakan durasi penanganan tiket pada saat tiket dibuat. Waktu penutupan belum diketahui pada saat tersebut.",
+    "alur": [
+      "Tentukan target durasi dan gunakan hanya fitur yang tersedia ketika tiket masuk. Jangan memakai waktu penutupan sebagai fitur.",
+      "Pisahkan data sesuai konteks waktu atau kelompok. Fit imputasi, scaling, dan model pada data training melalui pipeline.",
+      "Bandingkan dengan baseline sederhana, seperti prediksi median training untuk evaluasi MAE. Laporkan kesalahan dan keterbatasan data sintetis."
+    ],
+    "tugas": [
+      "Buat daftar fitur beserta kapan nilainya diketahui.",
+      "Bandingkan model dengan baseline menggunakan pemisahan yang sama.",
+      "Periksa hasil per kelompok dan catat kondisi ketika prediksi tidak layak digunakan."
+    ],
+    "hasil": "Kamu dapat menjelaskan mengapa model lebih baik atau lebih buruk dari baseline tanpa mengintip test set untuk memilih parameter.",
+    "salah": "Akurasi tinggi dapat menipu pada kelas yang tidak seimbang. Data sintetis berguna untuk belajar alur, tetapi tidak membuktikan model layak dipakai pada jaringan nyata.",
+    "link": "/programming/ds-kasus-durasi"
+  },
+  "pengujian-debugging": {
+    "bekal": "Pahami fungsi, list/dictionary, exception, import, dan file. Pasang practice-lab beserta dependensi dev pada virtual environment sesuai README.",
+    "tujuan": [
+      "Menulis harapan perilaku sebelum melihat hasil implementasi.",
+      "Membedakan pengujian unit, integrasi, dan browser berdasarkan hal yang benar-benar diperiksa.",
+      "Menelusuri traceback, mengisolasi penyebab, dan menyimpan perbaikan sebagai regression test."
+    ],
+    "istilah": [
+      {
+        "term": "Test case",
+        "meaning": "Satu situasi dengan masukan, tindakan, dan hasil yang diharapkan."
+      },
+      {
+        "term": "Assert",
+        "meaning": "Pernyataan yang memeriksa apakah suatu kondisi sesuai harapan."
+      },
+      {
+        "term": "Fixture",
+        "meaning": "Persiapan data atau sumber daya pengujian yang dapat digunakan beberapa test."
+      },
+      {
+        "term": "Mock",
+        "meaning": "Pengganti suatu dependensi selama pengujian dengan perilaku yang dikendalikan."
+      },
+      {
+        "term": "Regression test",
+        "meaning": "Pengujian yang menjaga perilaku yang pernah salah agar kesalahan serupa terdeteksi."
+      }
+    ],
+    "kasus": "Fungsi ringkas menghitung rasio ok. Kesalahan lama muncul pada data kosong karena pembagian dengan nol.",
+    "alur": [
+      "Tulis kontrak: data kosong menghasilkan rasio None karena belum ada observasi.",
+      "Siapkan list kosong, panggil ringkas, lalu assert bahwa rasio_ok is None. Pisahkan kasus kosong dari kasus satu hasil ok.",
+      "Jika test gagal, baca nilai aktual dan traceback. Perbaiki penyebab, jalankan test terkait, kemudian pengujian alur yang dipengaruhi."
+    ],
+    "tugas": [
+      "Jalankan test contoh dan jelaskan bagian Arrange, Act, serta Assert.",
+      "Tambahkan satu kasus batas yang harapannya dihitung sendiri.",
+      "Ubah satu perilaku di salinan latihan untuk memastikan test terkait benar-benar gagal."
+    ],
+    "hasil": "Test mendeteksi perubahan perilaku yang salah dan kembali lulus sesudah perbaikan. Kamu dapat menyebut batas yang belum diuji.",
+    "salah": "Mock yang selalu mengembalikan hasil ideal belum membuktikan koneksi nyata bekerja. Banyak test lulus juga tidak menggantikan kontrak dan kasus yang dipilih dengan baik.",
+    "link": "/programming/uji-regresi-log"
+  },
+  "proyek-otomasi": {
+    "bekal": "Pahami fungsi, exception, file, dan dasar pengujian. Gunakan paket practice-lab utuh; jalankan perintah dari folder yang memuat pyproject.toml.",
+    "tujuan": [
+      "Menata kode, dependensi, konfigurasi, dan perintah terminal agar bisa diulang.",
+      "Memvalidasi file sebelum menghasilkan laporan atau mengubah keadaan.",
+      "Mengantisipasi proses gagal, pengulangan job, serta jadwal dan zona waktu."
+    ],
+    "istilah": [
+      {
+        "term": "Virtual environment",
+        "meaning": "Lingkungan paket Python yang terpisah untuk satu proyek."
+      },
+      {
+        "term": "CLI",
+        "meaning": "Antarmuka program yang dipanggil melalui perintah dan argumen terminal."
+      },
+      {
+        "term": "Exit code",
+        "meaning": "Kode hasil proses; 0 biasanya menandakan berhasil, kode lain menyatakan kondisi gagal sesuai kontrak program."
+      },
+      {
+        "term": "Dry-run",
+        "meaning": "Mode memeriksa atau memperlihatkan rencana tanpa menerapkan perubahan yang didefinisikan program."
+      },
+      {
+        "term": "Idempotensi",
+        "meaning": "Pengulangan operasi yang sama tidak menghasilkan efek tambahan di luar hasil yang sudah ditentukan."
+      }
+    ],
+    "kasus": "Job membaca CSV observasi, memisahkan baris invalid, menyimpan data valid, lalu membuat laporan JSON.",
+    "alur": [
+      "Periksa lokasi file, header, dan tipe setiap nilai. Baris invalid dicatat agar penyebabnya bisa ditelusuri.",
+      "Terapkan aturan kunci data dalam transaksi. Jika input yang sama diproses ulang, cegah duplikasi sesuai kontrak impor.",
+      "Tulis laporan lengkap ke file sementara sebelum mengganti hasil akhir. Catat jumlah dibaca, diterima, ditolak, dan hasil proses."
+    ],
+    "tugas": [
+      "Jalankan dry-run pada CSV latihan dan periksa rencana hasilnya.",
+      "Jalankan impor, lalu ulangi input yang sama dan bandingkan jumlah data.",
+      "Coba header salah serta folder keluaran tidak tersedia; periksa pesan dan exit code."
+    ],
+    "hasil": "Hasil dapat diulang, data invalid dapat ditelusuri, dan kegagalan tidak meninggalkan laporan akhir setengah tertulis.",
+    "salah": "Penjadwal dapat memanggil program ketika proses lama belum selesai. Tetapkan aturan job bertumpuk dan zona waktu; jangan menganggap satu perintah cron menyelesaikan semua kebutuhan otomasi.",
+    "link": "/programming/otomasi-laporan"
+  },
+  "rekayasa-deployment": {
+    "bekal": "Pahami proyek Python, pengujian, database, HTTP, dan web dasar. Pelajari branch serta pull request di Learn Git untuk alur review kode.",
+    "tujuan": [
+      "Menghubungkan kebutuhan dengan modul, pengujian, dan dokumentasi penggunaan.",
+      "Membedakan kode sumber, artefak build, konfigurasi lingkungan, dan data runtime.",
+      "Menyiapkan rilis bertahap dengan pemantauan serta latihan pemulihan."
+    ],
+    "istilah": [
+      {
+        "term": "Acceptance criteria",
+        "meaning": "Perilaku yang dapat diperiksa untuk menyatakan kebutuhan terpenuhi."
+      },
+      {
+        "term": "Artefak",
+        "meaning": "Hasil build yang diberi identitas versi dan dipakai saat rilis."
+      },
+      {
+        "term": "Image",
+        "meaning": "Paket filesystem serta konfigurasi untuk membuat container."
+      },
+      {
+        "term": "Container",
+        "meaning": "Proses yang berjalan dari image dengan konfigurasi dan sumber daya runtime."
+      },
+      {
+        "term": "Rollback",
+        "meaning": "Mengembalikan aplikasi ke versi yang diketahui baik; perubahan data mungkin memerlukan rencana pemulihan tersendiri."
+      }
+    ],
+    "kasus": "Aplikasi laporan terdiri dari impor CSV, database SQLite, API, dan dashboard. Rilis baru menambahkan kolom pada hasil laporan.",
+    "alur": [
+      "Tulis kriteria penerimaan: impor valid, penolakan input salah, bentuk response, dan tampilan ketika API gagal.",
+      "Jalankan pengujian, bangun artefak, lalu uji pada lingkungan latihan dengan konfigurasi dan data yang terpisah.",
+      "Saat rilis, periksa kesehatan layanan dan perilaku utama. Simpan identitas versi, backup terverifikasi, serta langkah kembali yang cocok dengan skema data."
+    ],
+    "tugas": [
+      "Hubungkan satu kebutuhan ke modul dan test yang membuktikannya.",
+      "Jalankan proyek akhir dari README pada folder latihan baru.",
+      "Lakukan latihan restore ke database terpisah, lalu periksa isi dan fungsi aplikasi."
+    ],
+    "hasil": "Proyek dapat dijalankan dari petunjuk yang tertulis, kegagalan utama diuji, dan hasil restore diperiksa sebelum dinyatakan dapat dipulihkan.",
+    "salah": "File Dockerfile atau YAML yang sudah ditulis belum membuktikan build dan rilis berhasil. Mengembalikan image juga tidak otomatis mengembalikan perubahan skema atau data.",
+    "link": "/programming/akhir-proyek-dashboard"
+  }
+}
