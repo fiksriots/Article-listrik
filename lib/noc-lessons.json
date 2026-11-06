@@ -108,7 +108,7 @@
         "url": "https://www.zabbix.com/documentation/current/en/manual/config/triggers/best_practices/dependencies"
       }
     ],
-    "intro": "Bayangkan kamu baru masuk shift pagi. Dashboard memperlihatkan banyak kotak merah, grup operasional ramai, dan seorang pelanggan melapor tidak bisa membuka aplikasi. Apa yang dikerjakan lebih dahulu? Artikel ini membahas cara berpikir petugas Junior NOC: memahami layanan yang terdampak, memeriksa bukti, dan memastikan ada orang yang menangani masalah sampai jelas statusnya.",
+    "intro": "Bayangkan kamu baru masuk shift pagi. Dashboard memperlihatkan banyak kotak merah, grup operasional ramai, dan seorang pelanggan melapor tidak bisa membuka aplikasi. Apa yang dikerjakan lebih dahulu?\n\nArtikel ini membahas cara berpikir petugas Junior NOC: memahami layanan yang terdampak, memeriksa bukti, dan memastikan ada orang yang menangani masalah sampai jelas statusnya.",
     "goals": [
       "Membedakan perangkat hidup dengan layanan pelanggan sehat.",
       "Menentukan pemeriksaan awal dari topologi dan cakupan gangguan.",
