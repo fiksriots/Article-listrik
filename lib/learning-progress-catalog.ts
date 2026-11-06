@@ -1,6 +1,7 @@
 import 'server-only';
 import {programmingTracks} from './programming-tracks';
 import {lessons,stages} from './course';
+import {nocResources} from './noc-course';
 import {networkLessons} from './network-course';
 import {iotGroups,iotLessons} from './iot-course';
 import {gitTracks} from './git-tracks';
@@ -21,6 +22,7 @@ export const learningTracks:LearningTrack[]=[
   {id:'pendalaman',title:'Pendalaman Jaringan',href:'/jaringan',lessons:network(networkLessons.filter(l=>!l.mtcna&&!l.mtcre&&l.stage>=11))},
   {id:'mtcre',title:'MTCRE',href:'/jaringan/mtcre',lessons:[...network(networkLessons.filter(l=>!!l.mtcre)),...mtcreTopics.map(l=>({slug:'mtcre-topic-'+l.slug,title:l.title,href:'/jaringan/mtcre/materi/'+l.slug})),...mtcreLabs.map(l=>({slug:'mtcre-lab-'+l.slug,title:'Lab · '+l.title,href:'/jaringan/mtcre/lab/'+l.slug}))]},
   {id:'winbox',title:'Praktik Winbox',href:'/jaringan/winbox',lessons:winboxItems.map(l=>({slug:winboxProgressSlug(l.slug),title:l.title,href:'/jaringan/winbox/'+l.slug}))},
+  {id:'noc',title:'Roadmap Junior NOC',href:'/jaringan/noc',lessons:nocResources},
   {id:'troubleshooting',title:'Troubleshooting',href:'/jaringan/troubleshooting',lessons:troubleshootingItems.map(l=>({slug:l.href.includes('/winbox/')?winboxProgressSlug(l.href.split('/').pop()!):l.href.split('/').pop()!,title:l.title,href:l.href}))},
  ]},
  {id:'iot',title:'Learn IoT',href:'/iot',groups:iotGroups.map(g=>({id:g.id,title:g.title,href:'/iot',lessons:g.slugs.map(slug=>({slug,title:iotLessons.find(l=>l.slug===slug)!.title,href:'/iot/'+slug}))}))},
