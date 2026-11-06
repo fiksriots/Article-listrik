@@ -4,7 +4,7 @@
     "title": "Merancang proyek IoT dari kebutuhan",
     "summary": "Ubah masalah sehari-hari menjadi daftar pengukuran, aturan, perangkat, dan pengujian.",
     "stage": 0,
-    "minutes": 18,
+    "minutes": 20,
     "analogy": "Seperti merencanakan perjalanan: tentukan tujuan dan bekal sebelum memilih kendaraan. Membeli banyak sensor belum berarti masalahnya terpecahkan.",
     "explain": [
       "Tulis masalah yang spesifik: “Saya ingin tahu suhu ruangan setiap 30 detik dan mendapat tanda jika data berhenti lebih dari dua menit.” Kalimat ini lebih mudah diuji daripada “membuat rumah pintar”.",
@@ -486,7 +486,7 @@
     "title": "Membaca datasheet dan pinout sebelum merangkai",
     "summary": "Bedakan nama pin, tegangan, batas maksimum, dan kondisi kerja yang disarankan.",
     "stage": 0,
-    "minutes": 18,
+    "minutes": 20,
     "analogy": "Datasheet seperti buku aturan kendaraan. Batas kecepatan yang membuat mesin rusak bukan kecepatan yang disarankan untuk perjalanan sehari-hari.",
     "explain": [
       "Cari nomor komponen dan revisi yang tepat. ESP32 adalah keluarga chip; susunan pin DevKitC, C3, S3, dan papan pihak lain tidak otomatis sama. Label pada board juga tidak selalu sama dengan nomor kaki chip.",
@@ -528,7 +528,7 @@
     "title": "Menghitung daya, adaptor, dan perkiraan baterai",
     "summary": "Pilih catu berdasarkan tegangan dan arus puncak, bukan hanya angka kapasitas baterai.",
     "stage": 0,
-    "minutes": 18,
+    "minutes": 20,
     "analogy": "Tegangan seperti tekanan air dan kemampuan arus seperti kapasitas pompa. Pompa yang sanggup mengalirkan lebih banyak tidak memaksa semua keran mengambil aliran maksimum.",
     "explain": [
       "Catu harus memiliki tegangan yang sesuai dan kemampuan arus yang cukup untuk kondisi puncak. Adaptor 5 V 2 A tidak otomatis memaksa perangkat memakai 2 A; beban mengambil sesuai kebutuhannya. Tegangan salah tetap dapat merusak perangkat.",
@@ -1023,7 +1023,7 @@
     "title": "OTA: memperbarui program melalui jaringan",
     "summary": "Pahami unggahan pertama, autentikasi, partisi, dan pemulihan ketika pembaruan gagal.",
     "stage": 0,
-    "minutes": 18,
+    "minutes": 20,
     "analogy": "OTA seperti memperbarui aplikasi tanpa menyerahkan ponsel ke teknisi, tetapi perangkat tetap perlu memastikan paketnya benar dan mempunyai jalan pulang bila pembaruan gagal.",
     "explain": [
       "OTA mengirim firmware baru melalui jaringan. Unggahan awal biasanya tetap melalui USB untuk memasang program yang memiliki kemampuan menerima pembaruan. Tidak semua pilihan partisi ESP32 menyediakan ruang OTA.",
@@ -1628,7 +1628,7 @@
     "title": "Dari breadboard ke perangkat yang lebih rapi",
     "summary": "Rencanakan konektor, jalur daya, pengikat kabel, ventilasi, dan dokumentasi rakitan.",
     "stage": 0,
-    "minutes": 18,
+    "minutes": 20,
     "analogy": "Breadboard seperti meja percobaan terbuka. Perangkat yang akan dipindah-pindah perlu rumah dan sambungan yang tidak mudah lepas saat meja terguncang.",
     "explain": [
       "Selesaikan fungsi di breadboard lebih dahulu, lalu dokumentasikan wiring berdasarkan nama pin. Pindahkan ke papan prototipe atau PCB yang tepat dengan konektor berlabel, bukan mengandalkan warna kabel saja.",

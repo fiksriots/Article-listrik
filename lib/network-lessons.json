@@ -20,7 +20,7 @@
       "Printer LAN"
     ],
     "stage": 0,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "lan-wan-internet",
@@ -43,7 +43,7 @@
       "ISP dan internet"
     ],
     "stage": 0,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "perangkat-jaringan",
@@ -66,7 +66,7 @@
       "Access point"
     ],
     "stage": 0,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "hardware-nic-port",
@@ -90,7 +90,7 @@
       "Perangkat jaringan"
     ],
     "stage": 0,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
   },
   {
@@ -115,7 +115,7 @@
       "Klien B"
     ],
     "stage": 0,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/328068/Bridging+and+Switching"
   },
   {
@@ -140,7 +140,7 @@
       "Server menjawab"
     ],
     "stage": 0,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://www.cloudflare.com/learning/serverless/glossary/client-side-vs-server-side/"
   },
   {
@@ -164,7 +164,7 @@
       "Internet: IP"
     ],
     "stage": 1,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "ethernet-speed-duplex",
@@ -189,7 +189,7 @@
       "Kemampuan switch"
     ],
     "stage": 1,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
   },
   {
@@ -213,7 +213,7 @@
       "Router ke internet"
     ],
     "stage": 1,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "switch-arp",
@@ -236,7 +236,7 @@
       "PC .30 menjawab"
     ],
     "stage": 1,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "tcp-udp-port",
@@ -259,7 +259,7 @@
       "Layanan HTTPS"
     ],
     "stage": 1,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "subnet-mask",
@@ -282,7 +282,7 @@
       "Subnet .128/25"
     ],
     "stage": 2,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "gateway-dns",
@@ -305,7 +305,7 @@
       "Server tujuan"
     ],
     "stage": 2,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "dhcp-ip-statis",
@@ -328,7 +328,7 @@
       "Lease + opsi"
     ],
     "stage": 2,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "kabel-utp-kategori",
@@ -352,7 +352,7 @@
       "Patch cord"
     ],
     "stage": 3,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://www.flukenetworks.com/"
   },
   {
@@ -378,7 +378,7 @@
       "Wire-map tester"
     ],
     "stage": 3,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://www.flukenetworks.com/knowledge-base/application-or-standards-articles-copper/differences-between-wiring-codes-t568a-vs"
   },
   {
@@ -403,7 +403,7 @@
       "Modul pasangan"
     ],
     "stage": 3,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323191/Ethernet"
   },
   {
@@ -427,7 +427,7 @@
       "AP kompatibel"
     ],
     "stage": 3,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "rack-patch-panel",
@@ -451,7 +451,7 @@
       "Switch"
     ],
     "stage": 3,
-    "minutes": 7,
+    "minutes": 9,
     "source": "https://www.flukenetworks.com/"
   },
   {
@@ -475,7 +475,7 @@
       "Uplink kabel"
     ],
     "stage": 4,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "vlan-access-trunk",
@@ -498,7 +498,7 @@
       "Access VLAN 20"
     ],
     "stage": 4,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "routing-statis",
@@ -521,7 +521,7 @@
       "R2 — LAN B /24"
     ],
     "stage": 4,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "nat-ip-publik",
@@ -544,7 +544,7 @@
       "Server internet"
     ],
     "stage": 4,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "firewall-dasar",
@@ -567,7 +567,7 @@
       "Tujuan / layanan"
     ],
     "stage": 4,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "mikrotik-winbox",
@@ -590,7 +590,7 @@
       "Router latihan"
     ],
     "stage": 5,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "lab-jaringan-rumah",
@@ -613,7 +613,7 @@
       "WAN sesuai ISP"
     ],
     "stage": 5,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "monitoring-ping",
@@ -636,7 +636,7 @@
       "Uji layanan / DNS"
     ],
     "stage": 5,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "bandwidth-latency",
@@ -659,7 +659,7 @@
       "Latency: waktu tunda"
     ],
     "stage": 6,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "troubleshooting-runtut",
@@ -682,7 +682,7 @@
       "DNS / aplikasi"
     ],
     "stage": 6,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "flapping-jaringan",
@@ -730,7 +730,7 @@
       "Jaringan kantor"
     ],
     "stage": 7,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "failover-dua-isp",
@@ -753,7 +753,7 @@
       "ISP B: cadangan"
     ],
     "stage": 7,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "proyek-kantor",
@@ -776,7 +776,7 @@
       "Tamu: VLAN 20"
     ],
     "stage": 7,
-    "minutes": 6
+    "minutes": 8
   },
   {
     "slug": "mtcna-routeros-cli",
@@ -1126,7 +1126,7 @@
     ],
     "source": "https://www.rfc-editor.org/rfc/rfc4632",
     "stage": 11,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "dns-record-ttl",
@@ -1152,7 +1152,7 @@
     ],
     "source": "https://developers.cloudflare.com/dns/manage-dns-records/reference/dns-record-types/",
     "stage": 11,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "ipv6-alamat-prefix",
@@ -1232,7 +1232,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/network-management/dhcp/",
     "stage": 11,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "loop-rstp",
@@ -1258,7 +1258,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
     "stage": 12,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "lacp-bonding",
@@ -1284,7 +1284,7 @@
     ],
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/8323193/Bonding",
     "stage": 12,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "mtu-mss-pmtud",
@@ -1310,7 +1310,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/hardware/mtu-in-routeros/",
     "stage": 12,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "qos-bufferbloat",
@@ -1336,7 +1336,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/firewall-and-quality-of-service/queues/",
     "stage": 12,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "wireshark-dasar",
@@ -1362,7 +1362,7 @@
     ],
     "source": "https://www.wireshark.org/docs/wsug_html/",
     "stage": 13,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "radio-ptp-los-fresnel",
@@ -1388,7 +1388,7 @@
     ],
     "source": "https://dl.ui.com/guides/training/courses/UBWA_Training_Guide.pdf",
     "stage": 13,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "monitoring-snmp-baseline",
@@ -1414,7 +1414,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/diagnostics-monitoring-and-troubleshooting/snmp/",
     "stage": 13,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "ipam-dokumentasi",
@@ -1440,7 +1440,7 @@
     ],
     "source": "https://docs.netbox.dev/en/stable/features/ipam/",
     "stage": 13,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "keamanan-lan-dhcp-arp",
@@ -1466,7 +1466,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/bridging-and-switching/",
     "stage": 14,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "wireguard-dasar",
@@ -1492,7 +1492,7 @@
     ],
     "source": "https://manual.mikrotik.com/docs/virtual-private-networks/wireguard/",
     "stage": 14,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "ospf-pengenalan",
@@ -1518,7 +1518,7 @@
     ],
     "source": "https://help.mikrotik.com/docs/spaces/ROS/pages/9863229/OSPF",
     "stage": 14,
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "mtcre-keputusan-routing",

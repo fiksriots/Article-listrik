@@ -3,7 +3,7 @@
     "slug": "apa-itu-git",
     "title": "Apa itu Git dan mengapa kita membutuhkannya?",
     "stage": 0,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Berhenti menumpuk file final, final-baru, dan final-banget. Kenali pencatatan versi.",
     "analogy": "Bayangkan album foto perkembangan sebuah rumah. Setiap foto menyimpan keadaan pada waktu tertentu; kamu bisa membandingkan sebelum dan sesudah renovasi.",
     "explain": [
@@ -39,7 +39,7 @@
     "slug": "git-dan-github",
     "title": "Git, GitHub, repository, dan istilah dasar",
     "stage": 0,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Bedakan alat pencatat versi dan tempat berbagi proyek.",
     "analogy": "Git seperti kamera pencatat perkembangan; GitHub seperti tempat berbagi album dengan tim.",
     "explain": [
@@ -75,7 +75,7 @@
     "slug": "instalasi-git",
     "title": "Instal Git di Windows, Ubuntu, dan macOS",
     "stage": 0,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Siapkan alat sebelum mulai latihan.",
     "analogy": "Sebelum belajar menyetir, pastikan kendaraan dan kuncinya tersedia.",
     "explain": [
@@ -111,7 +111,7 @@
     "slug": "terminal-dan-identitas",
     "title": "Terminal, folder kerja, dan identitas commit",
     "stage": 0,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Kenali lokasi kerja serta nama dan email penulis commit.",
     "analogy": "Alamat rumah menentukan di mana paket diletakkan; lokasi terminal menentukan folder yang menerima perintah.",
     "explain": [
@@ -147,7 +147,7 @@
     "slug": "repo-pertama",
     "title": "Membuat repository latihan pertama",
     "stage": 1,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Mulai proyek catatan belajar dengan git init.",
     "analogy": "Kamu menyiapkan buku kosong lalu memberi halaman indeks untuk riwayatnya.",
     "explain": [
@@ -184,7 +184,7 @@
     "slug": "tiga-area",
     "title": "Working tree, staging area, dan repository",
     "stage": 1,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Pahami tiga area agar tidak sekadar menghafal perintah.",
     "analogy": "Meja kerja berisi semua perubahan; nampan berisi yang dipilih; album menyimpan hasil yang sudah dicatat.",
     "explain": [
@@ -220,7 +220,7 @@
     "slug": "commit-pertama",
     "title": "Add dan commit pertama",
     "stage": 1,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Catat satu perubahan kecil dengan pesan yang jelas.",
     "analogy": "Kamu memilih satu foto, memberi keterangan, lalu menempelkannya ke album.",
     "explain": [
@@ -257,7 +257,7 @@
     "slug": "status-diff-log",
     "title": "Membaca status, diff, dan log",
     "stage": 1,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Lihat keadaan sekarang, perbedaan isi, dan perjalanan proyek.",
     "analogy": "Status adalah papan kondisi; diff adalah kaca pembanding; log adalah daftar perjalanan.",
     "explain": [
@@ -379,7 +379,7 @@
     "slug": "gitignore",
     "title": "Memilih file dengan .gitignore",
     "stage": 1,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Pisahkan kode penting dari file lokal, rahasia, dan hasil build.",
     "analogy": "Saat mengirim dokumen, kamu menyertakan naskah, bukan kunci rumah dan sampah meja.",
     "explain": [
@@ -549,7 +549,7 @@
     "slug": "branch",
     "title": "Branch dan HEAD: jalur percobaan",
     "stage": 2,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Coba ide baru tanpa langsung mengubah jalur utama.",
     "analogy": "Branch seperti jalur renovasi alternatif dari denah yang sama.",
     "explain": [
@@ -586,7 +586,7 @@
     "slug": "merge",
     "title": "Menggabungkan branch dengan merge",
     "stage": 2,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Bawa perubahan yang sudah siap ke jalur utama.",
     "analogy": "Ide renovasi disetujui lalu dimasukkan ke denah utama.",
     "explain": [
@@ -623,7 +623,7 @@
     "slug": "konflik",
     "title": "Memahami konflik saat merge",
     "stage": 2,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Git meminta keputusan saat dua perubahan tidak bisa digabung otomatis.",
     "analogy": "Dua orang mengganti kalimat yang sama dengan maksud berbeda; editor harus memilih hasil akhirnya.",
     "explain": [
@@ -660,7 +660,7 @@
     "slug": "github-remote",
     "title": "Membuat GitHub dan menghubungkan remote",
     "stage": 3,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Kenalkan alamat tujuan berbagi riwayat lokal.",
     "analogy": "Remote adalah kontak alamat pengiriman, belum berarti paket sudah terkirim.",
     "explain": [
@@ -697,7 +697,7 @@
     "slug": "autentikasi",
     "title": "HTTPS, token, SSH, dan akses GitHub",
     "stage": 3,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Pahami izin akses tanpa menyimpan password di kode.",
     "analogy": "Alamat rumah menunjukkan tujuan; kunci menentukan apakah kamu boleh masuk.",
     "explain": [
@@ -776,7 +776,7 @@
     "slug": "push-clone",
     "title": "Push pertama dan clone ke folder baru",
     "stage": 3,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Kirim commit lalu buat salinan untuk latihan dua komputer.",
     "analogy": "Push mengirim isi album; clone menyalin album beserta riwayatnya ke meja lain.",
     "explain": [
@@ -813,7 +813,7 @@
     "slug": "fetch-pull",
     "title": "Fetch, pull, upstream, dan sinkronisasi",
     "stage": 3,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Ambil perubahan dengan memahami apa yang terjadi.",
     "analogy": "Fetch mengambil kabar terbaru; merge memasukkan kabar itu ke catatan kerja.",
     "explain": [
@@ -896,7 +896,7 @@
     "slug": "pull-request",
     "title": "Workflow tim dan pull request",
     "stage": 4,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Ajukan perubahan kecil agar mudah diperiksa sebelum digabung.",
     "analogy": "Pull request seperti mengajukan revisi dokumen untuk dibaca dan disetujui rekan.",
     "explain": [
@@ -1025,7 +1025,7 @@
     "slug": "fork",
     "title": "Fork, origin, upstream, dan kontribusi",
     "stage": 4,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Berkontribusi ke repo yang tidak bisa kamu tulis langsung.",
     "analogy": "Fork seperti salinan buku di perpustakaan pribadimu; usulan revisinya dikirim ke pemilik buku asli.",
     "explain": [
@@ -1062,7 +1062,7 @@
     "slug": "restore-revert",
     "title": "Undo aman: unstage, restore, dan revert",
     "stage": 5,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Tentukan apa yang ingin dibatalkan sebelum memilih perintah.",
     "analogy": "Mengeluarkan foto dari nampan berbeda dari membuang foto, dan berbeda lagi dari menambahkan koreksi pada album.",
     "explain": [
@@ -1099,7 +1099,7 @@
     "slug": "stash",
     "title": "Stash: menyimpan pekerjaan sementara",
     "stage": 5,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Pindah tugas tanpa memaksakan commit yang belum siap.",
     "analogy": "Kamu memasukkan catatan sementara ke laci agar meja bisa dipakai untuk tugas lain.",
     "explain": [
@@ -1136,7 +1136,7 @@
     "slug": "reset-reflog",
     "title": "Reset, reflog, dan penyelamatan commit",
     "stage": 5,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Kenali operasi berisiko dan cara menemukan titik riwayat lokal.",
     "analogy": "Memindahkan penanda halaman tidak sama dengan merobek kertas; beberapa pilihan reset juga mengubah isi meja.",
     "explain": [
@@ -1173,7 +1173,7 @@
     "slug": "rebase-cherry-pick",
     "title": "Rebase dan cherry-pick setelah paham merge",
     "stage": 6,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Pilih integrasi lanjutan dengan memahami perubahan identitas commit.",
     "analogy": "Rebase menyusun ulang rangkaian catatan di atas dasar baru; cherry-pick mengambil satu catatan tertentu.",
     "explain": [
@@ -1300,7 +1300,7 @@
     "slug": "tag-dan-troubleshooting",
     "title": "Tag rilis dan pemecahan masalah umum",
     "stage": 6,
-    "minutes": 12,
+    "minutes": 14,
     "summary": "Beri penanda versi dan baca pesan error dengan tenang.",
     "analogy": "Tag seperti label edisi buku yang menunjuk versi tertentu.",
     "explain": [
