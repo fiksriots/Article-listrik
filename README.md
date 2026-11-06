@@ -121,3 +121,7 @@ Setelah build, jalankan `npm run check:path` untuk memeriksa seluruh posisi dan 
 Kurikulum listrik kini memiliki 38 materi. Enam modul tambahan membahas NO/NC, sekering DC, terminal kabel, nameplate motor, kontrol start–stop, dan sinyal sensor industri. Artikel pemilihan komponen dan simulasi gangguan diperdalam tanpa mengganti URL atau progres lama. Lab start–stop memodelkan pengunci, STOP, overload, dan putus/pulih suplai; diagram adalah konsep pembelajaran, bukan gambar instalasi.
 
 Materi ke-39 menambahkan star–delta setelah kontrol start–stop pada tahap motor: hubungan belitan, tegangan, syarat nameplate, transisi terbuka, interlock, dan kuis. Diagramnya merupakan konsep; bukan petunjuk pemasangan terminal motor.
+
+## Roadmap Junior NOC
+
+`/jaringan/noc` merangkai materi jaringan yang ada menjadi 12 minggu (perkiraan 6–8 jam/minggu), dengan praktik dan target lulus per minggu. Delapan materi operasional di `lib/noc-lessons.json` tersedia melalui `/jaringan/noc/[slug]`: peran L1, Linux, monitoring, tiket/eskalasi, akses ISP, upstream, handover/perubahan, dan simulasi akhir. Urutan dan referensi materi didefinisikan di `lib/noc-course.ts`; materi terhubung dengan direktori, pencarian, dan progres Learn Networking.
