@@ -3,23 +3,95 @@
     "slug": "noc-peran-dan-alur-kerja",
     "title": "Peran Junior NOC dan alur satu shift",
     "summary": "Kenali pekerjaan NOC, batas tindakan L1, dan cara membaca dampak gangguan.",
-    "minutes": 25,
+    "minutes": 7,
     "sections": [
       {
-        "title": "NOC itu mengerjakan apa?",
-        "body": "Network Operations Center memantau layanan dan menangani indikasi gangguan. Junior NOC atau L1 memvalidasi alarm, mengumpulkan bukti awal, membuka tiket, menjalankan runbook yang diizinkan, dan meneruskan kasus ke tim yang tepat. Tujuannya menjaga layanan dan membuat masalah dapat ditindaklanjuti. Menghafal perintah saja belum cukup."
+        "title": "1. Memahami NOC dari layanan yang dijaga",
+        "body": "Network Operations Center adalah fungsi operasional untuk mengawasi jaringan dan membantu menjaga layanan tetap berjalan. Pada ISP, layanan yang dimaksud dapat berupa koneksi internet pelanggan, koneksi antarkantor, atau akses ke jaringan tertentu. Perangkat seperti router, switch, OLT, dan radio adalah bagian dari jalur yang membuat layanan itu tersedia.\n\nKarena itu, pertanyaan awal petugas bukan hanya “perangkat mana yang merah?”, tetapi “layanan apa yang tidak bekerja dan siapa yang merasakannya?”. Router yang menjawab ping mungkin tetap mengalami masalah autentikasi pelanggan. Sebaliknya, satu perangkat yang tidak membalas ping belum tentu mati; aturan ICMP atau jalur monitoring bisa menjadi penyebab. Kesimpulan harus mengikuti jenis pemeriksaan yang benar-benar dilakukan."
       },
       {
-        "title": "Mulai dari layanan dan topologi",
-        "body": "Bedakan perangkat dengan layanan: router dapat menjawab ping sementara pelanggan gagal login PPPoE. Gambar jalur pelanggan → ONT atau radio → perangkat akses → agregasi → core → upstream → layanan tujuan. Tandai titik pengukuran dan dependensi. Bila uplink agregasi mati, puluhan alarm perangkat di bawahnya mungkin berasal dari satu kejadian."
+        "title": "2. Apa yang dikerjakan Junior NOC atau L1?",
+        "body": "L1 biasanya menjadi penerima awal alarm atau laporan: memvalidasi kejadian, mencatat dampak, menjalankan pemeriksaan yang terdokumentasi, lalu melakukan eskalasi bila penanganannya membutuhkan pihak lain. Runbook adalah panduan kerja untuk kondisi tertentu: apa yang dicek, hasil yang diharapkan, tindakan yang diizinkan, dan kapan harus berhenti.\n\nSebutan L1 dan L2 tidak selalu mempunyai batas sama di setiap perusahaan. Yang perlu kamu pelajari adalah membaca batas kewenangan. Menemukan dugaan masalah routing tidak otomatis berarti kamu boleh mengubah rute. Menjadi petugas yang baik berarti bisa meneruskan bukti yang membuat tim berikutnya cepat bekerja, termasuk menyatakan apa yang belum diketahui.",
+        "table": {
+          "caption": "Contoh pembagian pekerjaan; sesuaikan dengan SOP perusahaan",
+          "headers": [
+            "Peran",
+            "Contoh tanggung jawab",
+            "Hasil yang dibutuhkan"
+          ],
+          "rows": [
+            [
+              "NOC L1",
+              "Validasi alarm, pemeriksaan awal, tiket dan update",
+              "Kronologi, dampak dan bukti awal"
+            ],
+            [
+              "Tim jaringan / L2",
+              "Diagnosis lanjutan dan perubahan terotorisasi",
+              "Analisis, tindakan dan validasi teknis"
+            ],
+            [
+              "Tim lapangan",
+              "Pemeriksaan fisik perangkat dan jalur",
+              "Kondisi di lokasi dan hasil penanganan"
+            ],
+            [
+              "Penyedia upstream",
+              "Pemeriksaan pada sisi layanan penyedia",
+              "Status circuit dan tindak lanjut penyedia"
+            ]
+          ]
+        }
       },
       {
-        "title": "Awal, tengah, dan akhir shift",
-        "body": "Saat mulai, baca handover, tiket aktif, jadwal maintenance, dan status monitoring. Selama shift, periksa alarm baru, perubahan jumlah pelanggan aktif, grafik, dan tenggat pembaruan tiket. Menjelang selesai, rangkum kasus aktif, pemiliknya, tindakan terakhir, dan waktu tindakan berikutnya. Gunakan zona waktu eksplisit, misalnya WIB (UTC+7)."
+        "title": "3. Membaca topologi sebagai peta dependensi",
+        "body": "Topologi fisik menunjukkan sambungan perangkat. Topologi logis membantu menjelaskan VLAN, subnet, rute, dan layanan yang menumpang pada sambungan itu. Sebuah kabel yang sama bisa membawa beberapa VLAN pelanggan; gangguan pada kabel dapat memengaruhi lebih dari satu layanan. Mulailah dari jalur paling sederhana: pelanggan, akses, agregasi, core, lalu upstream.\n\nDependensi berarti satu bagian membutuhkan bagian lain untuk bekerja. Misalnya, dua perangkat akses hanya bisa dijangkau dari NOC melalui satu switch agregasi. Ketika uplink agregasi gagal, alarm kedua perangkat bisa muncul bersamaan. Belum tentu kedua perangkat itu rusak. Dengan melihat titik bersama, kamu dapat mengarahkan pemeriksaan ke tempat yang paling banyak menjelaskan gejala."
       },
       {
-        "title": "Batas kewenangan",
-        "body": "Contoh pembagian: L1 memeriksa data dan menjalankan runbook; L2 menangani diagnosis atau konfigurasi lebih lanjut; tim lapangan memeriksa fisik; upstream memeriksa sisi penyedia. Pembagian sebenarnya mengikuti perusahaan. Jangan reboot, mematikan port, atau mengubah routing untuk mencoba-coba. Jika runbook tidak mencakup kondisi itu, eskalasikan beserta bukti."
+        "title": "4. Dari alarm sampai kasus ditangani",
+        "body": "Alarm adalah petunjuk awal dari alat, sedangkan insiden adalah gangguan layanan yang perlu ditangani. Satu insiden dapat menghasilkan banyak alarm. Laporan pelanggan juga bisa menunjukkan insiden sebelum alat monitoring mendeteksinya. Jangan menunggu dashboard merah jika bukti layanan sudah menunjukkan gangguan.\n\nUrutan latihan yang masuk akal adalah mencatat waktu, memvalidasi gejala, menilai cakupan, mengaitkan alarm dengan topologi, membuka tiket, dan menunjuk pemilik. Setelah itu lakukan tindakan sesuai runbook atau eskalasikan. Selama penanganan, pastikan ada waktu update berikutnya. Kasus tetap membutuhkan tindak lanjut meskipun sudah diteruskan ke tim lain."
+      },
+      {
+        "title": "5. Mengatur satu shift agar tidak kehilangan konteks",
+        "body": "Pada awal shift, baca serah terima dari petugas sebelumnya. Periksa tiket yang masih berdampak, kasus yang sudah pulih tetapi masih diobservasi, serta maintenance yang sedang berlangsung. Pastikan juga monitoring menerima data terbaru. Dashboard yang tampak tenang karena collector berhenti bukan kondisi aman untuk disimpulkan.\n\nDi tengah shift, perhatikan alarm baru dan tenggat pembaruan tiket. Pada akhir shift, tulis keadaan terakhir, tindakan berikutnya, pemilik kasus, dan waktunya. “Masih dicek” terlalu kabur untuk penerus. “Tim lapangan memeriksa uplink POP A; menunggu hasil pukul 15.30 WIB; bila belum ada kabar hubungi koordinator” memberi petunjuk kerja yang jelas."
+      },
+      {
+        "title": "6. Studi kasus: banyak alarm dari satu jalur",
+        "body": "Contoh fiktif: pukul 09.10 WIB, monitoring kehilangan respons dari dua perangkat akses di POP A. Pada waktu yang sama, 40 sesi pelanggan terputus. POP B tetap normal. Kedua perangkat akses POP A melewati uplink agregasi yang sama. Dari sini, dugaan gangguan bersama lebih kuat daripada dugaan 40 akun pelanggan bermasalah secara terpisah.\n\nNamun, dugaan belum menjadi penyebab terkonfirmasi. L1 memeriksa status uplink, waktu sampel terakhir, dan hasil uji dari titik lain. Jika uplink juga down, tiket diarahkan ke pemeriksaan jalur agregasi dengan lampiran bukti. Ia tidak menyimpulkan “fiber putus” sebelum ada hasil pemeriksaan fisik yang mendukung.",
+        "table": {
+          "caption": "Cara menghubungkan bukti dan keputusan pada kasus fiktif",
+          "headers": [
+            "Bukti",
+            "Arti sementara",
+            "Pemeriksaan berikutnya"
+          ],
+          "rows": [
+            [
+              "Dua akses hilang bersamaan",
+              "Mungkin ada dependensi bersama",
+              "Lihat topologi dan uplink agregasi"
+            ],
+            [
+              "POP B normal",
+              "Dampak mungkin terbatas pada POP A",
+              "Bandingkan jalur POP A dan B"
+            ],
+            [
+              "40 sesi turun bersamaan",
+              "Ada dampak pada layanan pelanggan",
+              "Cek segmen dan daftar sesi terdampak"
+            ],
+            [
+              "Uplink agregasi down",
+              "Arahkan diagnosis ke jalur tersebut",
+              "Minta pemeriksaan sisi lawan dan fisik"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "7. Menulis update tanpa melampaui bukti",
+        "body": "Gunakan bahasa yang memisahkan fakta dan dugaan. Contoh: “Sejak 09.10 WIB, 40 sesi pelanggan POP A terputus. Uplink agregasi terpantau down. Tim jaringan dan lapangan sedang memeriksa jalur. Estimasi pulih belum terkonfirmasi; update berikutnya pukul 09.30 WIB.” Kalimat ini memberi status tanpa menjanjikan penyelesaian yang belum diketahui.\n\nSesudah ada perbaikan, periksa kembali layanan pelanggan dan pemulihan alarm. Catat waktu pulih serta masa observasi sesuai SOP. Jika layanan pulih tetapi penyebabnya belum jelas, tulis apa adanya dan buat tindak lanjut investigasi. Layanan pulih dan akar masalah diketahui adalah dua hasil yang berbeda."
       }
     ],
     "practice": [
@@ -35,32 +107,101 @@
         "title": "Zabbix: dependencies antar-trigger",
         "url": "https://www.zabbix.com/documentation/current/en/manual/config/triggers/best_practices/dependencies"
       }
-    ]
+    ],
+    "intro": "Bayangkan kamu baru masuk shift pagi. Dashboard memperlihatkan banyak kotak merah, grup operasional ramai, dan seorang pelanggan melapor tidak bisa membuka aplikasi. Apa yang dikerjakan lebih dahulu? Artikel ini membahas cara berpikir petugas Junior NOC: memahami layanan yang terdampak, memeriksa bukti, dan memastikan ada orang yang menangani masalah sampai jelas statusnya.",
+    "goals": [
+      "Membedakan perangkat hidup dengan layanan pelanggan sehat.",
+      "Menentukan pemeriksaan awal dari topologi dan cakupan gangguan.",
+      "Menjelaskan pekerjaan L1 serta isi catatan pada awal dan akhir shift."
+    ],
+    "analogy": "NOC mirip ruang pengatur perjalanan kereta. Petugas melihat kondisi banyak jalur, mengenali keterlambatan, dan mengoordinasikan penanganan. Ia tidak harus memperbaiki semua rel sendiri, tetapi harus tahu jalur mana terganggu, siapa yang mengerjakannya, dan informasi apa yang dibutuhkan penumpang.",
+    "practiceReview": "Pada topologi latihan, tunjukkan terlebih dahulu titik yang dipakai bersama dua lokasi. Saat titik itu bermasalah, tiket induk menjelaskan dampak bersama dan tiket atau alarm turunannya ditautkan sesuai sistem kerja. Hasil latihan yang baik memuat waktu WIB, bukti pembanding dari jalur sehat, pemilik tindak lanjut, dan batas kewenangan L1. Kamu belum perlu menemukan lokasi kerusakan fisik jika buktinya belum tersedia."
   },
   {
     "slug": "noc-linux-terminal",
     "title": "Linux dasar untuk pemeriksaan NOC",
     "summary": "Baca alamat, rute, socket, DNS, kapasitas disk, dan log tanpa mengubah layanan.",
-    "minutes": 25,
+    "minutes": 7,
     "sections": [
       {
-        "title": "Terminal sebagai alat membaca",
-        "body": "Terminal menerima perintah; output adalah bukti yang harus dibaca bersama waktu dan lokasi pengujiannya. Mulai dengan pwd, ls, cd, dan cat untuk mengenali direktori serta berkas latihan. Gunakan akun dengan hak minimum. Perintah dan paket dapat berbeda antardistribusi; ip dan ss biasanya berasal dari iproute2, sedangkan dig dari dnsutils atau bind-utils."
+        "title": "1. Kenali tempat kamu menjalankan perintah",
+        "body": "Terminal adalah antarmuka untuk menjalankan perintah pada sebuah mesin. Perintah yang sama pada laptop NOC dan server di lokasi pelanggan bisa memberi hasil berbeda karena titik uji dan jalurnya berbeda. Mulailah dengan mencatat nama host, waktu dan zona waktunya. Jangan menyalin hasil tanpa tahu dari mesin mana hasil tersebut berasal.\n\nGunakan pwd untuk lokasi direktori, ls untuk melihat berkas, dan cat untuk membaca berkas latihan yang memang boleh dilihat. Untuk artikel ini, gunakan VM Linux dengan iproute2, curl, dan utilitas DNS yang sudah disiapkan. Nama paket dan interface bisa berbeda. Contoh log menggunakan systemd; jika distribusimu tidak memakainya, ikuti alat log yang tersedia.",
+        "code": "hostname\ndate -Is\npwd\nls",
+        "codeLabel": "Terminal · identitas titik uji",
+        "language": "sh"
       },
       {
-        "title": "Pemeriksaan berlapis",
-        "body": "Jalankan ip -br address untuk alamat dan status, ip route untuk rute, lalu ip route get 192.0.2.10 untuk melihat keputusan lokal menuju alamat dokumentasi tersebut. Hasil rute bukan bukti tujuan dapat dijangkau. ping -c 5 <gateway-lab> menguji respons ICMP. ss -lnt menampilkan socket TCP yang mendengarkan; socket LISTEN tidak menjamin layanan dapat diakses dari luar.",
-        "code": "ip -br address\nip route\nip route get 192.0.2.10\nss -lnt"
+        "title": "2. Baca alamat dan status interface",
+        "body": "Interface adalah antarmuka jaringan, misalnya lo untuk loopback dan ens18 untuk adapter VM. ip -br address menampilkan ringkasan status dan alamat. Status UP berarti interface aktif secara administratif; itu belum membuktikan internet atau seluruh jalur bekerja. Interface dapat memiliki beberapa alamat, termasuk IPv4 dan IPv6.\n\nPada contoh, ens18 memakai 192.168.10.10/24. Prefix /24 berarti network IPv4-nya 192.168.10.0/24. Tujuan 192.168.10.11 berada pada subnet yang sama, sedangkan 192.0.2.10 berada di luar subnet. Kamu memakai informasi ini untuk menentukan apakah pemeriksaan berikutnya perlu melihat tetangga lokal atau gateway.",
+        "code": "ip -br address",
+        "codeLabel": "Terminal · baca alamat",
+        "language": "sh",
+        "output": "lo      UNKNOWN  127.0.0.1/8 ::1/128\nens18   UP       192.168.10.10/24",
+        "outputLabel": "Contoh keluaran fiktif · nama interface dapat berbeda"
       },
       {
-        "title": "DNS dan HTTP",
-        "body": "Gunakan dig example.com untuk membaca status jawaban, alamat, resolver yang menjawab, dan TTL. Bandingkan dengan resolver yang memang diizinkan untuk lab. curl -I --connect-timeout 5 --max-time 10 https://example.com meminta header dengan batas waktu. Respons 200/301 berbeda dari gagal resolusi, timeout TCP, atau kegagalan sertifikat. Jangan memakai opsi yang menonaktifkan verifikasi TLS untuk menyatakan layanan sehat.",
-        "code": "dig example.com\ncurl -I --connect-timeout 5 --max-time 10 https://example.com"
+        "title": "3. Menghubungkan tabel rute dengan keputusan lokal",
+        "body": "ip route menunjukkan rute IPv4. Baris default menentukan jalur yang dipakai ketika tidak ada rute yang lebih spesifik untuk tujuan. Pada contoh, tujuan di luar jaringan lokal diarahkan melalui 192.168.10.1 pada ens18. Gateway ini harus dapat dijangkau melalui link yang sesuai.\n\nip route get meminta kernel menjelaskan keputusan menuju satu alamat, termasuk interface dan alamat sumber. Ini berguna saat host memiliki beberapa adapter atau tabel kebijakan. Hasilnya hanya keputusan lokal; belum membuktikan paket sampai, firewall mengizinkan, atau tujuan memiliki rute balasan. Alamat 192.0.2.10 adalah alamat dokumentasi, bukan target internet yang dijanjikan membalas.",
+        "code": "ip route\nip route get 192.0.2.10",
+        "codeLabel": "Terminal · rute lokal",
+        "language": "sh",
+        "output": "default via 192.168.10.1 dev ens18\n192.168.10.0/24 dev ens18 proto kernel scope link src 192.168.10.10",
+        "outputLabel": "Contoh tabel rute fiktif"
       },
       {
-        "title": "Log dan sumber daya",
-        "body": "Pada Linux dengan systemd, systemctl status <unit> membaca status unit; journalctl -u <unit> --since \"15 minutes ago\" --no-pager membaca log unit itu. Nama unit perlu disesuaikan. date -Is mencatat waktu, df -h menunjukkan ruang filesystem, dan free -h menunjukkan memori. Log mungkin dibatasi izin. Jangan mengartikan akses ditolak sebagai tidak ada kejadian; minta bukti melalui petugas yang berwenang.",
-        "code": "date -Is\ndf -h\nfree -h\n# Ganti NAMA_UNIT dengan unit yang tersedia di VM lab\nsystemctl status NAMA_UNIT\njournalctl -u NAMA_UNIT --since \"15 minutes ago\" --no-pager"
+        "title": "4. Ping dan socket menjawab pertanyaan berbeda",
+        "body": "ping -c 5 mengirim lima probe ICMP pada sistem yang mendukung opsi tersebut. Bila gateway membalas, ada bukti pertukaran ICMP ke gateway dari titik uji. Bila tidak membalas, periksa kemungkinan pembatasan ICMP, link, VLAN, alamat dan jalur sebelum menyatakan perangkat mati. Untuk alamat lokal yang membutuhkan ARP, ip neigh membantu melihat hasil resolusi tetangga.\n\nss -lnt membaca socket TCP yang sedang mendengarkan dalam bentuk alamat numerik. LISTEN pada 127.0.0.1:8080 berarti aplikasi hanya terikat ke loopback IPv4. LISTEN pada 0.0.0.0:8080 mencakup seluruh alamat IPv4 lokal, tetapi firewall dan jalur jaringan masih menentukan akses dari luar. Keluaran itu juga belum membuktikan aplikasinya memberi jawaban yang benar.",
+        "code": "ping -c 5 192.168.10.1\nip neigh\nss -lnt",
+        "codeLabel": "Terminal · gunakan gateway lab yang benar",
+        "language": "sh",
+        "table": {
+          "caption": "Pertanyaan yang bisa dijawab alat",
+          "headers": [
+            "Alat",
+            "Bukti yang diberikan",
+            "Yang belum dibuktikan"
+          ],
+          "rows": [
+            [
+              "ping",
+              "Respons ICMP dari titik uji",
+              "Kesehatan DNS dan aplikasi"
+            ],
+            [
+              "ip route get",
+              "Keputusan rute lokal",
+              "Keterjangkauan ujung ke ujung"
+            ],
+            [
+              "ss -lnt",
+              "Socket TCP listening lokal",
+              "Akses dari klien lain"
+            ],
+            [
+              "ip neigh",
+              "Status tetangga IPv4/IPv6",
+              "Kesehatan seluruh jalur internet"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "5. Pisahkan DNS dari HTTP dan TLS",
+        "body": "DNS menerjemahkan nama menjadi informasi seperti alamat A atau AAAA. Saat menjalankan dig, baca status respons, record jawaban, resolver yang menjawab, serta waktu uji. NOERROR tidak selalu berarti ada alamat yang diminta: jawaban bisa kosong untuk jenis record tersebut. NXDOMAIN berarti resolver menjawab nama tidak ada, sedangkan timeout berarti jawaban tidak diterima dalam batas waktu.\n\nSesudah nama teresolusi, curl dapat memeriksa koneksi HTTPS. Opsi -I meminta header dengan metode HEAD; beberapa aplikasi tidak mendukungnya, sehingga respons 405 perlu dipahami sesuai aplikasi. --connect-timeout membatasi fase koneksi, sedangkan --max-time membatasi keseluruhan operasi. Sertifikat gagal, koneksi ditolak, timeout, dan HTTP 503 memberi petunjuk berbeda. Respons 200 pun belum menguji seluruh alur pengguna seperti login.",
+        "code": "dig example.com A\ndig example.com AAAA\ncurl -I --connect-timeout 5 --max-time 10 https://example.com",
+        "codeLabel": "Terminal · contoh pemeriksaan nama dan HTTPS",
+        "language": "sh"
+      },
+      {
+        "title": "6. Membaca log dan kapasitas dengan konteks",
+        "body": "Gunakan systemctl status untuk membaca keadaan unit systemd, lalu journalctl untuk melihat kejadian pada rentang waktu insiden. Nama unit bergantung distribusi dan aplikasi. Hindari mengambil log seluruh sistem jika pertanyaanmu hanya tentang satu layanan dalam lima belas menit terakhir. Jika akses dibatasi, catat keterbatasan itu dan minta bukti dari petugas berwenang.\n\ndf -h menunjukkan penggunaan filesystem. free -h menunjukkan pembagian memori; Linux menggunakan sebagian RAM sebagai cache sehingga nilai free yang kecil saja belum membuktikan kehabisan memori. Cocokkan kapasitas, tren, pesan log dan keluhan. Jangan menghapus log, me-restart unit, atau mengubah izin sebagai bagian dari pemeriksaan baca ini.",
+        "code": "df -h\nfree -h\n# Ganti NAMA_UNIT dengan unit yang benar-benar ada di VM\nsystemctl status NAMA_UNIT\njournalctl -u NAMA_UNIT --since \"15 minutes ago\" --no-pager",
+        "codeLabel": "Terminal · status dan log pada Linux dengan systemd",
+        "language": "sh"
+      },
+      {
+        "title": "7. Studi kasus: ping sehat, nama layanan gagal",
+        "body": "Contoh fiktif: klien dapat membalas ping gateway, tetapi curl melaporkan tidak bisa meresolusi nama. Kamu memeriksa dig dan mendapati resolver yang dipakai timeout. Dari host pembanding pada jalur yang sama, resolver yang diizinkan memberi jawaban. Bukti ini mengarahkan pemeriksaan pada konfigurasi atau akses DNS klien pertama, bukan langsung pada aplikasi web.\n\nCatat resolver aktual, waktu, hasil dua titik uji, dan batas kesimpulan. Jangan mengganti resolver pelanggan atau membuka firewall tanpa kewenangan. Setelah tindakan lab yang direncanakan, ulangi resolusi dan pemeriksaan HTTPS. Bukti pulih harus menunjukkan tahap yang sebelumnya gagal kini bekerja, bukan hanya ping tetap sukses."
       }
     ],
     "practice": [
@@ -83,31 +224,92 @@
       {
         "title": "iproute2: ip dan ss",
         "url": "https://www.kernel.org/pub/linux/utils/net/iproute2/"
+      },
+      {
+        "title": "iproute2: ip-route",
+        "url": "https://man7.org/linux/man-pages/man8/ip-route.8.html"
+      },
+      {
+        "title": "iproute2: ss",
+        "url": "https://man7.org/linux/man-pages/man8/ss.8.html"
       }
     ],
-    "template": "Contoh catatan terminal\nWaktu & zona: ...\nHost / titik uji: ...\nPerintah: ...\nHasil ringkas: ...\nArti hasil & batas kesimpulan: ...\nLangkah berikutnya: ..."
+    "template": "Contoh catatan terminal\nWaktu & zona: ...\nHost / titik uji: ...\nPerintah: ...\nHasil ringkas: ...\nArti hasil & batas kesimpulan: ...\nLangkah berikutnya: ...",
+    "intro": "Banyak pemeriksaan NOC dilakukan dari terminal Linux. Tujuannya bukan menghafal banyak perintah, melainkan memahami pertanyaan yang dijawab setiap perintah. Kita akan mengikuti urutan dari alamat lokal, rute, DNS, koneksi aplikasi, hingga log, menggunakan contoh keluaran fiktif yang bisa kamu bandingkan dengan VM sendiri.",
+    "goals": [
+      "Membaca alamat, rute dan socket tanpa mengubah konfigurasi.",
+      "Membedakan kegagalan resolusi nama, koneksi, TLS dan HTTP.",
+      "Menulis bukti terminal dengan waktu, titik uji dan batas kesimpulannya."
+    ],
+    "analogy": "Anggap pemeriksaan jaringan seperti mengirim paket ke sebuah kantor. Kamu perlu tahu alamat pengirim, pintu keluar, alamat kantor tujuan, apakah pintunya terbuka, lalu apakah petugas di dalam benar-benar melayani. Perintah yang berbeda memeriksa bagian perjalanan yang berbeda.",
+    "practiceReview": "Laporan latihan seharusnya menyertakan alamat dan default route yang cocok dengan topologi. Untuk socket, jelaskan bahwa bind loopback berbeda dari bind seluruh alamat lokal. Pada kasus DNS, tunjukkan urutan: nama gagal → hasil dig → resolver dan titik pembanding → langkah koreksi lab → resolusi serta HTTPS diuji ulang. Jika hasil VM berbeda dari contoh, jelaskan perbedaannya; jangan mengubah catatan agar tampak sama."
   },
   {
     "slug": "noc-monitoring-alarm",
     "title": "Membaca dashboard dan menangani alarm",
     "summary": "Latihan monitoring dengan baseline, usia data, dependensi, dan validasi layanan.",
-    "minutes": 25,
+    "minutes": 8,
     "sections": [
       {
-        "title": "Apa yang sebenarnya diukur?",
-        "body": "Mulai dari host, item/metrik, trigger, dan event. Host adalah objek yang dipantau; item mengumpulkan data; trigger mengevaluasi kondisi; perubahan kondisi menghasilkan event. Pada Zabbix, nama menu dan konfigurasi mengikuti versinya. Untuk latihan, gunakan satu VM monitoring dan satu host lab, atau analisis data contoh bila belum ada server. SNMP memerlukan konfigurasi di perangkat dan pembatasan akses yang sesuai."
+        "title": "1. Dari data mentah sampai muncul problem",
+        "body": "Host adalah objek yang dipantau, misalnya router POP A. Item adalah data yang dikumpulkan dari objek itu, seperti respons ICMP, jumlah sesi, atau traffic interface. Trigger adalah aturan untuk menilai kondisi berdasarkan data. Event mencatat kejadian ketika kondisi yang dikonfigurasi terpenuhi atau berubah. Pada Zabbix, detail problem dan recovery bergantung pada pengaturan trigger.\n\nInsiden adalah konteks operasional gangguan layanan. Satu insiden dapat berhubungan dengan beberapa problem dan banyak metrik. Contohnya, uplink terputus dapat menimbulkan host unreachable, sesi pelanggan turun, dan tes layanan gagal. Menganggap setiap alarm sebagai insiden terpisah bisa membuat pekerjaan berulang serta mengaburkan sumber gangguan bersama."
       },
       {
-        "title": "Baca grafik dan freshness",
-        "body": "Untuk setiap grafik, periksa satuan, rentang waktu, interval polling, dan waktu sampel terakhir. Grafik datar bisa berarti traffic nol atau pengambilan data berhenti. Bandingkan dengan baseline jam serupa, kapasitas link, error/discard, CPU, suhu, serta keluhan layanan. Traffic 900 Mbps pada link 1 Gbps perlu konteks arah, interval, antrean, dan pola puncak; ambang bukan angka universal."
+        "title": "2. Pastikan data masih segar sebelum membaca nilainya",
+        "body": "Polling berarti alat mengambil sampel secara berkala. Jika intervalnya satu menit, kamu biasanya melihat titik-titik data dengan jarak kira-kira satu menit, bukan rekaman setiap milidetik. Sebuah grafik mungkin merangkum data saat rentang waktunya diperbesar. Karena itu, puncak singkat dapat terlihat berbeda pada tampilan satu jam dan satu minggu.\n\nSelalu lihat waktu sampel terakhir. Nilai traffic nol yang baru diambil berbeda dari grafik yang berhenti memperbarui data. Collector yang bermasalah dapat membuat gambar terakhir tetap tampil. Sinkronisasi jam dan zona waktu juga penting: jika timestamp perangkat berbeda jauh, menghubungkan kejadian dengan laporan pelanggan menjadi lebih sulit.",
+        "table": {
+          "caption": "Contoh fiktif: tiga pembacaan pada pukul 10.05 WIB",
+          "headers": [
+            "Metrik",
+            "Nilai terakhir",
+            "Waktu sampel",
+            "Cara membacanya"
+          ],
+          "rows": [
+            [
+              "Traffic uplink",
+              "0 Mbps",
+              "10.05 WIB",
+              "Sampel segar; cari alasan traffic nol"
+            ],
+            [
+              "CPU router",
+              "25%",
+              "09.20 WIB",
+              "Data basi; jangan simpulkan kondisi CPU saat ini"
+            ],
+            [
+              "Tes DNS",
+              "Timeout",
+              "10.05 WIB",
+              "Ada kegagalan uji DNS; validasi dari titik lain"
+            ]
+          ]
+        }
       },
       {
-        "title": "Alarm yang bisa ditindaklanjuti",
-        "body": "Contoh aturan lab: host tidak merespons selama beberapa pengujian berurutan menjadi problem, lalu pulih setelah data sehat kembali. Atur penundaan dan recovery agar gangguan singkat tidak membanjiri petugas. Dependensi dapat menahan alarm turunan ketika induknya bermasalah. Severity bawaan alat bukan otomatis prioritas bisnis: nilai juga jumlah pelanggan, layanan kritis, dan redundansi."
+        "title": "3. Memahami traffic, kapasitas dan error",
+        "body": "Bit dan byte berbeda: satu byte terdiri dari delapan bit. Grafik Mbps menunjukkan megabit per detik, sedangkan sebagian aplikasi memakai MB/s. Baca pula arah traffic. Receive dan transmit mengacu pada perangkat atau interface yang diukur; arah yang sama bisa disebut berbeda bila dibaca dari perangkat di ujung lawan.\n\nTraffic 900 Mbps pada link 1 Gbps memberi perkiraan utilisasi 90% untuk arah dan interval tersebut: 900 dibagi 1.000, lalu dikali 100%. Angka itu belum otomatis membuktikan kongesti. Periksa antrean, discard, latency, throughput yang dicapai, serta pola puncak. Untuk counter error, lihat perubahan per interval; total counter yang tinggi sejak perangkat lama menyala tidak sama dengan error yang sedang meningkat."
       },
       {
-        "title": "Acknowledge bukan selesai",
-        "body": "Validasi dari titik kedua, buat atau kaitkan tiket, lalu acknowledge dengan nama penanggung jawab dan waktu pembaruan. Acknowledge berarti kejadian sudah diperhatikan; layanan belum tentu pulih. Setelah perbaikan, uji layanan, tunggu observasi sesuai SOP, dan cocokkan kondisi recovery. Maintenance terjadwal harus tercatat dengan lingkup serta waktu akhir; jangan menyembunyikan alarm tanpa batas."
+        "title": "4. Baseline membantu mengenali perubahan",
+        "body": "Baseline adalah gambaran kondisi normal pada konteks tertentu. Traffic malam dapat berbeda jauh dari pagi. CPU router yang biasa 60% juga perlu dinilai berbeda dari router yang biasanya 5%. Bandingkan jam serupa dan pastikan kapasitas, konfigurasi, serta jumlah pengguna tidak berubah besar.\n\nContoh latihan: jumlah sesi biasanya sekitar 500 pada pukul 19.00–20.00 WIB. Hari ini turun menjadi 320 sementara pelanggan melapor putus. Selisihnya adalah petunjuk dampak, bukan daftar pasti 180 pelanggan yang sama. Periksa sumber data, sesi yang benar-benar berakhir, distribusi lokasinya, dan apakah ada maintenance. Baseline memperkuat pertanyaan yang tepat; ia tidak menggantikan validasi."
+      },
+      {
+        "title": "5. Merancang alarm yang memberi waktu untuk bertindak",
+        "body": "Ambang alarm harus terkait dengan risiko layanan dan kemampuan petugas menanganinya. Aturan satu sampel gagal dapat terlalu sensitif untuk link yang sesekali melewatkan probe. Sebagai rancangan latihan, kamu bisa meminta beberapa sampel gagal berturut-turut sebelum problem, lalu beberapa sampel sehat sebelum recovery. Jumlah dan durasinya mengikuti kebutuhan deteksi serta interval sampel.\n\nHysteresis memakai syarat pulih yang membantu mencegah status bolak-balik di sekitar satu ambang. Sebagai contoh kebijakan lab, peringatan traffic dapat muncul di atas ambang tertentu secara berkelanjutan dan pulih setelah berada cukup lama di bawah ambang yang lebih rendah. Ini rancangan konseptual; sintaks dan evaluasi trigger harus mengikuti versi alat. Aturan yang lambat juga menunda deteksi, sehingga selalu ada pertimbangan antara kecepatan dan noise."
+      },
+      {
+        "title": "6. Korelasikan alarm lewat dependensi",
+        "body": "Jika host pelanggan hanya dapat dijangkau melewati satu router, problem pada router dapat menjelaskan host unreachable di bawahnya. Dependensi trigger pada Zabbix dapat membantu mengurangi aksi atau notifikasi turunan saat problem induknya aktif, sesuai konfigurasi. Tetap baca perilaku versi yang digunakan; jangan menganggap semua alarm turunan selalu muncul atau langsung diperbarui dengan cara yang sama.\n\nSeverity menggambarkan tingkat kondisi menurut konfigurasi monitoring. Prioritas operasional juga mempertimbangkan layanan kritis, jumlah pengguna, dan ada tidaknya jalur cadangan. Alarm severity tinggi di perangkat lab tidak otomatis lebih mendesak daripada satu layanan pelanggan penting yang benar-benar putus. Lihat dampaknya bersama SOP."
+      },
+      {
+        "title": "7. Acknowledge, update, recovery dan penutupan",
+        "body": "Acknowledge berarti petugas telah memperhatikan problem dan mengambil tanggung jawab tindak lanjut sesuai proses. Ini bukan tombol untuk memperbaiki layanan. Isi komentar yang berguna, misalnya ID tiket, dampak yang sudah tervalidasi, pemilik penanganan dan waktu update berikutnya. Hindari komentar “cek” tanpa konteks.\n\nRecovery pada monitoring berarti kondisi yang dikonfigurasi untuk pulih telah tercapai. Sebelum menutup tiket, validasi layanan yang terdampak dan amati sesuai SOP. Jika maintenance memerlukan suppression atau jeda notifikasi, tetapkan lingkup serta waktu akhirnya. Jangan membiarkan alarm disembunyikan tanpa penanggung jawab yang mengembalikan pemantauan."
+      },
+      {
+        "title": "8. Studi kasus: bedakan kongesti dan data basi",
+        "body": "Contoh A: traffic uplink naik mendekati kapasitas, discard meningkat selama beberapa interval, latency tujuan akhir ikut naik, dan keluhan muncul pada jam yang sama. Kombinasi ini mendukung dugaan kongesti, walaupun lokasi dan penyebabnya tetap perlu dibuktikan. Eskalasikan dengan grafik satuan serta rentang waktu yang jelas.\n\nContoh B: grafik traffic tampak datar nol, tetapi waktu sampelnya 40 menit lalu dan klien masih mengakses layanan. Ini mengarah pada masalah pengambilan data. Tiket perlu menjelaskan blind spot monitoring; jangan melaporkan seluruh pelanggan mati hanya dari grafik tersebut. Pada kedua contoh, tulis bukti yang dapat membantah dugaan awal agar diagnosis tidak terkunci pada satu penjelasan."
       }
     ],
     "practice": [
@@ -126,30 +328,111 @@
       {
         "title": "Zabbix: acknowledgment",
         "url": "https://www.zabbix.com/documentation/7.0/en/manual/acknowledgment"
+      },
+      {
+        "title": "Zabbix: konfigurasi trigger dan recovery",
+        "url": "https://www.zabbix.com/documentation/current/en/manual/config/triggers/trigger"
+      },
+      {
+        "title": "Zabbix: dependensi trigger",
+        "url": "https://www.zabbix.com/documentation/current/en/manual/config/triggers/best_practices/dependencies"
       }
-    ]
+    ],
+    "intro": "Dashboard bisa menampilkan ratusan metrik, tetapi tugas petugas NOC adalah menemukan kejadian yang berdampak pada layanan. Artikel ini mengajakmu membaca angka bersama satuan, waktu, baseline, dan topologi, lalu mengubah alarm menjadi tindakan yang terarah. Semua angka kasus di bawah adalah data latihan fiktif.",
+    "goals": [
+      "Membedakan host, item, trigger, event dan insiden.",
+      "Membaca grafik bersama usia data, interval polling dan baseline.",
+      "Memvalidasi alarm, memberi acknowledge, serta memeriksa recovery."
+    ],
+    "analogy": "Alarm jaringan mirip lampu indikator pada kendaraan. Lampu membantu memberi tahu ada kondisi yang perlu diperiksa, tetapi tidak selalu menjelaskan komponen yang rusak. Bila alat ukurnya terputus, angka yang terakhir terlihat juga tidak boleh dianggap sebagai keadaan kendaraan saat ini.",
+    "practiceReview": "Dalam lab, catat interval sampling dan waktu saat koneksi target diputus. Ukur kapan problem muncul dan kapan recovery terdeteksi, lalu cocokkan dengan rancangan aturan. Pada data contoh, tunjukkan mana metrik segar dan mana yang berhenti. Acknowledge harus memuat pemilik serta tiket; laporan pulih harus memuat uji layanan. Jika hanya menyebut warna dashboard tanpa waktu atau satuan, hasil latihan belum cukup."
   },
   {
     "slug": "noc-tiket-eskalasi",
     "title": "Tiket gangguan, prioritas, SLA, dan eskalasi",
     "summary": "Ubah keluhan menjadi catatan yang jelas dan paket bukti yang siap ditangani tim berikutnya.",
-    "minutes": 25,
+    "minutes": 7,
     "sections": [
       {
-        "title": "Isi tiket yang berguna",
-        "body": "Simpan ID layanan atau lokasi, waktu awal beserta zona, gejala, cakupan dampak, sumber alarm, topologi terkait, dan kontak operasional sesuai kebijakan. Pisahkan fakta, dugaan, dan tindakan. Kalimat \"internet rusak\" sulit ditindaklanjuti; \"20 sesi pelanggan POP A terputus sejak 09.10 WIB, uplink access down, POP B normal\" lebih terukur."
+        "title": "1. Ubah keluhan menjadi pertanyaan yang bisa diperiksa",
+        "body": "Pelanggan mungkin berkata “internet lambat”. Jangan langsung menerjemahkannya menjadi bandwidth penuh. Tanyakan layanan atau tujuan apa, sejak kapan, apakah semua perangkat mengalaminya, dan apakah koneksi kabel serta Wi-Fi menunjukkan gejala yang sama. Gunakan pertanyaan yang mengurangi ketidakjelasan tanpa menyalahkan pelanggan.\n\nContoh hasil pencatatan: “Sejak 10.05 WIB, tiga komputer di cabang A gagal membuka aplikasi persediaan; situs lain masih terbuka; koneksi memakai kabel.” Informasi ini membantu membedakan gangguan seluruh akses dari gangguan tujuan tertentu. Jika waktu awal belum diketahui, tulis waktu laporan dan tandai waktu awal belum terkonfirmasi."
       },
       {
-        "title": "Prioritas dan waktu layanan",
-        "body": "Prioritas menggabungkan dampak dan urgensi menurut matriks perusahaan. Contoh latihan: P1 untuk gangguan luas tanpa redundansi, P2 gangguan sebagian, P3 satu layanan nonkritis. Ini bukan standar universal. SLA adalah komitmen layanan yang definisi pengukuran, pengecualian, dan targetnya mengikuti kontrak. Bedakan target respons, interval update, dan pemulihan; jangan menjanjikan ETA tanpa konfirmasi."
+        "title": "2. Pisahkan fakta, dugaan dan tindakan",
+        "body": "Fakta adalah hasil yang benar-benar diamati: interface down, resolver timeout, atau lima probe tidak dibalas. Dugaan adalah penjelasan sementara: masalah VLAN, gangguan upstream, atau layanan DNS tidak tersedia. Tindakan adalah apa yang telah dikerjakan serta hasilnya. Ketiganya perlu terlihat berbeda dalam tiket.\n\nContoh yang kurang tepat: “Router rusak, sudah dicek.” Contoh yang lebih berguna: “Dari host NOC-A pukul 10.12 WIB, lima probe ke alamat manajemen gagal; dari host pembanding hasil sama. Penyebab belum diketahui. Tim lapangan diminta memeriksa daya dan status link.” Dengan cara ini, tim penerima tahu apa yang dapat dipercaya dan apa yang masih perlu diuji.",
+        "table": {
+          "caption": "Tiga jenis catatan pada kasus fiktif",
+          "headers": [
+            "Jenis",
+            "Contoh catatan",
+            "Mengapa berguna"
+          ],
+          "rows": [
+            [
+              "Fakta",
+              "Uplink POP A down sejak 09.10 WIB pada sampel segar",
+              "Menentukan waktu dan titik yang diperiksa"
+            ],
+            [
+              "Dugaan",
+              "Gangguan pada jalur agregasi; belum terkonfirmasi",
+              "Menunjukkan arah diagnosis tanpa vonis"
+            ],
+            [
+              "Tindakan",
+              "Meminta status port sisi lawan; menunggu tim transport",
+              "Menjelaskan pekerjaan yang sedang berjalan"
+            ]
+          ]
+        }
       },
       {
-        "title": "Eskalasi yang membuat pekerjaan bergerak",
-        "body": "Eskalasi fungsional mengarahkan kasus ke tim yang kompeten; eskalasi hierarkis meminta bantuan penanggung jawab ketika dampak atau tenggat memerlukannya. Sertakan ID circuit/perangkat, titik uji, waktu, bukti dua arah bila tersedia, hasil pembanding, tindakan yang sudah dilakukan, dan permintaan spesifik. Catat pemilik kasus dan konfirmasi penerima; mengirim pesan saja belum menjamin kasus diambil."
+        "title": "3. Menentukan prioritas dari dampak dan urgensi",
+        "body": "Dampak menggambarkan seberapa besar layanan terpengaruh, sedangkan urgensi menggambarkan seberapa cepat penanganan diperlukan. Banyak pelanggan terputus tanpa redundansi biasanya perlu perhatian cepat. Satu layanan dengan fungsi bisnis penting juga bisa sangat mendesak walaupun penggunanya sedikit. Karena itu, jumlah pengguna saja tidak cukup untuk memilih prioritas.\n\nTabel berikut hanya matriks latihan. Saat bekerja, gunakan definisi prioritas perusahaan serta kontrak layanan terkait. Jika informasi dampak berubah, perbarui prioritas beserta alasannya. Jangan menaikkan atau menurunkannya hanya agar statistik terlihat baik.",
+        "table": {
+          "caption": "Matriks prioritas untuk simulasi, bukan aturan universal",
+          "headers": [
+            "Prioritas latihan",
+            "Contoh kondisi",
+            "Fokus awal"
+          ],
+          "rows": [
+            [
+              "P1",
+              "Satu POP putus dan tidak ada jalur cadangan",
+              "Koordinasi cepat, validasi cakupan, eskalasi pemilik"
+            ],
+            [
+              "P2",
+              "Sebagian layanan terganggu atau redundansi hilang",
+              "Nilai risiko dan tangani sebelum dampak meluas"
+            ],
+            [
+              "P3",
+              "Satu layanan nonkritis terganggu dengan alternatif tersedia",
+              "Diagnosis terjadwal sesuai target internal"
+            ]
+          ]
+        }
       },
       {
-        "title": "Kapan tiket boleh ditutup?",
-        "body": "Bedakan layanan pulih dengan akar masalah terkonfirmasi. Verifikasi dari sisi pelanggan atau titik uji yang mewakili, cek alarm recovery, dan observasi menurut SOP. Simpan waktu pulih, penyebab yang diketahui atau masih diselidiki, tindakan, serta tindak lanjut. Gunakan label \"dugaan\" jika bukti belum cukup. Lampiran portofolio memakai identitas fiktif, tanpa password atau konfigurasi pelanggan asli."
+        "title": "4. Bedakan SLA, target respons dan waktu pemulihan",
+        "body": "SLA adalah kesepakatan tingkat layanan. Definisi availability, pengecualian, periode pengukuran, dan target mengikuti dokumen yang berlaku, bukan angka yang diambil dari internet. Target respons berarti kapan laporan diakui atau mulai ditangani menurut definisinya. Target pemulihan berbeda: kapan layanan kembali bekerja. Interval update adalah kapan perkembangan berikutnya harus disampaikan.\n\nContoh aturan internal latihan: acknowledge dalam 10 menit dan update setiap 30 menit. Jika alarm dicatat 09.10 WIB, target acknowledge pertama adalah 09.20 WIB. Ini latihan membaca waktu, bukan janji pemulihan pukul 09.20. Bila penyedia belum memberi estimasi selesai, tulis “ETA belum terkonfirmasi” dan tetap berikan waktu update berikutnya."
+      },
+      {
+        "title": "5. Eskalasi harus mempunyai penerima dan permintaan jelas",
+        "body": "Eskalasi fungsional meminta bantuan tim yang memiliki keahlian atau kewenangan sesuai masalah. Eskalasi hierarkis melibatkan penanggung jawab ketika dampak, hambatan atau tenggat memerlukannya. Mengirim pesan ke grup tanpa penerima yang mengakui belum menjamin ada orang yang mengambil pekerjaan. Catat siapa pemilik tindak lanjut.\n\nPaket bukti minimal berisi ID layanan atau circuit, lokasi, waktu dan zona, cakupan dampak, hasil pemeriksaan, pembanding, serta tindakan yang sudah dilakukan. Akhiri dengan permintaan spesifik, misalnya “mohon periksa status port sisi penyedia dan konfirmasi apakah ada gangguan pada circuit LAB-A”. Jangan menempel seluruh konfigurasi atau rahasia pelanggan bila tidak dibutuhkan."
+      },
+      {
+        "title": "6. Studi kasus: satu tiket dari alarm ke eskalasi",
+        "body": "Contoh fiktif: alarm uplink muncul 09.10 WIB. Pukul 09.12, L1 mengonfirmasi bahwa POP A kehilangan sesi pelanggan sementara POP B normal. Pukul 09.15, ia membuka LAB-001 dan menghubungi tim jaringan. Pukul 09.18, tim jaringan mengonfirmasi menerima kasus dan meminta pemeriksaan sisi transport.\n\nTimeline menunjukkan urutan fakta serta siapa yang sedang bekerja. Ketika kasus berpindah tim, NOC tetap memantau tenggat dan mengomunikasikan perubahan status. Jika bukti berikutnya menunjukkan akses sudah sehat tetapi autentikasi masih gagal, perbarui lingkup diagnosis; jangan memaksa semua bukti mengikuti dugaan uplink awal.",
+        "code": "LAB-001 · Update 09.20 WIB (UTC+7)\nDampak: layanan pelanggan POP A masih terputus; POP B normal.\nBukti: uplink agregasi down pada sampel 09.19 WIB; sesi POP A turun.\nTindakan: tim jaringan sudah menerima; pemeriksaan transport berjalan.\nPemilik teknis: petugas on-call tim jaringan (simulasi).\nETA: belum terkonfirmasi.\nUpdate berikutnya: 09.50 WIB atau lebih awal bila ada perubahan.",
+        "codeLabel": "Contoh update tiket fiktif",
+        "language": "text"
+      },
+      {
+        "title": "7. Pemulihan, penutupan dan akar masalah",
+        "body": "Sesudah tim teknis menyampaikan perbaikan, uji kembali layanan dari titik yang mewakili pengguna. Catat hasil aplikasi atau koneksi yang sebelumnya gagal, status alarm, serta kondisi sesi bila relevan. Tunggu masa observasi yang ditetapkan. “Port up” adalah salah satu bukti, tetapi belum menjamin autentikasi atau akses layanan sudah pulih.\n\nTiket penutupan mencatat waktu awal, waktu pulih menurut definisi yang dipakai, dampak, tindakan, hasil validasi dan tindak lanjut. Jika penyebab belum diketahui, jangan mengisinya dengan tebakan. Tulis layanan sudah pulih dan investigasi penyebab masih terbuka, dengan pemiliknya. Untuk latihan portofolio, gunakan identitas, nomor circuit dan kontak fiktif."
       }
     ],
     "practice": [
@@ -166,29 +449,86 @@
         "url": "https://www.zabbix.com/documentation/7.0/en/manual/acknowledgment"
       }
     ],
-    "template": "ID tiket: LAB-001\nMulai / zona waktu: ...\nLayanan / lokasi / circuit ID: ...\nGejala & dampak: ...\nPrioritas & alasan: ...\nBukti (waktu, titik uji, hasil): ...\nDugaan (belum terkonfirmasi): ...\nTindakan & hasil: ...\nPemilik / tim eskalasi: ...\nUpdate berikutnya: ...\nWaktu pulih & verifikasi: ...\nTindak lanjut: ..."
+    "template": "ID tiket: LAB-001\nMulai / zona waktu: ...\nLayanan / lokasi / circuit ID: ...\nGejala & dampak: ...\nPrioritas & alasan: ...\nBukti (waktu, titik uji, hasil): ...\nDugaan (belum terkonfirmasi): ...\nTindakan & hasil: ...\nPemilik / tim eskalasi: ...\nUpdate berikutnya: ...\nWaktu pulih & verifikasi: ...\nTindak lanjut: ...",
+    "intro": "Gangguan yang sama bisa ditangani cepat atau berlarut-larut bergantung pada kualitas informasi yang diteruskan. Tiket bukan sekadar formulir administrasi. Ia menjadi catatan bersama tentang siapa yang terdampak, apa yang sudah diperiksa, siapa yang bekerja, dan kapan tindak lanjut harus dilakukan. Di sini kita menyusun satu tiket dari keluhan singkat sampai verifikasi pulih.",
+    "goals": [
+      "Menulis gejala, dampak, fakta dan dugaan secara terpisah.",
+      "Menggunakan contoh matriks prioritas tanpa menyamakannya dengan SLA perusahaan.",
+      "Menyusun eskalasi, update dan penutupan dengan bukti yang dapat ditindaklanjuti."
+    ],
+    "analogy": "Bayangkan tiket sebagai buku estafet sebuah pekerjaan. Pelari berikutnya harus menerima posisi terakhir dan arah larinya, bukan diminta mengulang dari garis mulai. Catatan yang jelas membuat pergantian tim atau shift tidak menghapus pengetahuan yang sudah dikumpulkan.",
+    "practiceReview": "Tiga tiket latihan harus dapat dibedakan dari cakupan dampaknya: satu pelanggan, satu segmen, dan satu layanan DNS. Prioritas disertai alasan, bukan hanya label P1/P2/P3. Eskalasi harus menunjuk penerima dan meminta tindakan spesifik. Pada penutupan, sertakan hasil uji yang sama jenisnya dengan gejala awal. Jika belum ada ETA, jadwal update tetap bisa ditentukan tanpa menjanjikan waktu pulih."
   },
   {
     "slug": "noc-akses-isp",
     "title": "Gangguan akses ISP: ONT, radio, dan PPPoE",
     "summary": "Pisahkan gangguan fisik, VLAN akses, sesi pelanggan, dan autentikasi.",
-    "minutes": 25,
+    "minutes": 8,
     "sections": [
       {
-        "title": "Telusuri satu jalur pelanggan",
-        "body": "Gambar CPE/ONT → OLT atau radio akses → switch agregasi → BRAS/BNG → core. Tidak semua ISP memakai perangkat atau urutan yang sama. BRAS/BNG mengakhiri layanan pelanggan, misalnya PPPoE; RADIUS dapat memeriksa kredensial dan kebijakan sesi. Catat ID pelanggan fiktif, port/PON/VLAN, perangkat agregasi, serta titik terminasi."
+        "title": "1. Membaca jalur pelanggan sebelum memeriksa akun",
+        "body": "CPE adalah perangkat pada sisi pelanggan; router Wi-Fi rumah dapat menjadi salah satunya. Pada akses fiber, ONT mengakhiri koneksi optik di pelanggan dan berhubungan dengan OLT di jaringan penyedia. ONT dan router bisa menjadi satu perangkat atau terpisah. Pada akses radio, perangkat station atau penerima pelanggan berhubungan dengan perangkat radio penyedia.\n\nTraffic kemudian melewati akses dan agregasi menuju perangkat yang menyediakan layanan pelanggan, misalnya BRAS atau BNG. RADIUS dapat dipakai untuk autentikasi serta kebijakan layanan. Tidak semua ISP memakai bentuk yang sama. Saat membaca inventaris, cari hubungan nyata pelanggan–port–PON/radio–VLAN–BNG, bukan menganggap gambar contoh berlaku persis di semua jaringan."
       },
       {
-        "title": "Fisik lebih dahulu",
-        "body": "Pada fiber, periksa status ONT, LOS, link uplink, serta tren daya optik bila tersedia. Ambang Rx/Tx bergantung modul, class optik, desain, dan spesifikasi perangkat; satu angka dBm tidak berlaku untuk semua. LOS bukan bukti pasti kabel putus di lokasi tertentu. Pada radio, bandingkan RSSI, SNR, kapasitas dan error dengan baseline; cuaca, interferensi, atau alignment masih perlu pembuktian."
+        "title": "2. Pisahkan gangguan rumah pelanggan dari gangguan segmen",
+        "body": "Jika satu ponsel bermasalah tetapi komputer dengan kabel normal, pemeriksaan perlu mempertimbangkan perangkat pengguna dan Wi-Fi. Jika semua perangkat satu pelanggan gagal, cakupannya berbeda. Jika banyak pelanggan di PON yang sama terputus pada waktu berdekatan, carilah bagian yang dipakai bersama. Pertanyaan cakupan membantu menentukan lokasi uji berikutnya.\n\nMinta status indikator dan waktu kejadian dengan bahasa sederhana. “Apakah lampu LOS merah?”, “apakah semua perangkat gagal?”, atau “apakah perangkat baru saja mati listrik?” lebih membantu daripada meminta pelanggan langsung menyimpulkan jenis kerusakan. Cocokkan jawaban dengan status perangkat yang dapat dibaca NOC serta pelanggan pembanding."
       },
       {
-        "title": "PPPoE dan autentikasi",
-        "body": "PPPoE memiliki tahap discovery dan session. Tidak menemukan access concentrator mengarahkan pemeriksaan ke link, bridge/VLAN, layanan PPPoE dan jalur Layer 2. Gagal autentikasi mengarahkan pemeriksaan ke username, profile, RADIUS dan kebijakan akun. Sesi aktif tetapi tidak ada internet mengarahkan pemeriksaan ke alamat, DNS, rute, NAT, atau kebijakan setelah login. Teks log merupakan petunjuk, bukan vonis tunggal."
+        "title": "3. Fiber: pahami link dan daya optik",
+        "body": "LOS berarti perangkat mendeteksi kehilangan sinyal optik sesuai mekanismenya. Penyebabnya dapat berkaitan dengan patch cord, konektor, jalur fiber, perangkat lawan atau catu daya yang membuat pemancar lawan mati. LOS tidak langsung menunjukkan koordinat kabel putus. Periksa apakah satu pelanggan atau satu kelompok terdampak, kemudian minta bukti dari kedua sisi sesuai kewenangan.\n\nDaya optik sering dinyatakan dalam dBm. Nilai yang makin negatif berarti daya yang lebih kecil, tetapi rentang penerimaan yang benar bergantung class optik dan spesifikasi pemancar/penerima. Jangan memakai satu ambang universal. Bandingkan nilai saat ini, tren sebelumnya, spesifikasi perangkat, serta alarm yang menyertainya. Pekerjaan fisik fiber mengikuti prosedur teknisi; jangan melihat langsung ke konektor optik."
       },
       {
-        "title": "Bukti sebelum kirim tim lapangan",
-        "body": "Tentukan satu pelanggan atau satu segmen, bandingkan pelanggan tetangga pada PON/radio yang sama, dan periksa alarm bersama. Untuk MikroTik lab, gunakan /interface pppoe-client print detail, /ppp active print, dan /log print sesuai peran client/server serta hak akses. Jangan menampilkan password, memutus sesi massal, atau mengubah profile pelanggan tanpa runbook dan otorisasi."
+        "title": "4. Radio: sinyal kuat belum menjamin throughput sehat",
+        "body": "Pada radio, RSSI menggambarkan kekuatan sinyal yang diterima, sedangkan SNR membandingkan sinyal dengan noise. Keduanya perlu dibaca bersama kapasitas, modulasi atau rate, error, retransmission, serta pemakaian kanal. Link dengan sinyal terlihat kuat tetap dapat mengalami gangguan bila interferensi tinggi atau kapasitas sudah penuh.\n\nGunakan baseline link yang sama. Jika RSSI relatif tetap tetapi SNR turun dan retransmission meningkat pada waktu keluhan, interferensi menjadi salah satu dugaan yang perlu diuji. Jika seluruh perangkat pada lokasi hilang bersamaan, periksa daya dan uplink bersama juga. Jangan menyalahkan cuaca atau mengubah channel produksi hanya karena satu angka berubah."
+      },
+      {
+        "title": "5. Memahami discovery PPPoE sebagai pencarian gerbang",
+        "body": "PPPoE membawa PPP melalui Ethernet. Sebelum sesi terbentuk, client mencari access concentrator pada jalur Layer 2. Secara sederhana, PADI adalah permintaan pencarian, PADO adalah tawaran server, PADR adalah permintaan memilih layanan, dan PADS mengonfirmasi sesi. Tujuannya agar kedua pihak memiliki konteks sesi sebelum menjalankan pertukaran PPP berikutnya.\n\nJika client mengirim PADI tetapi tidak menerima PADO, pemeriksaan diarahkan ke akses Layer 2, VLAN, bridge, ketersediaan server, serta batas layanan yang dikonfigurasi. Ini bukan bukti langsung password salah, karena autentikasi belum mencapai tahap yang relevan. Capture paket jika memang diizinkan dapat membantu, tetapi L1 bisa mulai dari log serta status client dan sisi akses.",
+        "table": {
+          "caption": "Tahap PPPoE dan arah diagnosis awal",
+          "headers": [
+            "Tahap atau gejala",
+            "Yang sedang dicoba",
+            "Arah pemeriksaan"
+          ],
+          "rows": [
+            [
+              "Tidak ada tawaran server",
+              "Menemukan access concentrator",
+              "Link, VLAN/bridge, discovery dan server"
+            ],
+            [
+              "Autentikasi ditolak",
+              "Memverifikasi identitas/kebijakan",
+              "Akun, RADIUS, profile dan status layanan"
+            ],
+            [
+              "Sesi aktif, alamat tidak sesuai",
+              "Pembentukan layanan IP",
+              "Negosiasi IP, pool/profile dan konfigurasi"
+            ],
+            [
+              "Sesi aktif, internet gagal",
+              "Mengirim traffic setelah login",
+              "DNS, rute, NAT bila dipakai, dan kebijakan"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "6. Autentikasi berbeda dari ketersediaan server akun",
+        "body": "Autentikasi memeriksa apakah identitas diizinkan. Pesan penolakan dapat berkaitan dengan kredensial, kebijakan akun, batas sesi, profile atau layanan yang dipilih. Timeout ke server autentikasi berbeda dari jawaban penolakan: pada timeout, respons tidak diterima dalam batas waktu dan jalur menuju server juga perlu diperiksa.\n\nCatat pesan log aktual dan waktunya, lalu korelasikan dengan sisi server jika akses tersedia. Jangan menyalin password ke tiket. Untuk kasus massal, periksa apakah banyak client pada akses berbeda mengalami gejala sama dan memakai dependensi autentikasi yang sama. Reset banyak akun tanpa bukti justru dapat memperluas pekerjaan pemulihan."
+      },
+      {
+        "title": "7. Sesi aktif tetapi pelanggan tetap tidak bisa bekerja",
+        "body": "Sesi aktif menunjukkan tahapan pembentukan sesi tertentu berhasil. Itu belum menguji resolusi nama, rute internet, kebijakan firewall, kapasitas atau aplikasi tujuan. Periksa alamat yang diterima, default route yang relevan, DNS dan tujuan yang dilaporkan. Uji dari sisi yang mewakili pelanggan, bukan hanya dari alamat manajemen router.\n\nPada MikroTik, perintah baca disesuaikan peran perangkat: pppoe-client untuk sisi client dan ppp active untuk sesi pada perangkat PPP yang sesuai. Nama menu dapat berbeda menurut versi. Keluaran print detail dapat memuat identitas serta konfigurasi; baca secara lokal dan buat ringkasan yang sudah disamarkan sebelum melampirkannya.",
+        "code": "/interface pppoe-client print\n/ppp active print\n/log print",
+        "codeLabel": "Pemeriksaan baca · RouterOS, sesuaikan client/server",
+        "language": "routeros"
+      },
+      {
+        "title": "8. Studi kasus: dua puluh pelanggan pada satu PON",
+        "body": "Contoh fiktif: dua puluh ONT pada satu PON offline sejak 14.05 WIB. Pelanggan pada PON lain dan akses radio tetap terhubung. L1 mencatat waktu, cakupan PON dan perangkat bersama, lalu memeriksa alarm OLT serta uplink. Jika OLT masih dapat diakses dan hanya satu PON bermasalah, arah diagnosis lebih sempit daripada dugaan seluruh core mati.\n\nPaket eskalasi berisi ID OLT/PON fiktif, daftar dampak tersamarkan, kondisi sebelum/sesudah, alarm optik, dan hasil pembanding. Tim yang berwenang memeriksa sisi fisik atau perangkat akses. Setelah perbaikan, verifikasi ONT kembali terdaftar, sesi pelanggan kembali terbentuk, dan uji layanan berhasil. Jangan menutup tiket hanya karena indikator optik kembali normal."
       }
     ],
     "practice": [
@@ -203,30 +543,120 @@
       {
         "title": "MikroTik: PPPoE",
         "url": "https://manual.mikrotik.com/docs/virtual-private-networks/pppoe/"
+      },
+      {
+        "title": "RFC 2516: discovery dan session PPPoE",
+        "url": "https://www.rfc-editor.org/rfc/rfc2516"
       }
-    ]
+    ],
+    "intro": "Laporan “internet mati” dapat berasal dari kabel, perangkat akses, VLAN, autentikasi, atau jalur setelah pelanggan berhasil terhubung. Bila semua gejala ditangani dengan cara yang sama, pemeriksaan akan berputar-putar. Artikel ini menjelaskan perjalanan koneksi pelanggan dan alasan urutan pemeriksaannya, dengan contoh ISP fiktif.",
+    "goals": [
+      "Mengenali peran CPE, ONT, OLT, agregasi, BNG dan RADIUS.",
+      "Membedakan gangguan fisik, discovery PPPoE, autentikasi dan akses setelah login.",
+      "Menentukan bukti serta tim tujuan eskalasi dari satu atau banyak pelanggan terdampak."
+    ],
+    "analogy": "Mengakses internet seperti masuk kawasan perkantoran. Jalan menuju gerbang harus tersambung, gerbang harus ditemukan, identitas diperiksa, lalu pengunjung diberi akses menuju tujuan. Mengganti kartu identitas tidak akan memperbaiki jalan yang terputus sebelum gerbang.",
+    "practiceReview": "Pohon keputusan latihan sebaiknya dimulai dari cakupan pelanggan, lalu status fisik, discovery, autentikasi, alamat dan layanan. Untuk LOS, hasil yang dicari adalah lokasi/segmen dan bukti optik, bukan tebakan password. Untuk authentication failed, bedakan penolakan dengan timeout server. Untuk sesi aktif tanpa DNS, tunjukkan hasil resolusi dan uji layanan. Pada gangguan massal, sertakan pembanding dari jalur yang tidak terdampak."
   },
   {
     "slug": "noc-upstream-dns-routing",
     "title": "Mengenali gangguan upstream, peering, CDN, dan DNS",
     "summary": "Kumpulkan bukti ketika jaringan lokal sehat tetapi akses tujuan tertentu bermasalah.",
-    "minutes": 25,
+    "minutes": 8,
     "sections": [
       {
-        "title": "Bedakan jenis koneksi ISP",
-        "body": "IP transit menyediakan akses menuju internet melalui penyedia. Peering adalah pertukaran rute antarjaringan sesuai kebijakan, sering melalui IXP. CDN menempatkan salinan konten atau layanan di berbagai lokasi; cache hit dapat mengurangi perjalanan ke origin. Tidak semua tujuan melewati jalur yang sama. Jarak fisik CDN yang dekat saja tidak menjamin latency rendah karena rute, kapasitas, dan kondisi layanan ikut berpengaruh."
+        "title": "1. Mengapa tidak semua tujuan melewati jalur yang sama?",
+        "body": "Internet terdiri dari banyak jaringan dengan kebijakan masing-masing. ISP menerima informasi keterjangkauan dan memilih jalur sesuai kebijakan serta rute yang tersedia. Akibatnya, dua layanan yang dibuka pelanggan yang sama bisa melewati penyedia berbeda. Perubahan hanya pada sebagian tujuan tidak otomatis membuktikan seluruh akses internet terputus.\n\nSaat menerima keluhan, catat nama layanan, alamat tujuan yang diperoleh saat uji, protokol, waktu dan lokasi pengujian. Alamat layanan bisa berubah karena DNS atau CDN. “Situs A lambat sejak malam” perlu diperjelas menjadi hasil yang bisa dibandingkan dari beberapa titik serta waktu yang sama."
       },
       {
-        "title": "Kenali BGP pada tingkat observasi",
-        "body": "ASN mengidentifikasi autonomous system dan BGP bertukar informasi keterjangkauan prefix. Junior NOC perlu mengenali sesi established, perubahan jumlah prefix, dan perbedaan jalur dari baseline. Established tidak menjamin semua rute yang dibutuhkan tersedia. Mengubah filter, local preference, atau pengumuman prefix memerlukan prosedur tim routing; roadmap ini cukup pada membaca bukti dan eskalasi."
+        "title": "2. Transit, peering dan IXP mempunyai peran berbeda",
+        "body": "IP transit adalah layanan dari penyedia untuk menjangkau jaringan internet melalui rute yang disepakati. Peering adalah pertukaran traffic antarjaringan sesuai kebijakan dan kesepakatan. IXP menyediakan fasilitas pertukaran tempat jaringan dapat membangun hubungan peering; bergabung ke IXP tidak berarti otomatis mendapat semua rute internet atau peer ke seluruh anggotanya.\n\nUntuk NOC, bedanya membantu memahami cakupan dampak. Bila beberapa tujuan yang biasa lewat satu peer bermasalah tetapi transit lain tetap sehat, paket eskalasi harus menyebut pola tersebut sebagai dugaan yang perlu diperiksa. Kamu tidak perlu mengubah pemilihan jalur untuk membuktikan dugaan awal; baca data yang tersedia dan libatkan tim routing.",
+        "table": {
+          "caption": "Peran sambungan, bukan jaminan kualitas",
+          "headers": [
+            "Istilah",
+            "Fungsi utama",
+            "Yang perlu dihindari"
+          ],
+          "rows": [
+            [
+              "IP transit",
+              "Mencapai internet melalui penyedia sesuai rute/kebijakan",
+              "Menganggap semua tujuan pasti lewat transit yang sama"
+            ],
+            [
+              "Peering",
+              "Pertukaran antarjaringan yang bersepakat",
+              "Menganggap selalu gratis atau selalu lebih cepat"
+            ],
+            [
+              "IXP",
+              "Fasilitas untuk pertukaran antarjaringan",
+              "Menganggap keanggotaan otomatis memberi semua rute"
+            ],
+            [
+              "CDN",
+              "Mendistribusikan layanan/konten melalui banyak lokasi",
+              "Menganggap server terdekat geografis pasti terpilih"
+            ]
+          ]
+        }
       },
       {
-        "title": "Uji nama dan tujuan secara terpisah",
-        "body": "Catat nama layanan, jawaban DNS termasuk A/AAAA, resolver, waktu, dan titik uji. Jika hanya IPv6 gagal sementara IPv4 sehat, jangan menyatakan seluruh layanan mati. Bandingkan gateway, beberapa tujuan yang disetujui, dan jalur cadangan bila tersedia. CDN dapat memberi jawaban berbeda menurut lokasi atau resolver. Simpan hasil aktual; jangan mengasumsikan alamat tujuan tetap."
+        "title": "3. CDN, cache hit dan alasan jarak saja tidak cukup",
+        "body": "CDN menempatkan layanan atau salinan konten pada sejumlah lokasi. Cache hit berarti objek yang diminta dapat dilayani dari cache terkait. Cache miss dapat memerlukan pengambilan dari origin atau lapisan cache lain. Tidak semua objek boleh di-cache dan tidak semua respons dinamis mengikuti pola yang sama. Karena itu, satu tes tidak cukup untuk menilai seluruh CDN.\n\nCDN yang secara geografis dekat dapat membantu mengurangi perjalanan data, tetapi routing dan peering menentukan lokasi yang benar-benar menerima traffic. Kepadatan link, koneksi ke origin dan pemrosesan aplikasi juga memengaruhi waktu muat. Saat halaman lambat, bedakan waktu resolusi DNS, koneksi, respons awal dan pengambilan objek; ping singkat saja belum mengukur pengalaman aplikasi."
       },
       {
-        "title": "Baca traceroute dengan hati-hati",
-        "body": "Tanda bintang bisa berarti router tidak merespons probe atau dibatasi ICMP. Loss pada hop tengah dengan tujuan akhir sehat bukan bukti loss transit pada hop itu. Jalur pergi dan pulang bisa berbeda. Gabungkan traceroute dengan uji tujuan akhir, hasil aplikasi, waktu, grafik link, serta pembanding dari lokasi lain. Jangan menuduh upstream tertentu hanya dari satu hop lambat."
+        "title": "4. ASN, prefix dan BGP pada tingkat pengamatan",
+        "body": "ASN mengidentifikasi autonomous system, yaitu jaringan yang menjalankan kebijakan routing tertentu. Prefix menyatakan blok alamat yang dapat dijangkau. BGP bertukar informasi keterjangkauan antarpeer, termasuk atribut jalur yang digunakan kebijakan pemilihan rute. AS path menggambarkan rangkaian AS pada informasi rute, bukan pengukuran waktu tempuh fisik.\n\nStatus established berarti sesi BGP telah terbentuk untuk pertukaran pesan. Itu belum membuktikan semua prefix yang diperlukan diterima, diterima kebijakan, atau dipasang untuk forwarding. Bandingkan jumlah prefix, perubahan status, rute tujuan yang relevan dan baseline. Contoh tabel di bawah hanya bahan observasi; tidak mengajarkan perubahan filter atau pengumuman rute produksi.",
+        "table": {
+          "caption": "Data fiktif untuk latihan membaca status BGP",
+          "headers": [
+            "Peer",
+            "Status",
+            "Prefix diterima / baseline",
+            "Pertanyaan lanjutan"
+          ],
+          "rows": [
+            [
+              "Transit A",
+              "Established",
+              "950.000 / sekitar 950.000",
+              "Apakah prefix tujuan dan forwarding sesuai?"
+            ],
+            [
+              "Peer B",
+              "Established",
+              "0 / biasanya 120",
+              "Apakah kebijakan, route exchange atau sumber datanya berubah?"
+            ],
+            [
+              "Peer C",
+              "Idle",
+              "0 / biasanya 80",
+              "Sejak kapan sesi turun dan apakah jalur lain mengambil alih?"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "5. DNS dan IPv4/IPv6 dapat membuat hasil uji berbeda",
+        "body": "Record A mengarah ke alamat IPv4, sedangkan AAAA mengarah ke IPv6. Klien dan aplikasi dapat memilih jalur berbeda sesuai dukungan serta mekanisme pemilihannya. Bila IPv4 sehat tetapi IPv6 gagal, pengguna bisa mengalami gejala yang tampak tidak konsisten. Catat hasil masing-masing keluarga alamat sebelum menyimpulkan layanan sepenuhnya down.\n\nJawaban DNS juga bisa berbeda menurut resolver, lokasi dan kebijakan layanan. Simpan jawaban yang benar-benar didapat pada waktu uji. Jangan langsung mengganti resolver produksi agar hasilnya menyerupai laptop pribadi. Pada Linux lab dengan utilitas yang sesuai, kamu dapat memeriksa A/AAAA lalu mencoba HTTPS terpisah per keluarga; kegagalan IPv6 pada host yang memang tidak mempunyai konektivitas IPv6 bukan bukti gangguan penyedia.",
+        "code": "dig example.com A\ndig example.com AAAA\ncurl -4 -I --connect-timeout 5 --max-time 10 https://example.com\n# Jalankan bila host lab memang memiliki konektivitas IPv6\ncurl -6 -I --connect-timeout 5 --max-time 10 https://example.com",
+        "codeLabel": "Pemeriksaan pembanding · Linux lab dengan konektivitas yang sesuai",
+        "language": "sh"
+      },
+      {
+        "title": "6. Membaca traceroute tanpa menyalahkan hop yang salah",
+        "body": "Traceroute memakai probe dengan batas hop yang meningkat untuk memperoleh respons dari jalur. Router dapat membatasi respons terhadap probe atau tidak menanggapinya, sementara tetap meneruskan traffic pengguna. Tanda bintang berarti respons yang diharapkan tidak diterima dalam batas waktu; itu belum menentukan apakah link putus.\n\nJika satu hop tampak kehilangan 80% respons tetapi hop berikutnya dan tujuan akhir sehat, data itu tidak cukup untuk menuduh hop tersebut membuang 80% traffic transit. Bila loss berlanjut hingga tujuan, dugaan gangguan ujung ke ujung lebih kuat, tetapi lokasi dan arah kehilangan tetap memerlukan bukti lain. Jalur balasan dapat berbeda, dan pemilihan rute atau load balancing juga dapat membuat hasil pengujian bervariasi."
+      },
+      {
+        "title": "7. Studi kasus: satu aplikasi lambat dari satu POP",
+        "body": "Contoh fiktif: aplikasi inventaris lambat dari POP A sejak 20.10 WIB. POP B normal. Resolusi DNS berhasil dari keduanya, tetapi hasil IPv6 di POP A timeout sementara IPv4 tetap memberi respons. Gateway lokal POP A sehat dan tidak ada lonjakan utilisasi yang terlihat pada sampel segar.\n\nL1 menyampaikan dugaan gangguan pada jalur IPv6 dari POP A menuju tujuan terkait. Paket bukti berisi jawaban A/AAAA saat uji, sumber dan tujuan, waktu WIB, hasil curl per keluarga, traceroute bila tersedia, serta pembanding POP B. Ini lebih berguna daripada laporan “CDN jelek”. Tim routing kemudian memeriksa rute dan jalurnya. Sampai ada bukti tambahan, penyebab pada peer atau penyedia tertentu tetap belum terkonfirmasi."
+      },
+      {
+        "title": "8. Menyusun eskalasi yang dapat diperiksa ulang",
+        "body": "Sertakan circuit atau peer terkait jika sudah diketahui dari data yang boleh dibaca. Gunakan rentang waktu sempit, hasil aktual, dan kriteria pulih: misalnya akses aplikasi IPv6 dari POP A kembali berhasil pada pengujian yang sama. Jika pengujian memakai alamat sumber hasil NAT, jelaskan sisi mana yang tercatat agar pihak penerima tidak mencari alamat yang berbeda.\n\nJangan mengubah local preference, filter BGP, komunitas atau pengumuman prefix sebagai percobaan L1. Perubahan itu dapat memengaruhi pengguna di luar kasus awal. Ketika tim berwenang melakukan perubahan, bantu dokumentasikan sebelum/sesudah dan uji kembali dari titik pelanggan yang relevan. Rute terlihat berbeda saja belum membuktikan pengalaman layanan sudah membaik."
       }
     ],
     "practice": [
@@ -245,30 +675,120 @@
       {
         "title": "Cloudflare: CDN",
         "url": "https://www.cloudflare.com/learning/cdn/what-is-a-cdn/"
+      },
+      {
+        "title": "Cloudflare: peering dan transit",
+        "url": "https://www.cloudflare.com/learning/network-layer/what-is-peering/"
+      },
+      {
+        "title": "Cloudflare: lokasi dan routing traffic CDN",
+        "url": "https://developers.cloudflare.com/support/troubleshooting/general-troubleshooting/geographic-traffic-routing/"
       }
-    ]
+    ],
+    "intro": "Kadang jaringan rumah pelanggan terlihat normal, tetapi satu situs lambat, game tertentu sulit terhubung, atau hanya IPv6 yang gagal. Untuk memahami kasus seperti ini, Junior NOC perlu mengenal hubungan ISP dengan jaringan lain. Fokus artikel ini adalah membaca gejala dan menyiapkan bukti, sehingga tim routing atau penyedia dapat menindaklanjuti dengan tepat.",
+    "goals": [
+      "Membedakan IP transit, peering, IXP dan CDN.",
+      "Mengenali ASN, prefix dan sesi BGP pada tingkat observasi.",
+      "Memisahkan DNS, jalur IPv4/IPv6, respons probe dan kesehatan layanan tujuan."
+    ],
+    "analogy": "Internet dapat dibayangkan sebagai banyak wilayah dengan jalan yang saling terhubung. Transit seperti menggunakan jaringan jalan penyedia untuk mencapai berbagai wilayah. Peering seperti membuat sambungan langsung dengan tetangga. CDN seperti menyimpan barang populer di gudang dekat pengguna; manfaatnya tetap bergantung pada jalan menuju gudang dan ketersediaan barang di sana.",
+    "practiceReview": "Peta latihan harus menunjukkan bahwa transit, peering dan CDN bukan tiga nama untuk fungsi yang sama. Pada kasus lambat, lampirkan hasil tujuan akhir dan aplikasi, bukan hanya hop tengah. Untuk IPv4/IPv6, nyatakan apakah titik uji mendukung keduanya. Eskalasi yang baik menyebut waktu, sumber, alamat tujuan saat uji, keluarga IP, pembanding, serta apa yang sudah dan belum dibuktikan."
   },
   {
     "slug": "noc-handover-perubahan",
     "title": "Handover shift dan perubahan yang terkendali",
     "summary": "Teruskan pekerjaan dengan jelas dan pahami validasi, rollback, serta pencatatan perubahan.",
-    "minutes": 25,
+    "minutes": 7,
     "sections": [
       {
-        "title": "Handover adalah serah terima tanggung jawab",
-        "body": "Catatan pergantian shift memuat status layanan, tiket aktif, pemilik, tindakan terakhir, hambatan, jadwal update, dan tugas berikutnya. Penerima harus dapat melanjutkan tanpa menebak. Pisahkan kasus sudah pulih tetapi masih diobservasi dari kasus masih berdampak. Cantumkan zona waktu untuk maintenance dan koordinasi lintas lokasi."
+        "title": "1. Mengapa daftar tiket saja belum cukup?",
+        "body": "ID tiket membantu menemukan kasus, tetapi penerus shift masih perlu memahami konteks. Tuliskan apakah pelanggan masih terdampak, layanan sudah pulih tetapi diobservasi, atau kasus menunggu pihak lain. Status ini menentukan tindakan berikutnya. “Open” di sistem tiket tidak selalu menjelaskan keadaan layanan sekarang.\n\nHandover yang baik memungkinkan petugas baru menjawab: apa yang sedang terjadi, siapa pemiliknya, apa yang sudah diperiksa, apa hambatannya, dan kapan harus bertindak. Bila ada kesepakatan lewat telepon atau grup, ringkas keputusan itu di catatan yang menjadi sumber kerja bersama. Hindari informasi penting hanya tersimpan di ingatan petugas lama."
       },
       {
-        "title": "Sebelum perubahan",
-        "body": "Perubahan kecil tetap perlu konteks: tujuan, lingkup perangkat/layanan, pihak yang menyetujui, jendela kerja, kondisi awal, cadangan yang relevan, jalur akses pemulihan, langkah, dan kriteria sukses. NOC L1 dapat membantu verifikasi dan pencatatan; pelaksanaan mengikuti kewenangan. Backup berisi rahasia dan harus dilindungi. Jangan menganggap satu format backup cocok untuk semua model atau versi."
+        "title": "2. Susun catatan berdasarkan pekerjaan berikutnya",
+        "body": "Untuk setiap kasus, tuliskan gejala dan dampak terbaru, bukti penting beserta waktunya, tindakan terakhir, pihak yang sedang menangani, serta langkah berikutnya. Catat waktu dengan zona yang eksplisit. Jika ada vendor atau penyedia, sertakan nomor tiket eksternal yang memang boleh dibagikan kepada petugas penerima.\n\nJangan hanya menulis “menunggu vendor”. Contoh yang dapat ditindaklanjuti: “Menunggu hasil pengukuran circuit LAB-A dari penyedia, dijanjikan update 15.30 WIB. Pemilik follow-up NOC shift sore; bila belum ada kabar pada 15.35 WIB, hubungi koordinator sesuai daftar on-call.” Catatan itu menjelaskan pekerjaan serta kondisi pemicu tindak lanjut.",
+        "table": {
+          "caption": "Contoh handover fiktif pada akhir shift",
+          "headers": [
+            "Tiket / keadaan",
+            "Tindakan terakhir",
+            "Langkah berikutnya / pemilik"
+          ],
+          "rows": [
+            [
+              "LAB-001 / masih berdampak",
+              "Tim transport menguji jalur 14.50 WIB",
+              "NOC sore meminta hasil 15.30 WIB"
+            ],
+            [
+              "LAB-002 / layanan pulih, observasi",
+              "Uji pelanggan berhasil 14.55 WIB",
+              "NOC sore memantau sampai batas SOP, lalu validasi penutupan"
+            ],
+            [
+              "LAB-003 / maintenance terjadwal",
+              "Rencana dan pemulihan disetujui tim berwenang",
+              "Pelaksana memulai sesuai jendela, NOC memantau dampak"
+            ]
+          ]
+        }
       },
       {
-        "title": "Rollback harus bisa dijalankan",
-        "body": "Rollback adalah rencana kembali ke kondisi sebelumnya bila syarat kegagalan tercapai. Tentukan pemicu, batas waktu keputusan, penanggung jawab, dan cara mengakses perangkat jika koneksi utama hilang. Pada lab, catat konfigurasi awal dan satu perubahan kecil; uji dampaknya dari sisi layanan. Di produksi, hentikan percobaan saat dampak meluas dan ikuti jalur eskalasi."
+        "title": "3. Konfirmasi bahwa tanggung jawab benar-benar berpindah",
+        "body": "Serah terima bukan hanya mengirim dokumen. Bila memungkinkan, minta penerima merangkum kembali kasus paling penting dan tindakan terdekat. Ini membantu menemukan informasi yang hilang, misalnya siapa kontak penyedia atau bagaimana mengakses grafik yang dirujuk. Konfirmasi mengikuti proses perusahaan, tidak harus melalui rapat panjang.\n\nTiket kritis yang belum mempunyai pemilik perlu ditangani sebelum petugas lama berhenti. Jika penerima belum tersedia, ikuti jalur koordinator. Tujuannya memastikan tidak ada sela ketika semua orang menganggap orang lain sedang bekerja. Handover dapat singkat, tetapi keputusan dan tanggung jawabnya harus jelas."
       },
       {
-        "title": "Setelah pekerjaan",
-        "body": "Bandingkan kondisi sebelum dan sesudah: alarm, pelanggan aktif, rute, layanan, serta akses manajemen. Catat hasil, waktu selesai, rollback jika terjadi, dan masa observasi menurut SOP. Bila penyebab belum jelas, buat tindak lanjut investigasi. Hindari menyatakan akar masalah hanya karena layanan membaik setelah reboot."
+        "title": "4. Memahami change sebagai pekerjaan dengan tujuan terukur",
+        "body": "Change atau perubahan adalah tindakan yang sengaja mengubah kondisi sistem, misalnya mengganti konfigurasi port atau kebijakan routing. Rencana yang baik menyebut masalah yang hendak diselesaikan dan hasil yang diharapkan. “Optimasi jaringan” terlalu luas; “mengoreksi deskripsi port agar sesuai inventaris” lebih mudah divalidasi.\n\nSebelum menjalankan perubahan, pastikan lingkup perangkat dan layanan, pihak yang memberi persetujuan, pelaksana, jendela waktu, prasyarat serta kondisi awal tercatat. NOC L1 dapat mendukung pemantauan dan uji layanan. Hak melaksanakan perubahan mengikuti kewenangan perusahaan; membaca artikel ini bukan pengganti otorisasi produksi."
+      },
+      {
+        "title": "5. Backup dan jalur pemulihan mempunyai fungsi berbeda",
+        "body": "Backup menyimpan kondisi yang mungkin diperlukan untuk pemulihan. Format backup, export konfigurasi dan kompatibilitasnya berbeda menurut perangkat serta versi. Export teks tidak selalu memuat semua hal yang diperlukan; backup biner juga tidak boleh dianggap dapat dipulihkan ke semua perangkat. Ketahui jenis salinan yang digunakan dan prosedur pemulihannya.\n\nJalur pemulihan menjawab bagaimana kamu mengakses perangkat jika perubahan memutus akses utama. Misalnya, petugas berwenang mungkin mempunyai console atau jalur manajemen terpisah. File backup yang bagus tidak membantu cepat jika tidak ada cara mengakses perangkat. Simpan backup sesuai kebijakan karena dapat mengandung rahasia. Jangan menjadikannya lampiran portofolio publik."
+      },
+      {
+        "title": "6. Rollback harus mempunyai pemicu dan pengambil keputusan",
+        "body": "Rollback adalah tindakan kembali ke keadaan sebelumnya atau keadaan pemulihan yang disepakati. Tuliskan pemicunya: misalnya akses manajemen hilang, uji layanan utama gagal, atau waktu kerja mendekati batas yang ditetapkan. Tuliskan pula siapa memutuskan dan siapa melaksanakan. Rencana “kalau gagal, kembalikan” belum cukup bila langkah serta aksesnya tidak diketahui.\n\nTidak semua perubahan bisa dibalik hanya dengan satu tombol. Pertimbangkan apa yang sudah terlanjur berubah, ketergantungan pada perangkat lain dan cara memverifikasi setelah rollback. Pada tahap Junior NOC, yang penting adalah mengenali bahwa penambahan percobaan tanpa batas dapat menghabiskan waktu pemulihan dan memperbesar dampak."
+      },
+      {
+        "title": "7. Studi kasus lab: mengoreksi deskripsi port",
+        "body": "Gunakan perangkat lab terisolasi. Tujuannya mengoreksi comment interface agar sama dengan label topologi, bukan mematikan port. Catat nama interface dan comment lama terlebih dahulu. Meskipun tindakan ini biasanya tidak mengubah forwarding, kamu tetap harus memastikan interface yang dipilih benar dan jangan mencampurkannya dengan perubahan VLAN atau status link.\n\nBerikut contoh rencana fiktif. Saat praktik, pakai nilai aktual dari labmu, bukan menyalin nama interface tanpa pemeriksaan. Jika hasil tidak sesuai, kembalikan comment lama menurut rencana dan tulis hasilnya.",
+        "table": {
+          "caption": "Rencana perubahan sederhana untuk latihan",
+          "headers": [
+            "Bagian rencana",
+            "Isi contoh fiktif"
+          ],
+          "rows": [
+            [
+              "Tujuan",
+              "Comment port lab sesuai topologi yang sudah dicek"
+            ],
+            [
+              "Kondisi awal",
+              "Nama interface, comment lama dan uji koneksi dicatat"
+            ],
+            [
+              "Pelaksana / izin",
+              "Peserta mengelola lab milik sendiri"
+            ],
+            [
+              "Validasi",
+              "Comment benar, link serta uji klien tetap sehat"
+            ],
+            [
+              "Pemicu pemulihan",
+              "Interface atau hasil tidak sesuai dengan rencana"
+            ],
+            [
+              "Rollback",
+              "Kembalikan comment yang dicatat; ulangi validasi"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "8. Dokumentasikan hasil tanpa menebak akar masalah",
+        "body": "Sesudah pekerjaan, bandingkan layanan, alarm, sesi pelanggan dan akses manajemen sesuai lingkupnya. Catat kapan mulai, selesai, dan apakah rollback diperlukan. Bila ada dampak tak terduga, tulis apa yang terjadi serta bagaimana dipulihkan; informasi ini berguna untuk perbaikan prosedur.\n\nPada insiden lain, layanan mungkin kembali normal setelah reboot. Itu membuktikan pemulihan setelah tindakan, tetapi belum otomatis menjelaskan akar masalah. Penyebab dapat memerlukan log sebelum reboot, tren kapasitas atau analisis tim lain. Pisahkan hasil pemulihan dari hasil investigasi, dan sertakan tindak lanjut yang masih terbuka pada handover."
       }
     ],
     "practice": [
@@ -285,29 +805,115 @@
         "url": "https://help.mikrotik.com/docs/spaces/ROS/pages/328155/Configuration+Management"
       }
     ],
-    "template": "Handover shift: ... → ...\nWaktu / zona: ...\nRingkasan layanan: ...\nTiket aktif / dampak / pemilik: ...\nBukti & tindakan terakhir: ...\nHambatan / menunggu siapa: ...\nLangkah berikutnya & tenggat: ...\nMaintenance & rencana pemulihan: ...\nKonfirmasi penerima: ..."
+    "template": "Handover shift: ... → ...\nWaktu / zona: ...\nRingkasan layanan: ...\nTiket aktif / dampak / pemilik: ...\nBukti & tindakan terakhir: ...\nHambatan / menunggu siapa: ...\nLangkah berikutnya & tenggat: ...\nMaintenance & rencana pemulihan: ...\nKonfirmasi penerima: ...",
+    "intro": "Sebuah gangguan bisa melewati pergantian shift, sementara perubahan konfigurasi bisa dilakukan oleh tim yang berbeda. Tanpa catatan yang jelas, petugas berikutnya dapat mengulang pemeriksaan, kehilangan tenggat, atau salah mengira layanan sudah pulih. Artikel ini membahas cara menjaga kesinambungan pekerjaan dan memahami perubahan yang mempunyai rencana pemulihan.",
+    "goals": [
+      "Membuat handover yang dapat langsung dilanjutkan penerima.",
+      "Memahami tujuan, lingkup, validasi dan rollback perubahan.",
+      "Membedakan layanan pulih, hasil observasi dan penyebab terkonfirmasi."
+    ],
+    "analogy": "Handover seperti menyerahkan pasien kepada petugas berikutnya: keadaan terakhir, tindakan yang sudah dilakukan, dan hal yang perlu diawasi harus ikut berpindah. Perubahan jaringan juga seperti pekerjaan pada jalur yang masih digunakan; harus ada rencana jika pekerjaan tidak menghasilkan kondisi yang diharapkan.",
+    "practiceReview": "Minta orang lain membaca handover tanpa penjelasan tambahan. Jika ia tidak bisa menentukan siapa yang dihubungi dan kapan, perbaiki catatan. Untuk perubahan comment lab, hasil yang diperiksa adalah kesesuaian label serta tidak berubahnya konektivitas yang diuji. Rencana rollback harus menyimpan nilai lama dan cara mengembalikannya. Penilaian latihan didasarkan pada keterlacakan, bukan banyaknya perintah yang dijalankan."
   },
   {
     "slug": "noc-lab-akhir",
     "title": "Simulasi shift Junior NOC dan portofolio",
     "summary": "Kerjakan empat insiden dari alarm sampai verifikasi pulih dan handover.",
-    "minutes": 25,
+    "minutes": 9,
     "sections": [
       {
-        "title": "Siapkan lab yang bisa diulang",
-        "body": "Gunakan dua klien atau VM, satu router lab, dan jaringan host-only/internal yang tidak membawa pelanggan produksi. Contoh: klien A 192.168.10.10/24 dan B 192.168.10.11/24, gateway router 192.168.10.1/24. Internet lab opsional. Tambahkan monitoring bila tersedia; bila belum, catat hasil pemeriksaan dalam tabel waktu. Simpan topologi, kondisi awal, dan cara pemulihan."
+        "title": "1. Siapkan lab dan batas kegiatannya",
+        "body": "Gunakan satu router lab, dua klien/VM, dan satu layanan uji yang kamu kelola sendiri. Jaringan harus terisolasi dari pelanggan produksi. Klien memakai subnet yang sama, sedangkan router menyediakan jalur menuju subnet layanan yang berbeda. Layanan dapat berupa server HTTP lab; internet publik tidak wajib sehingga hasil tidak bergantung pada ketersediaan situs pihak lain.\n\nContoh alamat pada tabel adalah rencana lab, bukan kondisi perangkatmu. Server layanan memerlukan rute balasan, misalnya melalui gateway 192.168.20.1. Jika memakai VM, sesuaikan adapter internal/host-only agar dua sisi router benar-benar berbeda jaringan. Jangan lanjut ke skenario gangguan sebelum koneksi sehat berhasil diuji.",
+        "table": {
+          "caption": "Rencana alamat contoh; implementasikan sesuai platform lab",
+          "headers": [
+            "Komponen",
+            "Alamat / jaringan",
+            "Peran"
+          ],
+          "rows": [
+            [
+              "Klien A",
+              "192.168.10.10/24, gateway 192.168.10.1",
+              "Titik pengguna pertama"
+            ],
+            [
+              "Klien B",
+              "192.168.10.11/24, gateway 192.168.10.1",
+              "Pembanding pada subnet yang sama"
+            ],
+            [
+              "Router sisi klien",
+              "192.168.10.1/24",
+              "Gateway kedua klien"
+            ],
+            [
+              "Router sisi layanan",
+              "192.168.20.1/24",
+              "Jalur menuju subnet layanan"
+            ],
+            [
+              "Server HTTP dan DNS lab",
+              "192.168.20.10/24, gateway 192.168.20.1",
+              "Layanan yang disiapkan peserta"
+            ]
+          ]
+        }
       },
       {
-        "title": "Empat skenario bergantian",
-        "body": "Kasus A: atur gateway klien A ke alamat yang salah pada lab. Kasus B: ubah resolver klien A ke resolver lab yang tidak tersedia. Kasus C: putuskan adapter virtual uplink lab sehingga kedua klien terdampak. Kasus D: gunakan catatan contoh traffic tinggi dan data monitoring basi untuk membedakan kapasitas penuh dengan collector berhenti. Kerjakan satu kasus per giliran dan kembalikan kondisi awal sebelum lanjut."
+        "title": "2. Siapkan layanan dan simpan kondisi sehat",
+        "body": "Pada server lab, siapkan HTTP dan DNS menggunakan alat yang sudah kamu pahami atau didampingi pengelola lab. Nama opsional portal.noc.test dapat diarahkan oleh DNS lab ke 192.168.20.10; .test dipakai untuk pengujian. Bila belum ada DNS lab, kerjakan skenario lain lebih dahulu atau gunakan data contoh DNS yang disediakan pembimbing. Tidak perlu menganggap pemahaman instalasi server sebagai syarat mengikuti seluruh simulasi.\n\nSimpan bukti dari kedua klien: alamat, tabel rute, resolver, komunikasi antarklien, resolusi nama dan akses HTTP server. Catat port HTTP aktual, sebab layanan pada 8080 berbeda dari port 80. Pastikan akses memakai alamat langsung dan nama sama-sama berhasil sebelum skenario DNS. Inilah baseline yang dipakai untuk membandingkan kondisi rusak dan pulih."
       },
       {
-        "title": "Urutan kerja yang dinilai",
-        "body": "Mulai dengan waktu dan gejala, validasi dampak dari kedua klien, telusuri IP/rute/DNS dan dependensi, lalu tulis hipotesis yang bisa diuji. Catat perintah dan hasil aktual. Tentukan prioritas dengan matriks latihan, buka tiket, lakukan hanya pemulihan lab yang sudah direncanakan, kemudian uji kembali dari klien. Jika butuh tim lain, tulis paket eskalasi dan jangan menandai kasus sudah selesai."
+        "title": "3. Cara menjalankan simulasi tanpa merusak pembanding",
+        "body": "Gunakan satu skenario dalam satu giliran. Orang yang menyuntikkan gangguan mencatat perubahan pada lembar terpisah dan menyimpan cara pemulihannya. Peserta diagnosis hanya menerima gejala serta akses baca yang disepakati. Jika belajar sendiri, pilih skenario secara acak dan tulis hipotesis sebelum membaca pembahasan.\n\nBatasi waktu sebagai latihan manajemen kerja, bukan janji SLA. Misalnya gunakan 10 menit diagnosis awal, 5 menit menyusun tiket/eskalasi, lalu evaluasi bersama. Jika belum menemukan penyebab, hasil yang sah adalah eskalasi dengan bukti yang tepat. Setelah tiap giliran, kembalikan kondisi awal dan ulangi baseline; jangan menumpuk beberapa penyebab tanpa sengaja."
       },
       {
-        "title": "Portofolio dan kriteria siap",
-        "body": "Hasil akhir: satu topologi berlabel, empat tiket dengan timeline, satu eskalasi, satu handover, dan satu ringkasan insiden. Nilai setiap kasus pada lima hal: dampak tepat, bukti relevan, diagnosis masuk akal, tindakan sesuai kewenangan, dan verifikasi pulih. Target latihan: minimal empat dari lima aspek terpenuhi pada setiap kasus; tindakan berisiko tanpa izin atau tanpa pemulihan harus diperbaiki dan diulang. Ini patokan belajar, bukan jaminan diterima kerja."
+        "title": "4. Kasus A: gateway klien A salah",
+        "body": "Pada klien A saja, ubah gateway lab ke alamat yang memang tidak digunakan, misalnya 192.168.10.254 setelah diverifikasi kosong. Klien B tetap memakai 192.168.10.1. Gejala yang diharapkan: akses A ke B pada subnet yang sama masih dapat bekerja bila kebijakan host mengizinkan, tetapi akses A ke server 192.168.20.10 gagal. B tetap dapat mengakses server.\n\nDiagnosis yang kuat membandingkan alamat dan rute A/B serta menjelaskan mengapa tujuan di luar subnet membutuhkan gateway. Catat ip route atau alat setara, jangan hanya menyimpulkan dari satu ping. Pemulihan mengembalikan gateway A sesuai baseline lewat prosedur pengaturan VM/OS yang kamu gunakan. Setelah itu uji server dari A kembali dan pastikan B tetap sehat."
+      },
+      {
+        "title": "5. Kasus B: resolver klien A tidak tersedia",
+        "body": "Pastikan kondisi sehat sudah pulih. Pada A, arahkan resolver lab ke alamat DNS yang tidak tersedia dan diketahui hanya dipakai untuk simulasi. Bersihkan atau perhitungkan cache sesuai prosedur lab sehingga nama yang sudah tersimpan tidak membuat hasil menyesatkan. Alamat IP serta gateway A tidak diubah, dan B tetap memakai DNS lab sehat.\n\nBukti yang dicari: akses HTTP menggunakan alamat IP server tetap berhasil bila layanan lab mendukungnya, tetapi permintaan nama melalui resolver A gagal. Bandingkan hasil dig dengan resolver aktual dan hasil dari B. Pada layanan publik HTTPS, sekadar mengganti nama dengan IP dapat menimbulkan masalah sertifikat atau virtual host; karena itu pembandingan ini sengaja memakai server HTTP lab yang dikendalikan. Pulihkan resolver, lalu ulangi uji nama dan aplikasi."
+      },
+      {
+        "title": "6. Kasus C: jalur router menuju server terputus",
+        "body": "Pada platform virtualisasi lab, putuskan adapter router yang menghubungkan subnet layanan. Jangan memutus adapter manajemen yang dipakai untuk memulihkan lab. A dan B kini sama-sama gagal mengakses server di subnet berbeda, sementara komunikasi lokal atau respons gateway sisi klien dapat tetap bekerja sesuai implementasi.\n\nKesamaan waktu dan dampak dua klien mengarahkan pemeriksaan ke dependensi bersama. Peserta mencatat status interface router, jalur menuju server, serta pembanding lokal. Jangan mengganti DNS kedua klien sebagai percobaan. Setelah adapter dikembalikan, verifikasi HTTP dan DNS server dari A/B. Jika konfigurasi platform membuat gejala berbeda, tulis hasil sebenarnya dan jelaskan topologinya."
+      },
+      {
+        "title": "7. Kasus D: data penuh atau pengambilan data berhenti?",
+        "body": "Skenario ini memakai tabel fiktif sehingga tidak perlu membanjiri link dengan traffic. Pada pukul 10.02 WIB, kondisi terakhir uplink terlihat 930 Mbps dari kapasitas 1.000 Mbps. Pertanyaan pertama adalah apakah angka itu segar dan bagaimana hasil layanan pada waktu yang sama, bukan langsung meminta upgrade bandwidth.\n\nBandingkan dua keadaan berikut. Pada keadaan pertama, beberapa sampel segar diikuti kenaikan discard dan latency tujuan akhir: dugaan kongesti layak diperiksa lebih lanjut. Pada keadaan kedua, semua item berhenti memperbarui sejak 09.20 WIB dan layanan masih dapat diakses: diagnosis perlu memeriksa monitoring. Jangan menganggap baris terakhir mewakili kondisi sekarang.",
+        "table": {
+          "caption": "Dataset sintetis untuk analisis; seluruh angka adalah contoh",
+          "headers": [
+            "Keadaan / waktu pengamatan",
+            "Sampel terakhir",
+            "Traffic / kapasitas",
+            "Bukti tambahan"
+          ],
+          "rows": [
+            [
+              "A / 10.02 WIB",
+              "10.02 WIB",
+              "930 / 1.000 Mbps",
+              "Discard naik beberapa interval; tes tujuan ikut melambat"
+            ],
+            [
+              "B / 10.02 WIB",
+              "09.20 WIB",
+              "0 / 1.000 Mbps",
+              "Item lain juga basi; HTTP dari klien masih berhasil"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "8. Contoh alur tiket dan komunikasi saat giliran berjalan",
+        "body": "Ketika gejala diterima, catat waktu serta hasil awal dan tentukan cakupan. Tulis dugaan sebagai dugaan, kemudian pilih pemeriksaan yang paling membedakan beberapa kemungkinan. Setelah bukti terkumpul, lakukan pemulihan yang memang termasuk skenario lab atau kirim eskalasi bila berada di luar peran yang disepakati.\n\nContoh pada kasus C: “Dua klien tidak bisa mengakses server 192.168.20.10 sejak 11.05 WIB. Gateway sisi klien dapat diakses; adapter menuju subnet layanan terpantau down. Mohon pengelola lab memeriksa sambungan adapter tersebut.” Sesudah pulih, tambahkan hasil HTTP dan resolusi nama dari kedua klien serta waktu observasinya. Bila shift berakhir sebelum pulih, tulis handover dengan pemilik berikutnya."
+      },
+      {
+        "title": "9. Menilai kesiapan dari proses yang dapat ditunjukkan",
+        "body": "Nilai setiap kasus pada lima aspek: ketepatan cakupan dampak, bukti yang relevan, diagnosis yang masuk akal, tindakan sesuai kewenangan, dan verifikasi pulih. Beri satu poin per aspek yang terpenuhi. Target latihan minimal empat dari lima pada setiap kasus, tetapi tindakan yang melanggar batas lab atau tidak punya pemulihan harus diperbaiki dan diulang meskipun totalnya tinggi.\n\nPortofolio memuat topologi berlabel, baseline, empat tiket, satu eskalasi, satu handover dan satu laporan ringkas insiden. Lampirkan hasil yang dipilih beserta maknanya; menempel ratusan baris log tanpa penjelasan tidak menunjukkan pemahaman. Gunakan data fiktif dan nyatakan keterbatasan lab. Target ini patokan belajar, bukan sertifikasi atau jaminan diterima kerja."
       }
     ],
     "practice": [
@@ -323,8 +929,20 @@
       {
         "title": "MikroTik: PPPoE untuk lab lanjutan",
         "url": "https://manual.mikrotik.com/docs/virtual-private-networks/pppoe/"
+      },
+      {
+        "title": "RFC 2606: nama domain untuk pengujian",
+        "url": "https://www.rfc-editor.org/rfc/rfc2606"
       }
     ],
-    "template": "Laporan insiden latihan\nGejala & dampak: ...\nTimeline dengan zona waktu: ...\nKondisi awal / titik uji: ...\nHipotesis & bukti: ...\nTindakan / alasan / kewenangan: ...\nHasil uji setelah pemulihan: ...\nPenyebab terkonfirmasi / masih dugaan: ...\nTindak lanjut & pemilik: ..."
+    "template": "Laporan insiden latihan\nGejala & dampak: ...\nTimeline dengan zona waktu: ...\nKondisi awal / titik uji: ...\nHipotesis & bukti: ...\nTindakan / alasan / kewenangan: ...\nHasil uji setelah pemulihan: ...\nPenyebab terkonfirmasi / masih dugaan: ...\nTindak lanjut & pemilik: ...",
+    "intro": "Pada simulasi ini kamu berperan sebagai petugas NOC yang menerima gejala tanpa langsung diberi penyebab. Kita memakai lab kecil agar kamu bisa mengulangi pemeriksaan, memulihkan kondisi awal, dan membandingkan bukti. Hasil akhirnya bukan hanya jaringan kembali terhubung, tetapi juga tiket, eskalasi dan handover yang bisa dipahami petugas lain.",
+    "goals": [
+      "Menjalankan diagnosis dengan satu perubahan penyebab per giliran.",
+      "Menghubungkan hasil teknis dengan dampak, prioritas dan komunikasi.",
+      "Menyusun portofolio yang memperlihatkan proses, verifikasi dan keterbatasan kesimpulan."
+    ],
+    "analogy": "Latihan ini seperti simulasi jaga di ruang kontrol. Soal terpenting bukan seberapa cepat kamu menebak kerusakan, melainkan apakah kamu bisa menunjukkan urutan bukti, mengambil tindakan yang sesuai, dan menyerahkan keadaan yang jelas kepada petugas berikutnya.",
+    "practiceReview": "Kasus A membedakan jalur lokal dan luar subnet; bukti utamanya tabel rute dan pembanding B. Kasus B membedakan resolusi nama dan koneksi IP pada layanan lab yang mendukung pengujian itu. Kasus C menyoroti dependensi bersama serta status link menuju server. Kasus D menuntut pembacaan timestamp dan bukti layanan sebelum menyimpulkan kapasitas penuh. Pada semua kasus, jawaban lengkap harus memperlihatkan kondisi sehat, kondisi bermasalah, alasan langkah yang dipilih, dan hasil uji sesudah pulih."
   }
 ]
