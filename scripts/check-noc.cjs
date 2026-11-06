@@ -16,6 +16,19 @@ for(const r of nocResources){assert.ok(fs.existsSync('.next/server/app'+r.href+'
 for(const l of nocLessons){
  const href='/jaringan/noc/'+l.slug,html=fs.readFileSync('.next/server/app'+href+'.html','utf8');
  assert.ok(html.includes(l.title));assert.ok(l.sections.length>=4&&l.practice.length>=4);
+ assert.ok(l.intro&&l.analogy&&l.practiceReview);assert.ok(l.goals.length);
+ assert.ok(html.includes('Pembahasan praktik dan hasil yang diharapkan'));
+ for(const [i,section] of l.sections.entries()){
+  assert.ok(html.includes('id="bagian-'+(i+1)+'"'),l.slug+' section anchor');
+  assert.ok(html.includes('href="#bagian-'+(i+1)+'"'),l.slug+' contents link');
+  assert.ok(section.body.includes('\n\n'),l.slug+' paragraph structure');
+  if(section.table){
+   assert.ok(html.includes('<caption>'+section.table.caption+'</caption>'),l.slug+' rendered table');
+   assert.ok(section.table.rows.every(row=>row.length===section.table.headers.length),l.slug+' table columns');
+  }
+  if(section.code)assert.ok(section.codeLabel&&section.language,l.slug+' command context');
+  if(section.output)assert.ok(section.outputLabel?.includes('fiktif'),l.slug+' example output label');
+ }
  const search=searchTracks.find(t=>t.id==='jaringan').lessons.find(x=>x.href===href);assert.equal(search.summary,l.summary);assert.equal(search.group,'Roadmap Junior NOC');
  assert.ok(group.lessons.some(r=>r.slug===l.slug));
 }

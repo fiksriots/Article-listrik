@@ -1,6 +1,13 @@
 import data from './noc-lessons.json';
 import {networkLessons} from './network-course';
-export type NocLesson = {slug:string;title:string;summary:string;minutes:number;sections:{title:string;body:string;code?:string}[];practice:string[];check:string;answer:string;sources:{title:string;url:string}[];template?:string};
+export type NocTable = {caption:string;headers:string[];rows:string[][]};
+export type NocSection = {title:string;body:string;code?:string;codeLabel?:string;language?:string;output?:string;outputLabel?:string;table?:NocTable};
+export type NocLesson = {
+ slug:string;title:string;summary:string;minutes:number;
+ intro:string;goals:string[];analogy:string;sections:NocSection[];
+ practice:string[];practiceReview:string;check:string;answer:string;
+ sources:{title:string;url:string}[];template?:string;
+};
 export const nocLessons:NocLesson[]=data;
 export type NocResource={slug:string;title:string;href:string};
 function network(slug:string):NocResource {
