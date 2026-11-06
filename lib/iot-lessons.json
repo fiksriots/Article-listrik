@@ -27,7 +27,7 @@
       "Jaringan",
       "Dashboard"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "cara-kerja-iot",
@@ -56,7 +56,7 @@
       "Layar menampilkan",
       "Status kembali"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "sensor-aktuator",
@@ -85,7 +85,7 @@
       "Penggerak",
       "Aktuator / output"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "mengenal-esp32",
@@ -114,7 +114,7 @@
       "GPIO 3,3 V",
       "Sensor"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "macam-mikrokontroler",
@@ -886,7 +886,7 @@
       "Katoda LED",
       "GND"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "persiapan-arduino-ide",
@@ -916,7 +916,7 @@
       "Upload",
       "Serial Monitor"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "led-pertama",
@@ -945,7 +945,7 @@
       "GND",
       "Nyala / padam"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "membaca-sensor",
@@ -974,7 +974,7 @@
       "Konversi satuan",
       "Validasi"
     ],
-    "minutes": 8
+    "minutes": 10
   },
   {
     "slug": "wifi-ip",
@@ -1003,7 +1003,7 @@
       "DNS",
       "Layanan tujuan"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "http-json",
@@ -1032,7 +1032,7 @@
       "Server memvalidasi",
       "Respons"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "mqtt-topic",
@@ -1119,7 +1119,7 @@
       "Grafik",
       "Status data"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "otomatisasi-histeresis",
@@ -1148,7 +1148,7 @@
       "≤28: OFF",
       "Ulangi"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "keamanan-iot",
@@ -1177,7 +1177,7 @@
       "TLS",
       "Pemantauan"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "proyek-monitor-suhu",
@@ -1208,7 +1208,7 @@
       "Penyimpanan",
       "Dashboard"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "troubleshooting-lanjutan",
@@ -1237,7 +1237,7 @@
       "Layanan",
       "Tampilan"
     ],
-    "minutes": 12
+    "minutes": 14
   },
   {
     "slug": "arduino-pengenalan",

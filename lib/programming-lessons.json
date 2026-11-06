@@ -1,6 +1,6 @@
 [
   {
-    "slug": "pemrograman-terstruktur", "title": "Apa itu pemrograman terstruktur?", "stage": 0, "minutes": 12,
+    "slug": "pemrograman-terstruktur", "title": "Apa itu pemrograman terstruktur?", "stage": 0, "minutes": 14,
     "summary": "Kenali program, algoritma, dan tiga pola dasar untuk menyusun instruksi yang jelas.",
     "analogy": "Resep membuat teh berisi langkah yang berurutan. Jika ingin teh manis, tambahkan gula. Jika membuat beberapa gelas, ulangi langkahnya. Program memakai pola berpikir yang serupa.",
     "explain": ["Program adalah kumpulan instruksi yang dijalankan komputer. Bahasa pemrograman membantu kita menulis instruksi tersebut; Python adalah salah satunya. Kamu tidak perlu pernah menulis kode untuk memulai jalur ini.", "Algoritma adalah urutan langkah untuk menyelesaikan masalah. Kamu bisa menuliskannya dengan bahasa sehari-hari sebelum mengubahnya menjadi kode. Contoh: tentukan harga barang, tentukan jumlah, kalikan keduanya, lalu tampilkan total.", "Pemrograman terstruktur menyusun alur menggunakan urutan, percabangan, dan perulangan. Urutan menjalankan langkah satu per satu; percabangan memilih berdasarkan kondisi; perulangan menjalankan bagian tertentu kembali. Fungsi membantu membagi program menjadi tugas kecil.", "Dalam Python, blok instruksi ditandai dengan indentasi, yaitu spasi di awal baris. Kita akan memakai empat spasi untuk satu tingkat. Materi berikutnya mengajakmu menyiapkan tempat menjalankan kode, kemudian mempelajari setiap konsep secara bertahap."],
@@ -14,7 +14,7 @@
     "source": "https://docs.python.org/3/tutorial/introduction.html"
   },
   {
-    "slug": "menjalankan-python", "title": "Menyiapkan dan menjalankan Python", "stage": 0, "minutes": 20,
+    "slug": "menjalankan-python", "title": "Menyiapkan dan menjalankan Python", "stage": 0, "minutes": 22,
     "summary": "Bedakan editor, interpreter, dan hasil program; jalankan file Python pertamamu.",
     "analogy": "Editor seperti kertas tempat menulis resep. Interpreter seperti juru masak yang mengikuti resep. Output adalah hasil yang bisa kamu lihat setelah instruksi dijalankan.",
     "explain": ["Gunakan Python 3. Unduh pemasang yang sesuai sistem operasi dari python.org/downloads, lalu ikuti petunjuk pemasangannya. Nama menu dapat berbeda antar sistem. Jangan mengambil pemasang dari iklan unduhan yang tidak jelas.", "Untuk awal, kamu dapat memakai IDLE jika tersedia pada pemasangan Python. IDLE mempunyai Shell untuk mencoba instruksi dan Editor untuk menulis program beberapa baris. Pada sebagian sistem, IDLE perlu dipasang terpisah.", "Buka IDLE, pilih File > New File, lalu ketik contoh di bawah. Simpan sebagai halo.py. Ekstensi .py menandai file kode Python. Pilih Run > Run Module untuk menjalankannya; hasil muncul di Shell.", "Shell interaktif biasanya menampilkan tanda >>>. Itu penanda tempat mengetik, bukan bagian kode yang disalin ke file. Jika memakai terminal, buka folder file dan jalankan python halo.py atau python3 halo.py sesuai perintah Python yang tersedia di sistemmu. Pada Windows dengan launcher Python, py halo.py juga dapat digunakan."],
@@ -28,7 +28,7 @@
     "source": "https://docs.python.org/3/library/idle.html"
   },
   {
-    "slug": "variabel-tipe-data", "title": "Variabel dan tipe data", "stage": 0, "minutes": 18,
+    "slug": "variabel-tipe-data", "title": "Variabel dan tipe data", "stage": 0, "minutes": 20,
     "summary": "Simpan teks, angka, dan nilai benar atau salah dengan nama yang mudah dibaca.",
     "analogy": "Untuk awal, bayangkan variabel sebagai label pada kotak penyimpanan. Label nama menunjuk ke teks Budi, sedangkan label umur menunjuk ke angka 20. Di Python, nama variabel sebenarnya merujuk ke sebuah objek nilai.",
     "explain": ["Variabel memungkinkan kita memakai kembali suatu nilai melalui sebuah nama. Perintah umur = 20 memberikan nilai 20 kepada nama umur. Tanda = merupakan penugasan nilai, bukan pemeriksaan kesamaan.", "Empat tipe dasar yang sering dipakai adalah str untuk teks, int untuk bilangan bulat, float untuk angka desimal, dan bool untuk True atau False. Python membedakan huruf besar dan kecil: nama dan Nama adalah dua nama berbeda.", "Gunakan nama yang menjelaskan maksudnya, seperti harga_buku dan jumlah_buku. Nama tidak boleh diawali angka atau mengandung spasi. Penulisan beberapa kata dengan garis bawah membuat kode mudah dibaca.", "Variabel bisa diberi nilai baru. Ketika umur = 21 dijalankan setelah umur = 20, pemakaian umur berikutnya merujuk ke nilai terbaru. Gunakan type() jika ingin memeriksa tipe suatu nilai."],
@@ -42,7 +42,7 @@
     "source": "https://docs.python.org/3/tutorial/introduction.html"
   },
   {
-    "slug": "input-output-operator", "title": "Input, output, dan perhitungan", "stage": 0, "minutes": 20,
+    "slug": "input-output-operator", "title": "Input, output, dan perhitungan", "stage": 0, "minutes": 22,
     "summary": "Terima masukan pengguna dan olah menjadi hasil melalui pola input, proses, output.",
     "analogy": "Di tempat fotokopi, jumlah lembar adalah masukan. Mengalikan jumlah dengan harga per lembar adalah proses. Total biaya adalah keluaran.",
     "explain": ["input() menampilkan pertanyaan dan menunggu pengguna mengetik. Nilai yang dikembalikan input() selalu berupa teks. Gunakan int() untuk mengubah teks bilangan bulat menjadi angka; untuk desimal gunakan float().", "Operator +, -, *, dan / digunakan untuk menambah, mengurangi, mengalikan, dan membagi. Tanda ** untuk pangkat, sedangkan % menghasilkan sisa pembagian. Tanda kurung mengatur bagian yang dihitung terlebih dahulu: (5 + 2) * 3 bernilai 21.", "Mulai dengan satu masukan yang jelas. Pada latihan ini, pengguna harus mengetik bilangan bulat, seperti 3. Masukan tiga atau 3.5 tidak dapat diubah menggunakan int() dan menimbulkan ValueError. Cara menanganinya dipelajari pada bab kesalahan.", "Bagian keluaran contoh memperlihatkan satu sesi pemakaian. Angka 3 setelah pertanyaan diketik pengguna; baris Total belanja dihasilkan program. Saat menyalin kode, salin blok program saja."],
@@ -56,7 +56,7 @@
     "source": "https://docs.python.org/3/library/functions.html#input"
   },
   {
-    "slug": "percabangan-logika", "title": "Percabangan if, elif, else dan logika", "stage": 1, "minutes": 25,
+    "slug": "percabangan-logika", "title": "Percabangan if, elif, else dan logika", "stage": 1, "minutes": 27,
     "summary": "Ajari program memilih tindakan dan gabungkan beberapa syarat dengan operator logika.",
     "analogy": "Saat memilih ongkos kirim: jika belanja mencapai batas tertentu, gratis ongkir. Jika belum, ongkir dibayar. Program perlu aturan yang sama jelasnya.",
     "explain": ["if memeriksa sebuah kondisi. Jika hasilnya benar, blok di bawahnya dijalankan. elif memeriksa kondisi berikutnya jika kondisi sebelumnya salah. else menangani keadaan ketika semua kondisi sebelumnya salah.", "Gunakan == untuk memeriksa kesamaan dan != untuk ketidaksamaan. Operator >, <, >=, dan <= membandingkan angka. Tanda >= menyertakan batas, sehingga nilai 75 memenuhi nilai >= 75.", "Dalam satu rangkaian if–elif–else, hanya blok pertama yang kondisinya benar yang dipilih. Karena itu, periksa batas nilai tertinggi lebih dahulu pada contoh penilaian. Jika nilai >= 75 ditulis sebelum nilai >= 90, angka 95 sudah masuk pilihan pertama.", "and memerlukan kedua syarat benar; or memerlukan setidaknya satu syarat benar; not membalik nilai logika. Contoh nilai >= 75 and tugas_selesai berarti keduanya harus terpenuhi. Indentasi empat spasi menandai isi blok, sedangkan titik dua menutup baris kondisi."],
@@ -70,7 +70,7 @@
     "source": "https://docs.python.org/3/tutorial/controlflow.html#if-statements"
   },
   {
-    "slug": "perulangan-for", "title": "Perulangan for dan range", "stage": 1, "minutes": 20,
+    "slug": "perulangan-for", "title": "Perulangan for dan range", "stage": 1, "minutes": 21,
     "summary": "Ulangi pekerjaan berdasarkan rentang angka tanpa menulis instruksi yang sama berkali-kali.",
     "analogy": "Petugas membacakan nomor antrean satu per satu. Tindakan membacanya sama; nomor yang dibaca berubah setiap giliran.",
     "explain": ["for mengambil satu nilai pada setiap putaran, lalu menjalankan blok yang menjorok di bawahnya. Setelah nilai terakhir diproses, program melanjutkan ke instruksi setelah perulangan.", "range(1, 6) menyediakan angka 1, 2, 3, 4, dan 5. Batas akhir 6 tidak disertakan. range(5) dimulai dari 0 dan menghasilkan lima angka: 0 sampai 4. range(2, 7, 2) menghasilkan 2, 4, dan 6.", "Nama angka pada contoh adalah variabel yang menerima nilai setiap putaran. Kamu dapat menggantinya menjadi nomor selama penggunaannya tetap konsisten. Nama yang jelas membantu menjelaskan apa yang sedang diproses.", "Selain rentang angka, for juga dapat memproses isi kumpulan data. Hal itu akan dipraktikkan pada bab list. Untuk sekarang, fokuslah membaca perubahan nilai dari satu putaran ke putaran berikutnya."],
@@ -84,7 +84,7 @@
     "source": "https://docs.python.org/3/tutorial/controlflow.html#the-range-function"
   },
   {
-    "slug": "perulangan-while", "title": "Perulangan while dan kondisi berhenti", "stage": 1, "minutes": 20,
+    "slug": "perulangan-while", "title": "Perulangan while dan kondisi berhenti", "stage": 1, "minutes": 22,
     "summary": "Ulangi instruksi selama syarat terpenuhi dan pahami cara mencegah program berjalan terus.",
     "analogy": "Kamu mengisi botol selama botol belum penuh. Kondisi diperiksa kembali setelah mengisi; ketika penuh, kegiatan berhenti.",
     "explain": ["while memeriksa kondisi sebelum setiap putaran. Jika benar, blok dijalankan. Jika salah, blok dilewati dan program melanjutkan ke baris berikutnya. Karena diperiksa di awal, blok bisa tidak dijalankan sama sekali.", "Contoh menggunakan penghitung. Nilai awalnya 1. Sesudah menampilkan satu putaran, hitungan ditambah satu. Ketika mencapai 4, syarat hitungan <= 3 tidak lagi terpenuhi.", "hitungan += 1 adalah penulisan singkat dari hitungan = hitungan + 1. Saat membaca program, catat nilai sebelum kondisi diperiksa dan setelah pembaruan dilakukan.", "Gunakan for saat memproses rentang atau kumpulan data. Gunakan while ketika pengulangan bergantung pada kondisi. Pemilihan yang jelas membantu pembaca memahami tujuan perulangan."],
@@ -98,7 +98,7 @@
     "source": "https://docs.python.org/3/reference/compound_stmts.html#the-while-statement"
   },
   {
-    "slug": "list-kumpulan-data", "title": "List: menyimpan dan mengolah banyak data", "stage": 2, "minutes": 22,
+    "slug": "list-kumpulan-data", "title": "List: menyimpan dan mengolah banyak data", "stage": 2, "minutes": 24,
     "summary": "Kelola daftar nilai dengan indeks, penambahan item, dan perulangan.",
     "analogy": "Daftar belanja menyimpan beberapa barang dalam satu catatan. List memungkinkan program menyimpan beberapa nilai dalam satu variabel dan membacanya satu per satu.",
     "explain": ["List ditulis memakai kurung siku, dengan koma di antara nilainya. Contoh buah = [\"Apel\", \"Jeruk\", \"Mangga\"]. Urutan item dipertahankan dan isinya dapat diubah.", "Indeks menunjukkan posisi item dan dimulai dari 0. buah[0] adalah Apel, buah[1] adalah Jeruk. len(buah) menghasilkan jumlah item. Jika list memiliki tiga item, indeks positif yang valid adalah 0, 1, dan 2.", "Gunakan append() untuk menambahkan satu item di akhir list. Gunakan for untuk memproses setiap item. Pada contoh penjumlahan, variabel total dimulai dari 0 dan diperbarui setiap kali sebuah harga diambil.", "total harus disiapkan sebelum perulangan. Jika total = 0 diletakkan di dalam blok for, hasil sebelumnya akan terhapus pada setiap putaran dan penjumlahan menjadi salah."],
@@ -112,7 +112,7 @@
     "source": "https://docs.python.org/3/tutorial/datastructures.html"
   },
   {
-    "slug": "fungsi-parameter-return", "title": "Fungsi, parameter, dan return", "stage": 2, "minutes": 25,
+    "slug": "fungsi-parameter-return", "title": "Fungsi, parameter, dan return", "stage": 2, "minutes": 27,
     "summary": "Pecah program menjadi tugas kecil yang bisa dipanggil kembali dan diuji satu per satu.",
     "analogy": "Mesin penghitung menerima dua angka, mengolahnya, lalu menyerahkan hasil. Kamu tidak perlu merakit ulang mesin setiap kali ingin menghitung angka lain.",
     "explain": ["Fungsi adalah bagian program yang diberi nama untuk melakukan suatu tugas. def mendefinisikan fungsi. Isi fungsi baru dijalankan ketika fungsi dipanggil.", "Parameter merupakan nama masukan pada definisi fungsi, seperti panjang dan lebar. Pada pemanggilan hitung_luas(8, 4), angka 8 dan 4 disebut argumen yang mengisi parameter tersebut.", "return mengembalikan nilai kepada pemanggil dan menghentikan pemanggilan fungsi itu. Nilai tersebut bisa disimpan ke variabel atau dipakai dalam perhitungan lain. print() hanya menampilkan sesuatu ke layar; menampilkan dan mengembalikan nilai adalah dua pekerjaan berbeda.", "Variabel yang dibuat di dalam fungsi biasanya bersifat lokal: digunakan di dalam pemanggilan fungsi tersebut. Untuk latihan awal, kirim data melalui parameter dan ambil hasil melalui return agar alurnya mudah ditelusuri."],
@@ -126,7 +126,7 @@
     "source": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions"
   },
   {
-    "slug": "algoritma-pseudocode", "title": "Merancang algoritma sebelum menulis kode", "stage": 2, "minutes": 20,
+    "slug": "algoritma-pseudocode", "title": "Merancang algoritma sebelum menulis kode", "stage": 2, "minutes": 22,
     "summary": "Ubah sebuah masalah menjadi input, proses, output, dan langkah yang bisa diperiksa.",
     "analogy": "Sebelum bepergian, kamu menentukan tujuan dan rute. Sebelum menulis kode, tentukan hasil yang diinginkan dan langkah untuk mencapainya.",
     "explain": ["Mulailah dengan kalimat masalah yang spesifik: pembeli mendapat diskon 10% jika subtotal minimal Rp100.000. Kalimat ini menjelaskan pemicu dan tindakan, sehingga bisa diterjemahkan menjadi kondisi yang dapat diuji.", "Pisahkan input, proses, dan output. Input adalah subtotal. Proses menentukan diskon dan mengurangi subtotal. Output adalah total bayar. Tetapkan juga asumsi: subtotal berupa rupiah bulat dan tidak negatif.", "Pseudocode menuliskan logika dalam bahasa sederhana. Penulisannya tidak harus mengikuti sintaks Python. Tujuannya agar kita bisa memeriksa langkah sebelum menghadapi aturan bahasa pemrograman.", "Untuk pengujian, pilih nilai di bawah batas, tepat pada batas, dan di atas batas. Dengan aturan minimal Rp100.000, subtotal 99.999 tidak mendapat diskon, sedangkan 100.000 dan 100.001 mendapat diskon. Uji batas membantu menemukan pemakaian > yang seharusnya >=."],
@@ -140,7 +140,7 @@
     "source": "https://docs.python.org/3/tutorial/controlflow.html#if-statements"
   },
   {
-    "slug": "kesalahan-validasi", "title": "Membaca error dan memvalidasi input", "stage": 3, "minutes": 25,
+    "slug": "kesalahan-validasi", "title": "Membaca error dan memvalidasi input", "stage": 3, "minutes": 27,
     "summary": "Kenali kesalahan penulisan, kesalahan saat berjalan, dan kesalahan logika tanpa panik.",
     "analogy": "Pesan error seperti petunjuk lokasi masalah. Jika resep menyebut bahan yang belum disiapkan, kamu memeriksa langkah yang memakai bahan itu, lalu memperbaikinya.",
     "explain": ["SyntaxError menunjukkan penulisan yang tidak sesuai aturan, misalnya titik dua setelah if terlupa. IndentationError berkaitan dengan susunan indentasi. Perbaiki penulisannya sebelum program dapat berjalan dengan benar.", "Kesalahan saat berjalan antara lain NameError karena nama belum tersedia, ValueError saat konversi nilai tidak cocok, dan ZeroDivisionError saat membagi nol. Baca nama error serta lokasi pada traceback; baris terakhir biasanya menjelaskan jenis masalahnya.", "try–except menangani jenis kesalahan yang sudah diperkirakan. Dalam contoh, int() dapat menimbulkan ValueError jika pengguna mengetik abc. Blok except ValueError menampilkan pesan yang lebih mudah dipahami. Kesalahan penulisan kode tetap harus diperbaiki.", "Input yang berhasil diubah menjadi angka belum tentu masuk akal. Jumlah buku -2 adalah bilangan bulat valid, tetapi tidak memenuhi aturan jumlah minimal 1. Itulah sebabnya konversi dan validasi nilai diperiksa terpisah. Contoh ini berhenti setelah satu masukan; belum meminta ulang secara otomatis."],
@@ -154,7 +154,7 @@
     "source": "https://docs.python.org/3/tutorial/errors.html"
   },
   {
-    "slug": "proyek-kasir-sederhana", "title": "Proyek akhir: kasir sederhana", "stage": 3, "minutes": 40,
+    "slug": "proyek-kasir-sederhana", "title": "Proyek akhir: kasir sederhana", "stage": 3, "minutes": 42,
     "summary": "Gabungkan variabel, list, percabangan, perulangan, dan fungsi dalam satu program yang bisa diuji.",
     "analogy": "Kasir membaca harga barang satu per satu, menjumlahkannya, memeriksa aturan diskon, lalu menyampaikan total yang harus dibayar.",
     "explain": ["Tujuan proyek adalah menghitung total dari list harga. Aturannya: setiap harga berupa rupiah bulat tidak negatif; subtotal minimal Rp100.000 mendapat diskon 10%. Diskon dibulatkan ke bawah ke rupiah penuh. List kosong diperbolehkan dan menghasilkan total 0.", "Pisahkan dua tugas: hitung_subtotal menjumlahkan harga dengan for, sedangkan hitung_diskon menentukan potongan dengan if. Bagian utama menyiapkan data, memanggil fungsi, dan menampilkan hasil. Dengan pembagian ini, setiap aturan bisa diperiksa secara terpisah.", "subtotal = 0 diletakkan sebelum for agar penjumlahan terus bertambah. return pada fungsi subtotal berada setelah perulangan agar semua barang selesai dihitung. Jika return berada di dalam for, fungsi bisa berhenti setelah barang pertama.", "Kode memakai data tetap agar kamu fokus pada alur, bukan kesulitan input. Setelah hasilnya benar, kembangkan dengan masukan pengguna dan validasi dari bab sebelumnya. Kamu sudah menyelesaikan fondasi pemrograman terstruktur ketika mampu menjelaskan alurnya, mengubah aturan, dan memeriksa hasilnya sendiri."],

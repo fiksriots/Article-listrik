@@ -1,0 +1,2092 @@
+{
+  "jaringan/apa-itu-jaringan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Sebuah jaringan baru berguna ketika perangkat mempunyai cara mengirim, alamat yang sesuai, dan layanan yang bisa menerima permintaan. Kabel atau Wi-Fi menyediakan sambungan, tetapi program pada kedua ujung tetap harus memakai aturan yang cocok. Inilah alasan laptop yang tersambung ke access point belum tentu bisa mencetak atau membuka situs.",
+          "Pisahkan koneksi lokal dari koneksi internet. Di jaringan lokal, perangkat bisa saling bertukar data tanpa melewati penyedia internet jika pengalamatan, izin, dan layanannya benar. Router diperlukan ketika paket harus diteruskan ke jaringan lain; perannya tidak sama dengan server yang menyediakan isi layanan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dalam rumah latihan ada laptop, printer dan router. Pertama, laptop memperoleh alamat pada subnet yang sama dengan printer. Kedua, laptop mencari layanan cetak dan mengirim pekerjaan sesuai konfigurasi printer. Ketiga, printer menerima serta memprosesnya. Tidak ada langkah yang secara otomatis harus melewati internet.",
+          "Sekarang bayangkan kabel menuju ISP terputus, tetapi jaringan rumah tetap menyala. Pencetakan lokal dapat tetap berhasil, sementara situs luar gagal dibuka. Hasil yang berbeda itu justru menunjukkan bagian lokal dan bagian internet perlu diperiksa secara terpisah."
+        ]
+      }
+    ],
+    "practiceReview": "Pada gambar latihan, beri tanda jalur laptop–printer sebagai lokal dan router–ISP sebagai jalan keluar. Jelaskan apakah setiap layanan membutuhkan internet. Jangan hanya menggambar perangkat; tambahkan apa yang sedang dipertukarkan, misalnya pekerjaan cetak atau permintaan halaman web."
+  },
+  "jaringan/lan-wan-internet": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "LAN dan WAN menjelaskan lingkup atau peran sambungan, bukan menjamin kecepatan tertentu. LAN kantor menghubungkan perangkat yang dikelola sebagai jaringan lokal. WAN menghubungkan jaringan yang lebih jauh atau sisi luar sebuah lokasi. Sambungan WAN dapat menuju kantor lain secara privat dan tidak harus berarti internet publik.",
+          "Pada router rumah, label WAN biasanya dipakai untuk port menuju modem atau upstream. Port itu tidak otomatis mempunyai alamat publik. Jika modem juga melakukan routing dan NAT, alamat sisi WAN router rumah bisa berupa alamat privat."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Kantor A dan B memiliki printer lokal masing-masing serta koneksi antarkantor. Saat koneksi antarkantor putus, komputer A mungkin tetap bisa memakai printer A. Jika jalur internet A berbeda dan tetap sehat, situs publik juga masih dapat terbuka.",
+          "Dengan memetakan layanan, kamu dapat melaporkan “jalur antarkantor terganggu” alih-alih “seluruh internet mati”. Gambarkan sambungan lokal, jalur antarlokasi, dan jalur menuju internet menggunakan label yang berbeda supaya cakupan gangguan mudah dibaca."
+        ]
+      }
+    ],
+    "practiceReview": "Topologi latihan harus menunjukkan batas tiap LAN dan tujuan setiap sambungan WAN. Coba ceritakan satu gangguan link dan layanan mana yang masih bekerja. Keberhasilan membuka situs publik tidak membuktikan koneksi privat ke kantor lain sehat."
+  },
+  "jaringan/perangkat-jaringan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Switch meneruskan frame pada jaringan Layer 2, router mengambil keputusan lintas jaringan, dan access point menghubungkan perangkat nirkabel ke jaringan. ONT mengakhiri sambungan optik akses pada sisi pelanggan. Perangkat rumah dapat menggabungkan beberapa fungsi itu dalam satu kotak sehingga nama pada kemasan belum menjelaskan seluruh pekerjaannya.",
+          "Untuk mengidentifikasi peran, tanyakan sambungan masuknya dari mana, klien terhubung lewat apa, siapa memberi alamat, dan siapa menjadi gateway. Jangan menyamakan bentuk fisik dengan fungsi. Router yang dipakai sebagai access point misalnya dapat memiliki layanan DHCP yang sengaja dinonaktifkan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh: fiber masuk ke ONT, kabel Ethernet dari ONT menuju router, kemudian router menghubungkan switch dan access point. Paket dari laptop Wi-Fi melewati AP, router, lalu ONT saat menuju internet. Paket menuju printer pada LAN yang sama dapat mengikuti jalur lokal yang berbeda.",
+          "Jika ONT juga berfungsi sebagai router dan penyedia Wi-Fi, gambar perlu mencatat fungsi gabungan itu. Ini membantu menjelaskan mengapa memasang router kedua bisa menciptakan subnet serta NAT tambahan, bukan sekadar menambah port."
+        ]
+      }
+    ],
+    "practiceReview": "Buat tabel perangkat, fungsi, port masuk/keluar, dan alamat manajemennya. Jika satu perangkat memiliki beberapa fungsi, tulis semuanya. Periksa konfigurasi atau dokumentasi sebelum menyatakan perangkat mana yang menjadi DHCP server dan gateway."
+  },
+  "jaringan/hardware-nic-port": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "NIC menyediakan antarmuka jaringan pada host. Sebuah perangkat dapat mempunyai NIC kabel, Wi-Fi, atau adapter virtual sekaligus. Karena itu, hasil pemeriksaan harus menyebut interface yang dipakai. Mengubah IP adapter Ethernet tidak selalu memengaruhi koneksi yang ternyata keluar melalui Wi-Fi.",
+          "Bentuk port tidak menjamin fitur yang aktif. Port RJ45 bisa memiliki kemampuan kecepatan tertentu, sedangkan slot SFP membutuhkan modul yang cocok. Baca spesifikasi perangkat dan status negosiasi aktual; angka pemasaran perangkat tidak otomatis berlaku untuk setiap port atau seluruh traffic gabungan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Laptop latihan mempunyai Wi-Fi dan USB Ethernet. Saat kabel dipasang, lampu Ethernet menyala tetapi aplikasi masih memakai rute Wi-Fi karena keputusan tabel rute. Mengukur speed test tanpa mencatat interface akan menghasilkan kesimpulan yang keliru tentang kabel USB.",
+          "Catat nama adapter, alamat IP, kecepatan link dan rute yang dipilih menuju tujuan uji. Jika ingin membandingkan dua sambungan, lakukan pengujian terkontrol di lab dan pastikan titik uji, server serta waktunya dicatat."
+        ]
+      }
+    ],
+    "practiceReview": "Hasil latihan bukan sekadar daftar lubang pada perangkat. Pasangkan setiap port dengan fungsi, kemampuan menurut spesifikasi, dan status aktual. Jika belum bisa membaca status suatu port, tandai belum diketahui daripada menebak dari bentuknya."
+  },
+  "jaringan/topologi-jaringan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Topologi fisik menjawab kabel atau radio menghubungkan perangkat mana. Topologi logis menjawab jalur VLAN, subnet dan layanan yang menumpang di atasnya. Satu kabel trunk dapat membawa beberapa VLAN sehingga dua perangkat yang tampak berdekatan belum tentu berada dalam jaringan logis yang sama.",
+          "Star memusatkan sambungan pada perangkat tertentu; mesh menyediakan beberapa hubungan antartitik. Jalur tambahan baru menjadi cadangan yang berguna bila protokol atau konfigurasi dapat memilihnya dengan benar. Dua kabel tanpa rancangan pengendalian loop justru dapat mengganggu jaringan Layer 2."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada kantor latihan, switch tengah menghubungkan tiga ruang. Secara fisik bentuknya star. VLAN 10 untuk staf dan VLAN 20 untuk tamu dapat melewati switch yang sama tetapi tetap dipisahkan secara logis. Router atau perangkat Layer 3 mengatur komunikasi di antara keduanya.",
+          "Ketika satu kabel menuju ruang A terputus, dampaknya berbeda dari matinya switch tengah. Tandai titik yang dipakai bersama semua ruang. Dengan begitu diagram tidak hanya menggambarkan sambungan, tetapi membantu memprediksi luas gangguan."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar latihan perlu mempunyai nama perangkat, label port/link dan batas subnet atau VLAN. Untuk satu simulasi gangguan, tulis perangkat terdampak serta alasannya. Jangan menyebut semua garis tambahan sebagai backup sebelum mekanisme perpindahannya dijelaskan."
+  },
+  "jaringan/client-server-p2p": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Client dan server merupakan peran dalam sebuah pertukaran, bukan jenis komputer yang selalu tetap. Client meminta layanan; server menerima serta merespons sesuai protokol. Laptop dapat menjadi client web sekaligus menyediakan file bagi komputer lain. Kondisi jaringan sehat harus diuji sampai peran layanan yang dimaksud benar-benar bekerja.",
+          "Pada peer-to-peer, peserta dapat saling menjadi penyedia sekaligus peminta. Tetap diperlukan identitas, keterjangkauan dan izin. Tidak adanya satu server pusat juga tidak menghapus kebutuhan mengatur akses dan menjaga data."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Komputer A membuka dashboard pada server B. Alurnya meliputi menemukan alamat B, membangun koneksi ke port layanan, mengirim permintaan, dan menerima jawaban. Ping B berhasil hanya memeriksa sebagian kecil jalur itu.",
+          "Jika web server B berhenti tetapi OS masih hidup, ping dapat berhasil sementara halaman gagal. Bandingkan status proses, port yang mendengarkan, dan respons aplikasi. Untuk berbagi file peer-to-peer, periksa juga izin folder; kabel tersambung tidak otomatis memberi hak membaca file."
+        ]
+      }
+    ],
+    "practiceReview": "Tuliskan siapa client dan server pada tiga kegiatan berbeda. Lalu pilih satu pemeriksaan yang membuktikan layanannya, misalnya membuka halaman uji atau membaca file yang memang diizinkan. Hindari menyamakan perangkat hidup dengan seluruh layanan aktif."
+  },
+  "jaringan/osi-tcp-ip": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Model layer membagi pekerjaan komunikasi supaya sumber masalah lebih mudah dibatasi. Sambungan fisik membawa sinyal, Ethernet atau Wi-Fi membawa frame pada link, IP menentukan jaringan tujuan, transport mengatur komunikasi antarendpoint, dan aplikasi menentukan makna permintaan. Model bukan daftar komponen yang harus selalu diperiksa secara terpisah pada setiap kasus.",
+          "Informasi dari lapisan lebih tinggi dibungkus oleh lapisan di bawahnya untuk dikirim. Router meneruskan paket IP melalui link berikutnya; bingkai Layer 2 pada link dapat berubah. Pemahaman ini membantu membedakan alamat MAC yang relevan pada satu segmen dengan alamat IP tujuan yang sedang dicapai."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Saat halaman tidak terbuka, lampu port yang mati mengarahkan pemeriksaan awal ke sambungan. Bila IP gateway bisa dijangkau tetapi nama domain gagal diresolusi, bukti mengarah ke layanan DNS atau jalurnya. Bila DNS berhasil dan server memberi HTTP 503, diagnosis sudah berbeda lagi.",
+          "Jangan menganggap label layer sebagai penyebab. Tulis hasil aktual pada setiap tahap. “Masalah Layer 3” belum membantu jika tidak disebutkan rute mana, dari titik mana, serta tujuan yang gagal."
+        ]
+      }
+    ],
+    "practiceReview": "Hubungkan setiap alat dengan pertanyaan yang dijawabnya: status port, alamat/rute, ping, resolusi nama, dan respons aplikasi. Jelaskan batas kesimpulannya. Latihan selesai bila kamu bisa memilih pemeriksaan berikutnya dari bukti, bukan hanya menghafal tujuh nama layer."
+  },
+  "jaringan/ethernet-speed-duplex": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Kecepatan link adalah hasil kemampuan dan negosiasi kedua sisi, bukan kecepatan internet yang pasti diperoleh aplikasi. Link 1 Gbps masih dapat membawa layanan internet 100 Mbps atau melewati bottleneck lain. Duplex menjelaskan apakah pengiriman dan penerimaan dapat berjalan bersamaan pada mode yang digunakan.",
+          "Auto-negotiation membantu kedua sisi menyepakati parameter. Memaksa satu sisi tanpa menyesuaikan rancangan sisi lain dapat menimbulkan ketidakcocokan. Pada gigabit tembaga, kondisi pasangan kabel dan dukungan kedua perangkat juga penting; tester kontinuitas sederhana belum menilai seluruh kualitas transmisi."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Koneksi laptop hanya bernegosiasi 100 Mbps padahal kedua port mendukung gigabit. Pertama, baca status kedua sisi. Kedua, bandingkan dengan kabel patch yang diketahui baik pada port yang sama. Ketiga, lihat apakah kecepatan negosiasi berubah dan apakah error meningkat saat traffic berjalan.",
+          "Jika kabel pembanding membuat link naik ke 1 Gbps, kabel atau terminasi lama layak diperiksa. Itu belum membuktikan setiap hasil aplikasi akan mencapai 1 Gbps; uji throughput memiliki overhead dan keterbatasan host/server."
+        ]
+      }
+    ],
+    "practiceReview": "Catat capability, negotiated speed, duplex dan counter error pada kedua ujung jika tersedia. Bandingkan satu variabel per giliran. Jangan memperbaiki hasil latihan dengan memaksa speed sembarangan atau langsung menyalahkan paket ISP."
+  },
+  "jaringan/ip-mac": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "IP membantu menentukan tujuan pada jaringan logis, sedangkan MAC dipakai untuk pengiriman frame pada link Ethernet yang relevan. MAC tujuan frame tidak selalu milik host tujuan akhir. Jika tujuan IP berada di jaringan lain, host biasanya mengirim frame menuju MAC gateway pada segmen lokal.",
+          "Karena itu, mengganti IP tidak otomatis mengubah MAC, dan mengetahui MAC tidak berarti perangkat dapat dijangkau melintasi router dengan cara yang sama seperti IP. Adapter virtual dan fitur privasi Wi-Fi juga membuat asumsi “satu perangkat selalu satu MAC tetap” tidak aman untuk semua keadaan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Laptop 192.168.10.10/24 ingin mengirim ke server 192.168.20.10. Laptop mengenali tujuan di luar subnet, lalu memakai gateway 192.168.10.1. Pada Ethernet lokal, frame dikirim ke MAC gateway, sementara paket IP tetap ditujukan ke server.",
+          "Bila laptop ingin mengirim ke 192.168.10.11 pada link yang sama, resolusi tetangga mencari MAC host lokal itu. Perbandingan dua tujuan ini menjelaskan mengapa tabel ARP dan tabel rute menjawab pertanyaan berbeda."
+        ]
+      }
+    ],
+    "practiceReview": "Pada tabel latihan, pisahkan IP sumber/tujuan paket dan MAC pengirim/penerima pada link pertama. Untuk tujuan luar subnet, penerima frame pertama adalah gateway yang dipilih, bukan otomatis MAC server jauh."
+  },
+  "jaringan/switch-arp": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Switch belajar alamat MAC sumber dari frame yang diterima dan mengaitkannya dengan port serta VLAN. Saat MAC tujuan sudah dikenal, frame dapat diarahkan ke port terkait. Jika tujuan belum dikenal, flooding dapat terjadi dalam batas domain Layer 2 yang berlaku. Ini berbeda dari router yang menggunakan tabel rute IP.",
+          "ARP pada IPv4 mencari pemetaan alamat IP tetangga ke alamat MAC pada link. Permintaan ARP lokal tidak menjadi cara mencari MAC semua server internet. Untuk IPv6, mekanisme neighbor discovery berbeda; jangan menganggap seluruh jaringan memakai ARP."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Laptop A ingin berbicara dengan laptop B pada subnet dan VLAN yang sama. Jika pemetaan B belum diketahui, A mengirim permintaan ARP. B menjawab, lalu A dapat mengirim frame dengan MAC tujuan B. Switch mempelajari posisi MAC dari traffic yang lewat.",
+          "Jika tujuan berada di luar subnet, A lebih dahulu memilih gateway melalui tabel rute, kemudian mencari MAC gateway itu. Saat ARP gagal, periksa VLAN, link dan identitas tetangga; menambah static route tidak otomatis memperbaiki kegagalan Layer 2 lokal."
+        ]
+      }
+    ],
+    "practiceReview": "Gambarkan urutan pilih tujuan → pilih rute → cari tetangga → kirim frame. Jelaskan apakah entri yang kamu lihat berasal dari tabel MAC switch atau tabel ARP host/router. Kedua tabel tidak boleh diperlakukan sebagai informasi yang sama."
+  },
+  "jaringan/tcp-udp-port": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "IP mengarahkan paket ke host atau jaringan, sedangkan port membantu sistem operasi membedakan endpoint transport pada host. Nomor port mempunyai konteks protokol: TCP port 53 dan UDP port 53 bukan satu endpoint yang persis sama. Layanan yang lazim memakai nomor tertentu juga tetap dapat dikonfigurasi memakai port lain.",
+          "TCP menyediakan aliran byte berurutan dengan mekanisme pengiriman ulang, tetapi aplikasi masih perlu menentukan batas pesan serta timeout. UDP membawa datagram tanpa jaminan pengiriman dan pengurutan dari protokol itu sendiri. Aplikasi di atas UDP dapat menambahkan mekanismenya sendiri, jadi UDP tidak selalu berarti data aplikasi pasti dibiarkan hilang."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Browser menghubungi layanan HTTPS pada TCP 443 dalam contoh umum. Klien memakai port sumber sementara untuk membedakan koneksinya. Jika server menjawab ping tetapi tidak mendengarkan pada TCP 443, layanan web belum dapat dinyatakan sehat.",
+          "Untuk tes DNS, catat transport yang dipakai dan hasil resolusi. Memblokir seluruh UDP tanpa memahami layanan dapat mengganggu fungsi penting. Sebaliknya, mengizinkan sebuah port tidak membuktikan aplikasi di belakangnya memberi jawaban yang benar."
+        ]
+      }
+    ],
+    "practiceReview": "Tulis pasangan protokol, alamat dan port untuk layanan latihan. Bedakan port sumber klien dengan port layanan server. Saat tes gagal, jelaskan apakah kegagalannya pada resolusi nama, pembentukan koneksi, atau respons aplikasi."
+  },
+  "jaringan/subnet-mask": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Prefix menunjukkan bagian alamat IPv4 yang menentukan network. Pada /24, 24 bit pertama adalah bagian network dan delapan bit tersisa membentuk 256 kemungkinan alamat. Dalam subnet IPv4 biasa, alamat network dan broadcast tidak dipakai sebagai alamat host, sehingga tersedia 254 alamat host. /31 dan /32 memiliki penggunaan khusus yang dibahas terpisah.",
+          "Host menggunakan prefix untuk menentukan apakah tujuan dianggap berada pada link lokal atau perlu gateway. Dua perangkat dengan angka awal IP mirip belum tentu satu subnet jika prefixnya berbeda. Itulah alasan IP harus selalu dicatat bersama prefix atau subnet mask."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua alamat 192.168.10.10/24 dan 192.168.10.200/24 berada pada network 192.168.10.0/24. Jika prefix keduanya diubah menjadi /25, batas bloknya adalah 0–127 dan 128–255; kedua alamat kini berada pada subnet yang berbeda.",
+          "Untuk blok pertama /25, network-nya .0, broadcast-nya .127 dan host biasanya .1–.126. Untuk blok kedua, network .128 dan broadcast .255. Hitungan ini menjelaskan mengapa mengganti mask dapat mengubah keputusan jalur walaupun IP host tidak berubah."
+        ]
+      }
+    ],
+    "practiceReview": "Cantumkan network, broadcast, rentang host dan gateway untuk setiap subnet latihan. Periksa bahwa gateway berada pada link yang sesuai. Jangan memakai rumus jumlah host tanpa memperhatikan jenis prefix dan skenario penggunaannya."
+  },
+  "jaringan/gateway-dns": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Gateway dan DNS menyelesaikan pekerjaan yang berbeda. Gateway adalah next hop yang dipilih untuk meneruskan paket, sedangkan resolver DNS membantu mendapatkan record berdasarkan nama. Sebuah host dapat menjangkau server menggunakan alamat yang sudah diketahui ketika DNS bermasalah, tetapi tidak otomatis dapat mencapai jaringan lain jika rutenya salah.",
+          "Default gateway digunakan ketika keputusan routing membutuhkan rute default, bukan untuk semua komunikasi tanpa kecuali. Tujuan pada subnet lokal biasanya dicapai langsung melalui link lokal. Resolver DNS sendiri juga perlu dijangkau melalui rute yang benar; masalah routing dapat terlihat sebagai timeout DNS."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Klien 192.168.10.10/24 menggunakan gateway .1 dan resolver DNS yang diizinkan di lab. Jika server lokal .20 dapat dicapai tetapi tujuan luar subnet gagal, tabel rute dan gateway menjadi bagian penting pemeriksaan. Jika akses IP yang sah berhasil tetapi nama tidak teresolusi, periksa DNS secara khusus.",
+          "Jangan langsung mengganti resolver dengan alamat publik: jaringan bisa mempunyai nama internal atau kebijakan sendiri. Catat resolver yang dipakai dan jawaban aktual, kemudian bandingkan dari titik uji lain yang relevan."
+        ]
+      }
+    ],
+    "practiceReview": "Buat dua kolom terpisah untuk gateway dan resolver pada catatan klien. Uji tujuan lokal, tujuan lintas subnet dan nama layanan. Tulis bukti tiap tes serta jangan menyimpulkan “DNS rusak” hanya karena halaman web gagal terbuka."
+  },
+  "jaringan/dhcp-ip-statis": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "DHCP memberi konfigurasi melalui proses permintaan dan penawaran, kemudian client menggunakan lease sesuai ketentuannya. Selain IP, opsi dapat berisi prefix, gateway, DNS dan waktu sewa. Mendapat alamat otomatis belum membuktikan semua opsi benar atau berasal dari server yang diharapkan.",
+          "IP statis ditetapkan secara manual, sedangkan reservation membuat server DHCP mencoba memberikan alamat tertentu kepada client yang cocok. Keduanya memerlukan pencatatan agar tidak bertabrakan dengan pool dinamis. Alamat yang stabil tidak otomatis menjamin layanan selalu tersedia."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada lab, pool DHCP adalah 192.168.10.100–.150. Jika printer diberi IP manual .120 tanpa pengecualian, server dapat menawarkan alamat itu ke client lain. Gejala konflik mungkin muncul hanya ketika keduanya aktif.",
+          "Rencana yang lebih jelas menempatkan alamat manual pada rentang yang dikelola di luar pool, atau menggunakan reservation sesuai dukungan server. Setelah itu periksa alamat, gateway, DNS dan identitas server dari client. Jangan hanya melihat “berhasil mendapat IP”."
+        ]
+      }
+    ],
+    "practiceReview": "Catatan latihan harus memuat pool, alamat manual/reservation, masa lease dan opsi client. Jika client mendapat alamat yang tidak diharapkan, kumpulkan informasi server DHCP serta VLAN sebelum mencoba memberi IP acak."
+  },
+  "jaringan/kabel-utp-kategori": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Kategori kabel menyatakan karakteristik yang terkait standar pengujian, tetapi satu link terdiri dari kabel, jack, konektor, patch panel dan pemasangan. Label Cat6 pada salah satu bagian tidak menjamin seluruh jalur memenuhi kemampuan Cat6. Panjang, kondisi terminasi dan lingkungan juga memengaruhi hasil.",
+          "Solid dan stranded menggambarkan konstruksi konduktor. Pemilihan kabel horizontal dan patch cord perlu sesuai penggunaan serta konektor. Pelindung atau shield juga membutuhkan rancangan instalasi yang benar; menambah shield bukan pengganti penataan jalur dan terminasi yang sesuai."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Link latihan memakai kabel utama yang baik, tetapi patch cord ujungnya rusak. Status turun ke 100 Mbps walaupun label kabel utama menunjukkan Cat6. Mengganti perangkat terlebih dahulu akan melewatkan komponen yang sebenarnya mudah dibandingkan.",
+          "Catat panjang jalur, setiap sambungan dan negotiated speed. Bandingkan patch cord dengan yang diketahui baik, lalu uji lagi. Tester kontinuitas membantu menemukan salah urutan atau putus, sedangkan penilaian kemampuan transmisi membutuhkan alat yang sesuai."
+        ]
+      }
+    ],
+    "practiceReview": "Daftar bahan perlu menyebut kategori, konstruksi, jenis konektor dan pemakaian, bukan merek saja. Bedakan bukti kontinuitas dari sertifikasi performa link. Jangan menyatakan kabel memenuhi kecepatan tertentu hanya berdasarkan tulisan pada jaketnya."
+  },
+  "jaringan/crimping-tester": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "T568A dan T568B menentukan pasangan serta posisi konduktor pada terminasi. Yang penting bukan sekadar lampu tester menyala berurutan, tetapi pasangan terpilin dipertahankan dan seluruh link dirakit sesuai kebutuhan. Split pair dapat lolos pada tester kontinuitas sederhana tetapi tetap mengganggu transmisi.",
+          "Konektor juga perlu cocok dengan jenis serta ukuran kabel. Crimping yang tampak rapi tidak menjamin kontak menjepit konduktor dengan benar. Dokumentasikan standar terminasi yang dipakai agar ujung berbeda tidak dikerjakan berdasarkan dugaan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada latihan tanpa PoE aktif, buat satu patch cable sesuai bahan yang cocok. Periksa urutan pin di kedua ujung, kondisi jaket dalam strain relief, dan hasil tester. Setelah itu pasang pada dua perangkat lab dan lihat negosiasi link.",
+          "Jika tester menunjukkan pin 4 tidak tersambung, fokuskan pemeriksaan pada konduktor dan terminasi terkait. Jika semua pin tampak tersambung tetapi gigabit gagal, kualitas pasangan dan konektor masih perlu diperiksa; hasil tester sederhana bukan pembuktian penuh performa."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan foto urutan sebelum crimping dan catatan pin tester. Jelaskan perbedaan straight-through, salah urutan dan split pair. Putuskan daya PoE sebelum menangani konduktor terbuka; lakukan pengujian sesuai kemampuan alat."
+  },
+  "jaringan/fiber-sfp-konektor": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Kecocokan sambungan optik meliputi jenis fiber, panjang gelombang, jenis konektor, kemampuan modul di kedua ujung, serta batas daya optik. Bentuk slot atau konektor yang cocok secara fisik belum menjamin semua parameter itu sesuai. Untuk BiDi, pasangan arah kirim/terima juga harus tepat.",
+          "Rx adalah daya yang diterima dan Tx daya yang dipancarkan menurut pelaporan perangkat. Nilai harus dibandingkan dengan spesifikasi modul dan rancangan link. Terlalu lemah maupun terlalu kuat bisa menjadi masalah pada kombinasi tertentu; jangan memakai satu angka dBm sebagai batas semua modul."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua modul sama-sama berbentuk SFP, tetapi satu dirancang untuk fiber multimode dan satu untuk single-mode. Menyambungkannya karena konektornya sama bukan prosedur pemilihan yang benar. Baca label lengkap dan cocokkan spesifikasi link sebelum pemasangan.",
+          "Pada link yang sebelumnya sehat lalu memburuk, bandingkan tren Rx, kondisi konektor dan sisi lawan. LOS menunjukkan kehilangan sinyal menurut perangkat, bukan lokasi pasti kabel putus. Pemeriksaan fisik lanjutan dilakukan teknisi dengan alat yang sesuai."
+        ]
+      }
+    ],
+    "practiceReview": "Tabel latihan perlu memuat model modul, SM/MM, panjang gelombang, konektor, jarak/rancangan dan rentang optik. Jangan melihat langsung ke konektor atau fiber aktif. Catat nilai aktual dan spesifikasi rujukan sebelum menilai kondisi link."
+  },
+  "jaringan/kabel-fiber-poe": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "UTP membawa sinyal listrik, fiber membawa sinyal optik, dan PoE menambahkan distribusi daya melalui pasangan kabel Ethernet dengan mekanisme tertentu. Media dipilih berdasarkan jarak, kebutuhan kapasitas, lingkungan serta daya perangkat. Fiber tidak sekaligus memberi daya ke perangkat jauh melalui inti optiknya.",
+          "PoE standar dan passive PoE tidak boleh disamakan. Perhatikan metode, tegangan, pasangan, daya yang tersedia dari sumber dan daya yang dibutuhkan perangkat. Dukungan konektor RJ45 saja bukan bukti perangkat aman diberi suplai dari injector tertentu."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Access point plafon dapat memakai satu kabel Ethernet untuk data dan PoE jika sumber serta AP kompatibel. Kamera di lokasi jauh yang terhubung fiber masih memerlukan suplai listrik atau solusi daya terpisah di sisi lokasi.",
+          "Jika AP restart ketika radio bekerja, periksa kapasitas PoE, total budget switch, panjang/kondisi kabel dan kebutuhan beban. Gejala tersebut tidak otomatis membuktikan jaringan IP rusak. Bandingkan sumber kompatibel yang kapasitasnya sesuai di lab."
+        ]
+      }
+    ],
+    "practiceReview": "Untuk setiap jalur, tulis media data dan sumber daya secara terpisah. Catat kompatibilitas PoE dari dokumentasi kedua perangkat. Jangan melakukan percobaan passive PoE pada perangkat yang spesifikasinya belum terkonfirmasi."
+  },
+  "jaringan/rack-patch-panel": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Patch panel mengatur terminasi kabel tetap, sedangkan patch cord menyambungkannya ke switch atau perangkat. Pemisahan ini memudahkan perubahan port tanpa menarik kabel horizontal berulang kali. Label yang konsisten membuat jalur dapat ditelusuri dari ruang pengguna sampai port switch.",
+          "Penataan rack juga perlu mempertimbangkan ventilasi, akses pemeliharaan, distribusi daya dan radius lengkung media. Kabel yang rapi tetapi menutup aliran udara atau menekan fiber tidak memenuhi tujuan operasional. Ikuti spesifikasi perangkat serta rancangan instalasi."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Outlet ruang A diberi label A-01, terminasi patch panel PP1-12, lalu patch cord menuju SW1-07. Saat pengguna kehilangan link, teknisi dapat mengikuti tiga label itu untuk membandingkan status fisik dan port.",
+          "Jika perpindahan patch cord tidak dicatat, diagram lama bisa mengarahkan pemeriksaan ke port yang salah. Setelah setiap perubahan, cocokkan label fisik, inventaris dan deskripsi port. Catatan sederhana lebih berguna daripada diagram indah yang sudah tidak sesuai."
+        ]
+      }
+    ],
+    "practiceReview": "Buat pemetaan outlet → patch panel → switch/port → VLAN. Uji dengan menelusuri satu jalur dari kedua arah. Jika label tidak terbaca atau jalur belum pasti, tandai untuk verifikasi; jangan langsung mencabut kabel produksi."
+  },
+  "jaringan/wifi-sinyal-channel": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Wi-Fi memakai media radio bersama. Kekuatan sinyal, tingkat noise, pemakaian airtime, kemampuan client dan hambatan fisik sama-sama memengaruhi hasil. Sinyal penuh pada layar hanya menunjukkan aspek tertentu dari hubungan radio; tidak menjamin kapasitas, DNS atau upstream sehat.",
+          "Lebar channel lebih besar dapat memberi kapasitas lebih tinggi pada kondisi sesuai, tetapi juga menggunakan spektrum lebih luas dan bisa memperbesar persaingan. Pemilihan band/channel mengikuti aturan wilayah, kemampuan perangkat dan hasil pengamatan lingkungan, bukan satu setelan universal."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Laptop dekat AP sehat melalui kabel tetapi lambat melalui Wi-Fi pada jam ramai. Catat band, channel, sinyal dan pemakaian airtime bila tersedia. Bandingkan lokasi serta waktu yang sama, lalu uji tujuan lokal untuk memisahkan radio dari jalur internet.",
+          "Jika tujuan lokal juga lambat melalui Wi-Fi sementara kabel normal, radio menjadi fokus awal. Jika keduanya lambat ke satu situs saja, perubahan channel belum tentu membantu. Gunakan bukti pembanding sebelum mengubah konfigurasi."
+        ]
+      }
+    ],
+    "practiceReview": "Catat lokasi uji, perangkat, band/channel dan tujuan pengujian. Bedakan kuat sinyal dari kualitas layanan. Jangan menilai seluruh jaringan hanya dari speed test satu ponsel atau menyetel daya maksimum sebagai jawaban semua gangguan."
+  },
+  "jaringan/vlan-access-trunk": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "VLAN membagi domain Layer 2 secara logis. Port access biasanya melayani perangkat yang mengirim frame tanpa tag untuk satu VLAN, sementara trunk membawa beberapa VLAN dengan penandaan sesuai rancangan. Detail perlakuan untagged/native dan PVID bergantung konfigurasi; istilah trunk sendiri tidak otomatis menentukan seluruh perilakunya.",
+          "Router atau fungsi Layer 3 diperlukan bila komunikasi harus melintasi subnet/VLAN. Kebijakan firewall mengatur izin antarlayanan. Membuat dua VLAN belum otomatis memastikan seluruh jalur akses, DHCP, routing dan aturan keamanan sudah benar."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Switch membawa VLAN 10 staf dan VLAN 20 tamu ke router melalui satu trunk. Port laptop staf dipetakan ke VLAN 10, lalu router menyediakan gateway dan layanan yang sesuai. Jika VLAN 10 tidak diizinkan pada salah satu sisi trunk, link fisik dapat tetap up tetapi laptop gagal mendapat DHCP.",
+          "Telusuri jalur dari port client, VLAN di switch, trunk, sampai interface layanan di router. Bandingkan tagging pada kedua sisi. Jangan mengatasi kesalahan VLAN dengan memberikan subnet acak kepada client."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan matriks port, PVID/untagged, VLAN bertag dan tujuan port. Uji DHCP, gateway dan izin antarsubnet sesuai rancangan. Pastikan akses manajemen dan cara pemulihan lab tersedia sebelum mencoba VLAN filtering."
+  },
+  "jaringan/routing-statis": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Sebuah static route menghubungkan prefix tujuan dengan next hop atau interface sesuai jenis route. Router memilih berdasarkan kecocokan dan kebijakan yang berlaku; rute yang lebih spesifik biasanya lebih tepat daripada default route untuk tujuan yang sama. Next hop juga harus dapat diresolusikan melalui jalur yang sesuai.",
+          "Pengiriman yang berhasil membutuhkan jalur balasan. Memasang rute dari R1 ke LAN R2 tidak otomatis membuat R2 mengenal LAN R1. Untuk komunikasi antarlokasi yang dirancang memakai routing, NAT bukan pengganti otomatis bagi perencanaan rute dua arah."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "LAN R1 adalah 192.168.10.0/24 dan LAN R2 192.168.20.0/24, dengan transit 10.10.10.0/30. R1 mempunyai alamat transit .1 dan R2 .2. R1 perlu petunjuk menuju LAN20 via .2; R2 perlu petunjuk menuju LAN10 via .1.",
+          "Client masing-masing LAN juga membutuhkan gateway lokal yang benar. Setelah menguji transit, uji host antarkedua LAN dan periksa kebijakan host/firewall. Ping router tetangga berhasil belum membuktikan seluruh perjalanan antarclient."
+        ]
+      }
+    ],
+    "practiceReview": "Tabel latihan harus menunjukkan destination dan next hop pada setiap router, bukan hanya satu sisi. Periksa gateway client serta rute balasan. Jika ping gagal, catat dari sumber mana agar pengujian router tidak disamakan dengan pengujian host LAN."
+  },
+  "jaringan/nat-ip-publik": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "NAT mengubah informasi alamat, dan pada bentuk tertentu port, sesuai aturan serta state koneksi. Source NAT sering dipakai ketika beberapa alamat privat berbagi akses keluar. Destination NAT mengarahkan traffic masuk ke tujuan internal tertentu. Perubahan alamat ini tidak otomatis memberi izin melewati firewall.",
+          "CGNAT menambahkan translasi pada sisi penyedia. Port forwarding pada router rumah saja mungkin tidak cukup untuk menerima koneksi langsung dari internet jika sisi WAN masih berada di balik translasi upstream. Periksa alamat serta layanan penyedia, bukan hanya tombol port forwarding lokal."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua laptop privat mengakses server yang sama melalui satu router. Router dapat membuat pemetaan koneksi sehingga balasan menuju endpoint internal yang sesuai. Server luar mungkin melihat alamat hasil NAT, bukan alamat LAN setiap laptop.",
+          "Saat ingin memublikasikan server lab, bedakan alamat WAN yang diperoleh, jalur upstream, aturan DNAT dan izin firewall. Untuk produksi, pembukaan layanan memerlukan rancangan keamanan. Mengetahui IP publik tidak membuktikan port server bisa diakses."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar perubahan alamat sebelum dan sesudah titik NAT serta arah balasannya. Bedakan hasil NAT dengan izin firewall dan routing. Untuk contoh akses masuk, jelaskan apakah masih ada router/NAT penyedia di depan perangkatmu."
+  },
+  "jaringan/firewall-dasar": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Firewall mengevaluasi traffic menurut aturan dan konteks yang dikonfigurasi. Urutan aturan penting pada sistem yang memprosesnya berurutan: aturan umum yang cocok lebih dahulu dapat membuat aturan khusus di bawahnya tidak pernah tercapai. Pemahaman chain juga diperlukan agar traffic menuju router tidak disamakan dengan traffic yang diteruskan lewat router.",
+          "Connection tracking membantu mengaitkan paket dengan koneksi, tetapi perilaku akhir tetap bergantung aturan. Jangan menyalin kebijakan tanpa memahami interface, alamat dan layanan manajemen yang dibutuhkan. Salah aturan bisa memutus akses pengelolaan sendiri."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh kebutuhan kantor: tamu boleh ke internet tetapi tidak ke subnet staf. Aturan harus membedakan sumber tamu, tujuan staf dan traffic lain yang diizinkan. Jika aturan drop terlalu luas atau ditempatkan keliru, akses internet tamu juga bisa terblokir.",
+          "Di lab, simpan kondisi awal dan rencana pemulihan, lalu uji akses yang seharusnya diizinkan serta yang seharusnya ditolak. Counter rule membantu menunjukkan aturan mana yang benar-benar cocok; keberadaan rule saja bukan bukti pengujian berhasil."
+        ]
+      }
+    ],
+    "practiceReview": "Buat matriks sumber–tujuan–layanan–izin sebelum menyusun aturan. Lakukan uji positif dan negatif. Jangan mematikan seluruh firewall untuk membuktikan satu dugaan, terutama pada perangkat yang terhubung ke jaringan aktif."
+  },
+  "jaringan/mikrotik-winbox": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Winbox adalah antarmuka pengelolaan RouterOS. Memahami letak menu membantu, tetapi tujuan akhirnya adalah mengetahui konfigurasi apa yang sedang dibaca atau diubah. Interfaces menunjukkan hubungan perangkat; IP Addresses menunjukkan pengalamatan; Routes menunjukkan keputusan jalur. Satu menu tidak menjelaskan seluruh perjalanan paket.",
+          "Kondisi awal router fisik dengan konfigurasi bawaan dapat berbeda dari CHR kosong. Sebelum praktik, catat model, versi, port yang dipakai, alamat manajemen dan cara masuk kembali. Reset tidak diperlukan hanya agar tampilan sama dengan tutorial."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Di lab, buka Interfaces dan cocokkan port yang terhubung ke laptop. Lalu lihat alamat IP yang melekat pada interface atau bridge terkait. Periksa apakah laptop memakai subnet yang sesuai sebelum mencoba akses IP.",
+          "Jika router terlihat pada Neighbors tetapi akses IP gagal, Layer 2 yang teramati belum membuktikan alamat, rute dan kebijakan manajemen benar. Gunakan console atau jalur pemulihan yang sudah disiapkan daripada menambah perubahan tanpa catatan."
+        ]
+      }
+    ],
+    "practiceReview": "Tangkap kondisi awal tanpa rahasia: versi, identitas, interface dan alamat lab. Jelaskan perbedaan membaca menu dengan menekan Apply/OK. Lanjutkan ke Praktik Winbox untuk konfigurasi bertahap dan hasil uji, bukan menggabungkan semua contoh sekaligus."
+  },
+  "jaringan/lab-jaringan-rumah": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Topologi satu router dan dua client berguna karena mempunyai pembanding. Ketika satu client gagal, client kedua membantu membedakan masalah host dari masalah bersama. Sebelum menguji internet, pastikan link, alamat lokal dan gateway benar. Jika lab belum mempunyai upstream, pengujian lokal tetap dapat diselesaikan.",
+          "Tentukan satu subnet LAN, gateway router dan cara pemberian alamat. Gunakan jaringan latihan yang tidak bertabrakan dengan jaringan aktif. Simpan kondisi sehat agar perubahan berikutnya dapat dibandingkan dan dipulihkan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh LAN 192.168.50.0/24 memakai router .1 dan client .10 serta .11. Pertama, catat IP/prefix keduanya. Kedua, uji akses ke gateway. Ketiga, uji layanan lokal yang sengaja disiapkan dan diizinkan firewall host. Baru setelah upstream tersedia, periksa akses luar subnet serta DNS.",
+          "Jika .10 gagal sementara .11 sehat, bandingkan alamat, gateway, adapter dan aturan host. Jika keduanya gagal ke tujuan yang sama, periksa bagian bersama. Ubah satu hal pada satu giliran agar penyebab perbaikan dapat dijelaskan."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan tabel alamat dan hasil tiap tahap sebelum/sesudah perubahan. Bila sebuah ping ditolak firewall host, jangan mencatatnya sebagai bukti kabel putus. Hasil akhir harus menjelaskan fungsi router, DHCP/DNS bila digunakan, dan batas pengujian yang dilakukan."
+  },
+  "jaringan/monitoring-ping": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Ping meminta respons ICMP dari tujuan. Waktu respons mencakup perjalanan pergi dan pulang serta pemrosesan terkait. Hasil dipengaruhi titik uji, kebijakan ICMP dan kondisi jalur. Tidak ada respons belum otomatis berarti perangkat mati, dan respons sukses tidak menguji seluruh aplikasi.",
+          "Traceroute menggunakan probe dengan batas hop bertahap untuk mendapat petunjuk jalur. Router tengah dapat membatasi responsnya sambil tetap meneruskan paket. Karena jalur balasan juga dapat berbeda, alamat hop dan latencynya perlu dibaca sebagai bukti terbatas, bukan peta kerusakan yang pasti."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Saat gateway membalas tetapi nama situs gagal, uji resolusi DNS dan aplikasi setelahnya. Saat satu hop traceroute menunjukkan bintang tetapi tujuan akhir membalas normal, jangan langsung menyimpulkan link hop tersebut putus.",
+          "Lakukan beberapa pengujian pada waktu yang dicatat dan bandingkan dari sumber kedua bila tersedia. Untuk keluhan aplikasi, sertakan uji aplikasi. Dengan demikian laporan menjelaskan apa yang diuji, bukan menyatakan semua layanan sehat hanya karena lima ping berhasil."
+        ]
+      }
+    ],
+    "practiceReview": "Catatan latihan memuat sumber, tujuan, waktu/zona, jumlah probe dan hasil. Bedakan loss tujuan akhir dengan hilangnya respons hop tengah. Jelaskan satu kesimpulan yang didukung dan satu hal yang belum dapat dibuktikan."
+  },
+  "jaringan/bandwidth-latency": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Bandwidth berkaitan dengan kapasitas pengiriman per waktu, sementara throughput adalah laju yang benar-benar dicapai dalam pengujian tertentu. Latency adalah waktu tempuh yang diukur, jitter variasinya, dan loss hilangnya paket menurut metode uji. Metrik berbeda dapat menghasilkan pengalaman pengguna yang berbeda.",
+          "Sambungan berkapasitas besar masih dapat terasa lambat jika antrean panjang atau server tujuan lambat. Sebaliknya, sambungan dengan throughput sedang bisa terasa responsif untuk aplikasi interaktif bila latencynya rendah dan stabil."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Unduhan 100 MB pada throughput 100 Mbps mempunyai waktu transfer teoritis sekitar delapan detik karena 100 MB setara sekitar 800 megabit, sebelum mempertimbangkan overhead dan perubahan laju. Angka ini berbeda dari waktu membuka aplikasi yang memerlukan banyak pertukaran kecil.",
+          "Bandingkan ping atau uji latency saat link idle dan saat transfer lab berjalan. Jika latency naik besar hanya ketika sibuk, antrean menjadi salah satu dugaan. Catat satuan MB/s dan Mbps agar perbandingan tidak salah delapan kali."
+        ]
+      }
+    ],
+    "practiceReview": "Tuliskan tujuan uji, arah traffic, satuan dan kondisi idle/sibuk. Jangan menilai kualitas game, rapat video dan unduhan sebagai kebutuhan yang identik. Jelaskan mengapa hasil satu speed test belum menggambarkan semua layanan."
+  },
+  "jaringan/troubleshooting-runtut": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Diagnosis dimulai dari gejala yang bisa diuji dan cakupan dampaknya. Pisahkan fakta dari hipotesis. “DNS timeout dari client A pukul 10.15” adalah fakta uji; “resolver mati” masih dugaan yang perlu dibandingkan. Tujuan pemeriksaan berikutnya adalah membedakan beberapa dugaan, bukan mengumpulkan perintah sebanyak mungkin.",
+          "Gunakan kondisi sehat sebagai pembanding dan ubah satu variabel di lab. Jika alamat, gateway, DNS dan kabel diubah bersamaan lalu layanan pulih, kamu kehilangan bukti perubahan mana yang membantu dan apakah ada dampak baru."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Satu komputer gagal membuka nama aplikasi, sementara komputer lain pada LAN yang sama sehat. Bandingkan resolver dan hasil resolusi kedua client, lalu periksa konektivitas ke server yang relevan. Temuan berbeda akan mempersempit masalah ke host atau jalur tertentu.",
+          "Setelah koreksi yang diizinkan, ulangi tes yang sebelumnya gagal dan uji pembanding yang sebelumnya sehat. Pemulihan perlu dibuktikan dari gejala awal, bukan hanya dari hilangnya satu pesan error."
+        ]
+      }
+    ],
+    "practiceReview": "Buat tabel gejala, dugaan, bukti pendukung, bukti pembantah, dan langkah berikutnya. Simpan keadaan sebelum/sesudah serta cara kembali. Jika belum ada bukti cukup, hasil latihan yang benar boleh berupa eskalasi dengan batas kesimpulan yang jelas."
+  },
+  "jaringan/vpn-akses-remote": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "VPN menyediakan hubungan logis melalui jaringan lain dengan mekanisme yang bergantung pada protokolnya. Sebuah tunnel aktif belum otomatis memberi akses ke seluruh subnet. Alamat, rute, izin firewall serta identitas peer tetap perlu sesuai kebutuhan. Enkripsi melindungi jalur tertentu, bukan memperbaiki semua masalah keamanan perangkat.",
+          "Tentukan apakah kebutuhanmu menghubungkan dua lokasi atau satu pengguna ke jaringan kantor. Batasi tujuan dan layanan yang benar-benar dibutuhkan. Mengarahkan seluruh traffic melalui VPN berbeda dari hanya mengarahkan subnet tertentu."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pengguna remote berhasil membentuk tunnel ke kantor tetapi server 192.168.20.10 tidak dapat diakses. Periksa apakah rute menuju subnet itu melewati tunnel, apakah sisi kantor mengenal rute balasan, dan apakah kebijakan mengizinkan layanan yang diuji.",
+          "Jika alamat LAN rumah dan kantor bertabrakan, client dapat memilih jalur lokal yang keliru. Catat kedua subnet sejak perencanaan. Jangan membuka semua akses untuk mengatasi satu kegagalan tanpa menelusuri jalurnya."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar underlay, tunnel, subnet kedua sisi dan layanan yang diizinkan. Bedakan bukti handshake/tunnel aktif dari bukti akses aplikasi. Gunakan akun serta kunci lab, dan jangan membagikan kredensial dalam hasil latihan."
+  },
+  "jaringan/failover-dua-isp": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Failover membutuhkan cara mendeteksi kegagalan dan aturan memilih jalur pengganti. Mengecek gateway terdekat hanya menguji sampai perangkat itu; gangguan internet di belakangnya bisa tidak terdeteksi. Target pemeriksaan, jalur probe dan interval perlu dirancang agar tidak salah menyatakan suatu ISP sehat.",
+          "Ketika IP sumber publik berubah, koneksi yang sudah berjalan mungkin terputus walaupun koneksi baru dapat dibuat melalui ISP kedua. NAT, DNS, kebijakan routing dan layanan yang bergantung pada IP tetap memengaruhi hasil. Jadi failover tidak selalu berarti seluruh sesi berpindah tanpa jeda."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Di lab, jalur utama melewati ISP A dan cadangan melalui B. Uji kondisi kabel A putus dan kondisi gateway A masih hidup tetapi tujuan luar gagal. Kedua kondisi itu dapat menuntut mekanisme deteksi berbeda.",
+          "Setelah perpindahan, uji pembuatan koneksi baru, resolusi nama dan aplikasi. Saat A pulih, amati apakah ada perpindahan berulang. Batas penundaan atau recovery membantu mencegah flap, sesuai rancangan yang digunakan."
+        ]
+      }
+    ],
+    "practiceReview": "Laporan harus mencatat gangguan yang disuntikkan, waktu deteksi, jalur aktif, layanan yang pulih dan sesi yang terputus. Gunakan simulator atau lab terisolasi; status route aktif saja belum merupakan bukti layanan pelanggan berhasil."
+  },
+  "jaringan/proyek-kantor": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Proyek kantor kecil menggabungkan pengalamatan, VLAN, DHCP, routing dan kebijakan. Mulai dari kebutuhan pengguna, bukan dari daftar menu. Pisahkan staf dan tamu karena kebutuhannya berbeda, lalu tentukan layanan yang boleh diakses masing-masing. Dokumentasikan juga alamat pengelolaan dan cara pemulihan.",
+          "Susunan konfigurasi harus mempunyai tahapan validasi. Jika seluruh bagian ditambahkan sekaligus, sulit menentukan apakah kegagalan berasal dari VLAN, alamat, DHCP atau firewall. Bangun jalur sederhana yang sehat, lalu tambahkan pembatasan dengan uji ulang."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh: staf memakai VLAN 10/subnet 192.168.10.0/24 dan tamu VLAN 20/subnet 192.168.20.0/24. Keduanya boleh ke internet, tetapi tamu tidak boleh menuju layanan internal staf. Printer staf berada pada subnet yang direncanakan.",
+          "Uji empat hal: client memperoleh alamat sesuai kelompok, gateway dapat dicapai, layanan yang diizinkan berhasil, dan akses yang dilarang benar-benar ditolak. Jika tamu tidak mendapat DHCP, periksa jalur VLAN lebih dahulu daripada menghapus seluruh aturan keamanan."
+        ]
+      }
+    ],
+    "practiceReview": "Kumpulkan topologi, tabel alamat, matriks izin serta hasil uji positif/negatif. Proyek belum selesai hanya karena satu laptop membuka situs. Orang lain harus dapat membaca dokumen dan menjelaskan layanan mana yang tersedia untuk tiap kelompok."
+  },
+  "jaringan/vlsm-perencanaan-ip": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "VLSM memungkinkan pembagian blok IPv4 menjadi subnet dengan ukuran berbeda. Kebutuhan alamat dihitung bersama gateway, infrastruktur dan ruang pertumbuhan, kemudian blok ditempatkan pada batas prefix yang benar. Jangan hanya menjumlah host lalu memilih rentang alamat yang saling tumpang tindih.",
+          "Untuk subnet biasa, /26 memiliki 64 alamat dan umumnya 62 host, /27 memiliki 32 alamat dan 30 host. Alokasikan kebutuhan terbesar lebih dahulu agar blok kecil tidak memecah ruang yang dibutuhkan jaringan besar. Penggunaan /31 atau /32 memiliki konteks khusus."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dari 192.168.10.0/24, kelompok yang membutuhkan 50 alamat dapat memakai .0/26 dengan host .1–.62 dan broadcast .63. Kelompok 20 alamat berikutnya dapat memakai .64/27 dengan host .65–.94 dan broadcast .95.",
+          "Sisa blok masih dapat dibagi sesuai batas yang sah. Periksa kebutuhan apakah angka 50 sudah mencakup gateway dan perangkat lain. Catat alamat yang dicadangkan agar pertumbuhan tidak memaksa perombakan terlalu cepat."
+        ]
+      }
+    ],
+    "practiceReview": "Tabel jawaban memuat kebutuhan total, prefix, network, broadcast, gateway dan rentang host. Buktikan tidak ada overlap dan seluruh subnet masih berada di blok induk. Jelaskan alasan memilih ukuran, bukan hanya menuliskan hasil kalkulator."
+  },
+  "jaringan/dns-record-ttl": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Jenis record menentukan informasi yang dicari: A untuk IPv4, AAAA untuk IPv6, dan CNAME mengarahkan nama ke nama lain sesuai aturan DNS. Resolver dapat menyimpan jawaban dalam cache selama TTL yang berlaku. Mengubah record authoritative tidak menjamin semua cache segera meminta ulang.",
+          "TTL rendah dapat membantu perencanaan perubahan berikutnya, tetapi menurunkannya setelah jawaban lama sudah di-cache tidak mempersingkat sisa masa jawaban lama tersebut. Periksa juga bahwa kamu mengubah zone dan authoritative server yang benar."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Sebuah nama lab berpindah dari server lama ke baru. Sebelum perpindahan, siapkan layanan baru dan rencanakan TTL lebih awal. Sesudah perubahan, bandingkan jawaban authoritative dengan resolver yang dipakai client serta catat TTL dan waktu.",
+          "Jika keduanya berbeda, cache menjadi salah satu penjelasan yang perlu diuji. Jika DNS sudah benar tetapi web gagal, periksa koneksi, sertifikat dan aplikasi. Jangan mengulang perubahan DNS hanya untuk memperbaiki masalah server."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan nama, jenis record, jawaban, resolver dan waktu uji. Bedakan NXDOMAIN, jawaban tanpa record jenis yang diminta, dan timeout. Keberhasilan ping ke satu IP bukan validasi lengkap perubahan nama layanan."
+  },
+  "jaringan/dhcp-relay": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Permintaan awal DHCP client sering berupa broadcast lokal. Router tidak sekadar meneruskannya ke subnet lain seperti switch. DHCP relay mewakili segmen client untuk mengirimkan permintaan ke server, dengan informasi yang membantu server memilih pool subnet yang sesuai.",
+          "Server tetap membutuhkan scope/pool, opsi, jalur balasan dan kebijakan yang benar. Relay bukan cara menggabungkan semua VLAN menjadi satu domain broadcast, dan menambah relay tidak memperbaiki trunk VLAN yang salah sebelum permintaan mencapai relay."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Client VLAN 20 berada di 192.168.20.0/24, sedangkan server DHCP ada di subnet layanan. Relay pada sisi VLAN20 mengirim permintaan ke server. Server harus mengenali segmen itu dan menawarkan alamat serta gateway VLAN20, bukan pool jaringan server.",
+          "Jika alamat tidak diperoleh, telusuri permintaan di client/relay/server dan balasannya. Jika alamat diperoleh dari pool yang salah, periksa scope serta identitas segmen. Jangan langsung memberi IP manual yang bertabrakan agar tes terlihat sukses."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar posisi client, relay, server dan jalur dua arah. Hasil latihan harus menunjukkan alamat, prefix, gateway dan DNS yang diterima client. Catat subnet tempat relay bekerja serta pool yang dipilih server."
+  },
+  "jaringan/loop-rstp": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Frame Ethernet tidak mempunyai mekanisme hop limit yang bekerja seperti TTL IP untuk menghentikan loop Layer 2. Flooding yang berputar dapat membebani link dan perangkat. Gejala dapat berupa broadcast tinggi, tabel MAC berubah-ubah, atau banyak pengguna putus bersamaan.",
+          "RSTP membentuk topologi bebas loop dengan peran/status port yang sesuai. Port yang diblokir untuk forwarding pada satu keadaan dapat merupakan hasil desain redundansi, bukan kerusakan. Pemilihan root dan pengaturan edge harus mengikuti posisi perangkat serta rancangan, bukan diterapkan ke semua port secara seragam."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua switch mempunyai dua jalur fisik. Tanpa pengendalian yang benar, jalur itu dapat membentuk loop. Dalam lab dengan RSTP yang sesuai, salah satu jalur dapat tidak meneruskan traffic biasa, lalu berubah peran ketika jalur aktif gagal.",
+          "Periksa root bridge, peran port dan perubahan topologi, kemudian cocokkan dengan gambar kabel. Jangan membuat loop pada jaringan aktif untuk mencoba teori; gunakan simulator atau lab yang terisolasi."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan topologi sebelum/sesudah gangguan lab dan status port pada kedua switch. Jelaskan mengapa port cadangan tidak forwarding. Jika terjadi MAC flap, cari kemungkinan loop atau perpindahan jalur; jangan menganggap semua flap berarti satu kabel rusak."
+  },
+  "jaringan/lacp-bonding": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Bonding atau link aggregation mengelompokkan beberapa link untuk tujuan yang bergantung mode. LACP membantu negosiasi kelompok link yang didukung kedua sisi. Anggota kelompok tetap memerlukan konfigurasi konsisten, termasuk speed dan pengaturan VLAN yang terkait.",
+          "Pembagian traffic sering menggunakan hash per aliran. Dua link 1 Gbps tidak otomatis membuat satu transfer TCP mencapai 2 Gbps. Banyak aliran dapat memanfaatkan kapasitas gabungan, sedangkan satu aliran biasanya mengikuti satu anggota sesuai metode pembagian."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua switch lab memiliki dua link 1 Gbps dalam agregasi yang kompatibel. Satu transfer hanya terukur mendekati kemampuan satu link, tetapi beberapa transfer dengan pasangan endpoint berbeda dapat tersebar. Ini tidak langsung berarti agregasi gagal.",
+          "Lihat status anggota, partner LACP dan traffic tiap interface. Saat satu kabel lab dicabut, ukur dampak terhadap aliran serta konektivitas. Jangan hanya menjumlah tulisan speed pada port untuk menyatakan throughput aplikasi."
+        ]
+      }
+    ],
+    "practiceReview": "Catat mode, anggota aktif dan hasil satu versus beberapa aliran uji. Periksa apakah kedua ujung sepakat. Jelaskan keterbatasan hashing dan jangan menganggap LACP bisa disambungkan ke dua perangkat independen tanpa dukungan rancangan khusus."
+  },
+  "jaringan/mtu-mss-pmtud": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "MTU membatasi ukuran paket yang dapat dibawa pada suatu link menurut konteks protokolnya. Jalur yang memakai tunnel dapat memiliki ruang lebih kecil akibat overhead. PMTUD membantu endpoint mengetahui batas jalur, tetapi mekanisme serta penanganan fragmentasi berbeda antara IPv4 dan IPv6.",
+          "MSS berkaitan dengan ukuran data TCP yang dinegosiasikan; ia bukan nama lain untuk MTU dan tidak mengatur seluruh UDP. Mengubah MSS dapat membantu kasus tertentu tetapi bukan pengganti memahami batas jalur serta pesan ICMP yang dibutuhkan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Sebuah tunnel dapat meloloskan ping kecil tetapi transfer atau sebagian situs tersendat saat paket lebih besar dibutuhkan. Bukti itu mendukung pemeriksaan MTU jalur, bukan membuktikannya secara tunggal. Catat ukuran probe, opsi dan keluarga IP yang dipakai.",
+          "Di lab, bandingkan ukuran paket dan hasil aplikasi sebelum/sesudah satu perubahan yang direncanakan. Jangan menyalin satu angka MTU/MSS ke semua interface produksi. Kebutuhan overhead bergantung protokol serta susunan encapsulation."
+        ]
+      }
+    ],
+    "practiceReview": "Jelaskan satuan dan lapisan ukuran yang kamu uji. Bedakan sukses paket kecil dari sukses transfer. Dokumentasikan jalur/tunnel dan hasil aktual; jika pesan ICMP dibatasi, masukkan hal itu sebagai bagian diagnosis tanpa mematikan seluruh proteksi."
+  },
+  "jaringan/qos-bufferbloat": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Antrean menyimpan paket ketika kedatangan lebih cepat daripada kemampuan keluar. Buffer terlalu panjang dapat menaikkan waktu tunggu walaupun throughput unduhan masih terlihat tinggi. QoS mengatur pembagian serta prioritas sesuai kebijakan, tetapi tidak menciptakan kapasitas fisik tambahan.",
+          "Pengaturan shaper perlu mempertimbangkan bottleneck dan arah traffic. Jika antrean utama sudah terjadi di perangkat upstream yang tidak kamu kendalikan, queue lokal yang salah posisi atau rate belum tentu menghasilkan perbaikan. Ukur kondisi sebelum mengubah kebijakan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada link lab, unduhan besar membuat ping tujuan akhir naik dari kisaran normal ke ratusan milidetik. Setelah transfer berhenti, latency turun lagi. Periksa apakah kenaikan berkaitan dengan utilisasi dan antrean, kemudian coba rancangan shaping yang memang sesuai lab.",
+          "Bandingkan latency idle/sibuk, throughput dan loss sebelum/sesudah. Penurunan sedikit throughput bisa diterima bila sesuai tujuan menjaga responsivitas, tetapi hasil harus ditunjukkan, bukan diasumsikan dari nama algoritma."
+        ]
+      }
+    ],
+    "practiceReview": "Hasil latihan memuat grafik atau tabel latency dan throughput dengan waktu yang sama. Jelaskan traffic serta arah yang dibentuk. Jangan menilai keberhasilan QoS hanya dari speed test maksimum atau menjanjikan perbaikan semua jenis delay."
+  },
+  "jaringan/wireshark-dasar": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Capture menunjukkan paket yang terlihat pada interface serta titik pengamatan tertentu. Switch biasanya tidak mengirim seluruh traffic perangkat lain ke laptopmu. Karena itu, capture kosong dapat berasal dari posisi pengambilan yang tidak sesuai, bukan dari tidak adanya traffic.",
+          "Capture filter membatasi data yang direkam, sedangkan display filter menyaring tampilan dari data yang sudah ada. Bedakan keduanya saat menyimpan bukti. Pada traffic terenkripsi, metadata tertentu tetap terlihat tetapi isi aplikasi tidak otomatis dapat dibaca."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Di lab, rekam satu percobaan resolusi DNS dari host sendiri dan satu koneksi web yang diizinkan. Catat interface, waktu dan aktivitas yang sengaja dilakukan. Cari pasangan query/response serta alamat dan port yang relevan.",
+          "Jika tidak ada paket, periksa apakah aplikasi menggunakan adapter lain atau jawaban berasal dari cache. Jangan menafsirkan satu retransmission sebagai bukti pasti kabel rusak; hubungkan dengan pola dan hasil tujuan akhir."
+        ]
+      }
+    ],
+    "practiceReview": "Gunakan data lab, batasi durasi, dan lindungi berkas capture karena dapat memuat informasi sensitif. Laporan berisi paket yang dipilih, alasan pemilihannya dan apa yang belum terlihat dari titik tersebut, bukan seluruh capture tanpa penjelasan."
+  },
+  "jaringan/radio-ptp-los-fresnel": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Line of sight optik belum cukup untuk merancang link radio: area Fresnel di sekitar jalur juga perlu diperhitungkan. Penghalang, antena, frekuensi, jarak dan kondisi lingkungan memengaruhi link budget. Margin diperlukan agar rancangan tidak hanya bekerja pada satu kondisi ideal.",
+          "RSSI, SNR, modulasi dan kapasitas perlu dibaca bersama baseline serta dokumentasi. Arah antena dan keselamatan pekerjaan ketinggian merupakan urusan instalasi yang membutuhkan petugas serta prosedur sesuai, bukan percobaan dari artikel pengantar."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua lokasi terlihat saling berhadapan, tetapi pepohonan mendekati jalur radio. Link mungkin tersambung namun kapasitas berubah dan error meningkat pada kondisi tertentu. Catat jarak, frekuensi, profil jalur dan metrik kedua ujung sebelum menyimpulkan perangkat rusak.",
+          "Periksa pula kabel Ethernet, PoE dan utilisasi. Gangguan radio tidak menjelaskan semua restart atau port down. Pisahkan gejala RF, backhaul Ethernet dan daya agar eskalasinya tepat."
+        ]
+      }
+    ],
+    "practiceReview": "Buat rancangan konseptual dan daftar data lapangan yang dibutuhkan, tanpa menebak tinggi pemasangan. Jelaskan perbedaan RSSI dan SNR serta arti margin. Gunakan perhitungan sesuai alat/dokumentasi perangkat dan aturan frekuensi setempat."
+  },
+  "jaringan/monitoring-snmp-baseline": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "SNMP memungkinkan pembacaan objek manajemen yang didukung perangkat. OID, satuan, tipe counter dan interval polling menentukan arti grafik. Counter byte yang terus bertambah perlu diubah menjadi laju berdasarkan selisih dan waktu; angka mentah bukan Mbps. Restart atau reset counter juga perlu ditangani.",
+          "Baseline membandingkan kondisi yang sepadan, misalnya jam ramai dengan jam ramai. Waktu sampel terakhir sama pentingnya dengan nilai. Dashboard yang tidak menerima data baru tidak boleh dipakai untuk menyimpulkan perangkat sedang sehat."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh: counter traffic bertambah 60.000.000 byte dalam 60 detik. Laju rata-ratanya sekitar 1.000.000 byte/detik atau 8 Mbps sebelum pertimbangan detail counter. Jika interval yang dibaca ternyata 30 detik, hasilnya berbeda dua kali.",
+          "Di monitoring lab, cocokan counter, interval dan kapasitas link. Alarm perlu mempunyai kondisi problem, recovery dan penanggung jawab. Acknowledge hanya berarti petugas memperhatikan kejadian, bukan memperbaiki layanan."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan OID/metrik, satuan, interval, last update dan kondisi baseline. Gunakan akses baca serta pembatasan yang sesuai. Jika data basi, laporkan keterbatasan monitoring dan validasi layanan dari titik lain sebelum menutup alarm."
+  },
+  "jaringan/ipam-dokumentasi": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "IPAM mencatat blok, subnet, alamat serta penanggung jawabnya agar alokasi tidak bertabrakan dan dapat ditelusuri. Dokumentasi operasional juga perlu menghubungkan alamat dengan perangkat, interface, lokasi dan layanan. Daftar IP tanpa konteks cepat menjadi sulit digunakan ketika terjadi gangguan.",
+          "Pisahkan rencana dari kondisi yang sudah diverifikasi. Perubahan baru sebaiknya mencatat alasan, waktu, pelaksana, bukti sebelum/sesudah dan cara pemulihan. Diagram harus diperbarui bersama perubahan nyata, bukan dianggap benar selamanya."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Sebuah printer dipindahkan dari VLAN10 ke VLAN30 tetapi inventaris masih menyebut alamat lama. Teknisi yang memakai catatan itu dapat memeriksa gateway atau port yang salah. Perubahan kecil menghasilkan waktu diagnosis panjang karena hubungan datanya hilang.",
+          "Catat lokasi, label port, VLAN, IP/prefix, gateway dan tanggal verifikasi. Jangan menaruh password di tabel inventaris umum; rujuk tempat penyimpanan rahasia sesuai proses yang berlaku."
+        ]
+      }
+    ],
+    "practiceReview": "Uji dokumen dengan meminta orang lain menelusuri satu layanan dari alamat hingga port fisik. Tandai informasi yang belum diverifikasi. Hasil latihan dinilai dari kemampuan melanjutkan pekerjaan, bukan jumlah kolom atau keindahan diagram."
+  },
+  "jaringan/keamanan-lan-dhcp-arp": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Layanan DHCP yang tidak diharapkan dapat memberi gateway atau resolver keliru, sedangkan informasi ARP yang menyesatkan dapat mengubah tujuan frame lokal. Pemeriksaan perlu membedakan salah konfigurasi biasa dari dugaan serangan; gejala saja belum membuktikan niat.",
+          "Fitur seperti DHCP snooping atau pemeriksaan ARP mempunyai prasyarat dan dukungan perangkat. Menandai port trusted secara keliru dapat melemahkan tujuan kontrol. Memasang kontrol tanpa inventaris VLAN/uplink yang benar juga dapat memutus client sah."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua client menerima konfigurasi dari server DHCP berbeda pada VLAN yang seharusnya sama. Catat server identifier, gateway, DNS dan waktu lease keduanya. Telusuri switch/port yang membawa tawaran server yang tidak diharapkan melalui proses berwenang.",
+          "Lakukan pembuktian di lab, bukan dengan membuat rogue server di jaringan aktif. Sesudah koreksi, renew dan validasi client sesuai prosedur; alamat yang tampak benar belum menguji seluruh kebijakan akses."
+        ]
+      }
+    ],
+    "practiceReview": "Tulis fakta, dugaan dan bukti pembanding. Sertakan posisi port trusted/untrusted dalam rancangan lab serta cara pemulihan. Jangan menyimpulkan serangan hanya karena ARP berubah; pergantian perangkat atau failover juga perlu dipertimbangkan."
+  },
+  "jaringan/wireguard-dasar": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "WireGuard menghubungkan peer memakai kunci publik/pribadi dan konfigurasi tujuan yang diizinkan. Kunci publik boleh dikenali peer, sedangkan kunci pribadi harus dijaga. Pengaturan peer dan rute lokal saling berhubungan tetapi tidak boleh dianggap sebagai satu tombol izin untuk semua layanan.",
+          "Handshake menunjukkan pertukaran tertentu berhasil, bukan bahwa seluruh subnet remote sudah terjangkau. Jalur underlay, alamat tunnel, rute balasan, firewall serta kemungkinan NAT tetap perlu diperiksa. Tidak adanya handshake baru juga perlu dibaca bersama waktu traffic dan konfigurasi."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua peer lab dapat handshake, tetapi client LAN di belakang peer A gagal mengakses LAN peer B. Periksa subnet yang direncanakan, route pada kedua sisi, allowed addresses sesuai desain, serta kebijakan forwarding.",
+          "Uji dulu alamat tunnel, kemudian host LAN yang relevan. Jika host LAN remote tidak mempunyai jalur balasan, ping dari router dan dari client bisa memberi hasil berbeda. Tulis alamat sumber setiap tes agar tidak menyamakan kedua pengujian."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar alamat underlay, tunnel dan LAN kedua peer. Simpan hanya kunci publik pada laporan yang dibagikan, bukan konfigurasi rahasia. Pembuktian mencakup layanan yang diizinkan serta penolakan yang memang direncanakan."
+  },
+  "jaringan/ospf-pengenalan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "OSPF bertukar informasi topologi agar router dapat menghitung jalur dalam lingkup yang dikonfigurasi. Tetangga yang terbentuk merupakan langkah penting, tetapi tidak otomatis menjamin semua LAN yang dibutuhkan masuk database atau tabel rute. Identitas, area, interface dan kebijakan tetap menentukan hasil.",
+          "Cost membentuk perhitungan jalur dan bukan pengukuran ping secara otomatis. Jalur dengan cost lebih rendah tidak selalu yang secara geografis paling pendek. Pemilihan serta distribusi jalur harus sesuai rancangan, lalu diuji dari sisi layanan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada tiga router lab A–B–C, A perlu mencapai LAN C. Mula-mula periksa neighbor antarlink. Berikutnya pastikan prefix LAN C memang diiklankan sesuai rancangan. Kemudian lihat next hop pada A dan jalur balasannya.",
+          "Jika neighbor penuh tetapi route LAN tidak terlihat, memeriksa kabel saja tidak cukup. Tinjau pengiklanan prefix dan kebijakan terkait. Setelah route ada, uji host LAN dengan gateway yang benar; tabel routing bukan hasil akhir pengujian aplikasi."
+        ]
+      }
+    ],
+    "practiceReview": "Catat router ID, area, neighbor, prefix tujuan dan next hop yang dipilih. Gunakan simulator serta lab MTCRE untuk konfigurasi lengkap. Jangan menyimpulkan seluruh routing sehat hanya dari status neighbor Full."
+  },
+  "git/apa-itu-git": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Git mencatat keadaan file yang dipilih sebagai snapshot commit. Riwayat berguna karena perubahan dapat dibandingkan bersama alasan yang menjelaskannya. Menekan Save hanya memperbarui file kerja; perubahan itu belum otomatis menjadi bagian riwayat. Menyalin seluruh folder menjadi final-2 juga tidak memberi hubungan perubahan seteratur commit.",
+          "Repository lokal dapat mempunyai riwayat tanpa koneksi internet. Remote menambahkan tempat berbagi, tetapi belum tentu menyimpan perubahan yang baru ada pada laptop. Periksa tahap mana yang sudah dilakukan sebelum menganggap pekerjaan aman tersimpan di tempat lain."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Buat catatan dua baris, lalu simpan sebagai perubahan pertama. Sesudah commit pertama, ubah satu baris dan bandingkan diff sebelum commit kedua. Riwayat kini dapat menjelaskan keadaan sebelum dan sesudah beserta pesan alasannya.",
+          "Jika baris ketiga masih hanya ada di file kerja, clone remote belum tentu memuatnya. Ceritakan urutan Save → pilih perubahan → commit → push untuk membedakan penyimpanan lokal dan berbagi riwayat."
+        ]
+      }
+    ],
+    "practiceReview": "Catatan latihan perlu menunjukkan dua perubahan yang tujuannya berbeda dan alasan commit masing-masing. Jelaskan bagian yang baru disimpan sebagai file serta bagian yang sudah tercatat di Git. Git bukan backup otomatis semua data komputer."
+  },
+  "git/git-dan-github": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Git mengelola riwayat, sedangkan GitHub menyediakan hosting repository dan fasilitas kolaborasi seperti issue serta pull request. Kamu dapat memakai Git tanpa GitHub atau memakai layanan hosting lain. Repository lokal dan repository remote merupakan tempat berbeda walaupun nama proyek sama.",
+          "Clone membuat salinan kerja beserta data riwayat yang diambil dari sumber sesuai opsi. Fork membuat repository terpisah pada layanan hosting. Keduanya dapat dipakai bersama, tetapi mengerjakan fork di web belum otomatis memperbarui folder lokal."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh alur: fork repository latihan, clone fork itu, buat branch lokal, ubah catatan, commit, lalu push ke fork. Sesudahnya PR mengusulkan perubahan ke repository tujuan. Setiap tahap mempunyai lokasi hasil yang berbeda.",
+          "Jika GitHub belum menampilkan perubahan, periksa remote dan branch yang dipush serta apakah commit sudah dibuat. Refresh halaman bukan langkah sinkronisasi bagi file yang belum dicatat atau dikirim."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar lokasi folder lokal, remote origin dan repository tujuan kontribusi. Pasangkan istilah commit, push, clone, fork dan PR dengan tempat serta hasilnya. Hindari menyebut semua tindakan sebagai “upload Git”."
+  },
+  "git/instalasi-git": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Instalasi menyediakan program Git, sedangkan terminal serta editor menjadi alat untuk menggunakannya. Nomor versi yang terbaca membantu memastikan perintah benar-benar tersedia pada lingkungan terminal tersebut. Komputer dapat memiliki lebih dari satu lingkungan, misalnya Windows dan WSL, yang konfigurasi serta lokasinya berbeda.",
+          "Pemasangan Git tidak otomatis membuat akun GitHub, mengatur autentikasi remote, atau menetapkan identitas commit. Ketiganya merupakan langkah berbeda. Gunakan sumber resmi atau pengelola paket yang sesuai OS dan pahami lingkungan tempat kamu berlatih."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Sesudah memasang Git, buka terminal baru dan jalankan pemeriksaan versi pada contoh. Jika belum dikenali, periksa apakah terminal lama belum membaca perubahan PATH atau paket dipasang pada lingkungan lain.",
+          "Kemudian buat folder latihan dan pastikan lokasinya benar. Jangan menyelesaikan pesan “command not found” dengan menyalin perintah penghapusan atau mengganti konfigurasi sistem yang tidak kamu pahami."
+        ]
+      }
+    ],
+    "practiceReview": "Catat OS/lingkungan, versi Git dan terminal yang digunakan. Latihan lulus saat pemeriksaan versi berhasil pada terminal tempat langkah berikutnya dijalankan. Identitas dan akses remote diuji pada materi terpisah."
+  },
+  "git/terminal-dan-identitas": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Perintah Git bekerja dalam konteks direktori serta repository. Mengetik perintah benar pada folder salah dapat memberi hasil berbeda atau gagal karena bukan repository. Selalu kenali lokasi kerja sebelum mengubah konfigurasi dan file.",
+          "Nama dan email commit adalah metadata penulis yang disimpan dalam commit. Itu bukan password dan bukan bukti bahwa akun remote sudah terautentikasi. Pengaturan lokal repository dapat berbeda dari global sehingga satu komputer bisa mempunyai identitas sesuai proyek."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dalam folder latihan, periksa status dan konfigurasi identitas yang berlaku sebelum commit. Jika proyek kerja memakai identitas berbeda dari catatan pribadi, gunakan lingkup konfigurasi yang sesuai tanpa mengubah proyek lain.",
+          "Saat push meminta autentikasi, mengubah user.name tidak menyelesaikan kredensial yang salah. Bedakan pesan tentang identitas penulis dengan pesan izin akses layanan remote."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan nama folder kerja dan lingkup konfigurasi yang dipilih. Gunakan email yang memang ingin dimasukkan ke riwayat atau alamat privasi layanan yang disiapkan sendiri. Jangan menuliskan token pada konfigurasi identitas."
+  },
+  "git/repo-pertama": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Inisialisasi membuat data pengelolaan Git pada direktori proyek, tetapi file yang sudah ada belum otomatis masuk commit. Git kemudian dapat melaporkan file belum dilacak, perubahan belum dipilih dan perubahan yang sudah masuk staging. Langkah awal yang benar menghindari repository tidak sengaja mencakup seluruh folder pribadi.",
+          "Gunakan folder khusus latihan dan periksa status sesudah setiap langkah. Nama branch awal bisa bergantung konfigurasi, jadi baca hasil aktual alih-alih menganggap selalu main atau master."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Buat folder latihan berisi README singkat. Setelah init, lihat status untuk menemukan README sebagai untracked. Pilih file itu, periksa staged diff, lalu buat commit. Riwayat pertama kini memiliki isi yang dapat dibandingkan dengan perubahan berikutnya.",
+          "Jika status menunjukkan banyak file di luar proyek, periksa lokasi repository sebelum melanjutkan. Jangan menghapus direktori metadata sembarangan untuk memperbaiki folder yang belum dipahami."
+        ]
+      }
+    ],
+    "practiceReview": "Tunjukkan lokasi proyek, status sebelum/sesudah add, dan commit pertama. Buktikan hanya file latihan yang dilacak. Tidak perlu remote untuk membuktikan repository lokal berhasil dibuat."
+  },
+  "git/tiga-area": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Working tree adalah file yang sedang diedit. Staging area atau index menyimpan pilihan isi untuk commit berikutnya. Repository menyimpan commit dan data riwayat. Isi satu file dapat berbeda pada ketiga tempat tersebut pada waktu yang sama.",
+          "Add bukan sekadar memberi tanda “ikut commit selamanya”; ia menyalin keadaan isi tertentu ke index. Jika file diedit lagi sesudah add, perubahan terbaru dapat tetap belum staged. Commit berikutnya mengambil pilihan di index, bukan otomatis semua isi paling baru dari editor."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "File catatan mula-mula berisi A. Ubah menjadi B lalu stage. Setelah itu ubah menjadi C tanpa add lagi. Diff biasa menunjukkan perbedaan C terhadap B di index, sedangkan staged diff membandingkan B dengan keadaan commit sebelumnya.",
+          "Bila commit dibuat saat itu, B yang dicatat, sementara C tetap menjadi perubahan file kerja. Contoh ini menjelaskan mengapa memeriksa staged diff penting sebelum commit."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar isi file pada working tree, staging dan commit terakhir untuk urutan A–B–C. Jawaban harus menyebut versi mana yang dicatat. Jangan menganggap status staged berarti seluruh perubahan terbaru sudah terpilih."
+  },
+  "git/commit-pertama": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Commit mencatat snapshot terpilih beserta metadata dan hubungan riwayatnya. Pesan commit sebaiknya menjelaskan tujuan perubahan sehingga pembaca memahami alasan tanpa menebak dari nama file. Commit kecil yang satu tujuan lebih mudah diperiksa daripada mencampur perbaikan dan percobaan yang tidak berhubungan.",
+          "Periksa staged diff untuk mengetahui apa yang benar-benar akan dicatat, termasuk penghapusan yang tidak disengaja. Commit tidak mengirim isi ke remote; push adalah langkah berbagi yang terpisah."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada README latihan, tambahkan tujuan proyek dan petunjuk menjalankan satu contoh. Pilih perubahan itu, periksa isinya, lalu buat commit dengan pesan yang menerangkan hasilnya. Sesudah commit, lihat log dan status.",
+          "Jika status masih menunjukkan modifikasi, mungkin file diedit sesudah add atau ada file lain yang belum dipilih. Baca hasil tersebut sebagai informasi, bukan otomatis mengulang add seluruh folder."
+        ]
+      }
+    ],
+    "practiceReview": "Tunjukkan diff yang dipilih, pesan commit dan hasil log singkat. Jelaskan apakah working tree bersih dan mengapa. Pastikan tidak ada token, file rahasia atau berkas tak terkait yang ikut commit."
+  },
+  "git/status-diff-log": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Status menjelaskan posisi perubahan terhadap index dan commit. Diff membandingkan isi dua keadaan, sedangkan log memperlihatkan riwayat commit. Menggabungkan ketiganya memberi jawaban apa yang sedang dikerjakan, apa yang akan dicatat, dan apa yang sudah tercatat.",
+          "Diff default dan diff staged mempunyai pembanding berbeda. File untracked juga tidak otomatis muncul sebagai patch pada diff biasa. Periksa status untuk memastikan kamu tidak melewatkan file baru yang relevan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Buat file baru, ubah file yang sudah dilacak, lalu stage hanya salah satu perubahan. Status akan memperlihatkan kategori yang berbeda. Bandingkan diff biasa dengan staged diff dan jelaskan perubahan yang muncul pada masing-masing.",
+          "Sesudah commit, log menunjukkan catatan barunya. Riwayat itu tidak membuktikan remote sudah diperbarui; lihat hasil push serta branch remote bila tugasnya berbagi pekerjaan."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan ringkasan status, satu potongan diff serta commit yang relevan. Untuk setiap keluaran, tulis dua keadaan yang dibandingkan. Jangan menganggap “diff kosong” selalu berarti tidak ada pekerjaan yang belum dicatat."
+  },
+  "git/gitignore": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Aturan ignore membantu mencegah file untracked tertentu ditambahkan secara tidak sengaja. Ia bukan mekanisme menghapus rahasia yang sudah pernah masuk commit. File yang sudah tracked tetap dapat dilacak meskipun nama atau polanya kemudian cocok dengan .gitignore.",
+          "Pilih pola menurut kebutuhan proyek: hasil build, cache, lingkungan lokal dan berkas rahasia sering tidak dibagikan sebagai source. Berkas contoh konfigurasi yang aman dapat disertakan agar pengguna tahu parameter yang diperlukan tanpa memuat nilai asli."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Di lab, buat file konfigurasi lokal palsu dan pola ignore sebelum menambahkannya. Bandingkan status dengan file README yang memang akan dicatat. Jika contoh file sudah terlanjur tracked, menambah ignore saja tidak mengubah sejarahnya.",
+          "Jika rahasia nyata pernah masuk repository, tindakan utama mencakup pencabutan atau rotasi kredensial sesuai layanan. Menghapus file dari tampilan terbaru tidak menjamin semua salinan commit lama hilang."
+        ]
+      }
+    ],
+    "practiceReview": "Buktikan pola cocok dengan file yang dimaksud tanpa menyembunyikan file source penting. Pakai data palsu. Jelaskan perbedaan ignore, berhenti melacak pada commit baru, dan penanganan riwayat lama; ketiganya bukan tindakan yang sama."
+  },
+  "git/branch": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Branch adalah referensi yang bergerak mengikuti commit dalam jalur kerja tertentu. HEAD biasanya menunjuk branch yang sedang aktif, tetapi bisa menunjuk commit secara langsung pada keadaan detached. Membuat branch tidak otomatis menggandakan seluruh folder seperti copy proyek manual.",
+          "Perubahan yang belum dicatat dapat tetap berada di working tree saat perpindahan tertentu, atau Git dapat menolak perpindahan agar tidak menimpa pekerjaan. Karena itu, periksa status dan simpan pekerjaan dengan cara yang dipahami sebelum mengganti jalur."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dari commit A, buat branch latihan untuk memperbaiki README. Commit B dibuat pada branch itu, sedangkan branch awal masih menunjuk A sampai ada tindakan berikutnya. Log dengan tampilan graf membantu melihat hubungan tersebut.",
+          "Ketika kembali ke branch awal, file yang dicatat mengikuti snapshot branch tersebut. Jangan menyimpulkan commit B hilang hanya karena belum berada pada branch awal; cari branch yang menunjuknya."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar posisi branch awal, branch latihan dan HEAD sebelum/sesudah commit. Gunakan status serta log untuk memverifikasi. Jelaskan perbedaan membuat branch dan berpindah ke branch itu."
+  },
+  "git/merge": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Merge menggabungkan riwayat berdasarkan hubungan commit. Fast-forward dapat terjadi jika tujuan cukup maju mengikuti jalur source, sedangkan riwayat yang bercabang dapat membutuhkan merge commit. Hasil merge bergantung isi serta keadaan riwayat, bukan hanya nama branch.",
+          "Merge dijalankan pada branch tujuan yang sedang aktif. Memeriksa posisi saat ini sebelum menjalankan perintah mencegah arah penggabungan terbalik. Working tree yang bersih atau pekerjaan yang sudah tersimpan membantu proses tetap jelas."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Branch utama berada pada A, branch fitur menambahkan B tanpa perubahan lain di utama. Penggabungan bisa memajukan pointer utama ke B. Pada latihan berikutnya, buat perubahan berbeda di kedua branch dari A; kini hubungan riwayatnya bercabang.",
+          "Jika isi tidak bertabrakan, Git dapat menggabungkannya secara otomatis, tetapi hasil tetap perlu dibaca dan diuji. “Merge sukses” hanya menunjukkan proses penggabungan selesai, bukan bahwa makna program pasti benar."
+        ]
+      }
+    ],
+    "practiceReview": "Tunjukkan branch tujuan, source dan log sebelum/sesudah. Jelaskan apakah fast-forward atau merge commit terjadi. Uji isi hasil serta pastikan perubahan yang diharapkan ada, bukan hanya memeriksa pesan sukses."
+  },
+  "git/konflik": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Konflik terjadi ketika Git tidak dapat memilih hasil gabungan secara otomatis untuk bagian yang bersinggungan. Marker menunjukkan alternatif isi, tetapi penyelesaiannya membutuhkan keputusan sesuai tujuan pekerjaan. Menghapus marker tanpa memikirkan hasil dapat menghasilkan file valid secara teks tetapi salah secara fungsi.",
+          "Periksa status untuk mengetahui file yang belum selesai dan operasi yang sedang berlangsung. Jangan memulai reset, rebase atau merge baru secara acak ketika konteks operasi lama belum dipahami. Jika perlu membatalkan, gunakan prosedur abort yang sesuai dan pastikan keadaan awalnya diketahui."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua branch mengubah judul README yang sama dengan kata berbeda. Saat konflik, baca versi dasar dan kebutuhan kedua perubahan. Tentukan judul akhir yang benar, hapus marker melalui penyuntingan, lalu periksa diff hasilnya.",
+          "Stage hasil penyelesaian dan lanjutkan operasi sesuai pesan Git. Sesudah selesai, baca kembali README dan riwayat. Jika file adalah kode, jalankan pemeriksaan yang relevan karena penyelesaian teks belum menjamin perilaku benar."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan uraian singkat mengapa isi akhir dipilih. Pastikan marker konflik tidak tersisa dan operasi benar-benar selesai. Nilai latihan terletak pada hasil gabungan yang masuk akal, bukan memilih “ours” atau “theirs” tanpa membaca."
+  },
+  "git/github-remote": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Remote menyimpan nama serta URL repository lain yang dipakai Git. Nama origin merupakan kebiasaan, bukan alamat khusus yang selalu berarti repository utama proyek. Fetch URL dan push URL juga dapat dikonfigurasi berbeda, sehingga tujuan pengiriman perlu diperiksa.",
+          "Membuat repository di web tidak otomatis menghubungkan folder lokal. Menambah remote juga belum mengirim commit. Ketersediaan akun, izin repository dan autentikasi perlu memenuhi operasi yang akan dilakukan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Folder latihan mempunyai satu commit lokal. Di GitHub, repository tujuan disiapkan sesuai kebutuhan. Tambahkan remote yang benar, baca ulang URL-nya, kemudian pilih branch yang akan dipush. Jika remote sudah punya commit awal berbeda, periksa riwayat kedua sisi sebelum mencoba penggabungan.",
+          "Jangan memakai force push hanya karena pesan penolakan muncul. Penolakan dapat melindungi commit yang belum ada pada salinan lokal."
+        ]
+      }
+    ],
+    "practiceReview": "Catat nama remote, URL aman tanpa kredensial, branch lokal dan branch tujuan. Buktikan commit yang dimaksud muncul pada tujuan yang benar. Jangan menaruh token dalam URL atau tangkapan layar."
+  },
+  "git/autentikasi": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Autentikasi membuktikan identitas saat mengakses layanan, sedangkan otorisasi menentukan tindakan yang diizinkan pada repository. Token atau kunci yang valid tetap bisa ditolak menulis jika akun tidak mempunyai akses yang sesuai. Metadata user.name dan user.email pada commit bukan kredensial remote.",
+          "HTTPS dan SSH mempunyai alur penyiapan berbeda. Pada SSH, verifikasi host membantu memastikan kamu terhubung ke tujuan yang benar. Lindungi private key serta token dan ikuti mekanisme kredensial layanan; jangan menyalinnya ke repository atau contoh publik."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Push ditolak dengan pesan izin, tetapi commit lokal berhasil. Pertama, periksa remote dan akun yang digunakan. Kedua, bedakan kredensial gagal dikenali dari akun yang dikenali tetapi tidak boleh menulis. Ketiga, periksa scope/izin yang diperlukan tanpa memperluas akses sembarangan.",
+          "Uji baca dan tulis pada repository latihan yang memang kamu kelola. Keberhasilan clone repository publik tidak otomatis membuktikan kredensial privat sudah bekerja."
+        ]
+      }
+    ],
+    "practiceReview": "Laporkan metode autentikasi dan hasilnya dengan identitas tersamarkan, tanpa nilai rahasia. Jelaskan hak baca/tulis yang dimiliki. Jika kredensial pernah bocor, cabut atau rotasi sesuai layanan; mengganti nama commit tidak mengamankannya."
+  },
+  "git/push-clone": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Push mengirim objek commit yang diperlukan lalu mencoba memperbarui referensi pada remote. Perubahan yang belum menjadi commit tidak ikut hanya karena file sudah di-save. Clone mengambil repository ke direktori baru dan membuat working tree sesuai kondisi serta opsi clone.",
+          "Folder hasil clone berbeda dari folder asal. Perubahan yang dilakukan di salah satu folder perlu dicatat serta disinkronkan melalui riwayat; kedua folder tidak otomatis menjadi folder sinkronisasi langsung seperti drive bersama."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Buat commit README di folder A lalu push ke branch latihan. Clone ke folder B dan periksa commit serta isi README. Selanjutnya edit file di A tanpa commit: file di B tetap tidak berubah, walaupun keduanya berasal dari repository yang sama.",
+          "Setelah perubahan kedua di-commit dan dipush, B masih perlu mengambil lalu mengintegrasikan pembaruan sesuai alur kerja. Urutan ini menunjukkan letak setiap hasil dan mengapa pengecekan log penting."
+        ]
+      }
+    ],
+    "practiceReview": "Bandingkan commit di A, remote dan B, bukan hanya nama file. Pastikan URL serta branch tujuan benar. Jangan menggunakan folder clone baru untuk menyatakan pekerjaan belum-commit pada folder lama sudah tersimpan."
+  },
+  "git/fetch-pull": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Fetch memperbarui informasi remote-tracking dan mengambil objek yang diperlukan tanpa langsung menggabungkannya ke branch kerja. Pull mengambil pembaruan lalu mengintegrasikannya menurut konfigurasi atau opsi, misalnya merge atau rebase. Karena itu, pull bukan sekadar tombol download file.",
+          "Upstream branch membantu Git mengetahui pasangan pelacakan branch lokal. Keadaan ahead/behind perlu dibaca setelah informasi remote cukup baru. Data lama dapat membuatmu merasa sudah sinkron padahal remote telah berubah."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua clone bermula dari A. Clone pertama menambahkan B dan push. Clone kedua membuat C secara lokal. Setelah fetch, clone kedua bisa melihat bahwa riwayatnya bercabang; perubahan B belum otomatis menjadi isi branch kerja.",
+          "Tinjau log, pilih kebijakan integrasi yang disepakati dan selesaikan konflik bila ada. Hindari memakai reset keras untuk memaksa tampilan sama tanpa memahami commit lokal yang akan ditinggalkan."
+        ]
+      }
+    ],
+    "practiceReview": "Catat working tree, upstream serta posisi lokal/remote sebelum integrasi. Jelaskan apakah hasilnya merge atau rebase dan periksa perubahan setelahnya. Jangan menganggap fetch gagal hanya karena isi file belum berubah."
+  },
+  "git/pull-request": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Pull request mengusulkan perbandingan dari branch sumber ke branch tujuan. PR bukan salinan percakapan semata: reviewer perlu mengetahui masalah, perubahan perilaku dan cara memeriksanya. Commit pada source dapat mengubah isi PR selama PR masih terbuka.",
+          "Base dan head harus tepat. PR yang terbuka atau pemeriksaan CI yang hijau belum berarti perubahan telah masuk branch utama maupun terpasang di produksi. Review, merge dan deployment merupakan tahap yang dapat mempunyai aturan berbeda."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada branch latihan, perbaiki petunjuk instalasi lalu buat PR ke branch tujuan yang disepakati. Tulis contoh masalah sebelum perbaikan, petunjuk sesudahnya dan hasil percobaan. Reviewer memeriksa diff serta mencoba langkah dari kondisi yang disebutkan.",
+          "Jika reviewer meminta perubahan, commit tambahan pada branch sumber memperbarui usulan. Sesudah merge, periksa branch tujuan dan status deployment bila proyek memakai publikasi otomatis."
+        ]
+      }
+    ],
+    "practiceReview": "Pastikan judul dan isi PR menggambarkan perubahan akhir. Cantumkan validasi yang benar-benar dilakukan serta batasnya. Jangan menulis “sudah tayang” hanya karena URL preview berhasil dibuat."
+  },
+  "git/fork": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Fork adalah repository tersendiri yang berhubungan dengan repository asal pada layanan hosting. Clone fork ke lokal biasanya menamai fork itu origin. Remote tambahan yang sering dinamai upstream dapat menunjuk repository asal, tetapi nama-nama tersebut tetap konfigurasi yang harus diperiksa.",
+          "Mengambil pembaruan dari upstream berbeda dari mengirim perubahan ke sana. Kamu mungkin hanya mempunyai hak tulis pada fork, sehingga kontribusi ke asal dilakukan melalui PR. Sinkronisasi juga perlu menjaga perubahan lokal yang belum selesai."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Fork contoh proyek, clone fork itu, lalu periksa URL origin. Tambahkan upstream sesuai alamat asal yang benar. Setelah fetch upstream, tinjau pembaruan pada branch dasar sebelum membuat branch fitur baru.",
+          "Push branch fitur ke fork dan ajukan PR dengan base repository asal serta source fork yang sesuai. Salah arah remote dapat membuat perubahan tidak muncul pada tempat yang kamu harapkan."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar tiga tempat: folder lokal, fork dan repository asal. Tuliskan arah fetch/push/PR. Verifikasi URL serta branch aktual dan jangan menganggap remote bernama upstream pasti menunjuk alamat yang benar."
+  },
+  "git/restore-revert": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Undo harus dipilih menurut keadaan perubahan. Unstage mengubah pilihan index, restore isi file dapat mengganti perubahan working tree, sedangkan revert membuat commit baru yang membalik efek commit tertentu. Ketiganya mempunyai tujuan dan risiko berbeda.",
+          "Pada riwayat yang sudah dibagikan, revert sering lebih mudah ditelusuri karena tidak menghapus hubungan riwayat bersama. Hasil revert tetap dapat berkonflik jika perubahan lain bergantung pada isi yang dibalik. Periksa diff dan validasi perilakunya."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dalam repo lab, stage perubahan README lalu unstage tanpa membuang isi editannya. Berikutnya, pada file percobaan lain yang sudah dicadangkan, pelajari bagaimana restore mengembalikan isi sesuai sumber yang dipilih.",
+          "Untuk commit yang sudah dipush pada branch latihan bersama, coba revert sesuai alur yang disepakati. Log akan menampilkan commit koreksi baru, bukan membuat commit lama tidak pernah ada."
+        ]
+      }
+    ],
+    "practiceReview": "Sebelum undo, tuliskan apakah targetnya staging, file kerja atau commit. Simpan pekerjaan penting dan periksa diff. Jangan menjalankan restore isi atau reset keras saat kamu hanya ingin menghapus pilihan staging."
+  },
+  "git/stash": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Stash menyimpan keadaan pekerjaan tertentu agar working tree dapat dipakai untuk tugas lain. Secara default, tidak semua jenis file otomatis tercakup; file untracked atau ignored membutuhkan pertimbangan opsi serta kebutuhan. Stash lokal juga bukan pengganti commit yang dibagikan atau backup terpisah.",
+          "Apply mencoba menerapkan isi tanpa langsung menghapus catatan stash, sedangkan pop menggabungkan penerapan dan penghapusan ketika prosesnya berhasil sesuai perilaku Git. Konflik tetap mungkin terjadi bila konteks file telah berubah."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Saat sedang mengedit README, muncul kebutuhan memeriksa branch lain. Lihat status, simpan pekerjaan dengan pesan yang menjelaskan konteksnya, lalu pastikan file yang penting memang tercakup. Setelah tugas selesai, terapkan stash pada konteks yang benar.",
+          "Jika terjadi konflik, baca status dan selesaikan isinya. Jangan menghapus stash karena mengira prosesnya sudah selesai hanya dari satu perintah; pastikan pekerjaan yang dibutuhkan sudah kembali."
+        ]
+      }
+    ],
+    "practiceReview": "Catat isi yang akan disimpan, identitas stash dan hasil setelah diterapkan. Uji file baru secara terpisah agar paham perilaku default. Jangan memakai stash tanpa catatan hingga sulit mengenali pekerjaan mana yang sedang dipulihkan."
+  },
+  "git/reset-reflog": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Reset memindahkan referensi dan, bergantung mode, dapat mengubah index serta working tree. Soft, mixed dan hard bukan tiga nama untuk tindakan yang sama. Hard dapat menimpa perubahan file yang belum menjadi commit; jangan mengandalkan reflog untuk mengembalikan isi yang tidak pernah tersimpan sebagai objek yang dapat dipulihkan.",
+          "Reflog membantu melihat pergerakan referensi lokal yang pernah dicatat. Ia mempunyai retensi serta batas, bukan cadangan permanen seluruh repository. Pada riwayat bersama, menulis ulang dan force push juga dapat mengganggu orang lain."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Di repo latihan dengan commit A–B–C, catat hash C sebelum percobaan. Bandingkan konsep memindahkan branch ke B dengan membalik perubahan C melalui revert. Keduanya menghasilkan hubungan riwayat berbeda.",
+          "Jika commit C masih dapat ditemukan melalui reflog, buat referensi penyelamatan yang sesuai sebelum mencoba perubahan tambahan. Jangan melakukan eksperimen pemulihan pertama kali pada proyek yang hanya mempunyai satu salinan pekerjaan penting."
+        ]
+      }
+    ],
+    "practiceReview": "Gunakan repo disposable yang sudah dicadangkan. Tulis apa yang berubah pada branch, index dan working tree untuk setiap mode yang dipelajari. Jelaskan batas reflog dan jangan menjanjikan pemulihan semua perubahan belum-commit."
+  },
+  "git/rebase-cherry-pick": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Rebase menerapkan kembali rangkaian perubahan pada basis berbeda sehingga identitas commit hasilnya dapat berubah. Cherry-pick mengambil perubahan commit tertentu ke jalur saat ini dan biasanya membuat commit baru. Hubungan hasilnya berbeda dari merge meskipun isi file dapat tampak mirip.",
+          "Keduanya membutuhkan pemahaman dependensi: satu commit dapat mengandalkan perubahan sebelumnya. Mengambil commit akhir saja mungkin tidak menghasilkan program yang bekerja. Untuk riwayat yang sudah dibagikan, ikuti kesepakatan tim sebelum menulis ulang."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Branch fitur dibuat dari A, lalu utama maju ke B. Rebase fitur ke basis baru akan mencoba memainkan kembali perubahan fitur di atas B. Jika konflik terjadi, selesaikan berdasarkan maksud kedua perubahan dan lanjutkan sesuai status operasi.",
+          "Pada latihan cherry-pick, pilih satu perbaikan kecil yang mandiri ke branch lain. Baca diff dan uji hasilnya. Jangan menganggap commit dapat dipindahkan bebas hanya karena perintah tidak melaporkan konflik."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar riwayat sebelum/sesudah dan catat hash yang berubah. Gunakan branch lab yang belum dipakai orang lain. Tunjukkan alasan pemilihan rebase, merge atau cherry-pick serta hasil validasi fungsinya."
+  },
+  "git/tag-dan-troubleshooting": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Tag menamai titik riwayat tertentu, sedangkan branch terus bergerak mengikuti commit baru. Tag beranotasi juga membawa metadata tersendiri. Membuat tag lokal tidak otomatis memublikasikannya, membuat release di web, atau memasang versi tersebut ke produksi.",
+          "Saat masalah Git muncul, baca pesan lengkap serta keadaan repository: folder kerja, branch aktif, status, remote dan hubungan riwayat. Solusi “force” atau “hapus .git” tanpa diagnosis dapat menghilangkan konteks yang diperlukan untuk menyelamatkan pekerjaan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada repo lab yang sudah diverifikasi, tandai commit yang dinilai sebagai versi latihan. Periksa commit yang ditunjuk tag, lalu bedakan isi pada tag itu dari branch yang sesudahnya menerima perubahan lain.",
+          "Jika push ditolak karena remote lebih maju, lakukan pemeriksaan fetch/log dan pilih integrasi sesuai aturan. Menambah tag baru tidak menyelesaikan konflik riwayat atau izin remote yang keliru."
+        ]
+      }
+    ],
+    "practiceReview": "Catat nama tag, commit tujuan dan apakah tag baru lokal atau sudah dibagikan. Untuk satu pesan error, tulis kondisi penyebab serta langkah pemeriksaan. Jangan menyalin solusi destruktif tanpa mengetahui pekerjaan yang akan terpengaruh."
+  },
+  "iot/apa-itu-iot": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Sistem IoT mempunyai jalur pengukuran, pengolahan, pertukaran data dan penggunaan hasil. Setiap bagian dapat gagal dengan cara berbeda. Sensor membaca keadaan, pengendali mengubahnya menjadi data yang bermakna, jaringan membawa pesan, dan aplikasi membantu pengguna mengambil tindakan. Menambahkan Wi-Fi saja belum menyelesaikan kebutuhan.",
+          "Tentukan fungsi yang harus tetap berjalan saat jaringan putus. Pemantauan jarak jauh mungkin berhenti, tetapi kendali lokal tertentu dapat tetap bekerja bila dirancang demikian. Perilaku ini perlu diputuskan, bukan diasumsikan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pemantau suhu ruang menyimpan nilai beserta waktu pengukuran dan status valid. Dashboard menunjukkan kapan data terakhir diterima. Saat internet putus, layar sebaiknya menunjukkan data basi, bukan mempertahankan angka lama seolah pengukuran masih berlangsung.",
+          "Jika perangkat juga mengendalikan kipas, tentukan aturan lokal dan batas kegagalannya secara terpisah. Data yang terlihat di ponsel dan tindakan fisik merupakan dua hasil yang harus diuji sendiri."
+        ]
+      }
+    ],
+    "practiceReview": "Rancangan latihan harus menyebut masalah, data, penerima dan tindakan. Jelaskan perilaku lokal serta remote saat koneksi hilang. Gunakan contoh nonkritis dan hindari menjadikan prototipe sebagai proteksi keselamatan."
+  },
+  "iot/cara-kerja-iot": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Nilai yang sampai ke layar melewati beberapa perubahan: sinyal sensor dibaca, diperiksa, diberi satuan/identitas, dikirim dan ditampilkan. Angka yang benar di Serial Monitor belum menjamin payload, penyimpanan dan grafik menggunakan satuan yang sama. Waktu pengukuran juga dapat berbeda dari waktu diterima server.",
+          "Berikan status validitas dan identitas perangkat agar penerima dapat menilai arti data. Kehilangan koneksi bukan alasan mengganti nilai dengan nol tanpa penanda karena nol mungkin merupakan hasil pengukuran yang sah."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh sintetis: sensor membaca 29,4 °C pada 10.00 WIB, tetapi pesan baru diterima 10.02 WIB sesudah antrean offline terkirim. Jika grafik memakai waktu terima, pembaca dapat mengira suhu berubah pada 10.02.",
+          "Catat waktu ukur dan waktu terima sesuai kebutuhan, lalu tampilkan usia data. Bandingkan isi yang dibaca perangkat, payload yang dikirim, dan record yang tersimpan untuk menemukan tahap yang mengubah nilai."
+        ]
+      }
+    ],
+    "practiceReview": "Gambar alur sensor → pengendali → jaringan → penyimpanan → layar. Tuliskan data di tiap tahap, termasuk satuan dan waktu. Latihan selesai jika kamu bisa menunjukkan tempat munculnya perbedaan, bukan hanya berhasil menampilkan angka."
+  },
+  "iot/sensor-aktuator": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Sensor menghasilkan informasi tentang keadaan, sedangkan aktuator mengubah keadaan fisik. Keluaran sensor perlu ditafsirkan sesuai karakteristik dan batas ukur. Aktuator biasanya membutuhkan daya atau driver yang tidak dapat disediakan langsung oleh pin mikrokontroler.",
+          "Sinyal kendali dan suplai beban merupakan jalur berbeda. Menulis HIGH pada GPIO tidak otomatis berarti motor sudah berputar; driver, catu, kabel dan kondisi beban ikut menentukan. Bila perlu kepastian tindakan, rancangan membutuhkan umpan balik yang sesuai."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada model kipas DC tegangan rendah, sensor suhu dibaca oleh pengendali dan sinyal kendali diberikan ke driver yang kompatibel. Pemeriksaan dimulai dari pembacaan sensor, log keputusan, status keluaran dan respons kipas.",
+          "Jika kipas tidak berputar, jangan langsung menyebut sensor rusak. Bandingkan nilai input dan keputusan program dahulu, kemudian jalur driver/daya melalui prosedur lab yang aman. Beban tidak disambungkan langsung ke pin tanpa perhitungan."
+        ]
+      }
+    ],
+    "practiceReview": "Pasangkan setiap sensor dengan besaran yang diukur serta tiap aktuator dengan perubahan yang dihasilkan. Cantumkan driver dan sumber daya yang diperlukan. Bedakan perintah aktif dengan bukti tindakan fisik."
+  },
+  "iot/mengenal-esp32": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "ESP32 adalah keluarga chip; papan pengembangan menambahkan modul, regulator, USB serta pengaturan pin tertentu. Pin yang tersedia dan fitur Wi-Fi/Bluetooth dapat berbeda antarvarian. Nama ESP32 pada toko belum cukup untuk memilih board profile atau menyalin pin dari contoh lain.",
+          "Pisahkan tegangan masuk board dari level logika GPIO. Kemampuan menerima suplai melalui USB atau pin daya tertentu tidak berarti setiap pin boleh menerima tegangan yang sama. Baca dokumentasi model lengkap sebelum menghubungkan sensor."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Papan latihan berlabel ESP32-DevKitC dipilih sesuai varian chip yang terpasang. Cocokkan board di IDE, port serial dan pin LED eksternal dengan dokumentasinya. Uji upload serta serial sebelum menambah sensor atau jaringan.",
+          "Jika kode dapat dikompilasi tetapi board terus restart, periksa pesan serial, catu dan pemilihan pin sesuai model. Mengganti semua pin secara acak dapat menyembunyikan masalah awal."
+        ]
+      }
+    ],
+    "practiceReview": "Catat foto/label model, chip, profile IDE serta pin yang digunakan. Jelaskan perbedaan board, modul dan chip. Jangan menerapkan spesifikasi satu varian ke seluruh keluarga ESP32."
+  },
+  "iot/listrik-breadboard": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Tegangan selalu dinilai antara dua titik. GND merupakan acuan rangkaian yang tidak otomatis sama dengan pembumian instalasi. Pada breadboard, hubungan lubang mengikuti konstruksinya; rail daya dapat terputus di tengah sehingga perlu diverifikasi saat rangkaian tidak diberi daya.",
+          "Komponen harus sesuai polaritas dan batasnya. LED membutuhkan pembatas arus yang dipilih menurut suplai serta karakteristiknya. Breadboard hanya untuk rangkaian latihan yang sesuai kemampuan, bukan untuk jaringan listrik rumah atau beban besar."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada lab tegangan rendah terbatas arus, susun diagram LED dan resistor terlebih dahulu. Dalam keadaan catu terputus, cocokkan hubungan kaki dengan kelompok lubang breadboard. Sesudah diverifikasi, barulah jalankan prosedur pengujian lab.",
+          "Jika LED tidak menyala, periksa polaritas, rail yang terpisah dan referensi GND. Jangan memindahkan kabel sambil menganggap seluruh rail pasti tersambung atau menambah tegangan agar lampu terlihat hidup."
+        ]
+      }
+    ],
+    "practiceReview": "Gambarkan sambungan listrik, bukan hanya posisi komponen. Catat sumber tegangan, resistor serta polaritas. Pekerjaan dilakukan pada kit tegangan rendah yang sesuai, dengan catu diputus saat mengubah wiring."
+  },
+  "iot/persiapan-arduino-ide": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "IDE mengedit dan membangun program, board package menyediakan dukungan target, sedangkan port menentukan perangkat yang dihubungi untuk upload/serial. Library menambahkan fungsi perangkat tertentu. Kegagalan pada masing-masing tahap menghasilkan pesan berbeda sehingga perlu dibaca terpisah.",
+          "Compile berhasil belum membuktikan program terkirim atau berjalan pada board yang benar. Setelah upload, periksa reset, keluaran serial dan perilaku yang direncanakan. Simpan versi board package serta library agar contoh dapat diulang."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Mulai dengan sketch serial paling sederhana dari materi. Pilih board sesuai model dan port yang muncul untuk perangkat itu. Jika compile gagal, baca pesan awal yang relevan tentang kode atau dependensi. Jika upload gagal, periksa port, kabel data dan kondisi boot sesuai dokumentasi.",
+          "Jika upload sukses tetapi teks acak, cocokkan baud Serial Monitor dengan Serial.begin pada sketch. Menambah library sensor tidak menyelesaikan ketidakcocokan baud."
+        ]
+      }
+    ],
+    "practiceReview": "Catat model board, package, port, baud dan hasil compile/upload/serial secara terpisah. Simpan pesan error lengkap tanpa rahasia. Latihan selesai saat kamu dapat menjelaskan tahap yang gagal dan bukti program sederhana berjalan."
+  },
+  "iot/led-pertama": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Blink memperkenalkan hubungan deklarasi pin, mode output dan perubahan level logika. Pada contoh dengan LED eksternal, cahaya muncul ketika rangkaian serta polaritas membuat arus yang dibatasi resistor mengalir. LED internal board bisa memakai pin atau polaritas aktif yang berbeda, jadi jangan menganggap semua board identik.",
+          "Delay membuat alur sederhana berhenti menunggu. Ini mudah dipelajari, tetapi pekerjaan lain pada loop juga tertunda. Materi millis dan state machine membantu ketika beberapa kegiatan perlu berlangsung tanpa menunggu panjang."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh mengatur LED menyala satu detik dan mati satu detik. Satu siklus penuh berlangsung sekitar dua detik, sehingga frekuensinya sekitar 0,5 Hz, bukan satu kedipan per detik dalam arti siklus penuh. Waktu aktual dapat dipengaruhi eksekusi program.",
+          "Ubah hanya durasi menyala, lalu amati perbedaan duty cycle terhadap periode. Jika LED tidak bereaksi, cocokkan pin serta wiring sebelum mengubah banyak bagian sketch."
+        ]
+      }
+    ],
+    "practiceReview": "Catat pin, resistor, durasi ON/OFF dan periode yang diamati. Jelaskan apa yang dijalankan sekali pada setup dan berulang pada loop. Jangan menyambungkan LED tanpa pembatas arus yang sesuai."
+  },
+  "iot/membaca-sensor": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Pembacaan analog menghasilkan nilai yang bergantung ADC, referensi serta konfigurasi, sedangkan sensor digital dapat memakai keluaran sederhana atau protokol yang membawa data. Nilai mentah bukan otomatis satuan fisik. Konversi membutuhkan transfer function atau petunjuk datasheet.",
+          "Perhatikan rentang, resolusi, akurasi dan waktu respons sebagai hal berbeda. Banyak digit di layar tidak membuktikan pengukuran akurat. Masukan di luar batas pin juga tidak menjadi aman hanya karena program membatasi angka hasil baca."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Bila sensor analog mempunyai hubungan tegangan terhadap suhu yang diketahui, alurnya adalah baca ADC, ubah ke tegangan sesuai referensi, lalu hitung besaran fisik. Setiap asumsi harus ditulis; referensi yang salah membuat hasil konversi salah walaupun angka terlihat stabil.",
+          "Untuk sensor digital, bedakan hasil valid dari timeout atau kegagalan komunikasi. Jangan mengubah kegagalan menjadi suhu nol tanpa status karena nol dapat merupakan nilai yang sah."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan nilai mentah, satuan hasil, asumsi referensi dan status valid. Bandingkan dengan rujukan yang sesuai. Jelaskan ketidakpastian serta batas alat; pengujian pemanasan atau listrik berbahaya tidak diperlukan untuk memahami konversi."
+  },
+  "iot/wifi-ip": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Tersambung ke SSID merupakan satu tahap hubungan radio. Agar data sampai ke layanan, perangkat juga membutuhkan konfigurasi IP, gateway bila tujuannya berbeda jaringan, resolusi nama bila memakai hostname, dan layanan server yang sehat. Tiap tahap dapat gagal sendiri.",
+          "Program perlu mempunyai perilaku saat koneksi hilang: kapan mencoba ulang, apakah pembacaan lokal berlanjut dan bagaimana status dilaporkan. Perulangan koneksi tanpa batas dapat membuat seluruh fungsi utama berhenti."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "ESP32 menyatakan Wi-Fi connected, tetapi pengiriman ke hostname gagal. Cetak alamat IP, gateway dan hasil resolusi yang relevan melalui log lab. Jika IP belum valid, periksa proses mendapat konfigurasi; jika nama gagal, bedakan dari timeout ke server yang sudah diketahui.",
+          "Sesudah perbaikan lab, uji pengiriman aplikasi, bukan hanya status Wi-Fi. Jangan memasukkan password SSID dalam tangkapan layar atau kode yang dibagikan."
+        ]
+      }
+    ],
+    "practiceReview": "Laporkan status radio, konfigurasi IP dan hasil layanan secara terpisah. Uji putus-sambung hanya pada jaringan latihan. Hasil yang baik menjelaskan apakah fungsi lokal tetap berjalan serta bagaimana program menghindari retry tanpa jeda."
+  },
+  "iot/http-json": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "HTTP mengatur permintaan dan respons, sedangkan JSON adalah format representasi data. JSON valid belum tentu memenuhi skema aplikasi. Server dapat memerlukan nama field, tipe, satuan dan autentikasi tertentu. Respons HTTP juga harus dibaca beserta body yang relevan tanpa membocorkan data.",
+          "Timeout tidak selalu berarti server tidak memproses permintaan: respons bisa hilang setelah penyimpanan berhasil. Mengulang operasi yang menambah record dapat menimbulkan duplikasi jika rancangan tidak mengenali identitas pesan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Perangkat mengirim suhu sintetis dengan deviceId, nilai, unit dan waktu ukur. Server memvalidasi tipe dan rentang sebelum menyimpan. Jika nilai dikirim sebagai teks tetapi kontrak meminta angka, JSON masih valid namun permintaan dapat ditolak.",
+          "Catat status HTTP serta alasan penolakan yang aman. Untuk retry, gunakan strategi identitas pesan atau operasi yang sesuai kebutuhan. Jangan menyatakan data tersimpan hanya karena koneksi TCP berhasil dibuat."
+        ]
+      }
+    ],
+    "practiceReview": "Tulis kontrak payload dan contoh valid/tidak valid. Periksa hasil penyimpanan serta respons aplikasi, bukan format JSON saja. Gunakan kredensial lab yang tidak ditanam ke repository dan jangan menonaktifkan verifikasi TLS agar tes tampak sukses."
+  },
+  "iot/dashboard-data": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Dashboard mengubah data menjadi informasi yang dapat dipakai. Supaya pembaca tidak salah memahami angka, tampilkan identitas sumber, satuan, waktu dan validitas. Nilai terakhir dapat berbeda jauh dari keadaan saat ini bila pengiriman terhenti.",
+          "Rata-rata, nilai maksimum dan nilai sesaat memiliki arti berbeda. Grafik yang meringkas data per menit dapat menyembunyikan puncak singkat. Pilih agregasi yang sesuai pertanyaan dan jelaskan jika data hilang, bukan menggambar garis mulus seolah semua sampel ada."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh sintetis: suhu terakhir 28 °C dikirim dua jam lalu. Tanpa label last update, operator bisa mengira ruangan masih aman. Tandai data basi sesuai interval serta kebutuhan sistem, lalu bedakan dari sensor yang aktif mengirim nilai 28 °C baru.",
+          "Pada grafik, coba satu rentang tanpa sampel dan lihat bagaimana dashboard menampilkannya. Gunakan warna/status yang menjelaskan kualitas data, bukan hanya besar kecil angkanya."
+        ]
+      }
+    ],
+    "practiceReview": "Buat tampilan contoh sehat, invalid dan offline. Minta orang lain menjelaskan umur data dari tampilannya. Hasil latihan belum cukup bila hanya berhasil membuat grafik tetapi tidak menunjukkan satuan serta timestamp."
+  },
+  "iot/otomatisasi-histeresis": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Histeresis memakai batas aktivasi dan pelepasan yang berbeda agar keluaran tidak terus berganti ketika nilai berada dekat satu ambang. Keputusan membutuhkan keadaan sebelumnya, jadi aturan tidak cukup dibaca sebagai satu perbandingan tanpa memori.",
+          "Batas harus dipilih sesuai proses serta ketelitian sensor. Menambah jarak ambang terlalu besar bisa menunda respons, sedangkan terlalu sempit masih dapat berfluktuasi. Tentukan pula keadaan saat data sensor invalid atau perangkat baru menyala."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada model kipas lab, aktifkan di atas 30 °C dan nonaktifkan di bawah 28 °C. Ketika suhu 29 °C, kipas yang sebelumnya aktif tetap aktif dan yang sebelumnya mati tetap mati. Angka contoh ini adalah aturan simulasi, bukan standar pendinginan.",
+          "Uji urutan 27, 29, 31, 29, 27 dan catat status setiap langkah. Lalu masukkan kondisi invalid untuk memastikan program tidak membuat keputusan dari angka yang tidak sah."
+        ]
+      }
+    ],
+    "practiceReview": "Tabel latihan harus menunjukkan input, status sebelumnya dan status sesudahnya. Jelaskan perilaku pada titik ambang sesuai operator yang digunakan. Jangan menyebut kontrol prototipe sebagai pengaman temperatur kritis."
+  },
+  "iot/keamanan-iot": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Keamanan mencakup identitas perangkat, hak akses, kerahasiaan data, pembaruan dan perilaku saat gagal. TLS membantu melindungi komunikasi tertentu bila sertifikat diverifikasi dengan benar, tetapi tidak menghapus risiko kredensial yang ditulis dalam repository atau izin server yang terlalu luas.",
+          "Tentukan siapa boleh membaca data dan siapa boleh mengirim perintah. Hak baca sensor tidak harus berarti hak mengubah aktuator. Perangkat offline juga perlu menunjukkan status yang jelas dan menjalankan perilaku lokal yang sudah direncanakan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua perangkat memakai broker lab. Akun perangkat A seharusnya hanya mengirim data A, bukan mengendalikan perangkat B. Uji dengan kredensial serta ACL latihan yang sesuai dan amati penolakan untuk operasi yang tidak diizinkan.",
+          "Jika koneksi TLS gagal karena waktu perangkat keliru, perbaiki penyebab sesuai dokumentasi. Mematikan verifikasi sertifikat hanya membuat koneksi tampak bekerja sambil menghilangkan bagian pemeriksaan identitas."
+        ]
+      }
+    ],
+    "practiceReview": "Buat matriks perangkat, data, aksi dan izin. Gunakan rahasia palsu pada laporan. Jelaskan prosedur pencabutan kredensial serta pembaruan dan jangan mengandalkan SSID tersembunyi sebagai satu-satunya perlindungan."
+  },
+  "iot/proyek-monitor-suhu": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Proyek pemantauan menggabungkan pengukuran, validasi, pengiriman dan tampilan. Bangun bertahap: sensor lokal harus dapat dibaca sebelum masalah jaringan ditambahkan. Nilai, satuan dan waktu perlu tetap konsisten di seluruh jalur.",
+          "Tentukan kebutuhan sampling, interval kirim, usia data maksimum dan apa yang terjadi ketika sensor gagal. Mengirim lebih sering tidak selalu meningkatkan ketelitian sensor atau manfaat tampilan; ia dapat menambah beban jaringan dan penyimpanan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Mulai dengan log nilai valid di serial. Selanjutnya bentuk payload sintetis yang kontraknya jelas, kirim ke server lab, lalu bandingkan record tersimpan dan dashboard. Setelah kondisi sehat didapat, putuskan jaringan latihan dan amati status offline.",
+          "Kembalikan jaringan dan periksa apakah pesan tertunda, hilang atau ganda. Jika memakai antrean, bedakan waktu ukur dari waktu kirim. Semua pengujian dilakukan pada sistem nonkritis, tanpa mengandalkan prototipe sebagai alarm keselamatan."
+        ]
+      }
+    ],
+    "practiceReview": "Kumpulkan diagram, kontrak payload, hasil lokal/server dan tiga kondisi: sehat, sensor invalid serta jaringan putus. Laporan menjelaskan data yang hilang atau tertunda, bukan hanya foto dashboard ketika semuanya berjalan."
+  },
+  "iot/troubleshooting-lanjutan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Pisahkan jalur daya, program, sensor, komunikasi lokal, jaringan dan aplikasi. Gejala akhir yang sama dapat berasal dari tahap berbeda. Memeriksa semuanya secara acak membuat penyebab sulit dibuktikan dan bisa menambah kesalahan wiring.",
+          "Gunakan log yang memberi konteks: tahap, waktu, deviceId dan hasil tanpa rahasia. Mulai dari sketch minimal yang sehat, kemudian tambahkan komponen satu per satu. Rekam keadaan awal sehingga percobaan dapat diulang."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Board restart ketika Wi-Fi mulai mengirim. Hal ini dapat berkaitan dengan daya, wiring atau program, tetapi pesan tersebut belum membuktikan salah satunya. Baca log/reset reason sesuai platform, cek kesesuaian catu serta uji contoh minimal sebelum menambah perubahan.",
+          "Jika sensor lokal sehat tetapi dashboard tidak berubah, bandingkan payload dan respons server. Menukar sensor tidak memperbaiki data yang sudah diterima tetapi gagal dipetakan pada tampilan."
+        ]
+      }
+    ],
+    "practiceReview": "Buat daftar dugaan dengan satu pemeriksaan pembeda untuk masing-masing. Catat perubahan tunggal dan hasilnya. Jika alat ukur atau akses tidak tersedia, tulis batas diagnosis serta bukti yang perlu diminta, bukan menebak komponen rusak."
+  },
+  "iot/merancang-proyek-iot": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Rancangan dimulai dari pertanyaan pengguna dan keputusan yang ingin dibantu. Tentukan besaran, rentang, interval dan tingkat ketelitian yang dibutuhkan. Baru pilih sensor, pengendali serta jalur komunikasi yang sesuai. Komponen populer tidak otomatis menjadi pilihan tepat.",
+          "Pisahkan keberhasilan prototipe dari kesiapan pemakaian jangka panjang. Daya, kondisi lingkungan, pembaruan, kehilangan jaringan dan pemeliharaan perlu dibahas sebelum perangkat bergantung pada layanan nyata."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Untuk memantau ruang nonkritis, tulis siapa melihat suhu, seberapa sering data dibutuhkan dan berapa lama riwayat disimpan. Buat kriteria terukur: data baru terlihat, invalid ditandai, dan kehilangan koneksi tidak ditampilkan sebagai suhu nol.",
+          "Kemudian pecah pekerjaan menjadi pengukuran lokal, pengiriman, penyimpanan dan tampilan. Setiap bagian mempunyai uji penerimaan sendiri. Ini lebih mudah diperiksa daripada target kabur “dashboard harus bagus”."
+        ]
+      }
+    ],
+    "practiceReview": "Dokumen latihan berisi kebutuhan, batas lingkup, pilihan komponen beserta alasan, dan hasil uji tiap tahap. Catat hal yang belum divalidasi. Jangan mengklaim siap produksi hanya karena satu demonstrasi berhasil."
+  },
+  "iot/datasheet-pinout": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Datasheet menjelaskan batas serta karakteristik pada kondisi tertentu. Absolute maximum adalah batas yang tidak boleh dijadikan target operasi normal. Recommended operating conditions berbeda dari batas mutlak, dan spesifikasi chip dapat berbeda dari papan yang menambahkan regulator atau rangkaian lain.",
+          "Pinout menyatakan nama/fungsi pin pada model serta orientasi tertentu. Foto papan lain yang mirip belum cukup. Periksa juga pin boot, fungsi alternatif, input-only dan batas tegangan sesuai varian."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Sensor memakai logika 5 V sementara GPIO pengendali memakai level yang lebih rendah. Adanya pin suplai 5 V pada board tidak membuktikan GPIO toleran 5 V. Cari spesifikasi sinyal input/output serta metode penyesuaian yang benar sebelum menyambungkan.",
+          "Pada diagram latihan, tulis nomor/nama pin dan tegangan sinyalnya. Jika data toleransi tidak ditemukan, keputusan yang benar adalah menunda sambungan dan mencari dokumen model yang tepat."
+        ]
+      }
+    ],
+    "practiceReview": "Lampirkan rujukan model, kondisi operasi, pin suplai/GND/sinyal dan data yang belum diketahui. Latihan membaca dokumen tidak memerlukan menguji batas maksimum hingga perangkat rusak."
+  },
+  "iot/daya-adaptor-baterai": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Kebutuhan daya harus mencakup kondisi puncak, regulator dan perangkat tambahan. Arus rata-rata kecil tidak membuktikan suplai mampu melayani lonjakan radio atau aktuator. Kapasitas label adaptor juga perlu sesuai tegangan, polaritas dan karakteristik perangkat.",
+          "Untuk baterai, Wh memudahkan perbandingan ketika tegangan berbeda. Kapasitas mAh sendiri belum menyatakan energi tanpa tegangan. Efisiensi konversi, batas pemakaian, suhu dan profil beban membuat runtime nyata berbeda dari hitungan ideal."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Baterai contoh berenergi 10 Wh melayani beban rata-rata 2 W. Perkiraan idealnya lima jam, sebelum rugi serta batas penggunaan yang relevan. Jika ada converter, gunakan energi yang benar-benar dapat dipakai dan efisiensi pada kondisi tersebut.",
+          "Sesudah perhitungan kertas, validasi pada kit lab sesuai prosedur serta batas baterai. Jangan memperpanjang waktu uji dengan mengabaikan proteksi atau menggunakan sel yang tidak sesuai."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan asumsi tegangan, energi, daya rata-rata/puncak dan rugi. Hasil akhir berupa rentang perkiraan beserta batasnya, bukan janji waktu kerja pasti dari angka mAh saja."
+  },
+  "iot/ota-pembaruan-firmware": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "OTA memindahkan pembaruan melalui jaringan, tetapi sistem juga perlu memverifikasi sumber serta kecocokan image dan menentukan apa yang terjadi jika proses terputus. Fitur partisi, rollback dan verifikasi berbeda menurut platform. Upload berhasil tidak otomatis membuktikan firmware baru sehat.",
+          "Siapkan jalur pemulihan lokal sebelum percobaan. Catat versi, konfigurasi dan prasyarat. Jangan menjadikan endpoint pembaruan terbuka sebagai cara memudahkan demo karena operasi itu dapat mengganti program perangkat."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada perangkat lab, catat versi awal dan uji fungsi dasarnya. Terapkan image yang sesuai melalui mekanisme resmi platform, lalu pastikan perangkat boot dan tugas utamanya berjalan. Uji ulang sensor serta koneksi, bukan hanya nomor versi.",
+          "Skenario kegagalan dilakukan hanya bila prosedur pemulihan platform benar-benar tersedia. Bila tidak ada dukungan rollback yang teruji, tulis keterbatasan itu alih-alih menganggap semua board dapat pulih otomatis."
+        ]
+      }
+    ],
+    "practiceReview": "Laporan mencantumkan versi sebelum/sesudah, sumber image, hasil verifikasi dan cara pemulihan. Pisahkan bukti transfer selesai dari bukti program berjalan. Jangan memakai perangkat yang sedang mengendalikan beban nyata untuk percobaan kegagalan pertama."
+  },
+  "iot/perakitan-kotak-perangkat": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Memindahkan prototipe ke kotak mengubah lingkungan sensor, suhu internal, akses kabel dan pemeliharaan. Sensor suhu yang terlalu dekat regulator dapat membaca panas rangkaian sendiri, sementara lubang ventilasi memengaruhi perlindungan terhadap lingkungan. Desain mekanik harus mendukung tujuan ukur.",
+          "Sambungan perlu mempunyai strain relief, label dan konektor sesuai spesifikasi. Kerapian visual tidak membuktikan kontak listrik atau ketahanan mekanik baik. Perhatikan pemisahan jalur daya/sinyal dan akses untuk memperbarui atau memulihkan perangkat."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Bandingkan pembacaan sensor pada meja dan sesudah dipasang di kotak pada lingkungan yang sama. Jika nilai berubah konsisten, periksa posisi sensor, ventilasi dan sumber panas sebelum mengubah kalibrasi.",
+          "Buat foto serta diagram hubungan yang sesuai keadaan akhir. Catat konektor dan polaritas agar pembongkaran berikutnya tidak bergantung pada warna kabel atau ingatan pembuat."
+        ]
+      }
+    ],
+    "practiceReview": "Checklist mencakup fungsi, posisi sensor, kabel, label, ventilasi dan akses pemeliharaan. Uji pada tegangan rendah yang sesuai. Jangan menyatakan tahan air/debu hanya karena kotak tertutup tanpa pengujian serta rating yang relevan."
+  },
+  "listrik/komponen-ac-penggunaan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Pisahkan fungsi kendali, pensaklaran dan proteksi. Sensor atau tombol memberi perintah; kontaktor melakukan pensaklaran sesuai rating; perangkat proteksi menangani jenis gangguan tertentu. Satu komponen tidak otomatis menggantikan semua fungsi tersebut. Beberapa produk memang menggabungkannya, tetapi kemampuan harus dibaca dari spesifikasi.",
+          "Rating tegangan dan arus juga mempunyai konteks beban serta kategori penggunaan. Arus motor saat start berbeda dari beban resistif stabil. Koil kontaktor dan kontak dayanya mempunyai spesifikasi terpisah sehingga angka pada salah satunya tidak boleh dipakai untuk menebak yang lain."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada rancangan pompa, daftar kebutuhan mencakup perintah operasi, pensaklaran motor, proteksi hubung singkat, overload dan perilaku ketika sensor gagal. Kemudian cocokkan fungsi itu dengan perangkat serta tabel koordinasi pabrikan.",
+          "Jika kontaktor dapat menarik tetapi proteksi overload tidak ada, sistem belum otomatis mempunyai proteksi motor yang lengkap. Latihan ini dilakukan sebagai analisis dokumen atau simulasi; pemilihan serta pemasangan aktual perlu mengikuti rancangan oleh petugas kompeten."
+        ]
+      }
+    ],
+    "practiceReview": "Buat tabel fungsi, komponen, rating dan sumber spesifikasi. Jelaskan bagian yang belum terpenuhi bila hanya ada saklar atau kontaktor. Jangan menentukan pengganti dari ukuran fisik dan angka ampere saja."
+  },
+  "listrik/proteksi-motor": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Proteksi hubung singkat, overload dan pemantauan kondisi mempunyai tujuan berbeda. Overload dapat berkembang selama waktu tertentu, sedangkan hubung singkat membutuhkan pemutusan sesuai kemampuan serta koordinasi sistem. Kontaktor sendiri umumnya berfungsi sebagai pensaklaran, bukan pengganti seluruh proteksi itu.",
+          "Setting dan pemilihan perangkat membutuhkan nameplate, cara starting, lingkungan, kabel serta data koordinasi. Sebuah perangkat gabungan dapat mempunyai beberapa fungsi, tetapi tidak semua kombinasi komponen atau posisi pemasangan mengikuti aturan setting yang sama."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Dua motor berdaya sama belum tentu mempunyai arus nameplate, metode start atau tugas kerja yang identik. Jika salah satunya trip ketika start, menaikkan setting tanpa diagnosis dapat menghilangkan perlindungan yang dibutuhkan.",
+          "Pada analisis kertas, kumpulkan data motor, beban mekanis, tegangan, waktu kejadian dan perangkat proteksi. Cocokkan dengan panduan pabrikan serta rancangan. Penyebab trip belum dapat ditentukan hanya dari satu angka arus atau dugaan motor terlalu berat."
+        ]
+      }
+    ],
+    "practiceReview": "Jawaban latihan perlu membedakan jenis gangguan, fungsi proteksi serta data yang belum tersedia. Jangan menguji trip dengan membuat gangguan nyata. Untuk instalasi, pemeriksaan dan perubahan setting dilakukan petugas yang kompeten sesuai prosedur."
+  },
+  "listrik/penyearah-regulator": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Penyearahan, penyaringan dan regulasi merupakan tahap berbeda. Keluaran satu polaritas masih dapat berdenyut; filter mengurangi variasi tertentu, sementara regulator mengendalikan keluaran dalam rentang kondisi yang diizinkan. Isolasi dan proteksi juga tidak otomatis muncul hanya karena suatu rangkaian diberi nama converter.",
+          "Converter harus memenuhi batas input, output, arus, temperatur dan kondisi transien. Label arus puncak tidak selalu berarti dapat dipakai terus-menerus pada seluruh tegangan. Baca karakteristik modul lengkap, termasuk komponen dan pendinginannya."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Beban contoh membutuhkan 5 V × 0,5 A = 2,5 W. Jika buck mempunyai efisiensi 85% pada titik kerja yang relevan, kebutuhan daya input kira-kira 2,5/0,85 = 2,94 W. Pada input 12 V, arus rata-rata ideal berdasarkan daya itu sekitar 0,245 A, di luar detail transien.",
+          "Angka tersebut menunjukkan arus masuk dan keluar tidak harus sama. Contoh efisiensi bukan nilai semua modul, dan hasil hitungan belum menilai batas termal atau kecocokan proteksi."
+        ]
+      }
+    ],
+    "practiceReview": "Tuliskan jenis konversi, tegangan input/output, daya serta asumsi rugi. Jelaskan kapan regulator linear menghasilkan panas lebih besar. Gunakan analisis atau kit DC tegangan rendah yang sesuai; materi ini bukan petunjuk merakit penyearah listrik jala-jala."
+  },
+  "listrik/komponen-dc-penggunaan": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Rangkaian DC tetap membutuhkan pemeriksaan polaritas, tegangan maksimum, arus normal serta arus gangguan yang mungkin disuplai sumber. Baterai dapat menghasilkan energi gangguan besar meskipun tegangan nominalnya relatif rendah. Kemampuan pemutusan kontak atau pengaman harus secara jelas mencakup penggunaan DC yang dimaksud.",
+          "Relay, diode, transistor dan converter mempunyai peran berbeda. Driver beban induktif memerlukan penanganan transien sesuai rangkaian dan datasheet. Menambahkan satu diode tanpa memeriksa jenis beban serta kecepatan pelepasan bukan solusi universal semua pensaklaran."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Untuk model lampu DC, cocokkan suplai, beban, saklar/driver, kabel dan pengaman sebagai satu rancangan. Jika arus kerja 1 A, angka itu belum menentukan rating pengaman karena inrush, kabel, suhu serta arus gangguan juga diperlukan.",
+          "Bandingkan dua komponen yang sama-sama tertulis 5 A tetapi mempunyai rating DC berbeda. Jelaskan mengapa bentuk dan arus nominal yang sama belum membuktikan keduanya dapat saling menggantikan."
+        ]
+      }
+    ],
+    "practiceReview": "Buat daftar komponen menurut fungsi dan data DC yang dibutuhkan. Jangan menebak kompatibilitas dari rating AC. Latihan dilakukan dengan katalog atau kit tegangan rendah terbatas arus yang sesuai."
+  },
+  "listrik/saklar-no-nc": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Normal pada NO/NC merujuk keadaan acuan komponen sesuai definisi pabrikan, bukan selalu kondisi mesin saat produksi. Tombol, relay dan sensor dapat mempunyai cara aktuasi berbeda. Kontak mekanis juga harus dibedakan dari keluaran transistor sensor walaupun keduanya digambarkan sebagai sinyal ON/OFF.",
+          "Pemilihan NO atau NC belum membuktikan seluruh fungsi fail-safe. Kabel putus, hubung singkat, kontak lengket dan kehilangan daya dapat menghasilkan perilaku berbeda. Fungsi keselamatan memerlukan komponen, arsitektur dan validasi yang sesuai."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada simulator tombol NC, keadaan tanpa ditekan menutup jalur dan saat ditekan membukanya. Kabel putus juga dapat membuka jalur, sehingga rancangan tertentu bisa merespons keduanya dengan berhenti. Namun kabel yang terhubung singkat dapat memberi gejala berbeda.",
+          "Dengan membandingkan beberapa kegagalan pada tabel logika, kamu melihat mengapa satu pilihan NC saja tidak cukup untuk mengklaim sistem keselamatan lengkap."
+        ]
+      }
+    ],
+    "practiceReview": "Isi tabel keadaan normal, tombol diaktifkan, kabel putus dan kehilangan catu pada model latihan. Gunakan simulator atau komponen lepas tanpa daya. Jangan menguji kontak memakai mode ohm pada rangkaian bertegangan."
+  },
+  "listrik/sekering-proteksi-dc": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Sekering dipilih sebagai bagian koordinasi sumber, kabel serta beban. Arus nominal adalah acuan pada kondisi tertentu; waktu putus mengikuti kurva dan kondisi penggunaan. Rating tegangan DC serta kemampuan pemutusan menentukan kemampuan menghadapi gangguan sesuai pengujian produk, bukan sekadar angka yang boleh diabaikan.",
+          "Holder, temperatur dan sambungan memengaruhi perilaku. Sekering dengan ampere sama dapat berbeda karakteristik serta kemampuan memutus gangguan. Penggantian harus mengikuti rancangan dan panduan, bukan sekadar memasang ukuran yang muat."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Beban contoh 24 W pada 12 V mempunyai arus ideal 2 A. Jika ada lonjakan saat start, analisis perlu membaca besar/durasi inrush dan kurva perangkat. Jangan langsung memilih nilai pengaman dari satu pengali tetap terhadap 2 A.",
+          "Dalam perbandingan katalog, pisahkan kandidat yang mempunyai rating DC serta kemampuan pemutusan sesuai kebutuhan. Bila arus gangguan prospektif atau kemampuan kabel belum diketahui, tandai data belum cukup untuk keputusan final."
+        ]
+      }
+    ],
+    "practiceReview": "Laporkan alasan kandidat dapat atau belum dapat dinilai. Jangan menjembatani sekering atau membuat hubung singkat untuk membuktikan kerjanya. Sekering putus berulang memerlukan pemeriksaan sebab, bukan otomatis peningkatan rating."
+  },
+  "listrik/hukum-ohm-daya": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Hukum Ohm menghubungkan tegangan, arus dan resistansi untuk kondisi yang mengikuti model tersebut. Daya DC sederhana dapat dihitung dengan P = V × I. Pada resistor, hubungan ini dapat digabung menjadi P = I²R atau V²/R dengan asumsi dan satuan yang konsisten.",
+          "Tidak semua beban berperilaku sebagai resistor tetap. Motor, converter dan rangkaian elektronik dapat mengubah arusnya saat kondisi berubah. Menggunakan R = V/I pada satu titik tidak otomatis memprediksi seluruh perilaku perangkat."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada resistor ideal 1.000 Ω dengan 5 V, arusnya 5/1.000 = 0,005 A atau 5 mA. Daya modelnya 5 × 0,005 = 0,025 W. Saat tegangan menjadi 10 V pada resistor yang sama, arus menjadi 10 mA dan daya 0,1 W, yaitu empat kali nilai awal.",
+          "Contoh memperlihatkan daya tidak sekadar bertambah dua kali ketika tegangan digandakan pada R tetap. Rating nyata, toleransi dan kondisi termal tetap perlu dibaca dari komponen."
+        ]
+      }
+    ],
+    "practiceReview": "Tuliskan diketahui, rumus, substitusi, satuan dan batas model. Periksa perubahan arus serta daya, bukan angka akhir saja. Gunakan simulator atau kit tegangan rendah yang sesuai, dan jangan memakai perhitungan ini sebagai satu-satunya dasar desain instalasi."
+  },
+  "listrik/terminal-sambungan-kabel": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Sambungan perlu mempertahankan kontak listrik dan ketahanan mekanik sesuai jenis terminal serta penghantar. Ukuran, bahan konduktor, jumlah kabel, panjang kupasan, ferrule/lug dan torsi bila ditentukan harus mengikuti pabrikan. Mengencangkan sekuat mungkin dapat merusak komponen.",
+          "Kontak buruk dapat menimbulkan pemanasan lokal meskipun arus beban tidak melebihi rating pengaman. Karena itu, pemutus yang tidak trip bukan bukti seluruh terminal sehat. Inspeksi dan pemeliharaan mengikuti jenis produk serta prosedurnya; tidak semua terminal boleh diperlakukan sama."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada analisis foto atau komponen lepas tanpa daya, bandingkan kabel yang terjepit pada isolasi dengan konduktor yang diterminasi sesuai petunjuk. Keduanya dapat tampak masuk ke lubang tetapi mempunyai kualitas kontak berbeda.",
+          "Buat daftar data sebelum pemilihan: rentang penampang, jenis solid/stranded, aksesori terminasi dan batas penggunaan. Jangan menyimpulkan sambungan sesuai hanya karena kabel tidak mudah ditarik dengan tangan."
+        ]
+      }
+    ],
+    "practiceReview": "Latihan berupa pembacaan datasheet dan pemeriksaan benda tanpa daya. Catat kecocokan konduktor serta cara terminasi yang dinyatakan pabrikan. Pekerjaan pada instalasi perlu isolasi, verifikasi bebas tegangan dan petugas kompeten."
+  },
+  "listrik/daya-ac-faktor-daya": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Pada AC, daya aktif, daya semu dan faktor daya mempunyai arti berbeda. Untuk model satu fase, daya semu S = Vrms × Irms, sedangkan faktor daya PF = P/S. Pada beban sinusoidal linear, perpindahan fase menjelaskan sebagian hubungan tersebut; pada beban nonlinier, distorsi juga dapat berperan.",
+          "Karena itu, nilai W tidak selalu sama dengan VA dan tidak tepat menyamakan PF dengan efisiensi. Efisiensi membandingkan daya keluaran berguna terhadap masukan, sedangkan PF berkaitan dengan hubungan daya aktif serta semu pada sisi yang diukur."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Contoh hitungan: tegangan 230 V RMS dan arus 2 A RMS memberi daya semu 460 VA. Jika alat ukur yang sesuai membaca daya aktif 368 W, faktor dayanya 368/460 = 0,8. Angka ini tidak menyatakan efisiensi perangkat 80%.",
+          "Untuk sistem tiga fase atau gelombang yang berbeda, model serta metode pengukuran perlu sesuai. Jangan menambahkan kapasitor koreksi berdasarkan satu angka tanpa analisis harmonisa, kebutuhan sistem dan rancangan yang benar."
+        ]
+      }
+    ],
+    "practiceReview": "Jawaban harus membedakan V, A, W, VA dan PF, lalu menyatakan asumsi model. Gunakan data sintetis atau simulator. Pengukuran pada instalasi hidup serta koreksi faktor daya bukan kegiatan percobaan pemula dari artikel ini."
+  },
+  "programming/pemrograman-terstruktur": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Urutan, pilihan dan pengulangan menjadi lebih mudah dipahami jika kamu menelusuri keadaan data sesudah setiap langkah. Komputer tidak otomatis memperbaiki urutan yang keliru berdasarkan maksud manusia. Instruksi menampilkan total sebelum total dihitung dapat gagal atau memakai nilai yang tidak diharapkan.",
+          "Mulailah dari masukan, proses dan keluaran, kemudian tentukan langkah yang benar-benar diperlukan. Pecah tugas besar menjadi langkah yang dapat diperiksa sebelum menambahkan fitur."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Untuk harga 10.000 dan jumlah 3, masukannya dua angka, prosesnya perkalian dan hasilnya 30.000. Jika ada diskon, tentukan syarat serta kapan diskon diterapkan, jangan hanya menulis “beri diskon” tanpa aturan.",
+          "Tulis tabel langkah: terima harga, terima jumlah, hitung total, tentukan diskon bila ada, tampilkan hasil. Dengan tabel ini kamu dapat menguji logika sebelum memikirkan sintaks Python."
+        ]
+      }
+    ],
+    "practiceReview": "Algoritma latihan harus dapat diikuti orang lain tanpa menebak. Tandai urutan, kondisi dan bagian berulang. Coba satu masukan biasa dan satu batas sederhana, misalnya jumlah nol, lalu jelaskan aturan yang dipilih."
+  },
+  "programming/menjalankan-python": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Editor menyimpan isi program, sedangkan interpreter menjalankannya. REPL interaktif mengeksekusi masukan pada sesi yang sedang aktif; file script menyediakan urutan yang dapat dijalankan ulang dari awal. Keberhasilan di REPL belum menjamin file mempunyai semua definisi yang diperlukan.",
+          "Terminal juga mempunyai direktori kerja. Nama file yang benar pada folder yang salah dapat menghasilkan pesan file tidak ditemukan. Periksa interpreter serta lokasi sebelum memasang ulang Python untuk setiap error."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Simpan contoh sapaan sebagai file latihan, kemudian jalankan dari foldernya memakai perintah yang sesuai lingkungan. Ubah teks, simpan lagi, dan jalankan ulang. Jika hasil tidak berubah, pastikan file yang dieksekusi sama dengan file yang diedit.",
+          "Jika program bekerja hanya sesudah beberapa perintah REPL sebelumnya, mulai sesi bersih dan coba script lengkap. Ini menemukan ketergantungan pada variabel yang sebenarnya belum ditulis dalam file."
+        ]
+      }
+    ],
+    "practiceReview": "Catat versi/interpreter, lokasi file dan perintah yang benar-benar dipakai. Bedakan perintah terminal dari isi file Python. Jangan memasukkan tanda prompt seperti >>> sebagai bagian script kecuali memang teks contoh."
+  },
+  "programming/variabel-tipe-data": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Nama variabel merujuk objek atau nilai menurut aturan Python. Operasi dipengaruhi tipe: penjumlahan angka berbeda dari penggabungan teks. Dua nilai yang tampil mirip dapat mempunyai perilaku berbeda, misalnya 12 dan \"12\". Konversi harus dilakukan sesuai makna data, bukan hanya agar error menghilang.",
+          "Assignment tidak berarti persamaan matematika yang berlaku selamanya. Setelah x diberi nilai baru, nama x merujuk keadaan baru. Menelusuri perubahan ini membantu memahami perulangan dan fungsi."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Misal harga = 10000 dan jumlah = 3 menghasilkan total 30000. Jika jumlah berasal dari input teks, ubah serta validasi sebelum menghitung. Perkalian teks \"3\" dengan bilangan tertentu tidak mempunyai arti belanja yang sama dengan angka 3.",
+          "Buat tabel nama, tipe dan nilai pada setiap langkah. Setelah harga diubah, hasil total yang sudah dihitung tidak otomatis dihitung ulang sampai instruksi perhitungannya dijalankan lagi."
+        ]
+      }
+    ],
+    "practiceReview": "Tunjukkan perbedaan nilai dan tipe serta titik konversi yang dipakai. Untuk satu perubahan assignment, prediksi nilai sebelum menjalankan. Jangan memakai eval untuk menafsirkan masukan yang seharusnya cukup dikonversi dan divalidasi."
+  },
+  "programming/input-output-operator": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Input menerima representasi masukan, proses mengolahnya, dan output menjelaskan hasil. input() mengembalikan teks, sehingga angka dari pengguna perlu dikonversi bila akan dihitung. Validasi bentuk dan validasi aturan bisnis adalah dua tahap: teks \"-2\" bisa sah sebagai integer tetapi belum tentu sah sebagai jumlah barang.",
+          "Urutan operator serta tanda kurung menentukan hasil. Satuan juga harus konsisten; rupiah dan jumlah barang tidak boleh dicampur tanpa arti yang jelas. Format tampilan dipisahkan dari nilai yang masih akan dipakai menghitung."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pengguna memasukkan harga 10000 dan jumlah 3. Setelah konversi serta validasi, total menjadi 30000. Jika ongkir 5000, rumus total + ongkir berbeda dari harga × (jumlah + ongkir).",
+          "Uji masukan kosong, huruf dan angka negatif. Putuskan apakah meminta ulang atau menolak dengan pesan jelas. Menampilkan nol untuk setiap masukan salah dapat menyembunyikan kesalahan pengguna."
+        ]
+      }
+    ],
+    "practiceReview": "Catat masukan sebagai teks, hasil konversi, rumus dan keluaran. Jelaskan perilaku masukan tidak valid. Tampilkan satuan agar hasil program dapat dinilai tanpa membaca seluruh source."
+  },
+  "programming/percabangan-logika": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "If memeriksa kondisi, elif diperiksa bila kondisi sebelumnya tidak terpenuhi, dan else menjadi jalur sisanya. Urutan aturan penting ketika rentang saling mencakup. Beberapa if terpisah juga berbeda dari satu rangkaian if/elif karena lebih dari satu blok mungkin berjalan.",
+          "Tuliskan batas secara eksplisit: lebih dari dan minimal mempunyai perbedaan pada nilai tepat di ambang. Operator and/or menggabungkan syarat sesuai logika, bukan sesuai kalimat yang terdengar benar saja."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Diskon contoh berlaku mulai total 100000. Uji 99999, 100000 dan 100001 untuk membuktikan batas. Jika aturan diskon lebih besar berlaku mulai 200000, urutan kondisi yang terlalu umum di depan dapat menutupi aturan itu.",
+          "Buat tabel kondisi, keputusan dan hasil untuk setiap nilai. Kemudian cocokkan tabel dengan cabang program. Ini lebih kuat daripada hanya mencoba satu transaksi yang kebetulan masuk jalur pertama."
+        ]
+      }
+    ],
+    "practiceReview": "Jawaban latihan harus menunjukkan semua cabang serta nilai batas. Jelaskan apakah hanya satu atau beberapa aksi boleh terjadi. Jangan memperbaiki kasus gagal dengan menambah if acak tanpa merapikan aturan."
+  },
+  "programming/perulangan-for": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "For menelusuri elemen iterable, sedangkan range menghasilkan urutan bilangan menurut parameternya. Batas stop pada range tidak disertakan. Perbedaan ini penting saat memilih jumlah pengulangan dan menghindari kesalahan satu langkah.",
+          "Akumulator seperti total biasanya diinisialisasi sebelum loop. Jika total diatur ulang pada setiap putaran, hasil sebelumnya hilang. Letak inisialisasi merupakan keputusan logika, bukan sekadar masalah indentasi."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Untuk harga [10000, 15000, 5000], mulai total 0. Setelah elemen pertama total 10000, kedua 25000 dan ketiga 30000. Cetakan di dalam loop memperlihatkan hasil sementara, sedangkan cetakan sesudah loop memperlihatkan hasil akhir.",
+          "Coba list kosong: loop tidak berjalan dan total tetap nilai awal. Periksa apakah perilaku itu sesuai kebutuhan, kemudian bandingkan dengan list satu elemen."
+        ]
+      }
+    ],
+    "practiceReview": "Tulis tabel putaran, elemen dan nilai akumulator. Untuk range, tuliskan urutan yang sebenarnya dihasilkan. Jangan menganggap nomor indeks dan isi elemen selalu sama."
+  },
+  "programming/perulangan-while": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "While memeriksa kondisi sebelum menjalankan setiap putaran. Jika kondisi awal salah, badan loop tidak berjalan. Agar berhenti sesuai rencana, perubahan keadaan yang relevan harus dapat membuat kondisi menjadi salah, atau ada jalur keluar yang memang dirancang.",
+          "Kondisi validasi input perlu memperhitungkan masukan salah, batal dan batas percobaan bila diperlukan. Loop yang terus berjalan tanpa kemajuan bukan sekadar program lambat; ia mungkin tidak mempunyai kondisi berhenti yang tercapai."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Pada penghitung tiga kesempatan, tentukan nilai awal, syarat lanjut dan kapan penghitung dikurangi. Telusuri 3 → 2 → 1 → 0 dan periksa apakah aksi terjadi tepat tiga kali. Jika pengurangan hanya berada di satu cabang, jalur lain dapat berulang tanpa batas.",
+          "Uji kondisi awal nol dan masukan yang tidak pernah valid melalui skenario terkendali. Sebelum menjalankan, pastikan kamu tahu cara menghentikan program di lingkungan latihan."
+        ]
+      }
+    ],
+    "practiceReview": "Tabel latihan harus memuat kondisi sebelum putaran dan perubahan yang membuatnya berhenti. Jelaskan perilaku ketika tidak ada putaran sama sekali. Jangan membuat retry jaringan atau input tanpa jeda/batas yang sesuai kebutuhan."
+  },
+  "programming/list-kumpulan-data": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "List menyimpan urutan elemen dan dapat diubah. Indeks dimulai dari nol, sehingga list tiga elemen mempunyai indeks biasa 0, 1 dan 2. Indeks yang tidak tersedia menimbulkan error; list kosong juga tidak mempunyai elemen pertama.",
+          "Dua nama dapat merujuk list yang sama. Memberi b = a tidak otomatis menyalin isi secara independen. Perubahan melalui salah satu nama dapat terlihat dari nama lain, sehingga kebutuhan salinan perlu dipahami."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Untuk daftar harga [10000, 15000, 5000], elemen indeks 1 adalah 15000. Menambah barang mengubah panjang list; menghitung total harus membaca keadaan terbaru bila hasilnya ingin diperbarui.",
+          "Coba dua nama yang merujuk list sama lalu lakukan perubahan kecil pada lab. Bandingkan dengan salinan dangkal untuk list angka sederhana. Pada list bertingkat, salinan dangkal belum memisahkan seluruh objek di dalamnya."
+        ]
+      }
+    ],
+    "practiceReview": "Catat panjang, indeks dan isi sebelum/sesudah operasi. Uji list kosong dan satu elemen. Jelaskan kapan kamu membutuhkan salinan dan hindari memodifikasi koleksi saat menelusurinya tanpa memahami dampaknya."
+  },
+  "programming/fungsi-parameter-return": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Fungsi membantu memisahkan tugas yang mempunyai masukan dan hasil jelas. Parameter menerima nilai saat dipanggil, sedangkan return mengirim hasil kepada pemanggil. Print menampilkan teks; ia tidak menggantikan return ketika hasil akan dipakai perhitungan lain.",
+          "Variabel lokal berada pada lingkup fungsi. Mengandalkan variabel global yang tidak terlihat pada parameter dapat membuat fungsi sulit diuji dan digunakan ulang. Sebutkan data yang diperlukan sebagai kontrak masukan sejauh sesuai desain."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Fungsi penghitung total menerima harga serta jumlah dan mengembalikan hasil perkalian. Pemanggil dapat memakai hasilnya untuk menambah ongkir atau menampilkan struk. Jika fungsi hanya mencetak total, hasil panggilannya tidak otomatis menjadi angka total.",
+          "Coba panggil fungsi dua kali dengan masukan berbeda, lalu uji jumlah nol dan masukan yang tidak diizinkan. Tentukan apakah validasi dilakukan pada fungsi atau lapisan pemanggil dan jelaskan alasannya."
+        ]
+      }
+    ],
+    "practiceReview": "Tuliskan kontrak masukan, hasil serta perilaku gagal. Buktikan return dapat dipakai lagi oleh pemanggil. Jangan menyatakan fungsi benar hanya karena pernah mencetak satu angka yang sesuai."
+  },
+  "programming/algoritma-pseudocode": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Pseudocode menjelaskan keputusan dan urutan tanpa harus mengikuti sintaks satu bahasa. Ia tetap perlu cukup tegas agar dua pembaca tidak mengimplementasikan perilaku berbeda. Frasa “olah data” atau “beri diskon yang cocok” masih perlu diuraikan jika itulah keputusan utama program.",
+          "Gunakan contoh masukan untuk menelusuri tiap langkah. Jika algoritma tidak dapat menangani kasus kosong atau batas yang relevan, menulis kodenya lebih cepat tidak menyelesaikan kekurangan rancangan."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Untuk mencari nilai terbesar pada kumpulan angka, tentukan dahulu apa yang dilakukan ketika kumpulan kosong. Untuk kumpulan tidak kosong, mulai dari elemen pertama sebagai kandidat lalu bandingkan elemen berikutnya.",
+          "Memulai kandidat dari nol akan keliru jika semua nilai negatif. Telusuri [-5, -2, -9] dan lihat bahwa hasil seharusnya -2. Contoh pembantah ini memperbaiki algoritma sebelum ada kode Python."
+        ]
+      }
+    ],
+    "practiceReview": "Simpan pseudocode, satu jejak eksekusi dan satu kasus batas. Jelaskan setiap variabel kerja serta kondisi berhenti. Pseudocode tidak perlu dijalankan sebagai Python, tetapi maknanya harus dapat diuji."
+  },
+  "programming/kesalahan-validasi": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Error sintaks menghalangi program dibaca sesuai aturan bahasa, error runtime muncul saat jalur tertentu dijalankan, sedangkan error logika dapat menghasilkan keluaran salah tanpa exception. Cara memeriksanya berbeda. Baca jenis error, baris serta jejak yang relevan alih-alih langsung mengubah banyak baris.",
+          "Tangani kegagalan yang memang dipahami secara spesifik. Menangkap semua exception lalu mengembalikan nol dapat menyembunyikan bug dan merusak makna data. Validasi bertujuan memberi keputusan jelas, bukan menghilangkan semua pesan error."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Konversi teks \"abc\" menjadi integer gagal dengan jenis error yang dapat diperiksa. Teks \"-2\" dapat dikonversi, tetapi mungkin ditolak oleh aturan jumlah barang. Kasus pertama terkait bentuk masukan; yang kedua terkait aturan domain.",
+          "Buat uji yang membedakan keduanya, lalu tampilkan pesan sesuai kebutuhan. Jika perhitungan benar untuk angka kecil tetapi salah untuk batas diskon, fokus pada logika cabang, bukan mencoba instalasi ulang Python."
+        ]
+      }
+    ],
+    "practiceReview": "Catat masukan pemicu, hasil yang diharapkan, hasil aktual dan jenis masalah. Perbaiki satu penyebab lalu ulangi uji biasa serta batas. Jangan mencatat data rahasia pengguna dalam log debugging."
+  },
+  "programming/proyek-kasir-sederhana": {
+    "sections": [
+      {
+        "title": "Memahami prosesnya lebih jauh",
+        "paragraphs": [
+          "Kasir sederhana perlu aturan yang dapat diperiksa: representasi harga, jumlah, diskon dan cara menangani masukan salah. Pisahkan perhitungan inti dari input serta tampilan agar rumus dapat diuji tanpa mengetik transaksi berulang. Untuk latihan rupiah utuh, integer dapat menghindari sebagian kerumitan pembulatan pecahan biner.",
+          "Tentukan perilaku keranjang kosong, jumlah nol dan harga negatif. Keputusan ini menjadi bagian spesifikasi program, bukan improvisasi saat error muncul. Proyek belum selesai hanya karena satu contoh belanja menghasilkan total benar."
+        ]
+      },
+      {
+        "title": "Contoh yang dibahas langkah demi langkah",
+        "paragraphs": [
+          "Keranjang contoh berisi dua barang: 10000 × 2 dan 15000 × 1. Subtotalnya 35000 sebelum diskon atau biaya lain. Tambahkan aturan diskon yang dinyatakan eksplisit, lalu buat tabel transaksi di bawah, tepat pada, serta di atas ambangnya.",
+          "Tampilkan rincian agar hasil dapat dihitung ulang secara manual. Jika menyimpan transaksi, gunakan data fiktif dan uji apakah file atau record dapat dibaca kembali sesuai format."
+        ]
+      }
+    ],
+    "practiceReview": "Kumpulkan fungsi perhitungan, tabel uji dan hasil tampilan. Uji keranjang kosong serta input tidak valid. Jelaskan bagian yang belum didukung, misalnya pajak atau pembulatan, agar pengguna tidak mengira prototipe mencakup sistem kasir produksi."
+  }
+}

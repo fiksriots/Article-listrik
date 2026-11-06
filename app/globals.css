@@ -71,3 +71,6 @@
 .programming-article .article-table-scroll th,.programming-article .article-table-scroll td{padding:12px 14px;text-align:left;vertical-align:top;border:1px solid #d7d8e3;overflow-wrap:anywhere}
 .programming-article .article-table-scroll th{background:#f0edf7;color:#403453;font-weight:700}
 .programming-article .article-table-scroll tbody tr:nth-child(even){background:#faf9fc}
+
+/* Topic-specific explanations and exercise reviews, rendered on the server. */
+.lesson-explanation>section{margin:2rem 0}.lesson-explanation p{line-height:1.85}.lesson-practice-review{margin:1.8rem 0;padding:1.2rem 1.4rem;border:1px solid #99d9cc;border-radius:14px;background:#f0fdfa}.lesson-practice-review h2{margin:0 0 .8rem!important;font-size:1.15rem!important;line-height:1.5!important}.lesson-practice-review summary{cursor:pointer;font-weight:700;line-height:1.6}.lesson-practice-review details[open] p{margin-top:1rem}.lesson-explanation h2[id]{scroll-margin-top:6rem}.lesson-practice-review summary:focus-visible{outline:3px solid #0f766e;outline-offset:4px}
