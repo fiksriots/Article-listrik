@@ -1,2 +1,44 @@
 .noc-roadmap{max-width:1080px}.noc-roadmap h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.13;margin:1rem 0}.noc-roadmap h2{font-size:1.5rem;font-weight:800}.noc-roadmap h3{font-size:1.05rem;font-weight:800;margin:.9rem 0 .4rem}.noc-roadmap p{line-height:1.8;margin:.6rem 0 1rem}.noc-week-nav{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0}.noc-week-nav a{padding:.5rem .8rem;border:1px solid #cbd5e1;border-radius:999px}.noc-weeks{display:grid;gap:1.4rem;margin:2rem 0}.noc-week{scroll-margin-top:6rem}.noc-week ol,.noc-roadmap ul{list-style:decimal;padding-left:1.5rem;line-height:1.8}.noc-roadmap ul{list-style:disc}.noc-week li{padding:.25rem 0}.noc-week li a{text-decoration:underline;text-underline-offset:3px}.noc-badge{display:inline-block;margin-left:.5rem;font-size:.72rem;font-weight:700;background:#ccfbf1;color:#115e59;padding:0 .45rem;border-radius:5px}.noc-outcomes{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}.noc-outcomes>div{padding:1rem;background:#f1f5f9;border-radius:12px}.noc-outcomes h3{margin-top:0}.noc-article{max-width:820px;margin:auto;padding:2rem 1rem}.noc-article header h1{font-size:clamp(2rem,4vw,3rem);font-weight:850;line-height:1.2;margin:1rem 0}.noc-article .net-article h2{scroll-margin-top:6rem}.noc-article .net-lesson-nav a{overflow-wrap:anywhere}@media(max-width:640px){.noc-outcomes{grid-template-columns:1fr}.noc-roadmap h1 br{display:none}}
-.noc-reading-time{font-size:.875rem;color:#64748b;margin-top:.8rem}.noc-article .noc-intro{font-size:1.1rem;line-height:1.9;margin:1.8rem 0}.noc-objectives{padding:1.3rem 1.5rem;background:#f0fdfa;border:1px solid #99f6e4;border-radius:14px;margin:1.6rem 0}.noc-article .noc-objectives h2{margin:0 0 .7rem;font-size:1.15rem}.noc-article .noc-objectives ul{margin:0}.noc-toc{border:1px solid #cbd5e1;border-radius:14px;padding:1.1rem 1.4rem;margin:2rem 0}.noc-toc summary,.noc-practice-review summary{cursor:pointer;font-weight:750}.noc-toc ul{list-style:none!important;padding:0!important;margin:.8rem 0 0!important}.noc-toc li{margin:.4rem 0;line-height:1.65}.noc-toc a{display:inline-block;text-decoration:underline;text-underline-offset:3px}.noc-explanation{margin-top:2.4rem}.noc-explanation>p{line-height:1.9}.noc-article .net-table-wrap{max-width:100%;margin:1.2rem 0;overflow-x:auto}.noc-article table{width:100%;min-width:540px;border-collapse:collapse;font-size:.9rem;line-height:1.65}.noc-article caption{text-align:left;font-weight:750;padding:0 0 .75rem;color:#334155}.noc-article th,.noc-article td{padding:.85rem;text-align:left;vertical-align:top;border:1px solid #cbd5e1}.noc-article th{background:#f1f5f9}.noc-practice-review{padding:1rem 1.2rem;margin:1.4rem 0;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa}.noc-practice-review p{margin-bottom:0}.noc-article :is(a,summary,button):focus-visible{outline:3px solid #0f766e;outline-offset:4px}.noc-article h2[id]{scroll-margin-top:6rem}@media(max-width:640px){.noc-objectives,.noc-toc{padding:1rem}.noc-article .noc-intro{font-size:1.03rem}}
+.noc-reading-time{font-size:.875rem;color:#64748b;margin-top:.8rem}.noc-objectives{padding:1.3rem 1.5rem;background:#f0fdfa;border:1px solid #99f6e4;border-radius:14px;margin:1.6rem 0}.noc-article .noc-objectives h2{margin:0 0 .7rem;font-size:1.15rem}.noc-article .noc-objectives ul{margin:0}.noc-toc{border:1px solid #cbd5e1;border-radius:14px;padding:1.1rem 1.4rem;margin:2rem 0}.noc-toc summary,.noc-practice-review summary{cursor:pointer;font-weight:750}.noc-toc ul{list-style:none!important;padding:0!important;margin:.8rem 0 0!important}.noc-toc li{margin:.4rem 0;line-height:1.65}.noc-toc a{display:inline-block;text-decoration:underline;text-underline-offset:3px}.noc-explanation{margin-top:2.4rem}.noc-explanation>p{line-height:1.9}.noc-article .net-table-wrap{max-width:100%;margin:1.2rem 0;overflow-x:auto}.noc-article table{width:100%;min-width:540px;border-collapse:collapse;font-size:.9rem;line-height:1.65}.noc-article caption{text-align:left;font-weight:750;padding:0 0 .75rem;color:#334155}.noc-article th,.noc-article td{padding:.85rem;text-align:left;vertical-align:top;border:1px solid #cbd5e1}.noc-article th{background:#f1f5f9}.noc-practice-review{padding:1rem 1.2rem;margin:1.4rem 0;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa}.noc-practice-review p{margin-bottom:0}.noc-article :is(a,summary,button):focus-visible{outline:3px solid #0f766e;outline-offset:4px}.noc-article h2[id]{scroll-margin-top:6rem}@media(max-width:640px){.noc-objectives,.noc-toc{padding:1rem}}
+
+/* The NOC reader owns its spacing; avoid nesting a padded article card. */
+.noc-article{width:100%;max-width:800px;padding:28px 28px 64px;min-width:0}
+.noc-article>.net-back{display:inline-block;margin-bottom:16px;font-size:.8125rem;line-height:1.5}
+.noc-lesson-header{margin-bottom:20px}
+.noc-lesson-header .net-eyebrow{display:block;font-size:.6875rem;letter-spacing:.12em;line-height:1.5}
+.noc-article .noc-lesson-header h1{font-size:clamp(1.75rem,3.5vw,2.75rem);line-height:1.18;letter-spacing:-.025em;font-weight:800;margin:12px 0 14px;text-wrap:balance;overflow-wrap:break-word}
+.noc-lesson-summary{font-size:1rem;line-height:1.65;color:var(--net-muted);margin:0}
+.noc-lesson-meta{display:flex;flex-wrap:wrap;gap:7px;list-style:none;padding:0;margin:16px 0 0}
+.noc-lesson-meta li{font-size:.75rem;line-height:1.4;padding:6px 9px;border-radius:6px;background:#edf4ef;color:#365c50}
+.noc-article>.noc-lesson-body{padding:0;border:0;border-radius:0;background:transparent;font-size:1rem;line-height:1.75}
+.noc-lesson-body .noc-toc{margin:0 0 22px;padding:0 14px;background:#fff;border-color:var(--net-line);border-radius:10px}
+.noc-toc summary{padding:12px 0;min-height:44px;font-size:.875rem;line-height:1.5}
+.noc-toc summary::marker{color:var(--net-green)}
+.noc-lesson-body .noc-toc ul{margin:0 0 12px!important}
+.noc-toc li{font-size:.875rem}
+.noc-lesson-body .noc-introduction p{font-size:1rem;line-height:1.75;margin:0 0 14px;color:#3e584d}
+.noc-lesson-body .noc-objectives{padding:16px 18px;margin:24px 0;background:#f0f6f1;border-color:#d1e2d6;border-radius:10px}
+.noc-lesson-body .noc-objectives ul{list-style:disc;padding-left:20px}
+.noc-lesson-body .noc-objectives li{margin:8px 0;padding-left:0;line-height:1.65}
+.noc-lesson-body .net-analogy{padding:16px 18px}
+.noc-lesson-body .net-analogy p{font:inherit;font-size:1rem;line-height:1.7;margin:8px 0 0}
+.noc-lesson-body .noc-explanation{margin-top:28px}
+.noc-lesson-body h2{font-size:1.4rem;line-height:1.35;margin:28px 0 12px}
+.noc-explanation>p{line-height:1.75}
+.noc-article .net-table-wrap:focus-visible{outline:3px solid var(--net-green);outline-offset:3px}
+.noc-article .net-sources p,.noc-article .net-sources ul{font-size:.875rem;line-height:1.7}
+@media(max-width:640px){
+ .noc-article{padding:22px 18px 40px}
+ .noc-article>.net-back{margin-bottom:14px}
+ .noc-article .noc-lesson-header h1{font-size:1.75rem;margin:10px 0 12px}
+ .noc-lesson-meta{margin-top:14px}
+ .noc-lesson-header{margin-bottom:18px}
+ .noc-lesson-body .noc-toc{margin-bottom:20px}
+ .noc-lesson-body .noc-objectives,.noc-lesson-body .net-analogy{padding:14px 16px}
+ .noc-lesson-body h2{font-size:1.25rem}
+ .noc-article .noc-practice-review{padding:14px 16px}
+ .noc-article .net-lesson-nav{grid-template-columns:1fr;gap:10px}
+ .noc-article .net-lesson-nav a{min-height:44px;padding:14px 16px;font-size:.875rem;line-height:1.5}
+ .noc-article .net-complete{padding:16px;gap:12px}
+ .noc-article .net-complete button{min-height:44px}
+}

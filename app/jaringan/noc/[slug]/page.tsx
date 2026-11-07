@@ -21,29 +21,33 @@ export default async function NocLessonPage({params}:{params:Promise<{slug:strin
  const weeks=nocWeeks.flatMap((w,i)=>w.resources.some(r=>r.slug===slug)?[i+1]:[]);
  return <main id="konten" className="noc-article">
   <Link className="net-back" href={'/jaringan/noc#minggu-'+weeks[0]}>← Roadmap Junior NOC · minggu {weeks.join(', ')}</Link>
-  <header>
+  <header className="noc-lesson-header">
    <span className="net-eyebrow">OPERASIONAL NOC / PEMULA</span>
-   <h1>{l.title}</h1><p>{l.summary}</p>
-   <p className="noc-reading-time">Sekitar {l.minutes} menit membaca, di luar praktik · {l.sections.length} bagian pembahasan</p>
+   <h1>{l.title}</h1><p className="noc-lesson-summary">{l.summary}</p>
+   <ul className="noc-lesson-meta" aria-label="Informasi bacaan">
+    <li>{l.minutes} menit baca</li><li>{l.sections.length} bagian</li><li>Praktik mandiri</li>
+   </ul>
   </header>
-  <article className="net-article">
-   <p className="noc-intro">{l.intro}</p>
-   <section className="noc-objectives" aria-labelledby="tujuan-belajar">
-    <h2 id="tujuan-belajar">Setelah membaca, kamu bisa…</h2>
-    <ul>{l.goals.map(goal=><li key={goal}>{goal}</li>)}</ul>
-   </section>
-   <aside className="net-analogy"><span>BAYANGKAN DULU</span><p>{l.analogy}</p></aside>
+  <article className="net-article noc-lesson-body">
    <nav className="noc-toc" aria-label="Daftar isi artikel">
-    <details open><summary>Alur pembahasan</summary><ul>
+    <details><summary>Alur pembahasan</summary><ul>
      {l.sections.map((s,i)=><li key={s.title}><a href={'#bagian-'+(i+1)}>{s.title}</a></li>)}
      <li><a href="#praktik">Praktik dan pembahasannya</a></li>
      <li><a href="#cek-pemahaman">Cek pemahaman</a></li>
     </ul></details>
    </nav>
+   <div className="noc-introduction">
+    {l.intro.split('\n\n').map((paragraph,i)=><p key={i}>{paragraph}</p>)}
+   </div>
+   <section className="noc-objectives" aria-labelledby="tujuan-belajar">
+    <h2 id="tujuan-belajar">Setelah membaca, kamu bisa…</h2>
+    <ul>{l.goals.map(goal=><li key={goal}>{goal}</li>)}</ul>
+   </section>
+   <aside className="net-analogy"><span>BAYANGKAN DULU</span><p>{l.analogy}</p></aside>
    {l.sections.map((s,i)=><section key={s.title} className="noc-explanation" aria-labelledby={'bagian-'+(i+1)}>
     <h2 id={'bagian-'+(i+1)}>{s.title}</h2>
     {s.body.split('\n\n').map((paragraph,n)=><p key={n}>{paragraph}</p>)}
-    {s.table&&<div className="net-table-wrap"><table>
+    {s.table&&<div className="net-table-wrap" role="region" tabIndex={0} aria-label={s.table.caption+' · geser tabel ke samping'}><table>
      <caption>{s.table.caption}</caption>
      <thead><tr>{s.table.headers.map(h=><th key={h} scope="col">{h}</th>)}</tr></thead>
      <tbody>{s.table.rows.map((row,n)=><tr key={n}>{row.map((cell,j)=><td key={j}>{cell}</td>)}</tr>)}</tbody>
