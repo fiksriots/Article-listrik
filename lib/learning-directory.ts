@@ -8,6 +8,7 @@ const baseGroups = [
     description: 'Pilih jalur sesuai pengetahuan dan tujuan belajarmu.',
     categories: [
       { name: 'Roadmap Junior NOC', description: 'Jalur 12 minggu: dasar jaringan, monitoring, troubleshooting, tiket, eskalasi, dan simulasi shift.', path: '/jaringan/noc' },
+      { name: 'Wireless Ubiquiti', description: 'PtP/PtMP, survey, PoE, lab airMAX, kualitas link, troubleshooting, dan UISP.', path: '/jaringan/ubiquiti' },
       { name: 'Dasar Jaringan', description: 'Perangkat, kabel, IP, gateway, DNS, dan fondasi jaringan.', path: '/jaringan#network-stage-0' },
       { name: 'Praktik Winbox', description: 'Kenali menu Winbox 4 dan praktik konfigurasi MikroTik.', path: '/jaringan/winbox' },
       { name: 'MTCNA', description: 'Dasar administrasi MikroTik, konfigurasi, dan latihan lab.', path: '/jaringan/mtcna' },

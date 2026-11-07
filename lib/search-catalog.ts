@@ -3,6 +3,7 @@ import {programmingLessons} from './programming-course';
 import {learningTracks} from './learning-progress-catalog';
 import {trackLessons} from './learning-progress-types';
 import {lessons} from './course';
+import {ubiquitiLessons} from './ubiquiti-course';
 import {nocLessons} from './noc-course';
 import {networkLessons} from './network-course';
 import {iotLessons} from './iot-course';
@@ -14,6 +15,7 @@ import {mtcreLabs} from './mtcre-labs';
 import type {SearchLesson} from './search-types';
 // Metadata only: article bodies and lab code are never sent to the search client.
 const descriptions=new Map<string,{summary:string;minutes?:number}>([
+ ...ubiquitiLessons.map(l=>['/jaringan/ubiquiti/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
  ...nocLessons.map(l=>['/jaringan/noc/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
  ...programmingLessons.map(l=>['/programming/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),
  ...lessons.map(l=>['/materi/'+l.slug,{summary:l.summary,minutes:l.minutes}] as const),

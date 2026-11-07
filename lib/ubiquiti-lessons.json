@@ -1,0 +1,886 @@
+[
+  {
+    "slug": "ubiquiti-dasar-dan-keluarga",
+    "title": "Wireless Ubiquiti: dari Wi-Fi sampai link antarbangunan",
+    "summary": "Kenali PtP, PtMP, AP, station, CPE, serta perbedaan UniFi, airMAX, LTU, airFiber, dan Wave.",
+    "minutes": 5,
+    "intro": "Sebuah kantor ingin menghubungkan gudang di seberang jalan. Membeli access point Wi-Fi saja belum tentu menyelesaikan kebutuhan itu: perangkat di kedua bangunan harus membentuk link yang cocok, lalu meneruskan jaringan ke pengguna.\n\nKita mulai dengan memahami tugas setiap perangkat. Contoh utama jalur ini memakai airMAX AC; pembahasan keluarga lain membantu menghindari salah memilih pasangan radio.",
+    "goals": [
+      "Membedakan akses Wi-Fi pengguna dengan link distribusi wireless.",
+      "Menentukan bentuk PtP atau PtMP dari kebutuhan.",
+      "Memeriksa kompatibilitas berdasarkan model dan protokol."
+    ],
+    "analogy": "Radio penghubung bangunan seperti jembatan antarterminal. Wi-Fi di dalam gedung seperti pintu masuk penumpang. Keduanya membantu perjalanan yang sama, tetapi tugas dan pasangannya berbeda.",
+    "sections": [
+      {
+        "title": "Wireless adalah media pengantar data",
+        "body": "Koneksi wireless membawa informasi menggunakan gelombang radio. Pada jaringan, paket yang biasanya melewati kabel dapat melintasi udara melalui sepasang perangkat. Udara dipakai bersama: link lain, hambatan, dan posisi antena ikut menentukan hasilnya. Karena itu tulisan kecepatan pada kotak bukan janji kecepatan layanan di lokasi.\n\nBedakan tiga pertanyaan: apakah radio saling terhubung, apakah paket dapat melewati link, dan apakah aplikasi berjalan baik? Status connected hanya menjawab pertanyaan pertama. DHCP yang salah, kabel bermasalah, atau gateway tidak aktif masih dapat membuat pengguna gagal internet."
+      },
+      {
+        "title": "PtP dan PtMP mengikuti bentuk kebutuhan",
+        "body": "Point-to-point (PtP) menghubungkan dua titik, misalnya kantor dan gudang. Point-to-multipoint (PtMP) menghubungkan satu titik pusat ke beberapa lokasi pelanggan. Pada PtMP, pusat biasanya memakai antena dengan cakupan yang sesuai wilayah layanan, sedangkan pelanggan memakai antena terarah ke pusat.\n\nSatu radio terarah tidak otomatis cocok menjadi pusat seluruh pelanggan. Perhatikan dukungan mode, pola pancar antena, kapasitas saat ramai, dan lokasi pelanggan. Menentukan topologi lebih dahulu membuat pemilihan perangkat punya alasan yang dapat diuji."
+      },
+      {
+        "title": "AP, station, dan CPE bukan sekadar nama kotak",
+        "body": "Access Point (AP) adalah sisi yang menyediakan koneksi radio, sedangkan station adalah sisi yang bergabung. Customer Premises Equipment (CPE) berarti perangkat di lokasi pelanggan; pada akses wireless, CPE sering berperan sebagai station. CPE juga bisa berarti jenis perangkat lain dalam konteks layanan berbeda.\n\nPada airMAX, AP tidak berarti hotspot yang bebas dihubungkan ke ponsel. Mode dan protokol airMAX harus sesuai pasangan radionya. Bila gudang membutuhkan Wi-Fi untuk ponsel, pasang access point Wi-Fi di sisi LAN gudang setelah link penghubung."
+      },
+      {
+        "title": "Kenali keluarga Ubiquiti sebelum mencari menu",
+        "body": "Ubiquiti memiliki beberapa keluarga dengan tugas serta perangkat lunak berbeda. Gunakan nama lengkap dan kode model, bukan hanya mereknya. airOS adalah antarmuka pada perangkat airMAX dalam lab ini; UISP membantu pengelolaan perangkat ISP yang didukung. UniFi Network memiliki ekosistem pengelolaan tersendiri.\n\nJangan mengikuti tutorial UniFi untuk mencari tombol airMAX. Tabel berikut adalah peta orientasi, bukan jaminan bahwa setiap anggota keluarga bisa saling berpasangan.",
+        "table": {
+          "caption": "Peta keluarga untuk orientasi belajar",
+          "headers": [
+            "Keluarga",
+            "Fokus umum",
+            "Yang harus diperiksa"
+          ],
+          "rows": [
+            [
+              "UniFi",
+              "LAN, Wi-Fi pengguna, dan ekosistem UniFi",
+              "Fungsi serta dukungan model; bukan pasangan airMAX otomatis"
+            ],
+            [
+              "airMAX",
+              "Distribusi wireless PtP/PtMP; generasi M dan AC",
+              "Band, mode, generasi, dan firmware"
+            ],
+            [
+              "LTU",
+              "Platform wireless ISP dengan protokol tersendiri",
+              "AP/station LTU yang sesuai; bukan pasangan airMAX M/AC"
+            ],
+            [
+              "airFiber",
+              "Link wireless dengan pasangan dan mode khusus model",
+              "Kode model dan dokumen kompatibilitas"
+            ],
+            [
+              "Wave",
+              "Keluarga wireless 60 GHz",
+              "Pasangan AP/station atau PtP sesuai model"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "Frekuensi sama belum berarti kompatibel",
+        "body": "Dua orang dapat berada di ruangan yang sama tetapi memakai bahasa berbeda. Demikian pula dua radio 5 GHz: band sama belum membuktikan protokol, lebar kanal, peran, atau firmware cocok. Contoh pentingnya adalah LTU yang tidak langsung berpasangan dengan airMAX M5 atau 5AC.\n\nBuat daftar model A, model B, versi firmware, mode yang diperlukan, serta rujukan kompatibilitas. Untuk belajar, gunakan dua airMAX AC yang sama dan memang mendukung PtP. Pasangan campuran M/AC memerlukan pemeriksaan tersendiri; jangan menganggap dukungannya dua arah atau berlaku pada semua versi."
+      },
+      {
+        "title": "Gambar jalur layanan sebelum konfigurasi",
+        "body": "Contoh rancangan: router kantor → switch → radio AP → udara → radio station → switch gudang → komputer atau AP Wi-Fi lokal. Radio bridge meneruskan Ethernet; router kantor tetap dapat menjadi gateway pengguna. IP radio dipakai mengelola perangkat, bukan otomatis menjadi gateway semua klien.\n\nJika radio bisa diping tetapi komputer gudang tidak mendapat layanan, telusuri bagian setelah radio: port, VLAN, alamat klien, dan DHCP. Dengan gambar ini, kamu tidak langsung menyalahkan sinyal untuk setiap masalah. Pelajaran berikutnya menilai apakah jalur udara layak dibuat."
+      }
+    ],
+    "practice": [
+      "Gambar link kantor–gudang dan beri label AP, station, router, serta klien.",
+      "Ubah skenario menjadi pusat dengan tiga pelanggan; jelaskan mengapa menjadi PtMP.",
+      "Pilih dua model contoh dari dokumen resmi dan isi tabel kompatibilitas; tulis “belum terverifikasi” jika bukti belum ada.",
+      "Tunjukkan di mana access point Wi-Fi pengguna dipasang dan siapa gateway klien."
+    ],
+    "practiceReview": "Hasil yang baik menunjukkan jalur paket lengkap dan memisahkan fungsi radio dengan router. Pada PtP ada dua ujung link; pada PtMP beberapa station berbagi pusat. Kesamaan merek atau angka GHz tidak boleh menjadi satu-satunya bukti kompatibilitas.",
+    "check": "Ponsel tidak melihat SSID sebuah link airMAX. Apakah radionya pasti rusak? Apa yang diperiksa?",
+    "answer": "Tidak. Pastikan SSID tersebut memang untuk akses Wi-Fi pengguna. Link airMAX memakai pasangan dan mode radio yang didukung; ponsel biasanya mengakses AP Wi-Fi lokal setelah bridge. Periksa model, mode, dan tujuan SSID sebelum menilai kerusakan.",
+    "sources": [
+      {
+        "title": "Ubiquiti — keluarga produk wireless UISP",
+        "url": "https://techspecs.ui.com/uisp/wireless"
+      },
+      {
+        "title": "Ubiquiti — LTU FAQ dan kompatibilitas",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590862218263-LTU-Frequently-Asked-Questions-FAQs"
+      },
+      {
+        "title": "Ubiquiti — airMAX: transparent bridge PtP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590879420695-airMAX-Guide-to-Configure-a-Point-to-Point-Link-Layer-2-Transparent-Bridge"
+      }
+    ],
+    "diagram": "topologi",
+    "diagramAlt": "Diagram terpisah antara link radio PtP dan akses Wi-Fi pengguna di gudang",
+    "related": [
+      {
+        "title": "Dasar perangkat jaringan",
+        "href": "/jaringan/perangkat-jaringan"
+      },
+      {
+        "title": "LAN, WAN, dan internet",
+        "href": "/jaringan/lan-wan-internet"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-survey-los-fresnel",
+    "title": "Survey wireless: LOS, Fresnel, dan rencana link",
+    "summary": "Ukur kebutuhan layanan, cek lintasan, dan baca link budget sebelum memasang radio.",
+    "minutes": 5,
+    "intro": "Dari halaman kantor, atap gudang terlihat. Apakah itu cukup untuk memasang wireless? Belum: jalur radio membutuhkan ruang di sekitar garis pandang, dan kondisi kedua ujung dapat berbeda.\n\nSurvey mengubah tebakan menjadi catatan yang bisa diperiksa. Tujuannya menilai kelayakan link, bukan sekadar menemukan tempat radio dapat dipasang.",
+    "goals": [
+      "Menyusun catatan survey dua ujung.",
+      "Menjelaskan perbedaan LOS dan ruang Fresnel.",
+      "Membedakan perkiraan desain dengan pengukuran setelah pemasangan."
+    ],
+    "analogy": "Melihat kendaraan di ujung jalan membuktikan arah jalan terlihat. Agar kendaraan bisa lewat, lebar jalan juga harus bebas. LOS seperti garis arahnya; Fresnel mengingatkan bahwa radio membutuhkan ruang di sekitarnya.",
+    "sections": [
+      {
+        "title": "Mulai dari kebutuhan layanan",
+        "body": "Tulis apa yang akan melewati link: kasir, CCTV, akses kantor, atau pelanggan internet. Catat kebutuhan kedua arah dan jam sibuk. Enam kamera yang mengirim ke kantor dapat lebih membebani arah gudang → kantor daripada arah sebaliknya. Kebutuhan harus mencakup pertumbuhan dan ruang cadangan.\n\nGunakan target yang dapat diuji, misalnya akses aplikasi lokal tetap responsif ketika transfer file berjalan. Angka kapasitas tanpa kondisi pengujian sulit dipakai sebagai kriteria penerimaan. Jarak saja juga tidak cukup untuk memilih model: topografi, spektrum, dan pola penggunaan ikut berpengaruh."
+      },
+      {
+        "title": "Periksa kedua ujung dan lintasan",
+        "body": "Catat koordinat, perkiraan jarak, elevasi tanah, tinggi pemasangan dari tanah, foto arah pasangan, sumber listrik, jalur kabel, dan akses pemeliharaan. Tinggi antena 10 meter di dua lokasi tidak berarti elevasi antenanya sama bila permukaan tanah berbeda.\n\nGunakan peta atau alat perencanaan untuk memperkirakan profil lintasan, lalu periksa kondisi nyata. Peta mungkin tidak menangkap pohon baru, bangunan, atau papan reklame. Catat ketidakpastian ini agar hasil simulasi tidak diperlakukan sebagai jaminan lapangan."
+      },
+      {
+        "title": "LOS terlihat, Fresnel juga perlu ruang",
+        "body": "Line of sight (LOS) adalah garis pandang antara antena. Zona Fresnel pertama adalah wilayah berbentuk elips di sekitar lintasan yang memengaruhi bagaimana gelombang diterima. Garis tengah yang terlihat tidak memastikan ruang ini bebas. Pohon di bawah garis pandang masih dapat masuk ke zona tersebut.\n\nPanduan Ubiquiti memakai acuan setidaknya 60% zona Fresnel pertama bebas hambatan. Jadikan ini pemeriksaan desain, bukan jaminan tunggal kestabilan. Perubahan vegetasi dan ayunan pohon perlu dipikirkan. Ilustrasi tidak berskala; perhitungan tinggi pemasangan nyata tetap memerlukan data lintasan."
+      },
+      {
+        "title": "Baca link budget sebagai perkiraan daya terima",
+        "body": "Link budget menghubungkan daya pancar, gain antena, dan rugi lintasan untuk memperkirakan daya yang tiba di penerima. dBm menyatakan level daya; dBi menyatakan gain antena; dB menyatakan perbandingan atau rugi. Jangan menjumlahkan angka dari satuan yang belum dipahami.\n\nContoh hitung fiktif: 10 dBm + 20 dBi + 20 dBi − 100 dB − 2 dB = −52 dBm. Ini latihan aritmetika, bukan rancangan untuk lokasi tertentu. Model sederhana juga belum memasukkan semua gangguan dan perubahan lingkungan. Setelah terpasang, bandingkan prediksi dengan pengukuran, lalu cari penyebab selisihnya.",
+        "code": "Daya terima ≈ daya pancar + gain antena pemancar\n              + gain antena penerima − rugi lintasan − rugi lain\nEIRP ≈ daya pancar + gain antena pemancar − rugi sebelum antena",
+        "codeLabel": "Hubungan sederhana; semua penjumlahan memakai besaran dB/dBm yang sesuai",
+        "language": "text"
+      },
+      {
+        "title": "Survei spektrum berbeda dengan survei pandangan",
+        "body": "Lokasi yang terlihat kosong belum tentu memiliki spektrum bersih. Radio menerima energi dari perangkat lain yang mungkin tidak tampak dari tempatmu berdiri. Ambil pengamatan di kedua ujung, dalam arah antena dan waktu yang relevan. Catat lebar kanal serta durasi pengamatan.\n\nJangan memilih frekuensi hanya karena daftar SSID sedikit. Gangguan dapat berasal dari sistem yang tidak muncul sebagai Wi-Fi biasa. Hasil survey adalah potret kondisi saat pengamatan; gunakan monitoring setelah instalasi untuk melihat perubahan malam hari atau jam sibuk."
+      },
+      {
+        "title": "Ambil keputusan layak, revisi, atau belum cukup data",
+        "body": "Contoh: kantor dan gudang berjarak sekitar satu kilometer, tetapi pohon masuk lintasan. Keputusan awal bisa berupa revisi lokasi pemasangan atau pencarian rute lain, kemudian hitung ulang. Menaikkan daya tidak menghilangkan hambatan fisik. Jangan menuliskan “layak” hanya karena simulasi memberi warna hijau.\n\nSimpan asumsi, risiko, dan hasil yang belum terverifikasi. Pekerjaan ketinggian, struktur tiang, pembumian, serta proteksi sambaran memerlukan pemasangan oleh tenaga yang sesuai. Latihan pemula dapat selesai sebagai dokumen survey dari permukaan tanah dan simulasi, tanpa memanjat."
+      }
+    ],
+    "practice": [
+      "Buat lembar survey fiktif dua lokasi: koordinat, jarak, elevasi, tinggi, dan kebutuhan kedua arah.",
+      "Tandai hambatan LOS serta potensi hambatan Fresnel pada sketsa.",
+      "Hitung ulang contoh link budget jika rugi lain bertambah 5 dB.",
+      "Tulis keputusan awal, bukti yang tersedia, dan tiga data yang masih dibutuhkan."
+    ],
+    "practiceReview": "Jika rugi lain bertambah 5 dB, perkiraan −52 dBm menjadi −57 dBm. Lembar survey harus membedakan tinggi dari tanah dengan elevasi, memasukkan kedua arah, dan menyatakan asumsi. Tidak punya data hambatan berarti perlu survey lanjutan, bukan otomatis layak.",
+    "check": "Atap pasangan terlihat, tetapi pohon berada sedikit di bawah garis pandang. Mengapa link masih perlu diperiksa?",
+    "answer": "Karena ruang Fresnel di sekitar garis pandang dapat terhalang. Periksa profil lintasan dan vegetasi, pertimbangkan lokasi atau ketinggian yang layak, lalu bandingkan prediksi dengan hasil aktual. Daya pancar lebih besar tidak membersihkan ruang tersebut.",
+    "sources": [
+      {
+        "title": "Ubiquiti — pemeriksaan kualitas link wireless",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590813737239-ISP-Wireless-Link-with-Poor-Wireless-Performance-Signal-Throughput-Latency-Jitter"
+      },
+      {
+        "title": "Ubiquiti — alignment antena outdoor",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590760854935-ISP-Wireless-Antenna-Alignment-for-Outdoor-Wireless-Links"
+      },
+      {
+        "title": "Ubiquiti — compliance dan dokumen produk",
+        "url": "https://ui.com/compliance/"
+      }
+    ],
+    "diagram": "fresnel",
+    "diagramAlt": "Zona Fresnel mengelilingi garis pandang dengan pohon yang berpotensi menghalangi bagian bawahnya",
+    "related": [
+      {
+        "title": "Radio PtP, LOS, dan Fresnel",
+        "href": "/jaringan/radio-ptp-los-fresnel"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-perangkat-poe-manajemen",
+    "title": "Menyiapkan radio: model, PoE, dan IP manajemen",
+    "summary": "Siapkan dua radio di meja, pastikan sumber daya benar, dan buat akses manajemen yang dapat dipulihkan.",
+    "minutes": 5,
+    "intro": "Link yang sering restart belum tentu mengalami gangguan frekuensi. Sumber daya, konektor, atau kabel dapat menjadi penyebabnya. Sebelum memasang di luar, siapkan perangkat dan aksesnya di meja.\n\nContoh perangkat jalur ini adalah LBE-5AC-GEN2. Spesifikasi daya contoh ini tidak berlaku otomatis pada NanoStation, Rocket, LTU, airFiber, atau semua produk Ubiquiti.",
+    "goals": [
+      "Membaca model dan spesifikasi daya sebelum menghubungkan kabel.",
+      "Membedakan port LAN dan PoE pada injector.",
+      "Menetapkan IP unik dan rencana pemulihan akses."
+    ],
+    "analogy": "Injector seperti titik penyisip listrik pada jalur data. Bentuk soket sama tidak memastikan semua perangkat di ujungnya dapat menerima listrik dengan jenis dan tegangan yang sama.",
+    "sections": [
+      {
+        "title": "Catat identitas, lalu buka dokumen model itu",
+        "body": "Periksa kode model pada label, revisi perangkat bila tersedia, versi firmware, dan kondisi fisik. Foto label untuk arsip internal tanpa membagikan kredensial. Cocokkan dengan halaman spesifikasi dan panduan pemasangan resmi, termasuk sumber daya dan dukungan mode.\n\nModel yang tampak mirip bisa memiliki kebutuhan berbeda. Tuliskan hasil verifikasi pada lembar inventaris sebelum menyalakan perangkat. Perangkat bekas perlu ditelusuri konfigurasi dan pemiliknya; reset bukan langkah pertama untuk radio produksi yang masih melayani pelanggan."
+      },
+      {
+        "title": "Passive PoE dan PoE standar harus dibedakan",
+        "body": "PoE membawa daya melalui kabel Ethernet, tetapi metode pemberian dayanya tidak selalu sama. Pada passive PoE, jangan mengandalkan negosiasi seperti pada sistem PoE standar. Periksa tegangan, polaritas, pin, dan dukungan port secara spesifik sebelum memasukkan kabel.\n\nSpesifikasi LBE-5AC-GEN2 mencantumkan passive PoE dua pasang, adaptor 24 V 0,3 A gigabit, rentang input 22–27 V DC, serta konsumsi maksimum 7 W. Gunakan nilai ini hanya untuk model tersebut; kecocokan voltase saja belum mencukupi untuk menyatakan injector pengganti cocok."
+      },
+      {
+        "title": "Susun bench tanpa menyatukan dua alamat bawaan",
+        "body": "Hubungkan port LAN injector ke laptop atau switch lab, dan port PoE ke radio sesuai label. Pastikan jaringan lab terpisah dari jaringan pengguna. Nyalakan dan konfigurasi satu radio dahulu agar dua perangkat dengan alamat awal yang sama tidak menimbulkan konflik.\n\nIkuti prosedur akses awal pada panduan model dan firmware yang terpasang. Sejumlah panduan lama memakai 192.168.1.20, tetapi jangan menganggap semua produk, kondisi DHCP, atau akun awal sama. Setelah akses berhasil, tetapkan akun unik dan sandi kuat sesuai kemampuan perangkat."
+      },
+      {
+        "title": "IP manajemen tidak menggantikan gateway klien",
+        "body": "Untuk lab berikutnya, kita memilih subnet 192.168.50.0/24. AP memakai .2, station .3, komputer A .10, dan komputer B .20. Semua alamat adalah contoh privat yang harus bebas konflik di labmu. Alamat radio dipakai membuka halaman pengaturan dan monitoring.\n\nLab lokal satu subnet ini tidak memerlukan internet atau default gateway. Bila nanti ada router .1 untuk keluar subnet, gateway klien tetap .1. Jangan memberikan DHCP server baru pada setiap radio bridge karena klien dapat menerima konfigurasi dari sumber yang salah.",
+        "table": {
+          "caption": "Rencana alamat lab terisolasi",
+          "headers": [
+            "Perangkat",
+            "Alamat contoh",
+            "Peran"
+          ],
+          "rows": [
+            [
+              "AP",
+              "192.168.50.2/24",
+              "Manajemen radio A"
+            ],
+            [
+              "Station",
+              "192.168.50.3/24",
+              "Manajemen radio B"
+            ],
+            [
+              "PC A",
+              "192.168.50.10/24",
+              "Penguji sisi kantor"
+            ],
+            [
+              "PC B",
+              "192.168.50.20/24",
+              "Penguji sisi gudang"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "Periksa kabel dan jalur fisik sejak awal",
+        "body": "Gunakan kabel serta konektor yang sesuai lingkungan dan panduan produsen. Untuk luar ruangan, perhatikan perlindungan cuaca, penataan kabel, drip loop, dan pembumian sistem yang benar. Proteksi tambahan tidak membuat perangkat kebal petir.\n\nDi meja, catat Ethernet negotiated speed, error port, dan uptime. Jika model berport gigabit hanya bernegosiasi 100 Mbps, periksa juga batas port pasangannya sebelum menyalahkan kabel. Uji dengan kabel serta port pembanding yang diketahui baik; jangan mengubah frekuensi untuk memperbaiki negosiasi Ethernet."
+      },
+      {
+        "title": "Backup dan rencana kembali sebelum mengubah",
+        "body": "Ekspor konfigurasi awal yang sah bila perangkat sudah digunakan. Catat IP lama dan baru, antarmuka laptop, serta cara mengakses ulang. Saat IP radio diubah, sesi browser dapat terputus karena alamatnya berubah; pindah ke alamat baru setelah perubahan tersimpan.\n\nUntuk kehilangan akses, mulai dari daya, link kabel, subnet laptop, konflik alamat, dan alamat aktual. Gunakan akses lokal atau discovery yang didukung sebelum reset. Reset menghapus konfigurasi dan dapat memutus layanan, sehingga hanya dilakukan pada unit lab milik sendiri atau sesuai prosedur perubahan yang berlaku."
+      }
+    ],
+    "practice": [
+      "Isi inventaris dua radio dan verifikasi injector dari dokumen masing-masing model.",
+      "Gambar sambungan LAN–injector–PoE–radio dengan label port.",
+      "Konfigurasi radio satu per satu, buat IP unik, lalu buka ulang alamat barunya.",
+      "Simpan backup dan catat prosedur pemulihan tanpa langsung reset."
+    ],
+    "practiceReview": "Hasilnya berupa dua unit dengan identitas jelas, sumber daya yang cocok, dan alamat unik. Bukti akses ulang lebih penting daripada tangkapan layar sebelum penyimpanan. Jika tidak memiliki radio, lengkapi lembar rencana dan tandai pengujian fisik sebagai belum dilakukan.",
+    "check": "Radio bridge .2 bisa dibuka, tetapi klien diberi gateway .2 dan tidak bisa internet. Apakah sinyal harus dinaikkan?",
+    "answer": "Tidak. Pada rancangan ini radio bukan router gateway. Koreksi gateway klien ke router sebenarnya jika layanan internet tersedia, lalu uji. Untuk lab lokal satu subnet, gateway tidak diperlukan. Verifikasi IP layanan dan IP manajemen secara terpisah.",
+    "sources": [
+      {
+        "title": "Ubiquiti — spesifikasi LBE-5AC-GEN2",
+        "url": "https://techspecs.ui.com/uisp/wireless/litebeam-5ac"
+      },
+      {
+        "title": "Ubiquiti — panduan instalasi LiteBeam 5AC Gen2",
+        "url": "https://dl.ui.com/qig/lbe-5ac-gen2/"
+      },
+      {
+        "title": "Ubiquiti — airMAX: transparent bridge PtP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590879420695-airMAX-Guide-to-Configure-a-Point-to-Point-Link-Layer-2-Transparent-Bridge"
+      }
+    ],
+    "diagram": "poe",
+    "diagramAlt": "Port LAN injector menuju komputer, port PoE menuju radio, dengan sumber listrik terpisah",
+    "related": [
+      {
+        "title": "Kabel, fiber, dan PoE",
+        "href": "/jaringan/kabel-fiber-poe"
+      },
+      {
+        "title": "DHCP dan IP statis",
+        "href": "/jaringan/dhcp-ip-statis"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-lab-ptp-airos",
+    "title": "Lab airMAX AC: membuat bridge PtP dengan airOS",
+    "summary": "Langkah konfigurasi dua radio, pengujian paket dari komputer ke komputer, dan cara kembali ke kondisi awal.",
+    "minutes": 5,
+    "intro": "Kita akan membuat jaringan lokal yang melewati udara. Targetnya PC A dapat berkomunikasi dengan PC B melalui dua radio; internet belum menjadi syarat kelulusan.\n\nLab memakai dua LBE-5AC-GEN2 yang mendukung airMAX AC dan airOS 8. Nama tombol dapat berbeda antarfirmware. Cocokkan fungsi pada dokumentasi versi terpasang sebelum menerapkan; tutorial ini tidak ditujukan untuk menu UniFi, LTU, atau Wave.",
+    "goals": [
+      "Mengatur satu AP PtP dan satu station PtP.",
+      "Meneruskan Ethernet melalui mode bridge tanpa NAT tambahan.",
+      "Menguji data lintas link dan menyimpan konfigurasi hasil."
+    ],
+    "analogy": "Bridge seperti penyambung kabel yang melintasi halaman. Ia membawa lalu lintas dua sisi; nomor IP pengelola bridge hanya alamat untuk teknisi yang ingin membuka pengaturannya.",
+    "sections": [
+      {
+        "title": "Tetapkan kondisi awal dan target selesai",
+        "body": "Sediakan dua radio, injector yang cocok, kabel pembanding, serta dua komputer berkabel. Gunakan jaringan lab terisolasi dan rencana alamat pelajaran sebelumnya. Tetapkan nama RADIO-A dan RADIO-B, SSID lab unik, serta kunci wireless kuat yang berbeda dari sandi administrator.\n\nSiapkan posisi uji dengan arah antena sesuai panduan dan hindari sinyal berlebihan pada jarak sangat dekat. Lab meja menguji fungsi, bukan membuktikan kemampuan jarak lapangan. Simpan konfigurasi awal dan jadwalkan akses kabel ke kedua radio jika perubahan wireless memutus sesi."
+      },
+      {
+        "title": "Konfigurasi sisi A sebagai AP PtP",
+        "body": "Buka radio A melalui prosedur awal modelnya. Pada pengaturan Network, pastikan Network Mode adalah Bridge dan tetapkan IP manajemen 192.168.50.2/24. Tidak perlu mengaktifkan NAT atau DHCP server pada radio untuk lab ini. Simpan, lalu akses ulang dari laptop yang berada di subnet yang sama.\n\nPada Wireless airMAX AC, aktifkan Access Point dan PTP Mode. Isi SSID, negara lokasi sebenarnya, frekuensi yang diperbolehkan untuk lokasi itu, serta lebar kanal yang didukung kedua radio. Gunakan WPA2-AES dan kunci kuat sesuai dukungan airOS. Simpan konfigurasi dan catat semua nilainya."
+      },
+      {
+        "title": "Konfigurasi sisi B sebagai station PtP",
+        "body": "Siapkan radio B secara terpisah dan tetapkan Bridge dengan IP 192.168.50.3/24. Pada Wireless, matikan Access Point dan aktifkan PTP Mode. Cari atau pilih SSID radio A; masukkan jenis keamanan dan kunci yang sama. Periksa lebar kanal dan daftar scan agar mencakup pengaturan AP.\n\nSimpan lalu amati apakah station terasosiasi dengan AP yang dimaksud. Gunakan identitas atau MAC AP untuk memastikan tidak salah bergabung ke SSID serupa. Pada perangkat M, istilah Station dan WDS dapat muncul; jangan menyalin tombol M ke lab AC ini tanpa menyesuaikan panduan."
+      },
+      {
+        "title": "Periksa pasangan pengaturan, bukan asal mencoba",
+        "body": "Bila station belum terhubung, cocokkan nilai kedua sisi sebelum mengubah daya. Periksa juga negara, dukungan band, daftar scan, serta pesan log. Frekuensi DFS dapat melibatkan pemeriksaan radar dan waktu tunggu sesuai aturan setempat; radio belum langsung memancar bukan selalu kerusakan.\n\nUbah satu variabel setiap percobaan dan catat hasilnya. Jangan mengganti negara untuk membuka kanal yang dibatasi. Jika tidak menemukan kanal sah yang cocok, hentikan uji pemancaran dan selesaikan verifikasi spesifikasi serta ketentuan pemasangan.",
+        "table": {
+          "caption": "Pasangan pengaturan lab airMAX AC",
+          "headers": [
+            "Parameter",
+            "Radio A",
+            "Radio B"
+          ],
+          "rows": [
+            [
+              "Network Mode",
+              "Bridge",
+              "Bridge"
+            ],
+            [
+              "Management IP",
+              "192.168.50.2/24",
+              "192.168.50.3/24"
+            ],
+            [
+              "Access Point / PTP",
+              "On / On",
+              "Off / On"
+            ],
+            [
+              "SSID dan keamanan",
+              "SSID lab, WPA2-AES, kunci kuat",
+              "SSID dan kunci AP yang sama"
+            ],
+            [
+              "Kanal",
+              "Kanal sah hasil survey",
+              "Mendukung dan dapat memindai kanal AP"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "Buktikan paket menyeberang, bukan hanya connected",
+        "body": "Hubungkan PC A .10 ke sisi LAN A dan PC B .20 ke sisi LAN B. Pastikan Wi-Fi atau jalur jaringan lain pada komputer tidak membuat paket melewati rute alternatif. Uji akses radio lokal dahulu, kemudian radio jauh, lalu PC jauh. Izinkan ICMP pada firewall host lab bila ingin memakai ping.\n\nPing berhasil ke PC B memberi bukti konektivitas IP lintas link pada saat itu. Jika ping diblokir, gunakan layanan uji yang memang diizinkan dan periksa firewall; jangan langsung menyimpulkan RF gagal. Setelah itu jalankan pengujian throughput lokal pada materi pengukuran, bukan hanya speedtest internet.",
+        "code": "ping 192.168.50.2\nping 192.168.50.3\nping 192.168.50.20",
+        "codeLabel": "Dari PC A 192.168.50.10; sintaks ping ini tersedia di Windows/Linux",
+        "language": "bash"
+      },
+      {
+        "title": "Simpan hasil dan uji pemulihan",
+        "body": "Ekspor konfigurasi akhir kedua radio dan catat versi firmware, waktu, pasangan MAC, kanal, lebar kanal, level sinyal, serta negotiated speed Ethernet. Simpan bukti uji PC ke PC dan jelaskan kondisi pengujiannya. Sandi atau kunci tidak perlu ditampilkan pada laporan publik.\n\nPada lab, lakukan reboot terencana untuk memastikan pengaturan tersimpan dan link kembali. Jika tidak pulih, gunakan akses kabel, periksa alamat serta mode, lalu kembalikan konfigurasi yang telah disimpan. Jangan membawa lab ke jaringan operasional sebelum penamaan, manajemen, dan pencegahan loop direncanakan."
+      }
+    ],
+    "practice": [
+      "Simpan konfigurasi awal dan isi tabel pengaturan kedua radio sebelum menerapkan.",
+      "Buat AP dan station sesuai langkah, lalu verifikasi MAC pasangan dan status asosiasi.",
+      "Uji PC A ke PC B dan sebaliknya; catat IP, waktu, hasil, dan aturan firewall yang diperlukan.",
+      "Reboot terencana pada lab, akses kembali kedua radio, dan simpan backup akhir."
+    ],
+    "practiceReview": "Lab lulus bila kedua radio dapat dikelola pada IP unik dan lalu lintas antar-PC benar-benar melewati link radio setelah reboot. Connected tanpa uji PC belum cukup. Jika belum punya perangkat, tabel konfigurasi dapat disiapkan, tetapi tulis statusnya sebagai rancangan, bukan hasil pengujian.",
+    "check": "Station connected dan kedua radio bisa diping dari PC A, tetapi PC B tidak merespons. Pemeriksaan berikutnya apa?",
+    "answer": "Periksa PC B: alamat dan mask, kabel ke LAN injector, firewall host, serta jalur lain. Dari PC B uji radio lokal lalu radio jauh. Asosiasi dan akses radio memberi petunjuk bahwa pemeriksaan harus diperluas ke Ethernet serta host; belum membuktikan aplikasi atau semua VLAN berfungsi.",
+    "sources": [
+      {
+        "title": "Ubiquiti — airMAX: transparent bridge PtP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590879420695-airMAX-Guide-to-Configure-a-Point-to-Point-Link-Layer-2-Transparent-Bridge"
+      },
+      {
+        "title": "Ubiquiti — spesifikasi LBE-5AC-GEN2",
+        "url": "https://techspecs.ui.com/uisp/wireless/litebeam-5ac"
+      },
+      {
+        "title": "Ubiquiti — station tidak tersambung ke AP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590819980823-ISP-Wireless-Station-Radio-Won-t-Connect-to-Access-Point"
+      }
+    ],
+    "diagram": "topologi",
+    "diagramAlt": "Topologi bridge PtP dengan PC A .10, AP .2, station .3, dan PC B .20",
+    "related": [
+      {
+        "title": "Gateway dan DNS",
+        "href": "/jaringan/gateway-dns"
+      },
+      {
+        "title": "IP dan MAC",
+        "href": "/jaringan/ip-mac"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-ptmp-sektor-airtime",
+    "title": "PtMP Ubiquiti: sektor, CPE, dan airtime bersama",
+    "summary": "Rancang akses beberapa pelanggan dan pahami mengapa jumlah CPE bukan ukuran kapasitas layanan.",
+    "minutes": 5,
+    "intro": "Sebuah BTS memiliki satu AP dan beberapa pelanggan. Ketika pelanggan baru ditambahkan, semuanya masih connected, tetapi pengalaman jam malam menurun. Apa yang sebenarnya dibagi?\n\nDi PtMP, kita perlu memikirkan waktu pemakaian radio bersama, mutu setiap station, dan uplink setelah AP. Materi ini membahas rancangan akses; konfigurasi produksi juga memerlukan isolasi serta desain layanan.",
+    "goals": [
+      "Membedakan batas asosiasi dengan kapasitas jam sibuk.",
+      "Menjelaskan airtime dan efek station dengan kualitas buruk.",
+      "Menyusun rancangan sektor serta pemisahan pelanggan."
+    ],
+    "analogy": "Satu loket melayani banyak pelanggan. Pelanggan yang perlu mengulang penjelasan berkali-kali memakai waktu loket lebih lama. Menambah jumlah orang yang boleh antre tidak mempercepat pekerjaan loket.",
+    "sections": [
+      {
+        "title": "Sektor menentukan wilayah, bukan kecepatan pasti",
+        "body": "Antena sektor memiliki pola cakupan horizontal dan vertikal. Derajat pada nama antena membantu memahami arah layanan, tetapi pelanggan harus dinilai terhadap pola antena dan elevasinya, bukan sekadar berada di dalam potongan lingkaran pada peta. Pelanggan terlalu dekat atau jauh di bawah antena dapat berada di bagian pola yang kurang sesuai.\n\nPetakan setiap CPE: arah, jarak, tinggi, hambatan, dan kebutuhan layanan. Memecah wilayah menjadi beberapa sektor dapat membantu perencanaan, tetapi kanal yang saling mengganggu tetap dapat membuat hasilnya buruk. Periksa penempatan serta spektrum antarsektor."
+      },
+      {
+        "title": "Pilih AP dan CPE dalam platform yang sesuai",
+        "body": "AP pusat harus mendukung mode PtMP dan pasangan CPE yang dipakai. LTU, airMAX, dan Wave tidak dapat disatukan hanya karena logonya sama. Untuk keluarga yang sama pun periksa model, generasi, firmware, dan mode. Hindari membeli CPE lebih dahulu tanpa bukti pasangan AP yang didukung.\n\nLab sederhana bisa memakai AP airMAX yang mendukung PtMP dan dua station yang kompatibel. Pada airMAX AC yang menyediakan tombol PTP Mode, nonaktifkan mode khusus PtP untuk skenario PtMP sesuai dokumentasinya. Jangan menganggap semua CPE terarah ideal menjadi pusat layanan sektor."
+      },
+      {
+        "title": "Airtime adalah sumber daya yang dipakai bersama",
+        "body": "Airtime adalah waktu penggunaan media radio. Mengirim sejumlah data dengan laju modulasi rendah memerlukan waktu lebih lama daripada laju tinggi; pengulangan paket ikut menambah waktu. Karena itu satu station dengan link buruk dapat mengonsumsi bagian sumber daya yang besar ketika aktif mengirim.\n\nGambaran sederhana: 10 MB memerlukan sekitar empat kali waktu kirim pada laju 20 Mbps dibanding 80 Mbps jika overhead diabaikan. Ini contoh konsep, bukan model penjadwalan airMAX lengkap. Pemeriksaan kapasitas perlu melihat station aktif, retry, laju link, dan trafik nyata secara bersamaan."
+      },
+      {
+        "title": "Batas jumlah station berbeda dari target layanan",
+        "body": "Angka maksimum CPE berarti batas teknis tertentu, bukan janji bahwa semua pelanggan dapat memakai paket maksimum serentak. Tulis jumlah pelanggan, pola serentak, kebutuhan upload/download, serta cadangan kapasitas. Gunakan data jam sibuk untuk memperbaiki perkiraan, bukan hanya menjumlah label paket.\n\nContoh fiktif: 12 pelanggan paket 20 Mbps tidak otomatis selalu mengirim 240 Mbps. Tetapi jika kebutuhan serentak memang 150 Mbps, hasil uji gabungan 90 Mbps jelas tidak cukup untuk target itu. Periksa juga port dan uplink setelah AP sebelum menambah sektor.",
+        "table": {
+          "caption": "Lembar kapasitas sebelum menambah pelanggan",
+          "headers": [
+            "Data",
+            "Tujuan"
+          ],
+          "rows": [
+            [
+              "Trafik dan latency saat jam sibuk",
+              "Mengetahui beban nyata dan antrean"
+            ],
+            [
+              "Kualitas tiap station",
+              "Menemukan link lemah atau retry tinggi"
+            ],
+            [
+              "Uji beberapa station serentak",
+              "Mengukur pembagian sumber daya"
+            ],
+            [
+              "Kapasitas Ethernet dan uplink",
+              "Memisahkan batas RF dari batas kabel"
+            ],
+            [
+              "Cadangan dan rencana pertumbuhan",
+              "Mencegah operasi selalu mendekati batas"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "Bridge bersama memerlukan desain layanan",
+        "body": "Bridge PtMP sederhana memudahkan lab, tetapi dapat memperluas broadcast domain dan akses antarpelanggan. Tentukan bagaimana isolasi, VLAN, autentikasi, dan routing diterapkan pada keseluruhan perangkat. Fitur isolasi harus diverifikasi: namanya saja tidak membuktikan semua jalur komunikasi terblokir.\n\nBila membawa VLAN, gambar port tagged/untagged dan pisahkan IP manajemen dari layanan sesuai desain. Uji klien pada VLAN tujuan, bukan hanya ping alamat radio. RSTP atau pencegahan loop juga perlu dipikirkan jika ada jalur kabel atau radio cadangan."
+      },
+      {
+        "title": "Uji bersama sebelum menyimpulkan sektor penuh",
+        "body": "Ukur satu station terlebih dahulu, kemudian dua station secara bersamaan dalam jendela uji lab. Catat throughput agregat dan per-station, arah, latency, serta beban uplink. Jika hasil turun hanya ketika station tertentu aktif, lihat kualitas dan pemakaian waktunya sebelum menyimpulkan AP rusak.\n\nPilihan perbaikan mengikuti bukti: alignment CPE, penataan kanal, pembatasan sesuai layanan, pemindahan pelanggan, atau pemecahan sektor. Prioritas airtime bukan obat untuk LOS terhalang. Simpan hasil sebelum/sesudah agar dampak pada pelanggan lain juga terlihat."
+      }
+    ],
+    "practice": [
+      "Buat peta satu AP dan tiga CPE dengan arah, jarak, serta kebutuhan kedua arah.",
+      "Isi matriks kompatibilitas dan rencana isolasi klien.",
+      "Susun pengujian satu station lalu dua station bersamaan; bila memakai data fiktif beri label.",
+      "Tentukan alasan kapan memperbaiki CPE dan kapan merencanakan tambahan sektor."
+    ],
+    "practiceReview": "Rancangan yang baik memiliki alasan penempatan dan bukti kapasitas serentak. Saat mutu satu CPE buruk, perbaiki penyebabnya dan ukur dampaknya. Jumlah station di bawah batas teknis saja belum membuktikan sektor cukup untuk paket yang dijual.",
+    "check": "AP masih di bawah batas jumlah CPE, tetapi latency naik pada jam sibuk. Apakah menambah batas asosiasi membantu?",
+    "answer": "Tidak menambah kapasitas. Periksa airtime, kualitas station, retry, trafik serentak, dan uplink. Tentukan bagian yang membatasi lalu uji perbaikan. Penambahan pelanggan tanpa evaluasi justru dapat memperberat antrean.",
+    "sources": [
+      {
+        "title": "Ubiquiti — airMAX: jaringan PtMP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590879457815-airMAX-Guide-to-Configure-a-Point-to-Multipoint-PtMP-ISP-Style-Access-Point"
+      },
+      {
+        "title": "Ubiquiti — LTU FAQ dan kompatibilitas",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590862218263-LTU-Frequently-Asked-Questions-FAQs"
+      },
+      {
+        "title": "Ubiquiti — keluarga produk wireless UISP",
+        "url": "https://techspecs.ui.com/uisp/wireless"
+      }
+    ],
+    "diagram": "ptmp",
+    "diagramAlt": "Satu AP sektor melayani tiga CPE yang berbagi airtime dan uplink yang sama",
+    "related": [
+      {
+        "title": "VLAN access dan trunk",
+        "href": "/jaringan/vlan-access-trunk"
+      },
+      {
+        "title": "Loop dan RSTP",
+        "href": "/jaringan/loop-rstp"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-spektrum-channel-alignment",
+    "title": "Optimasi wireless: kanal, lebar kanal, daya, dan alignment",
+    "summary": "Pahami kompromi setiap pengaturan dan lakukan perubahan radio dengan hasil sebelum/sesudah.",
+    "minutes": 5,
+    "intro": "Link terasa lambat, lalu lebar kanal dan daya langsung dinaikkan. Sesaat angka dashboard berubah, tetapi gangguan kembali. Tanpa pengukuran, kita tidak tahu apakah perubahan itu membantu.\n\nOptimasi berarti mencari pengaturan yang memenuhi kebutuhan dalam kondisi nyata, bukan membuat semua slider berada di nilai maksimum.",
+    "goals": [
+      "Memilih kandidat kanal dari pengamatan kedua sisi.",
+      "Menjelaskan kompromi lebar kanal dan daya.",
+      "Menyiapkan alignment serta pemindaian tanpa kejutan pemutusan layanan."
+    ],
+    "analogy": "Kanal seperti bagian jalan yang dipakai, lebar kanal seperti lebar jalurnya, dan daya seperti volume bicara. Jalan lebih lebar atau suara lebih keras tidak selalu menyelesaikan kemacetan dan kebisingan.",
+    "sections": [
+      {
+        "title": "Pilih kanal dari pengukuran, bukan kebiasaan",
+        "body": "Lihat spektrum dari kedua lokasi. AP yang mendengar kanal sepi belum tentu memiliki station yang mendengar kondisi sama. Catat waktu, arah antena, energi yang terlihat, dan hasil layanan. Ulangi pada waktu gangguan jika masalahnya muncul hanya malam hari.\n\nSusun beberapa kandidat kanal yang sah dan didukung kedua radio. Hindari satu angka frekuensi “terbaik untuk semua tempat”. Lingkungan spektrum berubah, sehingga pilihan perlu divalidasi dengan uji beban serta monitoring setelah perubahan."
+      },
+      {
+        "title": "Lebar kanal memberi peluang sekaligus kompromi",
+        "body": "Kanal lebih lebar dapat menyediakan ruang untuk laju data lebih tinggi pada kondisi yang mendukung, tetapi juga memakai spektrum lebih luas. Bagian kanal tambahan dapat memuat interferensi yang sebelumnya tidak masuk. Kebutuhan kualitas sinyal dan kondisi penerima tetap harus diperhatikan.\n\nBandingkan 20 dan 40 MHz sebagai contoh kandidat yang didukung, bukan rekomendasi universal. Pertahankan variabel lain agar hasil dapat dibandingkan. Pilih berdasarkan throughput yang diperlukan, latency saat beban, retry, serta kestabilan, bukan hanya perubahan PHY rate."
+      },
+      {
+        "title": "Daya pancar dan gain harus dinilai bersama",
+        "body": "Daya lebih tinggi dapat menaikkan level terima pasangan, tetapi tidak otomatis meningkatkan kualitas. Daya berlebihan pada jarak dekat dapat mengganggu penerimaan; pemancar lebih keras juga dapat menambah gangguan ke link lain. Jalur balik tetap memerlukan kualitas yang cukup.\n\nPerhitungkan EIRP bersama gain antena dan rugi yang relevan. Gunakan negara lokasi sebenarnya dan patuhi ketentuan yang berlaku. Jangan mengaktifkan mode compliance/test atau mengganti negara untuk membuka frekuensi dan daya yang tidak diizinkan pada instalasi tersebut."
+      },
+      {
+        "title": "Alignment dilakukan dua arah dan bertahap",
+        "body": "Mulai dari arah serta elevasi berdasarkan survey. Gerakkan antena perlahan dalam langkah kecil, tunggu pembacaan stabil, lalu bandingkan kedua ujung dan masing-masing chain MIMO jika tersedia. Pola pancar memiliki lobus; mendapat sinyal belum membuktikan antena berada pada arah utama terbaik.\n\nPerbedaan chain yang menetap perlu diperiksa terhadap baseline, alignment, penghalang, polarisasi, dan kondisi perangkat. Jangan menetapkan satu angka sinyal atau selisih chain sebagai jaminan semua model. Setelah posisi dipilih, kencangkan sesuai panduan dan ukur ulang karena posisi dapat bergeser."
+      },
+      {
+        "title": "Kenali dampak airView dan DFS sebelum memulai",
+        "body": "Panduan airView untuk airMAX M memakai radio data yang sama, sehingga pemindaian memutus koneksi wireless selama berjalan. Jika aksesmu juga melewati link itu, akses dapat hilang. Ini memerlukan jendela pemeliharaan dan akses lokal atau jalur pengelolaan lain.\n\nGenerasi AC dan perangkat lain dapat memiliki fasilitas analisis yang berbeda. Verifikasi dampaknya pada model dan firmware, jangan menganggap semua scan aman tanpa putus. Kanal DFS juga dapat menunggu pemeriksaan radar atau berpindah setelah deteksi; simpan log dan waktu kejadian sebelum mengira perangkat reboot."
+      },
+      {
+        "title": "Bandingkan hasil dan siapkan rollback",
+        "body": "Catat kondisi awal: kanal, lebar, daya, sinyal, noise/CINR bila tersedia, trafik, dan latency. Terapkan satu perubahan, tunggu stabil, kemudian ulangi uji dengan metode sama. Jika kebutuhan tidak membaik atau ada station kehilangan koneksi, kembalikan pengaturan yang telah dicatat.\n\nContoh keputusan fiktif: 40 MHz menghasilkan throughput lebih tinggi tetapi latency melonjak saat beban, sedangkan 20 MHz cukup memenuhi kebutuhan dengan variasi lebih rendah. Pilihan 20 MHz masuk akal untuk target itu. Keputusan harus mengikuti hasil, bukan anggapan bahwa lebar selalu lebih cepat dalam semua kondisi."
+      }
+    ],
+    "practice": [
+      "Buat tabel awal dan dua kandidat perubahan dengan hanya satu variabel berbeda.",
+      "Tulis rencana pemindaian sesuai generasi radio dan dampaknya pada akses.",
+      "Jalankan atau rancang pengukuran sebelum/sesudah dengan arah dan durasi sama.",
+      "Pilih hasil berdasarkan target layanan dan tulis pemicu rollback yang terukur."
+    ],
+    "practiceReview": "Laporan menyatakan model, firmware, kondisi, dan alasan pilihan. Jika throughput naik tetapi target latency gagal, perubahan belum berhasil. Pada perangkat M, rencana scan harus mencatat pemutusan link serta cara kembali mengakses perangkat.",
+    "check": "Kanal terlihat bersih di AP, tetapi station sering retry. Apa yang belum diketahui?",
+    "answer": "Kondisi penerimaan di lokasi station, kualitas lintasan, alignment, dan beban aktual belum diketahui. Amati kedua sisi serta waktu gangguan. Jangan langsung menaikkan daya atau memakai kanal lain tanpa mencatat dan membandingkan hasil.",
+    "sources": [
+      {
+        "title": "Ubiquiti — airView pada airMAX M, panduan legacy",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590893851927-airMAX-Guide-to-Channel-Scanning-with-airView"
+      },
+      {
+        "title": "Ubiquiti — alignment antena outdoor",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590760854935-ISP-Wireless-Antenna-Alignment-for-Outdoor-Wireless-Links"
+      },
+      {
+        "title": "Ubiquiti — compliance dan dokumen produk",
+        "url": "https://ui.com/compliance/"
+      },
+      {
+        "title": "Ubiquiti — panduan instalasi LiteBeam 5AC Gen2",
+        "url": "https://dl.ui.com/qig/lbe-5ac-gen2/"
+      }
+    ],
+    "diagram": "spektrum",
+    "diagramAlt": "Perbandingan konseptual kanal sempit dan lebar terhadap area interferensi, bukan hasil scan nyata",
+    "related": [
+      {
+        "title": "Wi-Fi, sinyal, dan channel",
+        "href": "/jaringan/wifi-sinyal-channel"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-metrik-dan-throughput",
+    "title": "Membaca airOS: sinyal, SNR, MCS, dan throughput",
+    "summary": "Ubah angka dashboard menjadi kesimpulan yang dapat diuji dengan pengukuran lintas link.",
+    "minutes": 5,
+    "intro": "Dashboard menampilkan sinyal kuat dan kapasitas tinggi, tetapi pengguna mengeluh transfer lambat. Angka-angka itu mengukur hal berbeda; satu indikator tidak mewakili seluruh jalur.\n\nKita akan memisahkan kualitas penerimaan, laju radio, dan data aplikasi. Contoh hasil pada materi ini fiktif; ukur perangkatmu dengan metode dan kondisi yang dicatat.",
+    "goals": [
+      "Membedakan dBm, dB, PHY rate, estimasi capacity, dan throughput.",
+      "Mengenali metrik yang berbeda antarplatform.",
+      "Menguji dua arah memakai dua host berkabel."
+    ],
+    "analogy": "Kecepatan mesin, kapasitas teoritis jalan, dan jumlah barang yang tiba di gudang bukan angka yang sama. Dashboard memberi petunjuk mesin serta jalannya; throughput menunjukkan data yang benar-benar sampai selama pengujian.",
+    "sections": [
+      {
+        "title": "Sinyal kuat harus dibandingkan dengan gangguan",
+        "body": "dBm menunjukkan level daya yang diterima. Angka −55 dBm lebih kuat daripada −65 dBm, tetapi hasil layanan juga dipengaruhi noise dan interferensi. Selisih signal dan noise memberi perkiraan SNR ketika pembacaannya sebanding. Nilai lebih negatif bukan berarti selalu lebih baik atau lebih buruk tanpa mengetahui metriknya.\n\nContoh fiktif A: signal −60 dBm, noise −92 dBm, selisih 32 dB. Contoh B: −55 dBm dan −70 dBm, selisih 15 dB. B memiliki signal lebih kuat tetapi ruang terhadap noise lebih kecil. CINR juga memperhitungkan interferensi; jangan menyamakan semua definisi dashboard begitu saja."
+      },
+      {
+        "title": "MCS dan chain menjelaskan kemampuan radio saat itu",
+        "body": "Modulation and Coding Scheme (MCS) menghubungkan cara pengiriman simbol dan perlindungan terhadap kesalahan. Radio dapat menyesuaikannya dengan kondisi link. Angka MCS hanya bermakna bersama generasi, lebar kanal, jumlah spatial stream, serta parameter lainnya. MCS antarkeluarga tidak boleh dibandingkan sebagai skor universal.\n\nPerhatikan arah TX/RX dan chain MIMO jika perangkat menampilkannya. Bila laju satu arah turun, periksa kondisi penerima pada arah tersebut. Snapshot bagus saat tidak ada trafik belum menggambarkan apa yang terjadi saat jam sibuk atau transfer panjang."
+      },
+      {
+        "title": "CCQ, airMAX Quality, dan capacity bukan hal yang sama",
+        "body": "Pada perangkat atau versi tertentu kamu dapat menemukan CCQ, airMAX Quality, airMAX Capacity, estimasi throughput, atau metrik lain. Nama, perhitungan, dan ketersediaannya berbeda. Baca bantuan airOS yang cocok dan bandingkan tren metrik yang sama pada perangkat yang sama.\n\nPersentase kualitas tinggi bukan jaminan kapasitas layanan tertentu. Estimasi capacity juga bukan hasil transfer aplikasi. Gabungkan dengan retry/error, laju link, penggunaan airtime, Ethernet, serta hasil uji eksternal. Jika tutorial menyebut metrik yang tidak ada pada perangkatmu, jangan mencari padanannya secara asal."
+      },
+      {
+        "title": "Ethernet bisa menjadi bagian paling lambat",
+        "body": "Paket melewati NIC komputer, switch atau injector data, Ethernet radio A, radio B, lalu host tujuan. Satu port 100 Mbps dapat membatasi jalur meskipun radio mampu membawa lebih banyak. Throughput aplikasi biasanya di bawah line rate karena overhead dan kondisi host.\n\nCatat negotiated speed dan duplex seluruh port yang relevan. Jika hasil berulang sekitar 90-an Mbps, perlakukan batas 100 Mbps sebagai hipotesis yang perlu dibuktikan, bukan vonis. CPU host, pembatas trafik, atau layanan lain juga dapat menimbulkan batas serupa."
+      },
+      {
+        "title": "Ukur dengan iperf3 di kedua sisi link",
+        "body": "Pasang iperf3 pada dua komputer berkabel dalam lab .10 dan .20. Jalankan server di PC B, lalu client di PC A. Izinkan hanya koneksi uji yang diperlukan pada firewall host lab; port bawaan TCP adalah 5201. Pada Windows nama executable dapat berupa iperf3.exe.\n\nPerintah berikut menguji satu aliran TCP selama 15 detik, kemudian arah balik melalui opsi -R. Jalankan satu per satu. Uji dapat memenuhi kapasitas link, sehingga gunakan lab atau jendela pemeliharaan. Hentikan server dengan Ctrl+C setelah selesai.",
+        "code": "# PC B (192.168.50.20)\niperf3 -s -B 192.168.50.20\n\n# PC A (192.168.50.10), arah A ke B\niperf3 -c 192.168.50.20 -t 15\n\n# PC A, arah B ke A\niperf3 -c 192.168.50.20 -t 15 -R",
+        "codeLabel": "Perintah iperf3 pada host lab; bukan perintah shell radio",
+        "language": "bash"
+      },
+      {
+        "title": "Simpan metode agar hasil bisa dibandingkan",
+        "body": "Ulangi beberapa kali dan catat waktu, arah, durasi, jumlah aliran, beban lain, serta nilai receiver akhir. Amati latency pada kondisi idle dan saat transfer. Penurunan throughput atau kenaikan latency perlu dikaitkan dengan beban dan indikator lain, bukan hanya satu tangkapan layar.\n\nUji lokal lintas radio mengurangi pengaruh server internet, tetapi masih mencakup NIC, kabel, dan host. Buat pembanding berkabel bila memungkinkan. Speedtest internet menambah faktor router, upstream, dan server tujuan. Jangan memakai selisih hasil internet sebagai bukti tunggal kerusakan radio.",
+        "table": {
+          "caption": "Contoh pembacaan hasil fiktif",
+          "headers": [
+            "Pengamatan",
+            "Hipotesis awal",
+            "Pemeriksaan"
+          ],
+          "rows": [
+            [
+              "RF baik; hasil sekitar 94 Mbps",
+              "Ada port 100 Mbps atau pembatas lain",
+              "Negosiasi semua port dan profil pembatas"
+            ],
+            [
+              "Satu arah jauh lebih lambat",
+              "Penerimaan atau beban asimetris",
+              "Statistik tiap arah, host, dan trafik"
+            ],
+            [
+              "Lokal baik; internet lambat",
+              "Batas setelah link atau tujuan uji",
+              "Router, upstream, dan server pembanding"
+            ]
+          ]
+        }
+      }
+    ],
+    "practice": [
+      "Hitung dua SNR contoh dan jelaskan mengapa sinyal terkuat belum tentu terbaik.",
+      "Catat nama metrik yang benar-benar tersedia pada model dan firmware.",
+      "Lakukan iperf3 maju dan balik, lalu catat hasil receiver beserta kondisi uji.",
+      "Bandingkan dengan jalur berkabel atau susun rencana pembanding; tulis batas kesimpulan."
+    ],
+    "practiceReview": "SNR contoh adalah 32 dan 15 dB. Laporan throughput menyebut host, arah, dan kondisi, serta tidak menyebut estimasi dashboard sebagai hasil aplikasi. Jika pengujian belum dilakukan, simpan rencana tanpa mengarang angka hasil.",
+    "check": "Capacity dashboard ratusan Mbps, tetapi uji lokal berhenti dekat 94 Mbps. Apa langkah paling membantu?",
+    "answer": "Periksa negotiated speed seluruh port dan pembatas trafik, lalu ulangi dengan kabel serta host pembanding. Angka itu konsisten dengan kemungkinan jalur 100 Mbps tetapi belum membuktikannya. Kumpulkan bukti Ethernet sebelum mengubah parameter RF.",
+    "sources": [
+      {
+        "title": "Ubiquiti — pemeriksaan kualitas link wireless",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590813737239-ISP-Wireless-Link-with-Poor-Wireless-Performance-Signal-Throughput-Latency-Jitter"
+      },
+      {
+        "title": "Ubiquiti — spesifikasi LBE-5AC-GEN2",
+        "url": "https://techspecs.ui.com/uisp/wireless/litebeam-5ac"
+      },
+      {
+        "title": "ESnet — penggunaan dan opsi iperf3",
+        "url": "https://software.es.net/iperf/invoking.html"
+      }
+    ],
+    "diagram": "ukur",
+    "diagramAlt": "Jalur pengukuran iperf3 di antara dua komputer melewati Ethernet dan link radio",
+    "related": [
+      {
+        "title": "Bandwidth dan latency",
+        "href": "/jaringan/bandwidth-latency"
+      },
+      {
+        "title": "Ethernet speed dan duplex",
+        "href": "/jaringan/ethernet-speed-duplex"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-troubleshooting",
+    "title": "Troubleshooting Ubiquiti: dari link down sampai putus-nyambung",
+    "summary": "Pisahkan gangguan daya, Ethernet, radio, IP, dan layanan dengan bukti yang jelas.",
+    "minutes": 5,
+    "intro": "Keluhan “internet mati” tidak langsung menunjukkan bagian mana yang rusak. Bisa jadi radio mati, station kehilangan AP, VLAN salah, atau DNS pengguna gagal.\n\nGunakan urutan pemeriksaan yang menyempitkan masalah. Tujuannya menemukan satu pengujian berikutnya yang paling membantu, lalu memverifikasi layanan setelah tindakan.",
+    "goals": [
+      "Mengelompokkan gejala sebelum mengganti pengaturan.",
+      "Membedakan reboot, putus asosiasi, dan gagal layanan.",
+      "Menulis bukti serta langkah berikutnya dalam tiket."
+    ],
+    "analogy": "Dokter memeriksa gejala dan tanda vital sebelum mengganti obat. Teknisi juga perlu membedakan listrik perangkat, jalur kabel, koneksi radio, dan layanan yang dipakai pengguna.",
+    "sections": [
+      {
+        "title": "Mulai dari dampak dan waktu kejadian",
+        "body": "Tanyakan sejak kapan, semua atau sebagian pelanggan, terus-menerus atau berkala, serta aplikasi apa yang gagal. Catat perubahan terakhir dan zona waktu log. Tiga pelanggan pada satu AP yang mati bersamaan memberi arah pemeriksaan berbeda dari satu laptop yang gagal DNS.\n\nSimpan bukti sebelum reboot karena uptime dan log sementara dapat hilang. Buat hipotesis dengan pemeriksaan yang dapat membantahnya. Contoh: “radio reboot” perlu perubahan uptime atau log boot, bukan hanya satu ping timeout."
+      },
+      {
+        "title": "Jika perangkat tidak dapat dikelola, periksa akses lokal",
+        "body": "Lihat sumber daya, LED, konektor, serta port Ethernet dari titik yang aman. Periksa negotiated link dan alamat laptop. Bandingkan akses dari sisi lokal dengan akses melalui link radio. IP tidak merespons dapat berarti subnet atau VLAN manajemen salah, bukan perangkat mati.\n\nGunakan kabel dan injector pembanding yang spesifikasinya benar bila tersedia. Jika uptime kembali kecil bersamaan dengan kejadian, selidiki sumber daya, kondisi perangkat, atau reboot terjadwal. Jangan mengganti injector hanya berdasarkan bentuk port dan jangan reset sebelum backup serta rencana pemulihan diperiksa."
+      },
+      {
+        "title": "Jika station tidak tersambung, cocokkan pasangan",
+        "body": "Periksa apakah AP aktif dan mendukung station tersebut, lalu cocokkan mode, SSID, keamanan, kunci, band, lebar kanal, dan daftar scan. Lihat apakah station dapat menemukan AP yang tepat. Log autentikasi memberi petunjuk berbeda dari kondisi AP sama sekali tidak terlihat.\n\nPada skenario DFS, catat radar event atau masa tunggu yang ditampilkan. Periksa alignment serta lintasan bila level penerimaan berubah. Jangan sekaligus mengubah kunci, kanal, dan daya: setelah pulih kamu tidak akan tahu penyebab atau cara mengulang perbaikannya."
+      },
+      {
+        "title": "Jika connected tetapi layanan gagal, telusuri paket",
+        "body": "Dari klien, uji radio lokal, radio jauh, host jauh, gateway, lalu layanan tujuan yang sesuai. Pastikan alamat, mask, VLAN, rute, dan DNS benar. Pada bridge, radio bukan otomatis gateway klien. Gunakan hasil pemeriksaan kedua sisi untuk menentukan batas terakhir yang terbukti bekerja.\n\nContoh: host jauh dapat diakses lewat IP tetapi nama domain gagal. Itu alasan memeriksa resolver serta respons DNS, bukan bukti RF buruk. Ping yang diblokir firewall juga harus dibedakan dari tidak adanya konektivitas; pakai layanan uji yang diizinkan sebagai pembanding."
+      },
+      {
+        "title": "Jika lambat atau flapping, korelasikan beberapa indikator",
+        "body": "Untuk lambat, ukur lokal dua arah dan lihat Ethernet, trafik, retry, serta kualitas penerimaan. Untuk flapping, bandingkan waktu putus dengan uptime, log asosiasi, DFS, cuaca, dan beban. Hujan yang bertepatan dengan gangguan belum cukup membuktikan redaman udara; konektor kemasukan air juga perlu ditelusuri.\n\nContoh fiktif: uptime tetap panjang, Ethernet stabil, tetapi asosiasi ulang berulang. Dugaan awal lebih mengarah ke bagian wireless daripada restart daya, meskipun penyebab pastinya belum diketahui. Jika semua klien satu AP terkena, kumpulkan bukti sisi pusat sebelum membongkar setiap CPE.",
+        "table": {
+          "caption": "Bedakan gejala dan bukti",
+          "headers": [
+            "Gejala",
+            "Bukti pembeda",
+            "Fokus berikutnya"
+          ],
+          "rows": [
+            [
+              "Perangkat diduga restart",
+              "Uptime turun, log boot",
+              "Daya, perangkat, atau jadwal reboot"
+            ],
+            [
+              "Radio terlepas dari AP",
+              "Uptime tetap, log reassociation",
+              "RF, kompatibilitas, kanal, DFS"
+            ],
+            [
+              "Connected, IP jauh gagal",
+              "Hasil per titik dan VLAN",
+              "Bridge, Ethernet, host, addressing"
+            ],
+            [
+              "Hanya internet lambat",
+              "Uji lokal baik",
+              "Router, upstream, tujuan layanan"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "Tutup kasus dengan validasi dan handover",
+        "body": "Setelah satu tindakan, ulangi uji yang gagal sebelumnya dan pantau selama periode yang relevan. Link yang terlihat pulih dua menit belum menyelesaikan gangguan yang biasanya terjadi setiap malam. Simpan perubahan, hasil, risiko tersisa, pemilik tindak lanjut, dan waktu evaluasi.\n\nTiket yang baik memuat model/firmware, topologi, dampak, waktu, statistik sebelum/sesudah, serta langkah berikutnya. Pisahkan fakta dari dugaan. Saat eskalasi, kirim log yang sudah disaring dari sandi, kunci, dan data pelanggan yang tidak diperlukan."
+      }
+    ],
+    "practice": [
+      "Buat tiket fiktif satu radio restart dan satu station reassociation tanpa reboot.",
+      "Tentukan bukti yang membedakan kedua kasus dan satu pengujian berikutnya.",
+      "Buat kasus connected tetapi DNS gagal; gambarkan urutan titik uji.",
+      "Tulis perubahan tunggal, hasil validasi, periode pantau, dan pemicu eskalasi."
+    ],
+    "practiceReview": "Tiket restart harus memiliki bukti uptime/log boot; tiket reassociation menyebut uptime tetap. Kasus DNS memakai hasil uji nama dan IP. Laporan boleh menyatakan penyebab belum pasti asalkan bukti serta pemeriksaan berikutnya jelas.",
+    "check": "Setiap malam semua station pada satu AP mengalami gangguan, tetapi hanya CPE yang direboot satu per satu. Apa yang kurang?",
+    "answer": "Pemeriksaan dependensi bersama di AP, uplink, spektrum, dan beban pada waktu gangguan. Kumpulkan korelasi waktu serta log pusat, lalu pilih uji yang menyempitkan dugaan. Reboot CPE saja dapat menghilangkan bukti tanpa menyelesaikan penyebab bersama.",
+    "sources": [
+      {
+        "title": "Ubiquiti — station tidak tersambung ke AP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590819980823-ISP-Wireless-Station-Radio-Won-t-Connect-to-Access-Point"
+      },
+      {
+        "title": "Ubiquiti — pemeriksaan kualitas link wireless",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590813737239-ISP-Wireless-Link-with-Poor-Wireless-Performance-Signal-Throughput-Latency-Jitter"
+      },
+      {
+        "title": "Ubiquiti — panduan instalasi LiteBeam 5AC Gen2",
+        "url": "https://dl.ui.com/qig/lbe-5ac-gen2/"
+      }
+    ],
+    "diagram": "diagnosis",
+    "diagramAlt": "Empat area pemeriksaan: daya dan Ethernet, asosiasi radio, IP dan VLAN, lalu layanan",
+    "related": [
+      {
+        "title": "Troubleshooting runtut",
+        "href": "/jaringan/troubleshooting-runtut"
+      },
+      {
+        "title": "Flapping jaringan",
+        "href": "/jaringan/flapping-jaringan"
+      }
+    ]
+  },
+  {
+    "slug": "ubiquiti-uisp-operasional-lab-akhir",
+    "title": "UISP dan operasi wireless: monitoring sampai serah terima",
+    "summary": "Kelola akses, backup, firmware, baseline, serta proyek akhir link Ubiquiti yang dapat diserahkan ke tim NOC.",
+    "minutes": 5,
+    "intro": "Sebuah link berhasil saat pemasangan, lalu teknisi berbeda menerima keluhan seminggu kemudian. Tanpa inventaris, baseline, dan catatan perubahan, pemeriksaan harus dimulai dari awal.\n\nPelajaran terakhir menghubungkan konfigurasi radio dengan pekerjaan operasional. Kamu akan menyusun bukti bahwa link bekerja dan dapat dikelola oleh orang lain.",
+    "goals": [
+      "Menambahkan perangkat yang didukung ke UISP dengan akses terbatas.",
+      "Membedakan alarm monitoring dan gangguan layanan.",
+      "Menyusun paket hasil lab, perubahan, dan handover."
+    ],
+    "analogy": "Dashboard seperti panel ruang kendali. Panel membantu melihat kondisi, tetapi lampu hijau tidak menggantikan uji jalur yang dipakai pengguna dan catatan teknisi di lapangan.",
+    "sections": [
+      {
+        "title": "UISP melengkapi akses perangkat",
+        "body": "UISP membantu inventaris dan pengelolaan perangkat ISP yang didukung. Halaman airOS lokal tetap berguna untuk memeriksa perangkat. Kemampuan pengelolaan bergantung model, firmware, serta versi aplikasi; jangan menganggap semua fitur tersedia untuk setiap perangkat berlogo Ubiquiti.\n\nSiapkan identitas perangkat, lokasi, pasangan link, alamat manajemen, dan pemilik operasional. UniFi Network adalah sistem berbeda; adopsi UniFi bukan prosedur umum untuk memasukkan airMAX. Mulai dari dua unit lab dan dokumen dukungan, bukan impor seluruh jaringan produksi sekaligus."
+      },
+      {
+        "title": "Tambahkan perangkat dan verifikasi telemetrinya",
+        "body": "Ikuti metode penambahan pada dokumentasi UISP yang sesuai versi: pilih perangkat yang didukung dan gunakan discovery atau koneksi UISP key sebagaimana tersedia. Pastikan radio dapat menjangkau server melalui jalur pengelolaan dan waktu/DNS yang diperlukan berfungsi. Jangan membuka akses administrator radio ke internet hanya agar mudah dipantau.\n\nPerlakukan UISP key sebagai rahasia dan jangan masukkan ke screenshot publik. Setelah tersambung, periksa identitas, waktu terakhir data, dan kecocokan pembacaan dengan halaman lokal. Status offline pada dashboard dapat berarti jalur monitoring terganggu walaupun lalu lintas pengguna masih berjalan.\n\nUntuk alur Web UI yang didokumentasikan Ubiquiti: buka Settings → Devices pada aplikasi UISP dan salin key; buka halaman radio melalui LAN lalu pilih tombol UISP; masukkan key melalui dialog yang tersedia dan simpan. Kembali ke aplikasi, konfirmasi perangkat bila diminta, lalu cocokkan model/MAC dan usia data. Jika menunya berbeda, gunakan panduan versi tersebut. Key tidak perlu dimasukkan ke laporan latihan."
+      },
+      {
+        "title": "Bangun baseline dan alarm yang punya tindakan",
+        "body": "Catat level sinyal kedua arah, chain bila tersedia, uptime, error port, kecepatan Ethernet, trafik, dan latency pada waktu sepi serta sibuk. Baseline adalah kondisi pembanding link itu sendiri; satu ambang sinyal tidak cocok untuk semua jarak dan model.\n\nUntuk setiap alarm, tentukan makna, pemeriksaan awal, pemilik, dan kapan eskalasi. Jika AP pusat mati, banyak alarm station dapat berasal dari satu kejadian. Korelasikan dependensi agar petugas tidak membuat banyak pekerjaan identik. Acknowledge hanya menandai alarm diterima, bukan layanan sudah pulih."
+      },
+      {
+        "title": "Jaga akses, konfigurasi, dan perubahan firmware",
+        "body": "Batasi manajemen ke jaringan atau VPN yang direncanakan, gunakan akun sesuai kebutuhan, sandi kuat, dan layanan administrasi yang diperlukan saja. Simpan backup secara terbatas karena konfigurasi dapat mengandung rahasia. Catat siapa berwenang melakukan perubahan dan cara mendapat akses pemulihan.\n\nSebelum firmware berubah, cocokkan model, cabang firmware, catatan rilis, dan prosedur produsen. Siapkan backup serta akses lokal, uji pada perangkat lab yang sesuai, lalu jadwalkan perubahan. Restore konfigurasi dan downgrade tidak otomatis didukung lintasversi; tulis langkah pemulihan yang benar-benar tersedia."
+      },
+      {
+        "title": "Proyek akhir: link kantor dan gudang",
+        "body": "Bangun bridge PtP dari lab sebelumnya dengan IP unik dan keamanan aktif. Siapkan dokumen survey atau asumsi survey bila hanya lab meja. Uji konektivitas, throughput dua arah, latency tanpa dan dengan beban, serta pemulihan setelah reboot terencana. Untuk PtMP opsional, tambahkan uji dua station bersamaan.\n\nTetapkan target penerimaan sebelum mengukur: konektivitas host, kebutuhan throughput tiap arah, batas latency sesuai aplikasi, serta keberhasilan akses manajemen. Jangan mengklaim lolos kapasitas lapangan dari uji jarak meja. Jika perangkat belum tersedia, selesaikan desain dan tabel kosong bertanda “belum diuji”.",
+        "table": {
+          "caption": "Isi paket serah terima",
+          "headers": [
+            "Berkas atau bukti",
+            "Isi minimum"
+          ],
+          "rows": [
+            [
+              "Topologi dan inventaris",
+              "Model, firmware, lokasi, pasangan, IP, port"
+            ],
+            [
+              "Rencana link",
+              "Kebutuhan, lintasan, asumsi, kanal sah"
+            ],
+            [
+              "Hasil uji",
+              "Metode, arah, waktu, beban, hasil dan target"
+            ],
+            [
+              "Konfigurasi dan recovery",
+              "Backup terbatas, akses lokal, langkah pemulihan"
+            ],
+            [
+              "Runbook dan tiket",
+              "Alarm, pemeriksaan awal, pemilik dan tindak lanjut"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "Nilai kesiapan dari bukti yang bisa diteruskan",
+        "body": "Minta orang lain mengikuti dokumenmu: bisakah ia menemukan IP radio, mengenali AP yang benar, mengulang pengukuran, dan menentukan tindakan saat satu station offline? Jika masih perlu menebak, lengkapi bagian itu sebelum menyebut serah terima selesai. Progres baca membantu belajar, tetapi bukan pengganti bukti praktik.\n\nBuat ringkasan satu halaman berisi tujuan, hasil dibanding target, kendala, dan pekerjaan tersisa. Simpan satu tiket simulasi gangguan beserta pemulihannya. Portofolio dengan hasil jujur dan batas kesimpulan jelas lebih berguna untuk Junior NOC daripada screenshot dashboard tanpa konteks."
+      }
+    ],
+    "practice": [
+      "Buat inventaris dan topologi lengkap; tambahkan perangkat lab ke UISP jika server tersedia.",
+      "Ambil baseline dan buat dua alarm dengan pemeriksaan awal serta pemiliknya.",
+      "Lengkapi paket proyek akhir dan bandingkan setiap hasil dengan target yang ditentukan.",
+      "Minta rekan mengulang satu uji dari catatan, lalu perbaiki bagian yang belum jelas."
+    ],
+    "practiceReview": "Proyek selesai bila setiap target memiliki bukti atau status belum terpenuhi, konfigurasi tersimpan dengan akses terbatas, dan orang lain dapat mengulang pemeriksaan. Tanpa server UISP, rancangan monitoring tetap dapat dibuat; tulis bagian adopsi sebagai belum diuji.",
+    "check": "Dashboard menyatakan radio offline tetapi pengguna masih bisa mengakses aplikasi melewati link. Apa kesimpulan yang tepat?",
+    "answer": "Belum ada bukti bahwa jalur pengguna mati. Periksa usia data, koneksi radio ke server UISP, jalur manajemen, DNS/waktu, serta akses lokal. Catat terpisah status telemetri dan layanan; jangan reboot link yang masih berfungsi tanpa pemeriksaan.",
+    "sources": [
+      {
+        "title": "Ubiquiti — menambahkan perangkat ke UISP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590956342295-UISP-Add-Devices-to-UISP-Application"
+      },
+      {
+        "title": "Ubiquiti — keamanan dan pengelolaan data UISP",
+        "url": "https://help.uisp.com/hc/en-us/articles/22590983111447-UISP-Security-Data-Management"
+      },
+      {
+        "title": "ESnet — penggunaan dan opsi iperf3",
+        "url": "https://software.es.net/iperf/invoking.html"
+      }
+    ],
+    "diagram": "diagnosis",
+    "diagramAlt": "Monitoring dan pemeriksaan layanan dipisahkan agar alarm UISP tidak langsung dianggap putusnya link",
+    "related": [
+      {
+        "title": "Monitoring dan baseline",
+        "href": "/jaringan/monitoring-snmp-baseline"
+      },
+      {
+        "title": "Tiket dan eskalasi Junior NOC",
+        "href": "/jaringan/noc/noc-tiket-eskalasi"
+      }
+    ]
+  }
+]
