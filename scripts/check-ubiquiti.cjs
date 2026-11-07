@@ -18,11 +18,17 @@ for(const [index,l] of lessons.entries()){
  assert.ok(html.includes('class="net-article ubq-body"'));
  assert.ok(html.includes('Pembahasan praktik dan hasil yang diharapkan'));
  assert.ok(html.includes('id="praktik"')&&html.includes('id="cek-pemahaman"'));
- assert.equal(l.sections.length,6);
+ assert.ok(l.sections.length>=6);
  assert.ok(l.sections.every(s=>s.body.includes('\n\n')));
  for(const [i,s] of l.sections.entries()){
   assert.ok(html.includes('id="bagian-'+(i+1)+'"'));
   assert.ok(html.includes('href="#bagian-'+(i+1)+'"'));
+  for(const [j,step] of (s.steps??[]).entries()){
+   assert.ok(html.includes('id="langkah-'+(i+1)+'-'+(j+1)+'"'));
+   assert.ok(html.includes(step.title));
+   assert.ok(['action','why','expected','ifFailed'].every(key=>typeof step[key]==='string'&&step[key].trim().length>0));
+   assert.ok(html.includes('Hasil yang diharapkan:')&&html.includes('Jika belum berhasil:'));
+  }
   if(s.table)assert.ok(s.table.rows.every(r=>r.length===s.table.headers.length));
  }
  for(const other of [lessons[index-1],lessons[index+1]].filter(Boolean))assert.ok(html.includes('/jaringan/ubiquiti/'+other.slug));
