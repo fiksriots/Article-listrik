@@ -46,7 +46,7 @@ export default function QuickSearch() {
     <button ref={trigger} type="button" className="site-search-button" onClick={()=>setOpen(true)} aria-haspopup="dialog" aria-label="Buka pencarian cepat">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Cari materi</span><kbd>⌘ / Ctrl K</kbd>
     </button>
-    <dialog ref={dialog} className="site-search-dialog" aria-labelledby="quick-search-title" onCancel={close} onClose={close} onClick={event=>{if(event.target===event.currentTarget)close();}}>
+    <dialog ref={dialog} className="site-search-dialog" aria-labelledby="quick-search-title" onCancel={close} onClose={close} onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();close();}}} onClick={event=>{if(event.target===event.currentTarget)close();}}>
       <header><div><p className="site-kicker">SELURUH AKADEMI</p><h2 id="quick-search-title">Apa yang ingin kamu pahami?</h2></div><button type="button" className="site-icon-button" onClick={close} aria-label="Tutup pencarian">✕</button></header>
       <label className="site-search-field">Topik, perangkat, atau konsep<input ref={input} type="search" value={query} maxLength={120} onChange={event=>setQuery(event.target.value)} placeholder="Coba: VLAN, Python, atau wireless…"/></label>
       {!words.length && <div className="site-search-popular"><p>Mulai dari topik populer</p>{['Python','VLAN','Ubiquiti','MQTT','Git'].map(word=><button key={word} type="button" onClick={()=>setQuery(word)}>{word}</button>)}</div>}

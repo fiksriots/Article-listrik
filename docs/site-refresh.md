@@ -14,7 +14,7 @@ Lapisan tampilan bersama diterapkan pada beranda, lima akademi, katalog, artikel
 
 Tidak menambah paket, font eksternal, video latar, carousel, atau library animasi. Endpoint `/api/search` dibangun statis dan mengembalikan metadata saja, termasuk jalur NOC dan Ubiquiti. Katalog 693 materi baru diminta setelah dialog pencarian dibuka, dibatasi delapan hasil tampilan, dan dicache browser. Ukuran payload katalog sekitar 37,8 KB gzip; stylesheet tambahan sekitar 4,8 KB gzip. Interaksi scroll pembaca dijadwalkan dengan requestAnimationFrame dan memperbarui elemen progress tanpa render React pada setiap scroll.
 
-Perbandingan daftar script awal halaman beranda: versi situs sebelum perubahan sekitar 158.035 byte gzip; build baru sekitar 159.479 byte gzip, selisih 1.444 byte (sekitar 0,9%). Katalog pencarian tidak termasuk dalam muatan awal karena diminta saat dialog dibuka.
+Perbandingan daftar script awal halaman beranda: versi situs sebelum perubahan sekitar 158.035 byte gzip; build baru sekitar 159.496 byte gzip, selisih 1.461 byte (sekitar 0,9%). Katalog pencarian tidak termasuk dalam muatan awal karena diminta saat dialog dibuka.
 
 Angka gzip merupakan ukuran aset hasil build lokal, bukan pengukuran Lighthouse atau waktu muat pada perangkat pengguna. Hasil bergantung pada cache, jaringan, dan perangkat.
 
@@ -25,6 +25,7 @@ npm ci
 npm run typecheck
 npm run build
 node scripts/check-site-refresh.cjs
+node scripts/check-site-refresh-browser.cjs
 node scripts/check-learning-dashboard.cjs
 node scripts/check-learning-directory.cjs
 npm run check:content
@@ -32,3 +33,4 @@ npm run check:content
 
 Pemeriksaan produksi memvalidasi navigasi bersama pada seluruh HTML statis, h1 tunggal dan respons 200 pada sampel lintas halaman, serta skema katalog pencarian yang unik dan tidak membawa isi artikel. Pemeriksaan lama memastikan cakupan lima akademi, perhitungan progres, dan materi listrik tetap valid.
 
+Pengujian browser lokal pada lebar 390, 768, dan 1366 piksel lulus: katalog tidak diminta pada muatan awal dan digunakan ulang sesudah dibuka; pencarian kosong, Escape, pengembalian fokus, menu responsif, ukuran teks, mode fokus, serta persistensi tanda selesai bekerja. Sampel lintas akademi tidak memiliki overflow horizontal halaman atau runtime error. Pengujian memakai konteks terisolasi dengan data latihan. CHROMIUM_PATH dapat memilih browser lokal yang sudah tersedia.
