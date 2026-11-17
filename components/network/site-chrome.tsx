@@ -1,38 +1,39 @@
-'use client';
-import {useState,useEffect} from 'react';
+"use client";
+import {useState,useEffect,useRef} from 'react';
 import {usePathname} from 'next/navigation';
 import Link from 'next/link';
-const externalArrow = <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8M13 3 3 13"/></svg>;
+import QuickSearch from '@/components/site/quick-search';
+
+const academies=[
+ {href:'/listrik',label:'Listrik',hint:'Listrik & elektronika'},
+ {href:'/jaringan',label:'Jaringan',hint:'Network & MikroTik'},
+ {href:'/iot',label:'IoT',hint:'Perangkat terhubung'},
+ {href:'/git',label:'Git',hint:'GitHub & GitLab'},
+ {href:'/programming',label:'Programming',hint:'Python, web & data'},
+];
+const programmingPaths=[['terstruktur','Dasar Python'],['struktur-data','Struktur Data'],['oop','OOP'],['basis-data','Basis Data'],['backend-api','Backend/API'],['pemrograman-jaringan','Jaringan Python'],['web','Web'],['django','Django'],['data-analysis','Data Analysis'],['data-science','Data Science'],['pengujian-debugging','Pengujian'],['proyek-otomasi','Otomasi'],['rekayasa-deployment','Deployment']];
 export function SiteHeader(){
  const pathname=usePathname();
  const [open,setOpen]=useState(false);
- const programming=pathname==='/programming'||pathname.startsWith('/programming/');
- const git=pathname.startsWith('/git');
- const iot=pathname.startsWith('/iot');
- const network=pathname.startsWith('/jaringan');
- const electricity=['/listrik','/modul','/materi','/simulator','/galeri'].some(p=>pathname===p||pathname.startsWith(p+'/'));
- const home=programming?'/programming':git?'/git':iot?'/iot':network?'/jaringan':electricity?'/listrik':'/';
- const brand=programming?'Learn Programming':git?'Learn Git':iot?'Learn IoT':network?'Learn Networking':electricity?'Learn Electric':'Ruang Belajar';
- const links=programming?[{href:'/programming',label:'Pilih jalur'},{href:'/programming/terstruktur',label:'Pemrograman Terstruktur'},{href:'/programming/struktur-data',label:'Struktur Data'},{href:'/programming/oop',label:'OOP Python'},{href:'/programming/basis-data',label:'Basis Data'},{href:'/programming/backend-api',label:'Backend/API'},{href:'/programming/pemrograman-jaringan',label:'Jaringan Python'},{href:'/programming/web',label:'Web'},{href:'/programming/django',label:'Django'},{href:'/programming/data-analysis',label:'Data Analysis'},{href:'/programming/data-science',label:'Data Science'},{href:'/programming/pengujian-debugging',label:'Pengujian & Debugging'},{href:'/programming/proyek-otomasi',label:'Proyek & Otomasi'},{href:'/programming/rekayasa-deployment',label:'Rekayasa & Deployment'}]:git?[{href:'/git',label:'Beranda Git'},{href:'/git/dasar',label:'Dasar Git'},{href:'/git/github',label:'GitHub'},{href:'/git/gitlab',label:'GitLab'},{href:'/git/panduan-cepat',label:'Panduan cepat'}]:iot?[{href:'/iot',label:'Beranda IoT'},{href:'/iot#kurikulum',label:'Kurikulum'},{href:'/iot/arduino',label:'Arduino A–D'},{href:'/iot#simulator',label:'Simulator'},{href:'/iot#perangkat',label:'Kenali perangkat'}]:network?[{href:'/jaringan',label:'Beranda jaringan'},{href:'/jaringan#kurikulum',label:'Kurikulum'},{href:'/jaringan/simulator',label:'Simulator'},{href:'/jaringan/winbox',label:'Praktik Winbox'},{href:'/jaringan/mtcna',label:'MTCNA'},{href:'/jaringan/mtcre',label:'MTCRE'},{href:'/jaringan/troubleshooting',label:'Troubleshooting'}]:electricity?[{href:'/listrik',label:'Beranda listrik'},{href:'/modul',label:'Modul'},{href:'/simulator',label:'Simulator'},{href:'/galeri',label:'Galeri alat'}]:[{href:'/',label:'Dashboard'},{href:'/listrik',label:'Learn Electric'},{href:'/jaringan',label:'Learn Networking'},{href:'/iot',label:'Learn IoT'},{href:'/git',label:'Learn Git'},{href:'/programming',label:'Learn Programming'}];
+ const nav=useRef<HTMLElement>(null);
+ const menuButton=useRef<HTMLButtonElement>(null);
+ const academy=academies.find(item=>pathname===item.href||pathname.startsWith(item.href+'/')) || (['/modul','/materi','/simulator','/galeri'].some(path=>pathname===path||pathname.startsWith(path+'/'))?academies[0]:undefined);
+ const paths=academy?.href==='/programming'?[[academy.href,'Semua jalur'],...programmingPaths.map(([path,title])=>['/programming/'+path,title])]:academy?.href==='/jaringan'?[['/jaringan','Kurikulum'],['/jaringan/noc','Roadmap Junior NOC'],['/jaringan/ubiquiti','Wireless & Ubiquiti'],['/jaringan/winbox','Praktik Winbox'],['/jaringan/mtcna','MTCNA'],['/jaringan/mtcre','MTCRE'],['/jaringan/simulator','Simulator'],['/jaringan/troubleshooting','Troubleshooting']]:academy?.href==='/listrik'?[['/listrik','Beranda listrik'],['/modul','Semua modul'],['/simulator','Simulator'],['/galeri','Galeri alat']]:academy?.href==='/iot'?[['/iot','Kurikulum IoT'],['/iot/arduino','Praktik Arduino'],['/iot#simulator','Simulator'],['/iot#perangkat','Kenali perangkat']]:academy?.href==='/git'?[['/git','Semua jalur'],['/git/dasar','Dasar Git'],['/git/github','GitHub'],['/git/gitlab','GitLab'],['/git/panduan-cepat','Panduan cepat']]:[];
  useEffect(()=>setOpen(false),[pathname]);
- const brandLink = <Link href={home} className="academy-nav-brand" onClick={()=>setOpen(false)}><span className="fiks-wordmark">Fiks<span className="fiks-dot">.</span></span><span className="academy-brand-context">{brand}<small>Python, web & data</small></span></Link>;
- const programmingActions = <><Link href="/cari" onClick={()=>setOpen(false)}>Cari materi</Link><Link href="/akun" onClick={()=>setOpen(false)}>Akun &amp; progres</Link><Link className="academy-switch" href="/" onClick={()=>setOpen(false)}>Ganti akademi {externalArrow}</Link><a href="https://www.fikss.site/articles">Portofolio {externalArrow}</a></>;
- if (programming) return <header className="academy-header academy-header-programming">
-   <div className="programming-header-shell">
-     <div className="programming-header-top">
-       {brandLink}
-       <nav className="programming-header-utility programming-header-utility-desktop" aria-label="Layanan belajar">{programmingActions}</nav>
-       <button type="button" className="academy-menu-toggle" aria-expanded={open} aria-controls="academy-menu" onClick={()=>setOpen(!open)}>{open?'Tutup ✕':'Menu ☰'}</button>
-     </div>
-     <div id="academy-menu" className={'programming-header-menu'+(open?' is-open':'')}>
-       <nav className="academy-nav-links" aria-label="Jalur Learn Programming">
-         {links.map(link=><Link key={link.href} href={link.href} onClick={()=>setOpen(false)} aria-current={pathname===link.href?'page':undefined}>{link.label}</Link>)}
-       </nav>
-       <nav className="programming-header-utility programming-header-utility-mobile" aria-label="Layanan belajar">{programmingActions}</nav>
-     </div>
-   </div>
+ useEffect(()=>{
+  if(!open)return;
+  function escape(event:KeyboardEvent){if(event.key==='Escape'){setOpen(false);menuButton.current?.focus();}}
+  document.addEventListener('keydown',escape);return()=>document.removeEventListener('keydown',escape);
+ },[open]);
+ useEffect(()=>{nav.current?.querySelector('[aria-current="page"]')?.scrollIntoView({block:'nearest',inline:'nearest'});},[pathname]);
+ return <header className="site-header">
+  <div className="site-header-top"><Link href="/" className="site-brand" aria-label="Article — Ruang Belajar Fikri"><span className="site-brand-mark">a<span>.</span></span><span>Article<small>Ruang Belajar Fikri</small></span></Link>
+   <QuickSearch/>
+   <div className="site-header-actions"><Link href="/akun" className="site-account-link">Progres belajar <span aria-hidden="true">↗</span></Link><button ref={menuButton} type="button" className="site-menu-toggle" onClick={()=>setOpen(value=>!value)} aria-expanded={open} aria-controls="site-academies">{open?'Tutup ✕':'Menu ☰'}</button></div>
+  </div>
+  <nav id="site-academies" className={'site-academy-nav'+(open?' is-open':'')} aria-label="Navigasi akademi"><div><Link href="/" onClick={()=>setOpen(false)} aria-current={pathname==='/'?'page':undefined}>Beranda</Link>{academies.map(item=><Link href={item.href} key={item.href} onClick={()=>setOpen(false)} aria-current={academy===item?'page':undefined}><span>{item.label}</span><small>{item.hint}</small></Link>)}<Link href="/akun" className="site-mobile-account" onClick={()=>setOpen(false)}>Akun & progres</Link></div></nav>
+  {paths.length>0&&<nav ref={nav} className="site-context-nav" aria-label="Materi dan jalur akademi"><div>{paths.map(([href,title])=><Link href={href} key={href} aria-current={pathname===href?'page':undefined}>{title}</Link>)}</div></nav>}
  </header>;
- return <header className={'academy-header'+(network?' academy-header-network':'')+(programming?' academy-header-programming':'')}><nav className="academy-nav" aria-label="Navigasi utama"><Link href={home} className="academy-nav-brand" onClick={()=>setOpen(false)}><span className="fiks-wordmark">Fiks<span className="fiks-dot">.</span></span><span className="academy-brand-context">{brand}<small>{programming?'Python, web & data':git?'Git, GitHub & GitLab':iot?'Internet of Things':network?'Jaringan komputer':electricity?'Listrik & elektronika':'Pilih jalur belajarmu'}</small></span></Link><button type="button" className="academy-menu-toggle" aria-expanded={open} aria-controls="academy-menu" onClick={()=>setOpen(!open)}>{open?'Tutup ✕':'Menu ☰'}</button><div id="academy-menu" className={'academy-nav-menu'+(open?' is-open':'')}><div className="academy-nav-links">{links.map(l=><Link key={l.href} href={l.href} onClick={()=>setOpen(false)} aria-current={pathname===l.href||(l.href==='/jaringan/simulator'&&pathname.startsWith(l.href+'/'))?'page':undefined}>{l.label}</Link>)}</div><div className="academy-nav-actions"><Link href="/cari" onClick={()=>setOpen(false)}>Cari materi</Link><Link href="/akun" onClick={()=>setOpen(false)}>Akun & progres</Link>{(network||electricity||iot||git||programming)&&<Link className="academy-switch" href="/" onClick={()=>setOpen(false)}>Ganti akademi ↗</Link>}<a href="https://www.fikss.site/articles">Portofolio ↗</a></div></div></nav></header>;
 }
 export function SiteFooter(){return <footer className="academy-footer">
  <div className="academy-footer-grid"><section className="academy-footer-brand"><Link href="/" className="academy-footer-logo"><span className="fiks-wordmark">Fiks<span className="fiks-dot">.</span></span><span className="fiks-footer-caption">Ruang Belajar Fikri</span></Link><p>Memahami teknologi, satu konsep setiap hari. Materi listrik, jaringan, IoT, Git, Python, web, dan data yang dekat dengan kebutuhan sehari-hari.</p><a href="https://www.fikss.site">Kenali Fikri ↗</a></section>
