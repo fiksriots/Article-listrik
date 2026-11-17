@@ -1,37 +1,35 @@
 # Wireless Ubiquiti
 
-Jalur baru `/jaringan/ubiquiti` berisi sembilan artikel berurutan. Pembaca mendapatkan konsep, analogi, penjelasan enam bagian per artikel, diagram, praktik dengan pembahasan, cek pemahaman, rujukan resmi, serta tautan fondasi jaringan. Lab utama dibatasi pada dua LBE-5AC-GEN2/airMAX AC dengan airOS 8; menu model atau keluarga lain tidak digeneralisasi.
+Jalur `/jaringan/ubiquiti` berisi sembilan artikel yang sekarang diperluas menjadi 8–10 bagian per artikel (81 bagian), sekitar 12.000 kata keseluruhan. Ada analogi, delapan SVG konsep asli, 21 langkah prosedural, praktik dengan pembahasan, cek pemahaman, dan rujukan resmi. Estimasi baca dihitung ulang; lab tetap terpisah dari durasi bacaan.
 
-## Cakupan
+## Pendalaman
 
-1. Wireless, PtP/PtMP, AP/station/CPE, dan keluarga Ubiquiti.
-2. Survey, LOS, Fresnel, kebutuhan layanan, dan link budget sederhana.
-3. Identitas model, passive PoE, bench, IP manajemen, dan pemulihan akses.
-4. Lab bridge PtP airMAX AC dan validasi PC ke PC.
-5. PtMP, sektor, airtime bersama, kapasitas, dan isolasi layanan.
-6. Spektrum, kanal, lebar kanal, daya, alignment, dan dampak scan.
-7. Metrik dashboard, Ethernet, dan iperf3 dua arah.
-8. Troubleshooting daya, asosiasi, IP/VLAN, dan layanan.
-9. UISP, baseline, keamanan, backup, firmware, dan proyek serah terima.
+1. **Dasar dan perangkat:** perjalanan frame melalui radio; frekuensi, lebar kanal dan beamwidth; satuan; perbedaan keluarga; LiteBeam/NanoBeam/PowerBeam/NanoStation/Rocket; AP/station dibanding bridge/router.
+2. **Survey:** kebutuhan dua arah, profil lintasan, LOS/Fresnel, tinggi/elevasi, ketidakpastian, link budget dan margin dengan angka fiktif.
+3. **Persiapan:** peran adaptor/injector/radio/antena; passive PoE khusus model; subnet laptop; akses awal yang diverifikasi; perubahan IP; pemulihan adapter laptop dan pemisahan kredensial.
+4. **Lab airMAX AC:** sembilan bagian, tujuh tahap praktik, sebelas langkah prosedural terstruktur, tabel IP dan peta menu, konfigurasi AP/station serta Bridge, keamanan, lebar kanal station Auto yang dapat berbeda dari label AP, pengujian, penyimpanan, backup dan recovery.
+5. **PtMP:** tiga langkah setting dua station, airtime, kapasitas bersama, isolasi dan pengujian serentak.
+6. **Optimasi:** fungsi tiap kolom, scan list, ACK/distance, kanal/lebar/daya/alignment dan contoh keputusan berdasarkan target layanan.
+7. **Pengukuran:** sudut pandang TX/RX, host pembanding, Ethernet, iperf3, receiver, arah, satuan dan keterbatasan kesimpulan.
+8. **Troubleshooting:** empat kasus berisi fakta, hipotesis, pengujian dan validasi: akses hilang setelah IP berubah, autentikasi gagal, batas sekitar 94 Mbps, serta putus malam tanpa reboot.
+9. **Operasi:** tiga langkah UISP key, kesegaran telemetri, waktu/log, baseline/alarm, perubahan dan target penerimaan serta rollback.
 
-## Integrasi
+Langkah prosedural menampilkan tindakan, alasan, hasil yang diharapkan, dan pemeriksaan jika gagal. Seluruh langkah terbaca langsung; tidak disembunyikan dalam tab. Diagram akses IP memperlihatkan laptop mengikuti subnet radio setelah alamat berubah.
 
-- Kartu jalur Learn Networking dan direktori belajar.
-- Grup progres `jaringan/ubiquiti`, sembilan slug unik dengan awalan `ubiquiti-`.
-- Pencarian memakai metadata, tanpa mengirim teks artikel penuh ke client.
-- Katalog publik `/api/articles` memuat sembilan materi dan diagramnya.
-- Tujuh SVG asli; seluruh artikel dibuat statis, daftar isi dapat dilipat, tabel dapat digeser dengan keyboard, navigasi menjadi satu kolom pada mobile.
+## Akurasi dan cakupan
 
-## Akurasi dan batas
+Lab utama tetap dua LBE-5AC-GEN2/airMAX AC dengan airOS 8. Kode model, firmware, tata menu, kebutuhan daya, akun/alamat awal, dan perilaku tombol diuji sementara versus simpan langsung tidak digeneralisasi. Dokumen airOS 8 adalah rujukan versi, bukan klaim antarmuka terbaru semua produk. Pengaturan frekuensi selalu mengikuti survey dan ketentuan lokasi; tidak ada angka kanal universal atau cara membuka pembatasan. Contoh hasil serta target layanan diberi label fiktif. Belum diuji pada radio fisik atau browser mobile.
 
-Rujukan primer diperiksa pada 7 November 2026, termasuk spesifikasi LBE-5AC-GEN2, panduan resmi PtP/PtMP, LTU FAQ, alignment, troubleshooting, airView M, UISP, dan ESnet iperf3. Daftar URL tersedia pada masing-masing artikel. Tidak menyalin nilai kanal negara lain atau kredensial bawaan sebagai aturan semua perangkat. Scan airView M dijelaskan dapat memutus link; spesifikasi passive PoE hanya dinyatakan untuk model contoh. Angka hasil adalah fiktif; lab meja tidak membuktikan kapasitas jarak lapangan. Belum dilakukan pengujian radio fisik atau pemeriksaan browser mobile.
+Rujukan primer diperiksa pada 7 November 2026: spesifikasi LBE-5AC-GEN2 dan Rocket Prism 5AC, panduan PtP/PtMP, LTU FAQ, airOS 8 User Guide, dokumentasi airView M, troubleshooting dan pengelolaan UISP, serta ESnet iperf3. URL lengkap tersedia pada masing-masing artikel.
 
-## Validasi
+## Integrasi dan validasi
 
-- `npm run build`: berhasil, 739 halaman statis dihasilkan.
-- `node scripts/check-ubiquiti.cjs`: rute, navigasi, diagram, pencarian, feed publik, dan progres.
-- `node scripts/check-learning-dashboard.cjs`: lima akademi; jaringan menjadi 193 materi unik.
-- `node scripts/check-learning-directory.cjs`: kontrak direktori tetap valid.
-- `node scripts/check-noc.cjs`: roadmap dan delapan artikel NOC tetap valid.
-- `python scripts/check-site-links.py`: 734 HTML, 64.054 referensi internal, tidak ada masalah.
-- Tujuh SVG divalidasi sebagai XML, dirender, dan diperiksa secara visual.
+Slug, URL, dan identitas progres dipertahankan. Katalog publik, pencarian, dan progres membaca otomatis memakai metadata terbaru. Pembaca mempertahankan progres yang sudah tersimpan.
+
+- `npm run build`: berhasil, 739 halaman statis.
+- `node scripts/check-ubiquiti.cjs`: rute, navigasi, daftar isi, langkah prosedural, diagram, pencarian, feed publik dan progres lulus.
+- `node scripts/check-learning-dashboard.cjs`: lima akademi dan 193 materi jaringan unik lulus.
+- `node scripts/check-learning-directory.cjs`: kontrak direktori lulus.
+- `node scripts/check-noc.cjs`: roadmap dan delapan artikel NOC lulus.
+- `python scripts/check-site-links.py`: 734 HTML dan 64.081 referensi internal, tanpa masalah.
+- SVG akses IP baru divalidasi sebagai XML, dirender, dan diperiksa secara visual.
